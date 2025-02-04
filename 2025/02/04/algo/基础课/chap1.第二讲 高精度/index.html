@@ -22,17 +22,18 @@
 
   <meta name="description" content="1.高精度 1.0.简介 所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c&#x2F;c++则没有这种功能，因此需要自己实现而这门课讲的高精度，主要局限在两个大数相加&#x2F;相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，\(len(A)\leq 1e6\)；小数一般指位">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
-<meta property="og:url" content="https://gitookie.github.io/gitookie/2025/01/28/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/index.html">
+<meta property="og:title" content="chap1.第二讲 高精度">
+<meta property="og:url" content="https://gitookie.github.io/gitookie/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
 <meta property="og:description" content="1.高精度 1.0.简介 所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c&#x2F;c++则没有这种功能，因此需要自己实现而这门课讲的高精度，主要局限在两个大数相加&#x2F;相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，\(len(A)\leq 1e6\)；小数一般指位">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-01-28T04:05:40.364Z">
-<meta property="article:modified_time" content="2025-02-04T08:15:37.930Z">
+<meta property="article:published_time" content="2025-02-04T08:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-04T08:48:32.685Z">
 <meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://gitookie.github.io/gitookie/2025/01/28/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/">
+<link rel="canonical" href="https://gitookie.github.io/gitookie/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>chap1.第二讲 高精度 | bluemouse's blog</title>
   
 
 
@@ -150,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://gitookie.github.io/gitookie/2025/01/28/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/">
+    <link itemprop="mainEntityOfPage" href="https://gitookie.github.io/gitookie/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/gitookie/images/avatar.gif">
@@ -163,7 +164,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          chap1.第二讲 高精度
         </h1>
 
         <div class="post-meta">
@@ -172,16 +173,19 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2025-01-28 12:05:40" itemprop="dateCreated datePublished" datetime="2025-01-28T12:05:40+08:00">2025-01-28</time>
+              <time title="Created: 2025-02-04 16:00:00 / Modified: 16:48:32" itemprop="dateCreated datePublished" datetime="2025-02-04T16:00:00+08:00">2025-02-04</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-04 16:15:37" itemprop="dateModified" datetime="2025-02-04T16:15:37+08:00">2025-02-04</time>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
               </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/gitookie/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
 
           
 
@@ -254,6 +258,9 @@ id="高精度和低精度除法也就是一个大数除以一个小数">1.4.高�
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/gitookie/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
 
         
 
@@ -261,12 +268,12 @@ id="高精度和低精度除法也就是一个大数除以一个小数">1.4.高�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/gitookie/2025/01/25/algo/%E6%9C%AA%E5%91%BD%E5%90%8D/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/gitookie/2025/02/03/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
     </a></div>
       <div class="post-nav-item">
-    <a href="/gitookie/2025/02/03/hello-world/" rel="next" title="Hello World">
-      Hello World <i class="fa fa-chevron-right"></i>
+    <a href="/gitookie/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E5%BF%AB%E6%8E%92%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%92%8C%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="next" title="chap1.第一讲 快排和归并排序和二分查找">
+      chap1.第一讲 快排和归并排序和二分查找 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -343,7 +350,7 @@ c_{k-1}\)，这个结果可以看成是\(c_{0}*10^{0}+c_{1}*10^{1}+\dots+c_{k-1}
       <div class="site-state-item site-state-posts">
           <a href="/gitookie/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
