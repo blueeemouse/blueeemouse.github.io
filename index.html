@@ -190,7 +190,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-高精度"><a href="#1-高精度" class="headerlink" title="1.高精度"></a>1.高精度</h1><h2 id="1-0-简介"><a href="#1-0-简介" class="headerlink" title="1.0.简介"></a>1.0.简介</h2><h3 id="所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c-c-则没有这种功能，因此需要自己实现而这门课讲的高精度，主要局限在两个大数相加-相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，-len-A-leq-1e6-；小数一般指位数不那么多的正整数，-len-B-leq-9-）"><a href="#所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c-c-则没有这种功能，因此需要自己实现而这门课讲的高精度，主要局限在两个大数相加-相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，-len-A-leq-1e6-；小数一般指位数不那么多的正整数，-len-B-leq-9-）" class="headerlink" title="所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c&#x2F;c++则没有这种功能，因此需要自己实现而这门课讲的高精度，主要局限在两个大数相加&#x2F;相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，$len(A)\leq 1e6$；小数一般指位数不那么多的正整数，$len(B)\leq 9$）"></a>所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c&#x2F;c++则没有这种功能，因此需要自己实现<br>而这门课讲的高精度，主要局限在两个大数相加&#x2F;相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，$len(A)\leq 1e6$；小数一般指位数不那么多的正整数，$len(B)\leq 9$）</h3>
+          <h1 id="高精度">1.高精度</h1>
+<h2 id="简介">1.0.简介</h2>
+<h3
+id="所谓高精度在这里指的是大数相关的运算且不是每一种语言都需要自己实现这种算法像java和python就不需要大体上是因为它们已经自带这个功能了而算法常用的cc则没有这种功能因此需要自己实现-而这门课讲的高精度主要局限在两个大数相加相减以及一个大数乘以一个小数这里的大数一般指位数很多的正整数lenaleq-1e6小数一般指位数不那么多的正整数lenbleq-9">所谓高精度，在这里指的是大数相关的运算。且不是每一种语言都需要自己实现这种算法。像java和python就不需要（大体上是因为它们已经自带这个功能了）。而算法常用的c/c++则没有这种功能，因此需要自己实现<br>而这门课讲的高精度，主要局限在两个大数相加/相减，以及一个大数乘以一个小数（这里的大数，一般指位数很多的正整数，<span
+class="math inline">\(len(A)\leq
+1e6\)</span>；小数一般指位数不那么多的正整数，<span
+class="math inline">\(len(B)\leq 9\)</span>）</h3>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/gitookie/2025/02/03/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6/#more" rel="contents">
@@ -262,7 +268,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-快速排序"><a href="#1-快速排序" class="headerlink" title="1.快速排序"></a>1.快速排序</h1><h2 id="1-1-核心思想：分治思想"><a href="#1-1-核心思想：分治思想" class="headerlink" title="1.1.核心思想：分治思想"></a>1.1.核心思想：分治思想</h2><h2 id="1-2-步骤："><a href="#1-2-步骤：" class="headerlink" title="1.2.步骤："></a>1.2.步骤：</h2><h3 id="1-2-1-对于一个给定的数组，选定一个中间值x（理论上来说，选哪个都行，但后面的代码需要注意相应的搭配，否则会陷入死循环。后面具体讲），常见的就是选数组的左边-右边-中间值-随机选"><a href="#1-2-1-对于一个给定的数组，选定一个中间值x（理论上来说，选哪个都行，但后面的代码需要注意相应的搭配，否则会陷入死循环。后面具体讲），常见的就是选数组的左边-右边-中间值-随机选" class="headerlink" title="1.2.1.对于一个给定的数组，选定一个中间值x（理论上来说，选哪个都行，但后面的代码需要注意相应的搭配，否则会陷入死循环。后面具体讲），常见的就是选数组的左边&#x2F;右边&#x2F;中间值&#x2F;随机选"></a>1.2.1.对于一个给定的数组，选定一个中间值x（理论上来说，选哪个都行，但后面的代码需要注意相应的搭配，否则会陷入死循环。后面具体讲），常见的就是选数组的左边&#x2F;右边&#x2F;中间值&#x2F;随机选</h3>
+          <h1 id="快速排序">1.快速排序</h1>
+<h2 id="核心思想分治思想">1.1.核心思想：分治思想</h2>
+<h2 id="步骤">1.2.步骤：</h2>
+<h3
+id="对于一个给定的数组选定一个中间值x理论上来说选哪个都行但后面的代码需要注意相应的搭配否则会陷入死循环后面具体讲常见的就是选数组的左边右边中间值随机选">1.2.1.对于一个给定的数组，选定一个中间值x（理论上来说，选哪个都行，但后面的代码需要注意相应的搭配，否则会陷入死循环。后面具体讲），常见的就是选数组的左边/右边/中间值/随机选</h3>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/gitookie/2025/02/03/chap1.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E5%BF%AB%E6%8E%92%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%92%8C%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/#more" rel="contents">
@@ -327,19 +337,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
+          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
+first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
+more info. If you get any problems when using Hexo, you can find the
+answer in <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
+you can ask me on <a
+target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h3 id="generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a
+target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
       
     </div>
@@ -506,6 +526,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
