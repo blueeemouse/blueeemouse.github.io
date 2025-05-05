@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="题目描述（原题链接） 给定一个字符串 s ，请你找出其中不含有重复字符的 最长 子串 的长度。 示例 1: 输入: s &#x3D; &quot;abcabcbb&quot;输出: 3 解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。 示例 2: 输入: s &#x3D; &quot;bbbbb&quot;输出: 1解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。 示例 3: 输入: s &#x3D; &quot;pww">
+  <meta name="description" content="题目描述（原题链接） 给定一个字符串 s ，请你找出其中不含有重复字符的 最长 子串 的长度。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
-<meta property="og:url" content="https://blueeemouse.github.io/2025/05/03/algo/leetcode%E9%9A%8F%E6%9C%BA%E5%88%B7/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/index.html">
+<meta property="og:title" content="无重复字符的最长字串（关于滑动窗口）">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/05/algo/leetcode%E9%9A%8F%E6%9C%BA%E5%88%B7/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="题目描述（原题链接） 给定一个字符串 s ，请你找出其中不含有重复字符的 最长 子串 的长度。 示例 1: 输入: s &#x3D; &quot;abcabcbb&quot;输出: 3 解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。 示例 2: 输入: s &#x3D; &quot;bbbbb&quot;输出: 1解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。 示例 3: 输入: s &#x3D; &quot;pww">
+<meta property="og:description" content="题目描述（原题链接） 给定一个字符串 s ，请你找出其中不含有重复字符的 最长 子串 的长度。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-05-03T08:43:11.990Z">
-<meta property="article:modified_time" content="2025-05-03T09:11:55.210Z">
+<meta property="article:published_time" content="2025-05-05T02:53:00.000Z">
+<meta property="article:modified_time" content="2025-05-05T02:55:56.215Z">
 <meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueeemouse.github.io/2025/05/03/algo/leetcode%E9%9A%8F%E6%9C%BA%E5%88%B7/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/">
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/05/algo/leetcode%E9%9A%8F%E6%9C%BA%E5%88%B7/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>无重复字符的最长字串（关于滑动窗口） | bluemouse's blog</title>
   
 
 
@@ -150,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/03/algo/leetcode%E9%9A%8F%E6%9C%BA%E5%88%B7/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/05/algo/leetcode%E9%9A%8F%E6%9C%BA%E5%88%B7/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -163,7 +164,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          无重复字符的最长字串（关于滑动窗口）
         </h1>
 
         <div class="post-meta">
@@ -174,7 +175,16 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-03 16:43:11 / Modified: 17:11:55" itemprop="dateCreated datePublished" datetime="2025-05-03T16:43:11+08:00">2025-05-03</time>
+              <time title="Created: 2025-05-05 10:53:00 / Modified: 10:55:56" itemprop="dateCreated datePublished" datetime="2025-05-05T10:53:00+08:00">2025-05-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
             </span>
 
           
@@ -192,6 +202,7 @@
 target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/?envType=company&amp;envId=huawei&amp;favoriteSlug=huawei-thirty-days">原题链接</a>）</h1>
 <h2
 id="给定一个字符串-s-请你找出其中不含有重复字符的-最长-子串-的长度">给定一个字符串 <code>s</code> ，请你找出其中不含有重复字符的 <strong>最长 子串</strong> 的长度。</h2>
+<span id="more"></span>
 <h2 id="示例-1"><strong>示例 1:</strong></h2>
 <h3
 id="输入-s-abcabcbb-输出-3-解释-因为无重复字符的最长子串是-abc所以其长度为-3"><strong>输入:</strong>
@@ -236,6 +247,9 @@ id="这题如果用c那么判断一个字符是否出现在一个子字符串里
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
 
         
 
@@ -243,12 +257,12 @@ id="这题如果用c那么判断一个字符是否出现在一个子字符串里
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/02/15/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/%E6%8E%8C%E6%8F%A1%E7%A8%8B%E5%BA%A6/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2025/05/04/%E6%8D%A3%E9%BC%93blog/%E5%9F%BA%E4%BA%8Ewindows11%E7%9A%84blog%E6%90%AD%E5%BB%BA---hexo+github%20pages/" rel="prev" title="基于windows11的blog搭建---hexo+github pages">
+      <i class="fa fa-chevron-left"></i> 基于windows11的blog搭建---hexo+github pages
     </a></div>
       <div class="post-nav-item">
-    <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/" rel="next" title="chap1.第三讲 双指针&位运算&离散化&区间合并">
-      chap1.第三讲 双指针&位运算&离散化&区间合并 <i class="fa fa-chevron-right"></i>
+    <a href="/2025/05/05/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/%E6%8E%8C%E6%8F%A1%E7%A8%8B%E5%BA%A6/" rel="next" title="掌握程度">
+      掌握程度 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
