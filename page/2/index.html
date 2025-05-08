@@ -150,6 +150,256 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E9%93%BE%E8%A1%A8&%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97&kmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E9%93%BE%E8%A1%A8&%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97&kmp/" class="post-title-link" itemprop="url">chap2.第一讲 链表&栈与队列&kmp</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:41:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:41:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:40" itemprop="dateModified" datetime="2025-05-05T10:55:40+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="链表">1.链表</h1>
+<h2
+id="简介这里主要讲的是用数组来模拟链表的操作而不是用结构体指针实现的链表具体会实现的有单链表常用于表示邻接表因而会用于图和树结构的表示和双链表常用于优化某些问题之所以在算法题里用数组来模拟主要是如果用结构体指针来构建链表的话每次增加一个节点都需要一个new操作这个操作是比较耗时的而算法题里又经常有比较多的操作这样的话可能光这些涉及到的new操作就超时了所以不太行故转向用数组模拟的静态链表">1.1.简介：这里主要讲的是用数组来模拟链表的操作，而不是用结构体＋指针实现的链表。具体会实现的有单链表（常用于表示邻接表，因而会用于图和树结构的表示）和双链表（常用于优化某些问题）（之所以在算法题里用数组来模拟，主要是如果用结构体+指针来构建链表的话，每次增加一个节点都需要一个new操作，这个操作是比较耗时的，而算法题里又经常有比较多的操作，这样的话可能光这些涉及到的new操作就超时了，所以不太行，故转向用数组模拟的静态链表</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E9%93%BE%E8%A1%A8&%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97&kmp/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/" class="post-title-link" itemprop="url">chap2.第二讲 trie树&并查集&堆</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:41:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:41:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:47" itemprop="dateModified" datetime="2025-05-05T10:55:47+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="trie树">1.trie树</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/" class="post-title-link" itemprop="url">chap1.第三讲 双指针&位运算&离散化&区间合并</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:40:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:40:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:33" itemprop="dateModified" datetime="2025-05-05T10:55:33+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="双指针">1.双指针</h1>
+<h2
+id="简介这个其实更多是一种思想或者说思路它的主要作用是利用某种性质进行优化通常是把on2的算法优化成on这里的性质可以理解为某种单调性比如前面归并排序中有一步要把两个有序的数组合并为一个有序的数组其中就用到了双指针两个指针从两个数组的起点开始谁指向的元素更小那个元素就是当前最小的元素则放到合并后的大数组并且相应指针往后移动一位这里用到的单调性就是两个数组都是有序的当前指针后面的所有数都是大于等于当前指针指向的元素的所以每次只需要比较一下当前两个指针指向的元素谁更小不需要和后面的相比这里就剩下了时间复杂度所以最后两个指针都只需要遍历一遍数组故时间复杂度是on">1.1.简介：这个其实更多是一种思想，或者说思路。它的主要作用是利用某种性质，进行优化，通常是把<span
+class="math inline">\(O(n^{2})\)</span>的算法优化成<span
+class="math inline">\(O(n)\)</span>。这里的性质，可以理解为某种单调性。比如，前面归并排序中，有一步要把两个有序的数组合并为一个有序的数组，其中就用到了双指针：两个指针从两个数组的起点开始，谁指向的元素更小，那个元素就是当前最小的元素，则放到合并后的大数组，并且相应指针往后移动一位。这里用到的单调性就是，两个数组都是有序的，当前指针后面的所有数都是大于等于当前指针指向的元素的，所以每次只需要比较一下当前两个指针指向的元素谁更小，不需要和后面的相比——这里就剩下了时间复杂度。所以最后两个指针都只需要遍历一遍数组，故时间复杂度是<span
+class="math inline">\(O(n)\)</span></h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/27/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -220,231 +470,6 @@ conda，完了再尝试激活conda环境，依然报错，不过报的错变了�
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. If you suspect this error is being caused by a malfunctioning plugin, consider using the --no-plugins option to turn off plugins. Example: conda --no-plugins install &lt;package&gt; Alternatively, you can <span class="built_in">set</span> the CONDA_NO_PLUGINS environment variable on the <span class="built_in">command</span> line to run the <span class="built_in">command</span> without plugins enabled. Example: CONDA_NO_PLUGINS=<span class="literal">true</span> conda install &lt;package&gt;</span><br></pre></td></tr></table></figure>
 <h2
 id="报错变了头很大本来之前的就没搞明白试着搜了一下这个报错发现github上还是有人给出issue且最后close掉了注意到评论区里有个人提出执行conda-clean--a就解决了不抱希望地尝试了一下竟然好了优点莫名其妙啊">报错变了，头很大……本来之前的就没搞明白……试着搜了一下这个报错，发现GitHub上还是有人给出issue，且最后close掉了；注意到评论区里有个人提出执行<code>conda clean -a</code>就解决了，不抱希望地尝试了一下，竟然好了…………优点莫名其妙啊？</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/04/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/04/04/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-04-04 15:25:11 / Modified: 15:43:13" itemprop="dateCreated datePublished" datetime="2025-04-04T15:25:11+08:00">2025-04-04</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1
-id="这里简单记录一些看起来有些共性的配置环境中遇到的问题">这里简单记录一些看起来有些共性的，配置环境中遇到的问题</h1>
-<h1
-id="pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt报错如下">1.pip
-install -i https://pypi.tuna.tsinghua.edu.cn/simple -r
-requirements.txt报错如下：</h1>
-<p>Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple WARNING:
-Retrying (Retry(total=4, connect=None, read=None, redirect=None,
-status=None)) after connection broken by 'ProxyError('Cannot connect to
-proxy.', OSError(0, 'Error'))': /simple/glfw/ WARNING: Retrying
-(Retry(total=3, connect=None, read=None, redirect=None, status=None))
-after connection broken by 'ProxyError('Cannot connect to proxy.',
-OSError(0, 'Error'))': /simple/glfw/ WARNING: Retrying (Retry(total=2,
-connect=None, read=None, redirect=None, status=None)) after connection
-broken by 'ProxyError('Cannot connect to proxy.', OSError(0, 'Error'))':
-/simple/glfw/ WARNING: Retrying (Retry(total=1, connect=None, read=None,
-redirect=None, status=None)) after connection broken by
-'ProxyError('Cannot connect to proxy.', OSError(0, 'Error'))':
-/simple/glfw/ WARNING: Retrying (Retry(total=0, connect=None, read=None,
-redirect=None, status=None)) after connection broken by
-'ProxyError('Cannot connect to proxy.', OSError(0, 'Error'))':
-/simple/glfw/ ERROR: Could not find a version that satisfies the
-requirement glfw&gt;=1.4.0 (from versions: none) ERROR: No matching
-distribution found for glfw&gt;=1.4.0 WARNING: There was an error
-checking the latest version of pip. ##
-这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）
-## 后面安装其它库的时候，也有类似的报错： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.dev.txt</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br></pre></td></tr></table></figure>
-<h2
-id="看到这种类似的错一样可以按照上面的方法尝试一下因为都有可能是网络问题还有可能出现把梯子关掉再尝试之后依然不行然后又尝试不指定源直接下也不行这时可以试试把梯子开了再下然后关掉再下有可能就成了有点难绷但确实是一种方法实操过是有效的其实感觉这样一通操作下来就验证了很有可能是网络问题了">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/20/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/20/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-20 11:25:51 / Modified: 11:41:28" itemprop="dateCreated datePublished" datetime="2025-03-20T11:25:51+08:00">2025-03-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题描述">问题描述：</h1>
-<h2
-id="就如标题所述在外面是能正常用conda的进入到一个tmux会话之后就不行了因为在外面可以所以应该是正常安装上了那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的-事实上在tmux会话里用conda相关命令之后它会提示要先进行conda-init然而如果用conda-init会发现什么结果也没有它展示了一串配置文件然后说no-change之后再尝试用conda命令依然输出说让先进行conda-init卡这了">就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的<br>事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda
-init，然而如果用conda
-init，会发现什么结果也没有，它展示了一串配置文件，然后说no
-change；之后再尝试用conda命令，依然输出说让先进行conda init，卡这了</h2>
-<h1 id="解决方法">解决方法：</h1>
-<h2
-id="一个暂时的但也见效很快的方法就是在tmux会话里用source-.bashrc激活一下bash的配置文件当然未必一定是bashrc要根据具体用哪个shell来决定不过我倒是几乎全都是用bash的至少我尝试之后这个问题就解决了至于说暂时体现在如果又重新开一个会话或者在一个会话里新开一个窗口都会发现还是有之前的问题这样就需要每次新开一个会话都用一下source-.bashrc其实倒也还好吧不能说特别麻烦但就有点疙瘩的感觉">一个暂时的，但也见效很快的方法，就是在tmux会话里用<code>source ~/.bashrc</code>激活一下bash的配置文件（当然，未必一定是bashrc，要根据具体用哪个shell来决定。不过我倒是几乎全都是用bash的）。至少我尝试之后，这个问题就解决了（至于说暂时，体现在：如果又重新开一个会话，或者在一个会话里新开一个窗口，都会发现还是有之前的问题。这样就需要每次新开一个会话，都用一下<code>source ~/.bashrc</code>，其实倒也还好吧，不能说特别麻烦，但就有点疙瘩的感觉</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E7%BB%88%E7%AB%AFtmux%E4%BC%9A%E8%AF%9D%E9%87%8C%E6%8C%89%E5%88%B0ctrl+z%E4%B9%8B%E5%90%8E%E6%B2%A1%E8%83%BD%E5%BD%BB%E5%BA%95%E6%9D%80%E6%8E%89%E7%A8%8B%E5%BA%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E7%BB%88%E7%AB%AFtmux%E4%BC%9A%E8%AF%9D%E9%87%8C%E6%8C%89%E5%88%B0ctrl+z%E4%B9%8B%E5%90%8E%E6%B2%A1%E8%83%BD%E5%BD%BB%E5%BA%95%E6%9D%80%E6%8E%89%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-14 09:33:03 / Modified: 09:40:43" itemprop="dateCreated datePublished" datetime="2025-03-14T09:33:03+08:00">2025-03-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>ctrl+z是无法终止程序的，它只是把程序挂起来，暂停，但没停掉（所以也不知道这个到底有什么用。。。）
-其实一般我是不会用这个的，更可能的是不小心按错了
-此时应该终止掉它，也就是切出去看一下是哪个进程，然后kill -9
-但不知道为什么，我遇到这个问题的时候，明明kill
--9了，之后再nvidia-smi的时候也没看到这个进程了，可是一旦我再用之前那张显卡，程序一开始就会报错out
-of memory，很明显是之前的程序还在占用着显存</p>
-<p>一个解决方法是，在终端运行<code>ps -ax</code>，它大概是会把各种各样的进程都展示出来，并且会显示每个进程具体的运行命令。根据这个命令，可以锁定哪个进程是之前不小心按到ctrl+z的，然后再对应kill
--9即可。（这里看的时候，除了我的那个不小心被挂起的程序的进程，还有一个进程，ID是前面那个程序的进程+1，好像是一个类似于指示/标识的作用？应该是因为前一个程序被ctrl+z给暂停了才会有的吧）
-反正从操作上，要解决这个问题，就是： 用ps
--ax找出对应的进程（以及可能的ID+1的那个附带的进程） 然后kill
--9把两个进程都kill掉（如果有第二个进程）
-之后再尝试用这张显卡，就能正常用了</p>
 
       
     </div>
@@ -792,7 +817,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

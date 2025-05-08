@@ -20,19 +20,21 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="问题描述： 就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda init，然而如果用conda init，会发现什么结果也没有，它展示了一串配置文件，然后说no change；之后再尝">
+  <meta name="description" content="问题描述： 就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda init，然而如果用conda init，会发现什么结果也没有，它展示了一串配置文件，然后说no change；之后">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
-<meta property="og:url" content="https://blueeemouse.github.io/2025/03/20/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:title" content="在服务器终端里能正常用conda，但进入tmux会话后无法使用">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="问题描述： 就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda init，然而如果用conda init，会发现什么结果也没有，它展示了一串配置文件，然后说no change；之后再尝">
+<meta property="og:description" content="问题描述： 就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda init，然而如果用conda init，会发现什么结果也没有，它展示了一串配置文件，然后说no change；之后">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-03-20T03:25:51.309Z">
-<meta property="article:modified_time" content="2025-03-20T03:41:28.368Z">
+<meta property="article:published_time" content="2025-05-07T14:06:00.000Z">
+<meta property="article:modified_time" content="2025-05-08T14:18:13.432Z">
 <meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="conda">
+<meta property="article:tag" content="tmux">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueeemouse.github.io/2025/03/20/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/">
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/">
 
 
 <script id="page-configurations">
@@ -45,7 +47,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>在服务器终端里能正常用conda，但进入tmux会话后无法使用 | bluemouse's blog</title>
   
 
 
@@ -155,7 +157,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/20/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +170,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          在服务器终端里能正常用conda，但进入tmux会话后无法使用
         </h1>
 
         <div class="post-meta">
@@ -177,9 +179,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-03-20 11:25:51 / Modified: 11:41:28" itemprop="dateCreated datePublished" datetime="2025-03-20T11:25:51+08:00">2025-03-20</time>
+              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-08 22:18:13" itemprop="dateModified" datetime="2025-05-08T22:18:13+08:00">2025-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
             </span>
 
           
@@ -193,7 +210,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="问题描述">问题描述：</h1>
+        <span id="more"></span>
+<h1 id="问题描述">问题描述：</h1>
 <h2
 id="就如标题所述在外面是能正常用conda的进入到一个tmux会话之后就不行了因为在外面可以所以应该是正常安装上了那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的-事实上在tmux会话里用conda相关命令之后它会提示要先进行conda-init然而如果用conda-init会发现什么结果也没有它展示了一串配置文件然后说no-change之后再尝试用conda命令依然输出说让先进行conda-init卡这了">就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的<br>事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda
 init，然而如果用conda
@@ -210,6 +228,10 @@ id="一个暂时的但也见效很快的方法就是在tmux会话里用source-.b
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/conda/" rel="tag"># conda</a>
+              <a href="/tags/tmux/" rel="tag"># tmux</a>
+          </div>
 
         
 
@@ -217,12 +239,12 @@ id="一个暂时的但也见效很快的方法就是在tmux会话里用source-.b
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E7%BB%88%E7%AB%AFtmux%E4%BC%9A%E8%AF%9D%E9%87%8C%E6%8C%89%E5%88%B0ctrl+z%E4%B9%8B%E5%90%8E%E6%B2%A1%E8%83%BD%E5%BD%BB%E5%BA%95%E6%9D%80%E6%8E%89%E7%A8%8B%E5%BA%8F/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E7%BB%88%E7%AB%AFtmux%E4%BC%9A%E8%AF%9D%E9%87%8C%E6%8C%89%E5%88%B0ctrl+z%E4%B9%8B%E5%90%8E%E6%B2%A1%E8%83%BD%E5%BD%BB%E5%BA%95%E6%9D%80%E6%8E%89%E7%A8%8B%E5%BA%8F/" rel="prev" title="在终端tmux会话里按到ctrl+z之后没能彻底杀掉程序">
+      <i class="fa fa-chevron-left"></i> 在终端tmux会话里按到ctrl+z之后没能彻底杀掉程序
     </a></div>
       <div class="post-nav-item">
-    <a href="/2025/04/04/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E9%AA%8C%E8%AF%81%E5%9B%9E%E6%96%87%E4%B8%B2/" rel="next" title="验证回文串">
+      验证回文串 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -310,7 +332,7 @@ change；之后再尝试用conda命令，依然输出说让先进行conda init�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

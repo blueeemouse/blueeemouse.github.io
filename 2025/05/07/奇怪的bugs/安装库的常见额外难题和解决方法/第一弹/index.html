@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="这里简单记录一些看起来有些共性的，配置环境中遇到的问题 1.pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple -r requirements.txt报错如下： Looking in indexes: https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple WARNING: Retrying (Retr">
+  <meta name="description" content="这里简单记录一些看起来有些共性的，配置环境中遇到的问题 1.pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple -r requirements.txt报错如下： 123456789Looking in indexes: https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simpleWARNING: Retryin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
-<meta property="og:url" content="https://blueeemouse.github.io/2025/04/04/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/index.html">
+<meta property="og:title" content="第一弹">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="这里简单记录一些看起来有些共性的，配置环境中遇到的问题 1.pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple -r requirements.txt报错如下： Looking in indexes: https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple WARNING: Retrying (Retr">
+<meta property="og:description" content="这里简单记录一些看起来有些共性的，配置环境中遇到的问题 1.pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple -r requirements.txt报错如下： 123456789Looking in indexes: https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simpleWARNING: Retryin">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-04-04T07:25:11.523Z">
-<meta property="article:modified_time" content="2025-04-04T07:43:13.783Z">
+<meta property="article:published_time" content="2025-05-07T14:06:00.000Z">
+<meta property="article:modified_time" content="2025-05-08T14:18:41.874Z">
 <meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="安装库">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueeemouse.github.io/2025/04/04/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>第一弹 | bluemouse's blog</title>
   
 
 
@@ -155,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/04/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%9D%E5%A4%96%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          第一弹
         </h1>
 
         <div class="post-meta">
@@ -177,9 +178,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-04-04 15:25:11 / Modified: 15:43:13" itemprop="dateCreated datePublished" datetime="2025-04-04T15:25:11+08:00">2025-04-04</time>
+              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-08 22:18:41" itemprop="dateModified" datetime="2025-05-08T22:18:41+08:00">2025-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
             </span>
 
           
@@ -199,27 +215,12 @@ id="这里简单记录一些看起来有些共性的配置环境中遇到的问�
 id="pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt报错如下">1.pip
 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r
 requirements.txt报错如下：</h1>
-<p>Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple WARNING:
-Retrying (Retry(total=4, connect=None, read=None, redirect=None,
-status=None)) after connection broken by 'ProxyError('Cannot connect to
-proxy.', OSError(0, 'Error'))': /simple/glfw/ WARNING: Retrying
-(Retry(total=3, connect=None, read=None, redirect=None, status=None))
-after connection broken by 'ProxyError('Cannot connect to proxy.',
-OSError(0, 'Error'))': /simple/glfw/ WARNING: Retrying (Retry(total=2,
-connect=None, read=None, redirect=None, status=None)) after connection
-broken by 'ProxyError('Cannot connect to proxy.', OSError(0, 'Error'))':
-/simple/glfw/ WARNING: Retrying (Retry(total=1, connect=None, read=None,
-redirect=None, status=None)) after connection broken by
-'ProxyError('Cannot connect to proxy.', OSError(0, 'Error'))':
-/simple/glfw/ WARNING: Retrying (Retry(total=0, connect=None, read=None,
-redirect=None, status=None)) after connection broken by
-'ProxyError('Cannot connect to proxy.', OSError(0, 'Error'))':
-/simple/glfw/ ERROR: Could not find a version that satisfies the
-requirement glfw&gt;=1.4.0 (from versions: none) ERROR: No matching
-distribution found for glfw&gt;=1.4.0 WARNING: There was an error
-checking the latest version of pip. ##
-这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）
-## 后面安装其它库的时候，也有类似的报错： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">ERROR: Could not find a version that satisfies the requirement glfw&gt;=1.4.0 (from versions: none)</span><br><span class="line">ERROR: No matching distribution found <span class="keyword">for</span> glfw&gt;=1.4.0</span><br><span class="line">WARNING: There was an error checking the latest version of pip.</span><br></pre></td></tr></table></figure>
+<h2
+id="这个问题其实看起来还挺正常的而它最后的warning显示应该是版本的一些不匹配的问题然而我是新创建了一个python环境来配置mujoco且也是按照网上的教程来的虽然不排除是版本问题可是人家是走通了的我这里也没先装上什么库应该不太会有库之间的冲突吧经评论区提醒关掉梯子之后再执行就没问题了但尚且不清楚原因">这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）</h2>
+<h2
+id="后面安装其它库的时候也有类似的报错">后面安装其它库的时候，也有类似的报错：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.dev.txt</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br></pre></td></tr></table></figure>
 <h2
 id="看到这种类似的错一样可以按照上面的方法尝试一下因为都有可能是网络问题还有可能出现把梯子关掉再尝试之后依然不行然后又尝试不指定源直接下也不行这时可以试试把梯子开了再下然后关掉再下有可能就成了有点难绷但确实是一种方法实操过是有效的其实感觉这样一通操作下来就验证了很有可能是网络问题了">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</h2>
@@ -231,6 +232,9 @@ id="看到这种类似的错一样可以按照上面的方法尝试一下因为�
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AE%89%E8%A3%85%E5%BA%93/" rel="tag"># 安装库</a>
+          </div>
 
         
 
@@ -238,12 +242,12 @@ id="看到这种类似的错一样可以按照上面的方法尝试一下因为�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/03/20/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2025/05/05/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/%E6%8E%8C%E6%8F%A1%E7%A8%8B%E5%BA%A6/" rel="prev" title="掌握程度">
+      <i class="fa fa-chevron-left"></i> 掌握程度
     </a></div>
       <div class="post-nav-item">
-    <a href="/2025/04/27/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E2%80%9C%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9D%E7%9A%84%E6%83%85%E5%86%B5/" rel="next" title="登录服务器的时候遇到“无法下载服务器”的情况">
+      登录服务器的时候遇到“无法下载服务器”的情况 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -305,7 +309,7 @@ id="看到这种类似的错一样可以按照上面的方法尝试一下因为�
       <div class="post-toc-wrap sidebar-panel">
           <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95%E4%B8%80%E4%BA%9B%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%9C%89%E4%BA%9B%E5%85%B1%E6%80%A7%E7%9A%84%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">这里简单记录一些看起来有些共性的，配置环境中遇到的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt%E6%8A%A5%E9%94%99%E5%A6%82%E4%B8%8B"><span class="nav-number">2.</span> <span class="nav-text">1.pip
 install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple -r
-requirements.txt报错如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E5%88%B0%E8%BF%99%E7%A7%8D%E7%B1%BB%E4%BC%BC%E7%9A%84%E9%94%99%E4%B8%80%E6%A0%B7%E5%8F%AF%E4%BB%A5%E6%8C%89%E7%85%A7%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%96%B9%E6%B3%95%E5%B0%9D%E8%AF%95%E4%B8%80%E4%B8%8B%E5%9B%A0%E4%B8%BA%E9%83%BD%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AF%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E8%BF%98%E6%9C%89%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E6%8A%8A%E6%A2%AF%E5%AD%90%E5%85%B3%E6%8E%89%E5%86%8D%E5%B0%9D%E8%AF%95%E4%B9%8B%E5%90%8E%E4%BE%9D%E7%84%B6%E4%B8%8D%E8%A1%8C%E7%84%B6%E5%90%8E%E5%8F%88%E5%B0%9D%E8%AF%95%E4%B8%8D%E6%8C%87%E5%AE%9A%E6%BA%90%E7%9B%B4%E6%8E%A5%E4%B8%8B%E4%B9%9F%E4%B8%8D%E8%A1%8C%E8%BF%99%E6%97%B6%E5%8F%AF%E4%BB%A5%E8%AF%95%E8%AF%95%E6%8A%8A%E6%A2%AF%E5%AD%90%E5%BC%80%E4%BA%86%E5%86%8D%E4%B8%8B%E7%84%B6%E5%90%8E%E5%85%B3%E6%8E%89%E5%86%8D%E4%B8%8B%E6%9C%89%E5%8F%AF%E8%83%BD%E5%B0%B1%E6%88%90%E4%BA%86%E6%9C%89%E7%82%B9%E9%9A%BE%E7%BB%B7%E4%BD%86%E7%A1%AE%E5%AE%9E%E6%98%AF%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%E5%AE%9E%E6%93%8D%E8%BF%87%E6%98%AF%E6%9C%89%E6%95%88%E7%9A%84%E5%85%B6%E5%AE%9E%E6%84%9F%E8%A7%89%E8%BF%99%E6%A0%B7%E4%B8%80%E9%80%9A%E6%93%8D%E4%BD%9C%E4%B8%8B%E6%9D%A5%E5%B0%B1%E9%AA%8C%E8%AF%81%E4%BA%86%E5%BE%88%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AF%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E4%BA%86"><span class="nav-number">2.1.</span> <span class="nav-text">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</span></a></li></ol></li></ol></div>
+requirements.txt报错如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E5%85%B6%E5%AE%9E%E7%9C%8B%E8%B5%B7%E6%9D%A5%E8%BF%98%E6%8C%BA%E6%AD%A3%E5%B8%B8%E7%9A%84%E8%80%8C%E5%AE%83%E6%9C%80%E5%90%8E%E7%9A%84warning%E6%98%BE%E7%A4%BA%E5%BA%94%E8%AF%A5%E6%98%AF%E7%89%88%E6%9C%AC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%8C%B9%E9%85%8D%E7%9A%84%E9%97%AE%E9%A2%98%E7%84%B6%E8%80%8C%E6%88%91%E6%98%AF%E6%96%B0%E5%88%9B%E5%BB%BA%E4%BA%86%E4%B8%80%E4%B8%AApython%E7%8E%AF%E5%A2%83%E6%9D%A5%E9%85%8D%E7%BD%AEmujoco%E4%B8%94%E4%B9%9F%E6%98%AF%E6%8C%89%E7%85%A7%E7%BD%91%E4%B8%8A%E7%9A%84%E6%95%99%E7%A8%8B%E6%9D%A5%E7%9A%84%E8%99%BD%E7%84%B6%E4%B8%8D%E6%8E%92%E9%99%A4%E6%98%AF%E7%89%88%E6%9C%AC%E9%97%AE%E9%A2%98%E5%8F%AF%E6%98%AF%E4%BA%BA%E5%AE%B6%E6%98%AF%E8%B5%B0%E9%80%9A%E4%BA%86%E7%9A%84%E6%88%91%E8%BF%99%E9%87%8C%E4%B9%9F%E6%B2%A1%E5%85%88%E8%A3%85%E4%B8%8A%E4%BB%80%E4%B9%88%E5%BA%93%E5%BA%94%E8%AF%A5%E4%B8%8D%E5%A4%AA%E4%BC%9A%E6%9C%89%E5%BA%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%86%B2%E7%AA%81%E5%90%A7%E7%BB%8F%E8%AF%84%E8%AE%BA%E5%8C%BA%E6%8F%90%E9%86%92%E5%85%B3%E6%8E%89%E6%A2%AF%E5%AD%90%E4%B9%8B%E5%90%8E%E5%86%8D%E6%89%A7%E8%A1%8C%E5%B0%B1%E6%B2%A1%E9%97%AE%E9%A2%98%E4%BA%86%E4%BD%86%E5%B0%9A%E4%B8%94%E4%B8%8D%E6%B8%85%E6%A5%9A%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.1.</span> <span class="nav-text">这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E9%9D%A2%E5%AE%89%E8%A3%85%E5%85%B6%E5%AE%83%E5%BA%93%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E6%9C%89%E7%B1%BB%E4%BC%BC%E7%9A%84%E6%8A%A5%E9%94%99"><span class="nav-number">2.2.</span> <span class="nav-text">后面安装其它库的时候，也有类似的报错：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E5%88%B0%E8%BF%99%E7%A7%8D%E7%B1%BB%E4%BC%BC%E7%9A%84%E9%94%99%E4%B8%80%E6%A0%B7%E5%8F%AF%E4%BB%A5%E6%8C%89%E7%85%A7%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%96%B9%E6%B3%95%E5%B0%9D%E8%AF%95%E4%B8%80%E4%B8%8B%E5%9B%A0%E4%B8%BA%E9%83%BD%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AF%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E8%BF%98%E6%9C%89%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E6%8A%8A%E6%A2%AF%E5%AD%90%E5%85%B3%E6%8E%89%E5%86%8D%E5%B0%9D%E8%AF%95%E4%B9%8B%E5%90%8E%E4%BE%9D%E7%84%B6%E4%B8%8D%E8%A1%8C%E7%84%B6%E5%90%8E%E5%8F%88%E5%B0%9D%E8%AF%95%E4%B8%8D%E6%8C%87%E5%AE%9A%E6%BA%90%E7%9B%B4%E6%8E%A5%E4%B8%8B%E4%B9%9F%E4%B8%8D%E8%A1%8C%E8%BF%99%E6%97%B6%E5%8F%AF%E4%BB%A5%E8%AF%95%E8%AF%95%E6%8A%8A%E6%A2%AF%E5%AD%90%E5%BC%80%E4%BA%86%E5%86%8D%E4%B8%8B%E7%84%B6%E5%90%8E%E5%85%B3%E6%8E%89%E5%86%8D%E4%B8%8B%E6%9C%89%E5%8F%AF%E8%83%BD%E5%B0%B1%E6%88%90%E4%BA%86%E6%9C%89%E7%82%B9%E9%9A%BE%E7%BB%B7%E4%BD%86%E7%A1%AE%E5%AE%9E%E6%98%AF%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%E5%AE%9E%E6%93%8D%E8%BF%87%E6%98%AF%E6%9C%89%E6%95%88%E7%9A%84%E5%85%B6%E5%AE%9E%E6%84%9F%E8%A7%89%E8%BF%99%E6%A0%B7%E4%B8%80%E9%80%9A%E6%93%8D%E4%BD%9C%E4%B8%8B%E6%9D%A5%E5%B0%B1%E9%AA%8C%E8%AF%81%E4%BA%86%E5%BE%88%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AF%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E4%BA%86"><span class="nav-number">2.3.</span> <span class="nav-text">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -330,7 +334,7 @@ requirements.txt报错如下：</span></a><ol class="nav-child"><li class="nav-i
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
