@@ -150,6 +150,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%BB%99hexo%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%8A%E7%B1%BB%E5%88%AB%E9%A1%B5%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%BB%99hexo%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%8A%E7%B1%BB%E5%88%AB%E9%A1%B5%E9%9D%A2/" class="post-title-link" itemprop="url">给hexo搭建的博客页面加上类别页面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-08 22:29:00 / Modified: 22:35:37" itemprop="dateCreated datePublished" datetime="2025-05-08T22:29:00+08:00">2025-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8D%A3%E9%BC%93blog/" itemprop="url" rel="index"><span itemprop="name">捣鼓blog</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1
+id="需求就如标题所说我希望给博客的首页加上类别的页面这样找文章是比较方便的">需求就如标题所说，我希望给博客的首页加上类别的页面，这样找文章是比较方便的</h1>
+<h1
+id="目前是hexogithub-pages搭建的用的是next主题-1.首先要创建一个标签的页面也就是在终端运行一下hexo-new-page-categories这个命令似乎是在blog的文件夹下的哪一级都行我是在source文件夹下的_posts文件夹这一级运行的这个命令运行完正常应该在source文件夹下看到一个categories文件夹且里面会有一个index.md文件这个文件就是用来自定义我们的类别页面的内容的-2.接下来是编辑这个index.md文件刚一打开应该是">目前是hexo+github
+pages搭建的，用的是next主题<br>1.首先，要创建一个标签的页面，也就是在终端运行一下<code>hexo new page "categories"</code>这个命令（似乎是在blog的文件夹下的哪一级都行？我是在source文件夹下的_posts文件夹这一级运行的这个命令）。运行完，正常应该在source文件夹下看到一个categories文件夹，且里面会有一个index.md文件，这个文件就是用来自定义我们的类别页面的内容的<br>2.接下来是编辑这个index.md文件，刚一打开，应该是</h1>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories </span><br><span class="line"><span class="section">date: 2021-03-13 15:21:30</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
+<h1
+id="的内容date是自动生成的我们只需要改成">的内容，date是自动生成的。我们只需要改成：</h1>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 2025-05-08 21:35:51</span><br><span class="line">type: &quot;categories&quot;</span><br><span class="line"><span class="section">layout: &quot;categories&quot;</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
+<h1 id="这样就行">这样就行</h1>
+<h1
+id="之后疑似是需要在主题文件的_config.yml文件里之所以说是疑似是因为找到的网上的资料里好像只有一篇提到了这一点其它的没提到不知道是不是它们都默认博客的配置文件里开了这个categoriesthemesnext_config.yml这个路径找到menu那一块之后再找到下属的categories那一行具体到我的例子就是categories-categories-fa-fa-th这一行把注释去掉至少我用的hexo的next主题是这样的它的主题本身支持的功能还是有一些的只不过一开始很多都被注释掉了如果需要我们就把注释去掉就行若需要进一步的修改那另说-4.最后我们正常部署就行hexo-generatedeploy不过每篇博文当然需要自己加上categories另这个东西生效还得等上一会前前后后好像大概十来分钟才能在首页点进categories那里看到相应的类别以及点进去能看到类别里的文章">3.之后疑似是需要在主题文件的_config.yml文件里（之所以说是疑似，是因为找到的网上的资料里，好像只有一篇提到了这一点，其它的没提到。不知道是不是它们都默认博客的配置文件里开了这个categories）（themes/next/_config.yml这个路径），找到menu那一块，之后再找到下属的categories那一行（具体到我的例子，就是<code>categories: /categories/ || fa fa-th</code>这一行），把注释去掉（至少我用的hexo的next主题是这样的，它的主题本身支持的功能还是有一些的，只不过一开始很多都被注释掉了，如果需要，我们就把注释去掉就行（若需要进一步的修改，那另说）<br>4.最后，我们正常部署就行（hexo
+generate+deploy）（不过每篇博文当然需要自己加上categories）（另，这个东西生效还得等上一会，前前后后好像大概十来分钟？才能在首页点进Categories那里，看到相应的类别，以及点进去能看到类别里的文章）</h1>
+<h1
+id="排除一个错误方案直接问ai它会让你执行一个这个命令npm-install-hexo-generator-index-pages---save然而会报错大概是一些404说找不到这个东西原因应该是这个插件没有了因为上npm官网搜了一下搜不到这个插件也许是太老了">排除一个错误方案：直接问ai，它会让你执行一个这个命令<code>npm install hexo-generator-index-pages --save</code>，然而会报错，大概是一些404，说找不到这个东西，原因应该是这个插件没有了，因为上<a
+target="_blank" rel="noopener" href="https://www.npmjs.com/">npm官网</a>搜了一下，搜不到这个插件，也许是太老了？</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AE%9E%E7%8E%B0Trie%EF%BC%88%E5%89%8D%E7%BC%80%E6%A0%91%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -282,7 +366,7 @@ id="感觉主要是很久没用struct了有点不熟练啊-简单看一下三个
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-08 14:50:00 / Modified: 14:51:02" itemprop="dateCreated datePublished" datetime="2025-05-08T14:50:00+08:00">2025-05-08</time>
+              <time title="Created: 2025-05-08 14:50:00 / Modified: 22:29:00" itemprop="dateCreated datePublished" datetime="2025-05-08T14:50:00+08:00">2025-05-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -910,90 +994,6 @@ id="给定一个字符串-s-请你找出其中不含有重复字符的-最长-�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/%E6%8D%A3%E9%BC%93blog/%E5%9F%BA%E4%BA%8Ewindows11%E7%9A%84blog%E6%90%AD%E5%BB%BA---hexo+github%20pages/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/04/%E6%8D%A3%E9%BC%93blog/%E5%9F%BA%E4%BA%8Ewindows11%E7%9A%84blog%E6%90%AD%E5%BB%BA---hexo+github%20pages/" class="post-title-link" itemprop="url">基于windows11的blog搭建---hexo+github pages</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-04 16:42:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:42:00+08:00">2025-05-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-08 14:44:03" itemprop="dateModified" datetime="2025-05-08T14:44:03+08:00">2025-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8D%A3%E9%BC%93blog/" itemprop="url" rel="index"><span itemprop="name">捣鼓blog</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1
-id="参考了很多网上的博客现在勉强是搭建出一个雏形凑合能用但显然还有很多地方有待优化只能慢慢来在使用中改进了">参考了很多网上的博客，现在勉强是搭建出一个雏形，凑合能用。但显然还有很多地方有待优化，只能慢慢来，在使用中改进了</h1>
-<h1 id="hexo安装参考了比较多这个博客">1.hexo安装（参考了比较多<a
-target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html">这个博客</a>）</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/04/%E6%8D%A3%E9%BC%93blog/%E5%9F%BA%E4%BA%8Ewindows11%E7%9A%84blog%E6%90%AD%E5%BB%BA---hexo+github%20pages/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1063,7 +1063,7 @@ target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html"
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1074,7 +1074,7 @@ target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html"
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
