@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-08 22:29:00 / Modified: 22:39:01" itemprop="dateCreated datePublished" datetime="2025-05-08T22:29:00+08:00">2025-05-08</time>
+              <time title="Created: 2025-05-08 22:29:00 / Modified: 22:51:41" itemprop="dateCreated datePublished" datetime="2025-05-08T22:29:00+08:00">2025-05-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -202,21 +202,28 @@
 <h1
 id="需求就如标题所说我希望给博客的首页加上类别的页面这样找文章是比较方便的下面的教程参考了比较多这个博客">需求就如标题所说，我希望给博客的首页加上类别的页面，这样找文章是比较方便的（下面的教程，参考了比较多<a
 target="_blank" rel="noopener" href="https://blog.csdn.net/cflsup/article/details/123452683?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-123452683-blog-137717020.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">这个博客</a>）</h1>
-<h1
+<h1 id="一添加类别">一、添加类别</h1>
+<h2
 id="目前是hexogithub-pages搭建的用的是next主题-1.首先要创建一个标签的页面也就是在终端运行一下hexo-new-page-categories这个命令似乎是在blog的文件夹下的哪一级都行我是在source文件夹下的_posts文件夹这一级运行的这个命令运行完正常应该在source文件夹下看到一个categories文件夹且里面会有一个index.md文件这个文件就是用来自定义我们的类别页面的内容的-2.接下来是编辑这个index.md文件刚一打开应该是">目前是hexo+github
-pages搭建的，用的是next主题<br>1.首先，要创建一个标签的页面，也就是在终端运行一下<code>hexo new page "categories"</code>这个命令（似乎是在blog的文件夹下的哪一级都行？我是在source文件夹下的_posts文件夹这一级运行的这个命令）。运行完，正常应该在source文件夹下看到一个categories文件夹，且里面会有一个index.md文件，这个文件就是用来自定义我们的类别页面的内容的<br>2.接下来是编辑这个index.md文件，刚一打开，应该是</h1>
+pages搭建的，用的是next主题<br>1.首先，要创建一个标签的页面，也就是在终端运行一下<code>hexo new page "categories"</code>这个命令（似乎是在blog的文件夹下的哪一级都行？我是在source文件夹下的_posts文件夹这一级运行的这个命令）。运行完，正常应该在source文件夹下看到一个categories文件夹，且里面会有一个index.md文件，这个文件就是用来自定义我们的类别页面的内容的<br>2.接下来是编辑这个index.md文件，刚一打开，应该是</h2>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories </span><br><span class="line"><span class="section">date: 2021-03-13 15:21:30</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
-<h1
-id="的内容date是自动生成的我们只需要改成">的内容，date是自动生成的。我们只需要改成：</h1>
+<h2
+id="的内容date是自动生成的我们只需要改成">的内容，date是自动生成的。我们只需要改成：</h2>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 2025-05-08 21:35:51</span><br><span class="line">type: &quot;categories&quot;</span><br><span class="line"><span class="section">layout: &quot;categories&quot;</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
-<h1
-id="这样就行注意冒号是英文的且后面要有一个空格">这样就行（注意，冒号是英文的，且后面要有一个空格）</h1>
-<h1
+<h2
+id="这样就行注意冒号是英文的且后面要有一个空格">这样就行（注意，冒号是英文的，且后面要有一个空格）</h2>
+<h2
 id="之后疑似是需要在主题文件的_config.yml文件里之所以说是疑似是因为找到的网上的资料里好像只有一篇提到了这一点其它的没提到不知道是不是它们都默认博客的配置文件里开了这个categoriesthemesnext_config.yml这个路径找到menu那一块之后再找到下属的categories那一行具体到我的例子就是categories-categories-fa-fa-th这一行把注释去掉至少我用的hexo的next主题是这样的它的主题本身支持的功能还是有一些的只不过一开始很多都被注释掉了如果需要我们就把注释去掉就行若需要进一步的修改那另说-4.最后我们正常部署就行hexo-generatedeploy不过每篇博文当然需要自己加上categories另这个东西生效还得等上一会前前后后好像大概十来分钟才能在首页点进categories那里看到相应的类别以及点进去能看到类别里的文章">3.之后疑似是需要在主题文件的_config.yml文件里（之所以说是疑似，是因为找到的网上的资料里，好像只有一篇提到了这一点，其它的没提到。不知道是不是它们都默认博客的配置文件里开了这个categories）（themes/next/_config.yml这个路径），找到menu那一块，之后再找到下属的categories那一行（具体到我的例子，就是<code>categories: /categories/ || fa fa-th</code>这一行），把注释去掉（至少我用的hexo的next主题是这样的，它的主题本身支持的功能还是有一些的，只不过一开始很多都被注释掉了，如果需要，我们就把注释去掉就行（若需要进一步的修改，那另说）<br>4.最后，我们正常部署就行（hexo
-generate+deploy）（不过每篇博文当然需要自己加上categories）（另，这个东西生效还得等上一会，前前后后好像大概十来分钟？才能在首页点进Categories那里，看到相应的类别，以及点进去能看到类别里的文章）</h1>
-<h1
+generate+deploy）（不过每篇博文当然需要自己加上categories）（另，这个东西生效还得等上一会，前前后后好像大概十来分钟？才能在首页点进Categories那里，看到相应的类别，以及点进去能看到类别里的文章）</h2>
+<h2
 id="排除一个错误方案直接问ai它会让你执行一个这个命令npm-install-hexo-generator-index-pages---save然而会报错大概是一些404说找不到这个东西原因应该是这个插件没有了因为上npm官网搜了一下搜不到这个插件也许是太老了">排除一个错误方案：直接问ai，它会让你执行一个这个命令<code>npm install hexo-generator-index-pages --save</code>，然而会报错，大概是一些404，说找不到这个东西，原因应该是这个插件没有了，因为上<a
-target="_blank" rel="noopener" href="https://www.npmjs.com/">npm官网</a>搜了一下，搜不到这个插件，也许是太老了？</h1>
+target="_blank" rel="noopener" href="https://www.npmjs.com/">npm官网</a>搜了一下，搜不到这个插件，也许是太老了？</h2>
+<h1 id="二添加子类别">二、添加子类别</h1>
+<h2
+id="在做完上面的之后其实可以在一个类别下添加子类别了具体是如果一篇文章既属于类别a也属于类别a下的一个子类别b那么在这篇文章的开头我们指定categories的时候就是类似这样">在做完上面的之后，其实可以在一个类别下添加子类别了。具体是，如果一篇文章既属于类别A，也属于类别A下的一个子类别B，那么在这篇文章的开头，我们指定categories的时候，就是类似这样：</h2>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">categories: </span><br><span class="line"><span class="bullet">-</span> [bugs, 安装库的常见难题和解决方法]</span><br></pre></td></tr></table></figure>
+<h2
+id="也就是用一个中括号从前到后是类别的顺序代表了类别的级别越前面的类别越高">也就是用一个中括号，从前到后是类别的顺序，代表了类别的级别，越前面的类别越高</h2>
 
       
     </div>
