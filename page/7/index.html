@@ -150,6 +150,264 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 22:41:58" itemprop="dateCreated datePublished" datetime="2024-10-26T22:41:58+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-16 21:29:22" itemprop="dateModified" datetime="2025-02-16T21:29:22+08:00">2025-02-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="eccv24">ECCV24</h1>
+<h1
+id="所研究的taskunsupervised-visible-infrared-person-re-identification">所研究的task：Unsupervised
+Visible-Infrared Person Re-Identification。</h1>
+<h1
+id="贡献提出了一种指标ari用来评价聚类的效果-提出了multi-memory-matching-framework可以提取更多信息以便实现更好的跨模态的对应cross-modality-correspondences">贡献：提出了一种指标ARI，用来评价聚类的效果<br>提出了Multi-Memory
+Matching
+framework，可以提取更多信息，以便实现更好的跨模态的对应（cross-modality
+correspondences）</h1>
+<h1
+id="insight通过多特征匹配来提高聚类和伪标签的可靠性以及辅助跨模态的对应和一般的提高跨模态对应的方法不太一样那些更多聚焦于怎么去对应会把对应的方法转化成其它优化问题">insight：通过多特征匹配，来提高聚类和伪标签的可靠性，以及辅助跨模态的对应（和一般的提高跨模态对应的方法不太一样——那些更多聚焦于怎么去对应，会把对应的方法转化成其它优化问题）</h1>
+<h1
+id="动机无监督情况下训练很大程度上依赖于聚类产生的伪标签但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究而本文先是提出一个指标用来衡量聚类产生的伪标签的效果之后发现其实以前的一些方法的伪标签效果不算好例如明明是不同identity对应的特征但是聚类的时候被分到了相同的伪标签">动机：无监督情况下，训练很大程度上依赖于聚类产生的伪标签。但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究。而本文先是提出一个指标，用来衡量聚类产生的伪标签的效果，之后发现其实以前的一些方法的伪标签效果不算好（例如，明明是不同identity对应的特征，但是聚类的时候被分到了相同的伪标签）</h1>
+<h1 id="方法">方法</h1>
+<h2
+id="cross-modality-clusteringcmc整个pipeline的第一步它主要是用于生成伪标签它的大体思想是提取出图像的更多特征用于进行一个多特征的匹配而不是以往的单特征匹配以提高匹配的可靠性-而所谓单特征匹配其实就是对每幅图像我们都只提取出一个特征向量然后就开始匹配本质上我们在期望这一个特征向量就提取出足够的有意义的信息所以其实它的创新不止是在于提取更多特征这样只是增加了参数量而已至于它所说的更多特征能提取出更多细节信息多少有些讲故事了那我还是提取一个特征向量但我把维度改的更大本质上应该是一样的重点在于多特征的匹配多特征匹配也就是每幅图都有多个特征向量然后用多个特征向量来进行匹配这个是有道理的且是真正创新的下面的mmlm模块就是在实现这个步骤">1.Cross-Modality
+Clustering（CMC）（整个pipeline的第一步）它主要是用于生成伪标签（它的大体思想是，提取出图像的更多特征，用于进行一个多特征的匹配，而不是以往的单特征匹配，以提高匹配的可靠性）<br>（而所谓单特征匹配，其实就是，对每幅图像，我们都只提取出一个特征向量，然后就开始匹配。本质上我们在期望这一个特征向量就提取出足够的、有意义的信息）（所以其实它的创新不止是在于提取更多特征，这样只是增加了参数量而已，至于它所说的更多特征能提取出更多细节信息，多少有些讲故事了：那我还是提取一个特征向量，但我把维度改的更大，本质上应该是一样的；重点在于多特征的匹配。多特征匹配，也就是每幅图都有多个特征向量，然后用多个特征向量来进行匹配，这个是有道理的，且是真正创新的。下面的MMLM模块就是在实现这个步骤）</h2>
+<h2 id="multi-memory-learning-and-matchingmmlm">2.Multi-Memory Learning
+and Matching（MMLM）</h2>
+<h3
+id="它做的主要是在每个簇内继续划分出多个子簇它们代表了更细节的特征跨模态匹配簇的时候还是用pgm的框架但计算簇的距离或者说节点的距离的时候用的是多个子簇而不是像往常的直接用一个簇中心的特征然后再用某种距离度量比如说余弦相似度就认为这个是簇之间的距离了">它做的主要是，在每个簇内继续划分出多个子簇，它们代表了更细节的特征。跨模态匹配簇的时候，还是用PGM的框架，但计算簇的距离（或者说节点的距离）的时候，用的是多个子簇，而不是像往常的，直接用一个簇中心的特征，然后再用某种距离度量，比如说余弦相似度，就认为这个是簇之间的距离了</h3>
+<h2 id="soft-cluster-level-alignment-还得细看">3.Soft Cluster-level
+Alignment<br>还得细看</h2>
+<h1 id="分析">分析</h1>
+<h2
+id="cmc模块主要是聚类的时候把两种模态的所有数据放到一起来聚类但有个问题就是我不清楚它是一开始就把两种模态的数据放到一起只聚类一次还是说先两个模态分别聚类按照经典操作来之后再把两种模态的数据放到一起来一个混合模态的聚类得看代码了论文里没说清楚但这个问题不是很大然后不仅会在两个模态内的簇各自去拉近实例还是经典的用clusternce-loss且会有一步把实例拉近到混合簇里就是说因为两种模态的数据放到一起来聚类了所以会出现一个簇里既有可见光数据也有红外数据拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近通过这种方式间接地学到一些跨模态对应的知识">1.CMC模块，主要是聚类的时候把两种模态的所有数据放到一起来聚类，（但有个问题，就是我不清楚它是一开始就把两种模态的数据放到一起，只聚类一次；还是说先两个模态分别聚类，按照经典操作来，之后再把两种模态的数据放到一起，来一个混合模态的聚类？得看代码了，论文里没说清楚。但这个问题不是很大）然后不仅会在两个模态内的簇各自去拉近实例（还是经典的用ClusterNCE
+loss），且会有一步，把实例拉近到混合簇里（就是说，因为两种模态的数据放到一起来聚类了，所以会出现一个簇里既有可见光数据，也有红外数据；拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近。通过这种方式，间接地学到一些跨模态对应的知识）</h2>
+<h2
+id="mmlm模块在1中其实已经构建了单memory也就是各个模态里的簇中心一般的操作就是直接用这些单memory进行跨模态匹配了此时我们衡量距离就是用簇中心的特征而论文提出要在每个簇指属于这个簇的所有特征的集合内再划分多个小的簇也就是multi-memory用于捕获更多细节的信息最终进行跨模态匹配的时候还是原来那些大的簇进行匹配但我们计算簇的距离的时候就会用到这两个簇里面的多个小的簇这里就是论文强调的multi-memory-matching也是它认为能提高匹配质量的地方">2.MMLM模块，在1中，其实已经构建了单memory（也就是各个模态里的簇中心），一般的操作就是直接用这些单memory进行跨模态匹配了，此时我们衡量距离就是用簇中心的特征。而论文提出，要在每个簇（指属于这个簇的所有特征的集合）内再划分多个小的簇，也就是multi-memory，用于捕获更多细节的信息。最终进行跨模态匹配的时候，还是原来那些大的簇进行匹配，但我们计算簇的距离的时候，就会用到这两个簇里面的多个小的簇（这里就是论文强调的multi-memory
+matching，也是它认为能提高匹配质量的地方）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 16:41:28" itemprop="dateCreated datePublished" datetime="2024-10-26T16:41:28+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-18 14:08:45" itemprop="dateModified" datetime="2025-03-18T14:08:45+08:00">2025-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>通常所谓提取”modality-invariant information“，”modality-shared
+feature“的方法，都是进行一些跨模态的对比学习。这一块有没有得改进？更多借鉴对比学习的技术、理论？用confuser和discriminator可能都还算比较新的了。但confuser到底有没有问题？
+# 研究问题的对比： ## 无监督： ### [[Shallow-Deep Collaborative Learning
+for Unsupervised Visible-Infrared Person
+Re-Identification]]研究的是同时利用好浅层和深层特征，来更好进行重识别。具体做的是，修改了一下骨干网络，改进了一下对比损失部分（主要改进的是谁和谁对比。这个好像有点通病了，大家都这么改），改进了一下label
+association方法 ### [[Learning Commonality, Divergence and Variety for
+Unsupervised Visible-Infrared Person
+Re-identification]]研究的是在无监督学习中，通过改进对比的对象，从而学到更多样的信息。具体做的是，除了通常的centroid
+prototype外，还提出了hard
+prototype（即一个cluster内里中心最远的，虽然也有可能受到噪声影响）和dynamic
+prototype（不局限于和cluster的中心对比，也会和每个cluster里的某个特征向量进行对比，但并不固定和谁对比，动态选取）
+## 有监督： ### [[Implicit Discriminative Knowledge Learning for
+Visible-Infrared Person
+Re-Identification]]研究的是，在提取modality-shared
+feature之余，能不能把modality-specific
+feature也用上，用它们来辅助判别。具体做的是，用一个discriminator和confuser分别提取modality
+specific/shared feature，然后用引入Information
+Purifier来减小两种特征之间的差异，后面将modality-specific
+feature的内容蒸馏进modality-shared
+feature中（感觉这里其实三个部分都相对会新一点。discriminator和confuser可能之前有人用过，但这样明确地提出如何提取shared/specific
+feature还是挺好的。蒸馏感觉尤其新，代表了不同的利用多种特征的方法啊）
+### [[WRIM-Net---Wide-Ranging Information Mining Network for
+Visible-Infrared Person
+Re-Identification]]研究的是，如何更好地提取出一个模态下的multi-dimension
+information。个人理解，也就是想更好捕捉图像中不同部分的交互信息。具体做的是，用池化、注意力机制等计算出一个mask，代表提取了重点特征和多个区域交互的特征（主要体现在多头注意力机制本身的特点，以及它的query、key、value上），然后是一个对比学习了，最重要的改进点在于计算每个query和它最不相似的k个向量之间的对比损失（发现改进点基本还是在于谁和谁比）
+### [[High-Order Structure Based Middle-Feature Learning for
+Visible-Infrared Person
+Re-identification]]研究的是，如何更好地提取出图像中不同部分的交互信息，以便更好地进行行人重识别（显然，和上面的有点重复了）。具体做的是，用CNN和Transformer分别提取长短程的信息（或许可以参考一下cv里之前的一堆把二者结合起来的工作？比如Swin-Transformer），用GAT提取交互信息，最后则还是用一堆对比损失来拉近距离，算上自己算出来的middle
+feature，有三种模态；论文又提出长短程两种range的feature，来回组合对比。。。
+### [[Channel Augmentation for Visible-Infrared
+Re-Identification]]研究的是，从visible images去匹配infrared
+images的方法，希望能利用好visible
+images中的颜色信息，但又要减小两种特征之间的差异。具体做的是，提出一种新的增强操作CA，并稍微解释了一下；然后提出weak-and-strong
+augmentation joint learning
+strategy，在其中提出了分类结果一致性的约束。感觉某种程度上比直接拉近两个特征之间的距离、算对比损失要来的合理一点
+### [[Diverse Embedding Expansion Network and Low-Light Cross-Modality
+Benchmark for Visible-Infrared Person
+Re-Identification]]研究的是从embedding角度出发，希望能生成更多样的embedding，从而学习到更好的特征（不从传统的生成模型出发，是因为论文认为配对数据不够，生成模型效果可能不够好）。具体做的是，提出一个多分支的模块，希望它的每个分支都能捕获不同的信息；然后根据三个假设，提出相应损失来优化这些分支产生的embedding，最后再设计一个模块将多个embedding聚合利用起来（有点像多头注意力，一开始多头注意力的提出，除了稳定训练过程，也是为了每个头能关注到不同的特征）
+### [[PartMix---Regularization Strategy to Learn Part Discovery for
+Visible-Infrared Person
+Re-identification]]研究的是，如何将mixup技术应用到VI-ReID而不会遇到之前mixup技术中固有的问题（比如产生不自然的pattern，即产生很奇怪的图片；或者产生了只有背景的图、没有目标对象的图）。具体做的是，先用注意力机制，得到图像的part
+descriptor和global descriptor，后面对part
+descriptor进行mixup，得到正负样本，最后进行对比 ### [[Shape-Erased
+Feature Learning for Visible-Infrared Person
+Re-Identification]]研究的是，如何更好的提取shape信息，以得到更好的modality-shared
+feature。具体做的是，将得到的表征分离为两部分，相互无关，一部分是shape-related，一部分是shape-erased，然后通过利用shape-related进行重识别，促使其学到更多具有判别性的非shape信息；最后把两部分结合起来，就既有shape信息，也有shape以外的多样的信息
+### [[Visible-Infrared Person Re-Identification via Semantic Alignment
+and Affinity Inference]]研究的是，如何更好的提取part
+feature，并且在推理的时候将行人之间的关系也纳入考虑。具体做的是，先提出SAFL，在这个过程中学习、优化部位信息。这一过程中，会有若干模板，综合利用骨干网络提取出的特征和模板，可以得到图像的latent
+semantic part features；然后推理的时候提出AIM module，计算query
+image与gallery images之间的距离的时候，既用到了query image与gallery
+images之间直接的距离衡量（余弦相似度），也用到了gallery
+images相互之间的距离，二者综合得到修正后的距离 # 方法改进对比： ##
+对比损失部分： ### 谁和谁进行对比： ####
+中间模态的相互对比（比如，[[Shallow-Deep Collaborative Learning for
+Unsupervised Visible-Infrared Person
+Re-Identification]]中，两种模态的shallow/deep
+feature就在不断对比；又比如，[[High-Order Structure Based Middle-Feature
+Learning for Visible-Infrared Person Re-identification]]里，long/short
+term feature之间也会进行对比 ####
+算上中间模态，和原来的模态一起对比（大体上就是三种模态的数据互相对比。一般都是先提出一些假设/rationale，然后基于此挑选一些对象来对比），比如[[Diverse
+Embedding Expansion Network and Low-Light Cross-Modality Benchmark for
+Visible-Infrared Person Re-Identification]] #### 和centroid
+prototype进行对比（很常见了，基本所有无监督方法里都会用到，有监督方法里也可能会用到，比如[[Visible-Infrared
+Person Re-Identification via Semantic Alignment and Affinity
+Inference]]） #### 和hard prototype进行对比（一般hard
+prototype都选取为“最离群”的特征向量。比如，[[Learning Commonality,
+Divergence and Variety for Unsupervised Visible-Infrared Person
+Re-identification]]里，直接就这么说了；但[[WRIM-Net---Wide-Ranging
+Information Mining Network for Visible-Infrared Person
+Re-Identification]]中其实也有类似的思想（就是和最不相似的k个向量进行对比）（总的来说，这类对比方法就是，找出最远的/最不相似的来进行对比，期望能学到里面的独特的信息。但有没有严谨的理论一点的分析）
+#### 增强产生的正负样本之间的对比。比如[[Channel Augmentation for
+Visible-Infrared Re-Identification]]和[[PartMix---Regularization
+Strategy to Learn Part Discovery for Visible-Infrared Person
+Re-identification]]。那这类对比一般可能多出现在基于增强的方法中 ##
+提取modality-specific feature的方法： ###
+discriminator（+confuser一起用） ## 提取modality-shared feature的方法：
+###
+专门提取共性的特征（比如，shape，或者颜色的变化。一般这种专门想针对提取某种特征的，可能都基于增强操作，也许都会提出一种新的增强操作）
+###
+把一些东西共用（譬如，把模板共同给两个模态的特征一起用，或许可以认为最终学习到的模板是含有两个模态共有的信息的。但这只是一种直观上的理解，还不太有理论上的严格证明？）
+## 减小modality gap的方法： ###
+跨模态的对比（基本是标配了）（至于怎么对比，和谁对比，就是上面的问题了）
+###
+利用IN等Normalization方法（这种方法或许是解决分布不同的一种常用方法）[[Implicit
+Discriminative Knowledge Learning for Visible-Infrared Person
+Re-Identification]] ### 利用一些可学习的mask来筛选信息（同上） ### ##
+提取区域交互信息的方法： ### CNN+Transformer提取，GAT提取具体的交互 ###
+用池化、注意力等算出一个mask ## 利用提取出来的多种信息的方法： ###
+提出专门的聚合的模块（[[Diverse Embedding Expansion Network and
+Low-Light Cross-Modality Benchmark for Visible-Infrared Person
+Re-Identification]]） ### ## label association方法： #
+能不能整理出有监督和无监督方法的各自的pipeline？然后考究一下各个方法都在改进哪些部分？
+#
+其它相关领域：多模态（很显然是有关的，看看别的领域怎么处理多种模态的数据，尤其是统一的方法）；domain
+adaptation/transfer
+learning（跨领域，感觉和跨模态其实有点相似，都是会遇到不同的数据） #
+画图 ## 可以参考一下CROSS-MODALITY TRANSFORMER WITH MODALITY MINING FOR
+VISIBLE-INFRARED PERSON
+RE-IDENTIFICATION这篇论文里最后用t-SNE画的那个图，感觉效果一看就特别好。特别是它给每个id的两种模态的特征给圈到一起，这样就能直观看出来embedding效果有多好。而且也能一眼看出来不同id的特征都是分得比较开的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -826,283 +1084,6 @@ compensation<br>这种方法通常是由一种模态生成另一种模态的数�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-23 12:52:14" itemprop="dateCreated datePublished" datetime="2024-10-23T12:52:14+08:00">2024-10-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-24 14:01:27" itemprop="dateModified" datetime="2024-10-24T14:01:27+08:00">2024-10-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题设定">问题设定：</h1>
-<h2
-id="要解决的是利用clip-based-model用于下游的图像分类的问题">要解决的是利用CLIP-based
-model用于下游的图像分类的问题</h2>
-<h1 id="创新点">创新点：</h1>
-<h2
-id="提出学习两种模态的prompt即text和image而之前的工作大多是只学习text-modal-prompt">提出学习两种模态的prompt（即text和image），而之前的工作大多是只学习text-modal
-prompt</h2>
-<h2
-id="学习的prompt之间是有联系的即用不同的test-sample学习prompt时由前一个test-sample习得的prompt会部分地继承到下一个prompt里继承的程度则由前一个prompt的效果决定效果越好继承的越多">学习的prompt之间是有联系的，即用不同的test
-sample学习prompt时，由前一个test
-sample习得的prompt会部分地继承到下一个prompt里。继承的程度则由前一个prompt的效果决定，效果越好、继承的越多</h2>
-<h1 id="method">Method</h1>
-<h2 id="dual-modal-online-prompting-in-dart">1.Dual-Modal Online
-Prompting in DART</h2>
-<h3
-id="它主要就是对textual-modal的prompt进行改进之前的工作一般都是一个prompt套到多个类上比如this-is-a-photo-of-birddog......-而论文希望改进它给每个类别都设计了自己的prompt并且后续可以学习">它主要就是对textual
-modal的prompt进行改进。之前的工作，一般都是一个prompt套到多个类上，比如this
-is a photo of bird/dog/......
-而论文希望改进，它给每个类别都设计了自己的prompt，并且后续可以学习</h3>
-<h3
-id="另外之前的工作大部分只是在调整textual-modal的prompt但该论文希望visual-modal也能有prompt于是也提出了一个prompt但这里就没有像上面那样给每个类别都设计一个prompt而是只设计了一个prompt">另外，之前的工作大部分只是在调整textual
-modal的prompt，但该论文希望visual
-modal也能有prompt，于是也提出了一个prompt。但这里就没有像上面那样给每个类别都设计一个prompt，而是只设计了一个prompt</h3>
-<h3
-id="这里的两种prompt都是instance-level的就是每个样本的都不一样">这里的两种prompt都是instance-level的，就是每个样本的都不一样</h3>
-<h2 id="adaptive-knowledge-retention-in-dart">2.Adaptive Knowledge
-Retention in DART</h2>
-<h3
-id="之所以它希望能做到knowledge-retention是因为测试的时候数据本就不多并且它是online-learning">之所以它希望能做到knowledge
-retention，是因为测试的时候数据本就不多，并且它是online learning</h3>
-<h3
-id="knowledge-retention的方法就是引入一组prompt包括visual和textual的它们记录了历史信息有点类似于lstm里的隐状态具体来说它引入的这组visual和textual-prompt都是分类别的这里一定要和上面的prompt区分开二者不是同一个东西这里引入的我们可以叫它历史prompt上面的是instance-level的然后历史prompt的学习是依赖于instance-level的有点moco里的动量更新的感觉而instance-level-prompt的初始化又是依赖于历史prompt的">knowledge
-retention的方法就是引入一组prompt，包括visual和textual的。它们记录了历史信息，有点类似于LSTM里的隐状态。具体来说，它引入的这组visual和textual
-prompt，都是分类别的。这里一定要和上面的prompt区分开，二者不是同一个东西。这里引入的我们可以叫它历史prompt，上面的是instance-level的。然后历史prompt的学习是依赖于instance
-level的，有点Moco里的动量更新的感觉；而instance level
-prompt的初始化又是依赖于历史prompt的</h3>
-<h3
-id="这里的核心思想或者说假设是对一个输入样本它属于哪个类的概率更高这个概率是用了visual和textual-prompt的我们认为那个类对应的instance-level-visualtextual-prompt质量越高也会越多地把它融合进历史prompt里">这里的核心思想，或者说假设，是：对一个输入样本，它属于哪个类的概率更高（这个概率是用了visual和textual
-prompt的），我们认为那个类对应的instance-level visual/textual
-prompt质量越高，也会越多地把它融合进历史prompt里</h3>
-<h2 id="the-optimization-of-dart">3.The Optimization of DART</h2>
-<h3
-id="上面要用到的instance-level-visualtextual-prompt其实应该是用历史prompt初始化后需要学习的">上面要用到的instance-level
-visual/textual prompt，其实应该是用历史prompt初始化后，需要学习的</h3>
-<h3
-id="它具体的学习过程如下对一幅输入图像先做b次augmentation得到b幅图像b即batch-size然后利用初始化的prompt计算出各个图像属于各个类别的概率分布再筛选出比较自信的结果取平均得到原始样本属于各个类别的概率最后我们优化原始样本的那个概率分布希望它的信息熵尽可能小也就是要尽可能确定逼近一个独热向量优化应该是梯度下降吧还没看代码">它具体的学习过程如下：对一幅输入图像，先做B次augmentation，得到B幅图像（B即batch
-size），然后利用初始化的prompt计算出各个图像属于各个类别的概率分布，再筛选出比较自信的结果，取平均得到原始样本属于各个类别的概率，最后我们优化原始样本的那个概率分布，希望它的信息熵尽可能小，也就是要尽可能确定，逼近一个独热向量（优化应该是梯度下降吧，还没看代码）</h3>
-<h1 id="疑问">疑问：</h1>
-<h2
-id="论文里认为由prompt得到的分类结果越自信即越接近于一个独热向量效果越好但有没有可能分类错了这时就不应该过多继承吧">（论文里认为，由prompt得到的分类结果越自信——即越接近于一个独热向量，效果越好。但有没有可能分类错了？这时就不应该过多继承吧？）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Incremental%20Learning/FineFMPL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Incremental%20Learning/FineFMPL/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-22 19:52:46" itemprop="dateCreated datePublished" datetime="2024-10-22T19:52:46+08:00">2024-10-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-24 14:00:57" itemprop="dateModified" datetime="2024-10-24T14:00:57+08:00">2024-10-24</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="背景知识">背景知识：</h1>
-<h2
-id="它研究的是few-shot-class-incremental-learning-fscil即少样本增量学习简单来说它研究的是增量学习但新类别的数据很少的情况它一般会遇到两个问题一是灾难性遗忘二是对新类别的样本过拟合因为新类别的样本很少">它研究的是Few-Shot
-Class Incremental Learning
-(FSCIL)，即少样本增量学习。简单来说，它研究的是增量学习，但新类别的数据很少的情况。它一般会遇到两个问题，一是灾难性遗忘，二是对新类别的样本过拟合（因为新类别的样本很少）</h2>
-<h1 id="method">method：</h1>
-<h2
-id="大体上本论文提出利用vlmvision-language-model去提取图像的粗粒度的全局信息和细粒度的细节信息然后再结合文本信息这块再细看没懂最后把所有提取出的信息结合起来进行分类">大体上，本论文提出利用VLM（Vision-Language
-Model），去提取图像的粗粒度的全局信息和细粒度的细节信息，然后再结合文本信息（这块再细看，没懂），最后把所有提取出的信息结合起来进行分类</h2>
-<h2 id="背景">0.背景</h2>
-<h3
-id="先明确论文主要是利用vlm因而模型有两个模态的encoder即image模态和text模态的encoder">先明确，论文主要是利用VLM，因而模型有两个模态的encoder，即image模态和text模态的encoder</h3>
-<h2 id="visual-probe-prompt">1.visual probe prompt</h2>
-<h3
-id="它是用来提取出图像中的discriminative-information的也就是提取出关键信息具体来说我们希望用它提取出一幅图像的global-level-feature和object-level-feature前者粗粒度后者细粒度">它是用来提取出图像中的discriminative
-information的，也就是提取出关键信息。具体来说，我们希望用它提取出一幅图像的global-level
-feature和object-level feature（前者粗粒度，后者细粒度）</h3>
-<h3
-id="大体操作对于一幅图像我们会把它处理成多个patch组成的seq因为这里vlm的visual-encoder是vit然后在最后面加入一个可学习的vpp-token即visual-probe-prompt-token当然前面的cls-token也还是在的后面要用组成新的序列然后送到encoder里">大体操作：对于一幅图像，我们会把它处理成多个patch组成的seq（因为这里VLM的visual
-encoder是ViT），然后在最后面加入一个可学习的VPP token（即visual probe
-prompt token）（当然，前面的CLS
-token也还是在的，后面要用），组成新的序列，然后送到encoder里。</h3>
-<h4
-id="提取粗粒度信息可以把这个seq送到encoder里让它照常输出并且还是把cls-token的内容当作全局信息也就是我们认为的global-level-feature">（1）提取粗粒度信息，可以把这个seq送到encoder里，让它照常输出，并且还是把CLS
-token的内容当作全局信息，也就是我们认为的global-level feature。</h4>
-<h4
-id="提取细粒度信息则不能直接把seq送到encoder里而是要走一个新的分支它也是vit但到了后面会有一点不同的操作具体来说到了transformer的倒数第二层后它会取出vpp-token在这一层的结果然后用它对该层的所有token的embedding进行一个scale也就是进行哈达玛积并通过一个mlp以及残差连接然后才送到transformer的最后一层得到最后一层的输出后会用vpp-token的embedding计算各个patch对应的token的权重细粒度的object-level-feature就是cls-token最后的输出再加上各个patch-token的加权求和重点在于这个权重它衡量了各个patch的重要性它认为重要的patch最后权重比较大加的比较多也就对应了论文希望的object-level-feature可以捕捉细粒度信息的目的">（2）提取细粒度信息，则不能直接把seq送到encoder里，而是要走一个新的分支。它也是ViT，但到了后面会有一点不同的操作。具体来说，到了transformer的倒数第二层后，它会取出VPP
-token在这一层的结果，然后用它对该层的所有token的embedding进行一个scale（也就是进行哈达玛积），并通过一个MLP以及残差连接，然后才送到transformer的最后一层。得到最后一层的输出后，会用VPP
-token的embedding计算各个patch对应的token的权重，细粒度的object-level
-feature就是CLS token最后的输出再加上各个patch
-token的加权求和。重点在于这个权重，它衡量了各个patch的重要性，它认为重要的patch，最后权重比较大，加的比较多，也就对应了论文希望的object-level
-feature可以捕捉细粒度信息的目的</h4>
-<h2 id="visual-prototypes-constructions">2.Visual Prototypes
-Constructions</h2>
-<h3
-id="它是用来防止灾难性遗忘的具体来说它会提取出已经学过的各个类别的global-level-feature和object-level-feature也就是所谓global-level-prototype和object-level-prototype用来保存学过的知识">它是用来防止灾难性遗忘的。具体来说，它会提取出已经学过的各个类别的global-level
-feature和object-level feature，也就是所谓global-level
-prototype和object-level prototype，用来保存学过的知识</h3>
-<h3 id="关于如何获得这两种prototype">关于如何获得这两种prototype：</h3>
-<h4
-id="获得global-level-prototype正常把图片输入到vit的encoder后将输出的cls-token的特征视作该图像的全局信息然后如果要获得第i个类的global-prototype就把所有的第i类的图像的输出cls-token取个平均其它类的global-level-prototype类似">（1）获得global-level
-prototype：正常把图片输入到ViT的encoder后，将输出的CLS
-token的特征视作该图像的全局信息。然后，如果要获得第i个类的global
-prototype，就把所有的第i类的图像的输出CLS
-token取个平均。其它类的global-level prototype类似</h4>
-<h4
-id="获得object-level-prototypevit中间各个层会有注意力矩阵若有h个头则每层有h个注意力矩阵把所有层的第i个头的注意力矩阵累乘逐元素然后取出cls与其它token的关系性的那一行其实也就是第一行吧后面可以看代码验证一下我们可以认为这就是第i个头综合所有层的信息提取出来的各个token的重要性它也就是一个长度为n的一维向量如果seq-length为n1除掉cls-token后则有n个token类似地我们算出所有头对应的token的重要性向量把它们累加起来就得到最终的重要性向量用它对patch-seq进行加权求和其实也就是一个向量点乘了得到object-level-prototype之所以是object-level主要还是因为它是由各个patch-token加权求和得到而权重又是反映了各个patch的重要性对于一幅图像可以如此得到一个object-level-prototype类似地对所有图像都可以得到它们自己的object-level-prototype因为我们要分类所以还是像上面那样第i个类的所有图像的object-level-prototype求个平均得到第i个类的object-level-prototype其它类做法类似">（2）获得object-level
-prototype：ViT中间各个层会有注意力矩阵，若有H个头，则每层有H个注意力矩阵。把所有层的第i个头的注意力矩阵累乘（逐元素），然后取出CLS与其它token的关系性的那一行（其实也就是第一行吧，后面可以看代码验证一下）。我们可以认为这就是第i个头综合所有层的信息提取出来的，各个token的重要性，它也就是一个长度为N的一维向量（如果seq
-length为N+1，除掉CLS
-token后则有N个token）。类似地，我们算出所有头对应的token的重要性向量，把它们累加起来，就得到最终的重要性向量。用它对patch
-seq进行加权求和（其实也就是一个向量点乘了），得到object-level
-prototype。之所以是object-level，主要还是因为它是由各个patch
-token加权求和得到，而权重又是反映了各个patch的重要性。对于一幅图像可以如此得到一个object-level
-prototype，类似地，对所有图像都可以得到它们自己的object-level
-prototype。因为我们要分类，所以还是像上面那样，第i个类的所有图像的object-level
-prototype求个平均，得到第i个类的object-level
-prototype。其它类做法类似</h4>
-<h2 id="textual-context-prompt">3.Textual Context Prompt</h2>
-<h3
-id="这也算是文章的主要创新点了因为它就是在强调它提取了两种模态的信息然后要用这两种模态的信息共同对图像进行分类">这也算是文章的主要创新点了，因为它就是在强调，它提取了两种模态的信息，然后要用这两种模态的信息共同对图像进行分类</h3>
-<h3
-id="它是由上面的global-level-prototype和object-level-prototype计算得到的大体上是先将两个level的prototype经过一个mlp以实现信息融合然后再用融合后的信息去分别和两个prototype进行哈达玛积再经过sigmoid函数得到一个类似注意力的权重最后用它计算得到textual-encoder的输入">它是由上面的global-level
-prototype和object-level
-prototype计算得到的。大体上是先将两个level的prototype经过一个MLP，以实现信息融合，然后再用融合后的信息去分别和两个prototype进行哈达玛积，再经过sigmoid函数，得到一个类似注意力的权重，最后用它计算得到textual
-encoder的输入</h3>
-<h3
-id="细节上看起来有点复杂但流程上也就是把两个visual-prototype进行一个融合和重点提取然后送到textual-encoder让它输出我们期望的global-level-textual-prototype和object-level-textual-prototype">细节上看起来有点复杂，但流程上也就是把两个visual
-prototype进行一个融合和重点提取，然后送到textual
-encoder，让它输出我们期望的global-level textual prototype和object-level
-textual prototype</h3>
-<h3
-id="之所以能用visual-prototype得到textual-prototype主要也是像论文里说的那样vl-model有cross-modal-knowledge和能力">之所以能用visual
-prototype得到textual prototype，主要也是像论文里说的那样，VL
-model有cross-modal knowledge和能力</h3>
-<h2 id="inference">4.Inference</h2>
-<h3
-id="最后推理的大概流程就是利用图像的global-feature和object-feature与我们提前计算好的visual和textual-prototype进行匹配得到分类的概率">最后推理的大概流程就是利用图像的global
-feature和object feature与我们提前计算好的visual和textual
-prototype进行匹配，得到分类的概率</h3>
-<h3
-id="具体来说先是用visual-prototype进行匹配先将图像globalobject-feature经过一个mlp同时visual-prototype也通过一个mlp然后将二者的结果进行点积计算余弦相似度比如图像的global-feature会和各个类别的global-level-prototype进行点积得到从全局角度上看图像属于各个类别的logit类似的可以得到从细节角度上图像属于各个类别的logit二者相加即得到最终的从图像角度来看输入图像属于各个类的logit当然论文里说了二者相加不是直接相加object-level的logit有个权重这个就纯粹是小trick了">具体来说，先是用visual
-prototype进行匹配。先将图像global/object feature经过一个MLP，同时visual
-prototype也通过一个MLP，然后将二者的结果进行点积，计算余弦相似度。比如，图像的global
-feature会和各个类别的global-level
-prototype进行点积，得到从全局角度上看，图像属于各个类别的logit。类似的可以得到从细节角度上，图像属于各个类别的logit。二者相加即得到最终的，从图像角度来看，输入图像属于各个类的logit（当然，论文里说了，二者相加不是直接相加，object-level的logit有个权重。这个就纯粹是小trick了）</h3>
-<h3
-id="至于textual-prototype的匹配和上面的过程基本一致只是少了经过mlp的一步直接进行相似度计算也可以得到一个从文本角度来看输入图像属于各个类的logit">至于textual
-prototype的匹配，和上面的过程基本一致，只是少了经过MLP的一步，直接进行相似度计算，也可以得到一个从文本角度来看，输入图像属于各个类的logit</h3>
-<h3
-id="最终两个模态的logit相加得到最后的输入图像属于各个类别的logit这也就是论文里说的用两个模态的信息进行相互辅助的分类同样的这里也有一个权重是图像角度的logit同样是trick了">最终，两个模态的logit相加，得到最后的，输入图像属于各个类别的logit。这也就是论文里说的，用两个模态的信息进行相互辅助的分类（同样的，这里也有一个权重，是图像角度的logit。同样是trick了）</h3>
-<h1 id="疑问">疑问：</h1>
-<h2
-id="object-level特征为什么要用vpp的特征做scale目的在哪里各个patch的权重的计算意义何在为什么认为patch的feature越接近vpp-feature这个patch越重要vpp的意义到底是">object-level特征为什么要用VPP的特征做scale？目的在哪里？各个patch的权重的计算意义何在？为什么认为patch的feature越接近VPP
-feature，这个patch越重要？VPP的意义到底是？</h2>
-<h2
-id="论文里最后进行推理的时候visual那个分支上反而feature和prototype都要经过一个mlp说是为了减小数据之间的gap但textual那个分支上却并没有经过mlp可是feature是通过image得到的和visual-prototype之间的gap应该没有和textual-prototype之间的gap大吧mlp为什么不放到textual那个分支上">论文里最后进行推理的时候，visual那个分支上，反而feature和prototype都要经过一个MLP，说是为了减小数据之间的gap；但textual那个分支上却并没有经过MLP。可是feature是通过image得到的，和visual
-prototype之间的gap应该没有和textual
-prototype之间的gap大吧？MLP为什么不放到textual那个分支上？</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/NCL%EF%BC%88Non%20Negative%20Contrastive%20Learning%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1519,11 +1500,11 @@ encoding的效果并做了实验，发现确实要有这个东西，但至于是
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

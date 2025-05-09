@@ -150,6 +150,195 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr24">cvpr24</h1>
+<h1
+id="problem主流的方法是提取modality-shared-feature然后用它来进行重识别但这种方法忽略了modality-specific-feature而这些feature也并非毫无用处它们可能也含有一些关键的有利于判别的信息intro里有一段说的挺好的虽然我们想利用这些信息但也不能直接利用因为它们本来是modality-specific的差异会比较大需要用一些手段比如蒸馏消去这种差异的同时保留能帮助判别的信息">problem：主流的方法是提取modality-shared
+feature，然后用它来进行重识别。但这种方法忽略了modality-specific
+feature，而这些feature也并非毫无用处，它们可能也含有一些关键的有利于判别的信息（intro里有一段说的挺好的，虽然我们想利用这些信息，但也不能直接利用，因为它们本来是modality-specific的，差异会比较大。需要用一些手段，比如蒸馏，消去这种差异的同时，保留能帮助判别的信息）</h1>
+<h1
+id="motivation希望也能用上modality-specific-feature">motivation：希望也能用上modality-specific
+feature</h1>
+<h1
+id="一些想法intro里提到了单纯的想把两种模态的数据投影到一个公共特征空间里虽然想法很好但总归得到的特征会有些gap就是说不太能真正做到完美的投影到一个公共空间这种方法是有上限的换成其它方法结合其它方法">一些想法：intro里提到了，单纯的想把两种模态的数据投影到一个公共特征空间里，虽然想法很好，但总归得到的特征会有些gap？就是说不太能真正做到完美的投影到一个公共空间。这种方法是有上限的？换成其它方法/结合其它方法？</h1>
+<h1 id="method">method：</h1>
+<h2
+id="modality-confuser-and-discriminator为了学习modality-specificshared-feature">1.Modality
+Confuser and Discriminator（为了学习modality-specific/shared
+feature）</h2>
+<h3
+id="用两套网络分别提取modality-shared-feature和modality-specific-feature后具体进行训练就需要用到confuser和discriminatorconfuser的输入是modality-shared-feature它希望confuser尽可能分不出feature来自于哪个模态这样我们可以认为此时的输入feature是不区分模态的则我们认为学到的是modality-shared-featurediscriminator的输入则是modality-specific-feature我们希望它能尽可能正确分类feature来源的模态这样我们认为这些输入特征确实是modality-specific的">用两套网络分别提取modality-shared
+feature和modality-specific
+feature后，具体进行训练，就需要用到confuser和discriminator。confuser的输入是modality-shared
+feature，它希望confuser尽可能分不出feature来自于哪个模态。这样我们可以认为此时的输入feature是不区分模态的，则我们认为学到的是modality-shared
+feature。discriminator的输入则是modality-specific
+feature，我们希望它能尽可能正确分类feature来源的模态，这样我们认为这些输入特征确实是modality-specific的</h3>
+<h2 id="information-purifier">2.Information Purifier</h2>
+<h3
+id="这一部分的目的是想尽可能消除modality-specific-feature之间的差异但又要尽可能保留它modality-specific的信息一是用了in二是引入两个可学习的mask一个是用来消除差异reduction-of-discrepancies另一个是用来保留modality-specific信息的enhancement-of-discriminative-characteristics">这一部分的目的是想尽可能消除modality-specific
+feature之间的差异，但又要尽可能保留它modality-specific的信息。一是用了IN，二是引入两个可学习的mask，一个是用来消除差异（reduction
+of discrepancies），另一个是用来保留modality-specific信息的（enhancement
+of discriminative characteristics）</h3>
+<h2 id="implicit-knowledge-distillation">3.Implicit Knowledge
+Distillation</h2>
+<h2 id="modality-discrepancy-reduction">4.Modality Discrepancy
+Reduction</h2>
+<h1
+id="改进看流程图pasted-image-20241101142934.png">改进：看流程图![[Pasted
+image 20241101142934.png]]</h1>
+<h1
+id="发现此时就没怎么利用到所谓浅层特征那么在特征进入confuser和discriminator之前是否可以先把浅层信息给结合进来其实主要修改的就是前面的主干网络了">发现，此时就没怎么利用到所谓浅层特征。那么，在特征进入confuser和discriminator之前，是否可以先把浅层信息给结合进来？其实主要修改的就是前面的主干网络了</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-04 20:49:43" itemprop="dateCreated datePublished" datetime="2024-11-04T20:49:43+08:00">2024-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-11-06 14:14:42" itemprop="dateModified" datetime="2024-11-06T14:14:42+08:00">2024-11-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="格式先说明任务设定然后是现有的lreid的benchmark附上图之后说明一下现在的任务的难点以及我们设计的benchmark是怎样的也要附上图并且要说明清楚infrared-image是怎么放进去的">格式：先说明任务设定，然后是现有的lreid的benchmark，附上图；之后说明一下现在的任务的难点，以及我们设计的benchmark是怎样的（也要附上图，并且要说明清楚infrared
+image是怎么放进去的）</h1>
+<h1
+id="将通常的lreid中的若干数据集目前的lreid中用到的数据集都是visible模态的即单模态的换成visible-infrared双模态的数据集也就是说此时要么是只有visible模态数据要么是同时有双模态的数据不会出现只有infrared模态数据的情况可能就是最基本的情况">1.将通常的lreid中的若干数据集（目前的lreid中用到的数据集都是visible模态的，即单模态的）换成visible-infrared双模态的数据集（也就是说此时要么是只有visible模态数据，要么是同时有双模态的数据，不会出现只有infrared模态数据的情况，可能就是最基本的情况）</h1>
+<h1
+id="数据流中的数据集有单独visible模态的单独infrared模态的从双模态的数据集中取出来以及两种模态的数据集的也就是此时既有infrared模态数据的缺失也有visible模态数据的缺失这个对应了现实中的什么情况是说有一些摄像头是有两种模态的拍摄功能然后有一些是只能拍visible模态数据的其中能拍两种模态的相机在一些时段能拍到两种模态的数据比如黄昏在一些时段只能拍到一种模态的数据比如大白天基本只能拍到visible模态的数据晚上基本只能拍到infrared模态的数据">2.数据流中的数据集有单独visible模态的，单独infrared模态的（从双模态的数据集中取出来），以及两种模态的数据集的（也就是此时既有infrared模态数据的缺失，也有visible模态数据的缺失）（这个对应了现实中的什么情况？是说有一些摄像头是有两种模态的拍摄功能，然后有一些是只能拍visible模态数据的？其中能拍两种模态的相机，在一些时段能拍到两种模态的数据（比如黄昏），在一些时段只能拍到一种模态的数据（比如大白天基本只能拍到visible模态的数据，晚上基本只能拍到infrared模态的数据）</h1>
+<h1
+id="数据流中的数据集中有visible模态的也有infrared模态的每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分例如identity1-10的双模态的数据这个又对应了什么情况">3.数据流中的数据集中有visible模态的，也有infrared模态的。每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分（例如，identity1-10的双模态的数据）（这个又对应了什么情况？</h1>
+<h1
+id="从现实应用的角度考虑在终身学习的基础上能做到给定visibleinfrared-image都能找到对应的visibleinfrared-image也就是能完成visibleinfrared到visibleinfrared两两一共四种检索方式就行了考虑最困难的情况即训练的时候只有一种模态然而测试的时候拿的却是另一种模态的数据benchmark能考虑到这种情况不就差不多了吗这样的话第三种到底还有没有必要它的意义在哪里">4.从现实应用的角度考虑，在终身学习的基础上，能做到：给定visible/infrared
+image，都能找到对应的visible/infrared
+image，也就是能完成visible/infrared到visible/infrared两两一共四种检索方式就行了。考虑最困难的情况，即：训练的时候只有一种模态，然而测试的时候拿的却是另一种模态的数据。benchmark能考虑到这种情况，不就差不多了吗？这样的话，第三种到底还有没有必要？它的意义在哪里？</h1>
+<h1
+id="初步baseline设计针对visible和infrared两种模态的数据设计两个模型单独编码visible和infrared-image的特征以及单独进行知识保存和缓解灾难性遗忘做到类似于modality-aware即visible-image的特征单独保存和利用infrared-image也是考虑到visible-image的通道数更多特征更丰富多样因此猜测不同数据集间的domain-gap可能会比较大而相比之下infrared-image的特征可能更为简单因此不同数据集的infrared-image的domain-gap可能会小一点那么在lreid中有可能两种模态的特征遗忘的-程度快慢-都是不一样的例如visible-image的特征可能遗忘的更快而infrared-image的特征可能遗忘的慢一点如果用一个模型对两种模态的图像进行编码以及同时保存知识可能会产生相互干扰的情况例如可能为了保留infrared-image的特征反而影响了visible-image特征信息的保留-后续需要对比用一个模型和两个模型效果哪个效果比较好">初步baseline设计：针对visible和infrared两种模态的数据，设计两个模型，单独编码visible和infrared
+image的特征，以及单独进行知识保存和缓解灾难性遗忘，做到类似于modality-aware（即visible
+image的特征单独保存和利用，infrared image也是）（考虑到visible
+image的通道数更多，特征更丰富多样，因此猜测不同数据集间的domain
+gap可能会比较大；而相比之下，infrared
+image的特征可能更为简单，因此不同数据集的infrared image的domain
+gap可能会小一点。那么，在lreid中，有可能两种模态的特征遗忘的 程度/快慢
+都是不一样的。例如，visible image的特征可能遗忘的更快，而infrared
+image的特征可能遗忘的慢一点。如果用一个模型对两种模态的图像进行编码，以及同时保存知识，可能会产生相互干扰的情况（例如，可能为了保留infrared
+image的特征，反而影响了visible
+image特征信息的保留）<br>后续需要对比用一个模型和两个模型效果哪个效果比较好</h1>
+<h1
+id="后续安排设计明确benchmark之后尝试跑通baseline">后续安排：设计、明确benchmark，之后尝试跑通baseline</h1>
+<h1
+id="问题在第二个benchmark的设定中有没有考察模型-学rgb检索ir学ir检索rgb-的能力换句话说它测试的数据集是怎样的和现有的lreid是不是不一样">问题：在第二个benchmark的设定中，有没有考察模型
+学RGB检索IR/学IR检索RGB
+的能力？换句话说，它测试的数据集是怎样的？和现有的lreid是不是不一样？</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -932,244 +1121,6 @@ id="具体来说跨模态传播标签就是我们聚类得到了红外模态内�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Visible-Infrared%20Person%20Re-Identification%20via%20Semantic%20Alignment%20and%20Affinity%20Inference/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Visible-Infrared%20Person%20Re-Identification%20via%20Semantic%20Alignment%20and%20Affinity%20Inference/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-31 17:26:16 / Modified: 21:58:53" itemprop="dateCreated datePublished" datetime="2024-10-31T17:26:16+08:00">2024-10-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="iccv23">iccv23</h1>
-<h1
-id="problem论文认为part-based-methods都用水平划分来分割部位例如某条线上面是头某两条线中间是躯干大概是这个意思吧真有人这么找部位嘛也太烂了吧不会是因为iccv时间比较早大家早期这么干吧还有就是没考虑到pedestrians-relationship没搞懂得看看它想说什么">problem：论文认为，part-based
-methods都用水平划分来分割部位（例如，某条线上面是头，某两条线中间是躯干。。大概是这个意思吧？）（真有人这么找部位嘛。。也太烂了吧，不会是因为iccv时间比较早，大家早期这么干吧）。还有就是，没考虑到pedestrians
-relationship（没搞懂，得看看它想说什么）</h1>
-<h1
-id="motivationwe-propose-a-semantic-alignment-and-affinity-inference-framework-saai-which-aligns-latent-semantic-part-features-and-better-utilizes-auxiliary-affinity-information.它这么说了看看-1.如何aligns-latent-semantic-part-features-2.如何utilize-auxiliary-affinity-information先注意一下怎么定义的affinity-information">motivation：We
-propose a Semantic Alignment and Affinity Inference framework (SAAI),
-which aligns latent semantic part features and better utilizes auxiliary
-affinity information.它这么说了，看看：<br>1.如何aligns latent semantic
-part features<br>2.如何utilize auxiliary affinity
-information（先注意一下怎么定义的affinity information）</h1>
-<h1 id="method">method：</h1>
-<h2 id="semantic-aligned-feature-learningsafl">1.Semantic-Aligned
-Feature Learning（SAFL）</h2>
-<h3
-id="公共prototypebnneck来减小modality-gapbnneck到底是什么是不是类似改良过的bn话又说回来提到分布间的差异的时候常常会用bn来调整-具体步骤-1.-像素级特征划分-拿到一个特征图-fv-和-fr划分为像素级特征-tv-和-tr-2.-相似性计算-计算像素级特征与可训练原型-p-之间的相似性矩阵-sv-和-sr-3.-部分特征聚合-根据相似性矩阵聚合像素级特征形成潜在语义部分特征-pv和-pr-4.-特征增强-将部分特征与全局特征连接得到增强的特征-fv-和-fr-5.-特征归一化-使用双分支bnneck归一化增强的特征得到归一化后的特征-fv-和-fr-6.-损失计算-计算身份损失-lid部分多样性损失-lpd和中心分离损失-lcs用于模型训练这个l_pd是想让各个不同的prototype学到不同的特征有点像之前生成embedding那篇文章diverse-embedding-expansion-network-and-low-light-cross-modality-benchmark-for-visible-infrared-person-re-identification里促使embedding尽可能不同的那个损失至于l_cs就有点像无监督里的那一套了就是希望让同一identity的样本相对聚拢一点而聚拢就体现在靠近同一identity样本的中心这个就比较稀松平常了">公共prototype，BNNeck来减小modality
-gap（BNNeck到底是什么。。是不是类似改良过的BN？话又说回来，提到分布间的差异的时候，常常会用BN来调整）<br>具体步骤：<br>1.
-<strong>像素级特征划分</strong>:
-拿到一个特征图 Fv​ 和 Fr，划分为像素级特征 Tv​ 和 Tr。<br>2.
-<strong>相似性计算</strong>:
-计算像素级特征与可训练原型 P 之间的相似性矩阵 Sv​ 和 Sr。<br>3.
-<strong>部分特征聚合</strong>:
-根据相似性矩阵，聚合像素级特征形成潜在语义部分特征 pv和 pr​。<br>4.
-<strong>特征增强</strong>:
-将部分特征与全局特征连接，得到增强的特征 F<sup>v 和 F</sup>r。<br>5.
-<strong>特征归一化</strong>:
-使用双分支BNneck归一化增强的特征，得到归一化后的特征 F<sub>v 和 F</sub>r。<br>6.
-<strong>损失计算</strong>:
-计算身份损失 Lid​、部分多样性损失 Lpd和中心分离损失 Lcs，用于模型训练。（这个<span
-class="math inline">\(L_{pd}\)</span>是想让各个不同的prototype学到不同的特征，有点像之前生成embedding那篇文章[[Diverse
-Embedding Expansion Network and Low-Light Cross-Modality Benchmark for
-Visible-Infrared Person
-Re-Identification]]里，促使embedding尽可能不同的那个损失。至于<span
-class="math inline">\(L_{cs}\)</span>，就有点像无监督里的那一套了，就是希望让同一identity的样本相对聚拢一点，而聚拢就体现在靠近同一identity样本的中心。这个就比较稀松平常了）</h3>
-<h2
-id="affinity-inference-moduleaim-module这个东西主要是用在推理的时候有点插件的意思可以加在其它网络上">2.Affinity
-Inference Module（AIM
-module）（这个东西主要是用在推理的时候，有点插件的意思，可以加在其它网络上）</h2>
-<h3
-id="它虽然口口声声说以前的方法忽略了所谓affinity只用cosine-similarity或欧氏距离然后自己利用了affinity但它自己计算affinity不也是用cosine-similarity嘛或者也可能是欧氏距离改进不就顶多体现在识别的时候还利用了gallery-images之间的相似性嘛-大体上说aim做的事就是计算出每个query-image与gallery-images之间的相似性矩阵记作所谓亲和性矩阵affinity-matrix由此可以算出一个base-distance-d这还没完继续计算gallery-images相互之间的亲和性矩阵由此可以算出一个修正距离d注意计算这个修正距离的时候还会对上面提到的两个亲和性矩阵进行一些额外的操作譬如去掉噪声值考虑邻居信息最后修正后的距离是d---d但比较令人奇怪的点是为什么二者相减就表示了一种修正的确修正距离的计算还是有一点道理的主要是除了考虑query-image与gallery-images之间的距离把gallery-images之间的相似性也考虑进来那相减呢表示了什么">它虽然口口声声说以前的方法忽略了所谓affinity，只用cosine
-similarity或欧氏距离，然后自己利用了affinity，但它自己计算affinity不也是用cosine
-similarity嘛（或者也可能是欧氏距离），改进不就顶多体现在识别的时候还利用了gallery
-images之间的相似性嘛<br>大体上说，AIM做的事就是，计算出每个query
-image与gallery images之间的相似性矩阵，记作所谓亲和性矩阵affinity
-matrix，由此可以算出一个base distance d；这还没完，继续计算gallery
-images相互之间的亲和性矩阵，由此可以算出一个修正距离<span
-class="math inline">\(d^{*}\)</span>（注意计算这个修正距离的时候，还会对上面提到的两个亲和性矩阵进行一些额外的操作，譬如去掉噪声值，考虑邻居信息）。最后，修正后的距离是<span
-class="math inline">\(d -
-d^{*}\)</span>（但比较令人奇怪的点是，为什么二者相减就表示了一种修正？的确，修正距离的计算还是有一点道理的，主要是除了考虑query
-image与gallery images之间的距离，把gallery
-images之间的相似性也考虑进来。那相减呢？表示了什么？）</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Unsupervised%20visible-infrared%20person%20re-identification%20via%20progressive%20graph%20matching%20and%20alternate%20learning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Unsupervised%20visible-infrared%20person%20re-identification%20via%20progressive%20graph%20matching%20and%20alternate%20learning/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-31 17:23:05" itemprop="dateCreated datePublished" datetime="2024-10-31T17:23:05+08:00">2024-10-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-17 15:02:31" itemprop="dateModified" datetime="2025-02-17T15:02:31+08:00">2025-02-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr23">cvpr23</h1>
-<h1
-id="insight用progressive-graph-matching的方法来解决跨模态的簇的对应问题progressive解决了两个模态内簇的数量不一样的问题转化为graph-matching则利用了全局的信息提高了对应的质量">insight：用progressive
-graph
-matching的方法来解决跨模态的簇的对应问题，progressive解决了两个模态内簇的数量不一样的问题；转化为graph
-matching则利用了全局的信息，提高了对应的质量</h1>
-<h1
-id="动机先前的方法大多是用局部信息来挖掘跨模态对应关系但忽略了全局信息其实这段话意思就是说直接根据特征的距离远近进行跨模态的匹配是不够的因为这样局限在两两之间的距离远近没有考虑到更多对象而论文提出的方法中的progressive-graph-matching通过图匹配的方式来利用所谓全局信息因为通过图匹配来构建跨模态的对应关系就变成一个全局的最优化问题就不会说单纯的一看到哪两个跨模态的簇是距离最近的就匹配上了这种做法在初期是很可能有问题的且两个模态内聚类得到的簇的数量通常也不一样这也导致跨模态的对齐可能会出问题">动机：先前的方法大多是用局部信息来挖掘跨模态对应关系，但忽略了全局信息。其实这段话意思就是说，直接根据特征的距离远近进行跨模态的匹配是不够的，因为这样局限在两两之间的距离远近，没有考虑到更多对象。而论文提出的方法中的Progressive
-Graph
-Matching，通过图匹配的方式来利用所谓“全局信息”（因为通过图匹配来构建跨模态的对应关系，就变成一个全局的最优化问题，就不会说单纯的，一看到哪两个跨模态的簇是距离最近的，就匹配上了（这种做法在初期是很可能有问题的））。且两个模态内聚类得到的簇的数量通常也不一样，这也导致跨模态的对齐可能会出问题</h1>
-<h1 id="方法简单说明">方法简单说明</h1>
-<h2
-id="提出dual-contrastive-leraning-frameworkdcl操作比较常见只是对可见光多了一个ca增强">1.
-提出Dual-Contrastive Leraning
-framework(DCL)，操作比较常见，只是对可见光多了一个CA增强</h2>
-<h2
-id="提出progressive-graph-matchingpgm把跨模态匹配的问题转化成一个全局的最优化问题后续工作中借鉴的比较多">2.提出Progressive
-Graph
-Matching(PGM)，把跨模态匹配的问题转化成一个全局的最优化问题（后续工作中借鉴的比较多）</h2>
-<h2
-id="提出alternate-cross-contrastive-learningaccl为了减小模态间差异轮流从两个模态出发去拉近实例与跨模态的簇中心之间的距离后续工作中借鉴思想较多">3.提出Alternate
-Cross Contrastive
-Learning(ACCL)，为了减小模态间差异，轮流从两个模态出发去拉近实例与跨模态的簇中心之间的距离（后续工作中借鉴思想较多）</h2>
-<h1 id="方法">方法：</h1>
-<h2
-id="先是一个dual-contrastive-leraning-frameworkdcl用于获取模态内的关联知识接着是一个progressive-graph-matchingpgm-method用于构建可见光和红外数据之间的跨模态联系最后是一个alternate-cross-contrastive-learningaccl">先是一个Dual-Contrastive
-Leraning
-framework（DCL，用于获取模态内的关联知识），接着是一个Progressive Graph
-Matching（PGM
-method，用于构建可见光和红外数据之间的跨模态联系），最后是一个Alternate
-Cross Contrastive Learning（ACCL）</h2>
-<h2
-id="dual-contrastive-learning-framework其实就是聚类对比损失在无监督vi-reid的设定下这个损失一般叫做clusternce它的核心思想就是聚类完成之后对于每个实例都要让它尽可能接近它所属的那个簇的中心">1.Dual-Contrastive
-Learning
-framework其实就是聚类+对比损失（在无监督vi-reid的设定下，这个损失一般叫做ClusterNCE）。它的核心思想就是，聚类完成之后，对于每个实例，都要让它尽可能接近它所属的那个簇的中心</h2>
-<h2
-id="progressive-graph-matching是通过图匹配的方法来捕获跨模态知识的关联它解决的问题就是两个模态里的簇的数量不一样的问题和没有利用全局关系的问题-具体来说它会先构建两个图分别对应红外和可见光两种模态每个图的每个节点都是一个簇中心的特征而所谓图匹配就是让每幅图的每个节点都能对应到另一幅图的某个节点上而关于图匹配结果的评判标准这里的思想是匹配到的两个点它们的特征距离越小匹配成本就越小而我们希望最终总的匹配成本尽可能小由此可以转化成一个带约束的优化问题且可以用矩阵乘法表达这个图匹配问题有一些现成的算法可以调用比如hungarian-algorithm">2.Progressive
-Graph
-Matching是通过图匹配的方法来捕获跨模态知识的关联。它解决的问题就是两个模态里的簇的数量不一样的问题，和没有利用全局关系的问题<br>具体来说，它会先构建两个图，分别对应红外和可见光两种模态。每个图的每个节点都是一个簇中心的特征。而所谓图匹配，就是让每幅图的每个节点都能对应到另一幅图的某个节点上。而关于图匹配结果的评判标准，这里的思想是：匹配到的两个点，它们的特征距离越小，匹配成本就越小；而我们希望最终总的匹配成本尽可能小。由此，可以转化成一个带约束的优化问题，且可以用矩阵乘法表达。这个图匹配问题，有一些现成的算法可以调用，比如Hungarian
-algorithm</h2>
-<h2
-id="alternate-cross-contrastive-learningaccl这里涉及到cross-contrastive-learningccl它就是根据pgm得到的对应关系会从两个模态出发去拉近实例与跨模态的簇中心之间的距离举个例子从红外出发去对齐可见光中的簇中心就是给定一个红外实例我们有它的伪标签知道它属于哪个红外簇不妨记为i根据pgm的匹配结果我们可以知道红外簇i会对应到哪个可见光簇不妨记为j于是我们会用一个对比损失来拉近这个红外实例和可见光簇j之间的距离而从可见光出发也是类似的只不过可见光中一半是ca增强得到的图像-接下来是比较重点比较精彩的地方比较容易想到我们这里的损失就是l_v2rl_r2v也就是两个模态出发的单向损失之和但这里有个问题就是这种双向损失之和会放大噪声或者说传播一些错误的信息因为很显然初期模型还不够好的时候提取出来的特征也不够好进而导致pgm的匹配结果也是不够好的从而会出现匹配错误比如一个红外簇和一个可见光簇其实分别属于id1和2但却被匹配到一起了这时l_v2r就会拉近红外实例与这个错误的可见光簇之间的距离而l_r2v则会拉近可见光实例与这个错误的红外簇之间的距离错误的梯度相当于双倍了会很影响模型性能因此论文提出交替进行具体来说就是奇数轮用l_v2r偶数轮用l_r2v这样做的好处一是减少噪声带来的影响即使初期模型不够好导致匹配出错错误信息也只会影响到一个损失产生一个错误的梯度更有利于模型在初期的改善不至于说一开始直接崩了而只要模型在不断进步那么模型的匹配结果也会越来越好注意每个epoch结束前面的memory以及匹配结果都会重新计算不是固定的相应的accl部分也会起到更多正面的效果换句话说初期的正确性是很有必要的所以一个改进有没有可能可以是做一个类似warmup的操作初期的损失权重小一点经过几轮之后再逐渐增大到1以确保模型能比较顺利地度过初期因为很显然初期是最危险的有可能直接导致模型不收敛了二是我们一轮交替一次让模型不至于非常明显地偏向于某个模态过多地从某个模态的角度出发不妨想一下两轮交替一次好像也没问题三轮交替一次似乎在后期也还凑合那么如果在极限情况一半的epoch才交替一次呢可能模型那个时候就会过于偏向一个模态了导致最终在后面一半的epoch中进展缓慢甚至可能不收敛了但是否有必要在模型已经学到一定程度的知识的时候改变交替的轮数或者在训练的后期改成自适应的交替比如后面发现模型从可见光到红外做的比较好但从红外到可见光做的相对差一些所以就自行更换用l_r2v或许也是一个改进的点">3.Alternate
-Cross Contrastive Learning（ACCL）。这里涉及到Cross Contrastive
-Learning（CCL），它就是根据PGM得到的对应关系，会从两个模态出发去拉近实例与跨模态的簇中心之间的距离（举个例子，从红外出发去对齐可见光中的簇中心，就是，给定一个红外实例，我们有它的伪标签，知道它属于哪个红外簇，不妨记为i；根据PGM的匹配结果，我们可以知道红外簇i会对应到哪个可见光簇，不妨记为j，于是我们会用一个对比损失来拉近这个红外实例和可见光簇j之间的距离。而从可见光出发也是类似的，只不过可见光中一半是CA增强得到的图像）<br>接下来是比较重点，比较精彩的地方。比较容易想到，我们这里的损失就是<span
-class="math inline">\(L_{V2R}+L_{R2V}\)</span>，也就是两个模态出发的单向损失之和。但这里有个问题，就是，这种双向损失之和会放大噪声，或者说传播一些错误的信息。因为很显然，初期模型还不够好的时候，提取出来的特征也不够好，进而导致PGM的匹配结果也是不够好的，从而会出现匹配错误，比如一个红外簇和一个可见光簇，其实分别属于ID1和2，但却被匹配到一起了。这时，<span
-class="math inline">\(L_{V2R}\)</span>就会拉近红外实例与这个错误的可见光簇之间的距离；而<span
-class="math inline">\(L_{R2V}\)</span>则会拉近可见光实例与这个错误的红外簇之间的距离。错误的梯度相当于双倍了，会很影响模型性能。因此，论文提出交替进行，具体来说就是，奇数轮用<span
-class="math inline">\(L_{V2R}\)</span>，偶数轮用<span
-class="math inline">\(L_{R2V}\)</span>。这样做的好处，一是减少噪声带来的影响（即使初期模型不够好，导致匹配出错，错误信息也只会影响到一个损失，产生一个错误的梯度，更有利于模型在初期的改善，不至于说一开始直接崩了。而只要模型在不断进步，那么模型的匹配结果也会越来越好（注意，每个epoch结束，前面的memory以及匹配结果都会重新计算，不是固定的），相应的ACCL部分也会起到更多正面的效果。换句话说，初期的正确性是很有必要的。<strong><em>所以，一个改进有没有可能可以是，做一个类似warmup的操作，初期的损失权重小一点，经过几轮之后再逐渐增大到1，以确保模型能比较顺利地度过初期</em></strong>。因为很显然，初期是最危险的，有可能直接导致模型不收敛了），二是，我们一轮交替一次，让模型不至于非常明显地偏向于某个模态、过多地从某个模态的角度出发（不妨想一下，两轮交替一次，好像也没问题；三轮交替一次，似乎在后期也还凑合……那么，如果在极限情况，一半的epoch才交替一次呢？可能模型那个时候就会过于偏向一个模态了，导致最终在后面一半的epoch中，进展缓慢，甚至可能不收敛了。<strong><em>但，是否有必要，在模型已经学到一定程度的知识的时候，改变交替的轮数？或者在训练的后期，改成自适应的交替？比如，后面发现模型从可见光到红外做的比较好，但从红外到可见光做的相对差一些，所以就自行更换，用<span
-class="math inline">\(L_{R2V}\)</span>？或许也是一个改进的点</em></strong>）</h2>
-<h1 id="分析">分析</h1>
-<h2
-id="dual-contrastive-learning-framework具体来说会先构建两个memory对应可见光和红外两个模态每个模态的memory存的都是聚类得到的所有簇中心的特征更新方式是一个momentum-update但加进来的特征只是一个这个簇里的某个图像特征-具体到训练方式在经过聚类得到伪标签后每个batch中会对红外采样p类每类采样k个样本对这总共pk个样本都施加clusternce-loss这里是要让每个样本尽可能靠近根据聚类得到的它所属的那个簇中心对可见光因为这里还会对每个可见光图像进行一个channel-augmentationca所以原始的可见光图像是随机采样p类每类随机取frack2个样本而这些样本又都会经过ca得到另一半增强后的图像ca图像故总数还是pk还是对这些样本施加clusternce-loss">1.Dual-contrastive
-learning
-framework，具体来说，会先构建两个memory，对应可见光和红外两个模态；每个模态的memory存的都是聚类得到的所有簇中心的特征。更新方式是一个momentum
-update，但加进来的特征只是一个这个簇里的某个图像特征<br>具体到训练方式，在经过聚类得到伪标签后，每个batch中，会对红外采样P类，每类采样K个样本，对这总共P×K个样本都施加ClusterNCE
-loss（这里是要让每个样本尽可能靠近根据聚类得到的，它所属的那个簇中心）；对可见光，因为这里还会对每个可见光图像进行一个Channel
-Augmentation（CA），所以原始的可见光图像是随机采样P类，每类随机取<span
-class="math inline">\(\frac{K}{2}\)</span>个样本，而这些样本又都会经过CA得到另一半增强后的图像（CA图像），故总数还是P×K，还是对这些样本施加ClusterNCE
-loss</h2>
-<h2
-id="在pgm中有个细节就是论文考虑的是比较一般的情况即两种模态聚类得到的clusters可能不相同且假设可见光模态中的cluster数大于等于红外模态中的cluster数故一轮下来其实可能会有可见光中的一些cluster没有红外中的对应cluster这里就体现出progressive-graph-matching中的progressive的由来它会把剩下的没对应上去的可见光的簇重新构建一个图而红外部分的图保持不变再对这两个图进行匹配不断重复这个过程直至所有可见光中的cluster都能对应到红外中的某个cluster">2.在PGM中，有个细节，就是，论文考虑的是比较一般的情况，即两种模态聚类得到的clusters可能不相同，且假设可见光模态中的cluster数大于等于红外模态中的cluster数。故，一轮下来，其实可能会有可见光中的一些cluster没有红外中的对应cluster。这里就体现出Progressive
-Graph
-Matching中的Progressive的由来：它会把剩下的没对应上去的可见光的簇重新构建一个图，而红外部分的图保持不变，再对这两个图进行匹配；不断重复这个过程，直至所有可见光中的cluster都能对应到红外中的某个cluster</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1246,11 +1197,11 @@ Matching中的Progressive的由来：它会把剩下的没对应上去的可见�
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

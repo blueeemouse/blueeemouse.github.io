@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="ICLR 2017 intro 1.先简单介绍一下数据压缩问题 数据压缩问题，本质就是给一组离散数据的各个值（或者说一个离散随机变量的各种可能取值）都赋一个不同的code，我们希望这个code的期望长度尽可能小（也就是熵尽可能小）。（如果是一些简单的情况， 比如，天气变量，一共三种情况，晴天、阴天、雨天，出现概率分别为0.6、0.3、0.1，那么此时我们很容易给出最优的编码。因为我们知道了">
+  <meta name="description" content="ICLR 2017 intro">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
-<meta property="og:url" content="https://blueeemouse.github.io/2024/12/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/index.html">
+<meta property="og:title" content="END-TO-END OPTIMIZED IMAGE COMPRESSION">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="ICLR 2017 intro 1.先简单介绍一下数据压缩问题 数据压缩问题，本质就是给一组离散数据的各个值（或者说一个离散随机变量的各种可能取值）都赋一个不同的code，我们希望这个code的期望长度尽可能小（也就是熵尽可能小）。（如果是一些简单的情况， 比如，天气变量，一共三种情况，晴天、阴天、雨天，出现概率分别为0.6、0.3、0.1，那么此时我们很容易给出最优的编码。因为我们知道了">
+<meta property="og:description" content="ICLR 2017 intro">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-12-30T09:01:52.041Z">
-<meta property="article:modified_time" content="2024-12-30T09:26:43.380Z">
+<meta property="article:published_time" content="2025-05-09T13:41:00.000Z">
+<meta property="article:modified_time" content="2025-05-09T13:42:38.949Z">
 <meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="Image Compression">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueeemouse.github.io/2024/12/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/">
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>END-TO-END OPTIMIZED IMAGE COMPRESSION | bluemouse's blog</title>
   
 
 
@@ -155,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          END-TO-END OPTIMIZED IMAGE COMPRESSION
         </h1>
 
         <div class="post-meta">
@@ -179,7 +180,24 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2024-12-30 17:01:52 / Modified: 17:26:43" itemprop="dateCreated datePublished" datetime="2024-12-30T17:01:52+08:00">2024-12-30</time>
+              <time title="Created: 2025-05-09 21:41:00 / Modified: 21:42:38" itemprop="dateCreated datePublished" datetime="2025-05-09T21:41:00+08:00">2025-05-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image-Compression/" itemprop="url" rel="index"><span itemprop="name">Image Compression</span></a>
+                </span>
             </span>
 
           
@@ -195,6 +213,7 @@
       
         <h1 id="iclr-2017">ICLR 2017</h1>
 <h1 id="intro">intro</h1>
+<span id="more"></span>
 <h2 id="先简单介绍一下数据压缩问题">1.先简单介绍一下数据压缩问题</h2>
 <h4
 id="数据压缩问题本质就是给一组离散数据的各个值或者说一个离散随机变量的各种可能取值都赋一个不同的code我们希望这个code的期望长度尽可能小也就是熵尽可能小如果是一些简单的情况-比如天气变量一共三种情况晴天阴天雨天出现概率分别为0.60.30.1那么此时我们很容易给出最优的编码因为我们知道了这个随机变量的概率分布这个压缩问题就非常依赖于我们对数据分布的认识同时因为连续数据的熵是无限大的而为这种连续数据赋code的话会导致熵无限大不可行所以对连续数据我们需要先进行一个量化然后再进行编码压缩而量化的时候就会引入误差因为举个例子一个随机变量它服从的是0-1上的均匀分布理论上它的取值范围是无穷多的而我们对它进行一个量化假定是按长度均匀划分为4个区间0-0.250.25-0.50.5-0.750.75-1每次抽出来一个数值离哪个区间近就归到哪个区间并量化为区间的右端点值这显然是造成了一些误差的因为可能本来精确值是0.23结果给量化为了0.25了所以这种压缩方式有损压缩lossy-compression-problem需要进行两方面的权衡量化误差要尽可能小同时码率也要尽可能小">数据压缩问题，本质就是给一组离散数据的各个值（或者说一个离散随机变量的各种可能取值）都赋一个不同的code，我们希望这个code的期望长度尽可能小（也就是熵尽可能小）。（如果是一些简单的情况，
@@ -209,6 +228,9 @@ problem），需要进行两方面的权衡：量化误差要尽可能小，同�
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Image-Compression/" rel="tag"># Image Compression</a>
+          </div>
 
         
 
@@ -216,12 +238,12 @@ problem），需要进行两方面的权衡：量化误差要尽可能小，同�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/12/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/%E5%85%A5%E9%97%A8/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/Image%20Compression%E5%85%A5%E9%97%A8/" rel="prev" title="Image Compression入门">
+      <i class="fa fa-chevron-left"></i> Image Compression入门
     </a></div>
       <div class="post-nav-item">
-    <a href="/2025/01/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20Layer%20Normalization%20in%20the%20Transformer%20Architecture/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/" rel="next" title="DART">
+      DART <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -305,11 +327,11 @@ problem），需要进行两方面的权衡：量化误差要尽可能小，同�
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
