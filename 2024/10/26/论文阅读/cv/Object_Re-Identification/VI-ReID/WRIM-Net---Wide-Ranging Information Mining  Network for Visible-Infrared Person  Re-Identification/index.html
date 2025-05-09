@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="阅读中的问题：了解MIIM的作用、AICL的作用到底什么叫specific-modality multi-dimension information？modality-invariant information，是否其实就是modality-shared feature？如果不是，二者的区别在哪里？ 贡献：提出新的模块，来融合多个维度的信息，提取身体部位、姿势等信息 吐槽：只是设计网络的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="阅读中的问题：了解MIIM的作用、AICL的作用到底什么叫specific-modality multi-dimension information？modality-invariant information，是否其实就是modality-shared feature？如果不是，二者的区别在哪里？ 贡献：提出新的模块，来融合多个维度的信息，提取身体部位、姿势等信息 吐槽：只是设计网络的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-10-26T02:32:01.354Z">
+<meta property="article:modified_time" content="2025-03-17T12:45:48.997Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 10:32:01" itemprop="dateCreated datePublished" datetime="2024-10-26T10:32:01+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-17 20:45:48" itemprop="dateModified" datetime="2025-03-17T20:45:48+08:00">2025-03-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1
+id="阅读中的问题了解miim的作用aicl的作用-到底什么叫specific-modality-multi-dimension-information-modality-invariant-information是否其实就是modality-shared-feature如果不是二者的区别在哪里">阅读中的问题：了解MIIM的作用、AICL的作用<br>到底什么叫specific-modality
+multi-dimension information？<br>modality-invariant
+information，是否其实就是modality-shared
+feature？如果不是，二者的区别在哪里？</h1>
+<h1
+id="贡献提出新的模块来融合多个维度的信息提取身体部位姿势等信息">贡献：提出新的模块，来融合多个维度的信息，提取身体部位、姿势等信息</h1>
+<h1
+id="吐槽只是设计网络的输出尺寸和前一个东西保持一致就可以一直强调减少了计算量嘛一直提因为计算量小可以放到浅层的网络-卷积和池化也能被说成是一个单独的压缩模块吹了半天">吐槽：只是设计网络的输出尺寸和前一个东西保持一致，就可以一直强调减少了计算量嘛。。。一直提因为计算量小，可以放到浅层的网络。。。<br>卷积和池化也能被说成是一个单独的压缩模块，吹了半天。。。</h1>
+<h1
+id="有时间可以了解的文章里的上采样具体是怎样的看看代码">有时间可以了解的：文章里的上采样，具体是怎样的？看看代码</h1>
+<h1
+id="problem之前的方法没有深入挖掘所谓specific-modality-multi-dimension-information具体来说它们一般只能做到挖掘一个dimension的信息而很难同时捕获多个dimension的信息这里的多个dimension不是指channel那个而是说多个维度角度比如空间信息颜色信息等">problem：之前的方法没有深入挖掘所谓specific-modality
+multi-dimension
+information。具体来说，它们一般只能做到挖掘一个dimension的信息，而很难同时捕获多个dimension的信息（这里的多个dimension不是指Channel那个，而是说多个维度/角度，比如空间信息，颜色信息等）</h1>
+<h1 id="method">method</h1>
+<h2
+id="miim-module主要是用来enhances-its-non-local-spatial-interaction-capability就是捕捉类似于姿势身体部位比例之类的信息也即关注spatial-dimension和channel-dimension越想越扯这哪有什么创新啊不就是在用transformer多头注意力之前动了一下输入而已嘛">1.MIIM
+module（主要是用来enhances its non-local spatial interaction
+capability，就是捕捉类似于姿势、身体部位比例之类的信息，也即关注spatial
+dimension和channel
+dimension）（越想越扯，这哪有什么创新啊，不就是在用transformer/多头注意力之前动了一下输入而已嘛。。。）</h2>
+<h3
+id="它主要做的事情就是通过一些计算得到一个和原输入形状相同的起到mask作用的一个张量m2用这个m2和输入作哈达玛积得到输出好经典啊只要是这类说提取身体部位相关的方法基本都是想方设法构造mask做哈达玛积得到feature-map但也不得不说这个方法很直观">它主要做的事情就是通过一些计算，得到一个和原输入形状相同的，起到mask作用的一个张量M2，用这个M2和输入作哈达玛积，得到输出（好经典啊，只要是这类说提取“身体部位”相关的方法，基本都是想方设法构造mask，做哈达玛积得到feature
+map。但也不得不说，这个方法很直观）</h3>
+<h3
+id="m2的计算主要经过三个部分依次是sccspatial-channel-compressiongriglobal-region-interactionscrspatial-channel-restorescc就是简单的卷积和池化然后卷积的结果作后续gri的query卷积再池化的结果作后续gri的key和valuegri就是一个多头注意力块kqv如上所述而gri的输出再经过scrscr经过一些网络和上上采样操作将gri的输出形状变得和输入一样此即m2最后就是一个逐元素相乘">M2的计算主要经过三个部分，依次是：SCC（Spatial-Channel
+Compression）、GRI（Global Region Interaction）、SCR（Spatial-Channel
+Restore）。SCC就是简单的卷积和池化，然后卷积的结果作后续GRI的Query，卷积再池化的结果作后续GRI的Key和Value。GRI就是一个多头注意力块。k，q，v如上所述。而GRI的输出再经过SCR，SCR经过一些网络和上上采样操作，将GRI的输出形状变得和输入一样。此即M2。最后就是一个逐元素相乘</h3>
+<h3
+id="论文认为之前的方法没能做到同时挖掘spatial-information和channel-information而这里它是认为miim中的多头注意力机制完成了对spatial-information的挖掘miim中的卷积使得channel数减少以及后面用线性层复原channel使channel数增多这里之所以可以用线性层改变channel应该是因为它把数据的channel放到最后一个维度了这两个地方就完成了channel-information的挖掘个人感觉有点扯了难道只要涉及channel变化就能说是挖掘了channel-information嘛那之前的方法应该或多或少都有吧最起码主干网络里那些卷积类的网络不都有卷积层嘛难道不会改变channel">论文认为之前的方法没能做到同时挖掘spatial
+information和channel
+information，而这里它是认为，MIIM中的多头注意力机制完成了对spatial
+information的挖掘；MIIM中的卷积（使得channel数减少）以及后面用线性层复原channel（使channel数增多）（这里之所以可以用线性层改变channel，应该是因为它把数据的channel放到最后一个维度了），这两个地方就完成了channel
+information的挖掘。。。个人感觉有点扯了，难道只要涉及channel变化就能说是挖掘了channel
+information嘛？那之前的方法应该或多或少都有吧？最起码主干网络里，那些卷积类的网络不都有卷积层嘛，难道不会改变channel？</h3>
+<h2
+id="aicl-approachauxiliary-information-based-contrastive-learning-approach">2.AICL
+approach（Auxiliary-Information-based Contrastive Learning
+Approach）</h2>
+<h3
+id="它是针对前面提取出的特征进行操作的具体来说pasted-image-20241026152320.png">它是针对前面提取出的特征进行操作的。具体来说，![[Pasted
+image 20241026152320.png]]</h3>
+<h3
+id="是block3和block4之后的特征大体的操作流程在图上应该是能看出来的需要关注的可能就是l_cmkic-p_5等几个损失是怎么计算的还有就是它的partition操作说是沿用了另外两篇论文里的操作没明说还不清楚得回头细看一下">是block3和block4之后的特征。大体的操作流程在图上应该是能看出来的。需要关注的可能就是<span
+class="math inline">\(L_{CMKIC-P_{5}}\)</span>等几个损失是怎么计算的（还有就是，它的partition操作说是沿用了另外两篇论文里的操作，没明说，还不清楚，得回头细看一下）</h3>
+<h3
+id="关于l_cmkic-p_5首先它会用到图里的z_5可以简单理解成提取过的特征两种模态每张图像都有一个特征向量它的组成部分其实是两个一个是l_cmkic-p_5-vi一个是l_cmkic-p_5-iv-以l_cmkic-p_5-vi为例解释一下对于训练的时候的一个batch里的rgb模态的图像特征向量我们先计算出ir模态中和它同标签但是最不相似的k个向量之后我们的目标就是拉近这个rgb特征向量与这k个向量的距离也就是计算它们之间的对比损失分母是这个rgb特征向量与所有的ir模态的特征向量的距离即点积取指数再求和别忘了外面的符号然后对这k个距离取平均完成一个样本的损失的计算那么一个batch里的rgb模态的特征都是这么算的求和即得到l_cmkic-p_5-vi至于l_cmkic-p_5-iv计算方法类似只不过我们是希望拉近ir模态和k个rgb模态的特征向量之间的距离相当于说锚点改成ir模态特征向量了">关于<span
+class="math inline">\(L_{CMKIC-P_{5}}\)</span>，首先它会用到图里的<span
+class="math inline">\(Z_{5}\)</span>，可以简单理解成提取过的特征（两种模态，每张图像都有一个特征向量）。它的组成部分其实是两个，一个是<span
+class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>，一个是<span
+class="math inline">\(L_{CMKIC-P_{5}-IV}\)</span> 。以<span
+class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>为例解释一下。对于训练的时候的一个batch里的RGB模态的图像特征向量，我们先计算出IR模态中和它同标签，但是最不相似的K个向量。之后我们的目标就是拉近这个RGB特征向量与这K个向量的距离，也就是计算它们之间的对比损失。分母是这个RGB特征向量与所有的IR模态的特征向量的距离（即点积）取指数再求和。别忘了外面的符号。然后对这K个距离取平均，完成一个样本的损失的计算。那么一个batch里的RGB模态的特征都是这么算的。求和即得到<span
+class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>。至于<span
+class="math inline">\(L_{CMKIC-P_{5}-IV}\)</span>，计算方法类似，只不过我们是希望拉近IR模态和K个RGB模态的特征向量之间的距离，相当于说锚点改成IR模态特征向量了</h3>
+<h3
+id="剩下几个损失中l_cls这种的都是正常的分类然后计算概率分布的交叉熵损失l_tri就是一个三元组损失应该是挺常见的有时间看一下附录里是怎么说的l_total也只是前面提到的各种特征的加权组合">剩下几个损失中，<span
+class="math inline">\(L_{cls}\)</span>这种的，都是正常的分类，然后计算概率分布的交叉熵损失。<span
+class="math inline">\(L_{tri}\)</span>就是一个三元组损失，应该是挺常见的。（有时间看一下附录里是怎么说的）。<span
+class="math inline">\(L_{total}\)</span>也只是前面提到的各种特征的加权组合。</h3>
+<h3
+id="这个方法的本意是用来提取modality-invariant-feature的精心设计的地方可能还是在于和k个最不相似且不同模态但是同标签的向量进行对比损失的计算比较工程的地方可能在于用了多个损失的组合这个和k个最不相似的向量进行对比有没有说法改成1行不行或者说用k会有什么问题但说到底这个大体还是依靠引入某种对比损失来进行所谓减少不同模态数据间的差异老一套了">这个方法的本意是用来提取modality-invariant
+feature的。精心设计的地方可能还是在于和K个最不相似，且不同模态，但是同标签的向量进行对比损失的计算。比较工程的地方可能在于用了多个损失的组合。这个”和K个最不相似的向量“进行对比，有没有说法？改成1行不行？或者说用K会有什么问题？但说到底，这个大体还是依靠引入某种对比损失来进行所谓”减少不同模态数据间的差异“。。。老一套了</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98%E4%BA%86%E8%A7%A3miim%E7%9A%84%E4%BD%9C%E7%94%A8aicl%E7%9A%84%E4%BD%9C%E7%94%A8-%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E5%8F%ABspecific-modality-multi-dimension-information-modality-invariant-information%E6%98%AF%E5%90%A6%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AFmodality-shared-feature%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AF%E4%BA%8C%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="nav-number">1.</span> <span class="nav-text">阅读中的问题：了解MIIM的作用、AICL的作用到底什么叫specific-modality
+multi-dimension information？modality-invariant
+information，是否其实就是modality-shared
+feature？如果不是，二者的区别在哪里？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%A1%E7%8C%AE%E6%8F%90%E5%87%BA%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9D%97%E6%9D%A5%E8%9E%8D%E5%90%88%E5%A4%9A%E4%B8%AA%E7%BB%B4%E5%BA%A6%E7%9A%84%E4%BF%A1%E6%81%AF%E6%8F%90%E5%8F%96%E8%BA%AB%E4%BD%93%E9%83%A8%E4%BD%8D%E5%A7%BF%E5%8A%BF%E7%AD%89%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">贡献：提出新的模块，来融合多个维度的信息，提取身体部位、姿势等信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%90%E6%A7%BD%E5%8F%AA%E6%98%AF%E8%AE%BE%E8%AE%A1%E7%BD%91%E7%BB%9C%E7%9A%84%E8%BE%93%E5%87%BA%E5%B0%BA%E5%AF%B8%E5%92%8C%E5%89%8D%E4%B8%80%E4%B8%AA%E4%B8%9C%E8%A5%BF%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E5%B0%B1%E5%8F%AF%E4%BB%A5%E4%B8%80%E7%9B%B4%E5%BC%BA%E8%B0%83%E5%87%8F%E5%B0%91%E4%BA%86%E8%AE%A1%E7%AE%97%E9%87%8F%E5%98%9B%E4%B8%80%E7%9B%B4%E6%8F%90%E5%9B%A0%E4%B8%BA%E8%AE%A1%E7%AE%97%E9%87%8F%E5%B0%8F%E5%8F%AF%E4%BB%A5%E6%94%BE%E5%88%B0%E6%B5%85%E5%B1%82%E7%9A%84%E7%BD%91%E7%BB%9C-%E5%8D%B7%E7%A7%AF%E5%92%8C%E6%B1%A0%E5%8C%96%E4%B9%9F%E8%83%BD%E8%A2%AB%E8%AF%B4%E6%88%90%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8D%95%E7%8B%AC%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%A8%A1%E5%9D%97%E5%90%B9%E4%BA%86%E5%8D%8A%E5%A4%A9"><span class="nav-number">3.</span> <span class="nav-text">吐槽：只是设计网络的输出尺寸和前一个东西保持一致，就可以一直强调减少了计算量嘛。。。一直提因为计算量小，可以放到浅层的网络。。。卷积和池化也能被说成是一个单独的压缩模块，吹了半天。。。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%89%E6%97%B6%E9%97%B4%E5%8F%AF%E4%BB%A5%E4%BA%86%E8%A7%A3%E7%9A%84%E6%96%87%E7%AB%A0%E9%87%8C%E7%9A%84%E4%B8%8A%E9%87%87%E6%A0%B7%E5%85%B7%E4%BD%93%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%E7%9C%8B%E7%9C%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">有时间可以了解的：文章里的上采样，具体是怎样的？看看代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#problem%E4%B9%8B%E5%89%8D%E7%9A%84%E6%96%B9%E6%B3%95%E6%B2%A1%E6%9C%89%E6%B7%B1%E5%85%A5%E6%8C%96%E6%8E%98%E6%89%80%E8%B0%93specific-modality-multi-dimension-information%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E5%AE%83%E4%BB%AC%E4%B8%80%E8%88%AC%E5%8F%AA%E8%83%BD%E5%81%9A%E5%88%B0%E6%8C%96%E6%8E%98%E4%B8%80%E4%B8%AAdimension%E7%9A%84%E4%BF%A1%E6%81%AF%E8%80%8C%E5%BE%88%E9%9A%BE%E5%90%8C%E6%97%B6%E6%8D%95%E8%8E%B7%E5%A4%9A%E4%B8%AAdimension%E7%9A%84%E4%BF%A1%E6%81%AF%E8%BF%99%E9%87%8C%E7%9A%84%E5%A4%9A%E4%B8%AAdimension%E4%B8%8D%E6%98%AF%E6%8C%87channel%E9%82%A3%E4%B8%AA%E8%80%8C%E6%98%AF%E8%AF%B4%E5%A4%9A%E4%B8%AA%E7%BB%B4%E5%BA%A6%E8%A7%92%E5%BA%A6%E6%AF%94%E5%A6%82%E7%A9%BA%E9%97%B4%E4%BF%A1%E6%81%AF%E9%A2%9C%E8%89%B2%E4%BF%A1%E6%81%AF%E7%AD%89"><span class="nav-number">5.</span> <span class="nav-text">problem：之前的方法没有深入挖掘所谓specific-modality
+multi-dimension
+information。具体来说，它们一般只能做到挖掘一个dimension的信息，而很难同时捕获多个dimension的信息（这里的多个dimension不是指Channel那个，而是说多个维度&#x2F;角度，比如空间信息，颜色信息等）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#method"><span class="nav-number">6.</span> <span class="nav-text">method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#miim-module%E4%B8%BB%E8%A6%81%E6%98%AF%E7%94%A8%E6%9D%A5enhances-its-non-local-spatial-interaction-capability%E5%B0%B1%E6%98%AF%E6%8D%95%E6%8D%89%E7%B1%BB%E4%BC%BC%E4%BA%8E%E5%A7%BF%E5%8A%BF%E8%BA%AB%E4%BD%93%E9%83%A8%E4%BD%8D%E6%AF%94%E4%BE%8B%E4%B9%8B%E7%B1%BB%E7%9A%84%E4%BF%A1%E6%81%AF%E4%B9%9F%E5%8D%B3%E5%85%B3%E6%B3%A8spatial-dimension%E5%92%8Cchannel-dimension%E8%B6%8A%E6%83%B3%E8%B6%8A%E6%89%AF%E8%BF%99%E5%93%AA%E6%9C%89%E4%BB%80%E4%B9%88%E5%88%9B%E6%96%B0%E5%95%8A%E4%B8%8D%E5%B0%B1%E6%98%AF%E5%9C%A8%E7%94%A8transformer%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B%E4%B9%8B%E5%89%8D%E5%8A%A8%E4%BA%86%E4%B8%80%E4%B8%8B%E8%BE%93%E5%85%A5%E8%80%8C%E5%B7%B2%E5%98%9B"><span class="nav-number">6.1.</span> <span class="nav-text">1.MIIM
+module（主要是用来enhances its non-local spatial interaction
+capability，就是捕捉类似于姿势、身体部位比例之类的信息，也即关注spatial
+dimension和channel
+dimension）（越想越扯，这哪有什么创新啊，不就是在用transformer&#x2F;多头注意力之前动了一下输入而已嘛。。。）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%83%E4%B8%BB%E8%A6%81%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85%E5%B0%B1%E6%98%AF%E9%80%9A%E8%BF%87%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AA%E5%92%8C%E5%8E%9F%E8%BE%93%E5%85%A5%E5%BD%A2%E7%8A%B6%E7%9B%B8%E5%90%8C%E7%9A%84%E8%B5%B7%E5%88%B0mask%E4%BD%9C%E7%94%A8%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BC%A0%E9%87%8Fm2%E7%94%A8%E8%BF%99%E4%B8%AAm2%E5%92%8C%E8%BE%93%E5%85%A5%E4%BD%9C%E5%93%88%E8%BE%BE%E7%8E%9B%E7%A7%AF%E5%BE%97%E5%88%B0%E8%BE%93%E5%87%BA%E5%A5%BD%E7%BB%8F%E5%85%B8%E5%95%8A%E5%8F%AA%E8%A6%81%E6%98%AF%E8%BF%99%E7%B1%BB%E8%AF%B4%E6%8F%90%E5%8F%96%E8%BA%AB%E4%BD%93%E9%83%A8%E4%BD%8D%E7%9B%B8%E5%85%B3%E7%9A%84%E6%96%B9%E6%B3%95%E5%9F%BA%E6%9C%AC%E9%83%BD%E6%98%AF%E6%83%B3%E6%96%B9%E8%AE%BE%E6%B3%95%E6%9E%84%E9%80%A0mask%E5%81%9A%E5%93%88%E8%BE%BE%E7%8E%9B%E7%A7%AF%E5%BE%97%E5%88%B0feature-map%E4%BD%86%E4%B9%9F%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%E5%BE%88%E7%9B%B4%E8%A7%82"><span class="nav-number">6.1.1.</span> <span class="nav-text">它主要做的事情就是通过一些计算，得到一个和原输入形状相同的，起到mask作用的一个张量M2，用这个M2和输入作哈达玛积，得到输出（好经典啊，只要是这类说提取“身体部位”相关的方法，基本都是想方设法构造mask，做哈达玛积得到feature
+map。但也不得不说，这个方法很直观）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#m2%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%BB%E8%A6%81%E7%BB%8F%E8%BF%87%E4%B8%89%E4%B8%AA%E9%83%A8%E5%88%86%E4%BE%9D%E6%AC%A1%E6%98%AFsccspatial-channel-compressiongriglobal-region-interactionscrspatial-channel-restorescc%E5%B0%B1%E6%98%AF%E7%AE%80%E5%8D%95%E7%9A%84%E5%8D%B7%E7%A7%AF%E5%92%8C%E6%B1%A0%E5%8C%96%E7%84%B6%E5%90%8E%E5%8D%B7%E7%A7%AF%E7%9A%84%E7%BB%93%E6%9E%9C%E4%BD%9C%E5%90%8E%E7%BB%ADgri%E7%9A%84query%E5%8D%B7%E7%A7%AF%E5%86%8D%E6%B1%A0%E5%8C%96%E7%9A%84%E7%BB%93%E6%9E%9C%E4%BD%9C%E5%90%8E%E7%BB%ADgri%E7%9A%84key%E5%92%8Cvaluegri%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%9D%97kqv%E5%A6%82%E4%B8%8A%E6%89%80%E8%BF%B0%E8%80%8Cgri%E7%9A%84%E8%BE%93%E5%87%BA%E5%86%8D%E7%BB%8F%E8%BF%87scrscr%E7%BB%8F%E8%BF%87%E4%B8%80%E4%BA%9B%E7%BD%91%E7%BB%9C%E5%92%8C%E4%B8%8A%E4%B8%8A%E9%87%87%E6%A0%B7%E6%93%8D%E4%BD%9C%E5%B0%86gri%E7%9A%84%E8%BE%93%E5%87%BA%E5%BD%A2%E7%8A%B6%E5%8F%98%E5%BE%97%E5%92%8C%E8%BE%93%E5%85%A5%E4%B8%80%E6%A0%B7%E6%AD%A4%E5%8D%B3m2%E6%9C%80%E5%90%8E%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E9%80%90%E5%85%83%E7%B4%A0%E7%9B%B8%E4%B9%98"><span class="nav-number">6.1.2.</span> <span class="nav-text">M2的计算主要经过三个部分，依次是：SCC（Spatial-Channel
+Compression）、GRI（Global Region Interaction）、SCR（Spatial-Channel
+Restore）。SCC就是简单的卷积和池化，然后卷积的结果作后续GRI的Query，卷积再池化的结果作后续GRI的Key和Value。GRI就是一个多头注意力块。k，q，v如上所述。而GRI的输出再经过SCR，SCR经过一些网络和上上采样操作，将GRI的输出形状变得和输入一样。此即M2。最后就是一个逐元素相乘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%AE%A4%E4%B8%BA%E4%B9%8B%E5%89%8D%E7%9A%84%E6%96%B9%E6%B3%95%E6%B2%A1%E8%83%BD%E5%81%9A%E5%88%B0%E5%90%8C%E6%97%B6%E6%8C%96%E6%8E%98spatial-information%E5%92%8Cchannel-information%E8%80%8C%E8%BF%99%E9%87%8C%E5%AE%83%E6%98%AF%E8%AE%A4%E4%B8%BAmiim%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E5%AE%8C%E6%88%90%E4%BA%86%E5%AF%B9spatial-information%E7%9A%84%E6%8C%96%E6%8E%98miim%E4%B8%AD%E7%9A%84%E5%8D%B7%E7%A7%AF%E4%BD%BF%E5%BE%97channel%E6%95%B0%E5%87%8F%E5%B0%91%E4%BB%A5%E5%8F%8A%E5%90%8E%E9%9D%A2%E7%94%A8%E7%BA%BF%E6%80%A7%E5%B1%82%E5%A4%8D%E5%8E%9Fchannel%E4%BD%BFchannel%E6%95%B0%E5%A2%9E%E5%A4%9A%E8%BF%99%E9%87%8C%E4%B9%8B%E6%89%80%E4%BB%A5%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%BA%BF%E6%80%A7%E5%B1%82%E6%94%B9%E5%8F%98channel%E5%BA%94%E8%AF%A5%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%AE%83%E6%8A%8A%E6%95%B0%E6%8D%AE%E7%9A%84channel%E6%94%BE%E5%88%B0%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%BA%86%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%9C%B0%E6%96%B9%E5%B0%B1%E5%AE%8C%E6%88%90%E4%BA%86channel-information%E7%9A%84%E6%8C%96%E6%8E%98%E4%B8%AA%E4%BA%BA%E6%84%9F%E8%A7%89%E6%9C%89%E7%82%B9%E6%89%AF%E4%BA%86%E9%9A%BE%E9%81%93%E5%8F%AA%E8%A6%81%E6%B6%89%E5%8F%8Achannel%E5%8F%98%E5%8C%96%E5%B0%B1%E8%83%BD%E8%AF%B4%E6%98%AF%E6%8C%96%E6%8E%98%E4%BA%86channel-information%E5%98%9B%E9%82%A3%E4%B9%8B%E5%89%8D%E7%9A%84%E6%96%B9%E6%B3%95%E5%BA%94%E8%AF%A5%E6%88%96%E5%A4%9A%E6%88%96%E5%B0%91%E9%83%BD%E6%9C%89%E5%90%A7%E6%9C%80%E8%B5%B7%E7%A0%81%E4%B8%BB%E5%B9%B2%E7%BD%91%E7%BB%9C%E9%87%8C%E9%82%A3%E4%BA%9B%E5%8D%B7%E7%A7%AF%E7%B1%BB%E7%9A%84%E7%BD%91%E7%BB%9C%E4%B8%8D%E9%83%BD%E6%9C%89%E5%8D%B7%E7%A7%AF%E5%B1%82%E5%98%9B%E9%9A%BE%E9%81%93%E4%B8%8D%E4%BC%9A%E6%94%B9%E5%8F%98channel"><span class="nav-number">6.1.3.</span> <span class="nav-text">论文认为之前的方法没能做到同时挖掘spatial
+information和channel
+information，而这里它是认为，MIIM中的多头注意力机制完成了对spatial
+information的挖掘；MIIM中的卷积（使得channel数减少）以及后面用线性层复原channel（使channel数增多）（这里之所以可以用线性层改变channel，应该是因为它把数据的channel放到最后一个维度了），这两个地方就完成了channel
+information的挖掘。。。个人感觉有点扯了，难道只要涉及channel变化就能说是挖掘了channel
+information嘛？那之前的方法应该或多或少都有吧？最起码主干网络里，那些卷积类的网络不都有卷积层嘛，难道不会改变channel？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#aicl-approachauxiliary-information-based-contrastive-learning-approach"><span class="nav-number">6.2.</span> <span class="nav-text">2.AICL
+approach（Auxiliary-Information-based Contrastive Learning
+Approach）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%83%E6%98%AF%E9%92%88%E5%AF%B9%E5%89%8D%E9%9D%A2%E6%8F%90%E5%8F%96%E5%87%BA%E7%9A%84%E7%89%B9%E5%BE%81%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%E7%9A%84%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4pasted-image-20241026152320.png"><span class="nav-number">6.2.1.</span> <span class="nav-text">它是针对前面提取出的特征进行操作的。具体来说，![[Pasted
+image 20241026152320.png]]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AFblock3%E5%92%8Cblock4%E4%B9%8B%E5%90%8E%E7%9A%84%E7%89%B9%E5%BE%81%E5%A4%A7%E4%BD%93%E7%9A%84%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9C%A8%E5%9B%BE%E4%B8%8A%E5%BA%94%E8%AF%A5%E6%98%AF%E8%83%BD%E7%9C%8B%E5%87%BA%E6%9D%A5%E7%9A%84%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E7%9A%84%E5%8F%AF%E8%83%BD%E5%B0%B1%E6%98%AFl_cmkic-p_5%E7%AD%89%E5%87%A0%E4%B8%AA%E6%8D%9F%E5%A4%B1%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97%E7%9A%84%E8%BF%98%E6%9C%89%E5%B0%B1%E6%98%AF%E5%AE%83%E7%9A%84partition%E6%93%8D%E4%BD%9C%E8%AF%B4%E6%98%AF%E6%B2%BF%E7%94%A8%E4%BA%86%E5%8F%A6%E5%A4%96%E4%B8%A4%E7%AF%87%E8%AE%BA%E6%96%87%E9%87%8C%E7%9A%84%E6%93%8D%E4%BD%9C%E6%B2%A1%E6%98%8E%E8%AF%B4%E8%BF%98%E4%B8%8D%E6%B8%85%E6%A5%9A%E5%BE%97%E5%9B%9E%E5%A4%B4%E7%BB%86%E7%9C%8B%E4%B8%80%E4%B8%8B"><span class="nav-number">6.2.2.</span> <span class="nav-text">是block3和block4之后的特征。大体的操作流程在图上应该是能看出来的。需要关注的可能就是\(L_{CMKIC-P_{5}}\)等几个损失是怎么计算的（还有就是，它的partition操作说是沿用了另外两篇论文里的操作，没明说，还不清楚，得回头细看一下）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8El_cmkic-p_5%E9%A6%96%E5%85%88%E5%AE%83%E4%BC%9A%E7%94%A8%E5%88%B0%E5%9B%BE%E9%87%8C%E7%9A%84z_5%E5%8F%AF%E4%BB%A5%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%E6%88%90%E6%8F%90%E5%8F%96%E8%BF%87%E7%9A%84%E7%89%B9%E5%BE%81%E4%B8%A4%E7%A7%8D%E6%A8%A1%E6%80%81%E6%AF%8F%E5%BC%A0%E5%9B%BE%E5%83%8F%E9%83%BD%E6%9C%89%E4%B8%80%E4%B8%AA%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E5%AE%83%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%E5%85%B6%E5%AE%9E%E6%98%AF%E4%B8%A4%E4%B8%AA%E4%B8%80%E4%B8%AA%E6%98%AFl_cmkic-p_5-vi%E4%B8%80%E4%B8%AA%E6%98%AFl_cmkic-p_5-iv-%E4%BB%A5l_cmkic-p_5-vi%E4%B8%BA%E4%BE%8B%E8%A7%A3%E9%87%8A%E4%B8%80%E4%B8%8B%E5%AF%B9%E4%BA%8E%E8%AE%AD%E7%BB%83%E7%9A%84%E6%97%B6%E5%80%99%E7%9A%84%E4%B8%80%E4%B8%AAbatch%E9%87%8C%E7%9A%84rgb%E6%A8%A1%E6%80%81%E7%9A%84%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E6%88%91%E4%BB%AC%E5%85%88%E8%AE%A1%E7%AE%97%E5%87%BAir%E6%A8%A1%E6%80%81%E4%B8%AD%E5%92%8C%E5%AE%83%E5%90%8C%E6%A0%87%E7%AD%BE%E4%BD%86%E6%98%AF%E6%9C%80%E4%B8%8D%E7%9B%B8%E4%BC%BC%E7%9A%84k%E4%B8%AA%E5%90%91%E9%87%8F%E4%B9%8B%E5%90%8E%E6%88%91%E4%BB%AC%E7%9A%84%E7%9B%AE%E6%A0%87%E5%B0%B1%E6%98%AF%E6%8B%89%E8%BF%91%E8%BF%99%E4%B8%AArgb%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E4%B8%8E%E8%BF%99k%E4%B8%AA%E5%90%91%E9%87%8F%E7%9A%84%E8%B7%9D%E7%A6%BB%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AE%A1%E7%AE%97%E5%AE%83%E4%BB%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%AF%B9%E6%AF%94%E6%8D%9F%E5%A4%B1%E5%88%86%E6%AF%8D%E6%98%AF%E8%BF%99%E4%B8%AArgb%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E4%B8%8E%E6%89%80%E6%9C%89%E7%9A%84ir%E6%A8%A1%E6%80%81%E7%9A%84%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%8D%B3%E7%82%B9%E7%A7%AF%E5%8F%96%E6%8C%87%E6%95%B0%E5%86%8D%E6%B1%82%E5%92%8C%E5%88%AB%E5%BF%98%E4%BA%86%E5%A4%96%E9%9D%A2%E7%9A%84%E7%AC%A6%E5%8F%B7%E7%84%B6%E5%90%8E%E5%AF%B9%E8%BF%99k%E4%B8%AA%E8%B7%9D%E7%A6%BB%E5%8F%96%E5%B9%B3%E5%9D%87%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E6%A0%B7%E6%9C%AC%E7%9A%84%E6%8D%9F%E5%A4%B1%E7%9A%84%E8%AE%A1%E7%AE%97%E9%82%A3%E4%B9%88%E4%B8%80%E4%B8%AAbatch%E9%87%8C%E7%9A%84rgb%E6%A8%A1%E6%80%81%E7%9A%84%E7%89%B9%E5%BE%81%E9%83%BD%E6%98%AF%E8%BF%99%E4%B9%88%E7%AE%97%E7%9A%84%E6%B1%82%E5%92%8C%E5%8D%B3%E5%BE%97%E5%88%B0l_cmkic-p_5-vi%E8%87%B3%E4%BA%8El_cmkic-p_5-iv%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E7%B1%BB%E4%BC%BC%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%88%91%E4%BB%AC%E6%98%AF%E5%B8%8C%E6%9C%9B%E6%8B%89%E8%BF%91ir%E6%A8%A1%E6%80%81%E5%92%8Ck%E4%B8%AArgb%E6%A8%A1%E6%80%81%E7%9A%84%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E4%B9%8B%E9%97%B4%E7%9A%84%E8%B7%9D%E7%A6%BB%E7%9B%B8%E5%BD%93%E4%BA%8E%E8%AF%B4%E9%94%9A%E7%82%B9%E6%94%B9%E6%88%90ir%E6%A8%A1%E6%80%81%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E4%BA%86"><span class="nav-number">6.2.3.</span> <span class="nav-text">关于\(L_{CMKIC-P_{5}}\)，首先它会用到图里的\(Z_{5}\)，可以简单理解成提取过的特征（两种模态，每张图像都有一个特征向量）。它的组成部分其实是两个，一个是\(L_{CMKIC-P_{5}-VI}\)，一个是\(L_{CMKIC-P_{5}-IV}\) 。以\(L_{CMKIC-P_{5}-VI}\)为例解释一下。对于训练的时候的一个batch里的RGB模态的图像特征向量，我们先计算出IR模态中和它同标签，但是最不相似的K个向量。之后我们的目标就是拉近这个RGB特征向量与这K个向量的距离，也就是计算它们之间的对比损失。分母是这个RGB特征向量与所有的IR模态的特征向量的距离（即点积）取指数再求和。别忘了外面的符号。然后对这K个距离取平均，完成一个样本的损失的计算。那么一个batch里的RGB模态的特征都是这么算的。求和即得到\(L_{CMKIC-P_{5}-VI}\)。至于\(L_{CMKIC-P_{5}-IV}\)，计算方法类似，只不过我们是希望拉近IR模态和K个RGB模态的特征向量之间的距离，相当于说锚点改成IR模态特征向量了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%A9%E4%B8%8B%E5%87%A0%E4%B8%AA%E6%8D%9F%E5%A4%B1%E4%B8%ADl_cls%E8%BF%99%E7%A7%8D%E7%9A%84%E9%83%BD%E6%98%AF%E6%AD%A3%E5%B8%B8%E7%9A%84%E5%88%86%E7%B1%BB%E7%84%B6%E5%90%8E%E8%AE%A1%E7%AE%97%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83%E7%9A%84%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1l_tri%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%89%E5%85%83%E7%BB%84%E6%8D%9F%E5%A4%B1%E5%BA%94%E8%AF%A5%E6%98%AF%E6%8C%BA%E5%B8%B8%E8%A7%81%E7%9A%84%E6%9C%89%E6%97%B6%E9%97%B4%E7%9C%8B%E4%B8%80%E4%B8%8B%E9%99%84%E5%BD%95%E9%87%8C%E6%98%AF%E6%80%8E%E4%B9%88%E8%AF%B4%E7%9A%84l_total%E4%B9%9F%E5%8F%AA%E6%98%AF%E5%89%8D%E9%9D%A2%E6%8F%90%E5%88%B0%E7%9A%84%E5%90%84%E7%A7%8D%E7%89%B9%E5%BE%81%E7%9A%84%E5%8A%A0%E6%9D%83%E7%BB%84%E5%90%88"><span class="nav-number">6.2.4.</span> <span class="nav-text">剩下几个损失中，\(L_{cls}\)这种的，都是正常的分类，然后计算概率分布的交叉熵损失。\(L_{tri}\)就是一个三元组损失，应该是挺常见的。（有时间看一下附录里是怎么说的）。\(L_{total}\)也只是前面提到的各种特征的加权组合。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%E7%9A%84%E6%9C%AC%E6%84%8F%E6%98%AF%E7%94%A8%E6%9D%A5%E6%8F%90%E5%8F%96modality-invariant-feature%E7%9A%84%E7%B2%BE%E5%BF%83%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9C%B0%E6%96%B9%E5%8F%AF%E8%83%BD%E8%BF%98%E6%98%AF%E5%9C%A8%E4%BA%8E%E5%92%8Ck%E4%B8%AA%E6%9C%80%E4%B8%8D%E7%9B%B8%E4%BC%BC%E4%B8%94%E4%B8%8D%E5%90%8C%E6%A8%A1%E6%80%81%E4%BD%86%E6%98%AF%E5%90%8C%E6%A0%87%E7%AD%BE%E7%9A%84%E5%90%91%E9%87%8F%E8%BF%9B%E8%A1%8C%E5%AF%B9%E6%AF%94%E6%8D%9F%E5%A4%B1%E7%9A%84%E8%AE%A1%E7%AE%97%E6%AF%94%E8%BE%83%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%9C%B0%E6%96%B9%E5%8F%AF%E8%83%BD%E5%9C%A8%E4%BA%8E%E7%94%A8%E4%BA%86%E5%A4%9A%E4%B8%AA%E6%8D%9F%E5%A4%B1%E7%9A%84%E7%BB%84%E5%90%88%E8%BF%99%E4%B8%AA%E5%92%8Ck%E4%B8%AA%E6%9C%80%E4%B8%8D%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%90%91%E9%87%8F%E8%BF%9B%E8%A1%8C%E5%AF%B9%E6%AF%94%E6%9C%89%E6%B2%A1%E6%9C%89%E8%AF%B4%E6%B3%95%E6%94%B9%E6%88%901%E8%A1%8C%E4%B8%8D%E8%A1%8C%E6%88%96%E8%80%85%E8%AF%B4%E7%94%A8k%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%E4%BD%86%E8%AF%B4%E5%88%B0%E5%BA%95%E8%BF%99%E4%B8%AA%E5%A4%A7%E4%BD%93%E8%BF%98%E6%98%AF%E4%BE%9D%E9%9D%A0%E5%BC%95%E5%85%A5%E6%9F%90%E7%A7%8D%E5%AF%B9%E6%AF%94%E6%8D%9F%E5%A4%B1%E6%9D%A5%E8%BF%9B%E8%A1%8C%E6%89%80%E8%B0%93%E5%87%8F%E5%B0%91%E4%B8%8D%E5%90%8C%E6%A8%A1%E6%80%81%E6%95%B0%E6%8D%AE%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82%E8%80%81%E4%B8%80%E5%A5%97%E4%BA%86"><span class="nav-number">6.2.5.</span> <span class="nav-text">这个方法的本意是用来提取modality-invariant
+feature的。精心设计的地方可能还是在于和K个最不相似，且不同模态，但是同标签的向量进行对比损失的计算。比较工程的地方可能在于用了多个损失的组合。这个”和K个最不相似的向量“进行对比，有没有说法？改成1行不行？或者说用K会有什么问题？但说到底，这个大体还是依靠引入某种对比损失来进行所谓”减少不同模态数据间的差异“。。。老一套了</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
