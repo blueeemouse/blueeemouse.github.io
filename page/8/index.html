@@ -150,6 +150,193 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-15 14:58:26 / Modified: 16:17:10" itemprop="dateCreated datePublished" datetime="2024-10-15T14:58:26+08:00">2024-10-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="结论">结论：</h3>
+<h4
+id="对于对比学习data-augmentation很重要尤其是一些特定的augmentation可能起到很大的作用">对于对比学习，data
+augmentation很重要，尤其是一些特定的augmentation，可能起到很大的作用</h4>
+<h4
+id="最后简单加的一个projection-head却能极大地提升效果">最后简单加的一个projection
+head，却能极大地提升效果</h4>
+<h4
+id="用更大的batch-size训练得更久都能明显提高simclr的效果">用更大的batch
+size/训练得更久，都能明显提高SimCLR的效果</h4>
+<h3
+id="方法框架图a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_10_47.png-损失函数a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_12_35.png-需要注意的是这个损失其实表示的是正样本i对正样本j的损失它不等于l_ji也就是这个损失是不对称的">方法框架图：![[A
+Simple Framework for Contrastive Learning of Visual Representations -
+Chen 等 - 2020 - Zotero 2024_10_15 15_10_47.png]]<br>损失函数![[A Simple
+Framework for Contrastive Learning of Visual Representations - Chen 等 -
+2020 - Zotero 2024_10_15
+15_12_35.png]]<br>需要注意的是，这个损失其实表示的是正样本i“对”正样本j的损失，它不等于<span
+class="math inline">\(l_{j,i}\)</span>，也就是这个损失是不对称的。</h3>
+<h3 id="值得学习的细节">值得学习的细节：</h3>
+<h4
+id="论文为了研究哪种data-augmentation效果比较好做了严格的消融实验它考虑两两组合augmentation看看效果如何最后把结果用一幅热力图展现还是很形象的a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-16_14_08.png-另外论文也发现对比学习很吃data-augmentation相比之下supervised-learning则不怎么需要甚至augmentation太过的话还可能损害效果">论文为了研究哪种data
+augmentation效果比较好，做了严格的消融实验。它考虑两两组合augmentation，看看效果如何，最后把结果用一幅热力图展现，还是很形象的![[A
+Simple Framework for Contrastive Learning of Visual Representations -
+Chen 等 - 2020 - Zotero 2024_10_15
+16_14_08.png]]<br>另外，论文也发现对比学习很吃data
+augmentation，相比之下supervised
+learning则不怎么需要，甚至augmentation太过的话还可能损害效果</h4>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/12/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/ViT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/12/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/ViT/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-12 17:06:11" itemprop="dateCreated datePublished" datetime="2024-10-12T17:06:11+08:00">2024-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-15 09:31:22" itemprop="dateModified" datetime="2024-10-15T09:31:22+08:00">2024-10-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="先讲讲把transformer照搬到cv的困难其实就在于注意力机制计算复杂度是平方级别的所以输入序列不能太长而如果我们要用transformer处理img也需要把img转化成类似nlp那边的序列类型的输入然而如果是朴素地把img展开基本都超了通常能接受的seq长度例如bert能处理的seq长度也就512而你大一点的img的单边的像素值都超了512了假如是一个224224的img其实不算太大了但展开的话长度就是50172了完全顶不住">先讲讲把transformer照搬到cv的困难。其实就在于注意力机制计算复杂度是平方级别的，所以输入序列不能太长。而如果我们要用transformer处理img，也需要把img转化成类似nlp那边的序列类型的输入。然而如果是朴素地把img展开，基本都超了通常能接受的seq长度。例如，bert能处理的seq长度也就512，而你大一点的img的单边的像素值都超了512了；假如是一个224*224的img，其实不算太大了，但展开的话长度就是50172了，完全顶不住</h1>
+<h1
+id="这篇工作就是vit它的模型部分就是把nlp那边的transformer几乎照搬过来做尽可能少的改动在此之前研究注意力机制与cv的工作主要是聚焦在两方面-一是在现有的cnn架构中把一部分卷积操作换成自注意力机制二是研究把transformer搬到cv之后怎么降低其计算量研究魔改一下注意力机制但它们这些方法因为没有硬件加速无法扩展得很大最终效果应该还是不够好而vit想尽可能照搬nlp那边的处理方法看能transformer能在cv领域scale到多大效果能有多好有种大力出奇迹的感觉那它为了解决序列长度过长而又不想改变注意力机制就把img划分为多个1616的patch每个patch当成是nlp那边一个token的embedding划分完seq长度就正常多了有可能训练了">这篇工作就是vit。它的模型部分就是把nlp那边的transformer几乎照搬过来，做尽可能少的改动（在此之前，研究注意力机制与cv的工作，主要是聚焦在两方面
+：一是在现有的cnn架构中把一部分卷积操作换成自注意力机制；二是研究把transformer搬到cv之后，怎么降低其计算量，研究魔改一下注意力机制。但它们这些方法因为没有硬件加速，无法扩展得很大，最终效果应该还是不够好）。而vit想尽可能照搬nlp那边的处理方法，看能transformer能在cv领域scale到多大，效果能有多好。有种大力出奇迹的感觉。那它为了解决序列长度过长，而又不想改变注意力机制，就把img划分为多个16*16的patch，每个patch当成是nlp那边一个token的embedding。划分完，seq长度就正常多了，有可能训练了</h1>
+<h1
+id="感觉这篇论文其实所谓创新性真不高就是敢于训大模型而且也有充足的资源此外就是实验详实考虑了很多细节并都做了对比实验-但从结果上看确实是连接了cv和nlp两个领域也给多模态带来了很大的影响">感觉这篇论文其实所谓创新性真不高，就是敢于训大模型，而且也有充足的资源。此外就是实验详实，考虑了很多细节，并都做了对比实验。
+<br>但从结果上看，确实是连接了cv和nlp两个领域，也给多模态带来了很大的影响</h1>
+<h1
+id="method部分没什么好说的它写的已经比较清楚了">method部分没什么好说的，它写的已经比较清楚了。</h1>
+<h1
+id="比较值得玩味的就是所谓的inductive-biascnn里主要是locality和translation-equivariance现在终于有点理解是什么意思了假如我们认为邻近像素比较有可能相近这就是locality的bias姑且当成是一种先验知识cnn的架构也满足这个locality所以它处理img的时候也会认为邻近像素会比较接近">比较值得玩味的就是所谓的inductive
+bias。cnn里主要是locality和translation
+equivariance（现在终于有点理解是什么意思了。假如我们认为邻近像素比较有可能相近，这就是locality的bias，姑且当成是一种先验知识。cnn的架构也满足这个locality，所以它处理img的时候也会认为邻近像素会比较接近）</h1>
+<h1 id="另外文章里多次提到inductive-bias">另外，文章里多次提到inductive
+bias</h1>
+<h2
+id="一是说为什么transformer应用到cv领域的时候数据集和模型小了效果不够好因为transformer比cnn少了一些inductive-bias也就是少了一些先验知识">一是说为什么transformer应用到cv领域的时候，数据集和模型小了效果不够好：因为transformer比cnn少了一些inductive
+bias，也就是少了一些先验知识</h2>
+<h2
+id="在第三节的method它甚至专门说了一下transformer的inductive-bias少在哪里">在第三节的method，它甚至专门说了一下transformer的inductive
+bias少在哪里：</h2>
+<h3 id="self-attention-block是global的没有locality">self-attention
+block是global的，没有locality</h3>
+<h3
+id="只有最后处理输出结果的mlp是local且translation-equivarient的其它地方都没有">只有最后处理输出结果的mlp是local且translation
+equivarient的，其它地方都没有</h3>
+<h3
+id="微调的时候有可能引入2d-dimensional-neighborhood-structure因为它微调的时候可能用到分辨率更高的img而由此得到的seq-length就更大了但这样会导致之前学到的position-encoding维度对不上了用不了它提出了一个权宜之计就是根据patch在原图像的位置进行2d-interpolation但这里就用到了patch在原图像里的相对位置引入了先验知识-而且最初的position-encoding因为是随机初始化的它刚开始也不包含什么信息所以最后我们学到的位置信息其实也不是我们提前给模型的而是模型从数据里自己学的">微调的时候有可能引入2d-dimensional
+neighborhood
+structure（因为它微调的时候可能用到分辨率更高的img，而由此得到的seq
+length就更大了，但这样会导致之前学到的position
+encoding维度对不上了，用不了。它提出了一个权宜之计，就是根据patch在原图像的位置，进行2d-interpolation，但这里就用到了patch在原图像里的相对位置，引入了先验知识<br>而且，最初的position
+encoding因为是随机初始化的，它刚开始也不包含什么信息，所以最后我们学到的位置信息其实也不是我们提前给模型的，而是模型从数据里自己学的</h3>
+<h1
+id="另外比较细节的点就是position-encoding这个主要是我不了解细节后面可以看看代码实现然后附录里讨论了几种不同的position-encoding的效果并做了实验发现确实要有这个东西但至于是用什么encoding一维二维relative效果基本一样">另外，比较细节的点就是position
+encoding。这个主要是我不了解细节。后面可以看看代码实现。然后，附录里讨论了几种不同的position
+encoding的效果并做了实验，发现确实要有这个东西，但至于是用什么encoding，一维/二维/relative，效果基本一样。</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -358,7 +545,7 @@ id="就是根据不同的边的类别进行加权求和中间掺杂了线性变�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -369,7 +556,7 @@ id="就是根据不同的边的类别进行加权求和中间掺杂了线性变�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
