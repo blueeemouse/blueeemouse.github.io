@@ -150,6 +150,139 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/RAG/Retrieval-Augmented%20Generation%20for%20%20AI-Generated%20Content%20%20A%20Survey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/RAG/Retrieval-Augmented%20Generation%20for%20%20AI-Generated%20Content%20%20A%20Survey/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-01-18 21:48:08" itemprop="dateCreated datePublished" datetime="2025-01-18T21:48:08+08:00">2025-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-01-19 10:49:54" itemprop="dateModified" datetime="2025-01-19T10:49:54+08:00">2025-01-19</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="结构可以从下面几个部分来阅读总结论文">1.结构：可以从下面几个部分来阅读、总结论文</h1>
+<h2 id="介绍一下rag中的基本概念">1.0.介绍一下RAG中的基本概念</h2>
+<h2
+id="根据retriever是如何辅助生成内容的对rag技术进行分类这个在文章中被称为underlinefoundational-paradigms简称underlinefoundations">1.1.根据retriever是如何辅助生成内容的，对RAG技术进行分类（这个在文章中被称为<span
+class="math inline">\(\underline{foundational \
+paradigms}\)</span>，简称<span
+class="math inline">\(\underline{foundations}\)</span></h2>
+<h2
+id="总结一下其它的提高rag的手段">1.2.总结一下其它的提高RAG的手段</h2>
+<h2
+id="调研rag在不同模态数据和不同任务下的应用场景文本的搜索和rag应该是目前最常见也是研究最多的但-不同模态数据的检索其实也可能为文本rag带来一些启发而一些常见的不同模态的检索包括但不限于识图听歌识曲">1.3.调研RAG在不同模态数据和不同任务下的应用场景（文本的搜索和RAG应该是目前最常见、也是研究最多的。但
+不同模态数据的检索，其实也可能为文本RAG带来一些启发。而一些常见的不同模态的检索，包括但不限于识图、听歌识曲）</h2>
+<h2
+id="介绍一下rag的benchmark并讨论现有rag系统的一些问题局限性也讨论了一下未来的发展方向">1.4.介绍一下RAG的benchmark，并讨论现有RAG系统的一些问题/局限性，也讨论了一下未来的发展方向</h2>
+<h1 id="preliminary-of-rag">2.preliminary of RAG</h1>
+<h2 id="overview">2.1.overview</h2>
+<h3
+id="rag系统一般就是包含两个核心模块retriever和generatorretriever用于根据用户的请求进行检索把找到的一些相关信息和输入一起给generator让它进行生成这就是一个大致的流程-我们可以分为三步">RAG系统一般就是包含两个核心模块：retriever和generator。retriever用于根据用户的请求进行检索，把找到的一些相关信息和输入一起给generator，让它进行生成。这就是一个大致的流程。
+我们可以分为三步：</h3>
+<h4
+id="retriever根据输入请求检索相关信息">1.retriever根据输入请求检索相关信息</h4>
+<h4
+id="原来的请求比如生成图像的时候我们的指令就是原来的请求和检索的结果一起给到generator这里如何把检索的结果和原来的请求进行结合是非常关键的一步也是对rag进行分类的一个判据可能是结合的方式不同可能是结合的位置不同">2.原来的请求（比如，生成图像的时候，我们的指令就是“原来的请求”）和检索的结果一起给到generator（这里如何把检索的结果和原来的请求进行结合，是非常关键的一步，也是对RAG进行分类的一个判据。可能是结合的方式不同，可能是结合的位置不同）</h4>
+<h4 id="generator生成结果">3.generator生成结果</h4>
+<h3
+id="rag中generator主要包括transformer-modellstmdiffusion-modelgan">RAG中，generator主要包括transformer
+model，LSTM，diffusion model，GAN</h3>
+<h3
+id="retriever主要分三类sparse-retrieverdense-retrieverothers-sparse-retriever感觉主要是传统的方法通常用于文档索引就是nlp课上讲的那些比较古老的方法-dense-retriever核心思想是用一些embedding来对query和key进行表征之后通过衡量query和key之间的相似性找出和query相似性高的那些key对应的结果就是检索结果这里有两个关键点一个是embedding一般是用一些预训练好的大模型对数据进行编码这种方法和sparse-retriever中用词袋模型等简单的统计模型进行的表征不同那些简单统计模型我的理解是考虑的信息更加简单局部以及通常会比较稀疏而相比之下深度学习进行编码得到的embedding则更加复杂但也包含更多信息也不会非常稀疏这应该也是为什么这种方法叫dense-retriever另一个关键点就是检索哪些key和query相似性高当数据量很大的时候想根据一个query计算它和所有key之间的相似性再来排序筛选计算量就太大了更别说多个query的情况了所以需要用到最近邻近似approximate-nearest-neighborann方法它的目的就是实现高效的最近邻搜索-others主要是在衡量相似性或者检索上有一些不同也是依据使用场景而定的如对文本我们可以直接用类似于最小编辑距离的指标进行相似度衡量而不是用embedding表示再衡量key和query之间的相似度对于代码我们也可以考虑用抽象语法树abstract-syntax-treesast来衡量代码片段相似度在知识图谱中我们进行检索其实就可以根据节点之间的关系进行索引比如对知识图谱的某个节点进行k-hop邻居搜索这些方法其实都算不上通用吧只是在一些特定领域里可能是可以用的但效果也不好说一定就比上面的dense-retriever要好">retriever主要分三类，sparse
+retriever，dense retriever，others<br>sparse
+retriever感觉主要是传统的方法，通常用于文档索引（就是nlp课上讲的那些比较古老的方法）<br>dense
+retriever核心思想是，用一些embedding来对query和key进行表征，之后通过衡量query和key之间的相似性，找出和query相似性高的那些key，对应的结果就是检索结果。这里有两个关键点，一个是embedding，一般是用一些预训练好的大模型对数据进行编码。这种方法和sparse
+retriever中用词袋模型等简单的统计模型进行的表征不同（那些简单统计模型，我的理解是，考虑的信息更加简单、局部，以及通常会比较稀疏；而相比之下，深度学习进行编码得到的embedding，则更加复杂、但也包含更多信息，也不会非常稀疏。这应该也是为什么这种方法叫dense
+retriever）。另一个关键点就是检索哪些key和query相似性高。当数据量很大的时候，想根据一个query，计算它和所有key之间的相似性，再来排序、筛选，计算量就太大了，更别说多个query的情况了。所以需要用到最近邻近似（Approximate
+Nearest
+Neighbor，ANN）方法。它的目的就是实现高效的最近邻搜索<br>others主要是在衡量相似性或者检索上有一些不同，也是依据使用场景而定的。如，对文本，我们可以直接用类似于最小编辑距离的指标进行相似度衡量，而不是用embedding表示再衡量key和query之间的相似度；对于代码，我们也可以考虑用抽象语法树（Abstract
+Syntax
+Trees，AST）来衡量代码片段相似度；在知识图谱中，我们进行检索，其实就可以根据节点之间的关系进行索引，比如对知识图谱的某个节点进行k-hop邻居搜索。（这些方法其实都算不上通用吧，只是在一些特定领域里可能是可以用的，但效果也不好说一定就比上面的dense
+retriever要好）</h3>
+<h1 id="rag-foundations">3.RAG Foundations</h1>
+<h2 id="query-based-rag">3.1.Query-based RAG</h2>
+<h3
+id="其实就是在把输入送到generator之前把retriever获得的信息一起融合得到一个新的输入再把新的输入送到generator也即feed-the-retrieved-information-directly-into-the-initial-stage-of-the-generators-input这里的directly和initial-stage很重要和后面的方法不同">其实就是在把输入送到generator之前，把retriever获得的信息一起融合，得到一个新的输入，再把新的输入送到generator。也即，feed
+the retrieved information directly into the initial stage of the
+generator's input（这里的directly和initial
+stage很重要，和后面的方法不同）</h3>
+<h2 id="latent-representation-based-rag">3.2.Latent Representation-based
+RAG</h2>
+<h3
+id="这里的核心思想是把检索到的信息进行编码同时把原本的query也进行编码再将编码后的二者进行一个结合此处结合的手段也很多有大家魔改出来的模块也有经典模块如cross-attention">这里的核心思想是，把检索到的信息进行编码，同时把原本的query也进行编码，再将编码后的二者进行一个结合。此处结合的手段也很多，有大家魔改出来的模块，也有经典模块，如Cross
+Attention</h3>
+<h3 id="经典方法如fid">经典方法如FiD</h3>
+<h2 id="logit-based-rag">3.3.Logit-based RAG</h2>
+<h3
+id="这种方法主要适用于序列生成的情形generator正常会在生成下一个token的时候有一个候选token概率分布而检索到的信息也可以用于获取一个概率分布可视为一种先验概率分布再把两种概率分布进行结合就得到最终的概率分布因为是从概率分布的角度上讲所以是logit-based">这种方法主要适用于序列生成的情形。generator正常会在生成下一个token的时候，有一个候选token概率分布；而检索到的信息，也可以用于获取一个概率分布（可视为一种先验概率分布），再把两种概率分布进行结合，就得到最终的概率分布。因为是从概率分布的角度上讲，所以是“Logit-based”</h3>
+<h3 id="经典方法有knn-lm">经典方法有kNN-LM</h3>
+<h2 id="speculative-rag">3.4.Speculative RAG</h2>
+<h3
+id="这个看着有点像是用rag代替了generator">这个看着有点像是用RAG代替了generator</h3>
+<h1 id="rag-enhancements">4.RAG Enhancements</h1>
+<h2
+id="根据enhance的目标对象不同进行分类分五类input-enhancementretriever-enhancementgenerator-enhancementresult-enhancementrag-pipeline-enhancement">根据enhance的目标对象不同，进行分类。分五类：Input
+Enhancement，Retriever Enhancement，Generator Enhancement，Result
+Enhancement，RAG Pipeline Enhancement</h2>
+<h2 id="input-enhancement">4.1.Input Enhancement</h2>
+<h3
+id="这类方法从输入上入手可以对query进行变换即query-transformation也可以对检索结果进行增强data-augmentation">这类方法从输入上入手。可以对query进行变换（即Query
+Transformation），也可以对检索结果进行增强（Data Augmentation）</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1066,104 +1199,6 @@ label的话，训练起来会更麻烦，同时lreid里的灾难性遗忘也会�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-02 17:36:47" itemprop="dateCreated datePublished" datetime="2024-11-02T17:36:47+08:00">2024-11-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-04 11:27:04" itemprop="dateModified" datetime="2024-11-04T11:27:04+08:00">2024-11-04</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="aaai24">aaai24</h1>
-<h1
-id="problemmotivationlreid任务中因为不断获得的新数据的分布可能差异很大模型要拟合新的分布自然会遇到灾难性遗忘的问题现有的基于data-replay的和基于knowledge-distillation的方法都有各自的问题前者的隐私问题很显然后者的一个问题在于现有的基于蒸馏的方法都是把所有过往知识保留下来了没有经过筛选很难保证这些蒸馏得到的知识的质量而如果这些知识的质量不够高可能会极大影响模型性能为此论文提出一种exemplar-free为了避免隐私问题的方法提出rectification-based-short-term-knowledge-transfer-module-r-stkt以筛选整合过往知识同时利用estimation-based-long-term-knowledge-consolidation-module-e-ltkc来整合新旧知识">problem&amp;motivation：LReID任务中，因为不断获得的新数据的分布可能差异很大，模型要拟合新的分布，自然会遇到灾难性遗忘的问题。现有的基于data
-replay的和基于knowledge
-distillation的方法都有各自的问题。前者的隐私问题很显然。后者的一个问题在于，现有的基于蒸馏的方法，都是把所有过往知识保留下来了，没有经过筛选，很难保证这些蒸馏得到的知识的质量。而如果这些知识的质量不够高，可能会极大影响模型性能。为此，论文提出一种exemplar-free（为了避免隐私问题）的方法，提出Rectification-based
-Short-Term Knowledge Transfer module
-(R-STKT)以筛选、整合过往知识，同时利用Estimation-based Long-Term
-Knowledge Consolidation module (E-LTKC)来整合新旧知识</h1>
-<h1
-id="话说这个normalization-guided-triplet-loss是指什么里面的apn又是什么意思">话说这个normalization-guided
-Triplet loss是指什么？里面的a，p，n又是什么意思？</h1>
-<h1 id="method">method：</h1>
-<h2
-id="r-stkcrectification-based-short-term-knowledge-transfer主要这里只是实现了相邻两个时间步下的知识迁移与保留因此是short-term">1.R-STKC（Rectification-based
-Short-Term Knowledge
-Transfer）（主要这里只是实现了相邻两个时间步下的知识迁移与保留，因此是short-term）：</h2>
-<h3
-id="先计算batch-data里的相似性矩阵前面要先归一化然后基于此计算关系矩阵相似性越高关系越大">先计算batch
-data里的相似性矩阵（前面要先归一化），然后基于此计算关系矩阵（相似性越高，关系越大）</h3>
-<h3
-id="然后要进行错误知识过滤具体是要过滤上面提到的关系矩阵所包含的知识拿到一个关系矩阵首先我们要将里面的元素分为tpfptnfnpositivienegative的判断比较简单就是看每一行里两两的identity是否一致至于truefalse则是根据关系的大小大于某个阈值则是true小于某个阈值则是false因此这里需要自己设置两个阈值">然后要进行错误知识过滤。具体是要过滤上面提到的关系矩阵所包含的知识。拿到一个关系矩阵，首先我们要将里面的元素分为TP/FP/TN/FN。Positivie/Negative的判断比较简单，就是看每一行里，两两的identity是否一致。至于True/False，则是根据关系的大小，大于某个阈值则是True，小于某个阈值则是False。因此这里需要自己设置两个阈值</h3>
-<h3
-id="最后是erroneous-knowledge-rectification错误知识整改大体上是对之前的关系矩阵的元素会进行一些整改这里会有一些好处比如正样本之间的分数一定会高于负样本之间的分数之后就是用一个kl散度来约束r_t-1和r_t要尽可能相似以此实现关系知识的迁移尽可能把t-1时刻的关系信息保留到t时刻">最后是Erroneous
-Knowledge
-Rectification（错误知识整改）。大体上是，对之前的关系矩阵的元素会进行一些整改（这里会有一些好处，比如正样本之间的分数一定会高于负样本之间的分数），之后就是用一个KL散度来约束<span
-class="math inline">\(R_{t-1}\)</span>和<span
-class="math inline">\(R_t\)</span>要尽可能相似，以此实现关系知识的迁移（尽可能把t-1时刻的关系信息保留到t时刻）</h3>
-<h2
-id="estimation-based-long-term-knowledge-consolidation-e-ltkc">2.Estimation-based
-Long-Term Knowledge Consolidation (E-LTKC)</h2>
-<h3
-id="为了实现长期的知识的融合这里提出的方法是不同模型的融合而不是像上面那样的特征之间的比对了并且这里也是自适应的融合很像ijcv24那篇exemplar-free-lifelong-person-re-identification-via-prompt-guided-adaptive-knowledge-consolidation里的方法但是相较而言这里的方法会更新一点理论上效果也应该会好一点因为ijcv那篇的方法只是融合前后两个时间步的模型而这里会融合所有时间步的模型">为了实现长期的知识的融合，这里提出的方法是不同模型的融合，而不是像上面那样的特征之间的比对了（并且这里也是自适应的融合，很像ijcv24那篇[[Exemplar-Free
-Lifelong Person Re-identification via Prompt-Guided Adaptive Knowledge
-Consolidation]]里的方法）（但是相较而言，这里的方法会更新一点，理论上效果也应该会好一点。因为ijcv那篇的方法只是融合前后两个时间步的模型，而这里会融合所有时间步的模型）</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1233,7 +1268,7 @@ Consolidation]]里的方法）（但是相较而言，这里的方法会更新�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -150,6 +150,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-02 17:36:47" itemprop="dateCreated datePublished" datetime="2024-11-02T17:36:47+08:00">2024-11-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-11-04 11:27:04" itemprop="dateModified" datetime="2024-11-04T11:27:04+08:00">2024-11-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="aaai24">aaai24</h1>
+<h1
+id="problemmotivationlreid任务中因为不断获得的新数据的分布可能差异很大模型要拟合新的分布自然会遇到灾难性遗忘的问题现有的基于data-replay的和基于knowledge-distillation的方法都有各自的问题前者的隐私问题很显然后者的一个问题在于现有的基于蒸馏的方法都是把所有过往知识保留下来了没有经过筛选很难保证这些蒸馏得到的知识的质量而如果这些知识的质量不够高可能会极大影响模型性能为此论文提出一种exemplar-free为了避免隐私问题的方法提出rectification-based-short-term-knowledge-transfer-module-r-stkt以筛选整合过往知识同时利用estimation-based-long-term-knowledge-consolidation-module-e-ltkc来整合新旧知识">problem&amp;motivation：LReID任务中，因为不断获得的新数据的分布可能差异很大，模型要拟合新的分布，自然会遇到灾难性遗忘的问题。现有的基于data
+replay的和基于knowledge
+distillation的方法都有各自的问题。前者的隐私问题很显然。后者的一个问题在于，现有的基于蒸馏的方法，都是把所有过往知识保留下来了，没有经过筛选，很难保证这些蒸馏得到的知识的质量。而如果这些知识的质量不够高，可能会极大影响模型性能。为此，论文提出一种exemplar-free（为了避免隐私问题）的方法，提出Rectification-based
+Short-Term Knowledge Transfer module
+(R-STKT)以筛选、整合过往知识，同时利用Estimation-based Long-Term
+Knowledge Consolidation module (E-LTKC)来整合新旧知识</h1>
+<h1
+id="话说这个normalization-guided-triplet-loss是指什么里面的apn又是什么意思">话说这个normalization-guided
+Triplet loss是指什么？里面的a，p，n又是什么意思？</h1>
+<h1 id="method">method：</h1>
+<h2
+id="r-stkcrectification-based-short-term-knowledge-transfer主要这里只是实现了相邻两个时间步下的知识迁移与保留因此是short-term">1.R-STKC（Rectification-based
+Short-Term Knowledge
+Transfer）（主要这里只是实现了相邻两个时间步下的知识迁移与保留，因此是short-term）：</h2>
+<h3
+id="先计算batch-data里的相似性矩阵前面要先归一化然后基于此计算关系矩阵相似性越高关系越大">先计算batch
+data里的相似性矩阵（前面要先归一化），然后基于此计算关系矩阵（相似性越高，关系越大）</h3>
+<h3
+id="然后要进行错误知识过滤具体是要过滤上面提到的关系矩阵所包含的知识拿到一个关系矩阵首先我们要将里面的元素分为tpfptnfnpositivienegative的判断比较简单就是看每一行里两两的identity是否一致至于truefalse则是根据关系的大小大于某个阈值则是true小于某个阈值则是false因此这里需要自己设置两个阈值">然后要进行错误知识过滤。具体是要过滤上面提到的关系矩阵所包含的知识。拿到一个关系矩阵，首先我们要将里面的元素分为TP/FP/TN/FN。Positivie/Negative的判断比较简单，就是看每一行里，两两的identity是否一致。至于True/False，则是根据关系的大小，大于某个阈值则是True，小于某个阈值则是False。因此这里需要自己设置两个阈值</h3>
+<h3
+id="最后是erroneous-knowledge-rectification错误知识整改大体上是对之前的关系矩阵的元素会进行一些整改这里会有一些好处比如正样本之间的分数一定会高于负样本之间的分数之后就是用一个kl散度来约束r_t-1和r_t要尽可能相似以此实现关系知识的迁移尽可能把t-1时刻的关系信息保留到t时刻">最后是Erroneous
+Knowledge
+Rectification（错误知识整改）。大体上是，对之前的关系矩阵的元素会进行一些整改（这里会有一些好处，比如正样本之间的分数一定会高于负样本之间的分数），之后就是用一个KL散度来约束<span
+class="math inline">\(R_{t-1}\)</span>和<span
+class="math inline">\(R_t\)</span>要尽可能相似，以此实现关系知识的迁移（尽可能把t-1时刻的关系信息保留到t时刻）</h3>
+<h2
+id="estimation-based-long-term-knowledge-consolidation-e-ltkc">2.Estimation-based
+Long-Term Knowledge Consolidation (E-LTKC)</h2>
+<h3
+id="为了实现长期的知识的融合这里提出的方法是不同模型的融合而不是像上面那样的特征之间的比对了并且这里也是自适应的融合很像ijcv24那篇exemplar-free-lifelong-person-re-identification-via-prompt-guided-adaptive-knowledge-consolidation里的方法但是相较而言这里的方法会更新一点理论上效果也应该会好一点因为ijcv那篇的方法只是融合前后两个时间步的模型而这里会融合所有时间步的模型">为了实现长期的知识的融合，这里提出的方法是不同模型的融合，而不是像上面那样的特征之间的比对了（并且这里也是自适应的融合，很像ijcv24那篇[[Exemplar-Free
+Lifelong Person Re-identification via Prompt-Guided Adaptive Knowledge
+Consolidation]]里的方法）（但是相较而言，这里的方法会更新一点，理论上效果也应该会好一点。因为ijcv那篇的方法只是融合前后两个时间步的模型，而这里会融合所有时间步的模型）</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/01/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DKP/Distribution-aware%20Knowledge%20Prototyping%20for%20Non-exemplar%20Lifelong%20Person%20Re-identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1060,64 +1158,6 @@ descriptor也要算，但它不进行mixup，因为它包含的是全局信息�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E5%AF%B9%E6%AF%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E5%AF%B9%E6%AF%94/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-29 09:25:16" itemprop="dateCreated datePublished" datetime="2024-10-29T09:25:16+08:00">2024-10-29</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1187,7 +1227,7 @@ descriptor也要算，但它不进行mixup，因为它包含的是全局信息�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
