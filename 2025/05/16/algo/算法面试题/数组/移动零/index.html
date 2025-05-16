@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动零">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-16T09:24:00.000Z">
+<meta property="article:modified_time" content="2025-05-16T09:33:37.559Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="数组">
+<meta property="article:tag" content="原地栈">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>移动零 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          移动零
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-16 17:24:00 / Modified: 17:33:37" itemprop="dateCreated datePublished" datetime="2025-05-16T17:24:00+08:00">2025-05-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/description/">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2
+id="给定一个数组-nums编写一个函数将所有-0-移动到数组的末尾同时保持非零元素的相对顺序">给定一个数组 <code>nums</code>，编写一个函数将所有 <code>0</code> 移动到数组的末尾，同时保持非零元素的相对顺序。</h2>
+<h2
+id="请注意-必须在不复制数组的情况下原地对数组进行操作"><strong>请注意</strong> ，必须在不复制数组的情况下原地对数组进行操作。</h2>
+<h2 id="示例-1"><strong>示例 1:</strong></h2>
+<h3 id="输入-nums-010312"><strong>输入:</strong> nums =
+<code>[0,1,0,3,12]</code></h3>
+<h3 id="输出-131200"><strong>输出:</strong>
+<code>[1,3,12,0,0]</code></h3>
+<h2 id="示例-2"><strong>示例 2:</strong></h2>
+<h3 id="输入-nums-0"><strong>输入:</strong> nums = <code>[0]</code></h3>
+<h3 id="输出-0"><strong>输出:</strong> <code>[0]</code></h3>
+<h2 id="提示"><strong>提示</strong>:</h2>
+<h3 id="nums.length-104">-
+<code>1 &lt;= nums.length &lt;= 10^4</code></h3>
+<h3 id="numsi-231---1">-
+<code>-2^31 &lt;= nums[i] &lt;= 2^31 - 1</code></h3>
+<h1 id="思路">思路：</h1>
+<h2
+id="简单看一下因为要保证非零元素的相对顺序所以一些直接把零元素放到后面的操作不太行然后想到了挨个交换相邻元素这种操作也是因为题目要求了非零元素的相对顺序但如果是从左到右那不太行因为假如我们看到了一个0要把它通过挨个交换的方式交换到末尾我们不能确定是不是有新的0被交换到前面去了也就是交换的时候我们得看看当前的0和它右边的这个要被交换的数确保右边这个数不是0才能交换否则做了无用功了但如果要检查一下右边这个数是不是0又有点麻烦了这时想到如果从右到左呢好像就没有这个问题了我们从倒数第二个元素开始往前看如果它是0就挨个交换到末尾如果不是0则继续往左遍历此时一定可以确保从末尾开始往左会有一段连续的0且我们这个交换的过程中不会有0被交换到当前遍历的元素的左边所以会比较方便不过也容易看到这个方法时间复杂度比较高它的代码如下">简单看一下，因为要保证非零元素的相对顺序，所以一些直接把零元素放到后面的操作不太行。然后想到了挨个交换相邻元素这种操作（也是因为题目要求了非零元素的相对顺序），但如果是从左到右，那不太行，因为假如我们看到了一个0，要把它通过挨个交换的方式交换到末尾，我们不能确定是不是有新的0被交换到前面去了，也就是交换的时候，我们得看看当前的0和它右边的这个要被交换的数，确保右边这个数不是0，才能交换，否则做了无用功了；但如果要检查一下右边这个数是不是0，又有点麻烦了。这时想到，如果从右到左呢？好像就没有这个问题了。我们从倒数第二个元素开始往前看，如果它是0，就挨个交换到末尾；如果不是0，则继续往左遍历。此时一定可以确保从末尾开始往左，会有一段连续的0，且我们这个交换的过程中，不会有0被交换到当前遍历的元素的左边。所以会比较方便。不过也容易看到这个方法时间复杂度比较高，它的代码如下：</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">moveZeroes</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> zero_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = len - <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (nums[i] == <span class="number">0</span>)&#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = i<span class="number">+1</span>; j &lt; len-zero_num; j++)&#123;</span><br><span class="line"></span><br><span class="line">                    <span class="built_in">my_swap</span>(nums, j<span class="number">-1</span>, j);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                zero_num++;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">my_swap</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> i, <span class="type">int</span> j)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> tmp = nums[i];</span><br><span class="line"></span><br><span class="line">        nums[i] = nums[j];</span><br><span class="line"></span><br><span class="line">        nums[j] = tmp;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2
+id="这里的代码还做了一点优化就是末尾的多个0是不需要再交换的所以我们统计一下已经把都少个0移动到末尾了交换的时候就不需要把当前的0交换到最末尾交换到末尾那一串0的左边就好也就是假如是这么一些数124035000我们遍历到了4右边的那个0现在要把它交换到末尾其实只需要把它交换到5右边那个位置即可">这里的代码还做了一点优化，就是，末尾的多个0是不需要再交换的。所以，我们统计一下已经把都少个0移动到末尾了，交换的时候就不需要把当前的0交换到最末尾，交换到末尾那一串0的左边就好（也就是，假如是这么一些数：1，2，4，0，3，5，0，0，0，我们遍历到了4右边的那个0，现在要把它交换到末尾，其实只需要把它交换到5右边那个位置即可）</h2>
+<h2 id="另一套思路是原地栈参考的这个题解">另一套思路是原地栈，参考的<a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/solutions/2969353/kuai-man-zhi-zhen-wei-shi-yao-ke-yi-ba-s-1h8x">这个题解</a></h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E7%BB%84/" rel="tag"># 数组</a>
+              <a href="/tags/%E5%8E%9F%E5%9C%B0%E6%A0%88/" rel="tag"># 原地栈</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/05/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/IR/Dense%20Text%20Retrieval%20based%20on%20Pretrained%20Language%20Models%EF%BC%9AA%20Survey/" rel="prev" title="Dense Text Retrieval based on Pretrained Language Models：A Survey">
+      <i class="fa fa-chevron-left"></i> Dense Text Retrieval based on Pretrained Language Models：A Survey
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84-nums%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%E5%B0%86%E6%89%80%E6%9C%89-0-%E7%A7%BB%E5%8A%A8%E5%88%B0%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%AB%E5%B0%BE%E5%90%8C%E6%97%B6%E4%BF%9D%E6%8C%81%E9%9D%9E%E9%9B%B6%E5%85%83%E7%B4%A0%E7%9A%84%E7%9B%B8%E5%AF%B9%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.1.</span> <span class="nav-text">给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B3%A8%E6%84%8F-%E5%BF%85%E9%A1%BB%E5%9C%A8%E4%B8%8D%E5%A4%8D%E5%88%B6%E6%95%B0%E7%BB%84%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%8E%9F%E5%9C%B0%E5%AF%B9%E6%95%B0%E7%BB%84%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">请注意 ，必须在不复制数组的情况下原地对数组进行操作。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.3.</span> <span class="nav-text">示例 1:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5-nums-010312"><span class="nav-number">2.3.1.</span> <span class="nav-text">输入: nums &#x3D;
+[0,1,0,3,12]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA-131200"><span class="nav-number">2.3.2.</span> <span class="nav-text">输出:
+[1,3,12,0,0]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.4.</span> <span class="nav-text">示例 2:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5-nums-0"><span class="nav-number">2.4.1.</span> <span class="nav-text">输入: nums &#x3D; [0]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA-0"><span class="nav-number">2.4.2.</span> <span class="nav-text">输出: [0]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.5.</span> <span class="nav-text">提示:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nums.length-104"><span class="nav-number">2.5.1.</span> <span class="nav-text">-
+1 &lt;&#x3D; nums.length &lt;&#x3D; 10^4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numsi-231---1"><span class="nav-number">2.5.2.</span> <span class="nav-text">-
+-2^31 &lt;&#x3D; nums[i] &lt;&#x3D; 2^31 - 1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9C%8B%E4%B8%80%E4%B8%8B%E5%9B%A0%E4%B8%BA%E8%A6%81%E4%BF%9D%E8%AF%81%E9%9D%9E%E9%9B%B6%E5%85%83%E7%B4%A0%E7%9A%84%E7%9B%B8%E5%AF%B9%E9%A1%BA%E5%BA%8F%E6%89%80%E4%BB%A5%E4%B8%80%E4%BA%9B%E7%9B%B4%E6%8E%A5%E6%8A%8A%E9%9B%B6%E5%85%83%E7%B4%A0%E6%94%BE%E5%88%B0%E5%90%8E%E9%9D%A2%E7%9A%84%E6%93%8D%E4%BD%9C%E4%B8%8D%E5%A4%AA%E8%A1%8C%E7%84%B6%E5%90%8E%E6%83%B3%E5%88%B0%E4%BA%86%E6%8C%A8%E4%B8%AA%E4%BA%A4%E6%8D%A2%E7%9B%B8%E9%82%BB%E5%85%83%E7%B4%A0%E8%BF%99%E7%A7%8D%E6%93%8D%E4%BD%9C%E4%B9%9F%E6%98%AF%E5%9B%A0%E4%B8%BA%E9%A2%98%E7%9B%AE%E8%A6%81%E6%B1%82%E4%BA%86%E9%9D%9E%E9%9B%B6%E5%85%83%E7%B4%A0%E7%9A%84%E7%9B%B8%E5%AF%B9%E9%A1%BA%E5%BA%8F%E4%BD%86%E5%A6%82%E6%9E%9C%E6%98%AF%E4%BB%8E%E5%B7%A6%E5%88%B0%E5%8F%B3%E9%82%A3%E4%B8%8D%E5%A4%AA%E8%A1%8C%E5%9B%A0%E4%B8%BA%E5%81%87%E5%A6%82%E6%88%91%E4%BB%AC%E7%9C%8B%E5%88%B0%E4%BA%86%E4%B8%80%E4%B8%AA0%E8%A6%81%E6%8A%8A%E5%AE%83%E9%80%9A%E8%BF%87%E6%8C%A8%E4%B8%AA%E4%BA%A4%E6%8D%A2%E7%9A%84%E6%96%B9%E5%BC%8F%E4%BA%A4%E6%8D%A2%E5%88%B0%E6%9C%AB%E5%B0%BE%E6%88%91%E4%BB%AC%E4%B8%8D%E8%83%BD%E7%A1%AE%E5%AE%9A%E6%98%AF%E4%B8%8D%E6%98%AF%E6%9C%89%E6%96%B0%E7%9A%840%E8%A2%AB%E4%BA%A4%E6%8D%A2%E5%88%B0%E5%89%8D%E9%9D%A2%E5%8E%BB%E4%BA%86%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%BA%A4%E6%8D%A2%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E5%BE%97%E7%9C%8B%E7%9C%8B%E5%BD%93%E5%89%8D%E7%9A%840%E5%92%8C%E5%AE%83%E5%8F%B3%E8%BE%B9%E7%9A%84%E8%BF%99%E4%B8%AA%E8%A6%81%E8%A2%AB%E4%BA%A4%E6%8D%A2%E7%9A%84%E6%95%B0%E7%A1%AE%E4%BF%9D%E5%8F%B3%E8%BE%B9%E8%BF%99%E4%B8%AA%E6%95%B0%E4%B8%8D%E6%98%AF0%E6%89%8D%E8%83%BD%E4%BA%A4%E6%8D%A2%E5%90%A6%E5%88%99%E5%81%9A%E4%BA%86%E6%97%A0%E7%94%A8%E5%8A%9F%E4%BA%86%E4%BD%86%E5%A6%82%E6%9E%9C%E8%A6%81%E6%A3%80%E6%9F%A5%E4%B8%80%E4%B8%8B%E5%8F%B3%E8%BE%B9%E8%BF%99%E4%B8%AA%E6%95%B0%E6%98%AF%E4%B8%8D%E6%98%AF0%E5%8F%88%E6%9C%89%E7%82%B9%E9%BA%BB%E7%83%A6%E4%BA%86%E8%BF%99%E6%97%B6%E6%83%B3%E5%88%B0%E5%A6%82%E6%9E%9C%E4%BB%8E%E5%8F%B3%E5%88%B0%E5%B7%A6%E5%91%A2%E5%A5%BD%E5%83%8F%E5%B0%B1%E6%B2%A1%E6%9C%89%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E4%BA%86%E6%88%91%E4%BB%AC%E4%BB%8E%E5%80%92%E6%95%B0%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%85%83%E7%B4%A0%E5%BC%80%E5%A7%8B%E5%BE%80%E5%89%8D%E7%9C%8B%E5%A6%82%E6%9E%9C%E5%AE%83%E6%98%AF0%E5%B0%B1%E6%8C%A8%E4%B8%AA%E4%BA%A4%E6%8D%A2%E5%88%B0%E6%9C%AB%E5%B0%BE%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AF0%E5%88%99%E7%BB%A7%E7%BB%AD%E5%BE%80%E5%B7%A6%E9%81%8D%E5%8E%86%E6%AD%A4%E6%97%B6%E4%B8%80%E5%AE%9A%E5%8F%AF%E4%BB%A5%E7%A1%AE%E4%BF%9D%E4%BB%8E%E6%9C%AB%E5%B0%BE%E5%BC%80%E5%A7%8B%E5%BE%80%E5%B7%A6%E4%BC%9A%E6%9C%89%E4%B8%80%E6%AE%B5%E8%BF%9E%E7%BB%AD%E7%9A%840%E4%B8%94%E6%88%91%E4%BB%AC%E8%BF%99%E4%B8%AA%E4%BA%A4%E6%8D%A2%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%B8%8D%E4%BC%9A%E6%9C%890%E8%A2%AB%E4%BA%A4%E6%8D%A2%E5%88%B0%E5%BD%93%E5%89%8D%E9%81%8D%E5%8E%86%E7%9A%84%E5%85%83%E7%B4%A0%E7%9A%84%E5%B7%A6%E8%BE%B9%E6%89%80%E4%BB%A5%E4%BC%9A%E6%AF%94%E8%BE%83%E6%96%B9%E4%BE%BF%E4%B8%8D%E8%BF%87%E4%B9%9F%E5%AE%B9%E6%98%93%E7%9C%8B%E5%88%B0%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%AF%94%E8%BE%83%E9%AB%98%E5%AE%83%E7%9A%84%E4%BB%A3%E7%A0%81%E5%A6%82%E4%B8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">简单看一下，因为要保证非零元素的相对顺序，所以一些直接把零元素放到后面的操作不太行。然后想到了挨个交换相邻元素这种操作（也是因为题目要求了非零元素的相对顺序），但如果是从左到右，那不太行，因为假如我们看到了一个0，要把它通过挨个交换的方式交换到末尾，我们不能确定是不是有新的0被交换到前面去了，也就是交换的时候，我们得看看当前的0和它右边的这个要被交换的数，确保右边这个数不是0，才能交换，否则做了无用功了；但如果要检查一下右边这个数是不是0，又有点麻烦了。这时想到，如果从右到左呢？好像就没有这个问题了。我们从倒数第二个元素开始往前看，如果它是0，就挨个交换到末尾；如果不是0，则继续往左遍历。此时一定可以确保从末尾开始往左，会有一段连续的0，且我们这个交换的过程中，不会有0被交换到当前遍历的元素的左边。所以会比较方便。不过也容易看到这个方法时间复杂度比较高，它的代码如下：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E7%9A%84%E4%BB%A3%E7%A0%81%E8%BF%98%E5%81%9A%E4%BA%86%E4%B8%80%E7%82%B9%E4%BC%98%E5%8C%96%E5%B0%B1%E6%98%AF%E6%9C%AB%E5%B0%BE%E7%9A%84%E5%A4%9A%E4%B8%AA0%E6%98%AF%E4%B8%8D%E9%9C%80%E8%A6%81%E5%86%8D%E4%BA%A4%E6%8D%A2%E7%9A%84%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E7%BB%9F%E8%AE%A1%E4%B8%80%E4%B8%8B%E5%B7%B2%E7%BB%8F%E6%8A%8A%E9%83%BD%E5%B0%91%E4%B8%AA0%E7%A7%BB%E5%8A%A8%E5%88%B0%E6%9C%AB%E5%B0%BE%E4%BA%86%E4%BA%A4%E6%8D%A2%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E4%B8%8D%E9%9C%80%E8%A6%81%E6%8A%8A%E5%BD%93%E5%89%8D%E7%9A%840%E4%BA%A4%E6%8D%A2%E5%88%B0%E6%9C%80%E6%9C%AB%E5%B0%BE%E4%BA%A4%E6%8D%A2%E5%88%B0%E6%9C%AB%E5%B0%BE%E9%82%A3%E4%B8%80%E4%B8%B20%E7%9A%84%E5%B7%A6%E8%BE%B9%E5%B0%B1%E5%A5%BD%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%81%87%E5%A6%82%E6%98%AF%E8%BF%99%E4%B9%88%E4%B8%80%E4%BA%9B%E6%95%B0124035000%E6%88%91%E4%BB%AC%E9%81%8D%E5%8E%86%E5%88%B0%E4%BA%864%E5%8F%B3%E8%BE%B9%E7%9A%84%E9%82%A3%E4%B8%AA0%E7%8E%B0%E5%9C%A8%E8%A6%81%E6%8A%8A%E5%AE%83%E4%BA%A4%E6%8D%A2%E5%88%B0%E6%9C%AB%E5%B0%BE%E5%85%B6%E5%AE%9E%E5%8F%AA%E9%9C%80%E8%A6%81%E6%8A%8A%E5%AE%83%E4%BA%A4%E6%8D%A2%E5%88%B05%E5%8F%B3%E8%BE%B9%E9%82%A3%E4%B8%AA%E4%BD%8D%E7%BD%AE%E5%8D%B3%E5%8F%AF"><span class="nav-number">3.2.</span> <span class="nav-text">这里的代码还做了一点优化，就是，末尾的多个0是不需要再交换的。所以，我们统计一下已经把都少个0移动到末尾了，交换的时候就不需要把当前的0交换到最末尾，交换到末尾那一串0的左边就好（也就是，假如是这么一些数：1，2，4，0，3，5，0，0，0，我们遍历到了4右边的那个0，现在要把它交换到末尾，其实只需要把它交换到5右边那个位置即可）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E5%A5%97%E6%80%9D%E8%B7%AF%E6%98%AF%E5%8E%9F%E5%9C%B0%E6%A0%88%E5%8F%82%E8%80%83%E7%9A%84%E8%BF%99%E4%B8%AA%E9%A2%98%E8%A7%A3"><span class="nav-number">3.3.</span> <span class="nav-text">另一套思路是原地栈，参考的这个题解</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
