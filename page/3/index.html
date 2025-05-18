@@ -150,6 +150,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/" class="post-title-link" itemprop="url">第一弹</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-08 22:42:08" itemprop="dateModified" datetime="2025-05-08T22:42:08+08:00">2025-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">安装库的常见难题和解决方法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="这里简单记录一些看起来有些共性的配置环境中遇到的问题">这里简单记录一些看起来有些共性的，配置环境中遇到的问题</h1>
+<h1
+id="pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt报错如下">1.pip
+install -i https://pypi.tuna.tsinghua.edu.cn/simple -r
+requirements.txt报错如下：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">ERROR: Could not find a version that satisfies the requirement glfw&gt;=1.4.0 (from versions: none)</span><br><span class="line">ERROR: No matching distribution found <span class="keyword">for</span> glfw&gt;=1.4.0</span><br><span class="line">WARNING: There was an error checking the latest version of pip.</span><br></pre></td></tr></table></figure>
+<h2
+id="这个问题其实看起来还挺正常的而它最后的warning显示应该是版本的一些不匹配的问题然而我是新创建了一个python环境来配置mujoco且也是按照网上的教程来的虽然不排除是版本问题可是人家是走通了的我这里也没先装上什么库应该不太会有库之间的冲突吧经评论区提醒关掉梯子之后再执行就没问题了但尚且不清楚原因">这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）</h2>
+<h2
+id="后面安装其它库的时候也有类似的报错">后面安装其它库的时候，也有类似的报错：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.dev.txt</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br></pre></td></tr></table></figure>
+<h2
+id="看到这种类似的错一样可以按照上面的方法尝试一下因为都有可能是网络问题还有可能出现把梯子关掉再尝试之后依然不行然后又尝试不指定源直接下也不行这时可以试试把梯子开了再下然后关掉再下有可能就成了有点难绷但确实是一种方法实操过是有效的其实感觉这样一通操作下来就验证了很有可能是网络问题了">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/05/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/%E6%8E%8C%E6%8F%A1%E7%A8%8B%E5%BA%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -914,115 +1006,10 @@ Model</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unified-ReID/Instruct-ReID++%EF%BC%9ATowards%20Universal%20Purpose%20%20Instruction-Guided%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unified-ReID/Instruct-ReID++%EF%BC%9ATowards%20Universal%20Purpose%20%20Instruction-Guided%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-11 11:36:57 / Modified: 15:06:36" itemprop="dateCreated datePublished" datetime="2025-03-11T11:36:57+08:00">2025-03-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1
-id="motivation现在reid相关的研究有很多不同的设定不同的设定就需要用不同的方法没有一个好用的统一的框架方法且现在绝大多数的检索都是用图像来检索图像然而如果是人来检索还可以通过自然语言的描述来进行检索所以论文提出一套统一的框架尝试解决方法不统一的问题同时加入用文字描述来进行检索的功能进一步提高方法的实用性显然会有一些只能用文字描述来检索图像的场景比如找犯人时可能没有犯人的照片但有被害人的证词">motivation：现在reid相关的研究，有很多不同的设定，不同的设定就需要用不同的方法，没有一个好用的统一的框架/方法。且，现在绝大多数的检索都是用图像来检索图像，然而如果是人来检索，还可以通过自然语言的描述来进行检索。所以，论文提出一套统一的框架，尝试解决方法不统一的问题，同时加入用文字描述来进行检索的功能，进一步提高方法的实用性（显然会有一些只能用文字描述来检索图像的场景。比如，找犯人时，可能没有犯人的照片，但有被害人的证词）</h1>
-<h1 id="insight">insight：</h1>
-<h1 id="方法">方法：</h1>
-<h2 id="instruction-generation">1.Instruction Generation</h2>
-<h3
-id="论文之所以能把各种任务统一起来就是因为它用了一个框架query-imageinstructiongallery-image不同的设定就由instruction来指定所以instruction是非常重要的">论文之所以能把各种任务统一起来，就是因为它用了一个框架，Query
-image+instruction+Gallery
-image，不同的设定就由instruction来指定。所以instruction是非常重要的</h3>
-<h2 id="model-architecture-of-irm">2.Model Architecture of IRM</h2>
-<h3
-id="这里先介绍一下irm的架构这个irm就是可以统一处理各种设定的reid任务的模型它和之后的irm有些不同">这里先介绍一下IRM的架构（这个IRM就是可以统一处理各种设定的reid任务的模型。它和之后的IRM++有些不同）</h3>
-<h3
-id="简单来说它有三大部分一个是instruction-encoder-epsilon_i用于处理文字的instruction把它变成特征向量f_t这里的encoder是一个visual-language-model之所以是visual-language-model而不是单纯的文字模态的模型应该是为了把文字投影到一个图像和文字公共的空间里以便后续进行图像和文字信息的融合否则单独用一个语言模型把文字投影到一个文字模态的特征空间后续也不好用来和图像进行融合-二是editing-transformer-epsilon_e它会把图像特征和文字特征一起当作输入用于获取经过文字指导后的图像特征f-三是一个attention-module-epsilon_f它的输入是文字特征f_t和融合特征f输出即为最终特征f_out主要功能是把文字信息和图像信息进一步融合其实理论上来讲前面的f应该就已经完成了文字和图像信息的融合了这里还来和文字信息一起输入应该就是单纯的想强化一下instruction了毕竟instruction承担的是指示任务类型的作用还是很重要的否则甚至会把任务类型搞错了">简单来说，它有三大部分，一个是instruction
-encoder <span
-class="math inline">\(\epsilon_{i}\)</span>，用于处理文字的instruction，把它变成特征向量<span
-class="math inline">\(F_{T}\)</span>（这里的encoder是一个visual language
-model。之所以是visual language
-model，而不是单纯的文字模态的模型，应该是为了把文字投影到一个图像和文字公共的空间里，以便后续进行图像和文字信息的融合。否则单独用一个语言模型，把文字投影到一个文字模态的特征空间，后续也不好用来和图像进行融合）<br>二是editing
-transformer <span
-class="math inline">\(\epsilon_{e}\)</span>，它会把图像特征和文字特征一起当作输入，用于获取经过文字指导后的图像特征<span
-class="math inline">\(F\)</span><br>三是一个attention module <span
-class="math inline">\(\epsilon_{f}\)</span>，它的输入是文字特征<span
-class="math inline">\(F_{T}\)</span>和融合特征<span
-class="math inline">\(F\)</span>，输出即为最终特征<span
-class="math inline">\(F_{out}\)</span>，主要功能是把文字信息和图像信息进一步融合（其实理论上来讲，前面的<span
-class="math inline">\(F\)</span>应该就已经完成了文字和图像信息的融合了。这里还来和文字信息一起输入，应该就是单纯的想强化一下instruction了。毕竟instruction承担的是指示任务类型的作用，还是很重要的，否则甚至会把任务类型搞错了）</h3>
-<h3
-id="这里训练的损失除了经典的分类损失还有一个论文提出的adaptive-triplet-loss对这个损失我的理解是它是针对同一id的融合了不同instruction的特征进行区分的具体来说假如有两幅图像都是id-0的样本但它们的instruction不同所以理论上图像和文字信息融合之后得到的最终特征f_out也应该尽可能远离本质上看这个损失是为了提高模型对指令的跟随和区分能力这个之所以创新也是因为这篇论文是用instruction的形式来做reid吧确实是一个新任务下的难点-则此时构造的triplet是一个anchor和一个正样本我的理解是同id且和anchor同样instruction以及一个负样本我的理解是同id但和anchor不同instruction然而看论文似乎和anchor同instruction也可以但这样的话这个损失大概率就是0意义不大了-看公式l_atrifrac1n_trisum_i1n_tri-signbeta_1-beta_2df_iaf_ir1beta_1-beta_2m-df_iaf_ir2它的中括号里第一项应该就是anchor和正样本之间的距离我们是希望它尽可能小的第二项是margin因为它是和beta_1beta_2相关的而beta_1beta_2又是和具体的三元组相关的所以它是随数据而变化的故称为所谓的adaptive-triplet-loss减去的第三项是anchor和负样本之间的距离我们希望它尽可能大从而减掉它之后整体会尽可能小损失会尽可能小到这整体是没什么问题的都是常见的思路-下面再仔细看一下中间第二项的自适应marginbeta的计算公式是beta_jiy_ay_r_jcosf_taf_tr_j它的含义是若两个数据的id相同则度量它们的instruction之间的距离这里我们先只考虑id相同的情况则beta度量的就单纯是指令之间的距离指令越相似beta越大那么回到上面的l_atri如果正样本和anchor的instruction尽可能相似乃至完全一样则beta_1就越发接近1而如果负样本和anchor之间的instruction非常不同则beta_2会尽可能接近-1此时beta_1-beta_2就会越大越接近2故margin就会越大这代表了什么呢-可以理解为同一id的数据它们遵循的instruction如果差距越大则我们希望融合了instruction之后的图像特征也应该尽可能差距大这样模型就相当于对指令有了比较好的区分能力它知道指令之间是不同的也知道即使是同一个id的特征融合了不同的指令信息之后就是不同的应该分离的此时模型应当是很好地理解了指令的也就能更好地跟随指令了故margin也应该越大因为margin大代表我们对它们的区分能力要求越高">这里训练的损失，除了经典的分类损失，还有一个论文提出的adaptive
-triplet
-loss。对这个损失，我的理解是，它是针对同一id的，融合了不同instruction的特征进行区分的。具体来说，假如有两幅图像，都是id
-0的样本，但它们的instruction不同，所以理论上图像和文字信息融合之后得到的最终特征<span
-class="math inline">\(F_{out}\)</span>也应该尽可能远离。（本质上看，这个损失是为了提高模型对指令的跟随和区分能力。这个之所以创新，也是因为这篇论文是用instruction的形式来做reid吧。确实是一个新任务下的难点）<br>则此时构造的triplet是一个anchor，和一个正样本（我的理解是，同id，且和anchor同样instruction），以及一个负样本（我的理解是，同id，但和anchor不同instruction。然而看论文，似乎和anchor同instruction也可以。但这样的话这个损失大概率就是0，意义不大了）<br>看公式<span
-class="math display">\[L_{atri}=\frac{1}{N_{tri†}}\sum_{i=1}^{N_{tri†}}\{
-Sign(\beta_{1}-\beta_{2})[d(F_{i}^{a},F_{i}^{r1})+(\beta_{1}-\beta_{2})m-d(F_{i}^{a},F_{i}^{r2})]\}\]</span>它的中括号里，第一项应该就是anchor和正样本之间的距离，我们是希望它尽可能小的；第二项是margin，因为它是和<span
-class="math inline">\(\beta_{1},\beta_{2}\)</span>相关的，而<span
-class="math inline">\(\beta_{1},\beta_{2}\)</span>又是和具体的三元组相关的，所以它是随数据而变化的，故称为所谓的adaptive
-triplet
-loss，减去的第三项是anchor和负样本之间的距离，我们希望它尽可能大，从而减掉它之后整体会尽可能小，损失会尽可能小。到这，整体是没什么问题的，都是常见的思路<br>下面再仔细看一下中间第二项的自适应margin。<span
-class="math inline">\(\beta\)</span>的计算公式是：<span
-class="math inline">\(\beta_{j}=I(y_{a}=y_{r_{j}})Cos&lt;F_{T}^{a},F_{T}^{r_{j}}&gt;\)</span>。它的含义是，若两个数据的id相同，则度量它们的instruction之间的距离。这里我们先只考虑id相同的情况，则<span
-class="math inline">\(\beta\)</span>度量的就单纯是指令之间的距离。指令越相似，<span
-class="math inline">\(\beta\)</span>越大。那么，回到上面的<span
-class="math inline">\(L_{atri}\)</span>，如果正样本和anchor的instruction尽可能相似乃至完全一样，则<span
-class="math inline">\(\beta_{1}\)</span>就越发接近1；而如果负样本和anchor之间的instruction非常不同，则<span
-class="math inline">\(\beta_{2}\)</span>会尽可能接近-1，此时<span
-class="math inline">\(\beta_{1}-\beta_{2}\)</span>就会越大（越接近2），故margin就会越大。这代表了什么呢？<br>可以理解为，同一id的数据，它们遵循的instruction如果差距越大，则我们希望，融合了instruction之后的图像特征也应该尽可能差距大，这样模型就相当于对指令有了比较好的区分能力，它知道指令之间是不同的，也知道即使是同一个id的特征，融合了不同的指令信息之后就是不同的，应该分离的。此时模型应当是很好地理解了指令的，也就能更好地跟随指令了（故margin也应该越大，因为margin大代表我们对它们的区分能力要求越高）</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1088,7 +1075,7 @@ class="math inline">\(\beta_{1}-\beta_{2}\)</span>就会越大（越接近2）�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1099,7 +1086,7 @@ class="math inline">\(\beta_{1}-\beta_{2}\)</span>就会越大（越接近2）�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
