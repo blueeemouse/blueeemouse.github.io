@@ -150,6 +150,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/Learning%20Transferable%20Visual%20Models%20From%20Natural%20Language%20Supervision/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/Learning%20Transferable%20Visual%20Models%20From%20Natural%20Language%20Supervision/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-11 16:48:45 / Modified: 23:54:15" itemprop="dateCreated datePublished" datetime="2025-03-11T16:48:45+08:00">2025-03-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="insight">insight：</h1>
+<h1 id="motivation">motivation：</h1>
+<h2
+id="在此之前视觉预训练的模型通常是用大量数据针对某一个任务进行训练比如分类任务这样得到的预训练模型局限性比较大因为它只能局限在一个特定类型的任务不方便迁移到其它任务迁移到其它下游任务都需要对应的数据进行微调而我们希望的一个好的预训练模型应该能做到比较方便地迁移到各种下游任务">在此之前，视觉预训练的模型通常是用大量数据，针对某一个任务进行训练（比如分类任务）。这样得到的预训练模型局限性比较大，因为它只能局限在一个特定类型的任务，不方便迁移到其它任务。迁移到其它下游任务，都需要对应的数据进行微调。而我们希望的一个好的预训练模型，应该能做到：比较方便地迁移到各种下游任务</h2>
+<h2
+id="另外一部分愿意也是当时nlp领域里用自监督预训练得到的模型效果特别好迁移到各种不同的下游任务效果都不错zero-shot能力很强相比之下当时cv领域就还是用大量有标签数据进行预训练下游微调的范式而大量标注数据是极其费时费力的所以自然cv领域里也有人想模仿nlp领域也用自监督来预训练但效果不尽如人意一个重要的点就在于规模之前cv领域里想尝试自监督它们用到的模型和数据量都远比nlp领域里的小clip做的一个改进就是设计了一个便于scale-up的架构从而模型大起来了数据量也大起来了效果也上来了">另外一部分愿意，也是当时nlp领域里用自监督预训练得到的模型效果特别好，迁移到各种不同的下游任务效果都不错，zero-shot能力很强。相比之下，当时cv领域就还是用大量有标签数据进行预训练+下游微调的范式。而大量标注数据是极其费时费力的。所以自然cv领域里也有人想模仿nlp领域，也用自监督来预训练。但效果不尽如人意。一个重要的点就在于规模。之前cv领域里想尝试自监督，它们用到的模型和数据量都远比nlp领域里的小。clip做的一个改进就是设计了一个便于scale
+up的架构，从而模型大起来了，数据量也大起来了，效果也上来了</h2>
+<h1 id="方法">方法</h1>
+<h2 id="构建数据集">1.构建数据集</h2>
+<h3
+id="这里的第一步是构建一个足够大的图像-文本数据对因为预训练的任务就是用到图像-文本数据对的之前常用的几个数据集比如ms-cocovisual-genome质量虽然够高但太小了大约100000而另一个比较大的数据集yfcc100m有大约100-million张图像量级确实够了但它是质量又不够高筛完之后大约只有15-million了一千五百万这和扩展之后的imagenet是差不多量级的imagenet-21k有大约21k个类别约1400万张图像所以确实得自己构造">这里的第一步是构建一个足够大的图像-文本数据对（因为预训练的任务就是用到图像-文本数据对的）。之前常用的几个数据集，比如MS-COCO，Visual
+Genome质量虽然够高，但太小了（大约100000）。而另一个比较大的数据集，YFCC100M，有大约100
+million张图像，量级确实够了，但它是质量又不够高。筛完之后，大约只有15
+million了（一千五百万），这和扩展之后的ImageNet是差不多量级的（ImageNet-21k，有大约21k个类别，约1400万张图像）。所以确实得自己构造</h3>
+<h3
+id="它构造的大致流程是根据一定方法筛选出高频的有意义的query500000个query然后用这些query在网上进行搜索并获取数据同时为了防止数据的不平衡限制了每个query的结果最多不超过20000个图像-文本对最终得到的数据集是400-million个数据对这和gpt-2的预训练语料差不多大了那边的叫webtext-dataset这里构造出来的就叫做webimagetextwit">它构造的大致流程是，根据一定方法，筛选出高频的，有意义的query（500000个query），然后用这些query在网上进行搜索并获取数据（同时为了防止数据的不平衡，限制了每个query的结果最多不超过20000个图像-文本对）。最终得到的数据集是400
+million个数据对，这和GPT-2的预训练语料差不多大了。那边的叫WebText
+dataset，这里构造出来的就叫做WebImageText（WIT）</h3>
+<h2 id="selecting-an-efficient-pre-training-method">2.Selecting an
+Efficient Pre-Training Method</h2>
+<h3
+id="之前的用文本-图像对来训练的方法是训练一个cnn来提取图像特征还有一个text-transformer接受图像特征之后要预测生成图像的caption还有一个baseline就是仍然训练一个cnn文字部分则是用词袋模型来编码之后会把提取出来的图像特征进行投影希望能得到对应的文本的词袋向量这两个方法进行比较会发现用transformer那个特别慢具体来说就是它得用很多的数据才能做到和baseline差不多的效果论文里给出结果大概是3倍的数据的关系">之前的用文本-图像对来训练的方法，是训练一个CNN来提取图像特征，还有一个text
+transformer，接受图像特征之后，要预测生成图像的caption。还有一个baseline，就是，仍然训练一个CNN，文字部分则是用词袋模型来编码，之后会把提取出来的图像特征进行投影，希望能得到对应的文本的词袋向量。这两个方法进行比较，会发现：用transformer那个，特别”慢“。具体来说，就是它得用很多的数据才能做到和baseline差不多的效果。论文里给出结果，大概是3倍的数据的关系</h3>
+<h3
+id="另一方面近期的工作表明对比式的目标函数比预测式的目标函数效果要好所以论文也进行了一个替换把任务从根据图像特征预测对应文本变成根据图像特征匹配相应的文本这个任务更加简单训练的时候给定n个文本-图像对我们的训练目标就是把匹配的文本和图像特征之间尽可能拉近把不匹配的文本和图像特征之间尽可能拉远且实验上表明它的效果非常好模型学习起来的时候很快只需要用大概baseline的四分之一的数据量就能达到同一个效果当然是指定了一个精度的前提下具体可以看论文的图">另一方面，近期的工作表明对比式的目标函数比预测式的目标函数效果要好，所以论文也进行了一个替换，把任务从根据图像特征预测对应文本，变成根据图像特征，匹配相应的文本。这个任务更加简单（训练的时候，给定N个文本-图像对，我们的训练目标就是把匹配的文本和图像特征之间尽可能拉近，把不匹配的文本和图像特征之间尽可能拉远），且实验上表明它的效果非常好，模型学习起来的时候很快，只需要用大概baseline的四分之一的数据量就能达到同一个效果（当然是指定了一个精度的前提下。具体可以看论文的图）</h3>
+<h2 id="choosing-and-scaling-a-model">3.Choosing and Scaling a
+Model</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unified-ReID/Instruct-ReID++%EF%BC%9ATowards%20Universal%20Purpose%20%20Instruction-Guided%20Person%20Re-identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -983,124 +1068,6 @@ Neighbor-Guided Label Refinement（无监督）</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-10 15:18:29" itemprop="dateCreated datePublished" datetime="2025-02-10T15:18:29+08:00">2025-02-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-11 11:30:29" itemprop="dateModified" datetime="2025-02-11T11:30:29+08:00">2025-02-11</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2
-id="它的核心动机是希望能做到从当前域的数据合成出前面的域的数据从而用这些合成数据来缓解灾难性遗忘这样我们也就不需要通过保留过往的exemplar来复习旧知识了">它的核心动机是，希望能做到：从当前域的数据，合成出前面的域的数据，从而用这些合成数据来缓解灾难性遗忘。（这样我们也就不需要通过保留过往的exemplar来复习旧知识了）</h2>
-<h2
-id="dask主要由两部分组成一是drl它主要做的是训练一个网络叫adaptive-kernel-prediction-networkakpnet注意一下这个akpnet的功能是把任意分布的输入数据转换到它学到的风格落到我们这里也就是把新域的数据转换成旧域的数据它会为每个实例都预测生成一个kernel这个kernel可以用于把这个实例转换成其它风格的实例">DASK主要由两部分组成，一是DRL，它主要做的是，训练一个网络（叫adaptive
-kernel prediction
-network，AKPNet）（注意一下，这个AKPNet的功能是，把任意分布的输入数据转换到它学到的风格，落到我们这里，也就是把新域的数据转换成旧域的数据），它会为每个实例都预测生成一个kernel，这个kernel可以用于把这个实例转换成其它风格的实例</h2>
-<h2
-id="二是drrt它主要做的是根据上面学到的akpnet负责缓解灾难性遗忘和新数据正常学习新知识去训练一个模型具体来说我们会用kernel和新数据合成一批旧数据然后拿着新数据与合成数据一起学习这里会有一个专门的loss">二是DRRT，它主要做的是，根据上面学到的AKPNet（负责缓解灾难性遗忘）和新数据（正常学习新知识），去训练一个模型。具体来说，我们会用kernel和新数据，合成一批旧数据，然后拿着新数据与合成数据，“一起”学习（这里会有一个专门的loss）</h2>
-<h2
-id="具体来说drrt主要由distribution-rehearsing-module-drm和joint-knowledge-consolidation-module-jkcm组成">具体来说，DRRT主要由Distribution
-Rehearsing Module (DRM)和Joint Knowledge Consolidation Module
-(JKCM)组成</h2>
-<h3
-id="drm的话它会用第t-1步的akpnetpsi_t-1输入为x_i它是当前域t的一个实例输出是一个kernelk_i它是一个卷积核卷积核可以认为就代表了一些特征所以这里我们可以认为用psi_t-1提取出的kernel蕴含了一些旧域t-1的一些特征之后我们再用这个核k_i和x_i进行卷积得到的输出结果x_i我们就认为是转换到旧域风格的实例了同时需要注意我们给这个合成的数据x_i它的标签也是y_i即它的标签和x_i的标签是一样的">DRM的话，它会用第t-1步的AKPNet<span
-class="math inline">\(\Psi_{t-1}\)</span>，输入为<span
-class="math inline">\(x_{i}\)</span>（它是当前域t的一个实例），输出是一个kernel，<span
-class="math inline">\(k_{i}\)</span>，它是一个卷积核（卷积核可以认为就代表了一些特征。所以这里我们可以认为，用<span
-class="math inline">\(\Psi_{t-1}\)</span>提取出的kernel，蕴含了一些旧域t-1的一些特征），之后我们再用这个核<span
-class="math inline">\(k_{i}\)</span>和<span
-class="math inline">\(x_{i}\)</span>进行卷积，得到的输出结果<span
-class="math inline">\(x_{i}^{*}\)</span>我们就认为是转换到旧域风格的实例了。<strong>同时需要注意，我们给这个合成的数据<span
-class="math inline">\(x_{i}^{*}\)</span>，它的标签也是<span
-class="math inline">\(y_{i}\)</span>，即它的标签和<span
-class="math inline">\(x_{i}\)</span>的标签是一样的</strong></h3>
-<p>话说，它这里是用一个网络来提取风格特征的。是不是因为它是用网络来提取的，所以效果会比较好；而我们之前是手动设计一些指标，比如均值和方差，来衡量风格，所以效果不够好？
-###
-JKCM的话，主要是几个损失。一个是相似矩阵之间的KL散度（也不是第一次见了），另一个是经典的交叉熵分类损失和triplet
-loss。对于新域的一个batch，我们会用第t步的模型（也就是我们正在训练的模型）<span
-class="math inline">\(M_{t}\)</span>提取特征，得到一个特征矩阵，每一行是一个实例的特征向量；然后也会用上一个域的模型<span
-class="math inline">\(M_{t-1}\)</span>提取当前batch的特征，也得到一个特征矩阵。新旧特征矩阵各自都可以计算得到一个相似性矩阵（即一个batch里的各个feature之间的相似性），我们会约束新旧相似性矩阵要尽可能相近，用KL散度来约束。这里其实是常规操作，是一个见过的抗遗忘措施。重点在于下面，我们对合成的数据，也会进行类似的操作。同样的，交叉熵损失和triplet
-loss自然会作用在新域的batch
-data上，同时也会作用在我们的合成数据上（此时就用上了我们前面给合成数据分配的标签了，否则这里无法进行）
-## 而DRL主要是两步，第一步是Distribution
-Augmentation，第二步是Distribution Reconstruction ### Distribution
-Augmentation主要是获取一些数据用于训练<span
-class="math inline">\(\Psi_{t}\)</span>。具体来说，我们对于一个数据集里的所有数据，都会统计每个实例的三个通道的均值和标准差（此为instance-level
-distribution），然后会统计整个数据集的三个通道的均值的标准差、三个通道的标准差的标准差（此为dataset-level
-distribution）。然后，对于一个图像<span
-class="math inline">\(x_{i}\)</span>，认为它的三个通道的均值服从一个高斯分布。它服从的这个分布的均值就是当前这个均值，标准差就是整个数据集的标准差。可以从中采样出一个均值。类似地，我们可以采样出标准差。由此，可以对这个图像的三个通道各自进行变换，得到增强后的一个数据<span
-class="math inline">\(x_{i}^{&#39;}\)</span>，而这也是<span
-class="math inline">\(\Psi_{t}\)</span>的输入。输出还是我们上面提到过的kernel，而这里训练的方法是，我们会用输出的kernel与<span
-class="math inline">\(x_{i}^{&#39;}\)</span>进行卷积，并用损失约束它要与<span
-class="math inline">\(x_{i}^{&#39;&#39;}\)</span>尽可能接近（也就是说，我们希望kernel能做到，对于任意分布的输入（即此处的<span
-class="math inline">\(x_{i}^{&#39;}\)</span>），通过与kernel卷积，可以变成指定风格（此处我们让它尽可能接近<span
-class="math inline">\(x_{i}\)</span>，也就是想让它变成<span
-class="math inline">\(x_{i}\)</span>的风格） ###
-和其它方法的对比&amp;DRL有效性的探讨： ####
-原论文还将DRL与其它的对分布进行预测的方法进行了对比。一是与CoP进行了对比。CoP主要是预测均值之差与标准差之比（就是，它根据变换均值和标准差的那个线性的公式，把目标定位预测均值之差与标准差之比，这样就能倒推）。但是CoP是每个像素都做一样的线性操作，论文认为，这样太过“狭窄”，没有考虑到一些空间上的信息，像素之间过于独立。相比之下，DRL因为是和卷积核进行卷积，得到的输出，而卷积其实一个局部空间上的加权求和，因此，论文认为，DRL的方法更好地把握了空间纹理等信息
-关于如何把这里的方法迁移到我们的bench：考虑这样，我们也训练一个“AKPNet”，然后它的输入是根据可见光图像<span
-class="math inline">\(x\)</span>增强得到的伪红外<span
-class="math inline">\(x^{&#39;}\)</span>，输出是一个kernel，kernel和伪红外<span
-class="math inline">\(x^{&#39;}\)</span>进行卷积，得到一个数据<span
-class="math inline">\(x^{&#39;&#39;}\)</span>，我们训练的时候就希望这个<span
-class="math inline">\(x^{&#39;&#39;}\)</span>尽可能接近对应的真实红外图像？</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1170,7 +1137,7 @@ class="math inline">\(x^{&#39;&#39;}\)</span>尽可能接近对应的真实红�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-count">82</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1181,7 +1148,7 @@ class="math inline">\(x^{&#39;&#39;}\)</span>尽可能接近对应的真实红�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
