@@ -150,6 +150,171 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/27/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/04/27/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-04-27 16:43:57 / Modified: 17:00:53" itemprop="dateCreated datePublished" datetime="2025-04-27T16:43:57+08:00">2025-04-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2
+id="先上结论可以试试conda-clean--a之后再执行conda-activate">先上结论，可以试试<code>conda clean -a</code>，之后再执行conda
+activate</h2>
+<h2
+id="问题就如标题所述这个其实有点久了但一直没管它此外似乎在桌面之类的其它地方打开power-shell再激活环境好像是可以的且在vscode里打开的话如果用cmd终端则也是可以正常conda激活环境的-而在power-shell里就会报错具体来说在vscode里打开终端然后选用power-shell的话一初始化就会报错大概就是会爆出一大堆环境变量里的路径最后是">问题就如标题所述。这个其实有点久了，但一直没管它。此外，似乎在桌面之类的其它地方打开power
+shell，再激活环境，好像是可以的；且在vscode里打开的话，如果用cmd终端，则也是可以正常conda激活环境的<br>而在power
+shell里就会报错。具体来说，在vscode里打开终端，然后选用power
+shell的话，一初始化就会报错，大概就是会爆出一大堆环境变量里的路径，最后是</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. No report sent. To permanently opt-out, use $ conda config --<span class="built_in">set</span> report_errors <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2
+id="这一段如果看一下它上面爆出的路径会发现里面有几个中文的路径还有类似乱码的路径我之前确实有添加过中文的环境变量本来以为是这个问题尝试在环境变量里把这些中文的都去掉正好也是不用了结果还是不行而且设置完环境变量关掉终端再打开还是会报一样的错且路径里还是有中文的这个很奇怪但不知道是不是因为环境变量设置以后需要重启才能生效">这一段。如果看一下它上面爆出的路径，会发现里面有几个中文的路径，还有类似乱码的路径（我之前确实有添加过中文的环境变量），本来以为是这个问题，尝试在环境变量里把这些中文的都去掉（正好也是不用了），结果还是不行。而且设置完环境变量，关掉终端再打开，还是会报一样的错，且路径里还是有中文的。这个很奇怪，但不知道是不是因为环境变量设置以后需要重启才能生效）</h2>
+<h2
+id="问ai之后尝试了conda-init-powershell也尝试了">问ai，之后尝试了conda
+init powershell，也尝试了</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除Conda的缓存目录 </span></span><br><span class="line">Remove-Item -Path <span class="variable">$env</span>:CONDA_ROOT\pkgs -Recurse -Force </span><br><span class="line">Remove-Item -Path <span class="variable">$env</span>:LOCALAPPDATA\conda -Recurse -Force</span><br></pre></td></tr></table></figure>
+<h2 id="依然无效">依然无效</h2>
+<h2
+id="尝试查看终端的配置文件即执行notepad-profile打开来看这个文件里也挺正常的啊">尝试查看终端的配置文件，即执行<code>notepad $PROFILE</code>，打开来看，这个文件里也挺正常的啊</h2>
+<h2
+id="之后想起来之前是vscode里power-shell终端不能用conda激活环境cmd终端是可以的而在cmd终端打印一下它里面的环境变量发现是有中文的路径的这样看中文路径不应该是报错的原因啊">之后想起来，之前是vscode里power
+shell终端不能用conda激活环境，cmd终端是可以的；而在cmd终端打印一下它里面的环境变量，发现是有中文的路径的。这样看，中文路径不应该是报错的原因啊？</h2>
+<h2
+id="考虑到可能是乱码相关的因为爆出的路径里是有中文乱码的不知道是不是编码方式需要改但尝试了改成用utf-8执行chcp-65001在power-shell里临时设置编码方式也还是报之前的错">考虑到可能是乱码相关的（因为爆出的路径里是有中文乱码的），不知道是不是编码方式需要改，但尝试了改成用utf-8，执行<code>#chcp 65001</code>，在power
+shell里临时设置编码方式，也还是报之前的错</h2>
+<h2
+id="上网查了一下似乎github上有人挂出过类似的issue其中评论区里有人说可能是conda版本太低之类的故尝试了conda-update-conda完了再尝试激活conda环境依然报错不过报的错变了前面依然是爆一大堆路径最后的则变成了">上网查了一下，似乎GitHub上有人挂出过类似的issue，其中评论区里有人说可能是conda版本太低之类的。故尝试了conda
+update
+conda，完了再尝试激活conda环境，依然报错，不过报的错变了。前面依然是爆一大堆路径，最后的则变成了：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. If you suspect this error is being caused by a malfunctioning plugin, consider using the --no-plugins option to turn off plugins. Example: conda --no-plugins install &lt;package&gt; Alternatively, you can <span class="built_in">set</span> the CONDA_NO_PLUGINS environment variable on the <span class="built_in">command</span> line to run the <span class="built_in">command</span> without plugins enabled. Example: CONDA_NO_PLUGINS=<span class="literal">true</span> conda install &lt;package&gt;</span><br></pre></td></tr></table></figure>
+<h2
+id="报错变了头很大本来之前的就没搞明白试着搜了一下这个报错发现github上还是有人给出issue且最后close掉了注意到评论区里有个人提出执行conda-clean--a就解决了不抱希望地尝试了一下竟然好了优点莫名其妙啊">报错变了，头很大……本来之前的就没搞明白……试着搜了一下这个报错，发现GitHub上还是有人给出issue，且最后close掉了；注意到评论区里有个人提出执行<code>conda clean -a</code>就解决了，不抱希望地尝试了一下，竟然好了…………优点莫名其妙啊？</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/19/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/04/19/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-04-19 11:16:20 / Modified: 11:54:17" itemprop="dateCreated datePublished" datetime="2025-04-19T11:16:20+08:00">2025-04-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="先来个粗糙的理解偏差可以简单看成是表征了这个模型族的输出与真实值之间的偏差因此如果偏差很大比较有可能是模型形式过于简单而导致的欠拟合-方差则度量了同样大小的训练集的变动导致的学习性能的变化这里注意是训练集的变动那么如果训练集有微小变动但学习性能变化很大这就是方差大的情况它表明训练出的模型性能太依赖于训练集了这表明模型的形式可能过于复杂了导致一训练就出现了过拟合的情况-因此实际训练的时候需要权衡偏差和方差也就是要注意模型的复杂度不能太复杂导致过拟合了但也不能太简单导致根本学不好某种程度上可以认为偏差反映了模型的准确性方差反映了模型的稳定性">1.先来个粗糙的理解。偏差可以简单看成是，表征了这个模型族的输出与真实值之间的偏差。因此，如果偏差很大，比较有可能是模型形式过于简单而导致的欠拟合<br>方差则度量了同样大小的训练集的变动导致的学习性能的变化（这里注意，是“训练集的变动”）。那么，如果训练集有微小变动，但学习性能变化很大，这就是方差大的情况，它表明训练出的模型性能太依赖于训练集了，这表明模型的形式可能过于复杂了，导致一训练就出现了过拟合的情况<br>因此，实际训练的时候，需要权衡偏差和方差。也就是要注意模型的复杂度，不能太复杂导致过拟合了，但也不能太简单，导致根本学不好。某种程度上，可以认为：偏差反映了模型的准确性，方差反映了模型的稳定性</h1>
+<h1
+id="下面从比较严谨的角度来看一下">2.下面从比较严谨的角度来看一下</h1>
+<h2
+id="偏差方差这两个概念出现在偏差-方差分解里这个偏差-方差分解主要是为了从理论角度去衡量模型的泛化性能好坏这个分解方法似乎更加侧重于衡量一个模型族的泛化性能所谓模型族就是一个模型的形式比如线性模型就是一个模型族具体的线性模型可以有无数个">偏差、方差这两个概念，出现在偏差-方差分解里。这个偏差-方差分解，主要是为了从理论角度去衡量模型的泛化性能好坏。这个分解方法，似乎更加侧重于衡量一个模型族的泛化性能。所谓模型族，就是一个模型的形式，比如“线性模型”就是一个模型族，具体的线性模型可以有无数个</h2>
+<h2
+id="首先要定义这里的方差就需要先定义一个期望预测平均预测average-predictedbar-fxe_dfxd这里d表示一个训练集fxd表示由d训练得到的模型f在x上的输出这个定义本身就比较少见了对训练集取期望可以先举个简单例子假如我们从实际的数据分布里采样得到了若干个相同大小的训练集记作k个我们用这k个训练集分别训练得到k个模型当然它们的形式都是一样的之后对某一个样本我们计算这k个模型在这个样本上的输出然后求均值这就是平均预测-再来看方差的定义varxe_dfxd-bar-fx2还是用上面的具体例子来说明就是我们训练出的k个模型在某个样本x上有k个输出我们计算这k个输出与前面提到的平均预测的平方差再求均值就是这里的方差了所以其实就是对k个输出求方差而符号里之所以是e_d只是因为我们假设训练集服从一个真实分布我们手头有的部分的训练集其实是从真实分布里采样得到的-这样看这里的方差衡量的似乎确实是模型族的稳定性不妨考虑两个极端一点的情况一个是模型选的恰到好处不管在哪个训练集上都能训练的特别好因此不同模型的输出都很接近所以方差很低另一个是模型选的太过简单不管在哪个训练集上都烂完了啥也没学到但输出依然很接近所以方差很低一个可能的例子就是直接选成了常数模型我们期望的当然是前者又稳定又好所以稳定性其实就靠方差来衡量了好不好就靠下面的偏差bias来衡量了">首先，要定义这里的方差，就需要先定义一个期望预测/平均预测（average
+predicted）：<span class="math display">\[\bar
+f(x)=E_{D}[f(x;D)]\]</span>这里D表示一个训练集，<span
+class="math inline">\(f(x;D)\)</span>表示，由D训练得到的模型f，在x上的输出。这个定义本身就比较少见了，对训练集取期望。可以先举个简单例子。假如我们从实际的数据分布里，采样得到了若干个相同大小的训练集，记作k个。我们用这k个训练集分别训练得到k个模型（当然，它们的形式都是一样的）。之后对某一个样本，我们计算：这k个模型在这个样本上的输出，然后求均值。这就是平均预测<br>再来看方差的定义：<span
+class="math display">\[var(x)=E_{D}[(f(x;D)-\bar
+f(x))^{2}]\]</span>还是用上面的具体例子来说明，就是：我们训练出的k个模型，在某个样本x上，有k个输出；我们计算这k个输出与前面提到的平均预测的平方差，再求均值，就是这里的方差了（所以其实就是对k个输出求方差。而符号里之所以是<span
+class="math inline">\(E_{D}\)</span>，只是因为我们假设训练集服从一个真实分布，我们手头有的部分的训练集其实是从真实分布里采样得到的）<br>这样看，这里的方差衡量的似乎确实是模型族的稳定性。不妨考虑两个极端一点的情况：一个是，模型选的恰到好处，不管在哪个训练集上，都能训练的特别好，因此不同模型的输出都很接近，所以方差很低；另一个是，模型选的太过简单，不管在哪个训练集上，都烂完了，啥也没学到，但输出依然很接近，所以方差很低。（一个可能的例子就是，直接选成了常数模型）。我们期望的当然是前者，又稳定又好。所以，稳定性其实就靠方差来衡量了，好不好就靠下面的偏差（bias）来衡量了</h2>
+<h2
+id="偏差定义如下bias2xbar-fx-y2沿用上面的例子也就是这k个模型的平均预测与真实值之间的平方差如果此时偏差很小说明我们训练得到的多个模型的平均性能是不错的那就表明了这个模型族的效果是不错的拟合的是比较好的">偏差定义如下：<span
+class="math display">\[bias^{2}(x)=(\bar
+f(x)-y)^{2}\]</span>沿用上面的例子，也就是：这k个模型的平均预测，与真实值之间的平方差。如果此时偏差很小，说明我们训练得到的多个模型的平均性能是不错的，那就表明了这个模型族的效果是不错的，拟合的是比较好的</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -909,147 +1074,6 @@ memory（这个memory的特征是由红外cluster和对应的可见光cluster加
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-16 10:28:47" itemprop="dateCreated datePublished" datetime="2025-02-16T10:28:47+08:00">2025-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-18 15:34:16" itemprop="dateModified" datetime="2025-02-18T15:34:16+08:00">2025-02-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>首先，无监督条件下的跨模态对应依然是难点。而加入了lifelong条件之后，显然会有lifelong的常见问题，就是灾难性遗忘。并且，
-在新数据集上，因为分布不同，所以之前学到的跨模态对应知识，以及单模态内的知识可能都不适用，而这会导致在学习新数据集的时候，初期的特征不够好，进而会导致聚类得到的伪标签也不够好，后续对应也很难对好，故训练完得到的模型性能可能也不够好/在新数据集上，反而是有一些先验知识会比较好，有利于度过初期训练？（如果是会产生负面影响，那么标签校正应该是非常有必要的了）</p>
-<p>解决方法上，提出一种比较有效的标签置信度求解方法，来帮助过度前期训练，或许是一个解决方法（比如，对每个实例，都找出和它距离前k近的实例，把这些邻居的标签加权求和，看看求和得到的标签和它的簇标签之间的距离远近？）
-或许修正标签是更加直接的方法（修正，而不是直接把带噪声的标签给去除掉）</p>
-<p>尝试：一个momentum encoder，一个online
-encoder，然后在新数据集上，用online
-encoder先学一下并聚类（可以适当加载一些momentum
-encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-02-16 00:07:08 / Modified: 15:04:15" itemprop="dateCreated datePublished" datetime="2025-02-16T00:07:08+08:00">2025-02-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1
-id="无监督vi-reid大多数的流程都是先通过某种聚类方法通常是dbscan得到一批伪标签然后开始构建跨模态的对应一般是对应簇而不是一个一个实例去对应因为对应完簇我们就认为这两个簇里的实例都是一个id的所以其实可以说一个常见的范式是在各个模态内进行聚类然后进行跨模态的簇的对应这么说来eccv24那篇有没有可能提出了一个新的范式就是在聚类的时候就已经考虑上跨模态的对应了">无监督vi-reid，大多数的流程都是，先通过某种聚类方法（通常是DBSCAN），得到一批伪标签，然后开始构建跨模态的对应（一般是对应簇，而不是一个一个实例去对应。因为对应完簇，我们就认为这两个簇里的实例都是一个ID的）。所以其实可以说，一个常见的范式是，在各个模态内进行聚类，然后进行跨模态的簇的对应（这么说来，ECCV24那篇，有没有可能提出了一个新的范式，就是在聚类的时候就已经考虑上跨模态的对应了？）</h1>
-<h1 id="通常的改进会聚焦在">通常的改进会聚焦在，</h1>
-<h2
-id="如何更好的构建伪标签的跨模态对应pgmotpm">如何更好的构建伪标签的跨模态对应（PGM）（OTPM）</h2>
-<h3
-id="毕竟没标签很难对应上最理想的情况当然是我们的聚类结果恰好就等于真实标签此时无监督vi-reid就会变成vi-reid实际还有个很重要的问题就是我们的对应很可能是有错的怎么在有错误对应即所谓噪声的情况下不断改进对应结果也是很重要的所以才会有很多progressive的方法">（毕竟没标签，很难对应上；最理想的情况当然是我们的聚类结果恰好就等于真实标签，此时无监督vi-reid就会变成vi-reid）（实际还有个很重要的问题，就是，我们的对应很可能是有错的，怎么在有错误对应（即所谓噪声）的情况下不断改进对应结果也是很重要的。所以才会有很多progressive的方法）；</h3>
-<h2
-id="还有一部分可能会聚焦在伪标签的可靠性上multi-memorypgm">还有一部分可能会聚焦在伪标签的可靠性上？（Multi-memory，PGM）</h2>
-<h2
-id="提取更加鲁棒的特征以改善聚类效果shallow-deepgur">提取更加鲁棒的特征，以改善聚类效果（Shallow-Deep，GUR）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1119,18 +1143,18 @@ id="提取更加鲁棒的特征以改善聚类效果shallow-deepgur">提取更�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">85</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

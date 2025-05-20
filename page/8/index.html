@@ -150,6 +150,229 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Channel%20Augmentation%20for%20Visible-Infrared%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Channel%20Augmentation%20for%20Visible-Infrared%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-28 14:46:46" itemprop="dateCreated datePublished" datetime="2024-10-28T14:46:46+08:00">2024-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-09 09:13:33" itemprop="dateModified" datetime="2025-03-09T09:13:33+08:00">2025-03-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="tpami24">tpami24</h1>
+<h1
+id="贡献提出一种很简单的channel-augmentation可以无缝衔接到现有的很多baseline里提出一种weak--and-strong--augmentation-joint-learning-strategy提出一种unsupervised-augmented-label-association设计了一种baseline看样子好像只是把以前的ir和rgb模态特征一起聚类改成了ir和中间模态特征一起聚类似乎大家都默认了无监督条件下解决cross-modality-gap的一个重要方法就是聚类">贡献：提出一种很简单的channel
+augmentation，可以无缝衔接到现有的很多baseline里；提出一种weak- and
+strong- augmentation joint learning strategy；提出一种unsupervised
+augmented label
+association，设计了一种baseline（看样子好像只是把以前的”IR和RGB模态特征一起聚类“改成了”IR和中间模态特征一起聚类“。似乎大家都默认了，无监督条件下解决cross-modality
+gap的一个重要方法就是聚类？）</h1>
+<h1
+id="problemmotivation还是老生常谈的large-modality-gap但文章关注的是其中的color-discrepancy由此提出channel-augmentation看fig1好像是从rgb图像往ir图像靠拢这样起码这次它不是空喊modality-gap了而是聚焦其中的一个部分并切实地提出了解决方案这就比那些文章好了-此外论文也提到了跨模态身份标注是费时费力的因此很有必要发展无监督的vi-reid这里就比较假大空了哪里都可以这么说嘛感觉更有可能是为了利用提出的ca操作也给无监督设定提出了一个新的baseline">problem&amp;motivation：还是老生常谈的large
+modality gap。但文章关注的是其中的color discrepancy，由此提出channel
+augmentation（看fig1，好像是从RGB图像往IR图像靠拢这样）（起码这次它不是空喊modality
+gap了，而是聚焦其中的一个部分，并切实地提出了解决方案。这就比那些文章好了）<br>此外，论文也提到了跨模态身份标注是费时费力的，因此很有必要发展无监督的VI-ReID（这里就比较假大空了，哪里都可以这么说嘛）。感觉更有可能是为了利用提出的CA操作，也给无监督设定提出了一个新的baseline</h1>
+<h1 id="method">method：</h1>
+<h2
+id="channel-augmentationca-它就是对训练集里的rgb图像进行操作会随机选择rgb三个通道中的一个然后把剩下两个通道都换成选出的那个通道一来可视化的时候这样得到的图像与ir模态图像更为相近了认为gap更小了另一方面论文提到如果是正常的rgb三通道的图像那么在提取特征的时候特征可能捕获了rgb三个通道相互之间的关系然而ir图像是没有这种相互关系的所以这种相互关系本质是一种modality-specific-information我们不太希望提取出这个信息而通过ca三个通道是相同的了那么特征也就不会包含三个通道相互的关系了相当于少学一些modality-specific-information而是更多去学一些modality-shared-information但细究一下的话不学通道之间的相互关系这种modality-specific-information不代表不可以学习其它的啊或者说只是少学了一种modality-specific-information效果一定会好嘛-不过总的来说引入ca操作以后对rgb图像进行ca可以得到一种新的图像姑且可以认为是一种ca模态的数据它减小了rgb和ir模态之间的差异-有一说一论文给出t-sne可视化的图来说明ca模态会更靠近ir模态但感觉反而一可视化就显得有点牵强了这个可视化效果一般啊会不会ca还是不够话说用一个网络输入是rgb输出是ir让它去预测会不会学到一些二者之间的关系然后后面就用rgb图像的输出代替所谓ca模态数据毕竟提出用一个网络的本意也只是想把ca这个操作给自动化希望能学出来-这里顺带的有个小trick就是channel-level-random-erasingcre大概就是对rgb图像的各个channel都随机选择一个区域然后把区域里的像素值都替换成一个提前算好的imagenet上的对应通道均值没有什么深度新意">1.Channel
+Augmentation（CA）<br>它就是对训练集里的RGB图像进行操作，会随机选择R/G/B三个通道中的一个，然后把剩下两个通道都换成选出的那个通道。一来，可视化的时候，这样得到的图像与IR模态图像更为相近了，认为gap更小了；另一方面，论文提到，如果是正常的RGB三通道的图像，那么在提取特征的时候，特征可能捕获了R/G/B三个通道相互之间的关系。然而IR图像是没有这种相互关系的。所以这种相互关系本质是一种modality-specific
+information。我们不太希望提取出这个信息。而通过CA，三个通道是相同的了，那么特征也就不会包含三个通道相互的关系了，相当于少学一些modality-specific
+information，而是更多去学一些modality-shared
+information（但细究一下的话，不学通道之间的相互关系这种modality-specific
+information，不代表不可以学习其它的啊？或者说，只是少学了一种modality-specific
+information，效果一定会好嘛？）<br>不过，总的来说，引入CA操作以后，对RGB图像进行CA，可以得到一种新的图像，姑且可以认为是一种CA模态的数据。它减小了RGB和IR模态之间的差异<br>有一说一，论文给出t-SNE可视化的图来说明CA模态会更靠近IR模态，但感觉反而一可视化就显得有点牵强了。这个可视化效果一般啊。。。会不会CA还是不够？（话说用一个网络，输入是RGB，输出是IR，让它去预测，会不会学到一些二者之间的关系？然后后面就用RGB图像的输出代替所谓CA模态数据？毕竟提出用一个网络的本意也只是想把CA这个操作给自动化，希望能学出来）<br>这里顺带的有个小trick，就是channel-level
+random
+erasing（CRE），大概就是对RGB图像的各个channel都随机选择一个区域，然后把区域里的像素值都替换成一个提前算好的ImageNet上的对应通道均值。没有什么深度/新意</h2>
+<h2
+id="weak-and-strong-augmentation-joint-learning-strategy-感觉主要的创新点以及相比于它在此之前提出的enhanced-channel-mixed-learning的不同点在于l_ws具体来说它好像希望weak-augmented-img即用常规增强方法得到的图像和strong-augmented-img即用ca得到的图像的分类输出尽可能保持一致注意一下它来约束分类结果的一致性至于分类结果的准确性是由另外两个常规损失来约束的还挺合理并且它强调说分类器是用的同一个以便确保确实在优化特征提取器但目前还没太看明白它具体计算损失的时候里面的y是指什么得回头细看了可能得看代码了感觉文章里说的就是不清楚-目前问了一下ai得到了还算合理的回答有时间看看代码对比一下但它怎么好像没公开代码pasted-image-20241028215226.png-这个损失求和里的每一样其实是交叉熵的简写里面的overline-y_iw和overline-y_is都代表一个概率分布上标是w的表示对应weak-augmented-img上标s则表示对应strong-augmented-img论文里说它们是预测概率中心其实预测概率中心应该就是一个向量举个例子说明一下什么是预测概率中心不妨假设分类任务中一共有5个类然后属于第一个类的数据有10个我们有一个网络一个输入x进去输出y都是这个输入x的属于各个类别的概率分布那么对于那10个都是第一类的数据它们都输入进去可以得到10个概率分布也就是10个5维的向量对这个10个向量取均值就得到了一个预测概率中心也就是说预测概率中心是针对一个类而言的它表征了模型整体对某个类的置信度比方说在这里的例子中如果这个预测概率中心它在第一个类上的概率很高假设是0.95那说明模型基本上是能很好地识别第一个类的它对第一个类的置信度还是很高的-总而言之从结果上看如果weak-augmented-img和strong-augmented-img的输出结果能做到非常接近说明模型确实对颜色的变化是比较鲁棒的了话说怎么确定它是学到了颜色中的信息而不是忽略了颜色信息">2.weak-and-strong
+augmentation joint learning
+strategy<br>感觉主要的创新点（以及相比于它在此之前提出的Enhanced
+Channel-Mixed Learning的不同点）在于<span
+class="math inline">\(L_{ws}\)</span>，具体来说，它好像希望weak-augmented
+img（即用常规增强方法得到的图像）和strong-augmented
+img（即用CA得到的图像）的分类输出尽可能保持一致？（注意一下，它来约束分类结果的一致性，至于分类结果的准确性，是由另外两个常规损失来约束的）还挺合理。并且它强调说分类器是用的同一个，以便确保确实在优化特征提取器？但目前还没太看明白它具体计算损失的时候里面的y是指什么？得回头细看了。可能得看代码了，感觉文章里说的就是不清楚<br>目前问了一下ai，得到了还算合理的回答。有时间看看代码对比一下（但它怎么好像没公开代码。。。）![[Pasted
+image
+20241028215226.png]]<br>这个损失，求和里的每一样其实是交叉熵的简写。里面的<span
+class="math inline">\(\overline y_{i}^{w}\)</span>和<span
+class="math inline">\(\overline
+y_{i}^{s}\)</span>都代表一个概率分布。（上标是w的表示对应weak augmented
+img，上标s则表示对应strong augmented
+img）论文里说它们是预测概率中心，其实预测概率中心应该就是一个向量。举个例子说明一下什么是预测概率中心。不妨假设分类任务中，一共有5个类。然后，属于第一个类的数据有10个。我们有一个网络，一个输入x进去，输出y都是这个输入x的属于各个类别的概率分布。那么，对于那10个都是第一类的数据，它们都输入进去，可以得到10个概率分布，也就是10个5维的向量。对这个10个向量，取均值，就得到了一个预测概率中心。也就是说，预测概率中心是针对一个类而言的。它表征了模型整体对某个类的置信度。比方说，在这里的例子中，如果这个预测概率中心，它在第一个类上的概率很高，假设是0.95，那说明模型基本上是能很好地识别第一个类的。它对第一个类的置信度还是很高的<br>总而言之，从结果上看，如果weak
+augmented img和strong augmented
+img的输出结果能做到非常接近，说明模型确实对颜色的变化是比较鲁棒的了<del>（话说怎么确定它是学到了颜色中的信息，而不是忽略了颜色信息。。。）</del></h2>
+<h2
+id="unsupervised-augmented-label-association-文章还提出了无监督条件下的一些改进具体来说它提出了一种新的聚类方法认为可以生成更可靠的伪标签且是ca模态和ir模态的特征分别聚类之后提出一种label-association方法同时用到ca模态和ir模态其核心思想是同一个人的不同模态的聚类应该非常接近大体的流程是对于一个模态的一个聚类即所有分到同一个伪标签的实例组成的集合计算离它最近的前k个另一模态的聚类比方说有一个ca模态的聚类然后计算它和ir模态的聚类之间的距离挑出最近的k个对这k个ir模态的聚类再反过来计算它们各自的前k个最近的ca模态的聚类如果ca模态的聚类a它的最近的k个ir模态聚类里有聚类b然后b的k个最近的ca模态的聚类里有聚类a那么就认为这两个聚类足够接近给它们分配相同的标签-这种聚类层面的association比实例级别的association的计算量会小一点算是它的一个优点">3.unsupervised
+augmented label
+association<br>文章还提出了无监督条件下的一些改进。具体来说，它提出了一种新的聚类方法（认为可以生成更可靠的伪标签，且是CA模态和IR模态的特征分别聚类），之后提出一种label
+association方法，同时用到CA模态和IR模态（其核心思想是，同一个人的不同模态的聚类应该非常接近）（大体的流程是，对于一个模态的一个聚类（即所有分到同一个伪标签的实例组成的集合），计算离它最近的前k个另一模态的聚类。比方说，有一个CA模态的聚类，然后计算它和IR模态的聚类之间的距离，挑出最近的k个。对这k个IR模态的聚类，再反过来计算它们各自的前k个最近的CA模态的聚类。如果CA模态的聚类a，它的最近的k个IR模态聚类里有聚类b；然后b的k个最近的CA模态的聚类里有聚类a，那么就认为这两个聚类足够接近，给它们分配相同的标签）<br>这种聚类层面的association，比实例级别的association的计算量会小一点，算是它的一个优点</h2>
+<h1 id="实验部分">实验部分：</h1>
+<h2
+id="它是逐个部分去验证的就是它提出了一个什么方法操作就单独去验证这个东西的有效性所以有很多个小部分现在先记录一下目前比较关心的">它是逐个部分去验证的。就是，它提出了一个什么方法/操作，就单独去验证这个东西的有效性，所以有很多个小部分。现在先记录一下目前比较关心的</h2>
+<h2
+id="关于weak-and-strong-augmentation-learning-schemes的有效性验证-实验主要有两个部分一不知道它想说什么啊二是利用论文提出的weak-and-strong-augmentation-learning-schemes也就是加上了一个consistency的约束以后相比于上面没加consistency-regularization效果更好说明了文章所提出的框架的有效性和consistency-regularization的合理性">关于weak-and-strong
+augmentation learning
+schemes的有效性验证：<br>实验主要有两个部分，一不知道它想说什么啊。二是利用论文提出的weak-and-strong
+augmentation learning
+schemes，也就是加上了一个consistency的约束以后，相比于上面没加consistency
+regularization，效果更好，说明了文章所提出的框架的有效性和consistency
+regularization的合理性</h2>
+<p>颜色本身可能是有一些信息，但如果跨模态的时候不好提取，不妨可以略过它，更多去关注”颜色的变化“这件事？这个会不会在跨模态的时候好提取一点？
+对啊，我也想到了color jitter。它这个channel augmentation到底和color
+jitter之间有什么区别？为什么color jitter会损害语义信息，而channel
+augmentation却不会呢？ 了解一下identity loss，triplet
+loss，有时间记录一下</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/High-Order%20Structure%20Based%20Middle-Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/High-Order%20Structure%20Based%20Middle-Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-27 21:09:10" itemprop="dateCreated datePublished" datetime="2024-10-27T21:09:10+08:00">2024-10-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-11-01 20:49:22" itemprop="dateModified" datetime="2024-11-01T20:49:22+08:00">2024-11-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="tpami24">tpami24</h1>
+<p>关注一下它说的high order structure
+information是什么。。感觉又是为了讲故事而提出的一个概念，本质上可能是想说图像的不同区域之间的交互
+关注一下whitened hypergraph是啥 关注一下它所说的middle
+feature是什么，以及它是怎么利用这个middle feature的 关注一下最后的CFL
+module里，align feature具体是怎么align的？为什么要align？
+话说，它在测试的时候，用的是哪个特征？最后的middle
+feature嘛？得看看代码了 #
+简单梳理：提出HOS-Net，包括一个主干网络、一个SLE（short-and-long range
+feature extraction）、一个HSL（high-order structure learning
+module）、一个CFL（common feature space
+learning）。最大的创新点就是它提出high-order structure
+information和middle feature，并利用它们来提取更好的modality-invariant
+feature ## SLE大体是由一个CNN和一个Transformer组成，用来提取short
+range和long range
+feature（估摸着就是利用下CNN和Transformer的特性了，感觉创新性不高） ##
+HSL则是利用上面提取的long/short range
+feature，来具体地建模这种long/short range
+dependence（后面看看怎么个建模法） ##
+最后的CFL看粗略介绍不是很明白，得稍微细看一下。不过CFL里提出了一个MRIC
+loss，用以减少模态间的差异。但其实说的很玄乎，这个MRIC
+loss也就是不停的用各种模态、各种range的feature进行对比而已。。说来说去，还是在用对比损失，至于用谁来对比，似乎很多论文都大同小异，一般就是（Vis，IR，middle）之间排列组合，同ID的尽可能接近，不同ID的尽可能远离
+# 批判一下：Conventional feature-level VI-ReID methods usually learn a
+common feature space based on a contrastive-based loss, which directly
+minimizes the distances between VIS and IR features. However, such a
+manner cannot achieve a reasonable common feature space because of the
+large modality
+discrepancy.搁着说车轱辘话呢，这最后一句不就说了和没说一样吗。。large
+modality
+discrepancy都被说烂了。。。不过，这让人想到，llm那块不是一直在搞多模态嘛，那边是怎么处理多模态之间的差异的？就比如文字和图像的差异？或许可以借鉴一下。怎么现在好像没看到什么论文说是借鉴了那边的方法呢。。。以及，这个确实可以说是一种对齐啊，把不同模态的数据特征给对齐了，类似于统一到一个模态里，那也可以借鉴一下llm里对齐的技术了？可能目前在VI-ReID领域里，减小模态差异的方法主要是引入middle
+feature？不好说，得总结一下 #
+problem：论文认为现在的方法没有足够地挖掘图像中各个部分之间的相互关系，例如，身体部位相互的关系。而没有充分挖掘这种信息，导致modality
+gap依然比较大 # motivation：进一步挖掘这种关系</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/dataset/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1379,181 +1602,6 @@ id="梳理它是如何提高表征的sparsityorthogonality以及disentanglement�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/Swav/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/Swav/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-16 22:36:22" itemprop="dateCreated datePublished" datetime="2024-10-16T22:36:22+08:00">2024-10-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-17 15:02:22" itemprop="dateModified" datetime="2024-10-17T15:02:22+08:00">2024-10-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题">问题：</h1>
-<h2
-id="从一个view出发计算得到的code或者说cluster-assignment到底是什么其形状为怎么计算得到它的含义是什么">从一个view出发计算得到的code（或者说cluster
-assignment）到底是什么？其形状为？怎么计算得到？它的含义是什么？</h2>
-<h3
-id="code就是指样本属于各个prototype的概率分布-先说一下它的求解顺序实际上求解它之前需要先计算特征和各个prototype之间的相似度相似度就是余弦相似度特征和prototype都会被归一化举个例子一个batch-data的特征形状为batch_size-dimprototype的那个矩阵形状为dimnum_prototypes二者进行矩阵乘法即可求解出这个还不算完这个还不是最终的code并不是因为还没归一化而是因为我们对它有一定的约束即我们希望batch-data均匀地分布在各个prototype之间否则有可能模型求得平凡解就是把全部样本都输出为一个表征然后每个表征从属于各个prototype的概率都均等而加了约束就相当于求解一个优化问题所以论文里提到要用sinkhorn-knopp算法进行迭代求解并且这部分操作是不计算梯度的也就是说每一个训练的step里我们会计算cluster-assignment但它只是用于计算梯度我们不会去反向传播优化cluster-assignment-在代码里code是一个列表每个元素是batch-data的一个augmentation的code也就是说每个元素是一个张量其形状为batch_size-num_prototypes它的计算并不是通过对比损失得到而是要用一个sinkhorn-knopp算法迭代求解一下">code就是指样本属于各个prototype的概率分布。<br>先说一下它的求解顺序。实际上，求解它之前需要先计算特征和各个prototype之间的相似度。相似度就是余弦相似度（特征和prototype都会被归一化）。举个例子，一个batch
-data的特征，形状为（batch_size,
-dim），prototype的那个矩阵，形状为（dim，num_prototypes），二者进行矩阵乘法即可。求解出这个还不算完，这个还不是最终的code。并不是因为还没归一化，而是因为我们对它有一定的约束，即我们希望batch
-data均匀地分布在各个prototype之间，否则有可能模型求得平凡解，就是把全部样本都输出为一个表征，然后每个表征从属于各个prototype的概率都均等。而加了约束，就相当于求解一个优化问题，所以论文里提到要用Sinkhorn-Knopp算法进行迭代求解，并且这部分操作是不计算梯度的，也就是说，每一个训练的step里，我们会计算cluster
-assignment，但它只是用于计算梯度，我们不会去反向传播优化cluster
-assignment。<br>在代码里，code是一个列表，每个元素是batch
-data的一个augmentation的code，也就是说，每个元素是一个张量，其形状为（batch_size,
-num_prototypes）。它的计算并不是通过对比损失得到，而是要用一个Sinkhorn-Knopp算法迭代求解一下，</h3>
-<h2
-id="swav这么对比其出发点是合理吗相比于之前的直接对比特征有什么区别优劣何在">swav这么对比，其出发点是？合理吗？相比于之前的直接对比特征，有什么区别？优劣何在？</h2>
-<h3
-id="出发点就是如果是同一图像的不同视图它们的表征应该尽可能相同这样的话由一个视图a1经过一个操作p1得到一个结果r1然后我用另一个视图a2也去做这样的操作p得到的结果r2应该和上面那个结果r1很相似具体到swav它觉得由一个视图a1的特征计算得到prototype但实现的时候就像上面说的只是求得一个概率分布应该和用a2的特征计算得到的prototype很相似">出发点就是，如果是同一图像的不同视图，它们的表征应该尽可能相同，这样的话由一个视图a1，经过一个操作p1得到一个结果r1，然后我用另一个视图a2，也去做这样的操作p，得到的结果r2应该和上面那个结果r1很相似。具体到swav，它觉得，由一个视图a1的特征，计算得到prototype（但实现的时候，就像上面说的，只是求得一个概率分布），应该和用a2的特征计算得到的prototype很相似</h3>
-<h2
-id="swav计算对比损失和优化prototype指优化那些prototype模板不是计算code的过程的顺序是怎样的谁先谁后还是同时">swav计算对比损失和优化prototype（指优化那些prototype模板，不是计算code）的过程的顺序是怎样的？谁先谁后？还是同时？</h2>
-<h3
-id="如果只是优化那个模板矩阵每一列表示一个prototype在代码里也就是一个不带bias的linear层那么其实就是计算完对比损失和分类损失之后反向传播的时候就在优化了比较令人困惑的点应该是code其实并不需要优化这点在第一个问题的回答里已经说明了">如果只是优化那个模板矩阵（每一列表示一个prototype）（在代码里也就是一个不带bias的Linear层），那么其实就是计算完对比损失和分类损失之后，反向传播的时候就在优化了。比较令人困惑的点应该是，code其实并不需要优化。这点在第一个问题的回答里已经说明了</h3>
-<h2
-id="求解code被转化成了一个优化问题这个优化问题的求解用到iterative-sinkhorn-knopp算法这个算法的流程和细节是怎样的">求解code被转化成了一个优化问题？这个优化问题的求解用到iterative
-Sinkhorn-Knopp算法？这个算法的流程和细节是怎样的？</h2>
-<h3
-id="是的求解code就是在我们的约束下的一个优化问题至于用到的这个算法只能说没啥兴趣去了解而且个人感觉这个所谓的用prototype去enforce样本之间的一致性好像不够简单本质只能算个trick它之所以提点了估摸着也是multi-crop的功劳居多吧">是的，求解code就是在我们的约束下的一个优化问题。至于用到的这个算法，只能说没啥兴趣去了解。而且，个人感觉，这个所谓的用prototype去enforce样本之间的一致性，好像不够简单本质，只能算个trick。它之所以提点了，估摸着也是multi-crop的功劳居多吧</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-15 14:58:26 / Modified: 16:17:10" itemprop="dateCreated datePublished" datetime="2024-10-15T14:58:26+08:00">2024-10-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="结论">结论：</h3>
-<h4
-id="对于对比学习data-augmentation很重要尤其是一些特定的augmentation可能起到很大的作用">对于对比学习，data
-augmentation很重要，尤其是一些特定的augmentation，可能起到很大的作用</h4>
-<h4
-id="最后简单加的一个projection-head却能极大地提升效果">最后简单加的一个projection
-head，却能极大地提升效果</h4>
-<h4
-id="用更大的batch-size训练得更久都能明显提高simclr的效果">用更大的batch
-size/训练得更久，都能明显提高SimCLR的效果</h4>
-<h3
-id="方法框架图a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_10_47.png-损失函数a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_12_35.png-需要注意的是这个损失其实表示的是正样本i对正样本j的损失它不等于l_ji也就是这个损失是不对称的">方法框架图：![[A
-Simple Framework for Contrastive Learning of Visual Representations -
-Chen 等 - 2020 - Zotero 2024_10_15 15_10_47.png]]<br>损失函数![[A Simple
-Framework for Contrastive Learning of Visual Representations - Chen 等 -
-2020 - Zotero 2024_10_15
-15_12_35.png]]<br>需要注意的是，这个损失其实表示的是正样本i“对”正样本j的损失，它不等于<span
-class="math inline">\(l_{j,i}\)</span>，也就是这个损失是不对称的。</h3>
-<h3 id="值得学习的细节">值得学习的细节：</h3>
-<h4
-id="论文为了研究哪种data-augmentation效果比较好做了严格的消融实验它考虑两两组合augmentation看看效果如何最后把结果用一幅热力图展现还是很形象的a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-16_14_08.png-另外论文也发现对比学习很吃data-augmentation相比之下supervised-learning则不怎么需要甚至augmentation太过的话还可能损害效果">论文为了研究哪种data
-augmentation效果比较好，做了严格的消融实验。它考虑两两组合augmentation，看看效果如何，最后把结果用一幅热力图展现，还是很形象的![[A
-Simple Framework for Contrastive Learning of Visual Representations -
-Chen 等 - 2020 - Zotero 2024_10_15
-16_14_08.png]]<br>另外，论文也发现对比学习很吃data
-augmentation，相比之下supervised
-learning则不怎么需要，甚至augmentation太过的话还可能损害效果</h4>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1623,18 +1671,18 @@ learning则不怎么需要，甚至augmentation太过的话还可能损害效果
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">85</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
