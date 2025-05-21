@@ -27,12 +27,14 @@
 <meta property="og:site_name" content="bluemouse&#39;s blog">
 <meta property="og:description" content="cvpr24 exemplar-based和knowledge distillation-based LReIDs方法指的是什么？ prototype-based又是什么？ 看摘要，说是exemplar-based和knowledge distillation-based方法都有一些问题，于是采用prototype-based方法，而prototype-based方法又忽视了distri">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueeemouse.github.io/.io//formula.png">
 <meta property="article:published_time" content="2025-05-21T09:02:00.000Z">
-<meta property="article:modified_time" content="2025-05-21T09:49:22.325Z">
+<meta property="article:modified_time" content="2025-05-21T09:50:27.891Z">
 <meta property="article:author" content="bluemouse">
 <meta property="article:tag" content="cv">
 <meta property="article:tag" content="lreid">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueeemouse.github.io/.io//formula.png">
 
 <link rel="canonical" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DKP/DKP/">
 
@@ -181,7 +183,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-21 17:02:00 / Modified: 17:49:22" itemprop="dateCreated datePublished" datetime="2025-05-21T17:02:00+08:00">2025-05-21</time>
+              <time title="Created: 2025-05-21 17:02:00 / Modified: 17:50:27" itemprop="dateCreated datePublished" datetime="2025-05-21T17:02:00+08:00">2025-05-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,7 +270,7 @@ data里的sample之间的affinity。这个其实解释起来已经有点牵强�
 data，每一行就是一个sample，那这个第二项表征affinity就很显然了</h3>
 <h3 id="最后在这两个矩阵上施加kl散度我姑且揣测应该是一行一行来的因为应用了softmax每一行姑且也是一个分布了虽然含义不是很明显换个角度想想kl散度其实也是一种衡量向量间距离的方式只不过两个向量有特殊的要求即必须呈现出一个概率分布的样子换句话说这里用两种方法计算了affinity再让两个affinity尽可能统一说实话它想优化什么还是不太清楚论文里说是反正这里用到了prototype也用到了当前的batch-data那这就是在进行所谓co-optimize并且用了prototype就缓解了灾难性遗忘">最后在这两个矩阵上施加KL散度，我姑且揣测应该是一行一行来的（因为应用了softmax，每一行姑且也是一个分布了，虽然含义不是很明显）（换个角度想想，KL散度其实也是一种衡量向量间距离的方式，只不过两个向量有特殊的要求，即必须呈现出一个概率分布的样子）。换句话说，这里用两种方法计算了affinity，再让两个affinity尽可能统一。说实话，它想优化什么，还是不太清楚。论文里说是，反正这里用到了prototype，也用到了当前的batch
 data，那这就是在进行所谓co-optimize，并且用了prototype就缓解了灾难性遗忘。。</h3>
-<h3 id="formula.png">![[formula.png]]</h3>
+<h3 id="formula.png">![[formula.png]]<img src="/.io//formula.png"></h3>
 <h2 id="最后来一张整体的框架图pasted-image-20241120154115.png">最后来一张整体的框架图：![[Pasted
 image 20241120154115.png]]</h2>
 
