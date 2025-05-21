@@ -28,7 +28,7 @@
 <meta property="og:description" content="cvpr24 exemplar-based和knowledge distillation-based LReIDs方法指的是什么？ prototype-based又是什么？ 看摘要，说是exemplar-based和knowledge distillation-based方法都有一些问题，于是采用prototype-based方法，而prototype-based方法又忽视了distri">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-05-21T09:02:00.000Z">
-<meta property="article:modified_time" content="2025-05-21T09:02:33.095Z">
+<meta property="article:modified_time" content="2025-05-21T09:30:54.400Z">
 <meta property="article:author" content="bluemouse">
 <meta property="article:tag" content="cv">
 <meta property="article:tag" content="lreid">
@@ -181,7 +181,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-21 17:02:00 / Modified: 17:02:33" itemprop="dateCreated datePublished" datetime="2025-05-21T17:02:00+08:00">2025-05-21</time>
+              <time title="Created: 2025-05-21 17:02:00 / Modified: 17:30:54" itemprop="dateCreated datePublished" datetime="2025-05-21T17:02:00+08:00">2025-05-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,85 +217,60 @@
 
       
         <h1 id="cvpr24">cvpr24</h1>
-<h2
-id="exemplar-based和knowledge-distillation-based-lreids方法指的是什么">exemplar-based和knowledge
+<h2 id="exemplar-based和knowledge-distillation-based-lreids方法指的是什么">exemplar-based和knowledge
 distillation-based LReIDs方法指的是什么？</h2>
 <h2 id="prototype-based又是什么">prototype-based又是什么？</h2>
-<h2
-id="看摘要说是exemplar-based和knowledge-distillation-based方法都有一些问题于是采用prototype-based方法而prototype-based方法又忽视了distribution-informationinstance-level-diversity所以提出这篇论文的改进方法">看摘要，说是exemplar-based和knowledge
+<h2 id="看摘要说是exemplar-based和knowledge-distillation-based方法都有一些问题于是采用prototype-based方法而prototype-based方法又忽视了distribution-informationinstance-level-diversity所以提出这篇论文的改进方法">看摘要，说是exemplar-based和knowledge
 distillation-based方法都有一些问题，于是采用prototype-based方法，而prototype-based方法又忽视了distribution
 information/instance-level diversity，所以提出这篇论文的改进方法</h2>
 <h1 id="基础知识">基础知识：</h1>
 <h2 id="exemplar-based方法"><strong>Exemplar-based方法</strong>：</h2>
-<h3
-id="工作原理这些方法通过存储和重用过去训练步骤中的示例图像来减轻遗忘问题当学习新数据时它们会将这些示例图像与新数据一起使用以帮助模型记住旧的知识">-
+<h3 id="工作原理这些方法通过存储和重用过去训练步骤中的示例图像来减轻遗忘问题当学习新数据时它们会将这些示例图像与新数据一起使用以帮助模型记住旧的知识">-
 <strong>工作原理</strong>：这些方法通过存储和重用过去训练步骤中的示例图像来减轻遗忘问题。当学习新数据时，它们会将这些示例图像与新数据一起使用，以帮助模型记住旧的知识。</h3>
-<h3
-id="问题然而存储人类图像往往在实际场景中是不切实际的因为这涉及到隐私问题此外存储和重用示例图像也会增加计算成本">-
+<h3 id="问题然而存储人类图像往往在实际场景中是不切实际的因为这涉及到隐私问题此外存储和重用示例图像也会增加计算成本">-
 <strong>问题</strong>：然而，存储人类图像往往在实际场景中是不切实际的，因为这涉及到隐私问题。此外，存储和重用示例图像也会增加计算成本。</h3>
 <span id="more"></span>
 <h2 id="knowledge-distillation-based方法"><strong>Knowledge
 distillation-based方法</strong>：</h2>
-<h3
-id="工作原理这些方法通过在遇到新数据集时施加输出一致性约束来执行知识蒸馏它们通过将新模型的输出与旧模型的输出进行比较并最小化它们之间的差异来保留旧的知识">-
+<h3 id="工作原理这些方法通过在遇到新数据集时施加输出一致性约束来执行知识蒸馏它们通过将新模型的输出与旧模型的输出进行比较并最小化它们之间的差异来保留旧的知识">-
 <strong>工作原理</strong>：这些方法通过在遇到新数据集时施加输出一致性约束来执行知识蒸馏。它们通过将新模型的输出与旧模型的输出进行比较，并最小化它们之间的差异来保留旧的知识。</h3>
-<h3
-id="问题然而这些严格的约束会严重限制模型的可塑性导致新数据的学习不足此外这些方法通常需要旧模型的可用性这在非示例的lreid场景中可能不可行">-
+<h3 id="问题然而这些严格的约束会严重限制模型的可塑性导致新数据的学习不足此外这些方法通常需要旧模型的可用性这在非示例的lreid场景中可能不可行">-
 <strong>问题</strong>：然而，这些严格的约束会严重限制模型的可塑性，导致新数据的学习不足。此外，这些方法通常需要旧模型的可用性，这在非示例的LReID场景中可能不可行。</h3>
-<h2
-id="为什么论文提出要用prototype"><strong>为什么论文提出要用prototype</strong>：</h2>
-<h3
-id="优势与exemplar-based和knowledge-distillation-based方法相比prototype-based方法不需要存储实际的示例图像也不需要旧模型的可用性它们通过利用原型来代表旧的知识可以更有效地减轻遗忘问题同时保持模型的可塑性">-
+<h2 id="为什么论文提出要用prototype"><strong>为什么论文提出要用prototype</strong>：</h2>
+<h3 id="优势与exemplar-based和knowledge-distillation-based方法相比prototype-based方法不需要存储实际的示例图像也不需要旧模型的可用性它们通过利用原型来代表旧的知识可以更有效地减轻遗忘问题同时保持模型的可塑性">-
 <strong>优势</strong>：与exemplar-based和knowledge
 distillation-based方法相比，prototype-based方法不需要存储实际的示例图像，也不需要旧模型的可用性。它们通过利用原型来代表旧的知识，可以更有效地减轻遗忘问题，同时保持模型的可塑性。</h3>
-<h3
-id="实例级别的多样性论文特别提出要利用实例级别的多样性来生成原型因为在lreid任务中同一个人的不同图像可能会因为时间和环境的变化而有很大的差异通过考虑这种多样性可以生成更准确和有信息量的原型从而更好地代表旧的知识">-
+<h3 id="实例级别的多样性论文特别提出要利用实例级别的多样性来生成原型因为在lreid任务中同一个人的不同图像可能会因为时间和环境的变化而有很大的差异通过考虑这种多样性可以生成更准确和有信息量的原型从而更好地代表旧的知识">-
 <strong>实例级别的多样性</strong>：论文特别提出要利用实例级别的多样性来生成原型，因为在LReID任务中，同一个人的不同图像可能会因为时间和环境的变化而有很大的差异。通过考虑这种多样性，可以生成更准确和有信息量的原型，从而更好地代表旧的知识。</h3>
 <h1 id="method详细">method（详细）</h1>
-<h2
-id="对每一个sample都会估计一个分布同时对每一个数据集的所有id我们都会学习一个prototype来保存信息后面要关注sample上学习到的分布和一个id对应的prototype之间的关系是">对每一个sample，都会估计一个分布。同时，对每一个数据集的所有id，我们都会学习一个prototype来保存信息（后面要关注，sample上学习到的分布和一个id对应的prototype之间的关系是？）</h2>
+<h2 id="对每一个sample都会估计一个分布同时对每一个数据集的所有id我们都会学习一个prototype来保存信息后面要关注sample上学习到的分布和一个id对应的prototype之间的关系是">对每一个sample，都会估计一个分布。同时，对每一个数据集的所有id，我们都会学习一个prototype来保存信息（后面要关注，sample上学习到的分布和一个id对应的prototype之间的关系是？）</h2>
 <h2 id="instance-level-distribution-modeling">1.Instance-level
 Distribution Modeling</h2>
-<h3
-id="这里主要会用一个双分支的网络去估计一个样本对应的多元高斯分布的均值和协方差矩阵这里的协方差矩阵是一个对角阵这个对角阵其实有点说法的似乎因为对角阵每个对角元可以控制特征的一个维度这样而要怎么训练这个分布呢或者说这个分布应该怎样才算合理呢一个直观的想法是一个样本它如果有一个分布从这个分布采样出来的采样样本它们的标签应该和样本一样吧更本质一点是这些采样样本应该和这个样本有一些本质属性是相同的所以才应该有标签是相同的所以第一个训练的方法或者说损失就是从样本的分布里采样若干个对应到dkp的代码默认是采6个采样样本然后让分类器去分类希望能把这些采样样本和原来的样本都分到正确类别这里的正确类别就是原样本所属的类别用一个交叉熵损失此外还采用一个triplet-loss直观上来说一批样本考虑其中一个样本x_i我们希望它和从它的分布里采样出来的采样样本尽可能接近同时和那些与它不同类别的样本的分布中采样得到的采样样本尽可能远离而这里希望尽可能接近尽可能远离已经是很常见的方法了在这拉近拉远之间模型或许是能学到一些判别性知识的而这里有一个一对多的问题就是一个样本它对应的自己的采样样本是多个的那么怎么判断去和谁拉近距离呢都算可能计算量过大了这里也是用上经典操作找hard-sample即和目前离得最远的那个采样样本拉近距离至于拉远的部分也是类似的思想找出现在距离x_i最近的不同类别的采样样本这里离的最近而且还类别不同说明是很难区分的然后尽可能拉远二者的距离至此idm模块的训练就算结束">这里主要会用一个双分支的网络，去估计一个样本对应的多元高斯分布的均值和协方差矩阵（这里的协方差矩阵是一个对角阵。这个对角阵其实有点说法的，似乎因为对角阵，每个对角元可以控制特征的一个维度，这样）。而要怎么训练这个分布呢？或者说，这个分布应该怎样才算合理呢？一个直观的想法是，一个样本，它如果有一个分布，从这个分布采样出来的采样样本，它们的标签应该和样本一样吧？更本质一点，是这些采样样本应该和这个样本有一些本质属性是相同的，所以才应该有标签是相同的。所以第一个训练的方法，或者说损失，就是从样本的分布里采样若干个（对应到DKP的代码，默认是采6个）采样样本，然后让分类器去分类，希望能把这些采样样本和原来的样本都分到正确类别（这里的正确类别就是原样本所属的类别），用一个交叉熵损失。此外，还采用一个triplet-loss。直观上来说，一批样本，考虑其中一个样本<span
-class="math inline">\(x_i\)</span>，我们希望它和从它的分布里采样出来的采样样本尽可能接近，同时和那些与它不同类别的样本的分布中采样得到的采样样本尽可能远离。而这里希望“尽可能接近”，“尽可能远离”，已经是很常见的方法了。在这“拉近”“拉远”之间，模型或许是能学到一些判别性知识的。而这里有一个一对多的问题，就是，一个样本，它对应的自己的采样样本是多个的，那么怎么判断去和谁拉近距离呢？都算可能计算量过大了，这里也是用上经典操作，找hard
-sample，即和目前离得最远的那个采样样本拉近距离。至于拉远的部分，也是类似的思想，找出现在距离<span
-class="math inline">\(x_i\)</span>最近的，不同类别的采样样本（这里离的最近，而且还类别不同，说明是很难区分的），然后尽可能拉远二者的距离。至此，IDM模块的训练就算结束</h3>
-<h2
-id="distribution-oriented-prototype-generation">2.Distribution-oriented
+<h3 id="这里主要会用一个双分支的网络去估计一个样本对应的多元高斯分布的均值和协方差矩阵这里的协方差矩阵是一个对角阵这个对角阵其实有点说法的似乎因为对角阵每个对角元可以控制特征的一个维度这样而要怎么训练这个分布呢或者说这个分布应该怎样才算合理呢一个直观的想法是一个样本它如果有一个分布从这个分布采样出来的采样样本它们的标签应该和样本一样吧更本质一点是这些采样样本应该和这个样本有一些本质属性是相同的所以才应该有标签是相同的所以第一个训练的方法或者说损失就是从样本的分布里采样若干个对应到dkp的代码默认是采6个采样样本然后让分类器去分类希望能把这些采样样本和原来的样本都分到正确类别这里的正确类别就是原样本所属的类别用一个交叉熵损失此外还采用一个triplet-loss直观上来说一批样本考虑其中一个样本x_i我们希望它和从它的分布里采样出来的采样样本尽可能接近同时和那些与它不同类别的样本的分布中采样得到的采样样本尽可能远离而这里希望尽可能接近尽可能远离已经是很常见的方法了在这拉近拉远之间模型或许是能学到一些判别性知识的而这里有一个一对多的问题就是一个样本它对应的自己的采样样本是多个的那么怎么判断去和谁拉近距离呢都算可能计算量过大了这里也是用上经典操作找hard-sample即和目前离得最远的那个采样样本拉近距离至于拉远的部分也是类似的思想找出现在距离x_i最近的不同类别的采样样本这里离的最近而且还类别不同说明是很难区分的然后尽可能拉远二者的距离至此idm模块的训练就算结束">这里主要会用一个双分支的网络，去估计一个样本对应的多元高斯分布的均值和协方差矩阵（这里的协方差矩阵是一个对角阵。这个对角阵其实有点说法的，似乎因为对角阵，每个对角元可以控制特征的一个维度，这样）。而要怎么训练这个分布呢？或者说，这个分布应该怎样才算合理呢？一个直观的想法是，一个样本，它如果有一个分布，从这个分布采样出来的采样样本，它们的标签应该和样本一样吧？更本质一点，是这些采样样本应该和这个样本有一些本质属性是相同的，所以才应该有标签是相同的。所以第一个训练的方法，或者说损失，就是从样本的分布里采样若干个（对应到DKP的代码，默认是采6个）采样样本，然后让分类器去分类，希望能把这些采样样本和原来的样本都分到正确类别（这里的正确类别就是原样本所属的类别），用一个交叉熵损失。此外，还采用一个triplet-loss。直观上来说，一批样本，考虑其中一个样本<span class="math inline">\(x_i\)</span>，我们希望它和从它的分布里采样出来的采样样本尽可能接近，同时和那些与它不同类别的样本的分布中采样得到的采样样本尽可能远离。而这里希望“尽可能接近”，“尽可能远离”，已经是很常见的方法了。在这“拉近”“拉远”之间，模型或许是能学到一些判别性知识的。而这里有一个一对多的问题，就是，一个样本，它对应的自己的采样样本是多个的，那么怎么判断去和谁拉近距离呢？都算可能计算量过大了，这里也是用上经典操作，找hard
+sample，即和目前离得最远的那个采样样本拉近距离。至于拉远的部分，也是类似的思想，找出现在距离<span class="math inline">\(x_i\)</span>最近的，不同类别的采样样本（这里离的最近，而且还类别不同，说明是很难区分的），然后尽可能拉远二者的距离。至此，IDM模块的训练就算结束</h3>
+<h2 id="distribution-oriented-prototype-generation">2.Distribution-oriented
 Prototype Generation</h2>
-<h3
-id="这个模块就是来回答上面的问题一个个sample的分布和一个id对应的prototype之间的关系是怎样的">这个模块，就是来回答上面的问题：一个个sample的分布，和一个id对应的prototype之间的关系是怎样的</h3>
-<h3
-id="论文里给出了根据一个id内的所有sample的分布的均值和方差计算出这个id对应的分布的均值和方差似乎可以用概率论的公式推导出来也就是说一个id的prototype我们还是用一个多元高斯分布来表征的但这也容易让人想到之后应该怎么利用这个prototype里的信息缓解灾难性遗忘呢">论文里给出了根据一个id内的所有sample的分布的均值和方差计算出这个id对应的分布的均值和方差。似乎可以用概率论的公式推导出来。也就是说，一个id的prototype，我们还是用一个多元高斯分布来表征的。但这也容易让人想到，之后应该怎么利用这个prototype里的信息，缓解灾难性遗忘呢？</h3>
-<h3
-id="关于这里引入方差的作用它可以更好的描述每个维度上的信息fig3的可视化感觉做的非常好很有启发性">关于这里引入方差的作用，它可以更好的描述每个维度上的信息。Fig3的可视化感觉做的非常好，很有启发性</h3>
+<h3 id="这个模块就是来回答上面的问题一个个sample的分布和一个id对应的prototype之间的关系是怎样的">这个模块，就是来回答上面的问题：一个个sample的分布，和一个id对应的prototype之间的关系是怎样的</h3>
+<h3 id="论文里给出了根据一个id内的所有sample的分布的均值和方差计算出这个id对应的分布的均值和方差似乎可以用概率论的公式推导出来也就是说一个id的prototype我们还是用一个多元高斯分布来表征的但这也容易让人想到之后应该怎么利用这个prototype里的信息缓解灾难性遗忘呢">论文里给出了根据一个id内的所有sample的分布的均值和方差计算出这个id对应的分布的均值和方差。似乎可以用概率论的公式推导出来。也就是说，一个id的prototype，我们还是用一个多元高斯分布来表征的。但这也容易让人想到，之后应该怎么利用这个prototype里的信息，缓解灾难性遗忘呢？</h3>
+<h3 id="关于这里引入方差的作用它可以更好的描述每个维度上的信息fig3的可视化感觉做的非常好很有启发性">关于这里引入方差的作用，它可以更好的描述每个维度上的信息。Fig3的可视化感觉做的非常好，很有启发性</h3>
 <h2 id="prototype-based-knowledge-transfer">3.Prototype-based Knowledge
 Transfer</h2>
-<h3
-id="这个模块回答的就是上面的如何利用prototype的问题虽然我感觉这里的所谓利用prototype似乎不是很直观">这个模块，回答的就是上面的“如何利用prototype”的问题（虽然我感觉这里的所谓利用prototype似乎不是很直观。。）</h3>
-<h3
-id="首先需要明确论文利用prototype的方式是当前训练step时用且只用上一个step的prototype操作上来说会从上一个step的prototype每个prototype里采样一个样本别忘了id的prototype是一个多元高斯分布把这些样本按行组织得到一个矩阵然后对于训练中的一个batch-data我们先计算batch-data中的每一个样本与所有prototype样本的距离矩阵容易想到就是进行一个矩阵乘法只不过还有一些调节scale的温度超参数得到的距离矩阵第i行表征的是batch-data中第i个样本与所有prototype样本之间的距离最后会对这个矩阵的每一行进行softmax归一化">首先需要明确，论文利用prototype的方式是，当前训练step时，用且只用上一个step的prototype。操作上来说，会从上一个step的prototype，每个prototype里采样一个样本（别忘了id的prototype是一个多元高斯分布），把这些样本按行组织，得到一个矩阵。然后，对于训练中的一个batch
+<h3 id="这个模块回答的就是上面的如何利用prototype的问题虽然我感觉这里的所谓利用prototype似乎不是很直观">这个模块，回答的就是上面的“如何利用prototype”的问题（虽然我感觉这里的所谓利用prototype似乎不是很直观。。）</h3>
+<h3 id="首先需要明确论文利用prototype的方式是当前训练step时用且只用上一个step的prototype操作上来说会从上一个step的prototype每个prototype里采样一个样本别忘了id的prototype是一个多元高斯分布把这些样本按行组织得到一个矩阵然后对于训练中的一个batch-data我们先计算batch-data中的每一个样本与所有prototype样本的距离矩阵容易想到就是进行一个矩阵乘法只不过还有一些调节scale的温度超参数得到的距离矩阵第i行表征的是batch-data中第i个样本与所有prototype样本之间的距离最后会对这个矩阵的每一行进行softmax归一化">首先需要明确，论文利用prototype的方式是，当前训练step时，用且只用上一个step的prototype。操作上来说，会从上一个step的prototype，每个prototype里采样一个样本（别忘了id的prototype是一个多元高斯分布），把这些样本按行组织，得到一个矩阵。然后，对于训练中的一个batch
 data，我们先计算batch
 data中的每一个样本与所有prototype样本的距离矩阵（容易想到，就是进行一个矩阵乘法，只不过还有一些调节scale的温度超参数。得到的距离矩阵，第i行表征的是，batch
 data中第i个样本与所有prototype样本之间的距离。最后会对这个矩阵的每一行进行softmax归一化</h3>
-<h3
-id="后面是最关键的计算损失的部分但个人感觉这个损失含义不明确啊上面得到的batch-data与所有prototype样本之间的距离矩阵也就是下图公式中的c_p它和自己转置的乘积被论文称为一个affinity-martix而且是形容batch-data里的sample之间的affinity这个其实解释起来已经有点牵强了但多少有一点道理它相当于是用所有的prototype样本作锚点如果两个sample很接近也就是比较亲和那么它们可能会比较相似因而与各个锚点之间的距离应该是很相近的而一个sample与所有锚点的距离可以组成一个距离向量那么若两个sample的距离向量比较相近可以认为这两个sample有一定的相似性事实上下图中kl散度里的第一项那个矩阵的每一行其实就是用距离向量度量得到的每一个sample与所有sample之间的affinity">后面是最关键的计算损失的部分。但个人感觉，这个损失含义不明确啊。上面得到的batch
-data与所有prototype样本之间的距离矩阵，也就是下图公式中的<span
-class="math inline">\(C_p\)</span>，它和自己转置的乘积，被论文称为一个affinity
+<h3 id="后面是最关键的计算损失的部分但个人感觉这个损失含义不明确啊上面得到的batch-data与所有prototype样本之间的距离矩阵也就是下图公式中的c_p它和自己转置的乘积被论文称为一个affinity-martix而且是形容batch-data里的sample之间的affinity这个其实解释起来已经有点牵强了但多少有一点道理它相当于是用所有的prototype样本作锚点如果两个sample很接近也就是比较亲和那么它们可能会比较相似因而与各个锚点之间的距离应该是很相近的而一个sample与所有锚点的距离可以组成一个距离向量那么若两个sample的距离向量比较相近可以认为这两个sample有一定的相似性事实上下图中kl散度里的第一项那个矩阵的每一行其实就是用距离向量度量得到的每一个sample与所有sample之间的affinity">后面是最关键的计算损失的部分。但个人感觉，这个损失含义不明确啊。上面得到的batch
+data与所有prototype样本之间的距离矩阵，也就是下图公式中的<span class="math inline">\(C_p\)</span>，它和自己转置的乘积，被论文称为一个affinity
 martix，而且是形容batch
 data里的sample之间的affinity。这个其实解释起来已经有点牵强了，但多少有一点道理：它相当于是用所有的prototype样本作锚点，如果两个sample很接近（也就是比较“亲和”），那么它们可能会比较相似，因而与各个锚点之间的距离应该是很相近的。而一个sample与所有锚点的距离可以组成一个距离向量，那么，若两个sample的距离向量比较相近，可以认为这两个sample有一定的相似性。事实上，下图中，KL散度里的第一项，那个矩阵的每一行其实就是用距离向量度量，得到的每一个sample与所有sample之间的affinity。</h3>
-<h3
-id="第二项就直观很多了f_c就是batch-data每一行就是一个sample那这个第二项表征affinity就很显然了">第二项就直观很多了，<span
-class="math inline">\(F_c\)</span>就是batch
+<h3 id="第二项就直观很多了f_c就是batch-data每一行就是一个sample那这个第二项表征affinity就很显然了">第二项就直观很多了，<span class="math inline">\(F_c\)</span>就是batch
 data，每一行就是一个sample，那这个第二项表征affinity就很显然了</h3>
-<h3
-id="最后在这两个矩阵上施加kl散度我姑且揣测应该是一行一行来的因为应用了softmax每一行姑且也是一个分布了虽然含义不是很明显换个角度想想kl散度其实也是一种衡量向量间距离的方式只不过两个向量有特殊的要求即必须呈现出一个概率分布的样子换句话说这里用两种方法计算了affinity再让两个affinity尽可能统一说实话它想优化什么还是不太清楚论文里说是反正这里用到了prototype也用到了当前的batch-data那这就是在进行所谓co-optimize并且用了prototype就缓解了灾难性遗忘">最后在这两个矩阵上施加KL散度，我姑且揣测应该是一行一行来的（因为应用了softmax，每一行姑且也是一个分布了，虽然含义不是很明显）（换个角度想想，KL散度其实也是一种衡量向量间距离的方式，只不过两个向量有特殊的要求，即必须呈现出一个概率分布的样子）。换句话说，这里用两种方法计算了affinity，再让两个affinity尽可能统一。说实话，它想优化什么，还是不太清楚。论文里说是，反正这里用到了prototype，也用到了当前的batch
+<h3 id="最后在这两个矩阵上施加kl散度我姑且揣测应该是一行一行来的因为应用了softmax每一行姑且也是一个分布了虽然含义不是很明显换个角度想想kl散度其实也是一种衡量向量间距离的方式只不过两个向量有特殊的要求即必须呈现出一个概率分布的样子换句话说这里用两种方法计算了affinity再让两个affinity尽可能统一说实话它想优化什么还是不太清楚论文里说是反正这里用到了prototype也用到了当前的batch-data那这就是在进行所谓co-optimize并且用了prototype就缓解了灾难性遗忘">最后在这两个矩阵上施加KL散度，我姑且揣测应该是一行一行来的（因为应用了softmax，每一行姑且也是一个分布了，虽然含义不是很明显）（换个角度想想，KL散度其实也是一种衡量向量间距离的方式，只不过两个向量有特殊的要求，即必须呈现出一个概率分布的样子）。换句话说，这里用两种方法计算了affinity，再让两个affinity尽可能统一。说实话，它想优化什么，还是不太清楚。论文里说是，反正这里用到了prototype，也用到了当前的batch
 data，那这就是在进行所谓co-optimize，并且用了prototype就缓解了灾难性遗忘。。</h3>
 <h3 id="pasted-image-20241120152719.png">![[Pasted image
 20241120152719.png]]</h3>
-<h2
-id="最后来一张整体的框架图pasted-image-20241120154115.png">最后来一张整体的框架图：![[Pasted
+<h2 id="最后来一张整体的框架图pasted-image-20241120154115.png">最后来一张整体的框架图：![[Pasted
 image 20241120154115.png]]</h2>
 
     </div>
