@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最小栈">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-22T03:02:00.000Z">
+<meta property="article:modified_time" content="2025-05-22T03:24:58.138Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="最小栈">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>最小栈 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最小栈
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-22 11:02:00 / Modified: 11:24:58" itemprop="dateCreated datePublished" datetime="2025-05-22T11:02:00+08:00">2025-05-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/leetbook/read/top-interview-questions/xa7r55/">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="设计一个支持-push-pop-top-操作并能在常数时间内检索到最小元素的栈">设计一个支持 <code>push</code> ，<code>pop</code> ，<code>top</code> 操作，并能在常数时间内检索到最小元素的栈。</h2>
+<h2 id="实现-minstack-类">实现 <code>MinStack</code> 类:</h2>
+<h3 id="minstack-初始化堆栈对象">-
+<code>MinStack()</code> 初始化堆栈对象。</h3>
+<h3 id="void-pushint-val-将元素val推入堆栈">-
+<code>void push(int val)</code> 将元素val推入堆栈。</h3>
+<h3 id="void-pop-删除堆栈顶部的元素">-
+<code>void pop()</code> 删除堆栈顶部的元素。</h3>
+<h3 id="int-top-获取堆栈顶部的元素">-
+<code>int top()</code> 获取堆栈顶部的元素。</h3>
+<h3 id="int-getmin-获取堆栈中的最小元素">-
+<code>int getMin()</code> 获取堆栈中的最小元素。</h3>
+<h2 id="示例-1"><strong>示例 1:</strong></h2>
+<h3 id="输入"><strong>输入：</strong></h3>
+<h4 id="minstackpushpushpushgetminpoptopgetmin"><code>["MinStack","push","push","push","getMin","pop","top","getMin"]</code></h4>
+<h4 id="section"><code>[[],[-2],[0],[-3],[],[],[],[]]</code></h4>
+<h3 id="输出"><strong>输出：</strong></h3>
+<h4 id="nullnullnullnull-3null0-2"><code>[null,null,null,null,-3,null,0,-2]</code></h4>
+<h3 id="解释"><strong>解释：</strong></h3>
+<h4 id="minstack-minstack-new-minstack">MinStack minStack = new
+MinStack();</h4>
+<h4 id="minstack.push-2">minStack.push(-2);</h4>
+<h4 id="minstack.push0">minStack.push(0);</h4>
+<h4 id="minstack.push-3">minStack.push(-3);</h4>
+<h4 id="minstack.getmin----返回--3.">minStack.getMin(); --&gt; 返回
+-3.</h4>
+<h4 id="minstack.pop">minStack.pop();</h4>
+<h4 id="minstack.top----返回-0.">minStack.top(); --&gt; 返回 0.</h4>
+<h4 id="minstack.getmin----返回--2.">minStack.getMin(); --&gt; 返回
+-2.</h4>
+<h3 id="提示"><strong>提示：</strong></h3>
+<h4 id="val-231---1">- <code>-2^31 &lt;= val &lt;= 2^31 - 1</code></h4>
+<h4 id="poptop-和-getmin-操作总是在-非空栈-上调用">-
+<code>pop</code>、<code>top</code> 和 <code>getMin</code> 操作总是在 <strong>非空栈</strong> 上调用</h4>
+<h4 id="push-pop-top-and-getmin最多被调用-3-104-次">-
+<code>push</code>, <code>pop</code>, <code>top</code>,
+and <code>getMin</code>最多被调用 <code>3 * 10^4</code> 次</h4>
+<h1 id="思路">思路：</h1>
+<h2 id="如果只是要实现一个栈那还是比较简单的用数组就可以进行模拟了这道题多出了一个要求就是要能用常数时间找出栈里的最小元素因为要用常数时间所以显然不能现排序应该维护某个东西可以直接查到当前栈的最小元素-提示部分给出val的范围说明可以用int就表示pop同配和getmin都是在非空栈上调用所以不需要考虑一些不合法的操作全都当成合法的就行pushpoptop和getmin最多各被调用3-104次这里面最重要的可能是push最多只会被调用3-104次这个信息因为这说明了栈最大的时候也就是3-104的长度所以我们用数组模拟的时候可以开一些辅助空间如果有需要而相对不太需要担心超出限制">如果只是要实现一个栈，那还是比较简单的，用数组就可以进行模拟了。这道题多出了一个要求，就是要能用常数时间找出栈里的最小元素。因为要用常数时间，所以显然不能现排序，应该维护某个东西，可以直接查到当前栈的最小元素<br>提示部分，给出val的范围，说明可以用int就表示；pop、同配、和getMin都是在非空栈上调用，所以不需要考虑一些不合法的操作，全都当成合法的就行；push、pop、top和getMin最多各被调用<span class="math inline">\(3 *
+10^4\)</span>次，这里面最重要的可能是：push最多只会被调用<span class="math inline">\(3 *
+10^{4}\)</span>次这个信息，因为这说明了栈最大的时候也就是<span class="math inline">\(3 *
+10^{4}\)</span>的长度。所以我们用数组模拟的时候，可以开一些辅助空间（如果有需要），而相对不太需要担心超出限制</h2>
+<h2 id="回到题目本身一开始的思路是维护一个min_idx变量它指示的就是栈里的最小元素的索引这样我们要返回最小元素的时候return-emin_idx即可-但这样有个问题就是不好维护栈的元素里的变化主要是由push和pop两个操作引起的如果发生了push那其实维护min_idx是比较简单的只需要看一下新入栈的这个元素和之前的最小元素的关系是怎样的看看是否要更新min_idx即可-但如果发生了pop那维护起来就很麻烦了因为-如果pop出去的元素不是最小元素那没什么-如果pop出去的元素是最小元素就比较头疼了如果pop出去的元素就是当前栈里的最小元素且是唯一的那么pop完剩下的栈里的最小元素肯定就变化了那就得重新找了但如果真的此时重新找最小元素显然就违背了题目里说的用常数时间找出最小元素如果pop出去的元素确实是最小的但不唯一那前面确实还有最小元素但我们又没记录它的索引还是很麻烦如果不找出它的索引后续就不好维护如果找出它的索引显然违背了题目的要求">回到题目本身，一开始的思路是，维护一个min_idx变量，它指示的就是栈里的最小元素的索引，这样我们要返回最小元素的时候，return
+e[min_idx]即可<br>但这样有个问题，就是不好维护。栈的元素里的变化主要是由push和pop两个操作引起的，如果发生了push，那其实维护min_idx是比较简单的，只需要看一下新入栈的这个元素和之前的最小元素的关系是怎样的，看看是否要更新min_idx即可；<br>但如果发生了pop，那维护起来就很麻烦了。因为，<br>如果pop出去的元素，不是最小元素，那没什么；<br>如果pop出去的元素是最小元素，就比较头疼了：如果pop出去的元素就是当前栈里的最小元素，且是唯一的，那么pop完，剩下的栈里的最小元素肯定就变化了，那就得重新找了，但如果真的此时重新找最小元素，显然就违背了题目里说的“用常数时间找出最小元素”；如果pop出去的元素确实是最小的，但不唯一，那前面确实还有最小元素，但我们又没记录它的索引，还是很麻烦，如果不找出它的索引，后续就不好维护；如果找出它的索引，显然违背了题目的要求……</h2>
+<h2 id="这时可能会想那如果我维护两个索引呢一个是最小元素的索引一个是第二小元素的索引但可以想见会非常麻烦而且更重要的是这种维护索引变量的方法在遇到有多个相同的最小元素的时候会很麻烦所以要维护的变量应该更加直接才行">这时可能会想，那如果我维护两个索引呢？一个是最小元素的索引，一个是第二小元素的索引？但可以想见，会非常麻烦，而且更重要的是，这种维护索引变量的方法，在遇到有多个相同的最小元素的时候会很麻烦。所以要维护的变量应该更加直接才行</h2>
+<h2 id="这里可以考虑我们开一个一样大小的辅助的栈它的第i个元素就是从0到i的这个栈里的最小元素这样比如当前的top指针是5也就是栈顶是5那么我们要求此时的栈的最小元素也就return一下这个辅助栈的索引为5的元素即可-那如何维护呢push的时候考虑一下一般的情况如果栈里已经有一些元素了且假设辅助栈里前面的元素也已经好了现在push进来一个新的元素栈的大小增加1我们的辅助栈也需要多加一个元素了此时只需要比较一下新加入的元素和之前的最小元素的大小即可也就是比较一下插入的val和此前的最小元素min_stacktop_idx---1这里我们把辅助栈记成min_stacktop_idx表示栈顶指针从而可以得到min_stacktop_idx如果是一开始什么元素都还没有的时候呢此时push进来一个元素栈里也就一个元素理所当然的最小元素也是它就这么更新就行-那如果发生了pop操作呢此时维护起来也非常方便体现出了维护一个min_stack数组的好处了其实我们什么都不用做因为pop掉以后top_idx自然会减1之后如果我们要查询最小元素还是直接返回min_stacktop_idx即可因为min_stack的定义就是这个意思min_stacki它记录的是从0到当前索引i的栈或者说是数组里的最小元素刚才pop掉的元素它的索引显然是i1它当然不影响我的min_stacki了">这里可以考虑，我们开一个一样大小的辅助的栈，它的第i个元素，就是从0到i的这个栈里的最小元素。这样，比如当前的top指针是5，也就是栈顶是5，那么我们要求此时的栈的最小元素，也就return一下这个辅助栈的索引为5的元素即可<br>那如何维护呢？push的时候，考虑一下一般的情况，如果栈里已经有一些元素了，且假设辅助栈里前面的元素也已经好了；现在push进来一个新的元素，栈的大小增加1，我们的辅助栈也需要多加一个元素了。此时，只需要比较一下新加入的元素和之前的最小元素的大小即可，也就是比较一下插入的val和此前的最小元素min_stack[top_idx
+-
+1]（这里，我们把辅助栈记成min_stack，top_idx表示栈顶指针），从而可以得到min_stack[top_idx]。如果是一开始，什么元素都还没有的时候呢？此时push进来一个元素，栈里也就一个元素，理所当然的，最小元素也是它，就这么更新就行<br>那如果发生了pop操作呢？此时维护起来也非常方便，体现出了维护一个min_stack数组的好处了。其实我们什么都不用做。因为，pop掉以后，top_idx自然会减1，之后如果我们要查询最小元素，还是直接返回min_stack[top_idx]即可，因为min_stack的定义就是这个意思：min_stack[i]，它记录的是，从0到当前索引i的栈（或者说是数组）里的最小元素。刚才pop掉的元素，它的索引显然是i+1，它当然不影响我的min_stack[i]了</h2>
+<h1 id="代码">代码：</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">3e4</span><span class="number">+10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MinStack</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> e[N];</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> min_stack[N];</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> min_idx = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> second_min_idx = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> top_idx = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="built_in">MinStack</span>() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">push</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        e[++top_idx] = val;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (top_idx == <span class="number">0</span>) min_stack[top_idx] = val;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (val &gt;= min_stack[top_idx - <span class="number">1</span>]) min_stack[top_idx] = min_stack[top_idx - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span> min_stack[top_idx] = val;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        top_idx--;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> e[top_idx];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> min_stack[top_idx];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * Your MinStack object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * MinStack* obj = new MinStack();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * obj-&gt;push(val);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * obj-&gt;pop();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * int param_3 = obj-&gt;top();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * int param_4 = obj-&gt;getMin();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%80%E5%B0%8F%E6%A0%88/" rel="tag"># 最小栈</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DKP/DKP/" rel="prev" title="DKP">
+      <i class="fa fa-chevron-left"></i> DKP
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E6%94%AF%E6%8C%81-push-pop-top-%E6%93%8D%E4%BD%9C%E5%B9%B6%E8%83%BD%E5%9C%A8%E5%B8%B8%E6%95%B0%E6%97%B6%E9%97%B4%E5%86%85%E6%A3%80%E7%B4%A2%E5%88%B0%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%A0%88"><span class="nav-number">2.1.</span> <span class="nav-text">设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-minstack-%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">实现 MinStack 类:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#minstack-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%A0%86%E6%A0%88%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">-
+MinStack() 初始化堆栈对象。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#void-pushint-val-%E5%B0%86%E5%85%83%E7%B4%A0val%E6%8E%A8%E5%85%A5%E5%A0%86%E6%A0%88"><span class="nav-number">2.2.2.</span> <span class="nav-text">-
+void push(int val) 将元素val推入堆栈。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#void-pop-%E5%88%A0%E9%99%A4%E5%A0%86%E6%A0%88%E9%A1%B6%E9%83%A8%E7%9A%84%E5%85%83%E7%B4%A0"><span class="nav-number">2.2.3.</span> <span class="nav-text">-
+void pop() 删除堆栈顶部的元素。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#int-top-%E8%8E%B7%E5%8F%96%E5%A0%86%E6%A0%88%E9%A1%B6%E9%83%A8%E7%9A%84%E5%85%83%E7%B4%A0"><span class="nav-number">2.2.4.</span> <span class="nav-text">-
+int top() 获取堆栈顶部的元素。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#int-getmin-%E8%8E%B7%E5%8F%96%E5%A0%86%E6%A0%88%E4%B8%AD%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0"><span class="nav-number">2.2.5.</span> <span class="nav-text">-
+int getMin() 获取堆栈中的最小元素。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.3.</span> <span class="nav-text">示例 1:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5"><span class="nav-number">2.3.1.</span> <span class="nav-text">输入：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#minstackpushpushpushgetminpoptopgetmin"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">[&quot;MinStack&quot;,&quot;push&quot;,&quot;push&quot;,&quot;push&quot;,&quot;getMin&quot;,&quot;pop&quot;,&quot;top&quot;,&quot;getMin&quot;]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#section"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">[[],[-2],[0],[-3],[],[],[],[]]</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA"><span class="nav-number">2.3.2.</span> <span class="nav-text">输出：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nullnullnullnull-3null0-2"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">[null,null,null,null,-3,null,0,-2]</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A"><span class="nav-number">2.3.3.</span> <span class="nav-text">解释：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack-minstack-new-minstack"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">MinStack minStack &#x3D; new
+MinStack();</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.push-2"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">minStack.push(-2);</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.push0"><span class="nav-number">2.3.3.3.</span> <span class="nav-text">minStack.push(0);</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.push-3"><span class="nav-number">2.3.3.4.</span> <span class="nav-text">minStack.push(-3);</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.getmin----%E8%BF%94%E5%9B%9E--3."><span class="nav-number">2.3.3.5.</span> <span class="nav-text">minStack.getMin(); --&gt; 返回
+-3.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.pop"><span class="nav-number">2.3.3.6.</span> <span class="nav-text">minStack.pop();</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.top----%E8%BF%94%E5%9B%9E-0."><span class="nav-number">2.3.3.7.</span> <span class="nav-text">minStack.top(); --&gt; 返回 0.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minstack.getmin----%E8%BF%94%E5%9B%9E--2."><span class="nav-number">2.3.3.8.</span> <span class="nav-text">minStack.getMin(); --&gt; 返回
+-2.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.3.4.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#val-231---1"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">- -2^31 &lt;&#x3D; val &lt;&#x3D; 2^31 - 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poptop-%E5%92%8C-getmin-%E6%93%8D%E4%BD%9C%E6%80%BB%E6%98%AF%E5%9C%A8-%E9%9D%9E%E7%A9%BA%E6%A0%88-%E4%B8%8A%E8%B0%83%E7%94%A8"><span class="nav-number">2.3.4.2.</span> <span class="nav-text">-
+pop、top 和 getMin 操作总是在 非空栈 上调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#push-pop-top-and-getmin%E6%9C%80%E5%A4%9A%E8%A2%AB%E8%B0%83%E7%94%A8-3-104-%E6%AC%A1"><span class="nav-number">2.3.4.3.</span> <span class="nav-text">-
+push, pop, top,
+and getMin最多被调用 3 * 10^4 次</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%8F%AA%E6%98%AF%E8%A6%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%A0%88%E9%82%A3%E8%BF%98%E6%98%AF%E6%AF%94%E8%BE%83%E7%AE%80%E5%8D%95%E7%9A%84%E7%94%A8%E6%95%B0%E7%BB%84%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%BF%9B%E8%A1%8C%E6%A8%A1%E6%8B%9F%E4%BA%86%E8%BF%99%E9%81%93%E9%A2%98%E5%A4%9A%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E8%A6%81%E6%B1%82%E5%B0%B1%E6%98%AF%E8%A6%81%E8%83%BD%E7%94%A8%E5%B8%B8%E6%95%B0%E6%97%B6%E9%97%B4%E6%89%BE%E5%87%BA%E6%A0%88%E9%87%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E5%9B%A0%E4%B8%BA%E8%A6%81%E7%94%A8%E5%B8%B8%E6%95%B0%E6%97%B6%E9%97%B4%E6%89%80%E4%BB%A5%E6%98%BE%E7%84%B6%E4%B8%8D%E8%83%BD%E7%8E%B0%E6%8E%92%E5%BA%8F%E5%BA%94%E8%AF%A5%E7%BB%B4%E6%8A%A4%E6%9F%90%E4%B8%AA%E4%B8%9C%E8%A5%BF%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E6%9F%A5%E5%88%B0%E5%BD%93%E5%89%8D%E6%A0%88%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0-%E6%8F%90%E7%A4%BA%E9%83%A8%E5%88%86%E7%BB%99%E5%87%BAval%E7%9A%84%E8%8C%83%E5%9B%B4%E8%AF%B4%E6%98%8E%E5%8F%AF%E4%BB%A5%E7%94%A8int%E5%B0%B1%E8%A1%A8%E7%A4%BApop%E5%90%8C%E9%85%8D%E5%92%8Cgetmin%E9%83%BD%E6%98%AF%E5%9C%A8%E9%9D%9E%E7%A9%BA%E6%A0%88%E4%B8%8A%E8%B0%83%E7%94%A8%E6%89%80%E4%BB%A5%E4%B8%8D%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%88%E6%B3%95%E7%9A%84%E6%93%8D%E4%BD%9C%E5%85%A8%E9%83%BD%E5%BD%93%E6%88%90%E5%90%88%E6%B3%95%E7%9A%84%E5%B0%B1%E8%A1%8Cpushpoptop%E5%92%8Cgetmin%E6%9C%80%E5%A4%9A%E5%90%84%E8%A2%AB%E8%B0%83%E7%94%A83-104%E6%AC%A1%E8%BF%99%E9%87%8C%E9%9D%A2%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E5%8F%AF%E8%83%BD%E6%98%AFpush%E6%9C%80%E5%A4%9A%E5%8F%AA%E4%BC%9A%E8%A2%AB%E8%B0%83%E7%94%A83-104%E6%AC%A1%E8%BF%99%E4%B8%AA%E4%BF%A1%E6%81%AF%E5%9B%A0%E4%B8%BA%E8%BF%99%E8%AF%B4%E6%98%8E%E4%BA%86%E6%A0%88%E6%9C%80%E5%A4%A7%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E5%B0%B1%E6%98%AF3-104%E7%9A%84%E9%95%BF%E5%BA%A6%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E7%94%A8%E6%95%B0%E7%BB%84%E6%A8%A1%E6%8B%9F%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%AF%E4%BB%A5%E5%BC%80%E4%B8%80%E4%BA%9B%E8%BE%85%E5%8A%A9%E7%A9%BA%E9%97%B4%E5%A6%82%E6%9E%9C%E6%9C%89%E9%9C%80%E8%A6%81%E8%80%8C%E7%9B%B8%E5%AF%B9%E4%B8%8D%E5%A4%AA%E9%9C%80%E8%A6%81%E6%8B%85%E5%BF%83%E8%B6%85%E5%87%BA%E9%99%90%E5%88%B6"><span class="nav-number">3.1.</span> <span class="nav-text">如果只是要实现一个栈，那还是比较简单的，用数组就可以进行模拟了。这道题多出了一个要求，就是要能用常数时间找出栈里的最小元素。因为要用常数时间，所以显然不能现排序，应该维护某个东西，可以直接查到当前栈的最小元素提示部分，给出val的范围，说明可以用int就表示；pop、同配、和getMin都是在非空栈上调用，所以不需要考虑一些不合法的操作，全都当成合法的就行；push、pop、top和getMin最多各被调用\(3 *
+10^4\)次，这里面最重要的可能是：push最多只会被调用\(3 *
+10^{4}\)次这个信息，因为这说明了栈最大的时候也就是\(3 *
+10^{4}\)的长度。所以我们用数组模拟的时候，可以开一些辅助空间（如果有需要），而相对不太需要担心超出限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E5%88%B0%E9%A2%98%E7%9B%AE%E6%9C%AC%E8%BA%AB%E4%B8%80%E5%BC%80%E5%A7%8B%E7%9A%84%E6%80%9D%E8%B7%AF%E6%98%AF%E7%BB%B4%E6%8A%A4%E4%B8%80%E4%B8%AAmin_idx%E5%8F%98%E9%87%8F%E5%AE%83%E6%8C%87%E7%A4%BA%E7%9A%84%E5%B0%B1%E6%98%AF%E6%A0%88%E9%87%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E7%B4%A2%E5%BC%95%E8%BF%99%E6%A0%B7%E6%88%91%E4%BB%AC%E8%A6%81%E8%BF%94%E5%9B%9E%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%97%B6%E5%80%99return-emin_idx%E5%8D%B3%E5%8F%AF-%E4%BD%86%E8%BF%99%E6%A0%B7%E6%9C%89%E4%B8%AA%E9%97%AE%E9%A2%98%E5%B0%B1%E6%98%AF%E4%B8%8D%E5%A5%BD%E7%BB%B4%E6%8A%A4%E6%A0%88%E7%9A%84%E5%85%83%E7%B4%A0%E9%87%8C%E7%9A%84%E5%8F%98%E5%8C%96%E4%B8%BB%E8%A6%81%E6%98%AF%E7%94%B1push%E5%92%8Cpop%E4%B8%A4%E4%B8%AA%E6%93%8D%E4%BD%9C%E5%BC%95%E8%B5%B7%E7%9A%84%E5%A6%82%E6%9E%9C%E5%8F%91%E7%94%9F%E4%BA%86push%E9%82%A3%E5%85%B6%E5%AE%9E%E7%BB%B4%E6%8A%A4min_idx%E6%98%AF%E6%AF%94%E8%BE%83%E7%AE%80%E5%8D%95%E7%9A%84%E5%8F%AA%E9%9C%80%E8%A6%81%E7%9C%8B%E4%B8%80%E4%B8%8B%E6%96%B0%E5%85%A5%E6%A0%88%E7%9A%84%E8%BF%99%E4%B8%AA%E5%85%83%E7%B4%A0%E5%92%8C%E4%B9%8B%E5%89%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%E7%9C%8B%E7%9C%8B%E6%98%AF%E5%90%A6%E8%A6%81%E6%9B%B4%E6%96%B0min_idx%E5%8D%B3%E5%8F%AF-%E4%BD%86%E5%A6%82%E6%9E%9C%E5%8F%91%E7%94%9F%E4%BA%86pop%E9%82%A3%E7%BB%B4%E6%8A%A4%E8%B5%B7%E6%9D%A5%E5%B0%B1%E5%BE%88%E9%BA%BB%E7%83%A6%E4%BA%86%E5%9B%A0%E4%B8%BA-%E5%A6%82%E6%9E%9Cpop%E5%87%BA%E5%8E%BB%E7%9A%84%E5%85%83%E7%B4%A0%E4%B8%8D%E6%98%AF%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E9%82%A3%E6%B2%A1%E4%BB%80%E4%B9%88-%E5%A6%82%E6%9E%9Cpop%E5%87%BA%E5%8E%BB%E7%9A%84%E5%85%83%E7%B4%A0%E6%98%AF%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E5%B0%B1%E6%AF%94%E8%BE%83%E5%A4%B4%E7%96%BC%E4%BA%86%E5%A6%82%E6%9E%9Cpop%E5%87%BA%E5%8E%BB%E7%9A%84%E5%85%83%E7%B4%A0%E5%B0%B1%E6%98%AF%E5%BD%93%E5%89%8D%E6%A0%88%E9%87%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E4%B8%94%E6%98%AF%E5%94%AF%E4%B8%80%E7%9A%84%E9%82%A3%E4%B9%88pop%E5%AE%8C%E5%89%A9%E4%B8%8B%E7%9A%84%E6%A0%88%E9%87%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E8%82%AF%E5%AE%9A%E5%B0%B1%E5%8F%98%E5%8C%96%E4%BA%86%E9%82%A3%E5%B0%B1%E5%BE%97%E9%87%8D%E6%96%B0%E6%89%BE%E4%BA%86%E4%BD%86%E5%A6%82%E6%9E%9C%E7%9C%9F%E7%9A%84%E6%AD%A4%E6%97%B6%E9%87%8D%E6%96%B0%E6%89%BE%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E6%98%BE%E7%84%B6%E5%B0%B1%E8%BF%9D%E8%83%8C%E4%BA%86%E9%A2%98%E7%9B%AE%E9%87%8C%E8%AF%B4%E7%9A%84%E7%94%A8%E5%B8%B8%E6%95%B0%E6%97%B6%E9%97%B4%E6%89%BE%E5%87%BA%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E5%A6%82%E6%9E%9Cpop%E5%87%BA%E5%8E%BB%E7%9A%84%E5%85%83%E7%B4%A0%E7%A1%AE%E5%AE%9E%E6%98%AF%E6%9C%80%E5%B0%8F%E7%9A%84%E4%BD%86%E4%B8%8D%E5%94%AF%E4%B8%80%E9%82%A3%E5%89%8D%E9%9D%A2%E7%A1%AE%E5%AE%9E%E8%BF%98%E6%9C%89%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E4%BD%86%E6%88%91%E4%BB%AC%E5%8F%88%E6%B2%A1%E8%AE%B0%E5%BD%95%E5%AE%83%E7%9A%84%E7%B4%A2%E5%BC%95%E8%BF%98%E6%98%AF%E5%BE%88%E9%BA%BB%E7%83%A6%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%89%BE%E5%87%BA%E5%AE%83%E7%9A%84%E7%B4%A2%E5%BC%95%E5%90%8E%E7%BB%AD%E5%B0%B1%E4%B8%8D%E5%A5%BD%E7%BB%B4%E6%8A%A4%E5%A6%82%E6%9E%9C%E6%89%BE%E5%87%BA%E5%AE%83%E7%9A%84%E7%B4%A2%E5%BC%95%E6%98%BE%E7%84%B6%E8%BF%9D%E8%83%8C%E4%BA%86%E9%A2%98%E7%9B%AE%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-number">3.2.</span> <span class="nav-text">回到题目本身，一开始的思路是，维护一个min_idx变量，它指示的就是栈里的最小元素的索引，这样我们要返回最小元素的时候，return
+e[min_idx]即可但这样有个问题，就是不好维护。栈的元素里的变化主要是由push和pop两个操作引起的，如果发生了push，那其实维护min_idx是比较简单的，只需要看一下新入栈的这个元素和之前的最小元素的关系是怎样的，看看是否要更新min_idx即可；但如果发生了pop，那维护起来就很麻烦了。因为，如果pop出去的元素，不是最小元素，那没什么；如果pop出去的元素是最小元素，就比较头疼了：如果pop出去的元素就是当前栈里的最小元素，且是唯一的，那么pop完，剩下的栈里的最小元素肯定就变化了，那就得重新找了，但如果真的此时重新找最小元素，显然就违背了题目里说的“用常数时间找出最小元素”；如果pop出去的元素确实是最小的，但不唯一，那前面确实还有最小元素，但我们又没记录它的索引，还是很麻烦，如果不找出它的索引，后续就不好维护；如果找出它的索引，显然违背了题目的要求……</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%97%B6%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%83%B3%E9%82%A3%E5%A6%82%E6%9E%9C%E6%88%91%E7%BB%B4%E6%8A%A4%E4%B8%A4%E4%B8%AA%E7%B4%A2%E5%BC%95%E5%91%A2%E4%B8%80%E4%B8%AA%E6%98%AF%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%80%E4%B8%AA%E6%98%AF%E7%AC%AC%E4%BA%8C%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BD%86%E5%8F%AF%E4%BB%A5%E6%83%B3%E8%A7%81%E4%BC%9A%E9%9D%9E%E5%B8%B8%E9%BA%BB%E7%83%A6%E8%80%8C%E4%B8%94%E6%9B%B4%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E8%BF%99%E7%A7%8D%E7%BB%B4%E6%8A%A4%E7%B4%A2%E5%BC%95%E5%8F%98%E9%87%8F%E7%9A%84%E6%96%B9%E6%B3%95%E5%9C%A8%E9%81%87%E5%88%B0%E6%9C%89%E5%A4%9A%E4%B8%AA%E7%9B%B8%E5%90%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E5%BE%88%E9%BA%BB%E7%83%A6%E6%89%80%E4%BB%A5%E8%A6%81%E7%BB%B4%E6%8A%A4%E7%9A%84%E5%8F%98%E9%87%8F%E5%BA%94%E8%AF%A5%E6%9B%B4%E5%8A%A0%E7%9B%B4%E6%8E%A5%E6%89%8D%E8%A1%8C"><span class="nav-number">3.3.</span> <span class="nav-text">这时可能会想，那如果我维护两个索引呢？一个是最小元素的索引，一个是第二小元素的索引？但可以想见，会非常麻烦，而且更重要的是，这种维护索引变量的方法，在遇到有多个相同的最小元素的时候会很麻烦。所以要维护的变量应该更加直接才行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E6%88%91%E4%BB%AC%E5%BC%80%E4%B8%80%E4%B8%AA%E4%B8%80%E6%A0%B7%E5%A4%A7%E5%B0%8F%E7%9A%84%E8%BE%85%E5%8A%A9%E7%9A%84%E6%A0%88%E5%AE%83%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%85%83%E7%B4%A0%E5%B0%B1%E6%98%AF%E4%BB%8E0%E5%88%B0i%E7%9A%84%E8%BF%99%E4%B8%AA%E6%A0%88%E9%87%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E8%BF%99%E6%A0%B7%E6%AF%94%E5%A6%82%E5%BD%93%E5%89%8D%E7%9A%84top%E6%8C%87%E9%92%88%E6%98%AF5%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%A0%88%E9%A1%B6%E6%98%AF5%E9%82%A3%E4%B9%88%E6%88%91%E4%BB%AC%E8%A6%81%E6%B1%82%E6%AD%A4%E6%97%B6%E7%9A%84%E6%A0%88%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E4%B9%9F%E5%B0%B1return%E4%B8%80%E4%B8%8B%E8%BF%99%E4%B8%AA%E8%BE%85%E5%8A%A9%E6%A0%88%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%BA5%E7%9A%84%E5%85%83%E7%B4%A0%E5%8D%B3%E5%8F%AF-%E9%82%A3%E5%A6%82%E4%BD%95%E7%BB%B4%E6%8A%A4%E5%91%A2push%E7%9A%84%E6%97%B6%E5%80%99%E8%80%83%E8%99%91%E4%B8%80%E4%B8%8B%E4%B8%80%E8%88%AC%E7%9A%84%E6%83%85%E5%86%B5%E5%A6%82%E6%9E%9C%E6%A0%88%E9%87%8C%E5%B7%B2%E7%BB%8F%E6%9C%89%E4%B8%80%E4%BA%9B%E5%85%83%E7%B4%A0%E4%BA%86%E4%B8%94%E5%81%87%E8%AE%BE%E8%BE%85%E5%8A%A9%E6%A0%88%E9%87%8C%E5%89%8D%E9%9D%A2%E7%9A%84%E5%85%83%E7%B4%A0%E4%B9%9F%E5%B7%B2%E7%BB%8F%E5%A5%BD%E4%BA%86%E7%8E%B0%E5%9C%A8push%E8%BF%9B%E6%9D%A5%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%85%83%E7%B4%A0%E6%A0%88%E7%9A%84%E5%A4%A7%E5%B0%8F%E5%A2%9E%E5%8A%A01%E6%88%91%E4%BB%AC%E7%9A%84%E8%BE%85%E5%8A%A9%E6%A0%88%E4%B9%9F%E9%9C%80%E8%A6%81%E5%A4%9A%E5%8A%A0%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E4%BA%86%E6%AD%A4%E6%97%B6%E5%8F%AA%E9%9C%80%E8%A6%81%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8B%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84%E5%85%83%E7%B4%A0%E5%92%8C%E4%B9%8B%E5%89%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E5%8D%B3%E5%8F%AF%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8B%E6%8F%92%E5%85%A5%E7%9A%84val%E5%92%8C%E6%AD%A4%E5%89%8D%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0min_stacktop_idx---1%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E6%8A%8A%E8%BE%85%E5%8A%A9%E6%A0%88%E8%AE%B0%E6%88%90min_stacktop_idx%E8%A1%A8%E7%A4%BA%E6%A0%88%E9%A1%B6%E6%8C%87%E9%92%88%E4%BB%8E%E8%80%8C%E5%8F%AF%E4%BB%A5%E5%BE%97%E5%88%B0min_stacktop_idx%E5%A6%82%E6%9E%9C%E6%98%AF%E4%B8%80%E5%BC%80%E5%A7%8B%E4%BB%80%E4%B9%88%E5%85%83%E7%B4%A0%E9%83%BD%E8%BF%98%E6%B2%A1%E6%9C%89%E7%9A%84%E6%97%B6%E5%80%99%E5%91%A2%E6%AD%A4%E6%97%B6push%E8%BF%9B%E6%9D%A5%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E6%A0%88%E9%87%8C%E4%B9%9F%E5%B0%B1%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E7%90%86%E6%89%80%E5%BD%93%E7%84%B6%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E4%B9%9F%E6%98%AF%E5%AE%83%E5%B0%B1%E8%BF%99%E4%B9%88%E6%9B%B4%E6%96%B0%E5%B0%B1%E8%A1%8C-%E9%82%A3%E5%A6%82%E6%9E%9C%E5%8F%91%E7%94%9F%E4%BA%86pop%E6%93%8D%E4%BD%9C%E5%91%A2%E6%AD%A4%E6%97%B6%E7%BB%B4%E6%8A%A4%E8%B5%B7%E6%9D%A5%E4%B9%9F%E9%9D%9E%E5%B8%B8%E6%96%B9%E4%BE%BF%E4%BD%93%E7%8E%B0%E5%87%BA%E4%BA%86%E7%BB%B4%E6%8A%A4%E4%B8%80%E4%B8%AAmin_stack%E6%95%B0%E7%BB%84%E7%9A%84%E5%A5%BD%E5%A4%84%E4%BA%86%E5%85%B6%E5%AE%9E%E6%88%91%E4%BB%AC%E4%BB%80%E4%B9%88%E9%83%BD%E4%B8%8D%E7%94%A8%E5%81%9A%E5%9B%A0%E4%B8%BApop%E6%8E%89%E4%BB%A5%E5%90%8Etop_idx%E8%87%AA%E7%84%B6%E4%BC%9A%E5%87%8F1%E4%B9%8B%E5%90%8E%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E8%A6%81%E6%9F%A5%E8%AF%A2%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E8%BF%98%E6%98%AF%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9Emin_stacktop_idx%E5%8D%B3%E5%8F%AF%E5%9B%A0%E4%B8%BAmin_stack%E7%9A%84%E5%AE%9A%E4%B9%89%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA%E6%84%8F%E6%80%9Dmin_stacki%E5%AE%83%E8%AE%B0%E5%BD%95%E7%9A%84%E6%98%AF%E4%BB%8E0%E5%88%B0%E5%BD%93%E5%89%8D%E7%B4%A2%E5%BC%95i%E7%9A%84%E6%A0%88%E6%88%96%E8%80%85%E8%AF%B4%E6%98%AF%E6%95%B0%E7%BB%84%E9%87%8C%E7%9A%84%E6%9C%80%E5%B0%8F%E5%85%83%E7%B4%A0%E5%88%9A%E6%89%8Dpop%E6%8E%89%E7%9A%84%E5%85%83%E7%B4%A0%E5%AE%83%E7%9A%84%E7%B4%A2%E5%BC%95%E6%98%BE%E7%84%B6%E6%98%AFi1%E5%AE%83%E5%BD%93%E7%84%B6%E4%B8%8D%E5%BD%B1%E5%93%8D%E6%88%91%E7%9A%84min_stacki%E4%BA%86"><span class="nav-number">3.4.</span> <span class="nav-text">这里可以考虑，我们开一个一样大小的辅助的栈，它的第i个元素，就是从0到i的这个栈里的最小元素。这样，比如当前的top指针是5，也就是栈顶是5，那么我们要求此时的栈的最小元素，也就return一下这个辅助栈的索引为5的元素即可那如何维护呢？push的时候，考虑一下一般的情况，如果栈里已经有一些元素了，且假设辅助栈里前面的元素也已经好了；现在push进来一个新的元素，栈的大小增加1，我们的辅助栈也需要多加一个元素了。此时，只需要比较一下新加入的元素和之前的最小元素的大小即可，也就是比较一下插入的val和此前的最小元素min_stack[top_idx
+-
+1]（这里，我们把辅助栈记成min_stack，top_idx表示栈顶指针），从而可以得到min_stack[top_idx]。如果是一开始，什么元素都还没有的时候呢？此时push进来一个元素，栈里也就一个元素，理所当然的，最小元素也是它，就这么更新就行那如果发生了pop操作呢？此时维护起来也非常方便，体现出了维护一个min_stack数组的好处了。其实我们什么都不用做。因为，pop掉以后，top_idx自然会减1，之后如果我们要查询最小元素，还是直接返回min_stack[top_idx]即可，因为min_stack的定义就是这个意思：min_stack[i]，它记录的是，从0到当前索引i的栈（或者说是数组）里的最小元素。刚才pop掉的元素，它的索引显然是i+1，它当然不影响我的min_stack[i]了</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
