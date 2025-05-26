@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.神经网络模型搭建 这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型 例1. LeNet的搭建 知道各个基本的层，例如Conv2d的计算过程，Avg Pooling、Max Pooling的计算过程 此外，需要掌握编写神经网络的类的细节： 第一，网络的类一般是继承了nn.Module类的 第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chap2.Pytorch基础">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="1.神经网络模型搭建 这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型 例1. LeNet的搭建 知道各个基本的层，例如Conv2d的计算过程，Avg Pooling、Max Pooling的计算过程 此外，需要掌握编写神经网络的类的细节： 第一，网络的类一般是继承了nn.Module类的 第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-26T07:49:00.000Z">
+<meta property="article:modified_time" content="2025-05-26T07:49:42.425Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="pytorch">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>chap2.Pytorch基础 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          chap2.Pytorch基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-26 15:49:00 / Modified: 15:49:42" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <span id="more"></span>
+<h1 id="神经网络模型搭建">1.神经网络模型搭建</h1>
+<h2 id="这里主要是通过三个例子简单介绍一下pytorch怎么建立模型">这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型</h2>
+<h2 id="例1.-lenet的搭建">例1. LeNet的搭建</h2>
+<h3 id="知道各个基本的层例如conv2d的计算过程avg-poolingmax-pooling的计算过程">知道各个基本的层，例如Conv2d的计算过程，Avg
+Pooling、Max Pooling的计算过程</h3>
+<h3 id="此外需要掌握编写神经网络的类的细节">此外，需要掌握编写神经网络的类的细节：</h3>
+<h4 id="第一网络的类一般是继承了nn.module类的">第一，网络的类一般是继承了nn.Module类的</h4>
+<h4 id="第二因为继承了这个类所以也需要先初始化一下也就是superyour_network_name-self.__-init__">第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_Network_Name,
+self).__ init__()</h4>
+<h4 id="第三一般我们把网络里可训练的层的初始化放到__-init__函数里">第三，一般我们把网络里可训练的层的初始化放到__
+init__函数里</h4>
+<h3 id="了解常见层的计算过程这里主要介绍的是cnn里常用的卷积和池化能根据输入数据的形状以及各个层的参数算出输出数据的尺寸">了解常见层的计算过程（这里主要介绍的是CNN里常用的卷积和池化），能根据输入数据的形状以及各个层的参数，算出输出数据的尺寸</h3>
+<h2 id="例2.-googlenet的搭建">例2. GoogLeNet的搭建</h2>
+<h3 id="这里也不太清楚怎么考可能是要把googlenet的网络架构记下来然后每个分支都能写出相应代码吧">这里也不太清楚怎么考，可能是要把GoogLeNet的网络架构记下来，然后每个分支都能写出相应代码吧</h3>
+<h2 id="例3.-resnet的搭建">例3. ResNet的搭建</h2>
+<h3 id="首先resnet的搭建基本就是靠堆叠残差块实现的残差块分了两种模式18和34层的resnet用的是basicblock而50及更高层数的resnet用的是bottleneck">首先，ResNet的搭建基本就是靠堆叠残差块实现的。残差块分了两种模式，18和34层的ResNet，用的是BasicBlock，而50及更高层数的ResNet用的是Bottleneck</h3>
+<h3 id="resnet的实例化一般就是通过指定每种残差块的个数来实现的一般它会被分成四个大的layer每个layer里可能有若干个残差块我们只需要通过一个列表指定这四个大layer里残差块的格式即可得到具体的resnet">ResNet的实例化，一般就是通过指定每种残差块的个数来实现的。一般它会被分成四个“大的”layer，每个layer里可能有若干个残差块，我们只需要通过一个列表，指定这四个“大”layer里残差块的格式，即可得到具体的ResNet</h3>
+<h1 id="定制数据集">2.定制数据集</h1>
+<h2 id="这里介绍了一般的关于现有数据集的一些操作以及怎么定制一个自己的数据集">这里介绍了一般的关于现有数据集的一些操作，以及怎么定制一个自己的数据集</h2>
+<h2 id="使用现有数据集">2.1. 使用现有数据集</h2>
+<h3 id="直接当函数调用即可例如要调用cifar10的训练数据则执行形如这样的代码即可trainset-torchvision.datasets.cifar10root.data-traintrue-downloadtrue-transformtransform-注意到这里有transform参数它代表了我们要对数据进行的预处理的操作传进去的一般是transforms库里的compose得到的一个一系列的操作例如transform-transforms.composetransforms.totensor-transforms.normalize0.5-0.5-0.5-0.5-0.5-0.5这里可能还需要我们了解常见的数据预处理的操作例如此处的totensor就是把numpy格式的图像数据给转化成torch格式的图像数据二者的主要区别在于channel维度在第几个维度numpy格式是htimes-wtimes-c而torch格式是ctimes-htimes-w">直接当函数调用即可。例如，要调用CIFAR10的训练数据，则执行形如这样的代码即可<code>trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)</code><br>注意到这里有transform参数，它代表了我们要对数据进行的预处理的操作。传进去的一般是transforms库里的Compose得到的一个一系列的操作，例如：<code>transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])</code>（这里可能还需要我们了解常见的数据预处理的操作。例如，此处的ToTensor就是把numpy格式的图像数据给转化成torch格式的图像数据，二者的主要区别在于Channel维度在第几个维度，numpy格式是<span class="math inline">\(H\times W\times C\)</span>，而torch格式是<span class="math inline">\(C\times H\times W\)</span></h3>
+<h3 id="上面我们得到了现有的数据集但实际使用时需要把数据放到一个dataloader里以便加载使用一般用torch.utils.data.dataloader例如trainloader-torch.utils.data.dataloadertrainset-batch_size4-shuffletrue-num_workers这里我们可以通过shuffle参数指定是否打乱数据集以及可以用multiprocessing-workers并行地加载数据">上面我们得到了现有的数据集，但实际使用时，需要把数据放到一个dataloader里，以便加载使用。一般用torch.utils.data.DataLoader，例如：<code>trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers)</code>，这里我们可以通过shuffle参数指定是否打乱数据集，以及可以用multiprocessing
+workers并行地加载数据</h3>
+<h2 id="定制自己的数据集">2.2. 定制自己的数据集</h2>
+<h3 id="定制自己的数据集首先得有自己的数据然而原始的数据可能格式不太对需要一些转换这时可能要用到一些库了">2.2.1.
+定制自己的数据集，首先得有自己的数据。然而原始的数据可能格式不太对，需要一些转换，这时可能要用到一些库了</h3>
+<h3 id="下一步是打标签这里是以经典的图像分类任务为例那可以考虑labelimg这个工具当然还有其它的例如labelme">2.2.2.
+下一步是打标签。这里是以经典的图像分类任务为例，那可以考虑labelimg这个工具。当然还有其它的，例如labelme</h3>
+<h3 id="有了数据以后类似上面调用现有数据集的方式我们还是需要一个数据集的类从而可以通过这个类来获取数据集因为本质上我们最后希望的效果是通过dataloader来获取batch-data而dataloader获取batch-data的本质是生成索引然后每个batch就用相应的batch索引从数据集类里获取数据这也是为什么实例化一个dataloader的时候我们要传入dataset-我们要继承的是一个torch.utils.data.dataset类它代表了一个数据集的抽象类我们自定义的时候重点关注三个函数__-len__函数它可以返回数据集的大小-__-getitem__函数它支持根据索引取出具体的数据例如dataseti就可以取出第i个样本这种方式的好处是我们不需要每次都把所有的数据加载到内存里毕竟这样一旦数据集大点可能内存就炸了而是要用到哪些数据时我就加载这些数据-__-init__函数一个类当然要有初始的函数了具体到这里的例子我们可能会在这里放一些类似于数据路径要对数据进行的预处理操作transform等以供__-getitem__或其它函数使用">2.2.3.
+有了数据以后，类似上面调用现有数据集的方式，我们还是需要一个数据集的类，从而可以通过这个类来获取数据集。因为本质上，我们最后希望的效果是通过dataloader来获取batch
+data，而dataloader获取batch
+data的本质是，生成索引，然后每个batch就用相应的batch索引，从数据集类里获取数据（这也是为什么实例化一个dataloader的时候我们要传入dataset）<br>我们要继承的是一个torch.utils.data.Dataset类，它代表了一个数据集的抽象类。我们自定义的时候，重点关注三个函数：__
+len__函数，它可以返回数据集的大小；<br>__
+getitem__函数，它支持根据索引取出具体的数据，例如dataset[i]就可以取出第i个样本。这种方式的好处是，我们不需要每次都把所有的数据加载到内存里（毕竟这样一旦数据集大点，可能内存就炸了），而是要用到哪些数据时，我就加载这些数据<br>__
+init__函数，一个类当然要有初始的函数了。具体到这里的例子，我们可能会在这里放一些类似于数据路径、要对数据进行的预处理操作transform等，以供__
+getitem__或其它函数使用</h3>
+<h3 id="实际使用时我们可能需要定制化的transform此时则可以考虑把操作给写成一个类然后transforms.compose的时候我们就传入这些自己写的类就行当然此时需要修改它的__-init__方法和__-call__方法以及它继承的是object类">2.2.4.
+实际使用时，我们可能需要定制化的transform，此时则可以考虑把操作给写成一个类，然后transforms.Compose的时候，我们就传入这些自己写的类就行（当然，此时需要修改它的__
+init__方法和__ call__方法。以及，它继承的是object类）</h3>
+<h3 id="综上我们定制了自己的数据集的类它可以顺利加载数据且进行相应的数据增强操作如果有并且想定制数据增强操作也是可以的之后就是按照一般流程走了实例化一个数据集的类再构造对应的dataloader即可">综上，我们定制了自己的数据集的类，它可以顺利加载数据，且进行相应的数据增强操作（如果有），并且想定制数据增强操作也是可以的。之后就是按照一般流程走了，实例化一个数据集的类，再构造对应的dataloader即可</h3>
+<h1 id="使用服务器">3.使用服务器</h1>
+<h1 id="训练过程可视化">4.训练过程可视化</h1>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" rel="next" title="chap1.深度神经网络基础">
+      chap1.深度神经网络基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">1.神经网络模型搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E4%B8%BB%E8%A6%81%E6%98%AF%E9%80%9A%E8%BF%87%E4%B8%89%E4%B8%AA%E4%BE%8B%E5%AD%90%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8Bpytorch%E6%80%8E%E4%B9%88%E5%BB%BA%E7%AB%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B1.-lenet%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-number">1.2.</span> <span class="nav-text">例1. LeNet的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E9%81%93%E5%90%84%E4%B8%AA%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B1%82%E4%BE%8B%E5%A6%82conv2d%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8Bavg-poolingmax-pooling%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">知道各个基本的层，例如Conv2d的计算过程，Avg
+Pooling、Max Pooling的计算过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A4%E5%A4%96%E9%9C%80%E8%A6%81%E6%8E%8C%E6%8F%A1%E7%BC%96%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E7%B1%BB%E7%9A%84%E7%BB%86%E8%8A%82"><span class="nav-number">1.2.2.</span> <span class="nav-text">此外，需要掌握编写神经网络的类的细节：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%BD%91%E7%BB%9C%E7%9A%84%E7%B1%BB%E4%B8%80%E8%88%AC%E6%98%AF%E7%BB%A7%E6%89%BF%E4%BA%86nn.module%E7%B1%BB%E7%9A%84"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">第一，网络的类一般是继承了nn.Module类的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%9B%A0%E4%B8%BA%E7%BB%A7%E6%89%BF%E4%BA%86%E8%BF%99%E4%B8%AA%E7%B1%BB%E6%89%80%E4%BB%A5%E4%B9%9F%E9%9C%80%E8%A6%81%E5%85%88%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%8B%E4%B9%9F%E5%B0%B1%E6%98%AFsuperyour_network_name-self.__-init__"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_Network_Name,
+self).__ init__()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E4%B8%80%E8%88%AC%E6%88%91%E4%BB%AC%E6%8A%8A%E7%BD%91%E7%BB%9C%E9%87%8C%E5%8F%AF%E8%AE%AD%E7%BB%83%E7%9A%84%E5%B1%82%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%94%BE%E5%88%B0__-init__%E5%87%BD%E6%95%B0%E9%87%8C"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">第三，一般我们把网络里可训练的层的初始化放到__
+init__函数里</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E5%B8%B8%E8%A7%81%E5%B1%82%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E8%BF%99%E9%87%8C%E4%B8%BB%E8%A6%81%E4%BB%8B%E7%BB%8D%E7%9A%84%E6%98%AFcnn%E9%87%8C%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8D%B7%E7%A7%AF%E5%92%8C%E6%B1%A0%E5%8C%96%E8%83%BD%E6%A0%B9%E6%8D%AE%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE%E7%9A%84%E5%BD%A2%E7%8A%B6%E4%BB%A5%E5%8F%8A%E5%90%84%E4%B8%AA%E5%B1%82%E7%9A%84%E5%8F%82%E6%95%B0%E7%AE%97%E5%87%BA%E8%BE%93%E5%87%BA%E6%95%B0%E6%8D%AE%E7%9A%84%E5%B0%BA%E5%AF%B8"><span class="nav-number">1.2.3.</span> <span class="nav-text">了解常见层的计算过程（这里主要介绍的是CNN里常用的卷积和池化），能根据输入数据的形状以及各个层的参数，算出输出数据的尺寸</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B2.-googlenet%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-number">1.3.</span> <span class="nav-text">例2. GoogLeNet的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E4%B9%9F%E4%B8%8D%E5%A4%AA%E6%B8%85%E6%A5%9A%E6%80%8E%E4%B9%88%E8%80%83%E5%8F%AF%E8%83%BD%E6%98%AF%E8%A6%81%E6%8A%8Agooglenet%E7%9A%84%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%E8%AE%B0%E4%B8%8B%E6%9D%A5%E7%84%B6%E5%90%8E%E6%AF%8F%E4%B8%AA%E5%88%86%E6%94%AF%E9%83%BD%E8%83%BD%E5%86%99%E5%87%BA%E7%9B%B8%E5%BA%94%E4%BB%A3%E7%A0%81%E5%90%A7"><span class="nav-number">1.3.1.</span> <span class="nav-text">这里也不太清楚怎么考，可能是要把GoogLeNet的网络架构记下来，然后每个分支都能写出相应代码吧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B3.-resnet%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-number">1.4.</span> <span class="nav-text">例3. ResNet的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88resnet%E7%9A%84%E6%90%AD%E5%BB%BA%E5%9F%BA%E6%9C%AC%E5%B0%B1%E6%98%AF%E9%9D%A0%E5%A0%86%E5%8F%A0%E6%AE%8B%E5%B7%AE%E5%9D%97%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%AE%8B%E5%B7%AE%E5%9D%97%E5%88%86%E4%BA%86%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F18%E5%92%8C34%E5%B1%82%E7%9A%84resnet%E7%94%A8%E7%9A%84%E6%98%AFbasicblock%E8%80%8C50%E5%8F%8A%E6%9B%B4%E9%AB%98%E5%B1%82%E6%95%B0%E7%9A%84resnet%E7%94%A8%E7%9A%84%E6%98%AFbottleneck"><span class="nav-number">1.4.1.</span> <span class="nav-text">首先，ResNet的搭建基本就是靠堆叠残差块实现的。残差块分了两种模式，18和34层的ResNet，用的是BasicBlock，而50及更高层数的ResNet用的是Bottleneck</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resnet%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%B8%80%E8%88%AC%E5%B0%B1%E6%98%AF%E9%80%9A%E8%BF%87%E6%8C%87%E5%AE%9A%E6%AF%8F%E7%A7%8D%E6%AE%8B%E5%B7%AE%E5%9D%97%E7%9A%84%E4%B8%AA%E6%95%B0%E6%9D%A5%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E8%88%AC%E5%AE%83%E4%BC%9A%E8%A2%AB%E5%88%86%E6%88%90%E5%9B%9B%E4%B8%AA%E5%A4%A7%E7%9A%84layer%E6%AF%8F%E4%B8%AAlayer%E9%87%8C%E5%8F%AF%E8%83%BD%E6%9C%89%E8%8B%A5%E5%B9%B2%E4%B8%AA%E6%AE%8B%E5%B7%AE%E5%9D%97%E6%88%91%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E9%80%9A%E8%BF%87%E4%B8%80%E4%B8%AA%E5%88%97%E8%A1%A8%E6%8C%87%E5%AE%9A%E8%BF%99%E5%9B%9B%E4%B8%AA%E5%A4%A7layer%E9%87%8C%E6%AE%8B%E5%B7%AE%E5%9D%97%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8D%B3%E5%8F%AF%E5%BE%97%E5%88%B0%E5%85%B7%E4%BD%93%E7%9A%84resnet"><span class="nav-number">1.4.2.</span> <span class="nav-text">ResNet的实例化，一般就是通过指定每种残差块的个数来实现的。一般它会被分成四个“大的”layer，每个layer里可能有若干个残差块，我们只需要通过一个列表，指定这四个“大”layer里残差块的格式，即可得到具体的ResNet</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E5%88%B6%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">2.定制数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E4%BB%8B%E7%BB%8D%E4%BA%86%E4%B8%80%E8%88%AC%E7%9A%84%E5%85%B3%E4%BA%8E%E7%8E%B0%E6%9C%89%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8A%E6%80%8E%E4%B9%88%E5%AE%9A%E5%88%B6%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.1.</span> <span class="nav-text">这里介绍了一般的关于现有数据集的一些操作，以及怎么定制一个自己的数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%8E%B0%E6%9C%89%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.2.</span> <span class="nav-text">2.1. 使用现有数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E5%BD%93%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E5%8D%B3%E5%8F%AF%E4%BE%8B%E5%A6%82%E8%A6%81%E8%B0%83%E7%94%A8cifar10%E7%9A%84%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E5%88%99%E6%89%A7%E8%A1%8C%E5%BD%A2%E5%A6%82%E8%BF%99%E6%A0%B7%E7%9A%84%E4%BB%A3%E7%A0%81%E5%8D%B3%E5%8F%AFtrainset-torchvision.datasets.cifar10root.data-traintrue-downloadtrue-transformtransform-%E6%B3%A8%E6%84%8F%E5%88%B0%E8%BF%99%E9%87%8C%E6%9C%89transform%E5%8F%82%E6%95%B0%E5%AE%83%E4%BB%A3%E8%A1%A8%E4%BA%86%E6%88%91%E4%BB%AC%E8%A6%81%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E6%93%8D%E4%BD%9C%E4%BC%A0%E8%BF%9B%E5%8E%BB%E7%9A%84%E4%B8%80%E8%88%AC%E6%98%AFtransforms%E5%BA%93%E9%87%8C%E7%9A%84compose%E5%BE%97%E5%88%B0%E7%9A%84%E4%B8%80%E4%B8%AA%E4%B8%80%E7%B3%BB%E5%88%97%E7%9A%84%E6%93%8D%E4%BD%9C%E4%BE%8B%E5%A6%82transform-transforms.composetransforms.totensor-transforms.normalize0.5-0.5-0.5-0.5-0.5-0.5%E8%BF%99%E9%87%8C%E5%8F%AF%E8%83%BD%E8%BF%98%E9%9C%80%E8%A6%81%E6%88%91%E4%BB%AC%E4%BA%86%E8%A7%A3%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E7%9A%84%E6%93%8D%E4%BD%9C%E4%BE%8B%E5%A6%82%E6%AD%A4%E5%A4%84%E7%9A%84totensor%E5%B0%B1%E6%98%AF%E6%8A%8Anumpy%E6%A0%BC%E5%BC%8F%E7%9A%84%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E7%BB%99%E8%BD%AC%E5%8C%96%E6%88%90torch%E6%A0%BC%E5%BC%8F%E7%9A%84%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E4%BA%8C%E8%80%85%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB%E5%9C%A8%E4%BA%8Echannel%E7%BB%B4%E5%BA%A6%E5%9C%A8%E7%AC%AC%E5%87%A0%E4%B8%AA%E7%BB%B4%E5%BA%A6numpy%E6%A0%BC%E5%BC%8F%E6%98%AFhtimes-wtimes-c%E8%80%8Ctorch%E6%A0%BC%E5%BC%8F%E6%98%AFctimes-htimes-w"><span class="nav-number">2.2.1.</span> <span class="nav-text">直接当函数调用即可。例如，要调用CIFAR10的训练数据，则执行形如这样的代码即可trainset &#x3D; torchvision.datasets.CIFAR10(root&#x3D;&#39;.&#x2F;data&#39;, train&#x3D;True, download&#x3D;True, transform&#x3D;transform)注意到这里有transform参数，它代表了我们要对数据进行的预处理的操作。传进去的一般是transforms库里的Compose得到的一个一系列的操作，例如：transform &#x3D; transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])（这里可能还需要我们了解常见的数据预处理的操作。例如，此处的ToTensor就是把numpy格式的图像数据给转化成torch格式的图像数据，二者的主要区别在于Channel维度在第几个维度，numpy格式是\(H\times W\times C\)，而torch格式是\(C\times H\times W\)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E6%88%91%E4%BB%AC%E5%BE%97%E5%88%B0%E4%BA%86%E7%8E%B0%E6%9C%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86%E4%BD%86%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%8A%8A%E6%95%B0%E6%8D%AE%E6%94%BE%E5%88%B0%E4%B8%80%E4%B8%AAdataloader%E9%87%8C%E4%BB%A5%E4%BE%BF%E5%8A%A0%E8%BD%BD%E4%BD%BF%E7%94%A8%E4%B8%80%E8%88%AC%E7%94%A8torch.utils.data.dataloader%E4%BE%8B%E5%A6%82trainloader-torch.utils.data.dataloadertrainset-batch_size4-shuffletrue-num_workers%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87shuffle%E5%8F%82%E6%95%B0%E6%8C%87%E5%AE%9A%E6%98%AF%E5%90%A6%E6%89%93%E4%B9%B1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%BB%A5%E5%8F%8A%E5%8F%AF%E4%BB%A5%E7%94%A8multiprocessing-workers%E5%B9%B6%E8%A1%8C%E5%9C%B0%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="nav-number">2.2.2.</span> <span class="nav-text">上面我们得到了现有的数据集，但实际使用时，需要把数据放到一个dataloader里，以便加载使用。一般用torch.utils.data.DataLoader，例如：trainloader &#x3D; torch.utils.data.DataLoader(trainset, batch_size&#x3D;4, shuffle&#x3D;True, num_workers)，这里我们可以通过shuffle参数指定是否打乱数据集，以及可以用multiprocessing
+workers并行地加载数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">2.3.</span> <span class="nav-text">2.2. 定制自己的数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86%E9%A6%96%E5%85%88%E5%BE%97%E6%9C%89%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%E7%84%B6%E8%80%8C%E5%8E%9F%E5%A7%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%83%BD%E6%A0%BC%E5%BC%8F%E4%B8%8D%E5%A4%AA%E5%AF%B9%E9%9C%80%E8%A6%81%E4%B8%80%E4%BA%9B%E8%BD%AC%E6%8D%A2%E8%BF%99%E6%97%B6%E5%8F%AF%E8%83%BD%E8%A6%81%E7%94%A8%E5%88%B0%E4%B8%80%E4%BA%9B%E5%BA%93%E4%BA%86"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.2.1.
+定制自己的数据集，首先得有自己的数据。然而原始的数据可能格式不太对，需要一些转换，这时可能要用到一些库了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E6%98%AF%E6%89%93%E6%A0%87%E7%AD%BE%E8%BF%99%E9%87%8C%E6%98%AF%E4%BB%A5%E7%BB%8F%E5%85%B8%E7%9A%84%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E4%BB%BB%E5%8A%A1%E4%B8%BA%E4%BE%8B%E9%82%A3%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91labelimg%E8%BF%99%E4%B8%AA%E5%B7%A5%E5%85%B7%E5%BD%93%E7%84%B6%E8%BF%98%E6%9C%89%E5%85%B6%E5%AE%83%E7%9A%84%E4%BE%8B%E5%A6%82labelme"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.2.2.
+下一步是打标签。这里是以经典的图像分类任务为例，那可以考虑labelimg这个工具。当然还有其它的，例如labelme</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E4%BA%86%E6%95%B0%E6%8D%AE%E4%BB%A5%E5%90%8E%E7%B1%BB%E4%BC%BC%E4%B8%8A%E9%9D%A2%E8%B0%83%E7%94%A8%E7%8E%B0%E6%9C%89%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E6%96%B9%E5%BC%8F%E6%88%91%E4%BB%AC%E8%BF%98%E6%98%AF%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E7%B1%BB%E4%BB%8E%E8%80%8C%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E8%BF%99%E4%B8%AA%E7%B1%BB%E6%9D%A5%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E9%9B%86%E5%9B%A0%E4%B8%BA%E6%9C%AC%E8%B4%A8%E4%B8%8A%E6%88%91%E4%BB%AC%E6%9C%80%E5%90%8E%E5%B8%8C%E6%9C%9B%E7%9A%84%E6%95%88%E6%9E%9C%E6%98%AF%E9%80%9A%E8%BF%87dataloader%E6%9D%A5%E8%8E%B7%E5%8F%96batch-data%E8%80%8Cdataloader%E8%8E%B7%E5%8F%96batch-data%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%98%AF%E7%94%9F%E6%88%90%E7%B4%A2%E5%BC%95%E7%84%B6%E5%90%8E%E6%AF%8F%E4%B8%AAbatch%E5%B0%B1%E7%94%A8%E7%9B%B8%E5%BA%94%E7%9A%84batch%E7%B4%A2%E5%BC%95%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%9B%86%E7%B1%BB%E9%87%8C%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E8%BF%99%E4%B9%9F%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%B8%80%E4%B8%AAdataloader%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E8%A6%81%E4%BC%A0%E5%85%A5dataset-%E6%88%91%E4%BB%AC%E8%A6%81%E7%BB%A7%E6%89%BF%E7%9A%84%E6%98%AF%E4%B8%80%E4%B8%AAtorch.utils.data.dataset%E7%B1%BB%E5%AE%83%E4%BB%A3%E8%A1%A8%E4%BA%86%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E6%8A%BD%E8%B1%A1%E7%B1%BB%E6%88%91%E4%BB%AC%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E6%97%B6%E5%80%99%E9%87%8D%E7%82%B9%E5%85%B3%E6%B3%A8%E4%B8%89%E4%B8%AA%E5%87%BD%E6%95%B0__-len__%E5%87%BD%E6%95%B0%E5%AE%83%E5%8F%AF%E4%BB%A5%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E5%A4%A7%E5%B0%8F-__-getitem__%E5%87%BD%E6%95%B0%E5%AE%83%E6%94%AF%E6%8C%81%E6%A0%B9%E6%8D%AE%E7%B4%A2%E5%BC%95%E5%8F%96%E5%87%BA%E5%85%B7%E4%BD%93%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BE%8B%E5%A6%82dataseti%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%8F%96%E5%87%BA%E7%AC%ACi%E4%B8%AA%E6%A0%B7%E6%9C%AC%E8%BF%99%E7%A7%8D%E6%96%B9%E5%BC%8F%E7%9A%84%E5%A5%BD%E5%A4%84%E6%98%AF%E6%88%91%E4%BB%AC%E4%B8%8D%E9%9C%80%E8%A6%81%E6%AF%8F%E6%AC%A1%E9%83%BD%E6%8A%8A%E6%89%80%E6%9C%89%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%88%B0%E5%86%85%E5%AD%98%E9%87%8C%E6%AF%95%E7%AB%9F%E8%BF%99%E6%A0%B7%E4%B8%80%E6%97%A6%E6%95%B0%E6%8D%AE%E9%9B%86%E5%A4%A7%E7%82%B9%E5%8F%AF%E8%83%BD%E5%86%85%E5%AD%98%E5%B0%B1%E7%82%B8%E4%BA%86%E8%80%8C%E6%98%AF%E8%A6%81%E7%94%A8%E5%88%B0%E5%93%AA%E4%BA%9B%E6%95%B0%E6%8D%AE%E6%97%B6%E6%88%91%E5%B0%B1%E5%8A%A0%E8%BD%BD%E8%BF%99%E4%BA%9B%E6%95%B0%E6%8D%AE-__-init__%E5%87%BD%E6%95%B0%E4%B8%80%E4%B8%AA%E7%B1%BB%E5%BD%93%E7%84%B6%E8%A6%81%E6%9C%89%E5%88%9D%E5%A7%8B%E7%9A%84%E5%87%BD%E6%95%B0%E4%BA%86%E5%85%B7%E4%BD%93%E5%88%B0%E8%BF%99%E9%87%8C%E7%9A%84%E4%BE%8B%E5%AD%90%E6%88%91%E4%BB%AC%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%9C%A8%E8%BF%99%E9%87%8C%E6%94%BE%E4%B8%80%E4%BA%9B%E7%B1%BB%E4%BC%BC%E4%BA%8E%E6%95%B0%E6%8D%AE%E8%B7%AF%E5%BE%84%E8%A6%81%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9Ctransform%E7%AD%89%E4%BB%A5%E4%BE%9B__-getitem__%E6%88%96%E5%85%B6%E5%AE%83%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8"><span class="nav-number">2.3.3.</span> <span class="nav-text">2.2.3.
+有了数据以后，类似上面调用现有数据集的方式，我们还是需要一个数据集的类，从而可以通过这个类来获取数据集。因为本质上，我们最后希望的效果是通过dataloader来获取batch
+data，而dataloader获取batch
+data的本质是，生成索引，然后每个batch就用相应的batch索引，从数据集类里获取数据（这也是为什么实例化一个dataloader的时候我们要传入dataset）我们要继承的是一个torch.utils.data.Dataset类，它代表了一个数据集的抽象类。我们自定义的时候，重点关注三个函数：__
+len__函数，它可以返回数据集的大小；__
+getitem__函数，它支持根据索引取出具体的数据，例如dataset[i]就可以取出第i个样本。这种方式的好处是，我们不需要每次都把所有的数据加载到内存里（毕竟这样一旦数据集大点，可能内存就炸了），而是要用到哪些数据时，我就加载这些数据__
+init__函数，一个类当然要有初始的函数了。具体到这里的例子，我们可能会在这里放一些类似于数据路径、要对数据进行的预处理操作transform等，以供__
+getitem__或其它函数使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E6%97%B6%E6%88%91%E4%BB%AC%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E5%AE%9A%E5%88%B6%E5%8C%96%E7%9A%84transform%E6%AD%A4%E6%97%B6%E5%88%99%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E6%8A%8A%E6%93%8D%E4%BD%9C%E7%BB%99%E5%86%99%E6%88%90%E4%B8%80%E4%B8%AA%E7%B1%BB%E7%84%B6%E5%90%8Etransforms.compose%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E5%B0%B1%E4%BC%A0%E5%85%A5%E8%BF%99%E4%BA%9B%E8%87%AA%E5%B7%B1%E5%86%99%E7%9A%84%E7%B1%BB%E5%B0%B1%E8%A1%8C%E5%BD%93%E7%84%B6%E6%AD%A4%E6%97%B6%E9%9C%80%E8%A6%81%E4%BF%AE%E6%94%B9%E5%AE%83%E7%9A%84__-init__%E6%96%B9%E6%B3%95%E5%92%8C__-call__%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E5%AE%83%E7%BB%A7%E6%89%BF%E7%9A%84%E6%98%AFobject%E7%B1%BB"><span class="nav-number">2.3.4.</span> <span class="nav-text">2.2.4.
+实际使用时，我们可能需要定制化的transform，此时则可以考虑把操作给写成一个类，然后transforms.Compose的时候，我们就传入这些自己写的类就行（当然，此时需要修改它的__
+init__方法和__ call__方法。以及，它继承的是object类）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E4%B8%8A%E6%88%91%E4%BB%AC%E5%AE%9A%E5%88%B6%E4%BA%86%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E7%B1%BB%E5%AE%83%E5%8F%AF%E4%BB%A5%E9%A1%BA%E5%88%A9%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE%E4%B8%94%E8%BF%9B%E8%A1%8C%E7%9B%B8%E5%BA%94%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C%E5%A6%82%E6%9E%9C%E6%9C%89%E5%B9%B6%E4%B8%94%E6%83%B3%E5%AE%9A%E5%88%B6%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C%E4%B9%9F%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%9A%84%E4%B9%8B%E5%90%8E%E5%B0%B1%E6%98%AF%E6%8C%89%E7%85%A7%E4%B8%80%E8%88%AC%E6%B5%81%E7%A8%8B%E8%B5%B0%E4%BA%86%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E7%B1%BB%E5%86%8D%E6%9E%84%E9%80%A0%E5%AF%B9%E5%BA%94%E7%9A%84dataloader%E5%8D%B3%E5%8F%AF"><span class="nav-number">2.3.5.</span> <span class="nav-text">综上，我们定制了自己的数据集的类，它可以顺利加载数据，且进行相应的数据增强操作（如果有），并且想定制数据增强操作也是可以的。之后就是按照一般流程走了，实例化一个数据集的类，再构造对应的dataloader即可</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">3.使用服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">4.训练过程可视化</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
