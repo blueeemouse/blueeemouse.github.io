@@ -150,6 +150,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-15 14:58:26 / Modified: 16:17:10" itemprop="dateCreated datePublished" datetime="2024-10-15T14:58:26+08:00">2024-10-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="结论">结论：</h3>
+<h4
+id="对于对比学习data-augmentation很重要尤其是一些特定的augmentation可能起到很大的作用">对于对比学习，data
+augmentation很重要，尤其是一些特定的augmentation，可能起到很大的作用</h4>
+<h4
+id="最后简单加的一个projection-head却能极大地提升效果">最后简单加的一个projection
+head，却能极大地提升效果</h4>
+<h4
+id="用更大的batch-size训练得更久都能明显提高simclr的效果">用更大的batch
+size/训练得更久，都能明显提高SimCLR的效果</h4>
+<h3
+id="方法框架图a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_10_47.png-损失函数a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_12_35.png-需要注意的是这个损失其实表示的是正样本i对正样本j的损失它不等于l_ji也就是这个损失是不对称的">方法框架图：![[A
+Simple Framework for Contrastive Learning of Visual Representations -
+Chen 等 - 2020 - Zotero 2024_10_15 15_10_47.png]]<br>损失函数![[A Simple
+Framework for Contrastive Learning of Visual Representations - Chen 等 -
+2020 - Zotero 2024_10_15
+15_12_35.png]]<br>需要注意的是，这个损失其实表示的是正样本i“对”正样本j的损失，它不等于<span
+class="math inline">\(l_{j,i}\)</span>，也就是这个损失是不对称的。</h3>
+<h3 id="值得学习的细节">值得学习的细节：</h3>
+<h4
+id="论文为了研究哪种data-augmentation效果比较好做了严格的消融实验它考虑两两组合augmentation看看效果如何最后把结果用一幅热力图展现还是很形象的a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-16_14_08.png-另外论文也发现对比学习很吃data-augmentation相比之下supervised-learning则不怎么需要甚至augmentation太过的话还可能损害效果">论文为了研究哪种data
+augmentation效果比较好，做了严格的消融实验。它考虑两两组合augmentation，看看效果如何，最后把结果用一幅热力图展现，还是很形象的![[A
+Simple Framework for Contrastive Learning of Visual Representations -
+Chen 等 - 2020 - Zotero 2024_10_15
+16_14_08.png]]<br>另外，论文也发现对比学习很吃data
+augmentation，相比之下supervised
+learning则不怎么需要，甚至augmentation太过的话还可能损害效果</h4>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/12/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/ViT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -460,7 +545,7 @@ id="就是根据不同的边的类别进行加权求和中间掺杂了线性变�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -471,7 +556,7 @@ id="就是根据不同的边的类别进行加权求和中间掺杂了线性变�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

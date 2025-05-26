@@ -28,7 +28,7 @@
 <meta property="og:description" content="# title: chap6.深度学习中的分布式训练——算法及系统 date: 2025-05-26 15:51 tags: [分布式训练] categories: [mlsys, foundation] --- # 1. 分布式训练的必要性 ## 随着问题规模的增大（包括数据量和计算量层面的），单一设备处理速度逐渐无法满足我们的需求（比如太慢了，或者是干脆单设备放不下模型了）而用分布式算">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-05-26T07:08:24.173Z">
-<meta property="article:modified_time" content="2025-05-26T07:51:16.090Z">
+<meta property="article:modified_time" content="2025-05-26T10:01:21.313Z">
 <meta property="article:author" content="bluemouse">
 <meta name="twitter:card" content="summary">
 
@@ -179,7 +179,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-26 15:08:24 / Modified: 15:51:16" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
+              <time title="Created: 2025-05-26 15:08:24 / Modified: 18:01:21" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
             </span>
 
           
@@ -214,7 +214,45 @@ law），它类似于对上面阿姆达尔定律的一个反击，是一个乐�
 #### 这里我们记，在拥有s个并行执行单元的机器上，执行时间为：<span class="math inline">\(T_{1}=W_{ser}+W_{par}\)</span>，这里初始的时间记号没变，含义和上面一样。下面，是关键的一步：<br>在单处理器上，我们可得到，执行时间为：<span class="math inline">\(T_{s}=W_{ser}+sW_{par}\)</span> ####
 看起来和上面好像没什么区别？但这里，我们是先定义了并行执行的时间。然后，在相同的问题规模下，我们再看，如果要在单处理器上执行，会是多少时间。上面阿姆达尔定律，则是：先看一下在单处理器情况下，执行时间是多少，之后再看用s个并行执行单元后，执行时间又是多少。最大的区别在于，上面阿姆达尔定律，它假设了可并行的部分的问题任务量是一定的，即固定为<span class="math inline">\(W_{par}\)</span>；此处的古斯塔夫定律，它先考察并行执行下的时间，此时可并行部分的任务量是<span class="math inline">\(W_{par}\)</span>，则之后在单处理器上执行的时候，总的并行部分的任务量应该是<span class="math inline">\(SW_{par}\)</span>（？再理解一下） ####
 此时，我们依然按照加速比的定义，可得到：<span class="math inline">\(S_{latency}(s)=\frac{W_{ser}+sW_{par}}{W_{ser}+W_{par}}\)</span>；依然引入p记号，则有：<span class="math inline">\(S_{latency}(s)=\frac{1-p+sp}{1}=1-p+sp\)</span><br>可以看到，当并行执行单元s增多的时候，且足够大的时候，是有可能可以做到接近线性加速比的
-# 2. 并行化的基本方案</p>
+# 2. 并行化的基本方案 ##
+大体上分算子内并行和算子间并行。算子内并行，没太明白……<br>而算子间并行，大体上分两种，一种是模型并行，一种是数据并行。这两个比较主要
+## 2.1. 模型并行 ### 2.1.1. 朴素idea： ####
+简单说，这个并行方式是要把计算图划分，然后放到不同的设备上进行执行。因此需要跨设备传递中间的激活值，以及每个设备都需要用梯度更新它那部分的模型
+### 2.1.2. 朴素idea的问题： ####
+但如果只是简单地把计算图划分（具体到代码上，一般是把模型的module之类的给划分，比如，可能模型里有两个sequential，第一个sequential放到cuda0上，第二个sequential放到cuda1上，这样），那其实未必能起到加速的效果。因为，给定一个batch，要前向计算，以上面的两个sequential的情况为例，就是要先在cuda0上经过第一个seq，再把这部分的结果放到cuda1上，经过seq2<br>这样，每个时刻，其实只有一个gpu在运行，且我们还多了跨设备传递数据的步骤，很可能不仅没加速，还比原来用单卡慢了
+### 2.1.3. 优化方式： ####
+因此需要优化。跨设备的搬移数据，不太好优化，但如果能尽量避免设备的空闲，显然是一个极大的改进。因此，考虑流水线。大概的idea是：我们把一个batch再给切分为若干split，之后每个split挨个进入到cuda设备里。用上面的例子进行说明，假如一个batch被我们划分为4个split，则split0先进入cuda0，然后下一个时刻，split0进入cuda1，split1进入cuda0；再下一个时刻，split0算完了，split1进入cuda1，split2进入cuda2……
+###
+上面的朴素的流水线，一般仅在开头结尾的iteration有gpu的空洞（也就是有设备的空闲），而中间大多数时候，两块gpu都能同时运行，效果比用流水线之前的是要好很多的<br>另一个点是，划分split的时候，并非越多越好，因为跨设备移动数据是比较耗时的（但本身划分较多的split的时候，是相当于流水线级数增多了吗？）
+###
+下面再介绍两种具体一点的算法。第一个是Gpipe算法，第二个是PipeDream算法
+### 2.1.4. Gpipe算法： ####
+它的idea是，对batch进行拆分，从而减少设备空闲（也就是所谓Bubble），且是在一个batch的所有前馈都结束之后，才开始反向传播（这样看，它和上面朴素的流水线改进，有什么区别？）
+### 2.1.5. PipeDream算法 ####
+它相当于在Gpipe算法上作出一些改进。主要是，上面Gpipe算法要等所有的前馈完成了，才一起反向传播（这样本身是有什么好处吗？如果什么好处都没有，显然一开始不会设计成这样啊？），但这样就很浪费设备，因为有时候得等一些split完成前馈，才能反传。因此，PipeDream就是在这方面作出了改进，第一个split的前馈一旦算完，就立刻开始反向传播。且每个split的反向传播，都被设计为占据两个时隙（可以简单理解为两个时间单位），进而人为制造出bubble，从而让后续的前馈运算能在这个间隙里进行，消除bubble（感觉还是没太明白啊？）
+## 2.2. 数据并行 ### 2.2.1. 朴素idea： ####
+所谓数据并行，就是，不同设备上，执行相同的计算图（可以理解为，我们不切分模型了，每个设备上都放一个完整的模型。然后每个设备上都可以各自算一批数据，完成前向和后向，接着就是跨设备的聚合梯度，并利用聚合后的梯度来更新模型）（但可以看到，这个并行方式其实是适用于“单个模型可以放在单卡上”的情况的，如果模型太大了，导致放不下，其实这个并行方式就不奏效了，可能得两种并行方式结合起来）
+### 2.2.2. 集合通信（collective communication）中的通信原语（primitive）
+####
+集合通信，可以简单理解为，设备间数据的传输（因为此时每个设备上都有各自的前向和后向，所以需要聚合梯度，也就是需要传递数据）。而通信原语，可以简单理解为一些基本的传输操作
+#### 通信原语，主要分三种：一对多，多对一，多对多 #### 一对多： #####
+主要有Scatter和Broadcast #####
+Scatter：它就是把主节点的数据进行划分，并分发到其它的指定的节点（节点，可以简单理解成设备，也就是一张gpu。但不同语境下应该有不同的理解）
+#####
+Broadcast：它是某个节点，把自身的数据，发送到集群里的其它节点上（注意，这就是Broadcast和Scatter的区别了，Broadcast发送的是自己的数据，而Scatter是把大的数据给拆散，分发到各个设备上）（一般Broadcast操作用于在分布式机器学习中的参数初始化）
+#### 多对一： ##### 主要有Reduce和Gather #####
+Reduce：被称为规约于是暖，是一系列简单运算操作的统称。细分有很多，包括：Sum、Min、Max等。这里不妨以Sum为例，理解一下：例如现在四个设备上各自有一个二维向量，然后要求把这些向量给累加起来，那Reduce操作就可以把四个设备上的二维向量聚集到一个设备上（比如gpu0），然后相加，从而在这个指定的设备上得到结果
+#####
+Gather：它是指，把多个节点上的数据收集到单个节点上（注意，这里和上面的Reduce的不同在于，Reduce收集完了是要做一些操作的，但这里Gather只是单纯的收集起来。它可以理解为反向的Scatter）
+#### 多对多： ##### 主要有All-Gather和All-Reduce #####
+All-Gather：可以理解为Gather+Broadcast。也就是，先把各个节点的数据收集起来，放到一个节点上，然后再从这个节点出发，进行Broadcast
+#####
+All-Reduce：它的目的是，要在所有的节点上都进行相同的Reduce操作。因此，我们可以看成是Reduce+Broadcast（这样，在一个节点上，我们会先得到Reduce的结果，之后再从这个节点，进行Broadcast，从而每个节点都能得到Reduce后的操作）
+######
+All-Reduce的基础是点对点通信，点对点通信又可以分为同步的和异步的通信（先略。简单说，同步的就是得等接收端那里开始接受数据了，发送端才能结束；异步则不需要这么麻烦，发送完数据，发送端就结束了）
+###### 下面再探讨All-Reduce的实现算法（这个感觉有点重点啊） ###### 1.
+Reduce+Broadcast<br>也就是最朴素的实现。它一般是采用一个参数服务器的分布式架构，也就是会有一个节点充当服务器（或者说中心节点），它会先存放Reduce的结果，经过本地计算后，再Broadcast到各个其它节点上<br>如果我们给定如下的记号：<span class="math inline">\(\alpha\)</span>表示两个通信节点之间的时延latency，S表示数据块大小（Size），B表示两个通信节点之间的带宽（Bandwidth），C表示每字节数据的计算耗时（Computation），N表示节点个数（Number），则总体的耗时为<span class="math display">\[2*(\alpha+\frac{S}{B})+N*S*C\]</span>现在我们看一下这个式子，前半的部分表示数据传递上的耗时。节点之间的通信，发出数据需要花时间，接收数据也要花时间，所以有个因子2；而<span class="math inline">\(\alpha\)</span>是时延，可以简单理解为硬性的时间开销；<span class="math inline">\(\frac{S}{B}\)</span>则表示，大小为S的数据，发送要多久（以及接收要多久）；后半部分则是每个节点都要进行计算，在计算方面的时间开销<br>这个算法的最大缺点就是，parameter
+server的那个节点，它的带宽会成为瓶颈（因为这个节点，它一开始reduce的时候，就得从其它节点那里接收很多数据，这里就得耗时了；之后它又得进行broadcast，要往其它节点那里发送很多数据，也很耗时）（怎么越看越感觉这个公式有点问题？）</p>
 
     </div>
 
@@ -309,7 +347,7 @@ law），它类似于对上面阿姆达尔定律的一个反击，是一个乐�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -320,7 +358,7 @@ law），它类似于对上面阿姆达尔定律的一个反击，是一个乐�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

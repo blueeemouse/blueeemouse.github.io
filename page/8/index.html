@@ -150,6 +150,66 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-31 22:27:12 / Modified: 22:35:06" itemprop="dateCreated datePublished" datetime="2024-10-31T22:27:12+08:00">2024-10-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="iccv23">iccv23</h1>
+<p>attention concordance是指什么？</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Towards%20Grand%20Unified%20Representation%20Learning%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1051,103 +1111,6 @@ loss，有时间记录一下</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/High-Order%20Structure%20Based%20Middle-Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/High-Order%20Structure%20Based%20Middle-Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-27 21:09:10" itemprop="dateCreated datePublished" datetime="2024-10-27T21:09:10+08:00">2024-10-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-01 20:49:22" itemprop="dateModified" datetime="2024-11-01T20:49:22+08:00">2024-11-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="tpami24">tpami24</h1>
-<p>关注一下它说的high order structure
-information是什么。。感觉又是为了讲故事而提出的一个概念，本质上可能是想说图像的不同区域之间的交互
-关注一下whitened hypergraph是啥 关注一下它所说的middle
-feature是什么，以及它是怎么利用这个middle feature的 关注一下最后的CFL
-module里，align feature具体是怎么align的？为什么要align？
-话说，它在测试的时候，用的是哪个特征？最后的middle
-feature嘛？得看看代码了 #
-简单梳理：提出HOS-Net，包括一个主干网络、一个SLE（short-and-long range
-feature extraction）、一个HSL（high-order structure learning
-module）、一个CFL（common feature space
-learning）。最大的创新点就是它提出high-order structure
-information和middle feature，并利用它们来提取更好的modality-invariant
-feature ## SLE大体是由一个CNN和一个Transformer组成，用来提取short
-range和long range
-feature（估摸着就是利用下CNN和Transformer的特性了，感觉创新性不高） ##
-HSL则是利用上面提取的long/short range
-feature，来具体地建模这种long/short range
-dependence（后面看看怎么个建模法） ##
-最后的CFL看粗略介绍不是很明白，得稍微细看一下。不过CFL里提出了一个MRIC
-loss，用以减少模态间的差异。但其实说的很玄乎，这个MRIC
-loss也就是不停的用各种模态、各种range的feature进行对比而已。。说来说去，还是在用对比损失，至于用谁来对比，似乎很多论文都大同小异，一般就是（Vis，IR，middle）之间排列组合，同ID的尽可能接近，不同ID的尽可能远离
-# 批判一下：Conventional feature-level VI-ReID methods usually learn a
-common feature space based on a contrastive-based loss, which directly
-minimizes the distances between VIS and IR features. However, such a
-manner cannot achieve a reasonable common feature space because of the
-large modality
-discrepancy.搁着说车轱辘话呢，这最后一句不就说了和没说一样吗。。large
-modality
-discrepancy都被说烂了。。。不过，这让人想到，llm那块不是一直在搞多模态嘛，那边是怎么处理多模态之间的差异的？就比如文字和图像的差异？或许可以借鉴一下。怎么现在好像没看到什么论文说是借鉴了那边的方法呢。。。以及，这个确实可以说是一种对齐啊，把不同模态的数据特征给对齐了，类似于统一到一个模态里，那也可以借鉴一下llm里对齐的技术了？可能目前在VI-ReID领域里，减小模态差异的方法主要是引入middle
-feature？不好说，得总结一下 #
-problem：论文认为现在的方法没有足够地挖掘图像中各个部分之间的相互关系，例如，身体部位相互的关系。而没有充分挖掘这种信息，导致modality
-gap依然比较大 # motivation：进一步挖掘这种关系</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1217,7 +1180,7 @@ gap依然比较大 # motivation：进一步挖掘这种关系</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1228,7 +1191,7 @@ gap依然比较大 # motivation：进一步挖掘这种关系</p>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

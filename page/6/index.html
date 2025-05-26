@@ -150,6 +150,150 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/BERT%20%20Pre-training%20of%20Deep%20Bidirectional%20Transformers%20for%20Language%20Understanding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/BERT%20%20Pre-training%20of%20Deep%20Bidirectional%20Transformers%20for%20Language%20Understanding/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-03-07 16:46:03" itemprop="dateCreated datePublished" datetime="2025-03-07T16:46:03+08:00">2025-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-02 10:43:16" itemprop="dateModified" datetime="2025-05-02T10:43:16+08:00">2025-05-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="task预训练模型架构">task：预训练模型架构</h1>
+<h1 id="insight">insight：</h1>
+<h1
+id="动机预训练模型可以比较容易地迁移到各种下游任务省去了很多针对不同任务设计架构的麻烦所以很重要而在此之前的预训练模型架构绝大多数都是单向的比如gpt这种从左到右预测下一个token或者是训练两个单方向的即一个从左到右一个从右到左模型然后把二者的输出结果拼接起来但这些做法都无法很好的利用到双向的上下文而有些任务是需要双向地理解上下文才能很好地作出回答的比如问答任务question-answering就类似英语里的阅读理解题需要综合地看给定的文段才能回答出某些问题此时这些单向的预训练模型迁移过去的效果就不够好因此bert作为一种双向的预训练模型架构就被提出了">动机：预训练模型可以比较容易地迁移到各种下游任务，省去了很多针对不同任务设计架构的麻烦，所以很重要。而在此之前的预训练模型架构绝大多数都是单向的（比如GPT这种，从左到右预测下一个token），或者是训练两个单方向的（即一个从左到右，一个从右到左）模型，然后把二者的输出结果拼接起来。但这些做法都无法很好的利用到双向的上下文，而有些任务是需要双向地理解上下文才能很好地作出回答的（比如问答任务，Question
+Answering，就类似英语里的阅读理解题，需要综合地看给定的文段，才能回答出某些问题），此时这些单向的预训练模型迁移过去的效果就不够好。因此bert作为一种双向的预训练模型架构，就被提出了</h1>
+<h1 id="方法">方法：</h1>
+<h2
+id="它大体上就是两个步骤也是之前持续了很长一段时间的范式预训练微调">它大体上就是两个步骤，也是之前持续了很长一段时间的范式：预训练＋微调</h2>
+<h2 id="预训练">1.预训练</h2>
+<h3
+id="bert的一个优点在于它的结构是比较通用的迁移到不同的下游任务要做出的改动也比较少之所以要作出改动是因为预训练的任务和下游任务可能不同比如预训练的时候用到了完形的任务然而实际下游任务是情感分析这个是论文里说的但不是本来就应该如此吗不然怎么叫预训练模型啊而且不这样的话不就失去了预训练模型的意义了吗">Bert的一个优点在于，它的结构是比较通用的，迁移到不同的下游任务，要做出的改动也比较少（之所以要作出改动，是因为预训练的任务和下游任务可能不同。比如预训练的时候用到了完形的任务，然而实际下游任务是情感分析）（这个是论文里说的，但不是本来就应该如此吗，不然怎么叫预训练模型啊。。而且不这样的话不就失去了预训练模型的意义了吗）</h3>
+<h3
+id="它的模型大小主要有两种bert_base-l12-h768-a12-total-parameters110m-和bert_large-l24-h1024-a16-total-parameters340m其中base主要是为了和openai-gpt进行对比应该是说gpt2吧">它的模型大小主要有两种：<span
+class="math inline">\(BERT_{BASE}\)</span> (L=12, H=768, A=12, Total
+Parameters=110M) 和<span class="math inline">\(BERT_{LARGE}\)</span>
+(L=24, H=1024, A=16, Total Parameters=340M)（其中base主要是为了和OPENAI
+GPT进行对比，应该是说GPT2吧）</h3>
+<h3
+id="它在inputoutput-representation上每个token大致由三个部分组成一是token自身的embedding二是position-embedding三是segment就是用来指示每个token属于哪个句子的一个embedding有了它的话处理句子对这种形式比如在问答中就比较常见效果就更好了这个segment也是可学习的">它在input/output
+representation上，每个token大致由三个部分组成：一是token自身的embedding，二是position
+embedding，三是segment（就是用来指示每个token属于哪个句子的一个embedding，有了它的话，处理句子对这种形式（比如在问答中就比较常见）效果就更好了（这个segment也是可学习的）</h3>
+<h3
+id="具体的预训练方式有两类任务一类是masked-language-modelmlm其实就是所谓的完形填空任务cloze-task另一类是next-sentence-predictionnsp-简单来说第一类任务就比较像gpt里的预测next-token只不过这里的完形任务是更加适合综合利用上下文的预测next-token形式的任务则不适合利用上下文否则利用上下文来预测next-token就会见到后文而后文里可能有过于明显的提示甚至直接有答案-第二类任务主要是为了让模型能更好地把握句子之间的关系感觉这个任务其实就不那么通用了已经有点在照顾下游任务往下游任务上靠了当然语言模型要解决的问题中能正确理解句子之间的关系还是相当重要的这个任务依然有一些泛化性在只不过似乎不如完形或next-token-prediction">具体的预训练方式：有两类任务，一类是Masked
+Language Model（MLM），其实就是所谓的完形填空任务（cloze
+task）；另一类是Next Sentence
+Prediction（NSP）<br>简单来说，第一类任务就比较像GPT里的预测next
+token，只不过这里的完形任务是更加适合综合利用上下文的，预测next
+token形式的任务则不适合利用上下文（否则利用上下文来预测next
+token，就会见到后文，而后文里可能有过于明显的提示，甚至直接有答案）<br>第二类任务主要是为了让模型能更好地把握句子之间的关系（感觉这个任务其实就不那么通用了，已经有点在照顾下游任务、往下游任务上靠了。当然，语言模型要解决的问题中，能正确理解句子之间的关系还是相当重要的，这个任务依然有一些泛化性在，只不过似乎不如完形或next
+token prediction）</h3>
+<h2 id="微调">2.微调</h2>
+<h3
+id="其实没什么好说的因为具体操作要根据具体的下游任务来决定论文里主要提到的是因为bert用的是双向注意力模块所以在处理text-pair这种需要前后互相利用的情况会比较方便就把text-pair拼接起来送到双向注意力模块里即可">其实没什么好说的，因为具体操作要根据具体的下游任务来决定。论文里主要提到的是，因为bert用的是双向注意力模块，所以在处理text-pair这种需要前后互相利用的情况，会比较方便，就把text-pair拼接起来，送到双向注意力模块里即可。</h3>
+<h1 id="方法细节">方法细节</h1>
+<h2
+id="预训练里的两类任务具体来说做的事如下">1.预训练里的两类任务，具体来说，做的事如下：</h2>
+<h3 id="mlm">MLM：</h3>
+<h4
+id="它会把序列里一定比例的token给mask掉这个比例在论文里是15也就是给选中的这些位置放一个mask-token然后用bert模型输出得到这些mask-token的输出特征向量之后对这些向量进行分类预测我们的目标是它能正确预测出原来的那个token">它会把序列里一定比例的token给mask掉（这个比例在论文里是15%），也就是给选中的这些位置放一个mask
+token，然后用bert模型输出，得到这些mask
+token的输出特征向量，之后对这些向量进行分类预测，我们的目标是它能正确预测出原来的那个token</h4>
+<h4
+id="但这里有个问题就是这里预训练用到的mask-token在下游任务里并不会出现换句话说它是纯为了预训练而用的这就可能导致因为预训练和下游任务之间的任务形式差异过大在下游任务进行finetune的时候效果不够好直观上来想预训练的时候一直都做的是完形填空如果下游任务实际是阅读理解那微调起来效果可能就没那么好了所以论文提出预训练的时候选定了一定比例的token的位置并不总是把它们都替换为mask-token而是按照比例选取如下三种操作中的一种80的概率把这个选中的token换为mask-tokenmask-token可以看成是强制让模型通过上下文来进行推断10的概率把这个token随机换成另一个token10的概率保持这个token不变保持不变的情况可以看成是让模型学习利用未被mask的词这个情况在下游任务里是比较常见的而任务最终的目标还是希望把选中位置的输出特征拿去分类能还原出正确的token此时就不那么依赖mask-token了所以预训练任务和下游任务之间的形式差异就小一些了也就减少了论文里所谓的mismatch后续也有针对这一点进行改进的论文-论文附录里也比较了全部用mask-token和部分用mask-token两种策略的效果发现确实是后者会更好事实上论文里的801010的百分比应该也是作者尝试调过的比较好的一个组合了另外如果纯用mask-token然后把预训练模型迁移到下游任务时用的是微调其实效果不会差很多但如果迁移的时候用feature-based-approach也就是把预训练的模型的输出特征也当作下游模型的一部分来用那么此时性能就差的会多一点了虽然其实也是不到一个点但是相对而言已经是差的比较多的了这个也算是侧面印证了一下纯用mask-token的话预训练和finetune的时候数据分布差的比较多所以把预训练模型特征拿来用效果就没那么好推测之所以性能差的比较多也就不到一个点的原因在于只是对输入序列里的15会进行masksamerandom的操作15本身还是比较少的所以就算这15全都变成mask-token差别也不算特别大如果这个比例再调高可能性能差距就会更加明显了">但这里有个问题就是，这里预训练用到的mask
+token在下游任务里并不会出现，换句话说，它是纯为了预训练而用的；这就可能导致因为预训练和下游任务之间的任务形式差异过大，在下游任务进行finetune的时候效果不够好（直观上来想，预训练的时候一直都做的是完形填空，如果下游任务实际是阅读理解，那微调起来效果可能就没那么好了）。所以论文提出，预训练的时候，选定了一定比例的token的位置，并不总是把它们都替换为mask
+token，而是按照比例，选取如下三种操作中的一种：80%的概率把这个选中的token换为mask
+token（mask
+token可以看成是强制让模型通过上下文来进行推断）；10%的概率把这个token随机换成另一个token；10%的概率保持这个token不变（保持不变的情况，可以看成是让模型学习利用未被mask的词。这个情况在下游任务里是比较常见的）。而任务最终的目标还是希望把选中位置的输出特征拿去分类，能还原出正确的token。此时就不那么依赖mask
+token了，所以预训练任务和下游任务之间的形式差异就小一些了，也就减少了论文里所谓的mismatch（后续也有针对这一点进行改进的论文）<br>（论文附录里也比较了全部用mask
+token和部分用mask
+token两种策略的效果，发现确实是后者会更好。事实上，论文里的80，10，10的百分比应该也是作者尝试调过的比较好的一个组合了。另外，如果纯用mask
+token，然后把预训练模型迁移到下游任务时用的是微调，其实效果不会差很多；但如果迁移的时候用feature-based
+approach，也就是把预训练的模型的输出特征也当作下游模型的一部分来用，那么此时性能就差的会多一点了（虽然其实也是不到一个点，但是相对而言已经是差的比较多的了），这个也算是侧面印证了一下，纯用mask
+token的话，预训练和finetune的时候数据分布差的比较多，所以把预训练模型特征拿来用效果就没那么好。推测之所以性能差的比较多也就不到一个点的原因在于，只是对输入序列里的15%会进行mask/same/random的操作，15%本身还是比较少的，所以就算这15%全都变成mask
+token，差别也不算特别大。如果这个比例再调高，可能性能差距就会更加明显了）</h4>
+<h3
+id="nsp没什么好说的它的任务定义已经说的比较明白了">NSP没什么好说的，它的任务定义已经说的比较明白了</h3>
+<h1 id="实验细节">实验细节</h1>
+<h2
+id="刷榜使用数据集包括gluesquad-v1.1squad-v2.0swag">1.刷榜。使用数据集：包括GLUE、SQuAD
+v1.1、SQuAD v2.0、SWAG</h2>
+<h3 id="gluegeneral-language-understanding-evaluation">GLUE（General
+Language Understanding Evaluation）：</h3>
+<h4
+id="这个数据集包含九项任务都涉及到自然语言推断文本蕴含情感分析语义相似等多个任务论文中也介绍了所用batch-size以及learning-rate是怎么调节的微调的具体方法就是最后多加一个线性分类器把序列的cls-token拿来分类由此进行整体模型分类头的finetune">这个数据集包含九项任务，都涉及到自然语言推断、文本蕴含、情感分析、语义相似等多个任务。论文中也介绍了所用batch
+size，以及learning
+rate是怎么调节的。微调的具体方法就是最后多加一个线性分类器，把序列的cls
+token拿来分类，由此进行整体模型+分类头的finetune</h4>
+<h2 id="消融实验">2.消融实验</h2>
+<h3
+id="这一块主要研究两种预训练任务的重要性模型大小的影响以及feature-based-finetuning的方式相比于简单加一个分类头的微调方式的效果">这一块主要研究两种预训练任务的重要性、模型大小的影响，以及feature-based
+finetuning的方式相比于简单加一个分类头的微调方式的效果</h3>
+<h3 id="两种预训练任务消融实验">两种预训练任务消融实验：</h3>
+<h4
+id="这里主要做两组实验一组是不用nsp任务只用mlm任务来预训练一个bert另一组是不用nsp任务且只是从左到右的进行预测即论文中的ltrleft-to-right此时其实和next-token预测没区别了通过看正常的结果与第一组没有nsp任务的结果可以分析出nsp预训练任务的重要性而对比第一组和第二组的实验可以分析出mlm预训练任务的重要性">这里主要做两组实验，一组是不用NSP任务，只用MLM任务来预训练一个bert；另一组是，不用NSP任务，且只是从左到右的进行预测（即论文中的LTR，Left-to-Right。此时其实和next
+token预测没区别了）。通过看正常的结果与第一组没有NSP任务的结果，可以分析出NSP预训练任务的重要性；而对比第一组和第二组的实验，可以分析出MLM预训练任务的重要性</h4>
+<h4
+id="结果表明这两种预训练任务都是有益的有效果的去掉它们中的任意一个都会降低模型性能而且在分析mlm任务的重要性的时候论文做了一些进一步的实验与分析">结果表明，这两种预训练任务都是有益的、有效果的，去掉它们中的任意一个，都会降低模型性能。而且在分析MLM任务的重要性的时候，论文做了一些进一步的实验与分析：</h4>
+<h5
+id="在一些任务上ltr任务可能过于吃亏了论文里提到做实验的时候还给它加上一个bilstm虽然效果提升很多但还是远远比不上正常的mlm而如果考虑不用mlm单独训练两个模型ltrrtl之后把它们的输出给concat起来是否能比得上mlm任务训练出来的模型呢论文给出了三个分析一个是说这种方式仅仅在最后一层用concat的方式利用了上下文相比于mlm这种中间就是一直在利用上下文的模型效果还是不够好但没有实验结果很难说可能它写论文的时候做实验了另外这种最后concat输出的方式在有些任务中并不常见可能有损性能比如qa情景中基于问题预测回答没问题基于回答预测问题很奇怪很少见了而且训两个模型开销也基本翻倍了">在一些任务上，LTR任务可能过于吃亏了，论文里提到，做实验的时候还给它加上一个BiLSTM，虽然效果提升很多，但还是远远比不上正常的MLM；而如果考虑不用MLM，单独训练两个模型（LTR，RTL），之后把它们的输出给concat起来，是否能比得上MLM任务训练出来的模型呢？论文给出了三个分析，一个是说，这种方式，仅仅在最后一层用concat的方式利用了上下文，相比于MLM这种，中间就是一直在利用上下文的模型，效果还是不够好（但没有实验结果，很难说，可能它写论文的时候做实验了）；另外，这种最后concat输出的方式，在有些任务中并不常见，可能有损性能（比如，QA情景中，基于问题预测回答，没问题；基于回答预测问题，很奇怪，很少见了），而且训两个模型，开销也基本翻倍了</h5>
+<h3 id="模型大小的影响">模型大小的影响</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/Language%20Models%20Encode%20the%20Value%20of%20Numbers%20Linearly/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -906,86 +1050,6 @@ id="对于一个给定的数组选定一个中间值x理论上来说选哪个都
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/03/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/03/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-03 17:28:21" itemprop="dateCreated datePublished" datetime="2025-02-03T17:28:21+08:00">2025-02-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
-first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
-more info. If you get any problems when using Hexo, you can find the
-answer in <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
-you can ask me on <a
-target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1055,7 +1119,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1066,7 +1130,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
