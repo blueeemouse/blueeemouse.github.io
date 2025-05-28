@@ -28,7 +28,7 @@
 <meta property="og:description" content="# title: chap6.深度学习中的分布式训练——算法及系统 date: 2025-05-26 15:51 tags: [分布式训练] categories: [mlsys, foundation] --- # 1. 分布式训练的必要性 ## 随着问题规模的增大（包括数据量和计算量层面的），单一设备处理速度逐渐无法满足我们的需求（比如太慢了，或者是干脆单设备放不下模型了）而用分布式算">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-05-26T07:08:24.173Z">
-<meta property="article:modified_time" content="2025-05-26T10:01:21.313Z">
+<meta property="article:modified_time" content="2025-05-27T07:39:54.923Z">
 <meta property="article:author" content="bluemouse">
 <meta name="twitter:card" content="summary">
 
@@ -177,10 +177,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-05-26 15:08:24 / Modified: 18:01:21" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
+              <time title="Created: 2025-05-26 15:08:24" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-27 15:39:54" itemprop="dateModified" datetime="2025-05-27T15:39:54+08:00">2025-05-27</time>
+              </span>
 
           
 
@@ -251,8 +257,24 @@ All-Reduce：它的目的是，要在所有的节点上都进行相同的Reduce�
 ######
 All-Reduce的基础是点对点通信，点对点通信又可以分为同步的和异步的通信（先略。简单说，同步的就是得等接收端那里开始接受数据了，发送端才能结束；异步则不需要这么麻烦，发送完数据，发送端就结束了）
 ###### 下面再探讨All-Reduce的实现算法（这个感觉有点重点啊） ###### 1.
-Reduce+Broadcast<br>也就是最朴素的实现。它一般是采用一个参数服务器的分布式架构，也就是会有一个节点充当服务器（或者说中心节点），它会先存放Reduce的结果，经过本地计算后，再Broadcast到各个其它节点上<br>如果我们给定如下的记号：<span class="math inline">\(\alpha\)</span>表示两个通信节点之间的时延latency，S表示数据块大小（Size），B表示两个通信节点之间的带宽（Bandwidth），C表示每字节数据的计算耗时（Computation），N表示节点个数（Number），则总体的耗时为<span class="math display">\[2*(\alpha+\frac{S}{B})+N*S*C\]</span>现在我们看一下这个式子，前半的部分表示数据传递上的耗时。节点之间的通信，发出数据需要花时间，接收数据也要花时间，所以有个因子2；而<span class="math inline">\(\alpha\)</span>是时延，可以简单理解为硬性的时间开销；<span class="math inline">\(\frac{S}{B}\)</span>则表示，大小为S的数据，发送要多久（以及接收要多久）；后半部分则是每个节点都要进行计算，在计算方面的时间开销<br>这个算法的最大缺点就是，parameter
-server的那个节点，它的带宽会成为瓶颈（因为这个节点，它一开始reduce的时候，就得从其它节点那里接收很多数据，这里就得耗时了；之后它又得进行broadcast，要往其它节点那里发送很多数据，也很耗时）（怎么越看越感觉这个公式有点问题？）</p>
+Reduce+Broadcast<br>也就是最朴素的实现。它一般是采用一个参数服务器的分布式架构，也就是会有一个节点充当服务器（或者说中心节点），它会先存放Reduce的结果，经过本地计算后，再Broadcast到各个其它节点上<br>如果我们给定如下的记号：<span class="math inline">\(\alpha\)</span>表示两个通信节点之间的时延latency，S表示数据块大小（Size），B表示两个通信节点之间的带宽（Bandwidth），C表示每字节数据的计算耗时（Computation），N表示节点个数（Number），则总体的耗时为<span class="math display">\[2*(\alpha+\frac{S}{B})+N*S*C\]</span>现在我们看一下这个式子，前半的部分表示数据传递上的耗时。节点之间的通信，发出数据需要花时间，接收数据也要花时间，所以有个因子2；而<span class="math inline">\(\alpha\)</span>是时延，可以简单理解为硬性的时间开销；<span class="math inline">\(\frac{S}{B}\)</span>则表示，大小为S的数据，发送要多久（以及接收要多久）；后半部分则是总共N个节点，它们都把数据传到中心节点上，一共是<span class="math inline">\(N*S\)</span>的数据量，再乘以C，则得到在计算方面的时间开销<br>这个算法的最大缺点就是，parameter
+server的那个节点，它的带宽会成为瓶颈（因为这个节点，它一开始reduce的时候，就得从其它节点那里接收很多数据，这里就得耗时了；之后它又得进行broadcast，要往其它节点那里发送很多数据，也很耗时）（怎么越看越感觉这个公式有点问题？）
+###### 2. 树形递归算法<br>其整体耗时为<span class="math display">\[log_{2}N*(\alpha+\frac{S}{B}+2*S*C)+log_{2}N*(\alpha+\frac{S}{B})=2*log_{2}N*(\alpha+\frac{S}{B}+S*C)\]</span>其中，<span class="math inline">\(log_{2}N\)</span>可以认为是“层数”，因为我们是两两节点组合到一起；前半部分的时间是聚合数据以及运算数据的时间开销。每一层虽然有很多节点在聚合和计算，但它们都是独立的，互不影响，可以认为是同时进行的，所以每一层的聚合所花的时间都是<span class="math inline">\(\alpha+\frac{S}{B}\)</span>；而每一层的计算时间开销都是<span class="math inline">\(2*B*C\)</span>（这里有个2，是因为，我们两两组合节点来计算，则需要计算的数据量是<span class="math inline">\(2*S\)</span>，再乘上计算的“速度“C，即得到计算开销）<br>至于后半部分，则是把结果分发出去的时间开销。可以看到，分发和聚合的时间开销是一样的，且因为后半部分已经算完了，所以不再有计算上的开销
+######
+上面两种方法都是基于Reduce+Broadcast的。还有一类是基于Scatter-Reduce+All-Gather的操作的，这里以Ring
+AllReduce为例 ###### 3. Ring
+AllReduce<br>既然它是基于Scatter-Reduce+All-Gather的，那么它的第一步就是Scatter-Reduce<br>具体来说，每个节点（也就是每张卡，或称为每个worker）上的数据量，我们记作K；然后，我们对每个节点上的数据，都划分为N个chunk（N也是节点的个数）；之后，我们可以给每个chunk一个编号，则有0
+~ N-1。现在，对于chunk 0，我们的第i个gpu，它会向下一个gpu传递它的chunk
+i的数据（对于gpu 0，它的上一个gpu，我们当成gpu
+N-1）；之后，接收到chunk数据的gpu，就继续把它接收到的chunk数据整合，往下一个gpu的相同chunk上传。这样一直传，传N-1次，则N个gpu上，各自都会有一个chunk上聚合完的数据（且每个gpu只会有一个这种聚合完的chunk）<br>接下来是All
+gather。All
+gather时，每个gpu都往下一个gpu传递自己的聚合完的那个chunk，且gpu接收了哪个新的chunk之后，也继续往下传递。这样传递N-1次，每个gpu的每个chunk，都是聚合完的。至此，Ring
+AllReduce结束<br>分析一下它的耗时。我们可以先分析一下每个worker总共接收/传递了多少的数据量。Scatter-Reduce和All
+Gather阶段，每个gpu都是接收/传递了N-1次的，则两个阶段，总共次数是<span class="math inline">\(2*(N-1)\)</span>；且每次都是接收/传递一个chunk的数据量，也就是<span class="math inline">\(\frac{K}{N}\)</span>；故每个worker接收/传递的数据总量应为<span class="math inline">\(2*(N-1)*\frac{K}{N}\)</span><br>我们观察一下这个结果，发现，每个worker的通信数据量（也就是上面反复提到的，接收/传递的数据量）可以近似为<span class="math inline">\(2*K\)</span>（尤其是N较大的时候）；也就是说，这个通信数据量是近似独立于网络中worker的数量的。这代表什么？这代表即使我们的模型、数据规模越来越大，用到的worker越来越多，但通信上的开销并不会剧增，而是基本差不多（但可能还有一些细节没考虑到吧）；相比之下，上面的朴素做法（例如主从架构），里面的主节点，它的通信量就是<span class="math inline">\(O(N*K)\)</span>级别的<br>且，每个worker的网络收发负载是均衡的（每个时刻，每个worker既会接收chunk，也会分发chunk，不会出现树形递归算法里，有些worker在傻等着进行分发），网络双向带宽得到充分利用（欸，这么说，接收和分发的带宽，原来不是同一个吗？）
+### 2.2.3. 集合通信原语的应用：分布式同步SGD算法 ####
+流程倒也简单。每个节点先把自己的梯度初始化为0，然后拿batch_size个数据进行前向+后向，把各自节点上的梯度求个均值（这里可能会用动量式更新地方方法，也即：<span class="math inline">\(G_{t}^{k}\leftarrow
+G_{t}^{k}+\frac{1}{N_{b}}\nabla
+f(x;w_{t})\)</span>）<br>之后，对各个节点的平均梯度，进行All-Reduce（这里就是我们需要通信的地方了，因为我们要传递各个节点上的梯度），得到一个总的梯度，并拿来更新参数，由此，一个iteration结束。后面就是重复这个iteration的操作，直到达到指定的iteration</p>
 
     </div>
 
@@ -347,18 +369,18 @@ server的那个节点，它的带宽会成为瓶颈（因为这个节点，它�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
