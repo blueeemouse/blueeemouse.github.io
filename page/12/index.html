@@ -150,6 +150,445 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-15 12:07:53 / Modified: 12:12:01" itemprop="dateCreated datePublished" datetime="2024-10-15T12:07:53+08:00">2024-10-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="在进行数据预处理的时候一般都会有一个类似train_transform这样的数据增强的列表它里面包含了一系列操作通常是调用库里的那些操作但如果需要自己定义一些预处理操作则需要自己写一个类一般有这些要求">在进行数据预处理的时候，一般都会有一个类似train_transform这样的数据增强的“列表”，它里面包含了一系列操作。通常是调用库里的那些操作。但如果需要自己定义一些预处理操作，则需要自己写一个类。一般有这些要求：</h2>
+<h3 id="类定义自定义的数据操作一般是定义为类如-cifar10policy并且实现了-__call__-方法__call__-方法使得类的实例可以像函数一样直接被调用">1.
+<strong>类定义</strong>：自定义的数据操作一般是定义为类（如
+<code>CIFAR10Policy</code>），并且实现了 <code>__call__</code>
+方法。<code>__call__</code>
+方法使得类的实例可以像函数一样直接被调用。</h3>
+<h3 id="实现-__call__-方法当类的实例通过-transforms.compose-被应用到图像时实际上是调用了该类的-__call__-方法因此在-__call__-方法中你可以定义自定义的图像变换逻辑">2.
+<strong>实现 <code>__call__</code> 方法</strong>：当类的实例通过
+<code>transforms.Compose</code> 被应用到图像时，实际上是调用了该类的
+<code>__call__</code> 方法。因此，在 <code>__call__</code>
+方法中，你可以定义自定义的图像变换逻辑。</h3>
+<h3 id="不变性要求数据增强和变换操作应该是无副作用的这意味着不应直接修改输入图像而是返回一个经过变换的新图像">3.
+<strong>不变性要求</strong>：数据增强和变换操作应该是“无副作用”的，这意味着不应直接修改输入图像，而是返回一个经过变换的新图像。</h3>
+<h3 id="可与其他操作链式使用自定义的数据操作通常应该与-pytorch-的其他数据转换操作如-transforms.totensor-或-transforms.normalize兼容因此要确保其输入输出类型与其他操作一致">4.
+<strong>可与其他操作链式使用</strong>：自定义的数据操作通常应该与
+PyTorch 的其他数据转换操作（如 <code>transforms.ToTensor()</code> 或
+<code>transforms.Normalize()</code>）兼容，因此要确保其输入输出类型与其他操作一致。</h3>
+<h4 id="例如">例如：</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyCustomTransform</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, some_parameter</span>):</span><br><span class="line">        <span class="variable language_">self</span>.some_parameter = some_parameter</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, img</span>):</span><br><span class="line">        <span class="comment"># 对图像 img 进行自定义处理，这里是示例逻辑</span></span><br><span class="line">        transformed_img = img + <span class="variable language_">self</span>.some_parameter  <span class="comment"># 假设是对图像进行了某种变换</span></span><br><span class="line">        <span class="keyword">return</span> transformed_img</span><br><span class="line">transforms.Compose([</span><br><span class="line">    transforms.RandomHorizontalFlip(),</span><br><span class="line">    MyCustomTransform(some_parameter=<span class="number">5</span>),  <span class="comment"># 自定义的变换操作</span></span><br><span class="line">    transforms.ToTensor()</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h4 id="这样就可以和其它的pytorch提供的transform一起用了">这样，就可以和其它的pytorch提供的transform一起用了</h4>
+<h4 id="一个具体的真实的例子可以参考这个">一个具体的真实的例子可以参考这个：</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SVHNPolicy</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;&quot;&quot; Randomly choose one of the best 25 Sub-policies on SVHN.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; policy = SVHNPolicy()</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; transformed = policy(image)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Example as a PyTorch Transform:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; transform=transforms.Compose([</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     transforms.Resize(256),</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     SVHNPolicy(),</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     transforms.ToTensor()])</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, fillcolor=(<span class="params"><span class="number">128</span>, <span class="number">128</span>, <span class="number">128</span></span>)</span>):</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.policies = [</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.2</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.7</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">5</span>, <span class="number">0.6</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">3</span>, <span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">1</span>, <span class="number">0.9</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.4</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">5</span>, <span class="number">0.2</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">6</span>, <span class="number">0.8</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">1</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">3</span>, <span class="number">0.9</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.3</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.7</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">5</span>, <span class="number">0.6</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, <span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">7</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.3</span>, <span class="string">&quot;contrast&quot;</span>, <span class="number">3</span>, <span class="number">0.8</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, <span class="number">0.0</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">2</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">6</span>, <span class="number">0.4</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">8</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.3</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">7</span>, <span class="number">0.9</span>, <span class="string">&quot;translateX&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.1</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">6</span>, <span class="number">0.6</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">2</span>, <span class="number">0.6</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">7</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">8</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">9</span>, <span class="number">0.8</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">5</span>, <span class="number">0.7</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">2</span>, <span class="number">0.1</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor)</span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, img</span>):</span><br><span class="line"></span><br><span class="line">        policy_idx = random.randint(<span class="number">0</span>, <span class="built_in">len</span>(<span class="variable language_">self</span>.policies) - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.policies[policy_idx](img)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;AutoAugment SVHN Policy&quot;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-15 11:06:57 / Modified: 11:58:02" itemprop="dateCreated datePublished" datetime="2024-10-15T11:06:57+08:00">2024-10-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="cutmix-是一种数据增强方法它将两张图片进行随机部分的组合同时将两张图片的标签按比例加权例如">-
+<strong>CutMix</strong>
+是一种数据增强方法，它将两张图片进行随机部分的组合，同时将两张图片的标签按比例加权。例如：</h2>
+<h3 id="一部分图片-a-和一部分图片-b-被切割组合输出图像的标签是-a-标签和-b-标签按图像的组合比例加权">-
+一部分图片 A 和一部分图片 B 被切割组合，输出图像的标签是 A 标签和 B
+标签按图像的组合比例加权。</h3>
+<h2 id="rcpasterandom-cut-paste是一种随机增强方法通常涉及在图像中随机剪切部分图像并粘贴到其他区域增加图像的多样性">-
+<strong>rcpaste</strong>（Random Cut
+Paste）是一种随机增强方法，通常涉及在图像中随机剪切部分图像并粘贴到其他区域，增加图像的多样性。</h2>
+<h2 id="mixup-也是一种数据增强技术涉及将两张图片的像素和标签按某个随机比例进行线性混合它通过图像的加权平均生成新的训练样本其对应标签也按相同比例混合例如图像-a-和-b-混合后新图像的标签为-λ-标签-a-1-λ-标签-b其中-λ-是随机生成的混合比例">-
+<strong>MixUp</strong>
+也是一种数据增强技术，涉及将两张图片的像素和标签按某个随机比例进行线性混合。它通过图像的加权平均生成新的训练样本，其对应标签也按相同比例混合。例如，图像
+A 和 B 混合后新图像的标签为
+<code>λ * 标签 A + (1-λ) * 标签 B</code>，其中 <code>λ</code>
+是随机生成的混合比例。</h2>
+<h2 id="这几个操作实在是有点太像了主要区别可能在于random-cut-paste是用自己的图像完成操作而cutmix和mixup都是用到两幅图像cutmix是部分的完全组合mixup是整体的部分组合">-
+这几个操作实在是有点太像了。主要区别可能在于，random cut
+paste是用自己的图像完成操作，而cutmix和mixup都是用到两幅图像。cutmix是部分的完全组合，mixup是整体的部分组合</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">class CutMix(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, size, beta):</span><br><span class="line"></span><br><span class="line">    self.size = size</span><br><span class="line"></span><br><span class="line">    self.beta = beta</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = self._shuffle_minibatch(batch) # rand_img, rand_label</span><br><span class="line"></span><br><span class="line">    # 不是说真的随机生成的img和label，只是把一个batch里的数据给打乱顺序了</span><br><span class="line"></span><br><span class="line">    lambda_ = np.random.beta(self.beta,self.beta) # 根据beta分布生成一个lambda</span><br><span class="line"></span><br><span class="line">    r_x = np.random.uniform(0, self.size) # r_x, r_y是随机裁剪框的中心点</span><br><span class="line"></span><br><span class="line">    r_y = np.random.uniform(0, self.size)</span><br><span class="line"></span><br><span class="line">    r_w = self.size * np.sqrt(1-lambda_)  # r_w, r_h是随机裁剪框的宽和高</span><br><span class="line"></span><br><span class="line">    r_h = self.size * np.sqrt(1-lambda_)</span><br><span class="line"></span><br><span class="line">    x1 = int(np.clip(r_x - r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    x2 = int(np.clip(r_x + r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y1 = int(np.clip(r_y - r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y2 = int(np.clip(r_y + r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    # (x1, y1), (x2, y2)分别是随机裁剪框的左上角和右下角坐标</span><br><span class="line"></span><br><span class="line">    # clip防止左上角/右下角坐标超出图像范围</span><br><span class="line"></span><br><span class="line">    img[:, :, x1:x2, y1:y2] = rand_img[:, :, x1:x2, y1:y2]  # 这一步完成混合</span><br><span class="line"></span><br><span class="line">    lambda_ = 1 - (x2-x1)*(y2-y1)/(self.size*self.size) # 重新计算lambda，因为前面</span><br><span class="line"></span><br><span class="line">    # 可能裁剪框超出了图像范围，所以需要重新计算</span><br><span class="line"></span><br><span class="line">    return img, label, rand_label, lambda_</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def _shuffle_minibatch(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = img.clone(), label.clone()</span><br><span class="line"></span><br><span class="line">    rand_idx = torch.randperm(img.size(0))</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = rand_img[rand_idx], rand_label[rand_idx]</span><br><span class="line"></span><br><span class="line">    return rand_img, rand_label</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class MixUp(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, alpha=0.1):</span><br><span class="line"></span><br><span class="line">    self.alpha = alpha</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    &#x27;&#x27;&#x27;Returns mixed inputs, pairs of targets, and lambda&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    x, y = batch</span><br><span class="line"></span><br><span class="line">    lam = np.random.beta(self.alpha, self.alpha)</span><br><span class="line"></span><br><span class="line">    batch_size = x.size(0)</span><br><span class="line"></span><br><span class="line">    index = torch.randperm(batch_size)</span><br><span class="line"></span><br><span class="line">    mixed_x = lam * x + (1 - lam) * x[index, :]</span><br><span class="line"></span><br><span class="line">    y_a, y_b = y, y[index]</span><br><span class="line"></span><br><span class="line">    return mixed_x, y_a, y_b, lam</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/13/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib.pyplot%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%93%E9%94%99%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/13/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib.pyplot%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%93%E9%94%99%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-13 11:58:01" itemprop="dateCreated datePublished" datetime="2024-10-13T11:58:01+08:00">2024-10-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/12/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/ViT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/12/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/ViT/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-12 17:06:11" itemprop="dateCreated datePublished" datetime="2024-10-12T17:06:11+08:00">2024-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-15 09:31:22" itemprop="dateModified" datetime="2024-10-15T09:31:22+08:00">2024-10-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="先讲讲把transformer照搬到cv的困难其实就在于注意力机制计算复杂度是平方级别的所以输入序列不能太长而如果我们要用transformer处理img也需要把img转化成类似nlp那边的序列类型的输入然而如果是朴素地把img展开基本都超了通常能接受的seq长度例如bert能处理的seq长度也就512而你大一点的img的单边的像素值都超了512了假如是一个224224的img其实不算太大了但展开的话长度就是50172了完全顶不住">先讲讲把transformer照搬到cv的困难。其实就在于注意力机制计算复杂度是平方级别的，所以输入序列不能太长。而如果我们要用transformer处理img，也需要把img转化成类似nlp那边的序列类型的输入。然而如果是朴素地把img展开，基本都超了通常能接受的seq长度。例如，bert能处理的seq长度也就512，而你大一点的img的单边的像素值都超了512了；假如是一个224*224的img，其实不算太大了，但展开的话长度就是50172了，完全顶不住</h1>
+<h1
+id="这篇工作就是vit它的模型部分就是把nlp那边的transformer几乎照搬过来做尽可能少的改动在此之前研究注意力机制与cv的工作主要是聚焦在两方面-一是在现有的cnn架构中把一部分卷积操作换成自注意力机制二是研究把transformer搬到cv之后怎么降低其计算量研究魔改一下注意力机制但它们这些方法因为没有硬件加速无法扩展得很大最终效果应该还是不够好而vit想尽可能照搬nlp那边的处理方法看能transformer能在cv领域scale到多大效果能有多好有种大力出奇迹的感觉那它为了解决序列长度过长而又不想改变注意力机制就把img划分为多个1616的patch每个patch当成是nlp那边一个token的embedding划分完seq长度就正常多了有可能训练了">这篇工作就是vit。它的模型部分就是把nlp那边的transformer几乎照搬过来，做尽可能少的改动（在此之前，研究注意力机制与cv的工作，主要是聚焦在两方面
+：一是在现有的cnn架构中把一部分卷积操作换成自注意力机制；二是研究把transformer搬到cv之后，怎么降低其计算量，研究魔改一下注意力机制。但它们这些方法因为没有硬件加速，无法扩展得很大，最终效果应该还是不够好）。而vit想尽可能照搬nlp那边的处理方法，看能transformer能在cv领域scale到多大，效果能有多好。有种大力出奇迹的感觉。那它为了解决序列长度过长，而又不想改变注意力机制，就把img划分为多个16*16的patch，每个patch当成是nlp那边一个token的embedding。划分完，seq长度就正常多了，有可能训练了</h1>
+<h1
+id="感觉这篇论文其实所谓创新性真不高就是敢于训大模型而且也有充足的资源此外就是实验详实考虑了很多细节并都做了对比实验-但从结果上看确实是连接了cv和nlp两个领域也给多模态带来了很大的影响">感觉这篇论文其实所谓创新性真不高，就是敢于训大模型，而且也有充足的资源。此外就是实验详实，考虑了很多细节，并都做了对比实验。
+<br>但从结果上看，确实是连接了cv和nlp两个领域，也给多模态带来了很大的影响</h1>
+<h1
+id="method部分没什么好说的它写的已经比较清楚了">method部分没什么好说的，它写的已经比较清楚了。</h1>
+<h1
+id="比较值得玩味的就是所谓的inductive-biascnn里主要是locality和translation-equivariance现在终于有点理解是什么意思了假如我们认为邻近像素比较有可能相近这就是locality的bias姑且当成是一种先验知识cnn的架构也满足这个locality所以它处理img的时候也会认为邻近像素会比较接近">比较值得玩味的就是所谓的inductive
+bias。cnn里主要是locality和translation
+equivariance（现在终于有点理解是什么意思了。假如我们认为邻近像素比较有可能相近，这就是locality的bias，姑且当成是一种先验知识。cnn的架构也满足这个locality，所以它处理img的时候也会认为邻近像素会比较接近）</h1>
+<h1 id="另外文章里多次提到inductive-bias">另外，文章里多次提到inductive
+bias</h1>
+<h2
+id="一是说为什么transformer应用到cv领域的时候数据集和模型小了效果不够好因为transformer比cnn少了一些inductive-bias也就是少了一些先验知识">一是说为什么transformer应用到cv领域的时候，数据集和模型小了效果不够好：因为transformer比cnn少了一些inductive
+bias，也就是少了一些先验知识</h2>
+<h2
+id="在第三节的method它甚至专门说了一下transformer的inductive-bias少在哪里">在第三节的method，它甚至专门说了一下transformer的inductive
+bias少在哪里：</h2>
+<h3 id="self-attention-block是global的没有locality">self-attention
+block是global的，没有locality</h3>
+<h3
+id="只有最后处理输出结果的mlp是local且translation-equivarient的其它地方都没有">只有最后处理输出结果的mlp是local且translation
+equivarient的，其它地方都没有</h3>
+<h3
+id="微调的时候有可能引入2d-dimensional-neighborhood-structure因为它微调的时候可能用到分辨率更高的img而由此得到的seq-length就更大了但这样会导致之前学到的position-encoding维度对不上了用不了它提出了一个权宜之计就是根据patch在原图像的位置进行2d-interpolation但这里就用到了patch在原图像里的相对位置引入了先验知识-而且最初的position-encoding因为是随机初始化的它刚开始也不包含什么信息所以最后我们学到的位置信息其实也不是我们提前给模型的而是模型从数据里自己学的">微调的时候有可能引入2d-dimensional
+neighborhood
+structure（因为它微调的时候可能用到分辨率更高的img，而由此得到的seq
+length就更大了，但这样会导致之前学到的position
+encoding维度对不上了，用不了。它提出了一个权宜之计，就是根据patch在原图像的位置，进行2d-interpolation，但这里就用到了patch在原图像里的相对位置，引入了先验知识<br>而且，最初的position
+encoding因为是随机初始化的，它刚开始也不包含什么信息，所以最后我们学到的位置信息其实也不是我们提前给模型的，而是模型从数据里自己学的</h3>
+<h1
+id="另外比较细节的点就是position-encoding这个主要是我不了解细节后面可以看看代码实现然后附录里讨论了几种不同的position-encoding的效果并做了实验发现确实要有这个东西但至于是用什么encoding一维二维relative效果基本一样">另外，比较细节的点就是position
+encoding。这个主要是我不了解细节。后面可以看看代码实现。然后，附录里讨论了几种不同的position
+encoding的效果并做了实验，发现确实要有这个东西，但至于是用什么encoding，一维/二维/relative，效果基本一样。</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/%E5%85%A5%E9%97%A8/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-10 22:58:06 / Modified: 23:06:47" itemprop="dateCreated datePublished" datetime="2024-10-10T22:58:06+08:00">2024-10-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[[滤波实验]] 12345</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/08/27/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/pytorch%E9%87%8C%E7%9A%84dataloader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/27/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/pytorch%E9%87%8C%E7%9A%84dataloader/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-08-27 22:54:31 / Modified: 23:04:17" itemprop="dateCreated datePublished" datetime="2024-08-27T22:54:31+08:00">2024-08-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>关于dataloader中的collate_fn参数，它的作用是，如果一个batch内的data需要进行一些“统一”的操作，就可以交由它来进行。比如下面这个例子：
+如果我们现在有一个句子数据集 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset = [&#x27;the cat sat on the mat&#x27;, &#x27;a dog is barking&#x27;, &#x27;birds are flying&#x27;]</span><br></pre></td></tr></table></figure>
+然后我们要把这些句子批量输送到nn里，就需要保持句子的长度一致，就可以写一个类似下面这样的函数
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from torch.nn.utils.rnn import pad_sequence</span><br><span class="line">import torch</span><br><span class="line"></span><br><span class="line">def collate_fn(batch):</span><br><span class="line">    # 将每个句子分割成单词列表</span><br><span class="line">    sentences = [torch.tensor(sentence.split()) for sentence in batch]</span><br><span class="line">    # 使用 pad_sequence 来填充句子，使其长度相同</span><br><span class="line">    padded_sentences = pad_sequence(sentences, batch_first=True, padding_value=0)</span><br><span class="line">    return padded_sentences</span><br><span class="line"></span><br><span class="line"># 假设这是 DataLoader 返回的一个批量</span><br><span class="line">batch = [&#x27;the cat sat on the mat&#x27;, &#x27;a dog is barking&#x27;, &#x27;birds are flying&#x27;]</span><br><span class="line"></span><br><span class="line"># 应用 collate_fn</span><br><span class="line">padded_batch = collate_fn(batch)</span><br><span class="line">print(padded_batch)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/kaggle%E7%AD%89%E6%AF%94%E8%B5%9B/DialogueGCN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -440,18 +879,18 @@ d)的节点特征矩阵x中通过边的索引提取出来的</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

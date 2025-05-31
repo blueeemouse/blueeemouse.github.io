@@ -150,6 +150,577 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">LSTKC----Long Short-Term Knowledge Consolidation for Lifelong Person Re-Identification</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:59:00 / Modified: 16:59:49" itemprop="dateCreated datePublished" datetime="2025-05-21T16:59:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person-reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="aaai24">aaai24</h1>
+<h1
+id="problemmotivationlreid任务中因为不断获得的新数据的分布可能差异很大模型要拟合新的分布自然会遇到灾难性遗忘的问题现有的基于data-replay的和基于knowledge-distillation的方法都有各自的问题前者的隐私问题很显然后者的一个问题在于现有的基于蒸馏的方法都是把所有过往知识保留下来了没有经过筛选很难保证这些蒸馏得到的知识的质量而如果这些知识的质量不够高可能会极大影响模型性能为此论文提出一种exemplar-free为了避免隐私问题的方法提出rectification-based-short-term-knowledge-transfer-module-r-stkt以筛选整合过往知识同时利用estimation-based-long-term-knowledge-consolidation-module-e-ltkc来整合新旧知识">problem&amp;motivation：LReID任务中，因为不断获得的新数据的分布可能差异很大，模型要拟合新的分布，自然会遇到灾难性遗忘的问题。现有的基于data
+replay的和基于knowledge
+distillation的方法都有各自的问题。前者的隐私问题很显然。后者的一个问题在于，现有的基于蒸馏的方法，都是把所有过往知识保留下来了，没有经过筛选，很难保证这些蒸馏得到的知识的质量。而如果这些知识的质量不够高，可能会极大影响模型性能。为此，论文提出一种exemplar-free（为了避免隐私问题）的方法，提出Rectification-based
+Short-Term Knowledge Transfer module
+(R-STKT)以筛选、整合过往知识，同时利用Estimation-based Long-Term
+Knowledge Consolidation module (E-LTKC)来整合新旧知识</h1>
+<h1
+id="话说这个normalization-guided-triplet-loss是指什么里面的apn又是什么意思">话说这个normalization-guided
+Triplet loss是指什么？里面的a，p，n又是什么意思？</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/" class="post-title-link" itemprop="url">Learning Continual Compatible Representation for Re-indexing Free Lifelong Person Re-identification</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:58:00 / Modified: 16:58:29" itemprop="dateCreated datePublished" datetime="2025-05-21T16:58:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="method">method：</h1>
+<h2 id="continual-compatible-transfer-networkcct">1.Continual Compatible
+Transfer Network（CCT）</h2>
+<h3
+id="特征的更新主要三部分一个是自己的残差一个是新知识用模板加权表示会用特征和模板计算相互之间的权重一个是旧知识用一些网络对原来的特征进行变换期望它能保留旧知识同时能迁移到新域">特征的更新主要三部分，一个是自己的残差；一个是新知识（用模板加权表示，会用特征和模板计算相互之间的权重）；一个是旧知识（用一些网络对原来的特征进行变换，期望它能保留旧知识，同时能迁移到新域）</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">lifelong reid paper调研</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:58:00 / Modified: 16:59:16" itemprop="dateCreated datePublished" datetime="2025-05-21T16:58:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="acm-mm24">acm mm24</h1>
+<h2
+id="mitigate-catastrophic-remembering-via-continual-knowledge-purification-for-noisy-lifelong-person-re-identification-in-32nd-acm-multimedia-conference">Mitigate
+Catastrophic Remembering via Continual Knowledge Purification for Noisy
+Lifelong Person Re-Identification", in 32nd ACM Multimedia
+Conference</h2>
+<h1 id="cvpr24">cvpr24</h1>
+<h2
+id="distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification">Distribution-aware
+Knowledge Prototyping for Non-exemplar Lifelong Person
+Re-identification</h2>
+<h2
+id="learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification"><strong>Learning
+Continual Compatible Representation for Re-indexing Free Lifelong Person
+Re-identification</strong></h2>
+<h1 id="aaai24">aaai24</h1>
+<h2
+id="lstkc-long-short-term-knowledge-consolidation-for-lifelong-person-re-identification">LSTKC:
+Long Short-Term Knowledge Consolidation for Lifelong Person
+Re-Identification</h2>
+<h1 id="eccv24无">eccv24无</h1>
+<h1 id="nips24无">nips24无</h1>
+<h1 id="iclr24无">iclr24无</h1>
+<h1 id="icml24无">icml24无</h1>
+<h1 id="ijcai24无">ijcai24无</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Exemplar-Free%20Lifelong%20Person%20Re-identification%20via%20Prompt-Guided%20Adaptive%20Knowledge%20Consolidation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Exemplar-Free%20Lifelong%20Person%20Re-identification%20via%20Prompt-Guided%20Adaptive%20Knowledge%20Consolidation/" class="post-title-link" itemprop="url">Exemplar-Free Lifelong Person Re-identification via Prompt-Guided Adaptive Knowledge Consolidation</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:57:00 / Modified: 16:57:53" itemprop="dateCreated datePublished" datetime="2025-05-21T16:57:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ijcv24">ijcv24</h1>
+<h1 id="tasklifelong-re-id">task：Lifelong Re-id</h1>
+<h1 id="贡献">贡献：</h1>
+<h1 id="insight">insight：</h1>
+<h1
+id="动机老生常谈地想解决lifelong-reid里的灾难性遗忘问题又因为data-privacy所以不打算用exemplar这篇文章提出的缓解灾难性遗忘的方法就是adaptive-exponential-moving-average就是会把旧模型和新模型融合只不过这里的参数是adaptive的具体来说是用prompt来求得的这也是文章的主要创新点而它相比于之前的ema技术改进点在于它提出的用prompt求得的系数是依赖于数据的而之前的要么是固定的要么是按照时间变化的却忽略了新旧数据集之间的关系">动机：老生常谈地想解决lifelong
+reid里的灾难性遗忘问题，又因为data
+privacy，所以不打算用exemplar。这篇文章提出的缓解灾难性遗忘的方法就是Adaptive
+Exponential Moving
+Average，就是会把旧模型和新模型融合，只不过这里的参数是Adaptive的，具体来说，是用prompt来求得的，这也是文章的主要创新点（而它相比于之前的EMA技术，改进点在于：它提出的用prompt求得的系数是依赖于数据的，而之前的要么是固定的，要么是按照时间变化的，却忽略了新旧数据集之间的关系）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Exemplar-Free%20Lifelong%20Person%20Re-identification%20via%20Prompt-Guided%20Adaptive%20Knowledge%20Consolidation/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/" class="post-title-link" itemprop="url">DASK：Distribution Rehearsing via Adaptive Style Kernel Learning for Exemplar-Free Lifelong Person Re-Identification</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:55:00 / Modified: 16:57:13" itemprop="dateCreated datePublished" datetime="2025-05-21T16:55:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2
+id="它的核心动机是希望能做到从当前域的数据合成出前面的域的数据从而用这些合成数据来缓解灾难性遗忘这样我们也就不需要通过保留过往的exemplar来复习旧知识了">它的核心动机是，希望能做到：从当前域的数据，合成出前面的域的数据，从而用这些合成数据来缓解灾难性遗忘。（这样我们也就不需要通过保留过往的exemplar来复习旧知识了）</h2>
+<h2
+id="dask主要由两部分组成一是drl它主要做的是训练一个网络叫adaptive-kernel-prediction-networkakpnet注意一下这个akpnet的功能是把任意分布的输入数据转换到它学到的风格落到我们这里也就是把新域的数据转换成旧域的数据它会为每个实例都预测生成一个kernel这个kernel可以用于把这个实例转换成其它风格的实例">DASK主要由两部分组成，一是DRL，它主要做的是，训练一个网络（叫adaptive
+kernel prediction
+network，AKPNet）（注意一下，这个AKPNet的功能是，把任意分布的输入数据转换到它学到的风格，落到我们这里，也就是把新域的数据转换成旧域的数据），它会为每个实例都预测生成一个kernel，这个kernel可以用于把这个实例转换成其它风格的实例</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/" class="post-title-link" itemprop="url">Incorporating physics into data-driven computer vision</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:53:00 / Modified: 16:54:51" itemprop="dateCreated datePublished" datetime="2025-05-21T16:53:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/" itemprop="url" rel="index"><span itemprop="name">ai4s</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="abstract">abstract</h1>
+<h2
+id="现在的cv技术因为它是数据驱动的所以其实它是从大量数据中推测出物理规律的这种方式不够显式进而导致可解释性等不足而传统的cv技术虽然是明确有物理规律支撑的但性能又不够好比不过深度学习的那些技术那么弱国能把物理模型与深度学习的技术融合或许就能结合二者的优点既有高性能又有可解释性泛化性可证伪性而这可以认为是把物理模型当成数据驱动过程中的一个约束条件也就是我们约束深度学习模型必须满足物理规律相当于一种融入先验知识的方法">现在的cv技术，因为它是数据驱动的，所以其实它是从大量数据中“推测”出物理规律的（这种方式不够显式，进而导致可解释性等不足）；而传统的cv技术，虽然是明确有物理规律支撑的，但性能又不够好，比不过深度学习的那些技术。那么，弱国能把物理模型与深度学习的技术融合，或许就能结合二者的优点，既有高性能，又有可解释性、泛化性、可证伪性。而这可以认为是把物理模型当成数据驱动过程中的一个约束条件，也就是我们约束深度学习模型必须满足物理规律（相当于一种融入先验知识的方法）</h2>
+<h2
+id="这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术也即所谓physics-based-machine-learning">这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术，也即所谓physics-based
+machine learning</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -466,499 +1037,6 @@ id="如题主要介绍一下模板的使用因为现在博客的文章需要一�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">打乱数组</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-18 16:39:00 / Modified: 17:25:22" itemprop="dateCreated datePublished" datetime="2025-05-18T16:39:00+08:00">2025-05-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/shuffle-an-array/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title-link" itemprop="url">移动零</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-16 17:24:00 / Modified: 17:33:37" itemprop="dateCreated datePublished" datetime="2025-05-16T17:24:00+08:00">2025-05-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/IR/Dense%20Text%20Retrieval%20based%20on%20Pretrained%20Language%20Models%EF%BC%9AA%20Survey/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/IR/Dense%20Text%20Retrieval%20based%20on%20Pretrained%20Language%20Models%EF%BC%9AA%20Survey/" class="post-title-link" itemprop="url">Dense Text Retrieval based on Pretrained Language Models：A Survey</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-15 22:54:00" itemprop="dateCreated datePublished" datetime="2025-05-15T22:54:00+08:00">2025-05-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-16 16:33:54" itemprop="dateModified" datetime="2025-05-16T16:33:54+08:00">2025-05-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/IR/" itemprop="url" rel="index"><span itemprop="name">IR</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="abstract">0.abstract</h1>
-<h2
-id="plmpretrained-language-models对于信息检索领域的帮助主要在于提高了文本的表征能力能提取出更好的embedding从而帮助之后的相关性建模这种把文本用embedding来表征的方法叫dense-retrieval">PLM（Pretrained
-Language
-Models）对于信息检索领域的帮助，主要在于提高了文本的表征能力，能提取出更好的embedding，从而帮助之后的相关性建模（这种把文本用embedding来表征的方法叫dense
-retrieval）</h2>
-<h2
-id="这篇论文会从四个角度来介绍dense-retrievalarchitecturetrainingindexingintegration最后总结一下主流技术">这篇论文会从四个角度来介绍dense
-retrieval：architecture，training，indexing，integration，最后总结一下主流技术</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/IR/Dense%20Text%20Retrieval%20based%20on%20Pretrained%20Language%20Models%EF%BC%9AA%20Survey/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/15/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/15/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">存在重复元素</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-15 19:43:00 / Modified: 19:57:16" itemprop="dateCreated datePublished" datetime="2025-05-15T19:43:00+08:00">2025-05-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/contains-duplicate/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/15/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/14/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E8%BD%AE%E8%BD%AC%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/14/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E8%BD%AE%E8%BD%AC%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">轮转数组</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-14 19:18:00 / Modified: 19:18:32" itemprop="dateCreated datePublished" datetime="2025-05-14T19:18:00+08:00">2025-05-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/rotate-array/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/14/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E8%BD%AE%E8%BD%AC%E6%95%B0%E7%BB%84/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">多数元素</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-13 17:36:00 / Modified: 17:55:52" itemprop="dateCreated datePublished" datetime="2025-05-13T17:36:00+08:00">2025-05-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/majority-element/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1028,18 +1106,18 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/majority-eleme
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
