@@ -150,6 +150,70 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-12 19:33:47 / Modified: 19:43:16" itemprop="dateCreated datePublished" datetime="2024-12-12T19:33:47+08:00">2024-12-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="服务器可能有时候会在配置环境下载库的时候说http之类的错误类似这样">服务器可能有时候会在配置环境，下载库的时候说http之类的错误，类似这样</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
+<h1 id="也不知道是不是源出了问题而如果想在创建环境装库的时候临时指定别的源一般都是现场查问ai它会说在后面加个-c指定一下源可是有时候还是会报错让人疑惑">也不知道是不是源出了问题。而如果想在创建环境/装库的时候临时指定别的源，一般都是现场查，问ai，它会说在后面加个-c，指定一下源，可是有时候还是会报错，让人疑惑：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
+<h1 id="然而如果仔细看一下它的问题好像是压根就没按我指定的源来啊虽然不太清楚这是为什么但显然此时更根本的方法是去condarc下删掉不想用的源比如这里的阿里源而此时又会现查问ai它一般会说用什么编辑器去打开那个condarc比如vim-.condarc进去编辑完再出来config-show一下检查却发现改动好像没生效此时我怀疑有个潜藏的问题就是ai的回答是假设了你在个人电脑上用或者说假设了你的conda是装在默认路径了然而我现在用的是服务器conda是装在我指定的非默认路径下那么上面修改的condarc其实就是没用的得去修改我安装路径里的conda的condarc才行事实上最后也确实是去我的个人路径下把condarc的源给改了然后再装就成功了">然而如果仔细看一下，它的问题好像是，压根就没按我指定的源来啊。虽然不太清楚这是为什么，但显然此时更根本的方法是，去condarc下删掉不想用的源，比如这里的阿里源。而此时又会现查，问ai，它一般会说用什么编辑器去打开那个condarc，比如<code>vim ~/.condarc</code>。进去编辑完，再出来，config
+show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏的问题，就是，ai的回答，是假设了你在个人电脑上用，或者说假设了你的conda是装在默认路径了。然而，我现在用的是服务器，conda是装在我指定的，非默认路径下。那么，上面修改的condarc其实就是没用的，得去修改我安装路径里的conda的condarc才行。事实上，最后也确实是，去我的个人路径下把condarc的源给改了，然后再装，就成功了</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -881,66 +945,6 @@ cv, object-reid, noisy lifelong reid] ---</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-31 22:27:12 / Modified: 22:35:06" itemprop="dateCreated datePublished" datetime="2024-10-31T22:27:12+08:00">2024-10-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="iccv23">iccv23</h1>
-<p>attention concordance是指什么？</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1010,7 +1014,7 @@ cv, object-reid, noisy lifelong reid] ---</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

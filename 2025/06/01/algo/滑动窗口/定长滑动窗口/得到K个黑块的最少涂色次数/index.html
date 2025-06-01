@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="得到K个黑块的最少涂色次数">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/06/01/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%BE%97%E5%88%B0K%E4%B8%AA%E9%BB%91%E5%9D%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%B6%82%E8%89%B2%E6%AC%A1%E6%95%B0/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-01T02:47:00.000Z">
+<meta property="article:modified_time" content="2025-06-01T03:04:25.419Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="滑动窗口">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/06/01/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%BE%97%E5%88%B0K%E4%B8%AA%E9%BB%91%E5%9D%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%B6%82%E8%89%B2%E6%AC%A1%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>得到K个黑块的最少涂色次数 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/01/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%BE%97%E5%88%B0K%E4%B8%AA%E9%BB%91%E5%9D%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%B6%82%E8%89%B2%E6%AC%A1%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          得到K个黑块的最少涂色次数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-06-01 10:47:00 / Modified: 11:04:25" itemprop="dateCreated datePublished" datetime="2025-06-01T10:47:00+08:00">2025-06-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" itemprop="url" rel="index"><span itemprop="name">滑动窗口</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" itemprop="url" rel="index"><span itemprop="name">定长滑动窗口</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-recolors-to-get-k-consecutive-black-blocks/description/">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="给你一个长度为-n-下标从-0-开始的字符串-blocks-blocksi-要么是-w-要么是-b-表示第-i-块的颜色字符-w-和-b-分别表示白色和黑色">给你一个长度为 <code>n</code> 下标从 <strong>0</strong> 开始的字符串 <code>blocks</code> ，<code>blocks[i]</code> 要么是 <code>'W'</code> 要么是 <code>'B'</code> ，表示第 <code>i</code> 块的颜色。字符 <code>'W'</code> 和 <code>'B'</code> 分别表示白色和黑色。</h2>
+<h2 id="给你一个整数-k-表示想要-连续-黑色块的数目">给你一个整数 <code>k</code> ，表示想要 <strong>连续</strong> 黑色块的数目。</h2>
+<h2 id="每一次操作中你可以选择一个白色块将它-涂成-黑色块">每一次操作中，你可以选择一个白色块将它 <strong>涂成</strong> 黑色块。</h2>
+<h2 id="请你返回至少出现-一次-连续-k-个黑色块的-最少-操作次数">请你返回至少出现 <strong>一次</strong> 连续 <code>k</code> 个黑色块的 <strong>最少</strong> 操作次数。</h2>
+<h2 id="示例-1"><strong>示例 1：</strong></h2>
+<h3 id="输入blocks-wbbwwbbwbw-k-7"><strong>输入：</strong>blocks =
+"WBBWWBBWBW", k = 7</h3>
+<h3 id="输出3"><strong>输出：</strong>3</h3>
+<h3 id="解释"><strong>解释：</strong></h3>
+<h3 id="一种得到-7-个连续黑色块的方法是把第-0-3-和-4-个块涂成黑色">一种得到
+7 个连续黑色块的方法是把第 0 ，3 和 4 个块涂成黑色。</h3>
+<h3 id="得到-blocks-bbbbbbbwbw">得到 blocks = "BBBBBBBWBW" 。</h3>
+<h3 id="可以证明无法用少于-3-次操作得到-7-个连续的黑块">可以证明无法用少于 3
+次操作得到 7 个连续的黑块。</h3>
+<h3 id="所以我们返回-3">所以我们返回 3 。</h3>
+<h2 id="示例-2"><strong>示例 2：</strong></h2>
+<h3 id="输入blocks-wbwbbbw-k-2"><strong>输入：</strong>blocks =
+"WBWBBBW", k = 2</h3>
+<h3 id="输出0"><strong>输出：</strong>0</h3>
+<h3 id="解释-1"><strong>解释：</strong></h3>
+<h3 id="不需要任何操作因为已经有-2-个连续的黑块">不需要任何操作，因为已经有
+2 个连续的黑块。</h3>
+<h3 id="所以我们返回-0">所以我们返回 0 。</h3>
+<h2 id="提示"><strong>提示：</strong></h2>
+<h3 id="n-blocks.length">- <code>n == blocks.length</code></h3>
+<h3 id="n-100">- <code>1 &lt;= n &lt;= 100</code></h3>
+<h3 id="blocksi-要么是-w-要么是-b">-
+<code>blocks[i]</code> 要么是 <code>'W'</code> ，要么是 <code>'B'</code> 。</h3>
+<h3 id="k-n">- <code>1 &lt;= k &lt;= n</code></h3>
+<h1 id="思路">思路：</h1>
+<h2 id="一开始看到这题目想得有点复杂了因为最简单的情况当然是原始字符串里已经有连续k个黑色块了则直接返回0-但如果不是这种情况那么要判断的话比如我们关注索引i开始的连续黑色块它可能是一个长度为k-5的连续黑色块那么此时我们就需要去看索引ik-5-1处后面的长度为5的地方里有没有连续黑色块以及有的话能否在通过改变中间的白色块后得到连续k个黑色块这样即使我们通过遍历一次字符串维护了一个数组cnts用于表征从索引i开始的连续黑色块长度且在维护的过程中我们就可以知道是否原字符串里有连续k个黑色块了有的话直接return之后我们还是要遍历一次这个cnts并且得到当前索引出发的连续黑色块数量我们还要往后看来检查这就很麻烦了">一开始看到这题目，想得有点复杂了。因为，最简单的情况当然是原始字符串里已经有连续k个黑色块了，则直接返回0；<br>但如果不是这种情况，那么要判断的话，比如我们关注索引i开始的连续黑色块，它可能是一个长度为k-5的连续黑色块，那么此时我们就需要去看，索引i+(k-5-1)处后面的长度为5的地方里，有没有连续黑色块，以及有的话能否在通过改变中间的白色块后得到连续k个黑色块。这样，即使我们通过遍历一次字符串，维护了一个数组cnts（用于表征从索引i开始的连续黑色块长度。且在维护的过程中，我们就可以知道是否原字符串里有连续k个黑色块了，有的话直接return），之后我们还是要遍历一次这个cnts，并且得到当前索引出发的连续黑色块数量，我们还要往后看，来检查，这就很麻烦了</h2>
+<h2 id="此时重新审视题目发现其实可以换个思路如果我们还是用一个长度为k的滑动窗口来遍历字符串则我们只需要看一下当前窗口里黑色块的数量是多少如果就是k则说明原字符串里已经有连续k个黑色块了则直接return如果不是k那么如果我们最后选择了要把这个滑动窗口里的所有字符都改成b也就是把这个滑动窗口变成长度为k的连续黑色块那么我们应该做的操作次数就恰好等于这个滑动窗口里的白色块数量此时容易想到滑动窗口滑动的过程中我们要动态维护窗口内的黑色块和白色块数量但这是很容易的因为滑动窗口只需要关注进出的那两个元素而滑动的过程中我们只需要根据窗口里最少的白色块数量来更新最少操作次数即可事实上最小操作次数就等于所有滑动窗口里最少的白色块数量这里是统一的包括了原始字符串就有连续k个黑色块的情况因为此时一定有一个滑动窗口里是没有白色块的也就是白色块数量最小操作次数0">此时重新审视题目，发现，其实可以换个思路：如果我们还是用一个长度为k的滑动窗口来遍历字符串，则我们只需要看一下当前窗口里黑色块的数量是多少，如果就是k，则说明原字符串里已经有连续k个黑色块了，则直接return；如果不是k，那么，如果我们最后选择了要把这个滑动窗口里的所有字符都改成'B'，也就是把这个滑动窗口变成长度为k的连续黑色块，那么，我们应该做的操作次数就恰好等于这个滑动窗口里的白色块数量。此时容易想到，滑动窗口滑动的过程中，我们要动态维护窗口内的黑色块和白色块数量，但这是很容易的（因为滑动窗口只需要关注进出的那两个元素）。而滑动的过程中，我们只需要根据窗口里最少的白色块数量，来更新“最少操作次数”即可。事实上，最小操作次数就等于所有滑动窗口里最少的白色块数量（这里是统一的，包括了原始字符串就有连续k个黑色块的情况，因为此时一定有一个滑动窗口里是没有白色块的，也就是白色块数量=最小操作次数=0）</h2>
+<h1 id="代码">代码：</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minimumRecolors</span><span class="params">(string blocks, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> cnts[<span class="number">101</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> black = <span class="number">0</span>, white = <span class="number">0</span>, min_op_cnts = k<span class="number">+1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; blocks.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (i &lt; k) &#123;</span><br><span class="line"></span><br><span class="line">                black += <span class="built_in">int</span>(blocks[i] == <span class="string">&#x27;B&#x27;</span>);</span><br><span class="line"></span><br><span class="line">                white += <span class="built_in">int</span>(blocks[i] == <span class="string">&#x27;W&#x27;</span>);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (black == k) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> ((k - black) &lt; min_op_cnts) min_op_cnts = k - black;</span><br><span class="line"></span><br><span class="line">                black -= <span class="built_in">int</span>(blocks[i-k] == <span class="string">&#x27;B&#x27;</span>), white -= <span class="built_in">int</span>(blocks[i-k] == <span class="string">&#x27;W&#x27;</span>);</span><br><span class="line"></span><br><span class="line">                black += <span class="built_in">int</span>(blocks[i] == <span class="string">&#x27;B&#x27;</span>), white += <span class="built_in">int</span>(blocks[i] == <span class="string">&#x27;W&#x27;</span>);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ((k - black) &lt; min_op_cnts) min_op_cnts = k - black;     <span class="comment">// 这个判断是用在最后一次循环上的。按照上面的代码，最后一次循环里（也就是最后一个滑动窗口里），我们没有检查更新min_op_cnts就退出了，所以需要在循环外补上这一次判断</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> min_op_cnts;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" rel="tag"># 滑动窗口</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/01/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AD%90%E6%95%B0%E7%BB%84%E6%9C%80%E5%A4%A7%E5%B9%B3%E5%9D%87%E6%95%B0%E2%85%A0/" rel="prev" title="子数组最大平均数Ⅰ">
+      <i class="fa fa-chevron-left"></i> 子数组最大平均数Ⅰ
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E4%BD%A0%E4%B8%80%E4%B8%AA%E9%95%BF%E5%BA%A6%E4%B8%BA-n-%E4%B8%8B%E6%A0%87%E4%BB%8E-0-%E5%BC%80%E5%A7%8B%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2-blocks-blocksi-%E8%A6%81%E4%B9%88%E6%98%AF-w-%E8%A6%81%E4%B9%88%E6%98%AF-b-%E8%A1%A8%E7%A4%BA%E7%AC%AC-i-%E5%9D%97%E7%9A%84%E9%A2%9C%E8%89%B2%E5%AD%97%E7%AC%A6-w-%E5%92%8C-b-%E5%88%86%E5%88%AB%E8%A1%A8%E7%A4%BA%E7%99%BD%E8%89%B2%E5%92%8C%E9%BB%91%E8%89%B2"><span class="nav-number">2.1.</span> <span class="nav-text">给你一个长度为 n 下标从 0 开始的字符串 blocks ，blocks[i] 要么是 &#39;W&#39; 要么是 &#39;B&#39; ，表示第 i 块的颜色。字符 &#39;W&#39; 和 &#39;B&#39; 分别表示白色和黑色。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E4%BD%A0%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0-k-%E8%A1%A8%E7%A4%BA%E6%83%B3%E8%A6%81-%E8%BF%9E%E7%BB%AD-%E9%BB%91%E8%89%B2%E5%9D%97%E7%9A%84%E6%95%B0%E7%9B%AE"><span class="nav-number">2.2.</span> <span class="nav-text">给你一个整数 k ，表示想要 连续 黑色块的数目。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E4%B8%80%E6%AC%A1%E6%93%8D%E4%BD%9C%E4%B8%AD%E4%BD%A0%E5%8F%AF%E4%BB%A5%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E7%99%BD%E8%89%B2%E5%9D%97%E5%B0%86%E5%AE%83-%E6%B6%82%E6%88%90-%E9%BB%91%E8%89%B2%E5%9D%97"><span class="nav-number">2.3.</span> <span class="nav-text">每一次操作中，你可以选择一个白色块将它 涂成 黑色块。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E4%BD%A0%E8%BF%94%E5%9B%9E%E8%87%B3%E5%B0%91%E5%87%BA%E7%8E%B0-%E4%B8%80%E6%AC%A1-%E8%BF%9E%E7%BB%AD-k-%E4%B8%AA%E9%BB%91%E8%89%B2%E5%9D%97%E7%9A%84-%E6%9C%80%E5%B0%91-%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">请你返回至少出现 一次 连续 k 个黑色块的 最少 操作次数。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.5.</span> <span class="nav-text">示例 1：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5blocks-wbbwwbbwbw-k-7"><span class="nav-number">2.5.1.</span> <span class="nav-text">输入：blocks &#x3D;
+&quot;WBBWWBBWBW&quot;, k &#x3D; 7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA3"><span class="nav-number">2.5.2.</span> <span class="nav-text">输出：3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A"><span class="nav-number">2.5.3.</span> <span class="nav-text">解释：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%A7%8D%E5%BE%97%E5%88%B0-7-%E4%B8%AA%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E6%8A%8A%E7%AC%AC-0-3-%E5%92%8C-4-%E4%B8%AA%E5%9D%97%E6%B6%82%E6%88%90%E9%BB%91%E8%89%B2"><span class="nav-number">2.5.4.</span> <span class="nav-text">一种得到
+7 个连续黑色块的方法是把第 0 ，3 和 4 个块涂成黑色。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%97%E5%88%B0-blocks-bbbbbbbwbw"><span class="nav-number">2.5.5.</span> <span class="nav-text">得到 blocks &#x3D; &quot;BBBBBBBWBW&quot; 。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E8%AF%81%E6%98%8E%E6%97%A0%E6%B3%95%E7%94%A8%E5%B0%91%E4%BA%8E-3-%E6%AC%A1%E6%93%8D%E4%BD%9C%E5%BE%97%E5%88%B0-7-%E4%B8%AA%E8%BF%9E%E7%BB%AD%E7%9A%84%E9%BB%91%E5%9D%97"><span class="nav-number">2.5.6.</span> <span class="nav-text">可以证明无法用少于 3
+次操作得到 7 个连续的黑块。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E8%BF%94%E5%9B%9E-3"><span class="nav-number">2.5.7.</span> <span class="nav-text">所以我们返回 3 。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.6.</span> <span class="nav-text">示例 2：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5blocks-wbwbbbw-k-2"><span class="nav-number">2.6.1.</span> <span class="nav-text">输入：blocks &#x3D;
+&quot;WBWBBBW&quot;, k &#x3D; 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA0"><span class="nav-number">2.6.2.</span> <span class="nav-text">输出：0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A-1"><span class="nav-number">2.6.3.</span> <span class="nav-text">解释：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E9%9C%80%E8%A6%81%E4%BB%BB%E4%BD%95%E6%93%8D%E4%BD%9C%E5%9B%A0%E4%B8%BA%E5%B7%B2%E7%BB%8F%E6%9C%89-2-%E4%B8%AA%E8%BF%9E%E7%BB%AD%E7%9A%84%E9%BB%91%E5%9D%97"><span class="nav-number">2.6.4.</span> <span class="nav-text">不需要任何操作，因为已经有
+2 个连续的黑块。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E8%BF%94%E5%9B%9E-0"><span class="nav-number">2.6.5.</span> <span class="nav-text">所以我们返回 0 。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.7.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#n-blocks.length"><span class="nav-number">2.7.1.</span> <span class="nav-text">- n &#x3D;&#x3D; blocks.length</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#n-100"><span class="nav-number">2.7.2.</span> <span class="nav-text">- 1 &lt;&#x3D; n &lt;&#x3D; 100</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blocksi-%E8%A6%81%E4%B9%88%E6%98%AF-w-%E8%A6%81%E4%B9%88%E6%98%AF-b"><span class="nav-number">2.7.3.</span> <span class="nav-text">-
+blocks[i] 要么是 &#39;W&#39; ，要么是 &#39;B&#39; 。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-n"><span class="nav-number">2.7.4.</span> <span class="nav-text">- 1 &lt;&#x3D; k &lt;&#x3D; n</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%BC%80%E5%A7%8B%E7%9C%8B%E5%88%B0%E8%BF%99%E9%A2%98%E7%9B%AE%E6%83%B3%E5%BE%97%E6%9C%89%E7%82%B9%E5%A4%8D%E6%9D%82%E4%BA%86%E5%9B%A0%E4%B8%BA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%83%85%E5%86%B5%E5%BD%93%E7%84%B6%E6%98%AF%E5%8E%9F%E5%A7%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%87%8C%E5%B7%B2%E7%BB%8F%E6%9C%89%E8%BF%9E%E7%BB%ADk%E4%B8%AA%E9%BB%91%E8%89%B2%E5%9D%97%E4%BA%86%E5%88%99%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E0-%E4%BD%86%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AF%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E9%82%A3%E4%B9%88%E8%A6%81%E5%88%A4%E6%96%AD%E7%9A%84%E8%AF%9D%E6%AF%94%E5%A6%82%E6%88%91%E4%BB%AC%E5%85%B3%E6%B3%A8%E7%B4%A2%E5%BC%95i%E5%BC%80%E5%A7%8B%E7%9A%84%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E5%AE%83%E5%8F%AF%E8%83%BD%E6%98%AF%E4%B8%80%E4%B8%AA%E9%95%BF%E5%BA%A6%E4%B8%BAk-5%E7%9A%84%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E9%82%A3%E4%B9%88%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E5%B0%B1%E9%9C%80%E8%A6%81%E5%8E%BB%E7%9C%8B%E7%B4%A2%E5%BC%95ik-5-1%E5%A4%84%E5%90%8E%E9%9D%A2%E7%9A%84%E9%95%BF%E5%BA%A6%E4%B8%BA5%E7%9A%84%E5%9C%B0%E6%96%B9%E9%87%8C%E6%9C%89%E6%B2%A1%E6%9C%89%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E4%BB%A5%E5%8F%8A%E6%9C%89%E7%9A%84%E8%AF%9D%E8%83%BD%E5%90%A6%E5%9C%A8%E9%80%9A%E8%BF%87%E6%94%B9%E5%8F%98%E4%B8%AD%E9%97%B4%E7%9A%84%E7%99%BD%E8%89%B2%E5%9D%97%E5%90%8E%E5%BE%97%E5%88%B0%E8%BF%9E%E7%BB%ADk%E4%B8%AA%E9%BB%91%E8%89%B2%E5%9D%97%E8%BF%99%E6%A0%B7%E5%8D%B3%E4%BD%BF%E6%88%91%E4%BB%AC%E9%80%9A%E8%BF%87%E9%81%8D%E5%8E%86%E4%B8%80%E6%AC%A1%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BB%B4%E6%8A%A4%E4%BA%86%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84cnts%E7%94%A8%E4%BA%8E%E8%A1%A8%E5%BE%81%E4%BB%8E%E7%B4%A2%E5%BC%95i%E5%BC%80%E5%A7%8B%E7%9A%84%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E9%95%BF%E5%BA%A6%E4%B8%94%E5%9C%A8%E7%BB%B4%E6%8A%A4%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%88%91%E4%BB%AC%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%9F%A5%E9%81%93%E6%98%AF%E5%90%A6%E5%8E%9F%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%87%8C%E6%9C%89%E8%BF%9E%E7%BB%ADk%E4%B8%AA%E9%BB%91%E8%89%B2%E5%9D%97%E4%BA%86%E6%9C%89%E7%9A%84%E8%AF%9D%E7%9B%B4%E6%8E%A5return%E4%B9%8B%E5%90%8E%E6%88%91%E4%BB%AC%E8%BF%98%E6%98%AF%E8%A6%81%E9%81%8D%E5%8E%86%E4%B8%80%E6%AC%A1%E8%BF%99%E4%B8%AAcnts%E5%B9%B6%E4%B8%94%E5%BE%97%E5%88%B0%E5%BD%93%E5%89%8D%E7%B4%A2%E5%BC%95%E5%87%BA%E5%8F%91%E7%9A%84%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E6%95%B0%E9%87%8F%E6%88%91%E4%BB%AC%E8%BF%98%E8%A6%81%E5%BE%80%E5%90%8E%E7%9C%8B%E6%9D%A5%E6%A3%80%E6%9F%A5%E8%BF%99%E5%B0%B1%E5%BE%88%E9%BA%BB%E7%83%A6%E4%BA%86"><span class="nav-number">3.1.</span> <span class="nav-text">一开始看到这题目，想得有点复杂了。因为，最简单的情况当然是原始字符串里已经有连续k个黑色块了，则直接返回0；但如果不是这种情况，那么要判断的话，比如我们关注索引i开始的连续黑色块，它可能是一个长度为k-5的连续黑色块，那么此时我们就需要去看，索引i+(k-5-1)处后面的长度为5的地方里，有没有连续黑色块，以及有的话能否在通过改变中间的白色块后得到连续k个黑色块。这样，即使我们通过遍历一次字符串，维护了一个数组cnts（用于表征从索引i开始的连续黑色块长度。且在维护的过程中，我们就可以知道是否原字符串里有连续k个黑色块了，有的话直接return），之后我们还是要遍历一次这个cnts，并且得到当前索引出发的连续黑色块数量，我们还要往后看，来检查，这就很麻烦了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A4%E6%97%B6%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%86%E9%A2%98%E7%9B%AE%E5%8F%91%E7%8E%B0%E5%85%B6%E5%AE%9E%E5%8F%AF%E4%BB%A5%E6%8D%A2%E4%B8%AA%E6%80%9D%E8%B7%AF%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E8%BF%98%E6%98%AF%E7%94%A8%E4%B8%80%E4%B8%AA%E9%95%BF%E5%BA%A6%E4%B8%BAk%E7%9A%84%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9D%A5%E9%81%8D%E5%8E%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%99%E6%88%91%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E7%9C%8B%E4%B8%80%E4%B8%8B%E5%BD%93%E5%89%8D%E7%AA%97%E5%8F%A3%E9%87%8C%E9%BB%91%E8%89%B2%E5%9D%97%E7%9A%84%E6%95%B0%E9%87%8F%E6%98%AF%E5%A4%9A%E5%B0%91%E5%A6%82%E6%9E%9C%E5%B0%B1%E6%98%AFk%E5%88%99%E8%AF%B4%E6%98%8E%E5%8E%9F%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%87%8C%E5%B7%B2%E7%BB%8F%E6%9C%89%E8%BF%9E%E7%BB%ADk%E4%B8%AA%E9%BB%91%E8%89%B2%E5%9D%97%E4%BA%86%E5%88%99%E7%9B%B4%E6%8E%A5return%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AFk%E9%82%A3%E4%B9%88%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%9C%80%E5%90%8E%E9%80%89%E6%8B%A9%E4%BA%86%E8%A6%81%E6%8A%8A%E8%BF%99%E4%B8%AA%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E9%87%8C%E7%9A%84%E6%89%80%E6%9C%89%E5%AD%97%E7%AC%A6%E9%83%BD%E6%94%B9%E6%88%90b%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%8A%8A%E8%BF%99%E4%B8%AA%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%8F%98%E6%88%90%E9%95%BF%E5%BA%A6%E4%B8%BAk%E7%9A%84%E8%BF%9E%E7%BB%AD%E9%BB%91%E8%89%B2%E5%9D%97%E9%82%A3%E4%B9%88%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%81%9A%E7%9A%84%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0%E5%B0%B1%E6%81%B0%E5%A5%BD%E7%AD%89%E4%BA%8E%E8%BF%99%E4%B8%AA%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E9%87%8C%E7%9A%84%E7%99%BD%E8%89%B2%E5%9D%97%E6%95%B0%E9%87%8F%E6%AD%A4%E6%97%B6%E5%AE%B9%E6%98%93%E6%83%B3%E5%88%B0%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%BB%91%E5%8A%A8%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%88%91%E4%BB%AC%E8%A6%81%E5%8A%A8%E6%80%81%E7%BB%B4%E6%8A%A4%E7%AA%97%E5%8F%A3%E5%86%85%E7%9A%84%E9%BB%91%E8%89%B2%E5%9D%97%E5%92%8C%E7%99%BD%E8%89%B2%E5%9D%97%E6%95%B0%E9%87%8F%E4%BD%86%E8%BF%99%E6%98%AF%E5%BE%88%E5%AE%B9%E6%98%93%E7%9A%84%E5%9B%A0%E4%B8%BA%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%8F%AA%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E8%BF%9B%E5%87%BA%E7%9A%84%E9%82%A3%E4%B8%A4%E4%B8%AA%E5%85%83%E7%B4%A0%E8%80%8C%E6%BB%91%E5%8A%A8%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%88%91%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E6%A0%B9%E6%8D%AE%E7%AA%97%E5%8F%A3%E9%87%8C%E6%9C%80%E5%B0%91%E7%9A%84%E7%99%BD%E8%89%B2%E5%9D%97%E6%95%B0%E9%87%8F%E6%9D%A5%E6%9B%B4%E6%96%B0%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0%E5%8D%B3%E5%8F%AF%E4%BA%8B%E5%AE%9E%E4%B8%8A%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0%E5%B0%B1%E7%AD%89%E4%BA%8E%E6%89%80%E6%9C%89%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E9%87%8C%E6%9C%80%E5%B0%91%E7%9A%84%E7%99%BD%E8%89%B2%E5%9D%97%E6%95%B0%E9%87%8F%E8%BF%99%E9%87%8C%E6%98%AF%E7%BB%9F%E4%B8%80%E7%9A%84%E5%8C%85%E6%8B%AC%E4%BA%86%E5%8E%9F%E5%A7%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B0%B1%E6%9C%89%E8%BF%9E%E7%BB%ADk%E4%B8%AA%E9%BB%91%E8%89%B2%E5%9D%97%E7%9A%84%E6%83%85%E5%86%B5%E5%9B%A0%E4%B8%BA%E6%AD%A4%E6%97%B6%E4%B8%80%E5%AE%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E9%87%8C%E6%98%AF%E6%B2%A1%E6%9C%89%E7%99%BD%E8%89%B2%E5%9D%97%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%99%BD%E8%89%B2%E5%9D%97%E6%95%B0%E9%87%8F%E6%9C%80%E5%B0%8F%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B00"><span class="nav-number">3.2.</span> <span class="nav-text">此时重新审视题目，发现，其实可以换个思路：如果我们还是用一个长度为k的滑动窗口来遍历字符串，则我们只需要看一下当前窗口里黑色块的数量是多少，如果就是k，则说明原字符串里已经有连续k个黑色块了，则直接return；如果不是k，那么，如果我们最后选择了要把这个滑动窗口里的所有字符都改成&#39;B&#39;，也就是把这个滑动窗口变成长度为k的连续黑色块，那么，我们应该做的操作次数就恰好等于这个滑动窗口里的白色块数量。此时容易想到，滑动窗口滑动的过程中，我们要动态维护窗口内的黑色块和白色块数量，但这是很容易的（因为滑动窗口只需要关注进出的那两个元素）。而滑动的过程中，我们只需要根据窗口里最少的白色块数量，来更新“最少操作次数”即可。事实上，最小操作次数就等于所有滑动窗口里最少的白色块数量（这里是统一的，包括了原始字符串就有连续k个黑色块的情况，因为此时一定有一个滑动窗口里是没有白色块的，也就是白色块数量&#x3D;最小操作次数&#x3D;0）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
