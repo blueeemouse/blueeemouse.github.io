@@ -150,6 +150,133 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/" class="post-title-link" itemprop="url">DART</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-09 21:41:00 / Modified: 21:44:05" itemprop="dateCreated datePublished" datetime="2025-05-09T21:41:00+08:00">2025-05-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt-learning/" itemprop="url" rel="index"><span itemprop="name">prompt learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="问题设定">问题设定：</h1>
+<h2
+id="要解决的是利用clip-based-model用于下游的图像分类的问题">要解决的是利用CLIP-based
+model用于下游的图像分类的问题</h2>
+<h1 id="创新点">创新点：</h1>
+<h2
+id="提出学习两种模态的prompt即text和image而之前的工作大多是只学习text-modal-prompt">提出学习两种模态的prompt（即text和image），而之前的工作大多是只学习text-modal
+prompt</h2>
+<h2
+id="学习的prompt之间是有联系的即用不同的test-sample学习prompt时由前一个test-sample习得的prompt会部分地继承到下一个prompt里继承的程度则由前一个prompt的效果决定效果越好继承的越多">学习的prompt之间是有联系的，即用不同的test
+sample学习prompt时，由前一个test
+sample习得的prompt会部分地继承到下一个prompt里。继承的程度则由前一个prompt的效果决定，效果越好、继承的越多</h2>
+<h1 id="method">Method</h1>
+<h2 id="dual-modal-online-prompting-in-dart">1.Dual-Modal Online
+Prompting in DART</h2>
+<h3
+id="它主要就是对textual-modal的prompt进行改进之前的工作一般都是一个prompt套到多个类上比如this-is-a-photo-of-birddog......-而论文希望改进它给每个类别都设计了自己的prompt并且后续可以学习">它主要就是对textual
+modal的prompt进行改进。之前的工作，一般都是一个prompt套到多个类上，比如this
+is a photo of bird/dog/......
+而论文希望改进，它给每个类别都设计了自己的prompt，并且后续可以学习</h3>
+<h3
+id="另外之前的工作大部分只是在调整textual-modal的prompt但该论文希望visual-modal也能有prompt于是也提出了一个prompt但这里就没有像上面那样给每个类别都设计一个prompt而是只设计了一个prompt">另外，之前的工作大部分只是在调整textual
+modal的prompt，但该论文希望visual
+modal也能有prompt，于是也提出了一个prompt。但这里就没有像上面那样给每个类别都设计一个prompt，而是只设计了一个prompt</h3>
+<h3
+id="这里的两种prompt都是instance-level的就是每个样本的都不一样">这里的两种prompt都是instance-level的，就是每个样本的都不一样</h3>
+<h2 id="adaptive-knowledge-retention-in-dart">2.Adaptive Knowledge
+Retention in DART</h2>
+<h3
+id="之所以它希望能做到knowledge-retention是因为测试的时候数据本就不多并且它是online-learning">之所以它希望能做到knowledge
+retention，是因为测试的时候数据本就不多，并且它是online learning</h3>
+<h3
+id="knowledge-retention的方法就是引入一组prompt包括visual和textual的它们记录了历史信息有点类似于lstm里的隐状态具体来说它引入的这组visual和textual-prompt都是分类别的这里一定要和上面的prompt区分开二者不是同一个东西这里引入的我们可以叫它历史prompt上面的是instance-level的然后历史prompt的学习是依赖于instance-level的有点moco里的动量更新的感觉而instance-level-prompt的初始化又是依赖于历史prompt的">knowledge
+retention的方法就是引入一组prompt，包括visual和textual的。它们记录了历史信息，有点类似于LSTM里的隐状态。具体来说，它引入的这组visual和textual
+prompt，都是分类别的。这里一定要和上面的prompt区分开，二者不是同一个东西。这里引入的我们可以叫它历史prompt，上面的是instance-level的。然后历史prompt的学习是依赖于instance
+level的，有点Moco里的动量更新的感觉；而instance level
+prompt的初始化又是依赖于历史prompt的</h3>
+<h3
+id="这里的核心思想或者说假设是对一个输入样本它属于哪个类的概率更高这个概率是用了visual和textual-prompt的我们认为那个类对应的instance-level-visualtextual-prompt质量越高也会越多地把它融合进历史prompt里">这里的核心思想，或者说假设，是：对一个输入样本，它属于哪个类的概率更高（这个概率是用了visual和textual
+prompt的），我们认为那个类对应的instance-level visual/textual
+prompt质量越高，也会越多地把它融合进历史prompt里</h3>
+<h2 id="the-optimization-of-dart">3.The Optimization of DART</h2>
+<h3
+id="上面要用到的instance-level-visualtextual-prompt其实应该是用历史prompt初始化后需要学习的">上面要用到的instance-level
+visual/textual prompt，其实应该是用历史prompt初始化后，需要学习的</h3>
+<h3
+id="它具体的学习过程如下对一幅输入图像先做b次augmentation得到b幅图像b即batch-size然后利用初始化的prompt计算出各个图像属于各个类别的概率分布再筛选出比较自信的结果取平均得到原始样本属于各个类别的概率最后我们优化原始样本的那个概率分布希望它的信息熵尽可能小也就是要尽可能确定逼近一个独热向量优化应该是梯度下降吧还没看代码">它具体的学习过程如下：对一幅输入图像，先做B次augmentation，得到B幅图像（B即batch
+size），然后利用初始化的prompt计算出各个图像属于各个类别的概率分布，再筛选出比较自信的结果，取平均得到原始样本属于各个类别的概率，最后我们优化原始样本的那个概率分布，希望它的信息熵尽可能小，也就是要尽可能确定，逼近一个独热向量（优化应该是梯度下降吧，还没看代码）</h3>
+<h1 id="疑问">疑问：</h1>
+<h2
+id="论文里认为由prompt得到的分类结果越自信即越接近于一个独热向量效果越好但有没有可能分类错了这时就不应该过多继承吧">（论文里认为，由prompt得到的分类结果越自信——即越接近于一个独热向量，效果越好。但有没有可能分类错了？这时就不应该过多继承吧？）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Incremental%20Learning/FineFMPL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1013,89 +1140,10 @@ id="反正从操作上要解决这个问题就是-用ps--ax找出对应的进程
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E2%80%9C%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9D%E7%9A%84%E6%83%85%E5%86%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E2%80%9C%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9D%E7%9A%84%E6%83%85%E5%86%B5/" class="post-title-link" itemprop="url">登录服务器的时候遇到“无法下载服务器”的情况</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-08 22:16:10" itemprop="dateModified" datetime="2025-05-08T22:16:10+08:00">2025-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1
-id="问题大概就标题所述具体的症状一般是之前能登陆服务器而现在用vscode插件登录服务器的时候输完密码明明没错但就是上不去本来输入密码是在窗口的顶上的但在那里输入完密码之后在终端它又要你输入一遍完了等一会就会报错说的大概就是这种failed-to-install-the-vs-code-server">问题大概就标题所述，具体的症状一般是，（之前能登陆服务器，而现在）用vscode插件登录服务器的时候，输完密码，明明没错，但就是上不去。本来输入密码是在窗口的顶上的，但在那里输入完密码之后，在终端它又要你输入一遍，完了等一会就会报错，说的大概就是这种“Failed
-to install the vs code server”</h1>
-<h1
-id="这个应该算是相对常见的bug吧一般的解决方法就是用其它方式登上服务器例如直接用终端或者用mobaxterm等其它工具进入到用户的目录下把.vscode-server这个文件夹给删掉之后再尝试用vscode插件登录服务器应该就能登上了可以参考一下这个博客">这个应该算是相对常见的bug吧，一般的解决方法就是，用其它方式登上服务器（例如，直接用终端，或者用MobaXterm等其它工具），进入到用户的目录下，把.vscode-server这个文件夹给删掉，之后再尝试用vscode插件登录服务器，应该就能登上了（可以参考一下<a
-target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44504069/article/details/127457003">这个博客</a>）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1161,7 +1209,7 @@ target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44504069/article/d
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">121</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1172,7 +1220,7 @@ target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44504069/article/d
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">61</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
