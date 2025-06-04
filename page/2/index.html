@@ -150,6 +150,291 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/30/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%8E%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/30/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%8E%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" class="post-title-link" itemprop="url">线性回归与逻辑回归</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-30 01:10:00 / Modified: 01:16:51" itemprop="dateCreated datePublished" datetime="2025-05-30T01:10:00+08:00">2025-05-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">ml常见算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一线性回归linear-regression"><strong>一、线性回归（Linear
+Regression）</strong></h1>
+<h2 id="核心思想">1. <strong>核心思想</strong></h2>
+<h3 id="用于解决连续值预测问题假设因变量与自变量之间存在线性关系例如根据房屋面积地段预测房价根据广告投入预测销售额">用于解决<strong>连续值预测问题</strong>，假设因变量与自变量之间存在线性关系。例如：根据房屋面积、地段预测房价，根据广告投入预测销售额。</h3>
+<h2 id="模型形式">2. <strong>模型形式</strong></h2>
+<h3 id="公式y-w_1x_1-w_2x_2-dots-w_nx_n-b其中y是预测的连续值w和b是模型参数">-
+公式：(<span class="math inline">\(y = w_1x_1 + w_2x_2 + \dots + w_nx_n
++ b\)</span>)，其中y是预测的连续值，w和b是模型参数。</h3>
+<h3 id="目标通过最小化均方误差mse-拟合一条直线或超平面使预测值与真实值的差距最小">-
+目标：通过最小化<strong>均方误差（MSE）</strong> 拟合一条直线（或超平面），使预测值与真实值的差距最小。</h3>
+<h2 id="关键特点">3. <strong>关键特点</strong></h2>
+<h3 id="输出是连续数值需满足自变量和因变量的线性假设">-
+输出是连续数值，需满足自变量和因变量的线性假设。</h3>
+<h3 id="对异常值敏感因为-mse-放大了大误差的影响">- 对异常值敏感（因为
+MSE 放大了大误差的影响）。</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/30/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%8E%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-29 01:08:46 / Modified: 01:38:26" itemprop="dateCreated datePublished" datetime="2025-05-29T01:08:46+08:00">2025-05-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="文章聚焦于多智能体系统中协作任务下智能体的自适应行为构建问题现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性导致在零样本协作场景即与未知队友协作中智能体缺乏战略适应能力研究旨在解决这一挑战提出利用大语言模型llms构建可动态适应队友行为的主动协作智能体框架-proagent">文章聚焦于多智能体系统中<strong>协作任务下智能体的自适应行为构建问题</strong>。现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性，导致在<strong>零样本协作场景</strong>（即与未知队友协作）中，智能体缺乏战略适应能力。研究旨在解决这一挑战，提出利用大语言模型（LLMs）构建可动态适应队友行为的主动协作智能体框架
+ProAgent。</h1>
+<h1 id="零样本协作挑战指智能体在没有预先训练或微调的情况下与未知队友包括-ai-或人类协作时面临的适应性难题文中提到现有-zsc-方法如基于种群训练-pbt心智理论-tom需消耗大量计算资源进行数据收集和模型优化且生成的策略缺乏可解释性难以在未见过的协作场景中有效泛化例如在-overcooked-ai-环境中传统方法无法高效推断新队友的意图导致协作效率低下">零样本协作挑战指智能体在<strong>没有预先训练或微调</strong>的情况下，与未知队友（包括
+AI 或人类）协作时面临的适应性难题。文中提到，现有 ZSC
+方法（如基于种群训练 PBT、心智理论
+ToM）需消耗大量计算资源进行数据收集和模型优化，且生成的策略缺乏可解释性，难以在未见过的协作场景中有效泛化。例如，在
+Overcooked-AI
+环境中，传统方法无法高效推断新队友的意图，导致协作效率低下。</h1>
+<h1 id="动态意图推理的挑战">动态意图推理的挑战</h1>
+<h2 id="动态意图推理的挑战指在协作过程中智能体需实时推断队友的行为意图并动态调整自身策略但现有方法难以实现这一点具体而言">动态意图推理的挑战指在协作过程中，智能体需<strong>实时推断队友的行为意图并动态调整自身策略</strong>，但现有方法难以实现这一点。具体而言</h2>
+<h3 id="传统方法依赖固定训练数据无法适应队友策略的动态变化">-
+传统方法依赖固定训练数据，无法适应队友策略的动态变化；</h3>
+<h3 id="缺乏对队友实际行为与预测意图的修正机制导致推理偏差累积">-
+缺乏对队友实际行为与预测意图的修正机制，导致推理偏差累积；</h3>
+<h3 id="难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析">-
+难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析。</h3>
+<h1 id="现有方法的缺陷">现有方法的缺陷</h1>
+<h2 id="策略泛化能力受限">（1）策略泛化能力受限</h2>
+<h3 id="依赖训练阶段队友多样性无法适应未知队友例如基于自玩sp或种群训练pbt的方法在零样本场景中性能显著下降">-
+依赖训练阶段队友多样性，无法适应未知队友。例如，基于自玩（SP）或种群训练（PBT）的方法在零样本场景中性能显著下降。</h3>
+<h2 id="计算与数据效率低">（2）计算与数据效率低</h2>
+<h3 id="零样本协作方法如-pbtmep需大量数据收集和模型优化资源消耗大">-
+零样本协作方法（如 PBT、MEP）需大量数据收集和模型优化，资源消耗大。</h3>
+<h2 id="可解释性不足">（3）可解释性不足</h2>
+<h3 id="学习型方法如强化学习的策略为黑盒难以解释决策逻辑而-proagent-通过自然语言推理提升可解释性">-
+学习型方法（如强化学习）的策略为黑盒，难以解释决策逻辑，而 ProAgent
+通过自然语言推理提升可解释性。</h3>
+<h2 id="动态意图推理能力弱">（4）动态意图推理能力弱</h2>
+<h3 id="缺乏显式的意图推断与修正机制无法根据队友实时行为调整策略导致协作效率低下">-
+缺乏显式的意图推断与修正机制，无法根据队友实时行为调整策略，导致协作效率低下。</h3>
+<h1 id="解决上述挑战的方法proagent-框架">解决上述挑战的方法：ProAgent
+框架</h1>
+<h2 id="proagent-通过以下机制解决零样本协作与动态意图推理挑战">ProAgent
+通过以下机制解决零样本协作与动态意图推理挑战：</h2>
+<h3 id="基于-llm-的动态意图推理与规划">（1）基于 LLM
+的动态意图推理与规划</h3>
+<h4 id="planner-模块利用-llm-的链式思维cot推理分析当前状态并推断队友意图生成高层协作策略">-
+<strong>Planner 模块</strong>：利用 LLM
+的链式思维（CoT）推理，分析当前状态并推断队友意图，生成高层协作策略。</h4>
+<h4 id="belief-correction-信念修正机制将预测的队友意图与实际行为对比更新信念库提升后续推理准确性例如若预测队友会拾取洋葱但实际未执行机制会修正信念并调整后续计划">-
+<strong>Belief Correction
+信念修正机制</strong>：将预测的队友意图与实际行为对比，更新信念库，提升后续推理准确性。例如，若预测队友会拾取洋葱但实际未执行，机制会修正信念并调整后续计划。</h4>
+<h3 id="模块化设计支持零样本适应">（2）模块化设计支持零样本适应</h3>
+<h4 id="verificator-模块验证计划可行性若失败则通过多轮提示分析原因如前提条件不满足触发重新规划">-
+<strong>Verificator
+模块</strong>：验证计划可行性，若失败则通过多轮提示分析原因（如前提条件不满足），触发重新规划。</h4>
+<h4 id="memory-模块存储任务知识历史状态与信念支持基于上下文的快速决策无需额外训练">-
+<strong>Memory
+模块</strong>：存储任务知识、历史状态与信念，支持基于上下文的快速决策，无需额外训练。</h4>
+<h4 id="controller-模块将高层技能分解为底层动作适配不同环境如-overcooked-ai-中的路径搜索">-
+<strong>Controller
+模块</strong>：将高层技能分解为底层动作，适配不同环境（如 Overcooked-AI
+中的路径搜索）。</h4>
+<h3 id="把上面各个模块串一下有个planner模块类似于大脑会优先用它进行分析当前状态得到决策而当前状态包括环境状态以及队友状态状态是经由一个llm进行提取的提取状态时会用到一个长期的memory模块决策则包括自身的预决策也就是打算做的事以及对队友意图的预测-对队友意图的预测可能会被纠正只需要看看队友实际做了什么就知道我们是否预测对了这部分由belief-correction机制实现-自身的预决策需要先判断能否进行这个动作可能实际环境限制导致无法开展此时就需要verificator模块来验证可行性可行则由controller模块进一步细分并执行不可行则需要分析原因并重新规划">把上面各个模块串一下：有个planner模块，类似于大脑，会优先用它进行分析当前状态，得到决策。而当前状态，包括环境状态以及队友状态（状态是经由一个llm进行提取的。提取状态时，会用到一个长期的Memory模块）；决策则包括自身的预决策（也就是打算做的事），以及对队友意图的预测<br>对队友意图的预测，可能会被纠正（只需要看看队友实际做了什么，就知道我们是否预测对了。这部分由Belief
+Correction机制实现）<br>自身的预决策，需要先判断能否进行这个动作（可能实际环境限制，导致无法开展）。此时就需要Verificator模块，来验证可行性。可行，则由Controller模块进一步细分并执行；不可行，则需要分析原因，并重新规划</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E.reshape%E5%92%8C.view%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8C%BA%E5%88%AB%E5%92%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E.reshape%E5%92%8C.view%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8C%BA%E5%88%AB%E5%92%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" class="post-title-link" itemprop="url">关于.reshape和.view的一些区别和注意事项</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-29 00:56:00 / Modified: 00:57:26" itemprop="dateCreated datePublished" datetime="2025-05-29T00:56:00+08:00">2025-05-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">python相关bugs或知识</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">pytorch相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="view是改变数据的视图不会占用多余的内存因为它相当于就地修改或者说它只是修改一下stride它要求操作的张量的所有数据地址是连续的当不连续的时候需要先进行.contiguous再进行.reshape这里的.contiguous起到的效果从直观上看就是让数据的地址连续实际上它应该就是新开辟了一块连续的内存然后把我们操作的数据放过去这样相当于得到一份新的地址连续的数据把它叫做新数据.contiguous函数会返回这份新数据的引用我们实质上是在操作新数据因此此时原数据还占着一块内存新的数据也占用了另一块内存这样就加大了内存的开销">.view是改变数据的视图，不会占用多余的内存，因为它相当于就地修改，或者说它只是修改一下stride。它要求操作的张量的所有数据地址是连续的，当不连续的时候，需要先进行.contiguous再进行.reshape，这里的.contiguous起到的效果，从直观上看就是让数据的地址连续。实际上它应该就是新开辟了一块连续的内存，然后把我们操作的数据放过去，这样相当于得到一份新的地址连续的数据，把它叫做新数据，.contiguous函数会返回这份新数据的引用。我们实质上是在操作新数据。因此，此时原数据还占着一块内存，新的数据也占用了另一块内存，这样就加大了内存的开销。</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E.reshape%E5%92%8C.view%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8C%BA%E5%88%AB%E5%92%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/28/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E5%AE%9A%E9%95%BF%E5%AD%90%E4%B8%B2%E4%B8%AD%E5%85%83%E9%9F%B3%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -701,308 +986,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap1.深度神经网络基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-26 15:49:00 / Modified: 17:00:41" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前略一些发展历史">1.前略，一些发展历史</h1>
-<h1 id="深度神经网络计算框架">2.深度神经网络计算框架</h1>
-<h2 id="深度学习框架的必要性">2.1.深度学习框架的必要性：</h2>
-<h3 id="如果没有现在的各种计算框架例如pytorchtensorflow则我们要训练一个神经网络就需要手动实现各种层的前向以及后向且性能可能就没有现在调用库的函数那么高效每个人写出来的函数也未必完全一样可移植性也不够好同一个算子很难跑在不同的加速设备上-因此非常有必要发展深度神经网络的计算框架要是没有现在这些框架魔改模型也会更加麻烦吧门槛就更高了魔改类的文章也会更少了且上面的缺点正是框架被提出的目的">如果没有现在的各种计算框架，例如pytorch，tensorflow，则我们要训练一个神经网络，就需要手动实现各种层的前向以及后向，且性能可能就没有现在调用库的函数那么高效；每个人写出来的函数也未必完全一样，可移植性也不够好；同一个算子很难跑在不同的加速设备上<br>因此，非常有必要发展深度神经网络的计算框架（要是没有现在这些框架，魔改模型也会更加麻烦吧，门槛就更高了，魔改类的文章也会更少了……），且上面的缺点，正是框架被提出的目的</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap2.Pytorch基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-26 15:49:00" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-27 16:00:43" itemprop="dateModified" datetime="2025-05-27T16:00:43+08:00">2025-05-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="神经网络模型搭建">1.神经网络模型搭建</h1>
-<h2 id="这里主要是通过三个例子简单介绍一下pytorch怎么建立模型">这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型</h2>
-<h2 id="例1.-lenet的搭建">例1. LeNet的搭建</h2>
-<h3 id="知道各个基本的层例如conv2d的计算过程avg-poolingmax-pooling的计算过程">知道各个基本的层，例如Conv2d的计算过程，Avg
-Pooling、Max Pooling的计算过程</h3>
-<h3 id="此外需要掌握编写神经网络的类的细节">此外，需要掌握编写神经网络的类的细节：</h3>
-<h4 id="第一网络的类一般是继承了nn.module类的">第一，网络的类一般是继承了nn.Module类的</h4>
-<h4 id="第二因为继承了这个类所以也需要先初始化一下也就是superyour_network_name-self.__-init__">第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_Network_Name,
-self).__ init__()</h4>
-<h4 id="第三一般我们把网络里可训练的层的初始化放到__-init__函数里">第三，一般我们把网络里可训练的层的初始化放到__
-init__函数里</h4>
-<h3 id="了解常见层的计算过程这里主要介绍的是cnn里常用的卷积和池化能根据输入数据的形状以及各个层的参数算出输出数据的尺寸">了解常见层的计算过程（这里主要介绍的是CNN里常用的卷积和池化），能根据输入数据的形状以及各个层的参数，算出输出数据的尺寸</h3>
-<h2 id="例2.-googlenet的搭建">例2. GoogLeNet的搭建</h2>
-<h3 id="这里也不太清楚怎么考可能是要把googlenet的网络架构记下来然后每个分支都能写出相应代码吧">这里也不太清楚怎么考，可能是要把GoogLeNet的网络架构记下来，然后每个分支都能写出相应代码吧</h3>
-<h2 id="例3.-resnet的搭建">例3. ResNet的搭建</h2>
-<h3 id="首先resnet的搭建基本就是靠堆叠残差块实现的残差块分了两种模式18和34层的resnet用的是basicblock而50及更高层数的resnet用的是bottleneck">首先，ResNet的搭建基本就是靠堆叠残差块实现的。残差块分了两种模式，18和34层的ResNet，用的是BasicBlock，而50及更高层数的ResNet用的是Bottleneck</h3>
-<h3 id="resnet的实例化一般就是通过指定每种残差块的个数来实现的一般它会被分成四个大的layer每个layer里可能有若干个残差块我们只需要通过一个列表指定这四个大layer里残差块的格式即可得到具体的resnet">ResNet的实例化，一般就是通过指定每种残差块的个数来实现的。一般它会被分成四个“大的”layer，每个layer里可能有若干个残差块，我们只需要通过一个列表，指定这四个“大”layer里残差块的格式，即可得到具体的ResNet</h3>
-<h1 id="定制数据集">2.定制数据集</h1>
-<h2 id="这里介绍了一般的关于现有数据集的一些操作以及怎么定制一个自己的数据集">这里介绍了一般的关于现有数据集的一些操作，以及怎么定制一个自己的数据集</h2>
-<h2 id="使用现有数据集">2.1. 使用现有数据集</h2>
-<h3 id="直接当函数调用即可例如要调用cifar10的训练数据则执行形如这样的代码即可trainset-torchvision.datasets.cifar10root.data-traintrue-downloadtrue-transformtransform-注意到这里有transform参数它代表了我们要对数据进行的预处理的操作传进去的一般是transforms库里的compose得到的一个一系列的操作例如transform-transforms.composetransforms.totensor-transforms.normalize0.5-0.5-0.5-0.5-0.5-0.5这里可能还需要我们了解常见的数据预处理的操作例如此处的totensor就是把numpy格式的图像数据给转化成torch格式的图像数据二者的主要区别在于channel维度在第几个维度numpy格式是htimes-wtimes-c而torch格式是ctimes-htimes-w">直接当函数调用即可。例如，要调用CIFAR10的训练数据，则执行形如这样的代码即可<code>trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)</code><br>注意到这里有transform参数，它代表了我们要对数据进行的预处理的操作。传进去的一般是transforms库里的Compose得到的一个一系列的操作，例如：<code>transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])</code>（这里可能还需要我们了解常见的数据预处理的操作。例如，此处的ToTensor就是把numpy格式的图像数据给转化成torch格式的图像数据，二者的主要区别在于Channel维度在第几个维度，numpy格式是<span class="math inline">\(H\times W\times C\)</span>，而torch格式是<span class="math inline">\(C\times H\times W\)</span></h3>
-<h3 id="上面我们得到了现有的数据集但实际使用时需要把数据放到一个dataloader里以便加载使用一般用torch.utils.data.dataloader例如trainloader-torch.utils.data.dataloadertrainset-batch_size4-shuffletrue-num_workers这里我们可以通过shuffle参数指定是否打乱数据集以及可以用multiprocessing-workers并行地加载数据">上面我们得到了现有的数据集，但实际使用时，需要把数据放到一个dataloader里，以便加载使用。一般用torch.utils.data.DataLoader，例如：<code>trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers)</code>，这里我们可以通过shuffle参数指定是否打乱数据集，以及可以用multiprocessing
-workers并行地加载数据</h3>
-<h2 id="定制自己的数据集">2.2. 定制自己的数据集</h2>
-<h3 id="定制自己的数据集首先得有自己的数据然而原始的数据可能格式不太对需要一些转换这时可能要用到一些库了">2.2.1.
-定制自己的数据集，首先得有自己的数据。然而原始的数据可能格式不太对，需要一些转换，这时可能要用到一些库了</h3>
-<h3 id="下一步是打标签这里是以经典的图像分类任务为例那可以考虑labelimg这个工具当然还有其它的例如labelme">2.2.2.
-下一步是打标签。这里是以经典的图像分类任务为例，那可以考虑labelimg这个工具。当然还有其它的，例如labelme</h3>
-<h3 id="有了数据以后类似上面调用现有数据集的方式我们还是需要一个数据集的类从而可以通过这个类来获取数据集因为本质上我们最后希望的效果是通过dataloader来获取batch-data而dataloader获取batch-data的本质是生成索引然后每个batch就用相应的batch索引从数据集类里获取数据这也是为什么实例化一个dataloader的时候我们要传入dataset-我们要继承的是一个torch.utils.data.dataset类它代表了一个数据集的抽象类我们自定义的时候重点关注三个函数__-len__函数它可以返回数据集的大小-__-getitem__函数它支持根据索引取出具体的数据例如dataseti就可以取出第i个样本这种方式的好处是我们不需要每次都把所有的数据加载到内存里毕竟这样一旦数据集大点可能内存就炸了而是要用到哪些数据时我就加载这些数据-__-init__函数一个类当然要有初始的函数了具体到这里的例子我们可能会在这里放一些类似于数据路径要对数据进行的预处理操作transform等以供__-getitem__或其它函数使用">2.2.3.
-有了数据以后，类似上面调用现有数据集的方式，我们还是需要一个数据集的类，从而可以通过这个类来获取数据集。因为本质上，我们最后希望的效果是通过dataloader来获取batch
-data，而dataloader获取batch
-data的本质是，生成索引，然后每个batch就用相应的batch索引，从数据集类里获取数据（这也是为什么实例化一个dataloader的时候我们要传入dataset）<br>我们要继承的是一个torch.utils.data.Dataset类，它代表了一个数据集的抽象类。我们自定义的时候，重点关注三个函数：__
-len__函数，它可以返回数据集的大小；<br>__
-getitem__函数，它支持根据索引取出具体的数据，例如dataset[i]就可以取出第i个样本。这种方式的好处是，我们不需要每次都把所有的数据加载到内存里（毕竟这样一旦数据集大点，可能内存就炸了），而是要用到哪些数据时，我就加载这些数据<br>__
-init__函数，一个类当然要有初始的函数了。具体到这里的例子，我们可能会在这里放一些类似于数据路径、要对数据进行的预处理操作transform等，以供__
-getitem__或其它函数使用</h3>
-<h3 id="实际使用时我们可能需要定制化的transform此时则可以考虑把操作给写成一个类然后transforms.compose的时候我们就传入这些自己写的类就行当然此时需要修改它的__-init__方法和__-call__方法以及它继承的是object类">2.2.4.
-实际使用时，我们可能需要定制化的transform，此时则可以考虑把操作给写成一个类，然后transforms.Compose的时候，我们就传入这些自己写的类就行（当然，此时需要修改它的__
-init__方法和__ call__方法。以及，它继承的是object类）</h3>
-<h3 id="综上我们定制了自己的数据集的类它可以顺利加载数据且进行相应的数据增强操作如果有并且想定制数据增强操作也是可以的之后就是按照一般流程走了实例化一个数据集的类再构造对应的dataloader即可">综上，我们定制了自己的数据集的类，它可以顺利加载数据，且进行相应的数据增强操作（如果有），并且想定制数据增强操作也是可以的。之后就是按照一般流程走了，实例化一个数据集的类，再构造对应的dataloader即可</h3>
-<h1 id="使用服务器">3.使用服务器</h1>
-<h2 id="简介">3.1. 简介：</h2>
-<h3 id="服务器一般都是linux系统且因为linux系统中一切都是文件而配置一个服务本质上就是在修改配置文件里的一些设置所以日常使用时一定会编写文档因此需要一个文档编辑器最经典的就是vim了">服务器，一般都是linux系统。且因为linux系统中，一切都是文件，而配置一个服务，本质上就是在修改配置文件里的一些设置；所以，日常使用时一定会编写文档，因此需要一个文档编辑器。最经典的就是vim了</h3>
-<h4 id="再简单介绍一下vim它有三种模式输入模式命令模式和末行模式">再简单介绍一下vim。它有三种模式，输入模式、命令模式和末行模式</h4>
-<h4 id="输入模式就是一般的模式我们打字就能编辑文档一般是通过aio等键位例如最常用的i表示换到插入模式从命令模式转到输入模式按esc键则可以从输入模式切换到命令模式从命令模式按冒号可以切换到末行模式也因此一些常用的退出保存等操作都是带个冒号的比如q就是退出w就是保存wq就是强制保存退出而从末行模式再按esc则可以切换到命令模式由此可以看出来esc键是可以在任何情况下切到命令模式的事实上命令模式也充当了一个中介的作用毕竟输入模式和末行模式相互之间无法直接切换得通过命令模式来所以切换到命令模式当然得尽量快捷简便">输入模式，就是一般的模式，我们打字，就能编辑文档。一般是通过a、i、o等键位（例如最常用的，i表示换到插入模式），从命令模式转到输入模式；按Esc键，则可以从输入模式切换到命令模式。从命令模式，按冒号可以切换到末行模式（也因此，一些常用的退出、保存等操作，都是带个冒号的。比如，<code>:q</code>就是退出，<code>:w</code>就是保存，<code>:wq</code>就是强制保存退出）；而从末行模式，再按Esc，则可以切换到命令模式（由此可以看出来，Esc键是可以在任何情况下切到命令模式的。事实上，命令模式也充当了一个中介的作用，毕竟输入模式和末行模式相互之间无法直接切换，得通过命令模式来，所以切换到命令模式当然得尽量快捷简便）</h4>
-<h2 id="框架简介与环境配置">3.2. 框架简介与环境配置：</h2>
-<h3 id="gpu环境的配置一般依赖于以下这几个东西">GPU环境的配置，一般依赖于以下这几个东西：</h3>
-<h4 id="nvidia-driver">Nvidia Driver</h4>
-<h4 id="cudnn">cuDNN</h4>
-<h4 id="cuda">CUDA</h4>
-<h4 id="pytorch">PyTorch</h4>
-<h1 id="训练过程可视化">4.训练过程可视化</h1>
-<h2 id="这里介绍的是用tensorboard进行可视化它相比于老式的一大堆print可视化效果更好也更加方便些不过这并不意味着print的方式就被彻底淘汰了">这里介绍的是用TensorBoard进行可视化（它相比于老式的一大堆print，可视化效果更好，也更加方便些）（不过这并不意味着print的方式就被彻底淘汰了）</h2>
-<h2 id="使用tensorboard的五个步骤">使用TensorBoard的五个步骤：</h2>
-<h3 id="记录想要观察的张量例如w2_hist-tf.summary.histogramweights2-w2cost_summ-tf.summary.scalarcost-cost">1.
-记录想要观察的张量。例如，<code>w2_hist = tf.summary.histogram("weights2", W2)</code>；<code>cost_summ = tf.summary.scalar("cost", cost)</code></h3>
-<h3 id="合并所有的summaries简单理解就是把所有的记录合并一下summary-tf.summary.merge_all">2.
-合并所有的summaries（简单理解，就是把所有的记录合并一下）。<code>summary = tf.summary.merge_all()</code></h3>
-<h3 id="创建writer并添加graph">3. 创建writer，并添加graph</h3>
-<h4 id="这里应该是要把结果给保存到某个路径下因此需要用到一个writer以及需要添加graph这里添加graph主要是为了得到模型的架构以方便后续的可视化还有用于分析模型的复杂度等-writer-tf.summayr.filewriter.logs-writer.add_graphsess.graph">这里应该是要把结果给保存到某个路径下，因此需要用到一个writer；以及，需要添加graph（这里添加graph，主要是为了得到模型的架构，以方便后续的可视化；还有用于分析模型的复杂度等）<br><code>writer = tf.summayr.FileWriter('./logs')</code><br><code>writer.add_graph(sess.graph)</code></h4>
-<h3 id="run-summary-merge-and-add_summary但这一步好像是tensorflow-1.x里的东西了在2.x的版本里被简化了所以感觉不会考代码啊">4.
-Run summary merge and add_summary（但这一步好像是tensorflow
-1.x里的东西了，在2.x的版本里被简化了？所以感觉不会考代码啊）</h3>
-<h3 id="launch-tensorboard">5. Launch TensorBoard</h3>
-<h4 id="这个倒是常见tensorboard---log-dir.logs指定一下记录的文件的路径就可以打开tensorboard了">这个倒是常见，<code>tensorboard --log-dir=./logs</code>，指定一下记录的文件的路径，就可以打开tensorboard了</h4>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-26 15:08:24" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-27 15:39:54" itemprop="dateModified" datetime="2025-05-27T15:39:54+08:00">2025-05-27</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="section">#</h2>
-<p>title: chap6.深度学习中的分布式训练——算法及系统 date: 2025-05-26
-15:51 tags: [分布式训练] categories: [mlsys, foundation] --- # 1.
-分布式训练的必要性 ##
-随着问题规模的增大（包括数据量和计算量层面的），单一设备处理速度逐渐无法满足我们的需求（比如太慢了，或者是干脆单设备放不下模型了）<br>而用分布式算法，把问题划分为若干小问题后，再经过分布式系统来执行处理，能做到较快解决较大的问题
-## 这里还介绍两个并行加速定律，来说明分布式训练的意义。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1072,18 +1055,18 @@ Run summary merge and add_summary（但这一步好像是tensorflow
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
