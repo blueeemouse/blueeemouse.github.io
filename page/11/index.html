@@ -150,6 +150,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Visible-Infrared%20Person%20Re-Identification%20via%20Semantic%20Alignment%20and%20Affinity%20Inference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Visible-Infrared%20Person%20Re-Identification%20via%20Semantic%20Alignment%20and%20Affinity%20Inference/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-31 17:26:16 / Modified: 21:58:53" itemprop="dateCreated datePublished" datetime="2024-10-31T17:26:16+08:00">2024-10-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="iccv23">iccv23</h1>
+<h1
+id="problem论文认为part-based-methods都用水平划分来分割部位例如某条线上面是头某两条线中间是躯干大概是这个意思吧真有人这么找部位嘛也太烂了吧不会是因为iccv时间比较早大家早期这么干吧还有就是没考虑到pedestrians-relationship没搞懂得看看它想说什么">problem：论文认为，part-based
+methods都用水平划分来分割部位（例如，某条线上面是头，某两条线中间是躯干。。大概是这个意思吧？）（真有人这么找部位嘛。。也太烂了吧，不会是因为iccv时间比较早，大家早期这么干吧）。还有就是，没考虑到pedestrians
+relationship（没搞懂，得看看它想说什么）</h1>
+<h1
+id="motivationwe-propose-a-semantic-alignment-and-affinity-inference-framework-saai-which-aligns-latent-semantic-part-features-and-better-utilizes-auxiliary-affinity-information.它这么说了看看-1.如何aligns-latent-semantic-part-features-2.如何utilize-auxiliary-affinity-information先注意一下怎么定义的affinity-information">motivation：We
+propose a Semantic Alignment and Affinity Inference framework (SAAI),
+which aligns latent semantic part features and better utilizes auxiliary
+affinity information.它这么说了，看看：<br>1.如何aligns latent semantic
+part features<br>2.如何utilize auxiliary affinity
+information（先注意一下怎么定义的affinity information）</h1>
+<h1 id="method">method：</h1>
+<h2 id="semantic-aligned-feature-learningsafl">1.Semantic-Aligned
+Feature Learning（SAFL）</h2>
+<h3
+id="公共prototypebnneck来减小modality-gapbnneck到底是什么是不是类似改良过的bn话又说回来提到分布间的差异的时候常常会用bn来调整-具体步骤-1.-像素级特征划分-拿到一个特征图-fv-和-fr划分为像素级特征-tv-和-tr-2.-相似性计算-计算像素级特征与可训练原型-p-之间的相似性矩阵-sv-和-sr-3.-部分特征聚合-根据相似性矩阵聚合像素级特征形成潜在语义部分特征-pv和-pr-4.-特征增强-将部分特征与全局特征连接得到增强的特征-fv-和-fr-5.-特征归一化-使用双分支bnneck归一化增强的特征得到归一化后的特征-fv-和-fr-6.-损失计算-计算身份损失-lid部分多样性损失-lpd和中心分离损失-lcs用于模型训练这个l_pd是想让各个不同的prototype学到不同的特征有点像之前生成embedding那篇文章diverse-embedding-expansion-network-and-low-light-cross-modality-benchmark-for-visible-infrared-person-re-identification里促使embedding尽可能不同的那个损失至于l_cs就有点像无监督里的那一套了就是希望让同一identity的样本相对聚拢一点而聚拢就体现在靠近同一identity样本的中心这个就比较稀松平常了">公共prototype，BNNeck来减小modality
+gap（BNNeck到底是什么。。是不是类似改良过的BN？话又说回来，提到分布间的差异的时候，常常会用BN来调整）<br>具体步骤：<br>1.
+<strong>像素级特征划分</strong>:
+拿到一个特征图 Fv​ 和 Fr，划分为像素级特征 Tv​ 和 Tr。<br>2.
+<strong>相似性计算</strong>:
+计算像素级特征与可训练原型 P 之间的相似性矩阵 Sv​ 和 Sr。<br>3.
+<strong>部分特征聚合</strong>:
+根据相似性矩阵，聚合像素级特征形成潜在语义部分特征 pv和 pr​。<br>4.
+<strong>特征增强</strong>:
+将部分特征与全局特征连接，得到增强的特征 F<sup>v 和 F</sup>r。<br>5.
+<strong>特征归一化</strong>:
+使用双分支BNneck归一化增强的特征，得到归一化后的特征 F<sub>v 和 F</sub>r。<br>6.
+<strong>损失计算</strong>:
+计算身份损失 Lid​、部分多样性损失 Lpd和中心分离损失 Lcs，用于模型训练。（这个<span
+class="math inline">\(L_{pd}\)</span>是想让各个不同的prototype学到不同的特征，有点像之前生成embedding那篇文章[[Diverse
+Embedding Expansion Network and Low-Light Cross-Modality Benchmark for
+Visible-Infrared Person
+Re-Identification]]里，促使embedding尽可能不同的那个损失。至于<span
+class="math inline">\(L_{cs}\)</span>，就有点像无监督里的那一套了，就是希望让同一identity的样本相对聚拢一点，而聚拢就体现在靠近同一identity样本的中心。这个就比较稀松平常了）</h3>
+<h2
+id="affinity-inference-moduleaim-module这个东西主要是用在推理的时候有点插件的意思可以加在其它网络上">2.Affinity
+Inference Module（AIM
+module）（这个东西主要是用在推理的时候，有点插件的意思，可以加在其它网络上）</h2>
+<h3
+id="它虽然口口声声说以前的方法忽略了所谓affinity只用cosine-similarity或欧氏距离然后自己利用了affinity但它自己计算affinity不也是用cosine-similarity嘛或者也可能是欧氏距离改进不就顶多体现在识别的时候还利用了gallery-images之间的相似性嘛-大体上说aim做的事就是计算出每个query-image与gallery-images之间的相似性矩阵记作所谓亲和性矩阵affinity-matrix由此可以算出一个base-distance-d这还没完继续计算gallery-images相互之间的亲和性矩阵由此可以算出一个修正距离d注意计算这个修正距离的时候还会对上面提到的两个亲和性矩阵进行一些额外的操作譬如去掉噪声值考虑邻居信息最后修正后的距离是d---d但比较令人奇怪的点是为什么二者相减就表示了一种修正的确修正距离的计算还是有一点道理的主要是除了考虑query-image与gallery-images之间的距离把gallery-images之间的相似性也考虑进来那相减呢表示了什么">它虽然口口声声说以前的方法忽略了所谓affinity，只用cosine
+similarity或欧氏距离，然后自己利用了affinity，但它自己计算affinity不也是用cosine
+similarity嘛（或者也可能是欧氏距离），改进不就顶多体现在识别的时候还利用了gallery
+images之间的相似性嘛<br>大体上说，AIM做的事就是，计算出每个query
+image与gallery images之间的相似性矩阵，记作所谓亲和性矩阵affinity
+matrix，由此可以算出一个base distance d；这还没完，继续计算gallery
+images相互之间的亲和性矩阵，由此可以算出一个修正距离<span
+class="math inline">\(d^{*}\)</span>（注意计算这个修正距离的时候，还会对上面提到的两个亲和性矩阵进行一些额外的操作，譬如去掉噪声值，考虑邻居信息）。最后，修正后的距离是<span
+class="math inline">\(d -
+d^{*}\)</span>（但比较令人奇怪的点是，为什么二者相减就表示了一种修正？的确，修正距离的计算还是有一点道理的，主要是除了考虑query
+image与gallery images之间的距离，把gallery
+images之间的相似性也考虑进来。那相减呢？表示了什么？）</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Unsupervised%20visible-infrared%20person%20re-identification%20via%20progressive%20graph%20matching%20and%20alternate%20learning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1154,100 +1264,6 @@ target="_blank" rel="noopener" href="https://github.com/wuancong/SYSU-MM01/tree/
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-26 22:41:58" itemprop="dateCreated datePublished" datetime="2024-10-26T22:41:58+08:00">2024-10-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-16 21:29:22" itemprop="dateModified" datetime="2025-02-16T21:29:22+08:00">2025-02-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="eccv24">ECCV24</h1>
-<h1
-id="所研究的taskunsupervised-visible-infrared-person-re-identification">所研究的task：Unsupervised
-Visible-Infrared Person Re-Identification。</h1>
-<h1
-id="贡献提出了一种指标ari用来评价聚类的效果-提出了multi-memory-matching-framework可以提取更多信息以便实现更好的跨模态的对应cross-modality-correspondences">贡献：提出了一种指标ARI，用来评价聚类的效果<br>提出了Multi-Memory
-Matching
-framework，可以提取更多信息，以便实现更好的跨模态的对应（cross-modality
-correspondences）</h1>
-<h1
-id="insight通过多特征匹配来提高聚类和伪标签的可靠性以及辅助跨模态的对应和一般的提高跨模态对应的方法不太一样那些更多聚焦于怎么去对应会把对应的方法转化成其它优化问题">insight：通过多特征匹配，来提高聚类和伪标签的可靠性，以及辅助跨模态的对应（和一般的提高跨模态对应的方法不太一样——那些更多聚焦于怎么去对应，会把对应的方法转化成其它优化问题）</h1>
-<h1
-id="动机无监督情况下训练很大程度上依赖于聚类产生的伪标签但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究而本文先是提出一个指标用来衡量聚类产生的伪标签的效果之后发现其实以前的一些方法的伪标签效果不算好例如明明是不同identity对应的特征但是聚类的时候被分到了相同的伪标签">动机：无监督情况下，训练很大程度上依赖于聚类产生的伪标签。但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究。而本文先是提出一个指标，用来衡量聚类产生的伪标签的效果，之后发现其实以前的一些方法的伪标签效果不算好（例如，明明是不同identity对应的特征，但是聚类的时候被分到了相同的伪标签）</h1>
-<h1 id="方法">方法</h1>
-<h2
-id="cross-modality-clusteringcmc整个pipeline的第一步它主要是用于生成伪标签它的大体思想是提取出图像的更多特征用于进行一个多特征的匹配而不是以往的单特征匹配以提高匹配的可靠性-而所谓单特征匹配其实就是对每幅图像我们都只提取出一个特征向量然后就开始匹配本质上我们在期望这一个特征向量就提取出足够的有意义的信息所以其实它的创新不止是在于提取更多特征这样只是增加了参数量而已至于它所说的更多特征能提取出更多细节信息多少有些讲故事了那我还是提取一个特征向量但我把维度改的更大本质上应该是一样的重点在于多特征的匹配多特征匹配也就是每幅图都有多个特征向量然后用多个特征向量来进行匹配这个是有道理的且是真正创新的下面的mmlm模块就是在实现这个步骤">1.Cross-Modality
-Clustering（CMC）（整个pipeline的第一步）它主要是用于生成伪标签（它的大体思想是，提取出图像的更多特征，用于进行一个多特征的匹配，而不是以往的单特征匹配，以提高匹配的可靠性）<br>（而所谓单特征匹配，其实就是，对每幅图像，我们都只提取出一个特征向量，然后就开始匹配。本质上我们在期望这一个特征向量就提取出足够的、有意义的信息）（所以其实它的创新不止是在于提取更多特征，这样只是增加了参数量而已，至于它所说的更多特征能提取出更多细节信息，多少有些讲故事了：那我还是提取一个特征向量，但我把维度改的更大，本质上应该是一样的；重点在于多特征的匹配。多特征匹配，也就是每幅图都有多个特征向量，然后用多个特征向量来进行匹配，这个是有道理的，且是真正创新的。下面的MMLM模块就是在实现这个步骤）</h2>
-<h2 id="multi-memory-learning-and-matchingmmlm">2.Multi-Memory Learning
-and Matching（MMLM）</h2>
-<h3
-id="它做的主要是在每个簇内继续划分出多个子簇它们代表了更细节的特征跨模态匹配簇的时候还是用pgm的框架但计算簇的距离或者说节点的距离的时候用的是多个子簇而不是像往常的直接用一个簇中心的特征然后再用某种距离度量比如说余弦相似度就认为这个是簇之间的距离了">它做的主要是，在每个簇内继续划分出多个子簇，它们代表了更细节的特征。跨模态匹配簇的时候，还是用PGM的框架，但计算簇的距离（或者说节点的距离）的时候，用的是多个子簇，而不是像往常的，直接用一个簇中心的特征，然后再用某种距离度量，比如说余弦相似度，就认为这个是簇之间的距离了</h3>
-<h2 id="soft-cluster-level-alignment-还得细看">3.Soft Cluster-level
-Alignment<br>还得细看</h2>
-<h1 id="分析">分析</h1>
-<h2
-id="cmc模块主要是聚类的时候把两种模态的所有数据放到一起来聚类但有个问题就是我不清楚它是一开始就把两种模态的数据放到一起只聚类一次还是说先两个模态分别聚类按照经典操作来之后再把两种模态的数据放到一起来一个混合模态的聚类得看代码了论文里没说清楚但这个问题不是很大然后不仅会在两个模态内的簇各自去拉近实例还是经典的用clusternce-loss且会有一步把实例拉近到混合簇里就是说因为两种模态的数据放到一起来聚类了所以会出现一个簇里既有可见光数据也有红外数据拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近通过这种方式间接地学到一些跨模态对应的知识">1.CMC模块，主要是聚类的时候把两种模态的所有数据放到一起来聚类，（但有个问题，就是我不清楚它是一开始就把两种模态的数据放到一起，只聚类一次；还是说先两个模态分别聚类，按照经典操作来，之后再把两种模态的数据放到一起，来一个混合模态的聚类？得看代码了，论文里没说清楚。但这个问题不是很大）然后不仅会在两个模态内的簇各自去拉近实例（还是经典的用ClusterNCE
-loss），且会有一步，把实例拉近到混合簇里（就是说，因为两种模态的数据放到一起来聚类了，所以会出现一个簇里既有可见光数据，也有红外数据；拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近。通过这种方式，间接地学到一些跨模态对应的知识）</h2>
-<h2
-id="mmlm模块在1中其实已经构建了单memory也就是各个模态里的簇中心一般的操作就是直接用这些单memory进行跨模态匹配了此时我们衡量距离就是用簇中心的特征而论文提出要在每个簇指属于这个簇的所有特征的集合内再划分多个小的簇也就是multi-memory用于捕获更多细节的信息最终进行跨模态匹配的时候还是原来那些大的簇进行匹配但我们计算簇的距离的时候就会用到这两个簇里面的多个小的簇这里就是论文强调的multi-memory-matching也是它认为能提高匹配质量的地方">2.MMLM模块，在1中，其实已经构建了单memory（也就是各个模态里的簇中心），一般的操作就是直接用这些单memory进行跨模态匹配了，此时我们衡量距离就是用簇中心的特征。而论文提出，要在每个簇（指属于这个簇的所有特征的集合）内再划分多个小的簇，也就是multi-memory，用于捕获更多细节的信息。最终进行跨模态匹配的时候，还是原来那些大的簇进行匹配，但我们计算簇的距离的时候，就会用到这两个簇里面的多个小的簇（这里就是论文强调的multi-memory
-matching，也是它认为能提高匹配质量的地方）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1317,7 +1333,7 @@ matching，也是它认为能提高匹配质量的地方）</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-count">128</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1328,7 +1344,7 @@ matching，也是它认为能提高匹配质量的地方）</h2>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-count">67</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
