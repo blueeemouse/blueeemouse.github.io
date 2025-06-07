@@ -150,6 +150,149 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-11 10:36:00" itemprop="dateModified" datetime="2025-03-11T10:36:00+08:00">2025-03-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="motivation它先强调了lifelong-re-id的重要性这个是没错的然后提到有时候没有visible-images比如晚上但如果是这样的话那它实验的时候为什么只用四个跨模态数据集到时候看看它实验的具体设定是怎样的更恰当的实验设定不应该是考虑到ir检索rgbrgb检索irir检索irrgb检索rgb吗">motivation：它先强调了lifelong
+re-id的重要性（这个是没错的），然后提到有时候没有visible
+images（比如晚上）。但如果是这样的话，那它实验的时候为什么只用四个跨模态数据集？到时候看看它实验的具体设定是怎样的。更恰当的实验设定不应该是考虑到IR检索RGB，RGB检索IR，IR检索IR，RGB检索RGB吗？</h1>
+<h1 id="trick">trick：</h1>
+<h2
+id="concatenate不同类型的token如果用的是注意力机制">1.concatenate不同类型的token（如果用的是注意力机制）</h2>
+<h2
+id="训练一些特殊的token有点像prompt-engineering在基于transformer的架构中训练特殊token是很自然的事那如果对其它架构的网络也训练一个类似token的东西用来提点能不能做到用比较少的算力来提升性能这是否算一个小小的亮点">2.训练一些特殊的token，有点像prompt
+engineering。在基于transformer的架构中，训练特殊token是很自然的事。那如果对其它架构的网络，也训练一个类似token的东西，用来提点。能不能做到，用比较少的算力，来提升性能？这是否算一个小小的亮点？</h2>
+<h1 id="一些intuition">一些intuition：</h1>
+<h2
+id="这个f_q有点意思它好像是为了提取domain-specific-feature这里domain指一个数据集所以这个f_q有点用来确定图像属于哪个数据集的意思关于它怎么训练这个特征它是把这个特征送到一个分类器里进行分类要么是当前这个数据集里的一个类别要么是之前见过的数据集里的类别也就是说这个特征所属的图像不属于这个数据集这里如果它能比较好地分类说明能比较好地区分当前数据集和之前的数据集的数据那侧面说明了它学到的domain-specific-feature就有点像对比学习的意思如果模型的特征能把同类的东西看成是比较相近的把不同类的东西看成是离得比较远的那某种程度上可以认为模型学到了这些类别的信息拿去做一些分类之类的下游任务也是合理的">这个<span
+class="math inline">\(f_q\)</span>有点意思。它好像是为了提取domain-specific
+feature（这里domain指一个数据集，所以这个<span
+class="math inline">\(f_q\)</span>有点用来确定图像属于哪个数据集的意思。关于它怎么训练这个特征，它是把这个特征送到一个分类器里进行分类，要么是当前这个数据集里的一个类别，要么是之前见过的数据集里的类别（也就是说这个特征所属的图像不属于这个数据集）。这里如果它能比较好地分类，说明能比较好地区分当前数据集和之前的数据集的数据，那侧面说明了它学到的domain-specific
+feature。就有点像对比学习的意思，如果模型的特征能把同类的东西看成是比较相近的，把不同类的东西看成是离得比较远的，那某种程度上可以认为，模型学到了这些类别的信息，拿去做一些分类之类的下游任务也是合理的）</h2>
+<h1 id="方法">方法</h1>
+<h2 id="baseline">1.Baseline</h2>
+<h3
+id="这里也就是没做什么改进时候的方法比较常见骨干是vit有data-replay对replay的data和正在学的data都有一个分类损失还有一个l_rehearsal也就是用来巩固旧知识的就是用一个js散度来约束新模型和旧模型对当前batch-data的输出要尽可能一致以及一个l_kd它是用js散度约束新模型对不同模态下同一id的样本的输出要尽可能一致也就是拉近同id的可见光和红外数据也很朴素">这里也就是没做什么改进时候的方法。比较常见。骨干是vit，有data
+replay，对replay的data和正在学的data，都有一个分类损失；还有一个<span
+class="math inline">\(L_{rehearsal}\)</span>，也就是用来巩固旧知识的，就是用一个JS散度来约束新模型和旧模型对当前batch
+data的输出要尽可能一致；以及一个<span
+class="math inline">\(L_{kd}\)</span>，它是用JS散度约束新模型对不同模态下同一id的样本的输出要尽可能一致（也就是拉近同id的可见光和红外数据，也很朴素）</h3>
+<h2 id="generalspecific-token">2.General/Specific Token</h2>
+<h3
+id="这里论文设计了两种token一个是general-token一个是specific-token它们的作用就是字面意义上的general-token用于提取通用的特征所以是一个token或者说prompt是所有数据集共用的而specific-token则是用于提取每个数据集特有的特征所以是一个数据集一个最终一个数据用来检索的特征就是它的general-feature和它对应的那个specific-feature融合得到的故最后还有一个fusion-module">这里论文设计了两种token，一个是general
+token，一个是specific token。它们的作用就是字面意义上的，general
+token用于提取通用的特征，所以是一个token（或者说prompt）是所有数据集共用的；而specific
+token则是用于提取每个数据集特有的特征，所以是一个数据集一个。最终一个数据用来检索的特征，就是它的general
+feature和它对应的那个specific feature融合得到的。故最后还有一个fusion
+module</h3>
+<h3
+id="specific-token具体来说当目前已经见到t个数据集时就会有t个specific-token此时对一个数据经过vit之后我们得到token-embedding序列不妨记其形状为ltimes-d然后会把这个数据前拼上第i个specific-token送到第i个specific-attention-block记为sab一个specific-attention-block就是一个class-attention-block也就是query仅有前面拼上的token产生而query以及gallery都是由数据x产生它的输出是一个d维的向量也就是一个数据对应一个d维的向量但此时就有t个结果了可是我们主要关注当前数据集的学习也就是第t个结果所以这里会用一个divergence-classifier它会对当前数据集的数据和之前数据集的数据因为有replay都进行分类但是要求对当前数据集进行精确分类而对之前数据集上的数据只要求它能区分出来这些是不属于当前数据集的即可所以它会把当前数据集的所有数据的标签加一然后进行分类空出来的第0类就被统一归类为不属于当前数据集的类所有之前数据集上的数据都是这一类然后这个divergence-classifier用的特征就是拼上了第t个specific-token之后经过第t个sab输出的特征">1.specific
+token：具体来说，当目前已经见到t个数据集时，就会有t个specific
+token。此时，对一个数据，经过vit之后，我们得到token
+embedding序列，不妨记其形状为<span class="math inline">\((L\times
+d)\)</span>，然后会把这个数据前拼上第i个specific
+token，送到第i个specific attention block（记为SAB）。一个specific
+attention block就是一个class attention
+block（也就是query仅有前面拼上的token产生，而query以及gallery都是由数据x产生），它的输出是一个d维的向量（也就是一个数据对应一个d维的向量）。但此时就有t个结果了，可是我们主要关注当前数据集的学习，也就是第t个结果，所以这里会用一个divergence
+classifier，它会对当前数据集的数据和之前数据集的数据（因为有replay）都进行分类，但是要求对当前数据集进行精确分类，而对之前数据集上的数据，只要求它能区分出来这些是不属于当前数据集的即可。所以，它会把当前数据集的所有数据的标签加一，然后进行分类；空出来的第0类就被统一归类为”不属于当前数据集的类“，所有之前数据集上的数据都是这一类（然后这个divergence
+classifier用的特征就是拼上了第t个specific
+token之后经过第t个SAB输出的特征）</h3>
+<h3
+id="general-tokenshareable-general-token则是所有数据集上的数据统一用一个token也是在数据前拼上这个token然后送到一个统一的general-attention-blockgab之后会送到一个分类器里进行分类但这里就要求分类器是对所有见过的身份都要精确分类所以不是像上面那样把之前数据集的所有数据都归到一个类了">2.general
+token：shareable general
+token则是所有数据集上的数据统一用一个token。也是在数据前拼上这个token，然后送到一个统一的general
+attention
+block（GAB），之后会送到一个分类器里进行分类，但这里就要求分类器是对所有见过的身份都要精确分类（所以不是像上面那样把之前数据集的所有数据都归到一个类了）</h3>
+<p>额，它设计、利用token的时候，确实没考虑到模态啊，比如specific
+token，它就是只针对一个数据集设计一个，并没有说一个数据集有两个模态，所以设计两个token。可以改进吗？这样有什么问题吗？不能直接说我觉得这里做的不好，所以要改；而是要说明为什么做的不好，然后我要针对做的不好的地方怎么改
+### 3.fusion module：其实很简单，一个数据，会产生一个general
+feature，也会产生t个specific
+feature。它属于哪个数据集，我们就挑出那个对应的specific
+feature，然后和general
+feature进行拼接，并通过一个线性层进行融合，就得到了最终的特征（然而一个问题是，测试的时候我们不知道一个数据到底属于哪个数据集，所以才有下面的query-key
+mechanism来解决这个问题） ## 3.Query-Key mechanism ###
+上面提到的内容中，有个关键点：训练的时候，我们是知道一个数据是属于哪个数据集的，所以我们能挑选出对应的那个specific
+feature来和general
+feature进行融合。但测试的时候，我们不知道数据属于哪个数据集，所以对于它产生的t个specific
+feature，我们就不知道要选哪个出来和general
+feature进行融合了。为了解决这个问题，论文想到要能通过图像特征，匹配到它属于哪个数据集。因此论文提出了所谓query-key
+mechanism。大体上说，它是给每个数据集都构造一个key（一个key是一个d维的向量），然后一个数据会对应产生一个query（也是一个d维向量），通过query和key之间的相似性匹配就可以推测数据属于哪个数据集：它的query和哪个key最接近，就是属于哪个数据集的。
+###
+具体训练上说，我们就需要让每个数据的query尽可能的靠近正确的key。所以会有一个<span
+class="math inline">\(L_{pull}\)</span>来做这件事（并且它还会对rehearsal
+data也进行这个操作。因为即使是旧数据，也要能识别出来是属于哪个数据集的）</p>
+<p>模态间模态内知识如果学的不平衡了，会怎么样？</p>
+<p>每隔若干epoch（比如20个epoch），就计算一下新旧模型之间的模态内模态间差异，决定一下模态内和模态间损失二者之间的权重；然后二者的平均代表了新旧模型整体之间的差异，它决定了模态内模态间整体损失的权重（差异越小，说明旧知识保留的越好，模态内模态间损失整体权重越小，可以更多地去学习新知识；）
+但这个的动机就不完全是出于改进TTQK了，而是：我们先基于TTQK没有保留跨模态知识，提出要用模态内模态间知识的平衡保留来改进抗遗忘效果；改进之后发现抗遗忘方面是有所提升的，但新数据的学习又太差了，所以想动态调整抗遗忘损失的权重</p>
+<h1 id="section">2025.3.11</h1>
+<h2
+id="模态内模态间一旦权重增大抗遗忘效果就是会上去但总体效果可能会下跌因为新数据集上学的太差了到底有什么办法可以让模型抗遗忘效果提升同时学习新数据集的效果也不要太差">模态内模态间一旦权重增大，抗遗忘效果就是会上去，但总体效果可能会下跌，因为新数据集上学的太差了。到底有什么办法可以让模型抗遗忘效果提升，同时学习新数据集的效果也不要太差？</h2>
+<p>和lstkc太像，是因为使用动态权重，还是因为计算权重的输入和方法和lstkc很像？可是对于现在的问题，使用动态权重不是很容易想到的吗（因为我们调节权重之后，是能看到一些不同的。并且，当原KL0.3，模态内模态间0.7的时候，它的总体效果好于原来的；而如果换成了原KL0.7，模态内模态间0.3的时候，前两个阶段，它比KL0.3、模态内模态间0.7的效果要好，然而到了第三个阶段又差一些了。这样的话，假设到第三个阶段的时候，我们又用KL0.3、模态内模态间0.7的权重分配，不就有可能提升性能了吗？这个应该正好验证了动态调整权重的合理性啊）
+如果是因为后者，那目前用相似性矩阵来度量模态内模态间知识，也是比较合理的，能修改的只有计算权重的方法。如果想避免过于相同，应该是可以找到一些别的映射方法的。但这样就有种为了创新而创新的感觉，没有针对问题而提出解决方法的感觉</p>
+<p>哦哦，我好像知道为什么说和lstkc很像了。其实重点还真不在于计算（虽然计算也过于相似了），而是在于思路：我们是希望根据模型旧知识保留的情况来调整抗遗忘损失的权重：如果模型忘得多，就增加抗遗忘损失的权重；如果忘得少，就减小抗遗忘损失的权重。而lstkc里，是：如果模型忘得多，则模型融合的时候增加旧模型的权重；如果模型忘得少，模型融合的时候就减少旧模型的权重
+这么一看，确实太像了。。。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -896,134 +1039,6 @@ images之间的相似性也考虑进来。那相减呢？表示了什么？）</
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Unsupervised%20visible-infrared%20person%20re-identification%20via%20progressive%20graph%20matching%20and%20alternate%20learning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Unsupervised%20visible-infrared%20person%20re-identification%20via%20progressive%20graph%20matching%20and%20alternate%20learning/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-31 17:23:05" itemprop="dateCreated datePublished" datetime="2024-10-31T17:23:05+08:00">2024-10-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-17 15:02:31" itemprop="dateModified" datetime="2025-02-17T15:02:31+08:00">2025-02-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr23">cvpr23</h1>
-<h1
-id="insight用progressive-graph-matching的方法来解决跨模态的簇的对应问题progressive解决了两个模态内簇的数量不一样的问题转化为graph-matching则利用了全局的信息提高了对应的质量">insight：用progressive
-graph
-matching的方法来解决跨模态的簇的对应问题，progressive解决了两个模态内簇的数量不一样的问题；转化为graph
-matching则利用了全局的信息，提高了对应的质量</h1>
-<h1
-id="动机先前的方法大多是用局部信息来挖掘跨模态对应关系但忽略了全局信息其实这段话意思就是说直接根据特征的距离远近进行跨模态的匹配是不够的因为这样局限在两两之间的距离远近没有考虑到更多对象而论文提出的方法中的progressive-graph-matching通过图匹配的方式来利用所谓全局信息因为通过图匹配来构建跨模态的对应关系就变成一个全局的最优化问题就不会说单纯的一看到哪两个跨模态的簇是距离最近的就匹配上了这种做法在初期是很可能有问题的且两个模态内聚类得到的簇的数量通常也不一样这也导致跨模态的对齐可能会出问题">动机：先前的方法大多是用局部信息来挖掘跨模态对应关系，但忽略了全局信息。其实这段话意思就是说，直接根据特征的距离远近进行跨模态的匹配是不够的，因为这样局限在两两之间的距离远近，没有考虑到更多对象。而论文提出的方法中的Progressive
-Graph
-Matching，通过图匹配的方式来利用所谓“全局信息”（因为通过图匹配来构建跨模态的对应关系，就变成一个全局的最优化问题，就不会说单纯的，一看到哪两个跨模态的簇是距离最近的，就匹配上了（这种做法在初期是很可能有问题的））。且两个模态内聚类得到的簇的数量通常也不一样，这也导致跨模态的对齐可能会出问题</h1>
-<h1 id="方法简单说明">方法简单说明</h1>
-<h2
-id="提出dual-contrastive-leraning-frameworkdcl操作比较常见只是对可见光多了一个ca增强">1.
-提出Dual-Contrastive Leraning
-framework(DCL)，操作比较常见，只是对可见光多了一个CA增强</h2>
-<h2
-id="提出progressive-graph-matchingpgm把跨模态匹配的问题转化成一个全局的最优化问题后续工作中借鉴的比较多">2.提出Progressive
-Graph
-Matching(PGM)，把跨模态匹配的问题转化成一个全局的最优化问题（后续工作中借鉴的比较多）</h2>
-<h2
-id="提出alternate-cross-contrastive-learningaccl为了减小模态间差异轮流从两个模态出发去拉近实例与跨模态的簇中心之间的距离后续工作中借鉴思想较多">3.提出Alternate
-Cross Contrastive
-Learning(ACCL)，为了减小模态间差异，轮流从两个模态出发去拉近实例与跨模态的簇中心之间的距离（后续工作中借鉴思想较多）</h2>
-<h1 id="方法">方法：</h1>
-<h2
-id="先是一个dual-contrastive-leraning-frameworkdcl用于获取模态内的关联知识接着是一个progressive-graph-matchingpgm-method用于构建可见光和红外数据之间的跨模态联系最后是一个alternate-cross-contrastive-learningaccl">先是一个Dual-Contrastive
-Leraning
-framework（DCL，用于获取模态内的关联知识），接着是一个Progressive Graph
-Matching（PGM
-method，用于构建可见光和红外数据之间的跨模态联系），最后是一个Alternate
-Cross Contrastive Learning（ACCL）</h2>
-<h2
-id="dual-contrastive-learning-framework其实就是聚类对比损失在无监督vi-reid的设定下这个损失一般叫做clusternce它的核心思想就是聚类完成之后对于每个实例都要让它尽可能接近它所属的那个簇的中心">1.Dual-Contrastive
-Learning
-framework其实就是聚类+对比损失（在无监督vi-reid的设定下，这个损失一般叫做ClusterNCE）。它的核心思想就是，聚类完成之后，对于每个实例，都要让它尽可能接近它所属的那个簇的中心</h2>
-<h2
-id="progressive-graph-matching是通过图匹配的方法来捕获跨模态知识的关联它解决的问题就是两个模态里的簇的数量不一样的问题和没有利用全局关系的问题-具体来说它会先构建两个图分别对应红外和可见光两种模态每个图的每个节点都是一个簇中心的特征而所谓图匹配就是让每幅图的每个节点都能对应到另一幅图的某个节点上而关于图匹配结果的评判标准这里的思想是匹配到的两个点它们的特征距离越小匹配成本就越小而我们希望最终总的匹配成本尽可能小由此可以转化成一个带约束的优化问题且可以用矩阵乘法表达这个图匹配问题有一些现成的算法可以调用比如hungarian-algorithm">2.Progressive
-Graph
-Matching是通过图匹配的方法来捕获跨模态知识的关联。它解决的问题就是两个模态里的簇的数量不一样的问题，和没有利用全局关系的问题<br>具体来说，它会先构建两个图，分别对应红外和可见光两种模态。每个图的每个节点都是一个簇中心的特征。而所谓图匹配，就是让每幅图的每个节点都能对应到另一幅图的某个节点上。而关于图匹配结果的评判标准，这里的思想是：匹配到的两个点，它们的特征距离越小，匹配成本就越小；而我们希望最终总的匹配成本尽可能小。由此，可以转化成一个带约束的优化问题，且可以用矩阵乘法表达。这个图匹配问题，有一些现成的算法可以调用，比如Hungarian
-algorithm</h2>
-<h2
-id="alternate-cross-contrastive-learningaccl这里涉及到cross-contrastive-learningccl它就是根据pgm得到的对应关系会从两个模态出发去拉近实例与跨模态的簇中心之间的距离举个例子从红外出发去对齐可见光中的簇中心就是给定一个红外实例我们有它的伪标签知道它属于哪个红外簇不妨记为i根据pgm的匹配结果我们可以知道红外簇i会对应到哪个可见光簇不妨记为j于是我们会用一个对比损失来拉近这个红外实例和可见光簇j之间的距离而从可见光出发也是类似的只不过可见光中一半是ca增强得到的图像-接下来是比较重点比较精彩的地方比较容易想到我们这里的损失就是l_v2rl_r2v也就是两个模态出发的单向损失之和但这里有个问题就是这种双向损失之和会放大噪声或者说传播一些错误的信息因为很显然初期模型还不够好的时候提取出来的特征也不够好进而导致pgm的匹配结果也是不够好的从而会出现匹配错误比如一个红外簇和一个可见光簇其实分别属于id1和2但却被匹配到一起了这时l_v2r就会拉近红外实例与这个错误的可见光簇之间的距离而l_r2v则会拉近可见光实例与这个错误的红外簇之间的距离错误的梯度相当于双倍了会很影响模型性能因此论文提出交替进行具体来说就是奇数轮用l_v2r偶数轮用l_r2v这样做的好处一是减少噪声带来的影响即使初期模型不够好导致匹配出错错误信息也只会影响到一个损失产生一个错误的梯度更有利于模型在初期的改善不至于说一开始直接崩了而只要模型在不断进步那么模型的匹配结果也会越来越好注意每个epoch结束前面的memory以及匹配结果都会重新计算不是固定的相应的accl部分也会起到更多正面的效果换句话说初期的正确性是很有必要的所以一个改进有没有可能可以是做一个类似warmup的操作初期的损失权重小一点经过几轮之后再逐渐增大到1以确保模型能比较顺利地度过初期因为很显然初期是最危险的有可能直接导致模型不收敛了二是我们一轮交替一次让模型不至于非常明显地偏向于某个模态过多地从某个模态的角度出发不妨想一下两轮交替一次好像也没问题三轮交替一次似乎在后期也还凑合那么如果在极限情况一半的epoch才交替一次呢可能模型那个时候就会过于偏向一个模态了导致最终在后面一半的epoch中进展缓慢甚至可能不收敛了但是否有必要在模型已经学到一定程度的知识的时候改变交替的轮数或者在训练的后期改成自适应的交替比如后面发现模型从可见光到红外做的比较好但从红外到可见光做的相对差一些所以就自行更换用l_r2v或许也是一个改进的点">3.Alternate
-Cross Contrastive Learning（ACCL）。这里涉及到Cross Contrastive
-Learning（CCL），它就是根据PGM得到的对应关系，会从两个模态出发去拉近实例与跨模态的簇中心之间的距离（举个例子，从红外出发去对齐可见光中的簇中心，就是，给定一个红外实例，我们有它的伪标签，知道它属于哪个红外簇，不妨记为i；根据PGM的匹配结果，我们可以知道红外簇i会对应到哪个可见光簇，不妨记为j，于是我们会用一个对比损失来拉近这个红外实例和可见光簇j之间的距离。而从可见光出发也是类似的，只不过可见光中一半是CA增强得到的图像）<br>接下来是比较重点，比较精彩的地方。比较容易想到，我们这里的损失就是<span
-class="math inline">\(L_{V2R}+L_{R2V}\)</span>，也就是两个模态出发的单向损失之和。但这里有个问题，就是，这种双向损失之和会放大噪声，或者说传播一些错误的信息。因为很显然，初期模型还不够好的时候，提取出来的特征也不够好，进而导致PGM的匹配结果也是不够好的，从而会出现匹配错误，比如一个红外簇和一个可见光簇，其实分别属于ID1和2，但却被匹配到一起了。这时，<span
-class="math inline">\(L_{V2R}\)</span>就会拉近红外实例与这个错误的可见光簇之间的距离；而<span
-class="math inline">\(L_{R2V}\)</span>则会拉近可见光实例与这个错误的红外簇之间的距离。错误的梯度相当于双倍了，会很影响模型性能。因此，论文提出交替进行，具体来说就是，奇数轮用<span
-class="math inline">\(L_{V2R}\)</span>，偶数轮用<span
-class="math inline">\(L_{R2V}\)</span>。这样做的好处，一是减少噪声带来的影响（即使初期模型不够好，导致匹配出错，错误信息也只会影响到一个损失，产生一个错误的梯度，更有利于模型在初期的改善，不至于说一开始直接崩了。而只要模型在不断进步，那么模型的匹配结果也会越来越好（注意，每个epoch结束，前面的memory以及匹配结果都会重新计算，不是固定的），相应的ACCL部分也会起到更多正面的效果。换句话说，初期的正确性是很有必要的。<strong><em>所以，一个改进有没有可能可以是，做一个类似warmup的操作，初期的损失权重小一点，经过几轮之后再逐渐增大到1，以确保模型能比较顺利地度过初期</em></strong>。因为很显然，初期是最危险的，有可能直接导致模型不收敛了），二是，我们一轮交替一次，让模型不至于非常明显地偏向于某个模态、过多地从某个模态的角度出发（不妨想一下，两轮交替一次，好像也没问题；三轮交替一次，似乎在后期也还凑合……那么，如果在极限情况，一半的epoch才交替一次呢？可能模型那个时候就会过于偏向一个模态了，导致最终在后面一半的epoch中，进展缓慢，甚至可能不收敛了。<strong><em>但，是否有必要，在模型已经学到一定程度的知识的时候，改变交替的轮数？或者在训练的后期，改成自适应的交替？比如，后面发现模型从可见光到红外做的比较好，但从红外到可见光做的相对差一些，所以就自行更换，用<span
-class="math inline">\(L_{R2V}\)</span>？或许也是一个改进的点</em></strong>）</h2>
-<h1 id="分析">分析</h1>
-<h2
-id="dual-contrastive-learning-framework具体来说会先构建两个memory对应可见光和红外两个模态每个模态的memory存的都是聚类得到的所有簇中心的特征更新方式是一个momentum-update但加进来的特征只是一个这个簇里的某个图像特征-具体到训练方式在经过聚类得到伪标签后每个batch中会对红外采样p类每类采样k个样本对这总共pk个样本都施加clusternce-loss这里是要让每个样本尽可能靠近根据聚类得到的它所属的那个簇中心对可见光因为这里还会对每个可见光图像进行一个channel-augmentationca所以原始的可见光图像是随机采样p类每类随机取frack2个样本而这些样本又都会经过ca得到另一半增强后的图像ca图像故总数还是pk还是对这些样本施加clusternce-loss">1.Dual-contrastive
-learning
-framework，具体来说，会先构建两个memory，对应可见光和红外两个模态；每个模态的memory存的都是聚类得到的所有簇中心的特征。更新方式是一个momentum
-update，但加进来的特征只是一个这个簇里的某个图像特征<br>具体到训练方式，在经过聚类得到伪标签后，每个batch中，会对红外采样P类，每类采样K个样本，对这总共P×K个样本都施加ClusterNCE
-loss（这里是要让每个样本尽可能靠近根据聚类得到的，它所属的那个簇中心）；对可见光，因为这里还会对每个可见光图像进行一个Channel
-Augmentation（CA），所以原始的可见光图像是随机采样P类，每类随机取<span
-class="math inline">\(\frac{K}{2}\)</span>个样本，而这些样本又都会经过CA得到另一半增强后的图像（CA图像），故总数还是P×K，还是对这些样本施加ClusterNCE
-loss</h2>
-<h2
-id="在pgm中有个细节就是论文考虑的是比较一般的情况即两种模态聚类得到的clusters可能不相同且假设可见光模态中的cluster数大于等于红外模态中的cluster数故一轮下来其实可能会有可见光中的一些cluster没有红外中的对应cluster这里就体现出progressive-graph-matching中的progressive的由来它会把剩下的没对应上去的可见光的簇重新构建一个图而红外部分的图保持不变再对这两个图进行匹配不断重复这个过程直至所有可见光中的cluster都能对应到红外中的某个cluster">2.在PGM中，有个细节，就是，论文考虑的是比较一般的情况，即两种模态聚类得到的clusters可能不相同，且假设可见光模态中的cluster数大于等于红外模态中的cluster数。故，一轮下来，其实可能会有可见光中的一些cluster没有红外中的对应cluster。这里就体现出Progressive
-Graph
-Matching中的Progressive的由来：它会把剩下的没对应上去的可见光的簇重新构建一个图，而红外部分的图保持不变，再对这两个图进行匹配；不断重复这个过程，直至所有可见光中的cluster都能对应到红外中的某个cluster</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1093,18 +1108,18 @@ Matching中的Progressive的由来：它会把剩下的没对应上去的可见�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

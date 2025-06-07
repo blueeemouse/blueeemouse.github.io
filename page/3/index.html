@@ -150,6 +150,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap3.%E7%9F%A9%E9%98%B5%E8%AE%A1%E7%AE%97%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88Computer%20architecture%20for%20Matrix%20computation%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/26/mlsys_foundation/chap3.%E7%9F%A9%E9%98%B5%E8%AE%A1%E7%AE%97%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88Computer%20architecture%20for%20Matrix%20computation%EF%BC%89/" class="post-title-link" itemprop="url">chap3.矩阵计算与计算机体系结构（Computer architecture for Matrix computation）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-26 15:50:00" itemprop="dateCreated datePublished" datetime="2025-05-26T15:50:00+08:00">2025-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-27 18:14:24" itemprop="dateModified" datetime="2025-05-27T18:14:24+08:00">2025-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="常见的层的计算方式">1.常见的层的计算方式</h1>
+<h2 id="不管是最简单的线性层还是之前很经典的卷积层抑或是之后的循环层注意力层它们的计算都可以表达成矩阵的运算或者说都可以表达成矩阵的乘法-而关于为什么要把网络结构表达成矩阵计算一个点在于矩阵计算有较好的计算并行性有没有更具体的理解另外矩阵计算有成熟的配套计算硬件和软件库也就是能用的工具比较多我们希望把问题都化归到矩阵乘法上">不管是最简单的线性层，还是之前很经典的卷积层，抑或是之后的循环层、注意力层，它们的计算都可以表达成矩阵的运算，或者说都可以表达成矩阵的乘法<br>而关于为什么要把网络结构表达成矩阵计算，一个点在于，矩阵计算有较好的计算并行性（有没有更具体的理解？）；另外，矩阵计算有成熟的配套计算硬件和软件库。也就是能用的工具比较多，我们希望把问题都化归到矩阵乘法上</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/26/mlsys_foundation/chap3.%E7%9F%A9%E9%98%B5%E8%AE%A1%E7%AE%97%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88Computer%20architecture%20for%20Matrix%20computation%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap4.AI%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%88AI%20Compiler%20and%20Optimization%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -986,117 +1072,6 @@ id="特征的更新主要三部分一个是自己的残差一个是新知识用�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">lifelong reid paper调研</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-21 16:58:00 / Modified: 16:59:16" itemprop="dateCreated datePublished" datetime="2025-05-21T16:58:00+08:00">2025-05-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="acm-mm24">acm mm24</h1>
-<h2
-id="mitigate-catastrophic-remembering-via-continual-knowledge-purification-for-noisy-lifelong-person-re-identification-in-32nd-acm-multimedia-conference">Mitigate
-Catastrophic Remembering via Continual Knowledge Purification for Noisy
-Lifelong Person Re-Identification", in 32nd ACM Multimedia
-Conference</h2>
-<h1 id="cvpr24">cvpr24</h1>
-<h2
-id="distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification">Distribution-aware
-Knowledge Prototyping for Non-exemplar Lifelong Person
-Re-identification</h2>
-<h2
-id="learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification"><strong>Learning
-Continual Compatible Representation for Re-indexing Free Lifelong Person
-Re-identification</strong></h2>
-<h1 id="aaai24">aaai24</h1>
-<h2
-id="lstkc-long-short-term-knowledge-consolidation-for-lifelong-person-re-identification">LSTKC:
-Long Short-Term Knowledge Consolidation for Lifelong Person
-Re-Identification</h2>
-<h1 id="eccv24无">eccv24无</h1>
-<h1 id="nips24无">nips24无</h1>
-<h1 id="iclr24无">iclr24无</h1>
-<h1 id="icml24无">icml24无</h1>
-<h1 id="ijcai24无">ijcai24无</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1166,18 +1141,18 @@ Re-Identification</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
