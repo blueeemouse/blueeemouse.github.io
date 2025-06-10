@@ -150,6 +150,238 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/dataset/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/dataset/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-27 10:10:43 / Modified: 23:03:22" itemprop="dateCreated datePublished" datetime="2024-10-27T10:10:43+08:00">2024-10-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 6%" />
+<col style="width: 5%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 1%" />
+<col style="width: 14%" />
+<col style="width: 19%" />
+<col style="width: 32%" />
+<col style="width: 1%" />
+</colgroup>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Person number(ID)</th>
+<th>Camera number</th>
+<th>Visible image number</th>
+<th>Infrared image number</th>
+<th>Year</th>
+<th>Training database(number of images)</th>
+<th>Testing database</th>
+<th>Validation database</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RegDB</td>
+<td>412</td>
+<td>1</td>
+<td>4120</td>
+<td>4120</td>
+<td>2017</td>
+<td>4120(randomly selected)</td>
+<td>4120(randomly selected)</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>SYSU-MM01</td>
+<td>491</td>
+<td>6</td>
+<td>30071</td>
+<td>15792</td>
+<td>2017</td>
+<td>20284(RGB)+9929(IR)(296 persons)</td>
+<td>301(RGB, randomly selected)+3803(IR)（96 persons）</td>
+<td>1974(RGB)+1980(IR)(99 persons，与Training
+database里的不同)（不用的话就归到Training database里）</td>
+<td></td>
+</tr>
+<tr>
+<td>LLCM</td>
+<td>1064</td>
+<td>9</td>
+<td>25626</td>
+<td>21141</td>
+<td>2023</td>
+<td>16946(RGB)+13975(IR)(713 persons)</td>
+<td>8680(RGB)+7166(IR)(351 persons)</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>RegDB的划分，在提出它的那篇论文里，是大概80%用于training，20%用于testing。具体来说是这样的：![[Pasted
+image 20241027224109.png]]</p>
+<p>但好像现在的论文的划分不是这样的？
+WRIM-Net里说是training是恰好划分了一半得到training和test（现在应该大部分都是这样了。因为每个人都是10张RGB和10张IR，所以相当于随机调一半的人到训练数据集里，另一半的人就到测试数据集里）</p>
+<p>关于SYSU-MM01数据集：提出它的论文里说它一共有287268张visible
+img，然后它给的github网站上说的是一共有30071张RGB
+img。之所以原论文说有287628张visible
+img，应该是因为它给的github网站上除了SYSU-MM01数据集之外，还有一个视频的数据集。SYSU-MM01里面cam1和cam2对应的数据其实是从视频数据集里取出的一个子集。SYSU-MM01和视频数据集加起来一共有287628张visible
+img 它的训练集应该就是有22258张RGB img，11909张IR img
+它测试的时候，测试数据集的RGB图像是随机采样出来的。而两种模式下不同的地方也就在于是从哪几个RGB数据集里进行采样。参考<a
+target="_blank" rel="noopener" href="https://github.com/wuancong/SYSU-MM01/tree/master?tab=readme-ov-file">原github网址</a>，这个它还是勉强说明白了</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1322,86 +1554,6 @@ learning则不怎么需要，甚至augmentation太过的话还可能损害效果
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-15 12:07:53 / Modified: 12:12:01" itemprop="dateCreated datePublished" datetime="2024-10-15T12:07:53+08:00">2024-10-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="在进行数据预处理的时候一般都会有一个类似train_transform这样的数据增强的列表它里面包含了一系列操作通常是调用库里的那些操作但如果需要自己定义一些预处理操作则需要自己写一个类一般有这些要求">在进行数据预处理的时候，一般都会有一个类似train_transform这样的数据增强的“列表”，它里面包含了一系列操作。通常是调用库里的那些操作。但如果需要自己定义一些预处理操作，则需要自己写一个类。一般有这些要求：</h2>
-<h3 id="类定义自定义的数据操作一般是定义为类如-cifar10policy并且实现了-__call__-方法__call__-方法使得类的实例可以像函数一样直接被调用">1.
-<strong>类定义</strong>：自定义的数据操作一般是定义为类（如
-<code>CIFAR10Policy</code>），并且实现了 <code>__call__</code>
-方法。<code>__call__</code>
-方法使得类的实例可以像函数一样直接被调用。</h3>
-<h3 id="实现-__call__-方法当类的实例通过-transforms.compose-被应用到图像时实际上是调用了该类的-__call__-方法因此在-__call__-方法中你可以定义自定义的图像变换逻辑">2.
-<strong>实现 <code>__call__</code> 方法</strong>：当类的实例通过
-<code>transforms.Compose</code> 被应用到图像时，实际上是调用了该类的
-<code>__call__</code> 方法。因此，在 <code>__call__</code>
-方法中，你可以定义自定义的图像变换逻辑。</h3>
-<h3 id="不变性要求数据增强和变换操作应该是无副作用的这意味着不应直接修改输入图像而是返回一个经过变换的新图像">3.
-<strong>不变性要求</strong>：数据增强和变换操作应该是“无副作用”的，这意味着不应直接修改输入图像，而是返回一个经过变换的新图像。</h3>
-<h3 id="可与其他操作链式使用自定义的数据操作通常应该与-pytorch-的其他数据转换操作如-transforms.totensor-或-transforms.normalize兼容因此要确保其输入输出类型与其他操作一致">4.
-<strong>可与其他操作链式使用</strong>：自定义的数据操作通常应该与
-PyTorch 的其他数据转换操作（如 <code>transforms.ToTensor()</code> 或
-<code>transforms.Normalize()</code>）兼容，因此要确保其输入输出类型与其他操作一致。</h3>
-<h4 id="例如">例如：</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyCustomTransform</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, some_parameter</span>):</span><br><span class="line">        <span class="variable language_">self</span>.some_parameter = some_parameter</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, img</span>):</span><br><span class="line">        <span class="comment"># 对图像 img 进行自定义处理，这里是示例逻辑</span></span><br><span class="line">        transformed_img = img + <span class="variable language_">self</span>.some_parameter  <span class="comment"># 假设是对图像进行了某种变换</span></span><br><span class="line">        <span class="keyword">return</span> transformed_img</span><br><span class="line">transforms.Compose([</span><br><span class="line">    transforms.RandomHorizontalFlip(),</span><br><span class="line">    MyCustomTransform(some_parameter=<span class="number">5</span>),  <span class="comment"># 自定义的变换操作</span></span><br><span class="line">    transforms.ToTensor()</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
-<h4 id="这样就可以和其它的pytorch提供的transform一起用了">这样，就可以和其它的pytorch提供的transform一起用了</h4>
-<h4 id="一个具体的真实的例子可以参考这个">一个具体的真实的例子可以参考这个：</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SVHNPolicy</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;&quot;&quot; Randomly choose one of the best 25 Sub-policies on SVHN.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; policy = SVHNPolicy()</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; transformed = policy(image)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Example as a PyTorch Transform:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; transform=transforms.Compose([</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     transforms.Resize(256),</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     SVHNPolicy(),</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     transforms.ToTensor()])</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, fillcolor=(<span class="params"><span class="number">128</span>, <span class="number">128</span>, <span class="number">128</span></span>)</span>):</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.policies = [</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.2</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.7</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">5</span>, <span class="number">0.6</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">3</span>, <span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">1</span>, <span class="number">0.9</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.4</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">5</span>, <span class="number">0.2</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">6</span>, <span class="number">0.8</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">1</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">3</span>, <span class="number">0.9</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.3</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.7</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">5</span>, <span class="number">0.6</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, <span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">7</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.3</span>, <span class="string">&quot;contrast&quot;</span>, <span class="number">3</span>, <span class="number">0.8</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, <span class="number">0.0</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">2</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">6</span>, <span class="number">0.4</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">8</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.3</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">7</span>, <span class="number">0.9</span>, <span class="string">&quot;translateX&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.1</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">6</span>, <span class="number">0.6</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">2</span>, <span class="number">0.6</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">7</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">8</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">9</span>, <span class="number">0.8</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">5</span>, <span class="number">0.7</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">2</span>, <span class="number">0.1</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor)</span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, img</span>):</span><br><span class="line"></span><br><span class="line">        policy_idx = random.randint(<span class="number">0</span>, <span class="built_in">len</span>(<span class="variable language_">self</span>.policies) - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.policies[policy_idx](img)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;AutoAugment SVHN Policy&quot;</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1471,7 +1623,7 @@ PyTorch 的其他数据转换操作（如 <code>transforms.ToTensor()</code> 或
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">129</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
