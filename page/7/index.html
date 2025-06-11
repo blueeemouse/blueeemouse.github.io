@@ -150,6 +150,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/" class="post-title-link" itemprop="url">第一弹</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-08 22:42:08" itemprop="dateModified" datetime="2025-05-08T22:42:08+08:00">2025-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">安装库的常见难题和解决方法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1
+id="这里简单记录一些看起来有些共性的配置环境中遇到的问题">这里简单记录一些看起来有些共性的，配置环境中遇到的问题</h1>
+<h1
+id="pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt报错如下">1.pip
+install -i https://pypi.tuna.tsinghua.edu.cn/simple -r
+requirements.txt报错如下：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">ERROR: Could not find a version that satisfies the requirement glfw&gt;=1.4.0 (from versions: none)</span><br><span class="line">ERROR: No matching distribution found <span class="keyword">for</span> glfw&gt;=1.4.0</span><br><span class="line">WARNING: There was an error checking the latest version of pip.</span><br></pre></td></tr></table></figure>
+<h2
+id="这个问题其实看起来还挺正常的而它最后的warning显示应该是版本的一些不匹配的问题然而我是新创建了一个python环境来配置mujoco且也是按照网上的教程来的虽然不排除是版本问题可是人家是走通了的我这里也没先装上什么库应该不太会有库之间的冲突吧经评论区提醒关掉梯子之后再执行就没问题了但尚且不清楚原因">这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）</h2>
+<h2
+id="后面安装其它库的时候也有类似的报错">后面安装其它库的时候，也有类似的报错：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.dev.txt</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br></pre></td></tr></table></figure>
+<h2
+id="看到这种类似的错一样可以按照上面的方法尝试一下因为都有可能是网络问题还有可能出现把梯子关掉再尝试之后依然不行然后又尝试不指定源直接下也不行这时可以试试把梯子开了再下然后关掉再下有可能就成了有点难绷但确实是一种方法实操过是有效的其实感觉这样一通操作下来就验证了很有可能是网络问题了">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/05/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/%E6%8E%8C%E6%8F%A1%E7%A8%8B%E5%BA%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -873,100 +965,6 @@ add_num。正如上所述，它会创建一个新的tensor对象，之后再把�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-03-14 23:27:03" itemprop="dateCreated datePublished" datetime="2025-03-14T23:27:03+08:00">2025-03-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-18 14:31:41" itemprop="dateModified" datetime="2025-03-18T14:31:41+08:00">2025-03-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="robust-multimodal-learning-via-representation-decoupling">Robust
-Multimodal Learning via Representation Decoupling</h1>
-<h1 id="eccv-24">ECCV 24</h1>
-<h1 id="motivation">motivation：</h1>
-<h1 id="insight">insight：</h1>
-<h1 id="方法">方法</h1>
-<h2
-id="方法的第一节其实没讲新东西而是从一个具体的任务分类任务入手说明了一下为什么传统的学习方法会限制模型的表达能力">1.方法的第一节其实没讲新东西，而是从一个具体的任务——分类任务入手，说明了一下为什么传统的学习方法会限制模型的表达能力</h2>
-<h2 id="decoupled-multimodal-representation">2.Decoupled Multimodal
-Representation</h2>
-<h3
-id="这一节主要讲如何缓解上面提到的问题同类的不同模态的数据被强制约束要靠近同一个中心导致模型表达能力降低">这一节主要讲如何缓解上面提到的问题：同类的不同模态的数据被强制约束要靠近同一个中心，导致模型表达能力降低</h3>
-<h3
-id="首先是prepresentation-probabilization具体来说对得到的embedding我们不直接利用它而是再用它去建立一个分布这里假设是多元高斯分布所以我们会用这个embedding送到两个网络分别预测高斯分布的均值和标准差的对数这个也算是常见的技巧了吧预测标准差这种恒正的量可能预测取对数后的值是更加容易优化的也是更加稳定的建立好分布之后训练时的embedding就是从分布里采样得到的当然为了能优化这个分布的均值和标准差用到了重参数化方法而测试的时候的embedding就是均值向量和dkp的操作几乎完全一样但可能是概率建模embedding的方法并不是特别稀奇吧">首先是Prepresentation
-Probabilization。具体来说，对得到的embedding，我们不直接利用它，而是再用它去建立一个分布，这里假设是多元高斯分布。所以我们会用这个embedding，送到两个网络，分别预测高斯分布的均值和标准差的对数（这个也算是常见的技巧了吧。预测标准差这种恒正的量，可能预测取对数后的值是更加容易优化的，也是更加稳定的）。建立好分布之后，训练时的embedding就是从分布里采样得到的（当然，为了能优化这个分布的均值和标准差，用到了重参数化方法）。而测试的时候的embedding就是均值向量（和DKP的操作几乎完全一样。。但可能是概率建模embedding的方法并不是特别稀奇吧）</h3>
-<h3
-id="通过建立分布现在每个数据的分布的均值并不一定要完全地相互靠近可以稍微远离一点也没关系因为是从一个分布里采样训练的embedding的因此此时的均值向量可以更加多样化一些论文认为这样的话模型能捕捉到更多模态特有的特征显然标准差越大不确定性越大均值向量之间可能离得更加远了但标准差过高是不好的所以需要加一些约束让它不要太随机了故引出下面的distributional-regularizaiton">通过建立分布，现在每个数据的分布的均值并不一定要完全地相互靠近，可以稍微远离一点也没关系，因为是从一个分布里采样训练的embedding的。因此，此时的均值向量可以更加多样化一些，论文认为这样的话，模型能捕捉到更多模态特有的特征（显然，标准差越大，不确定性越大，均值向量之间可能离得更加远了。但标准差过高是不好的，所以需要加一些约束，让它不要太随机了。故引出下面的Distributional
-Regularizaiton）</h3>
-<h3
-id="所谓distributional-regularization就是对建立的分布我们会施加一个它和标准正态分布之间的kl损失这里我的一个理解是往正态分布上约束是可以让标准差不要太大但为什么还要约束均值呢让所有分布都往同一个分布上靠拢似乎也有点奇怪但论文里说是受其它用概率建模embedding的论文的启发才这样做的姑且可以认为是一个比较常见的手段但为什么这样并没有说的很清楚">所谓Distributional
-Regularization，就是对建立的分布，我们会施加一个它和标准正态分布之间的KL损失（这里我的一个理解是，往正态分布上约束，是可以让标准差不要太大。但为什么还要约束均值呢？让所有分布都往同一个分布上靠拢？似乎也有点奇怪。但论文里说是受其它用概率建模embedding的论文的启发，才这样做的。姑且可以认为是一个比较常见的手段，但为什么这样，并没有说的很清楚。。。）</h3>
-<h2 id="hard-combination-regularizer">3.Hard Combination
-Regularizer</h2>
-<h3
-id="具体原理还没特别明白可能得再细看但它大概的思想以及作用是针对比较少出现的组合论文是处理多模态的输入的假设有k种模态一个输入里未必同时有这k个模态的数据k种模态是否出现一共会有2k种组合形式设计专门的梯度计算模块以免模型对这类组合处理的太差了有点对少样本进行重采样的感觉">具体原理还没特别明白，可能得再细看。。。但它大概的思想以及作用是，针对比较少出现的组合（论文是处理多模态的输入的，假设有k种模态，一个输入里未必同时有这k个模态的数据。k种模态是否出现，一共会有<span
-class="math inline">\(2^{k}\)</span>种组合形式），设计专门的梯度计算模块，以免模型对这类组合处理的太差了（有点对少样本进行重采样的感觉。。）</h3>
-<h1
-id="cross-modality-transformer-with-modality-mining-for-visible-infrared-person-re-identification">CROSS-MODALITY
-TRANSFORMER WITH MODALITY MINING FOR VISIBLE-INFRARED PERSON
-RE-IDENTIFICATION</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1036,7 +1034,7 @@ RE-IDENTIFICATION</h1>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">130</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
