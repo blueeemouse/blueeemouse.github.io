@@ -194,10 +194,8 @@
 
       
         <h1 id="arxiv-22">arxiv 22</h1>
-<h1
-id="这篇论文提出的设定倒是在现实生活里有意义不过它的动机好像也是提的比较模糊都是针对几个设定加起来的时候产生的问题">这篇论文提出的设定倒是在现实生活里有意义，不过它的动机好像也是提的比较模糊，都是针对几个设定加起来的时候产生的问题</h1>
-<h1
-id="它讲的故事however-a-real-world-video-monitoring-system-can-record-new-data-every-day-and-from-new-locations-when-new-cameras-are-added-into-an-existing-system.when-new-data-is-recorded-every-day-people-have-to-annotate-new-data-manually-before-deployment-which-is-cumbersome-and-time-consuming.这里在说明无监督方法研究的必要性-towards-a-generalizable-reid-model-lifelong-person-reid-has-been-recently-proposed这里在说明lifelong-learning研究的必要性">它讲的故事：However,
+<h1 id="这篇论文提出的设定倒是在现实生活里有意义不过它的动机好像也是提的比较模糊都是针对几个设定加起来的时候产生的问题">这篇论文提出的设定倒是在现实生活里有意义，不过它的动机好像也是提的比较模糊，都是针对几个设定加起来的时候产生的问题</h1>
+<h1 id="它讲的故事however-a-real-world-video-monitoring-system-can-record-new-data-every-day-and-from-new-locations-when-new-cameras-are-added-into-an-existing-system.when-new-data-is-recorded-every-day-people-have-to-annotate-new-data-manually-before-deployment-which-is-cumbersome-and-time-consuming.这里在说明无监督方法研究的必要性-towards-a-generalizable-reid-model-lifelong-person-reid-has-been-recently-proposed这里在说明lifelong-learning研究的必要性">它讲的故事：However,
 a real-world video monitoring system can record new data every day and
 from new locations, when new cameras are added into an existing
 system.；When new data is recorded every day, people have to annotate
@@ -205,39 +203,29 @@ new data manually before deployment, which is cumbersome and
 time-consuming.（这里在说明，无监督方法研究的必要性）<br>Towards a
 generalizable ReID model, lifelong person ReID has been recently
 proposed（这里在说明，lifelong learning研究的必要性）</h1>
-<h1
-id="它的方法设计的倒也算简单就是分别针对灾难性遗忘学习新数据的问题">它的方法，设计的倒也算简单，就是分别针对灾难性遗忘、学习新数据的问题</h1>
+<h1 id="它的方法设计的倒也算简单就是分别针对灾难性遗忘学习新数据的问题">它的方法，设计的倒也算简单，就是分别针对灾难性遗忘、学习新数据的问题</h1>
 <h1 id="方法">方法</h1>
 <h2 id="current-domain-contrastive-baseline">1.Current domain
 contrastive baseline</h2>
-<h3
-id="它主要是进行经典的拉近样本和簇中心的距离如今已经是一个非常常见的操作了还有一个l_cam就是对同一个簇里属于同一个相机的数据也求一个prototype就是这些数据的均值并要拉近样本与这个prototype的距离还是对比损失的形式">它主要是进行经典的拉近样本和簇中心的距离（如今已经是一个非常常见的操作了），还有一个<span
-class="math inline">\(L_{cam}\)</span>，就是对同一个簇里，属于同一个相机的数据，也求一个prototype（就是这些数据的均值），并要拉近样本与这个prototype的距离（还是对比损失的形式）</h3>
-<h4
-id="不过论文里还提到l_cam过于依赖相机标签局限在了reid任务里了如果想更加泛化其实也有其它的损失可以用比如在一个batch里与batch里的hardest-positives进行对比">不过，论文里还提到，<span
-class="math inline">\(L_{cam}\)</span>过于依赖相机标签，局限在了ReID任务里了；如果想更加泛化，其实也有其它的损失可以用，比如在一个batch里，与batch里的hardest
+<h3 id="它主要是进行经典的拉近样本和簇中心的距离如今已经是一个非常常见的操作了还有一个l_cam就是对同一个簇里属于同一个相机的数据也求一个prototype就是这些数据的均值并要拉近样本与这个prototype的距离还是对比损失的形式">它主要是进行经典的拉近样本和簇中心的距离（如今已经是一个非常常见的操作了），还有一个<span class="math inline">\(L_{cam}\)</span>，就是对同一个簇里，属于同一个相机的数据，也求一个prototype（就是这些数据的均值），并要拉近样本与这个prototype的距离（还是对比损失的形式）</h3>
+<h4 id="不过论文里还提到l_cam过于依赖相机标签局限在了reid任务里了如果想更加泛化其实也有其它的损失可以用比如在一个batch里与batch里的hardest-positives进行对比">不过，论文里还提到，<span class="math inline">\(L_{cam}\)</span>过于依赖相机标签，局限在了ReID任务里了；如果想更加泛化，其实也有其它的损失可以用，比如在一个batch里，与batch里的hardest
 positives进行对比</h4>
-<h4
-id="另注意这个方法会有online-encoder和momentum-encoder在这一步里聚类用的特征是momentum-encoder得到的而不是online-encoder">（另，注意，这个方法会有online
+<h4 id="另注意这个方法会有online-encoder和momentum-encoder在这一步里聚类用的特征是momentum-encoder得到的而不是online-encoder">（另，注意，这个方法会有online
 encoder和momentum encoder；在这一步里，聚类用的特征是momentum
 encoder得到的，而不是online encoder）</h4>
 <h2 id="old-domain-contrastive-rehearsal">2.Old domain contrastive
 rehearsal</h2>
-<h3
-id="这个方法里会存储一些旧数据集的prototype也就是我们得到的簇中心的特征以及各个簇的若干个可靠样本就是比较接近簇中心的这一步的核心思想是给定一个已知伪标签的旧数据样本我们希望当前的online-encoder对其编码后得到的特征应该还是尽可能接近原来它所属的那个簇由此我们认为online-encoder对旧数据集知识的保存做的比较好">这个方法里会存储一些旧数据集的prototype（也就是我们得到的簇中心的特征），以及各个簇的若干个可靠样本（就是比较接近簇中心的）。这一步的核心思想是，给定一个已知伪标签的旧数据样本，我们希望当前的online
+<h3 id="这个方法里会存储一些旧数据集的prototype也就是我们得到的簇中心的特征以及各个簇的若干个可靠样本就是比较接近簇中心的这一步的核心思想是给定一个已知伪标签的旧数据样本我们希望当前的online-encoder对其编码后得到的特征应该还是尽可能接近原来它所属的那个簇由此我们认为online-encoder对旧数据集知识的保存做的比较好">这个方法里会存储一些旧数据集的prototype（也就是我们得到的簇中心的特征），以及各个簇的若干个可靠样本（就是比较接近簇中心的）。这一步的核心思想是，给定一个已知伪标签的旧数据样本，我们希望当前的online
 encoder对其编码后，得到的特征应该还是尽可能接近原来它所属的那个簇（由此我们认为online
 encoder对旧数据集知识的保存做的比较好）</h3>
 <h2 id="image-to-image-similarity-constraint">3.Image-to-Image
 Similarity Constraint</h2>
-<h3
-id="这一步的作用是抗遗忘然后它的核心思想是给定一个batch我们用encoder得到特征后可以得到一个样本之间的相似性矩阵如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近对于同一个batch而言那么我们就认为这个新模型保留旧知识时保留得比较好论文里新模型就对应online-encoder旧模型就对应momentum-encoder它保留了比较多的旧知识衡量两个相似性矩阵的距离时用的是kl散度">这一步的作用是抗遗忘，然后它的核心思想是，给定一个batch，我们用encoder得到特征后，可以得到一个样本之间的相似性矩阵。如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近（对于同一个batch而言），那么我们就认为这个新模型保留旧知识时，保留得比较好。论文里，新模型就对应online
+<h3 id="这一步的作用是抗遗忘然后它的核心思想是给定一个batch我们用encoder得到特征后可以得到一个样本之间的相似性矩阵如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近对于同一个batch而言那么我们就认为这个新模型保留旧知识时保留得比较好论文里新模型就对应online-encoder旧模型就对应momentum-encoder它保留了比较多的旧知识衡量两个相似性矩阵的距离时用的是kl散度">这一步的作用是抗遗忘，然后它的核心思想是，给定一个batch，我们用encoder得到特征后，可以得到一个样本之间的相似性矩阵。如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近（对于同一个batch而言），那么我们就认为这个新模型保留旧知识时，保留得比较好。论文里，新模型就对应online
 encoder，旧模型就对应momentum
 encoder（它保留了比较多的旧知识）。衡量两个相似性矩阵的距离时，用的是KL散度</h3>
-<h3
-id="但此处有个小改进就是它的目标矩阵确实是用旧模型得到的但它的新的相似性矩阵计算的时候求行特征用的是新模型求列特征用的是旧模型论文里说这样的效果比单纯用新模型会好确实有一些道理吧因为求列特征用的是旧模型那么要迫使两个相似性矩阵尽可能接近就要求新模型的输出要尽可能接近旧模型的输出无形中其实就进行了蒸馏了吧">但此处有个小改进，就是，它的目标矩阵确实是用旧模型得到的，但它的新的相似性矩阵，计算的时候，求行特征用的是新模型，求列特征用的是旧模型。论文里说这样的效果比单纯用新模型会好。确实有一些道理吧，因为求列特征用的是旧模型，那么，要迫使两个相似性矩阵尽可能接近，就要求新模型的输出要尽可能接近旧模型的输出（无形中其实就进行了蒸馏了吧）</h3>
+<h3 id="但此处有个小改进就是它的目标矩阵确实是用旧模型得到的但它的新的相似性矩阵计算的时候求行特征用的是新模型求列特征用的是旧模型论文里说这样的效果比单纯用新模型会好确实有一些道理吧因为求列特征用的是旧模型那么要迫使两个相似性矩阵尽可能接近就要求新模型的输出要尽可能接近旧模型的输出无形中其实就进行了蒸馏了吧">但此处有个小改进，就是，它的目标矩阵确实是用旧模型得到的，但它的新的相似性矩阵，计算的时候，求行特征用的是新模型，求列特征用的是旧模型。论文里说这样的效果比单纯用新模型会好。确实有一些道理吧，因为求列特征用的是旧模型，那么，要迫使两个相似性矩阵尽可能接近，就要求新模型的输出要尽可能接近旧模型的输出（无形中其实就进行了蒸馏了吧）</h3>
 <h1 id="trick总结">trick总结</h1>
-<h2
-id="在进行对比的时候既可以和所有的prototype来对比也可以挑出若干个hard-sample保证效果的同时减少一些计算量">1.在进行对比的时候，既可以和所有的prototype来对比，也可以挑出若干个hard
+<h2 id="在进行对比的时候既可以和所有的prototype来对比也可以挑出若干个hard-sample保证效果的同时减少一些计算量">1.在进行对比的时候，既可以和所有的prototype来对比，也可以挑出若干个hard
 sample，保证效果的同时减少一些计算量</h2>
 
     </div>
@@ -351,18 +339,18 @@ sample，保证效果的同时减少一些计算量</span></a></li></ol></li></o
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

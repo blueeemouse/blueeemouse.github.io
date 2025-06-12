@@ -213,56 +213,44 @@
       
         <span id="more"></span>
 <h1 id="问题设定">问题设定：</h1>
-<h2
-id="要解决的是利用clip-based-model用于下游的图像分类的问题">要解决的是利用CLIP-based
+<h2 id="要解决的是利用clip-based-model用于下游的图像分类的问题">要解决的是利用CLIP-based
 model用于下游的图像分类的问题</h2>
 <h1 id="创新点">创新点：</h1>
-<h2
-id="提出学习两种模态的prompt即text和image而之前的工作大多是只学习text-modal-prompt">提出学习两种模态的prompt（即text和image），而之前的工作大多是只学习text-modal
+<h2 id="提出学习两种模态的prompt即text和image而之前的工作大多是只学习text-modal-prompt">提出学习两种模态的prompt（即text和image），而之前的工作大多是只学习text-modal
 prompt</h2>
-<h2
-id="学习的prompt之间是有联系的即用不同的test-sample学习prompt时由前一个test-sample习得的prompt会部分地继承到下一个prompt里继承的程度则由前一个prompt的效果决定效果越好继承的越多">学习的prompt之间是有联系的，即用不同的test
+<h2 id="学习的prompt之间是有联系的即用不同的test-sample学习prompt时由前一个test-sample习得的prompt会部分地继承到下一个prompt里继承的程度则由前一个prompt的效果决定效果越好继承的越多">学习的prompt之间是有联系的，即用不同的test
 sample学习prompt时，由前一个test
 sample习得的prompt会部分地继承到下一个prompt里。继承的程度则由前一个prompt的效果决定，效果越好、继承的越多</h2>
 <h1 id="method">Method</h1>
 <h2 id="dual-modal-online-prompting-in-dart">1.Dual-Modal Online
 Prompting in DART</h2>
-<h3
-id="它主要就是对textual-modal的prompt进行改进之前的工作一般都是一个prompt套到多个类上比如this-is-a-photo-of-birddog......-而论文希望改进它给每个类别都设计了自己的prompt并且后续可以学习">它主要就是对textual
+<h3 id="它主要就是对textual-modal的prompt进行改进之前的工作一般都是一个prompt套到多个类上比如this-is-a-photo-of-birddog......-而论文希望改进它给每个类别都设计了自己的prompt并且后续可以学习">它主要就是对textual
 modal的prompt进行改进。之前的工作，一般都是一个prompt套到多个类上，比如this
 is a photo of bird/dog/......
 而论文希望改进，它给每个类别都设计了自己的prompt，并且后续可以学习</h3>
-<h3
-id="另外之前的工作大部分只是在调整textual-modal的prompt但该论文希望visual-modal也能有prompt于是也提出了一个prompt但这里就没有像上面那样给每个类别都设计一个prompt而是只设计了一个prompt">另外，之前的工作大部分只是在调整textual
+<h3 id="另外之前的工作大部分只是在调整textual-modal的prompt但该论文希望visual-modal也能有prompt于是也提出了一个prompt但这里就没有像上面那样给每个类别都设计一个prompt而是只设计了一个prompt">另外，之前的工作大部分只是在调整textual
 modal的prompt，但该论文希望visual
 modal也能有prompt，于是也提出了一个prompt。但这里就没有像上面那样给每个类别都设计一个prompt，而是只设计了一个prompt</h3>
-<h3
-id="这里的两种prompt都是instance-level的就是每个样本的都不一样">这里的两种prompt都是instance-level的，就是每个样本的都不一样</h3>
+<h3 id="这里的两种prompt都是instance-level的就是每个样本的都不一样">这里的两种prompt都是instance-level的，就是每个样本的都不一样</h3>
 <h2 id="adaptive-knowledge-retention-in-dart">2.Adaptive Knowledge
 Retention in DART</h2>
-<h3
-id="之所以它希望能做到knowledge-retention是因为测试的时候数据本就不多并且它是online-learning">之所以它希望能做到knowledge
+<h3 id="之所以它希望能做到knowledge-retention是因为测试的时候数据本就不多并且它是online-learning">之所以它希望能做到knowledge
 retention，是因为测试的时候数据本就不多，并且它是online learning</h3>
-<h3
-id="knowledge-retention的方法就是引入一组prompt包括visual和textual的它们记录了历史信息有点类似于lstm里的隐状态具体来说它引入的这组visual和textual-prompt都是分类别的这里一定要和上面的prompt区分开二者不是同一个东西这里引入的我们可以叫它历史prompt上面的是instance-level的然后历史prompt的学习是依赖于instance-level的有点moco里的动量更新的感觉而instance-level-prompt的初始化又是依赖于历史prompt的">knowledge
+<h3 id="knowledge-retention的方法就是引入一组prompt包括visual和textual的它们记录了历史信息有点类似于lstm里的隐状态具体来说它引入的这组visual和textual-prompt都是分类别的这里一定要和上面的prompt区分开二者不是同一个东西这里引入的我们可以叫它历史prompt上面的是instance-level的然后历史prompt的学习是依赖于instance-level的有点moco里的动量更新的感觉而instance-level-prompt的初始化又是依赖于历史prompt的">knowledge
 retention的方法就是引入一组prompt，包括visual和textual的。它们记录了历史信息，有点类似于LSTM里的隐状态。具体来说，它引入的这组visual和textual
 prompt，都是分类别的。这里一定要和上面的prompt区分开，二者不是同一个东西。这里引入的我们可以叫它历史prompt，上面的是instance-level的。然后历史prompt的学习是依赖于instance
 level的，有点Moco里的动量更新的感觉；而instance level
 prompt的初始化又是依赖于历史prompt的</h3>
-<h3
-id="这里的核心思想或者说假设是对一个输入样本它属于哪个类的概率更高这个概率是用了visual和textual-prompt的我们认为那个类对应的instance-level-visualtextual-prompt质量越高也会越多地把它融合进历史prompt里">这里的核心思想，或者说假设，是：对一个输入样本，它属于哪个类的概率更高（这个概率是用了visual和textual
+<h3 id="这里的核心思想或者说假设是对一个输入样本它属于哪个类的概率更高这个概率是用了visual和textual-prompt的我们认为那个类对应的instance-level-visualtextual-prompt质量越高也会越多地把它融合进历史prompt里">这里的核心思想，或者说假设，是：对一个输入样本，它属于哪个类的概率更高（这个概率是用了visual和textual
 prompt的），我们认为那个类对应的instance-level visual/textual
 prompt质量越高，也会越多地把它融合进历史prompt里</h3>
 <h2 id="the-optimization-of-dart">3.The Optimization of DART</h2>
-<h3
-id="上面要用到的instance-level-visualtextual-prompt其实应该是用历史prompt初始化后需要学习的">上面要用到的instance-level
+<h3 id="上面要用到的instance-level-visualtextual-prompt其实应该是用历史prompt初始化后需要学习的">上面要用到的instance-level
 visual/textual prompt，其实应该是用历史prompt初始化后，需要学习的</h3>
-<h3
-id="它具体的学习过程如下对一幅输入图像先做b次augmentation得到b幅图像b即batch-size然后利用初始化的prompt计算出各个图像属于各个类别的概率分布再筛选出比较自信的结果取平均得到原始样本属于各个类别的概率最后我们优化原始样本的那个概率分布希望它的信息熵尽可能小也就是要尽可能确定逼近一个独热向量优化应该是梯度下降吧还没看代码">它具体的学习过程如下：对一幅输入图像，先做B次augmentation，得到B幅图像（B即batch
+<h3 id="它具体的学习过程如下对一幅输入图像先做b次augmentation得到b幅图像b即batch-size然后利用初始化的prompt计算出各个图像属于各个类别的概率分布再筛选出比较自信的结果取平均得到原始样本属于各个类别的概率最后我们优化原始样本的那个概率分布希望它的信息熵尽可能小也就是要尽可能确定逼近一个独热向量优化应该是梯度下降吧还没看代码">它具体的学习过程如下：对一幅输入图像，先做B次augmentation，得到B幅图像（B即batch
 size），然后利用初始化的prompt计算出各个图像属于各个类别的概率分布，再筛选出比较自信的结果，取平均得到原始样本属于各个类别的概率，最后我们优化原始样本的那个概率分布，希望它的信息熵尽可能小，也就是要尽可能确定，逼近一个独热向量（优化应该是梯度下降吧，还没看代码）</h3>
 <h1 id="疑问">疑问：</h1>
-<h2
-id="论文里认为由prompt得到的分类结果越自信即越接近于一个独热向量效果越好但有没有可能分类错了这时就不应该过多继承吧">（论文里认为，由prompt得到的分类结果越自信——即越接近于一个独热向量，效果越好。但有没有可能分类错了？这时就不应该过多继承吧？）</h2>
+<h2 id="论文里认为由prompt得到的分类结果越自信即越接近于一个独热向量效果越好但有没有可能分类错了这时就不应该过多继承吧">（论文里认为，由prompt得到的分类结果越自信——即越接近于一个独热向量，效果越好。但有没有可能分类错了？这时就不应该过多继承吧？）</h2>
 
     </div>
 
@@ -281,12 +269,12 @@ id="论文里认为由prompt得到的分类结果越自信即越接近于一个�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Incremental%20Learning/FineFMPL/" rel="prev" title="FineFMPL">
-      <i class="fa fa-chevron-left"></i> FineFMPL
+    <a href="/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%BB%99hexo%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%8A%E7%B1%BB%E5%88%AB%E9%A1%B5%E9%9D%A2/" rel="prev" title="给hexo搭建的博客页面加上类别页面">
+      <i class="fa fa-chevron-left"></i> 给hexo搭建的博客页面加上类别页面
     </a></div>
       <div class="post-nav-item">
-    <a href="/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/" rel="next" title="单词搜索Ⅱ">
-      单词搜索Ⅱ <i class="fa fa-chevron-right"></i>
+    <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/Image%20Compression%E5%85%A5%E9%97%A8/" rel="next" title="Image Compression入门">
+      Image Compression入门 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -380,18 +368,18 @@ size），然后利用初始化的prompt计算出各个图像属于各个类别�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

@@ -194,21 +194,17 @@
 
       
         <h1 id="cvpr23">cvpr23</h1>
-<h1
-id="problem老生常谈之modality-gap导致学习modality-shared-feature很困难这篇论文聚焦于学习shape即人物的轮廓信息不由得让人想到之前的channel-augmentation-for-visible-infrared-re-identification主要想学习颜色信息也是想去学习某种特定的属性">problem：老生常谈之modality
+<h1 id="problem老生常谈之modality-gap导致学习modality-shared-feature很困难这篇论文聚焦于学习shape即人物的轮廓信息不由得让人想到之前的channel-augmentation-for-visible-infrared-re-identification主要想学习颜色信息也是想去学习某种特定的属性">problem：老生常谈之modality
 gap导致学习modality-shared
 feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel
 Augmentation for Visible-Infrared
 Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性）</h1>
-<h1
-id="motivation希望能通过一种方法把表征分成两部分一部分是shape相关另一部分是shape无关然后先利用shape无关的表征去学习这样会逼迫这部分特征学习其它方面的内容不去利用shape信息进行判别最后把这部分表征和shape相关表征组合起来就能得到更强的表征">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</h1>
+<h1 id="motivation希望能通过一种方法把表征分成两部分一部分是shape相关另一部分是shape无关然后先利用shape无关的表征去学习这样会逼迫这部分特征学习其它方面的内容不去利用shape信息进行判别最后把这部分表征和shape相关表征组合起来就能得到更强的表征">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</h1>
 <h1 id="method">method：</h1>
-<h2
-id="关于shape信息的提取用到一篇20年tpami提出的分割人体形状的模型给定一幅图模型会给出各个像素属于头部躯干四肢等部位的概率最终整幅图上各个位置都有一个概率进行可视化理论上那些对应概率高的就显示出一个人的轮廓">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部/躯干/四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</h2>
+<h2 id="关于shape信息的提取用到一篇20年tpami提出的分割人体形状的模型给定一幅图模型会给出各个像素属于头部躯干四肢等部位的概率最终整幅图上各个位置都有一个概率进行可视化理论上那些对应概率高的就显示出一个人的轮廓">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部/躯干/四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</h2>
 <h2 id="shape-erased-feature-learning-paradigm">Shape-Erased Feature
 Learning Paradigm</h2>
-<h3
-id="这里有个关键的假设即shape-related-feature和shape-erased-feature之间是独立的这样才能做到学习一个特征而不影响另一个特征注意到前面motivation里已经说了它是要单独去学习一下shape-erased-feature此时这部分表征里没有了shape-feature于是这会逼迫它去学习其它的特征这样就达成了特征多样性的目的-论文提出严格的描述两个特征独立的方法是互信息为0但互信息求解起来太麻烦了虽然我不知道为什么于是松弛一下用个简化的条件即两个特征正交-guoqu-关于具体的shape-erased-feature-learning总的来说它用到各种互信息进行推导没太看懂忘得七七八八了但几个比较关键的公式背后的要求期望还是比较合理的或许可以借鉴一下其中的insightequation4期望用shape-erased-feature也能尽可能好地预测出identity毕竟前面说了这是训练中重要的一环5是为了优化4中的第一项而提出的好吧真不好写提出一大堆损失一些是用来训练shape-erased-feature的一些是用来消除shape-related-feature中的modality-specific成分的从而让它更加modality-shared最后一些是常规损失就是分类损失那些">这里有个关键的假设，即shape-related
+<h3 id="这里有个关键的假设即shape-related-feature和shape-erased-feature之间是独立的这样才能做到学习一个特征而不影响另一个特征注意到前面motivation里已经说了它是要单独去学习一下shape-erased-feature此时这部分表征里没有了shape-feature于是这会逼迫它去学习其它的特征这样就达成了特征多样性的目的-论文提出严格的描述两个特征独立的方法是互信息为0但互信息求解起来太麻烦了虽然我不知道为什么于是松弛一下用个简化的条件即两个特征正交-guoqu-关于具体的shape-erased-feature-learning总的来说它用到各种互信息进行推导没太看懂忘得七七八八了但几个比较关键的公式背后的要求期望还是比较合理的或许可以借鉴一下其中的insightequation4期望用shape-erased-feature也能尽可能好地预测出identity毕竟前面说了这是训练中重要的一环5是为了优化4中的第一项而提出的好吧真不好写提出一大堆损失一些是用来训练shape-erased-feature的一些是用来消除shape-related-feature中的modality-specific成分的从而让它更加modality-shared最后一些是常规损失就是分类损失那些">这里有个关键的假设，即shape-related
 feature和shape-erased
 feature之间是独立的。这样才能做到，学习一个特征，而不影响另一个特征（注意到，前面motivation里已经说了，它是要单独去学习一下shape-erased
 feature，此时这部分表征里没有了shape
@@ -326,18 +322,18 @@ feature中的modality-specific成分的，从而让它更加modality-shared；�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

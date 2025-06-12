@@ -198,20 +198,17 @@ channel-wise and spatial embeddings还是想挖掘出modality-specific
 feature以及图像中不同的交互信息。还是老一套的样子</p>
 <p>我去，让生成模型拿到VIS-IR数据对，直接学习根据一种模态生成另一种模态，感觉应该挺有效的。但很显然对数据量要求比较大。之前都是用GAN。那用diffusion
 model会不会效果更好？</p>
-<h1
-id="整体架构deen包含一个dee模块和mfa模块dee模块用来生成各种多样的embedding主要由一个cpm-loss实现那它应该就是用来提取特征的生成是说真的无中生有的那种还是只是提取特征而已-mfa模块用来整合汇聚特征看看它到时候是怎么汇聚的-好像还有对embedding的增强看看怎么增强的">整体架构：DEEN包含一个DEE模块和MFA模块。DEE模块用来生成各种多样的embedding，主要由一个CPM
+<h1 id="整体架构deen包含一个dee模块和mfa模块dee模块用来生成各种多样的embedding主要由一个cpm-loss实现那它应该就是用来提取特征的生成是说真的无中生有的那种还是只是提取特征而已-mfa模块用来整合汇聚特征看看它到时候是怎么汇聚的-好像还有对embedding的增强看看怎么增强的">整体架构：DEEN包含一个DEE模块和MFA模块。DEE模块用来生成各种多样的embedding，主要由一个CPM
 loss实现（那它应该就是用来提取特征的？生成是说真的无中生有的那种，还是只是提取特征而已？）<br>MFA模块用来整合、汇聚特征。（看看它到时候是怎么汇聚的？）<br>好像还有对embedding的增强？看看怎么增强的</h1>
 <h1 id="method">method：</h1>
 <h2 id="diverse-embedding-expansion-moduledee模块">1.Diverse Embedding
 Expansion Module（DEE模块）</h2>
-<h3
-id="主要是用一些卷积包括膨胀卷积1-1卷积然后有多个分支生成多个embedding论文期望这些embedding能捕获到不同的信息关于怎么优化这个模块后面第二部分提出了三个我们希望这些embedding能满足的属性以及相应设计的损失">主要是用一些卷积（包括膨胀卷积，1
+<h3 id="主要是用一些卷积包括膨胀卷积1-1卷积然后有多个分支生成多个embedding论文期望这些embedding能捕获到不同的信息关于怎么优化这个模块后面第二部分提出了三个我们希望这些embedding能满足的属性以及相应设计的损失">主要是用一些卷积（包括膨胀卷积，1
 *
 1卷积），然后有多个分支，生成多个embedding。论文期望这些embedding能捕获到不同的信息。关于怎么优化这个模块，后面第二部分提出了三个我们希望这些embedding能满足的属性，以及相应设计的损失</h3>
 <h2 id="center-guided-pair-mining-loss">2.Center-Guided Pair Mining
 Loss</h2>
-<h3
-id="用于优化上面的dee模块提出了三个期望属性-property-1-the-generated-embeddings-should-be-as-diverse-as-possible-to-effectively-learn-the-informative-feature-representations.为此需要尽可能拉远生成出的embedding和原来的那个embedding-property-2-the-generated-embeddings-should-facilitate-reducing-the-modality-discrepancy-between-the-vis-and-ir-images.这意味着如果我们用ir模态生成多个vis模态的embedding我们要尽可能拉近原来的ir模态和生成的vis模态的embedding之间的距离反之亦然-property-3-the-intra-class-distance-should-be-less-than-the-inter-class-one.如果embedding仅仅满足前两个属性有可能不同identity的embedding反而被拉的很近了这是不允许的因此给出第三个属性起到保险的作用为此我们需要拉远不同identity的embedding-大体思想就是这样的但最后的cpm-loss还做了一些额外的处理不过核心思想是一致的-另外这一部分还提出了一个小的损失是为了让各个不同分支生成的embedding包含的信息尽可能不要重复有一个orthogonal-loss期望各个不同分支生成的embedding的内积尽可能小即希望尽可能正交或许再加个绝对值更合理如果内积是负的怎么办还是说这里的内积不会为负">用于优化上面的DEE模块。提出了三个期望属性：<br>Property
+<h3 id="用于优化上面的dee模块提出了三个期望属性-property-1-the-generated-embeddings-should-be-as-diverse-as-possible-to-effectively-learn-the-informative-feature-representations.为此需要尽可能拉远生成出的embedding和原来的那个embedding-property-2-the-generated-embeddings-should-facilitate-reducing-the-modality-discrepancy-between-the-vis-and-ir-images.这意味着如果我们用ir模态生成多个vis模态的embedding我们要尽可能拉近原来的ir模态和生成的vis模态的embedding之间的距离反之亦然-property-3-the-intra-class-distance-should-be-less-than-the-inter-class-one.如果embedding仅仅满足前两个属性有可能不同identity的embedding反而被拉的很近了这是不允许的因此给出第三个属性起到保险的作用为此我们需要拉远不同identity的embedding-大体思想就是这样的但最后的cpm-loss还做了一些额外的处理不过核心思想是一致的-另外这一部分还提出了一个小的损失是为了让各个不同分支生成的embedding包含的信息尽可能不要重复有一个orthogonal-loss期望各个不同分支生成的embedding的内积尽可能小即希望尽可能正交或许再加个绝对值更合理如果内积是负的怎么办还是说这里的内积不会为负">用于优化上面的DEE模块。提出了三个期望属性：<br>Property
 1: The generated embeddings should be as diverse as possible to
 effectively learn the informative feature
 representations.为此，需要尽可能拉远生成出的embedding和原来的那个embedding<br>Property
@@ -224,8 +221,7 @@ loss还做了一些额外的处理，不过核心思想是一致的。<br>另外
 loss，期望各个不同分支生成的embedding的内积尽可能小（即希望尽可能正交）（或许再加个绝对值更合理？如果内积是负的怎么办？还是说这里的内积不会为负？）</h3>
 <h2 id="multistage-feature-aggregation-blockmfa-模块">3.Multistage
 Feature Aggregation Block（MFA 模块）</h2>
-<h3
-id="感觉真没什么见地就是一些繁复的网络只不过用到一些卷积和相似性矩阵而已似乎没啥好说的">感觉真没什么见地，就是一些繁复的网络。只不过用到一些卷积和相似性矩阵而已。似乎没啥好说的</h3>
+<h3 id="感觉真没什么见地就是一些繁复的网络只不过用到一些卷积和相似性矩阵而已似乎没啥好说的">感觉真没什么见地，就是一些繁复的网络。只不过用到一些卷积和相似性矩阵而已。似乎没啥好说的</h3>
 
     </div>
 
@@ -336,18 +332,18 @@ Feature Aggregation Block（MFA 模块）</span></a><ol class="nav-child"><li cl
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

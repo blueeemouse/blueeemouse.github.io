@@ -215,128 +215,79 @@
 
       
         <h1 id="abstract">0.abstract</h1>
-<h2
-id="plmpretrained-language-models对于信息检索领域的帮助主要在于提高了文本的表征能力能提取出更好的embedding从而帮助之后的相关性建模这种把文本用embedding来表征的方法叫dense-retrieval">PLM（Pretrained
+<h2 id="plmpretrained-language-models对于信息检索领域的帮助主要在于提高了文本的表征能力能提取出更好的embedding从而帮助之后的相关性建模这种把文本用embedding来表征的方法叫dense-retrieval">PLM（Pretrained
 Language
 Models）对于信息检索领域的帮助，主要在于提高了文本的表征能力，能提取出更好的embedding，从而帮助之后的相关性建模（这种把文本用embedding来表征的方法叫dense
 retrieval）</h2>
-<h2
-id="这篇论文会从四个角度来介绍dense-retrievalarchitecturetrainingindexingintegration最后总结一下主流技术">这篇论文会从四个角度来介绍dense
+<h2 id="这篇论文会从四个角度来介绍dense-retrievalarchitecturetrainingindexingintegration最后总结一下主流技术">这篇论文会从四个角度来介绍dense
 retrieval：architecture，training，indexing，integration，最后总结一下主流技术</h2>
 <span id="more"></span>
 <h1 id="intro">1.intro</h1>
-<h2
-id="核心主题密集文本检索通过-plm-学习查询和文本的稠密向量表示基于语义匹配实现高效检索是传统稀疏检索如-bm25的重要演进">-
+<h2 id="核心主题密集文本检索通过-plm-学习查询和文本的稠密向量表示基于语义匹配实现高效检索是传统稀疏检索如-bm25的重要演进">-
 <strong>核心主题</strong>：密集文本检索通过 PLM
 学习查询和文本的稠密向量表示，基于语义匹配实现高效检索，是传统稀疏检索（如
 BM25）的重要演进。</h2>
 <h2 id="发展脉络">- <strong>发展脉络</strong>：</h2>
-<h3
-id="传统方法向量空间模型vsm倒排索引概率模型如-bm25依赖词法匹配难以处理复杂语义">-
+<h3 id="传统方法向量空间模型vsm倒排索引概率模型如-bm25依赖词法匹配难以处理复杂语义">-
 <strong>传统方法</strong>：向量空间模型（VSM）、倒排索引、概率模型（如
 BM25）依赖词法匹配，难以处理复杂语义。</h3>
-<h3
-id="机器学习方法这里相当于进一步会用传统的机器学习方法来建模关系引入监督学习但依赖人工特征传统ml就是依赖人手工设计的特征">-
+<h3 id="机器学习方法这里相当于进一步会用传统的机器学习方法来建模关系引入监督学习但依赖人工特征传统ml就是依赖人手工设计的特征">-
 <strong>机器学习方法</strong>：这里相当于进一步，会用传统的机器学习方法来建模关系，引入监督学习，但依赖人工特征。（传统ml就是依赖人手工设计的特征）</h3>
-<h3
-id="神经网络与-plm神经信息检索neural-ir通过稠密向量实现语义匹配此时又需要区分一下大模型出现以前一般都是用一些小网络来提取embedding的可以称为pre-bert-model而大模型出现之后它的表达能力比以前的小模型显著提升了因此提取文本embedding的能力大幅度提升了大模型也在各大ir榜单上刷榜了故推动密集检索成为主流">-
+<h3 id="神经网络与-plm神经信息检索neural-ir通过稠密向量实现语义匹配此时又需要区分一下大模型出现以前一般都是用一些小网络来提取embedding的可以称为pre-bert-model而大模型出现之后它的表达能力比以前的小模型显著提升了因此提取文本embedding的能力大幅度提升了大模型也在各大ir榜单上刷榜了故推动密集检索成为主流">-
 <strong>神经网络与 PLM</strong>：神经信息检索（Neural
 IR）通过稠密向量实现语义匹配，此时又需要区分一下，大模型出现以前，一般都是用一些小网络来提取embedding的，可以称为pre-Bert
 model，而大模型出现之后，它的表达能力比以前的小模型显著提升了，因此提取文本embedding的能力大幅度提升了，大模型也在各大IR榜单上刷榜了，故推动密集检索成为主流。</h3>
-<h3
-id="密集检索优势通过-plm-捕捉深层语义解决术语不匹配问题尤其适用于复杂查询如开放域问答一些复杂的语义层面上的问题还想依靠以前的lexical-matching也就是词汇匹配那一套应该是不太行的比如很可能会有词汇上完全不搭界但语义上却是完全一致或非常类似的情况">-
+<h3 id="密集检索优势通过-plm-捕捉深层语义解决术语不匹配问题尤其适用于复杂查询如开放域问答一些复杂的语义层面上的问题还想依靠以前的lexical-matching也就是词汇匹配那一套应该是不太行的比如很可能会有词汇上完全不搭界但语义上却是完全一致或非常类似的情况">-
 <strong>密集检索优势</strong>：通过 PLM
 捕捉深层语义，解决术语不匹配问题，尤其适用于复杂查询（如开放域问答）。（一些复杂的语义层面上的问题，还想依靠以前的lexical
 matching，也就是词汇匹配那一套，应该是不太行的。比如，很可能会有词汇上完全不搭界，但语义上却是完全一致或非常类似的情况）</h3>
 <h1 id="overview">2.overview</h1>
-<h2
-id="这里主要介绍ir里的任务设定术语和记号">这里主要介绍IR里的任务设定、术语和记号、</h2>
+<h2 id="这里主要介绍ir里的任务设定术语和记号">这里主要介绍IR里的任务设定、术语和记号、</h2>
 <h2 id="任务设定和术语">2.1.任务设定和术语</h2>
-<h3
-id="ir是指根据用户给出的自然语言形式的query从大量的文本库text里返回相关的文本这里的text可以有很多形式documentpassagesentence">IR，是指根据用户给出的自然语言形式的query，从大量的文本库（text）里，返回相关的文本。这里的text可以有很多形式，document，passage，sentence……</h3>
-<h3
-id="一般来说一个ir系统它的流程里一般都会有两个最基础的-第一个是first-stage-retrieval它要做的是从一大批候选项里快速筛选出一小批可能相关的文本也就是减少搜索范围因此要求高效率且高召回率要求高效率是因为要处理的数据很多要求高召回率是因为我们做一个初步的筛选但显然并不希望最终用户真正想看到的内容被筛掉这个流程一般会由一个retriever模型来完成-第二个是reranking-stage它要做的是对retriever给出的缩小范围后的候选项根据和query之间的关系远近进行排序这一步一般是由一个叫做reranker的模型来完成-这两个流程是最主要的当然现代的ir系统一般是多级的后面还会有更多的流程但这些就要根据具体的业务需求来决定">一般来说，一个IR系统，它的流程里一般都会有两个最基础的，<br>第一个是first-stage
+<h3 id="ir是指根据用户给出的自然语言形式的query从大量的文本库text里返回相关的文本这里的text可以有很多形式documentpassagesentence">IR，是指根据用户给出的自然语言形式的query，从大量的文本库（text）里，返回相关的文本。这里的text可以有很多形式，document，passage，sentence……</h3>
+<h3 id="一般来说一个ir系统它的流程里一般都会有两个最基础的-第一个是first-stage-retrieval它要做的是从一大批候选项里快速筛选出一小批可能相关的文本也就是减少搜索范围因此要求高效率且高召回率要求高效率是因为要处理的数据很多要求高召回率是因为我们做一个初步的筛选但显然并不希望最终用户真正想看到的内容被筛掉这个流程一般会由一个retriever模型来完成-第二个是reranking-stage它要做的是对retriever给出的缩小范围后的候选项根据和query之间的关系远近进行排序这一步一般是由一个叫做reranker的模型来完成-这两个流程是最主要的当然现代的ir系统一般是多级的后面还会有更多的流程但这些就要根据具体的业务需求来决定">一般来说，一个IR系统，它的流程里一般都会有两个最基础的，<br>第一个是first-stage
 retrieval，它要做的是，从一大批候选项里快速筛选出一小批可能相关的文本（也就是减少搜索范围），因此要求高效率且高召回率（要求高效率，是因为要处理的数据很多；要求高召回率，是因为我们做一个初步的筛选，但显然并不希望最终用户真正想看到的内容被筛掉），这个流程一般会由一个retriever模型来完成；<br>第二个是reranking
 stage，它要做的是，对retriever给出的缩小范围后的候选项，根据和query之间的关系远近，进行排序，这一步一般是由一个叫做reranker的模型来完成。<br>这两个流程是最主要的，当然现代的IR系统一般是多级的，后面还会有更多的流程，但这些就要根据具体的业务需求来决定</h3>
 <h2 id="dense-retrieval的一些公式和记号">2.2.Dense
 Retrieval的一些公式和记号</h2>
-<h3
-id="一般用q来记表示queryd_i表示数据集里dd_i_i1m的一个text我们的目标是根据query返回n个最相关的textsld_1d_2cdots-d_n">一般用<span
-class="math inline">\(q\)</span>来记表示query，<span
-class="math inline">\(d_{i}\)</span>表示数据集里<span
-class="math inline">\(D=\{d_{i}\}_{i=1}^{m}\)</span>的一个text，我们的目标是根据query返回n个最相关的texts<span
-class="math inline">\(L=[d_{1},d_{2},\cdots d_{n}]\)</span></h3>
-<h3
-id="因为研究的是dense-retrieval用的是embedding来表征文本所以衡量相关性的时候可以用到一些相似性函数最简单的比如向量内积一般的公式可以抽象为relqdf_simphiqpsid其中phi和psi都是编码器">因为研究的是dense
-retrieval，用的是embedding来表征文本，所以衡量相关性的时候可以用到一些相似性函数（最简单的，比如向量内积），一般的公式可以抽象为：<span
-class="math display">\[Rel(q,d)=f_{sim}(\phi(q),\psi(d))\]</span>其中<span
-class="math inline">\(\phi\)</span>和<span
-class="math inline">\(\psi\)</span>都是编码器</h3>
-<h3
-id="在数据方面现实应用里最容易获取的数据标签应该都是二分类的也就是要么相关要么不相关更细粒度的比如分级相关虽然效果上应该会更好但获取难度也更大这篇论文聚焦于二分类标签对于一个query-q我们记与它相关的样本为d_i这些样本就是训练数据了至于不相关的样本也即negative-texts也被称作negatives一般不能直接获得想要的话得用一些其它手段">在数据方面，现实应用里最容易获取的数据标签应该都是二分类的，也就是要么相关、要么不相关。更细粒度的，比如分级相关，虽然效果上应该会更好，但获取难度也更大。这篇论文聚焦于二分类标签。对于一个query
-<span class="math inline">\(q\)</span>，我们记与它相关的样本为<span
-class="math inline">\(d_{i}^{+}\)</span>，这些样本就是训练数据了。至于不相关的样本，也即negative
+<h3 id="一般用q来记表示queryd_i表示数据集里dd_i_i1m的一个text我们的目标是根据query返回n个最相关的textsld_1d_2cdots-d_n">一般用<span class="math inline">\(q\)</span>来记表示query，<span class="math inline">\(d_{i}\)</span>表示数据集里<span class="math inline">\(D=\{d_{i}\}_{i=1}^{m}\)</span>的一个text，我们的目标是根据query返回n个最相关的texts<span class="math inline">\(L=[d_{1},d_{2},\cdots d_{n}]\)</span></h3>
+<h3 id="因为研究的是dense-retrieval用的是embedding来表征文本所以衡量相关性的时候可以用到一些相似性函数最简单的比如向量内积一般的公式可以抽象为relqdf_simphiqpsid其中phi和psi都是编码器">因为研究的是dense
+retrieval，用的是embedding来表征文本，所以衡量相关性的时候可以用到一些相似性函数（最简单的，比如向量内积），一般的公式可以抽象为：<span class="math display">\[Rel(q,d)=f_{sim}(\phi(q),\psi(d))\]</span>其中<span class="math inline">\(\phi\)</span>和<span class="math inline">\(\psi\)</span>都是编码器</h3>
+<h3 id="在数据方面现实应用里最容易获取的数据标签应该都是二分类的也就是要么相关要么不相关更细粒度的比如分级相关虽然效果上应该会更好但获取难度也更大这篇论文聚焦于二分类标签对于一个query-q我们记与它相关的样本为d_i这些样本就是训练数据了至于不相关的样本也即negative-texts也被称作negatives一般不能直接获得想要的话得用一些其它手段">在数据方面，现实应用里最容易获取的数据标签应该都是二分类的，也就是要么相关、要么不相关。更细粒度的，比如分级相关，虽然效果上应该会更好，但获取难度也更大。这篇论文聚焦于二分类标签。对于一个query
+<span class="math inline">\(q\)</span>，我们记与它相关的样本为<span class="math inline">\(d_{i}^{+}\)</span>，这些样本就是训练数据了。至于不相关的样本，也即negative
 texts（也被称作negatives），一般不能直接获得，想要的话得用一些其它手段</h3>
 <h1 id="datasetsevaluation-and-resources">3.Datasets，Evaluation and
 Resources</h1>
 <h2 id="datasets">3.1.Datasets</h2>
-<h3
-id="数据集方面这篇文章介绍了三种类别的数据集information-retrieval的question-answering的以及其它方面的-用来评估dense-retrieval比较多的数据集应该是ms-marco以及natural-questions两个数据集基于ms-marco还有一些特定数据集用来评估一些特定方面的能力比如多语言的能力现在聚焦某一特定方面的数据集也是越来越多了比如之前还看到了有翻译成中文的轻小说数据集了">数据集方面，这篇文章介绍了三种类别的数据集，information
+<h3 id="数据集方面这篇文章介绍了三种类别的数据集information-retrieval的question-answering的以及其它方面的-用来评估dense-retrieval比较多的数据集应该是ms-marco以及natural-questions两个数据集基于ms-marco还有一些特定数据集用来评估一些特定方面的能力比如多语言的能力现在聚焦某一特定方面的数据集也是越来越多了比如之前还看到了有翻译成中文的轻小说数据集了">数据集方面，这篇文章介绍了三种类别的数据集，information
 retrieval的，question answering的，以及其它方面的<br>用来评估dense
 retrieval比较多的数据集，应该是MS MARCO以及Natural
 Questions两个数据集。基于MS
 MARCO，还有一些特定数据集，用来评估一些特定方面的能力，比如多语言的能力。现在聚焦某一特定方面的数据集也是越来越多了（比如之前还看到了有翻译成中文的轻小说数据集了）</h3>
-<h3
-id="但现在的数据集普遍有一个问题就是它们的query通常只有很少的relevance-judgements也就是说一个query只有很少的正样本然而实际很可能不是这样的只不过因为数据集太大了人力标注实在开销很大所以不能做到对所有数据都打上标签这样的话可能会造成false-negative的现象也就是那些其实是和query相关的text却因为没有被打上相关的标签而被当成不相关的了显然会降低模型的性能比如有可能出现自相矛盾的情况明明两个texts很相近都和query相关但只给其中一个打上了相关的标签而另一个因为疏忽忘记打上相关标签了那模型就会被告知一个内容是和当前query相关的但另一个很相近的内容又被告知是和当前query不相关的-另一个问题就是现在的数据集大多是英语的非英语的很少所以要训练一个非英语的dense-retriever也是有困难的有点类似之前训大模型最开始语料都是英文的中文的很少之后才开始大肆收集中文语料吧现在网上也是比较多的">但现在的数据集普遍有一个问题，就是它们的query通常只有很少的relevance
+<h3 id="但现在的数据集普遍有一个问题就是它们的query通常只有很少的relevance-judgements也就是说一个query只有很少的正样本然而实际很可能不是这样的只不过因为数据集太大了人力标注实在开销很大所以不能做到对所有数据都打上标签这样的话可能会造成false-negative的现象也就是那些其实是和query相关的text却因为没有被打上相关的标签而被当成不相关的了显然会降低模型的性能比如有可能出现自相矛盾的情况明明两个texts很相近都和query相关但只给其中一个打上了相关的标签而另一个因为疏忽忘记打上相关标签了那模型就会被告知一个内容是和当前query相关的但另一个很相近的内容又被告知是和当前query不相关的-另一个问题就是现在的数据集大多是英语的非英语的很少所以要训练一个非英语的dense-retriever也是有困难的有点类似之前训大模型最开始语料都是英文的中文的很少之后才开始大肆收集中文语料吧现在网上也是比较多的">但现在的数据集普遍有一个问题，就是它们的query通常只有很少的relevance
 judgements，也就是说，一个query只有很少的正样本，然而实际很可能不是这样的，只不过因为数据集太大了，人力标注实在开销很大，所以不能做到对所有数据都打上标签。这样的话，可能会造成false
 negative的现象，也就是那些其实是和query相关的text，却因为没有被打上相关的标签而被当成不相关的了，显然会降低模型的性能（比如有可能出现自相矛盾的情况。明明两个texts很相近，都和query相关，但只给其中一个打上了相关的标签，而另一个因为疏忽，忘记打上相关标签了，那模型就会被告知一个内容是和当前query相关的，但另一个很相近的内容又被告知是和当前query不相关的……）<br>另一个问题就是，现在的数据集大多是英语的，非英语的很少，所以要训练一个非英语的dense
 retriever也是有困难的（有点类似之前训大模型，最开始语料都是英文的，中文的很少，之后才开始大肆收集中文语料吧，现在网上也是比较多的）</h3>
 <h2 id="evaluation-metrics">3.2.Evaluation Metrics</h2>
-<h3
-id="评价ir系统主要评价这么几个方面effectivenessefficiencydiversitynovelty这篇论文注重的是effectiveness应该就是指检索得到的结果是否尽可能多地和query相关">评价IR系统，主要评价这么几个方面：effectiveness，efficiency，diversity，novelty。这篇论文注重的是effectiveness（应该就是指检索得到的结果是否尽可能多地和query相关）</h3>
+<h3 id="评价ir系统主要评价这么几个方面effectivenessefficiencydiversitynovelty这篇论文注重的是effectiveness应该就是指检索得到的结果是否尽可能多地和query相关">评价IR系统，主要评价这么几个方面：effectiveness，efficiency，diversity，novelty。这篇论文注重的是effectiveness（应该就是指检索得到的结果是否尽可能多地和query相关）</h3>
 <h3 id="主要有这么几个指标">主要有这么几个指标：</h3>
-<h4
-id="recallk它衡量的就是召回率我们希望检索得到的前k个结果尽可能都是和query相关的计算公式为recallkfrac1qsum_q1qfracretr_qkrel_q其中q表示query集合的大小retr_qk表示检索得到的前k个结果里有多少个和query是相关的rel_q则是指和query相关的所有text的数量可以看到分母是固定的我们希望的就是分子能尽可能大">Recall@k。它衡量的就是召回率，我们希望检索得到的前k个结果尽可能都是和query相关的，计算公式为：<span
-class="math display">\[Recall@k=\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{\#retr_{q,k}}{\#rel_{q}}\]</span>其中<span
-class="math inline">\(|Q|\)</span>表示query集合的大小，<span
-class="math inline">\(\#retr_{q,k}\)</span>表示检索得到的前k个结果里，有多少个和query是相关的；<span
-class="math inline">\(\#rel_{q}\)</span>则是指和query相关的所有text的数量。可以看到，分母是固定的，我们希望的就是分子能尽可能大</h4>
-<h4
-id="top-k-accuracy计算公式为accuracykfrac1qsum_q1qiretr_qk0其中icdot是-指示函数这里对于一个query我们只要求取回来的前k个结果里存在一个相关的即可看起来它的要求比recallk低了很多但主要是因为它的使用场景和recallk也是不一样的比如粗筛阶段我们也不要求初步筛出来的全都是相关的有相关的就可以可以交给后面的流程把它找出来且真的要求全都是相关的那计算量应该会更大但显然没必要在粗筛阶段就花这么大功夫之后精筛就可以交给reranker等其它后续模型来处理所以初筛就比较适合用这个top-k-accuracy">Top-k
-Accuracy，计算公式为<span
-class="math display">\[Accuracy@k=\frac{1}{|Q|}\sum_{q=1}^{|Q|}I(\#retr_{q,k}&gt;0)\]</span>其中<span
-class="math inline">\(I(\cdot)\)</span>是
-指示函数，这里对于一个query，我们只要求取回来的前k个结果里，存在一个相关的即可。看起来它的要求比<span
-class="math inline">\(Recall@k\)</span>低了很多，但主要是因为它的使用场景和<span
-class="math inline">\(Recall@k\)</span>也是不一样的。比如，粗筛阶段，我们也不要求初步筛出来的全都是相关的，有相关的就可以（可以交给后面的流程把它找出来）；且真的要求全都是相关的，那计算量应该会更大，但显然没必要在粗筛阶段就花这么大功夫。之后精筛就可以交给reranker等其它后续模型来处理。所以，初筛就比较适合用这个Top-k
+<h4 id="recallk它衡量的就是召回率我们希望检索得到的前k个结果尽可能都是和query相关的计算公式为recallkfrac1qsum_q1qfracretr_qkrel_q其中q表示query集合的大小retr_qk表示检索得到的前k个结果里有多少个和query是相关的rel_q则是指和query相关的所有text的数量可以看到分母是固定的我们希望的就是分子能尽可能大">Recall@k。它衡量的就是召回率，我们希望检索得到的前k个结果尽可能都是和query相关的，计算公式为：<span class="math display">\[Recall@k=\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{\#retr_{q,k}}{\#rel_{q}}\]</span>其中<span class="math inline">\(|Q|\)</span>表示query集合的大小，<span class="math inline">\(\#retr_{q,k}\)</span>表示检索得到的前k个结果里，有多少个和query是相关的；<span class="math inline">\(\#rel_{q}\)</span>则是指和query相关的所有text的数量。可以看到，分母是固定的，我们希望的就是分子能尽可能大</h4>
+<h4 id="top-k-accuracy计算公式为accuracykfrac1qsum_q1qiretr_qk0其中icdot是-指示函数这里对于一个query我们只要求取回来的前k个结果里存在一个相关的即可看起来它的要求比recallk低了很多但主要是因为它的使用场景和recallk也是不一样的比如粗筛阶段我们也不要求初步筛出来的全都是相关的有相关的就可以可以交给后面的流程把它找出来且真的要求全都是相关的那计算量应该会更大但显然没必要在粗筛阶段就花这么大功夫之后精筛就可以交给reranker等其它后续模型来处理所以初筛就比较适合用这个top-k-accuracy">Top-k
+Accuracy，计算公式为<span class="math display">\[Accuracy@k=\frac{1}{|Q|}\sum_{q=1}^{|Q|}I(\#retr_{q,k}&gt;0)\]</span>其中<span class="math inline">\(I(\cdot)\)</span>是
+指示函数，这里对于一个query，我们只要求取回来的前k个结果里，存在一个相关的即可。看起来它的要求比<span class="math inline">\(Recall@k\)</span>低了很多，但主要是因为它的使用场景和<span class="math inline">\(Recall@k\)</span>也是不一样的。比如，粗筛阶段，我们也不要求初步筛出来的全都是相关的，有相关的就可以（可以交给后面的流程把它找出来）；且真的要求全都是相关的，那计算量应该会更大，但显然没必要在粗筛阶段就花这么大功夫。之后精筛就可以交给reranker等其它后续模型来处理。所以，初筛就比较适合用这个Top-k
 Accuracy</h4>
-<h4
-id="mean-average-precisionmap涉及到了一些其它指标首先是precisionk这个指标就是单纯衡量检索结果里的前k个有多少个是和query相关的也就是衡量前k个检索结果的准确性计算公式如下precisionkfrac1qsum_q1qfracretr_qkk之后有一个average-precisionap指标它是针对一个query而言的它的计算公式如下ap_qfrac1rel_qsum_k1lprecisionktimes-iqk这里的precisionk是仅针对当前query而言的所以在它的定义里我们可以认为q就是1或者直接化简表达式为fracretr_qkk而l则表示这一次检索回来的所有结果数我们不妨从它的定义来看前面的分数先不管求和是对所有检索结果都要求和如果这第k个检索结果是相关的那我们看一下precisionk并把它加进来如果第k个检索结果是不相关的则直接不管它-最终map就是对所有query的ap指标进行平均操作也即mapfrac1qsum_q1qap_q">Mean
-Average Precision（MAP），涉及到了一些其它指标。首先是<span
-class="math inline">\(Precision@k\)</span>，这个指标就是单纯衡量检索结果里的前k个，有多少个是和query相关的，也就是衡量前k个检索结果的准确性。计算公式如下：<span
-class="math display">\[Precision@k=\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{\#retr_{q,k}}{k}\]</span>之后有一个Average
-Precision（AP）指标，它是针对一个query而言的，它的计算公式如下：<span
-class="math display">\[AP_{q}=\frac{1}{\#rel_{q}}\sum_{k=1}^{L}Precision@k\times
-I(q,k)\]</span>这里的Precision@k是仅针对当前query而言的，所以在它的定义里，我们可以认为<span
-class="math inline">\(|Q|\)</span>就是1，或者直接化简表达式为<span
-class="math inline">\(\frac{\#retr_{q,k}}{k}\)</span>，而L则表示这一次检索回来的所有结果数。我们不妨从它的定义来看，前面的分数先不管，求和是对所有检索结果都要求和，如果这第k个检索结果是相关的，那我们看一下Precision@k，并把它加进来；如果第k个检索结果是不相关的，则直接不管它<br>最终，MAP就是对所有query的AP指标进行平均操作，也即：<span
-class="math display">\[MAP=\frac{1}{|Q|}\sum_{q=1}^{Q}AP_{q}\]</span></h4>
-<h4
-id="normalized-discounted-cumulative-gainndcg这个指标会更加简单易懂些它涉及到dcgdiscounted-cumulative-gain和idcgideal-discounted-cumulative-gaindcg计算公式如下dcg_qksum_i1kfrac2g_i-1log_2i1其中g_i表示第i个结案所结果和query的相关程度是一个分数显然越大越相关所以这个指标总体上看是衡量了前k个检索结果与query的相关性并且还与位置有关我们希望越相关的检索结果它的rank越靠前这样分母就越小最终的dcg越大-ndcg计算公式则如下frac1qsum_q1qfracdcg_qkidcg_qk显然它是对每个query都求一个量然后再平均而具体求的这个量就是实际的dcg和理想的dcg之间的比值理想的dcg计算大体上是把所有q的相关文档按照相关度降序排列这就是最理想的情况了第一个是相关度最高的第二个是相关度第二高的然后由此计算dcg即可得到idcg">Normalized
+<h4 id="mean-average-precisionmap涉及到了一些其它指标首先是precisionk这个指标就是单纯衡量检索结果里的前k个有多少个是和query相关的也就是衡量前k个检索结果的准确性计算公式如下precisionkfrac1qsum_q1qfracretr_qkk之后有一个average-precisionap指标它是针对一个query而言的它的计算公式如下ap_qfrac1rel_qsum_k1lprecisionktimes-iqk这里的precisionk是仅针对当前query而言的所以在它的定义里我们可以认为q就是1或者直接化简表达式为fracretr_qkk而l则表示这一次检索回来的所有结果数我们不妨从它的定义来看前面的分数先不管求和是对所有检索结果都要求和如果这第k个检索结果是相关的那我们看一下precisionk并把它加进来如果第k个检索结果是不相关的则直接不管它-最终map就是对所有query的ap指标进行平均操作也即mapfrac1qsum_q1qap_q">Mean
+Average Precision（MAP），涉及到了一些其它指标。首先是<span class="math inline">\(Precision@k\)</span>，这个指标就是单纯衡量检索结果里的前k个，有多少个是和query相关的，也就是衡量前k个检索结果的准确性。计算公式如下：<span class="math display">\[Precision@k=\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{\#retr_{q,k}}{k}\]</span>之后有一个Average
+Precision（AP）指标，它是针对一个query而言的，它的计算公式如下：<span class="math display">\[AP_{q}=\frac{1}{\#rel_{q}}\sum_{k=1}^{L}Precision@k\times
+I(q,k)\]</span>这里的Precision@k是仅针对当前query而言的，所以在它的定义里，我们可以认为<span class="math inline">\(|Q|\)</span>就是1，或者直接化简表达式为<span class="math inline">\(\frac{\#retr_{q,k}}{k}\)</span>，而L则表示这一次检索回来的所有结果数。我们不妨从它的定义来看，前面的分数先不管，求和是对所有检索结果都要求和，如果这第k个检索结果是相关的，那我们看一下Precision@k，并把它加进来；如果第k个检索结果是不相关的，则直接不管它<br>最终，MAP就是对所有query的AP指标进行平均操作，也即：<span class="math display">\[MAP=\frac{1}{|Q|}\sum_{q=1}^{Q}AP_{q}\]</span></h4>
+<h4 id="normalized-discounted-cumulative-gainndcg这个指标会更加简单易懂些它涉及到dcgdiscounted-cumulative-gain和idcgideal-discounted-cumulative-gaindcg计算公式如下dcg_qksum_i1kfrac2g_i-1log_2i1其中g_i表示第i个结案所结果和query的相关程度是一个分数显然越大越相关所以这个指标总体上看是衡量了前k个检索结果与query的相关性并且还与位置有关我们希望越相关的检索结果它的rank越靠前这样分母就越小最终的dcg越大-ndcg计算公式则如下frac1qsum_q1qfracdcg_qkidcg_qk显然它是对每个query都求一个量然后再平均而具体求的这个量就是实际的dcg和理想的dcg之间的比值理想的dcg计算大体上是把所有q的相关文档按照相关度降序排列这就是最理想的情况了第一个是相关度最高的第二个是相关度第二高的然后由此计算dcg即可得到idcg">Normalized
 Discounted Cumulative
 Gain（NDCG），这个指标会更加简单易懂些。它涉及到DCG（Discounted
 Cumulative Gain）和IDCG（Ideal Discounted Cumulative
-Gain）。DCG计算公式如下：<span
-class="math display">\[DCG_{q}@k=\sum_{i=1}^{k}\frac{2^{g_{i}}-1}{log_{2}(i+1)}\]</span>其中<span
-class="math inline">\(g_{i}\)</span>表示第i个结案所结果和query的相关程度，是一个分数，显然越大越相关。所以这个指标总体上看是衡量了前k个检索结果与query的相关性，并且还与位置有关。我们希望越相关的检索结果，它的rank越靠前，这样分母就越小，最终的DCG越大<br>NDCG计算公式则如下：<span
-class="math display">\[\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{DCG_{q}@k}{IDCG_{q}@k}\]</span>显然它是对每个query都求一个量，然后再平均。而具体求的这个量，就是实际的DCG和理想的DCG之间的比值。理想的DCG计算，大体上是，把所有q的相关文档按照相关度降序排列，这就是最理想的情况了：第一个是相关度最高的，第二个是相关度第二高的……然后由此计算DCG即可得到IDCG</h4>
-<h4
-id="mean-reciprocal-rank平均倒数排名mrr也是比较直观的一个指标计算公式如下mrrfrac1qsum_q1qfrac1rank_q其中的rank_q表示在检索结果里第一个出现的真正相关的检索结果它出现的次序比如检索回10个结果返回的这10个结果肯定是按照模型觉得和query相关程度从高到低排的可能前三个其实都不是相关的第四个才是真正相关的那这个query的倒数排名就是frac14了-可以看到这个指标重点关注的是第一个相关的结果出现的位置在此之后的结果则不怎么关注了在一些只需要一个正确答案的场景下这个指标还是比较适合的比如qa里又比如多轮对话检索里这里主要是多轮对话就需要经常回顾上文而回顾上文也是一个检索的过程只不过是从历史对话里检索如果我们能把期望的上文尽可能靠前地检索回来那响应得也就会比较快比较流畅如果期望的上文排在很后面那可能前面模型就会回答一些不那么相关的东西或者是需要比较久才能进一步找到该回答的东西">Mean
+Gain）。DCG计算公式如下：<span class="math display">\[DCG_{q}@k=\sum_{i=1}^{k}\frac{2^{g_{i}}-1}{log_{2}(i+1)}\]</span>其中<span class="math inline">\(g_{i}\)</span>表示第i个结案所结果和query的相关程度，是一个分数，显然越大越相关。所以这个指标总体上看是衡量了前k个检索结果与query的相关性，并且还与位置有关。我们希望越相关的检索结果，它的rank越靠前，这样分母就越小，最终的DCG越大<br>NDCG计算公式则如下：<span class="math display">\[\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{DCG_{q}@k}{IDCG_{q}@k}\]</span>显然它是对每个query都求一个量，然后再平均。而具体求的这个量，就是实际的DCG和理想的DCG之间的比值。理想的DCG计算，大体上是，把所有q的相关文档按照相关度降序排列，这就是最理想的情况了：第一个是相关度最高的，第二个是相关度第二高的……然后由此计算DCG即可得到IDCG</h4>
+<h4 id="mean-reciprocal-rank平均倒数排名mrr也是比较直观的一个指标计算公式如下mrrfrac1qsum_q1qfrac1rank_q其中的rank_q表示在检索结果里第一个出现的真正相关的检索结果它出现的次序比如检索回10个结果返回的这10个结果肯定是按照模型觉得和query相关程度从高到低排的可能前三个其实都不是相关的第四个才是真正相关的那这个query的倒数排名就是frac14了-可以看到这个指标重点关注的是第一个相关的结果出现的位置在此之后的结果则不怎么关注了在一些只需要一个正确答案的场景下这个指标还是比较适合的比如qa里又比如多轮对话检索里这里主要是多轮对话就需要经常回顾上文而回顾上文也是一个检索的过程只不过是从历史对话里检索如果我们能把期望的上文尽可能靠前地检索回来那响应得也就会比较快比较流畅如果期望的上文排在很后面那可能前面模型就会回答一些不那么相关的东西或者是需要比较久才能进一步找到该回答的东西">Mean
 Reciprocal
-Rank，平均倒数排名，MRR，也是比较直观的一个指标，计算公式如下：<span
-class="math display">\[MRR=\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{1}{rank_{q}}\]</span>其中的<span
-class="math inline">\(rank_{q}\)</span>表示在检索结果里，第一个出现的，真正相关的检索结果，它出现的次序（比如检索回10个结果，返回的这10个结果肯定是按照模型觉得和query相关程度从高到低排的，可能前三个其实都不是相关的，第四个才是真正相关的，那这个query的倒数排名就是<span
-class="math inline">\(\frac{1}{4}\)</span>了<br>可以看到，这个指标重点关注的是第一个相关的结果出现的位置，在此之后的结果则不怎么关注了。在一些只需要一个正确答案的场景下，这个指标还是比较适合的，比如QA里，又比如多轮对话检索里（这里主要是，多轮对话就需要经常回顾上文，而回顾上文也是一个检索的过程，只不过是从历史对话里检索。如果我们能把期望的上文尽可能靠前地检索回来，那响应得也就会比较快、比较流畅，如果期望的上文排在很后面，那可能前面模型就会回答一些不那么相关的东西，或者是需要比较久才能进一步找到该回答的东西）</h4>
+Rank，平均倒数排名，MRR，也是比较直观的一个指标，计算公式如下：<span class="math display">\[MRR=\frac{1}{|Q|}\sum_{q=1}^{|Q|}\frac{1}{rank_{q}}\]</span>其中的<span class="math inline">\(rank_{q}\)</span>表示在检索结果里，第一个出现的，真正相关的检索结果，它出现的次序（比如检索回10个结果，返回的这10个结果肯定是按照模型觉得和query相关程度从高到低排的，可能前三个其实都不是相关的，第四个才是真正相关的，那这个query的倒数排名就是<span class="math inline">\(\frac{1}{4}\)</span>了<br>可以看到，这个指标重点关注的是第一个相关的结果出现的位置，在此之后的结果则不怎么关注了。在一些只需要一个正确答案的场景下，这个指标还是比较适合的，比如QA里，又比如多轮对话检索里（这里主要是，多轮对话就需要经常回顾上文，而回顾上文也是一个检索的过程，只不过是从历史对话里检索。如果我们能把期望的上文尽可能靠前地检索回来，那响应得也就会比较快、比较流畅，如果期望的上文排在很后面，那可能前面模型就会回答一些不那么相关的东西，或者是需要比较久才能进一步找到该回答的东西）</h4>
 
     </div>
 
@@ -477,18 +428,18 @@ Rank，平均倒数排名，MRR，也是比较直观的一个指标，计算公�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

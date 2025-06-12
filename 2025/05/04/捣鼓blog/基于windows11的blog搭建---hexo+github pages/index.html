@@ -209,84 +209,62 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1
-id="参考了很多网上的博客现在勉强是搭建出一个雏形凑合能用但显然还有很多地方有待优化只能慢慢来在使用中改进了">参考了很多网上的博客，现在勉强是搭建出一个雏形，凑合能用。但显然还有很多地方有待优化，只能慢慢来，在使用中改进了</h1>
-<h1 id="hexo安装参考了比较多这个博客">1.hexo安装（参考了比较多<a
-target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html">这个博客</a>）</h1>
+        <h1 id="参考了很多网上的博客现在勉强是搭建出一个雏形凑合能用但显然还有很多地方有待优化只能慢慢来在使用中改进了">参考了很多网上的博客，现在勉强是搭建出一个雏形，凑合能用。但显然还有很多地方有待优化，只能慢慢来，在使用中改进了</h1>
+<h1 id="hexo安装参考了比较多这个博客">1.hexo安装（参考了比较多<a target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html">这个博客</a>）</h1>
 <span id="more"></span>
-<h2
-id="在这里主要做的是一些环境的配置">在这里主要做的是一些环境的配置</h2>
+<h2 id="在这里主要做的是一些环境的配置">在这里主要做的是一些环境的配置</h2>
 <h2 id="安装node.js">1.1.安装Node.js</h2>
-<h3
-id="其实直接去到它的官网就可以官网有教下载我是windows11然后是用命令行安装的也就是下面这几行命令">其实直接去到它的<a
-target="_blank" rel="noopener" href="https://nodejs.org/en/download">官网</a>就可以，官网有教下载。我是windows11，然后是用命令行安装的，也就是下面这几行命令</h3>
+<h3 id="其实直接去到它的官网就可以官网有教下载我是windows11然后是用命令行安装的也就是下面这几行命令">其实直接去到它的<a target="_blank" rel="noopener" href="https://nodejs.org/en/download">官网</a>就可以，官网有教下载。我是windows11，然后是用命令行安装的，也就是下面这几行命令</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Download and install fnm:</span></span><br><span class="line">winget install Schniz.fnm</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Download and install Node.js:</span></span><br><span class="line">fnm install 22</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Verify the Node.js version:</span></span><br><span class="line">node -v # Should print &quot;v22.13.1&quot;.</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Verify npm version:</span></span><br><span class="line">npm -v # Should print &quot;10.9.2&quot;.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3
-id="但有个问题就是如果是一次性把上面四个命令都执行完可能是没问题的如果把当前终端关掉再开一个然后试一下验证node.js和npm版本可能就会报错">但有个问题，就是如果是一次性把上面四个命令都执行完，可能是没问题的；如果把当前终端关掉，再开一个，然后试一下验证Node.js和npm版本，可能就会报错</h3>
+<h3 id="但有个问题就是如果是一次性把上面四个命令都执行完可能是没问题的如果把当前终端关掉再开一个然后试一下验证node.js和npm版本可能就会报错">但有个问题，就是如果是一次性把上面四个命令都执行完，可能是没问题的；如果把当前终端关掉，再开一个，然后试一下验证Node.js和npm版本，可能就会报错</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(base) PS C:\Users\user\Desktop&gt; fnm use 22 error: We can&#x27;t find the necessary environment variables to replace the Node version. You should setup your shell profile to evaluate `fnm env`, see [https://github.com/Schniz/fnm#shell-setup](https://github.com/Schniz/fnm#shell-setup) on how to do this Check out our documentation for more information: [https://fnm.vercel.app](https://fnm.vercel.app/)</span><br></pre></td></tr></table></figure>
-<h3
-id="这个问题主要是因为fnm环境没配置好根据fnm的github仓库安装完还得进行相应的配置才能正常使用fnm主要是要把一行代码写到终端的profile里windows的话就是要在power-shell的配置文件里写上fnm-env---use-on-cd---shell-powershell-out-string-invoke-expression它的作用是在每次打开-powershell-时加载-fnm-环境并在进入项目目录时自动切换到合适的-node.js-版本如果有-.node-version-或-.nvmrc-文件-至于打开这个配置文件可以这样notepad-profile方法应该是很多的可以搜到也可以问ai-加上之后就没问题关掉终端再重新开验证版本也不会报错了">这个问题主要是因为fnm环境没配置好。根据<a
-target="_blank" rel="noopener" href="https://github.com/Schniz/fnm">fnm的github仓库</a>，安装完还得进行相应的配置才能正常使用fnm。主要是要把一行代码写到终端的profile里。windows的话，就是要在power
+<h3 id="这个问题主要是因为fnm环境没配置好根据fnm的github仓库安装完还得进行相应的配置才能正常使用fnm主要是要把一行代码写到终端的profile里windows的话就是要在power-shell的配置文件里写上fnm-env---use-on-cd---shell-powershell-out-string-invoke-expression它的作用是在每次打开-powershell-时加载-fnm-环境并在进入项目目录时自动切换到合适的-node.js-版本如果有-.node-version-或-.nvmrc-文件-至于打开这个配置文件可以这样notepad-profile方法应该是很多的可以搜到也可以问ai-加上之后就没问题关掉终端再重新开验证版本也不会报错了">这个问题主要是因为fnm环境没配置好。根据<a target="_blank" rel="noopener" href="https://github.com/Schniz/fnm">fnm的github仓库</a>，安装完还得进行相应的配置才能正常使用fnm。主要是要把一行代码写到终端的profile里。windows的话，就是要在power
 shell的配置文件里写上<code>fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression</code>。（它的作用是，在每次打开
 PowerShell
 时加载 <code>fnm</code> 环境，并在进入项目目录时自动切换到合适的 Node.js
 版本（如果有 <code>.node-version</code> 或 <code>.nvmrc</code> 文件））<br>至于打开这个配置文件，可以这样：<code>notepad $PROFILE</code>（方法应该是很多的，可以搜到，也可以问AI）<br>加上之后就没问题，关掉终端再重新开，验证版本也不会报错了</h3>
 <h2 id="安装git">1.2.安装git</h2>
-<h3
-id="这个教程就更多了随便搜一下应该就能搜到了">这个教程就更多了，随便搜一下应该就能搜到了</h3>
+<h3 id="这个教程就更多了随便搜一下应该就能搜到了">这个教程就更多了，随便搜一下应该就能搜到了</h3>
 <h2 id="安装hexo">1.3.安装hexo</h2>
 <h3 id="在power-shell里运行一下这三行命令就行">在power
 shell里运行一下这三行命令就行：</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置npm镜像源</span></span><br><span class="line">npm config set registry https://registry.npmmirror.com</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装hexo命令行工具</span></span><br><span class="line">npm install hexo-cli -g</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">验证hexo安装</span></span><br><span class="line">hexo -v</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果正确输出版本号，就说明安装成功</span></span><br></pre></td></tr></table></figure>
 <h1 id="初步构建博客">2.初步构建博客</h1>
-<h2
-id="在这里我们最后能看到一个本地版的博客有一些初步成效">在这里，我们最后能看到一个”本地版“的博客，有一些初步成效</h2>
-<h2
-id="创建一个文件夹注意一定要是空的别往里面放东西否则init时会报错用来存放博客的各种文件然后在powershell中切到这个文件夹下或者直接在那个文件夹下打开power-shell依次运行如下命令">2.1.创建一个文件夹（注意，一定要是空的，别往里面放东西，否则init时会报错），用来存放博客的各种文件。然后，在powershell中切到这个文件夹下（或者直接在那个文件夹下打开power
+<h2 id="在这里我们最后能看到一个本地版的博客有一些初步成效">在这里，我们最后能看到一个”本地版“的博客，有一些初步成效</h2>
+<h2 id="创建一个文件夹注意一定要是空的别往里面放东西否则init时会报错用来存放博客的各种文件然后在powershell中切到这个文件夹下或者直接在那个文件夹下打开power-shell依次运行如下命令">2.1.创建一个文件夹（注意，一定要是空的，别往里面放东西，否则init时会报错），用来存放博客的各种文件。然后，在powershell中切到这个文件夹下（或者直接在那个文件夹下打开power
 shell），依次运行如下命令：</h2>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init # 初始化博客  </span><br><span class="line">hexo generate # 申城网站信息  </span><br><span class="line">hexo server # 开始网站服务</span><br></pre></td></tr></table></figure>
-<h2
-id="正常的话init后原来空的那个文件夹里就会多出一些文件夹和文件比如sourcesthemes等最后hexo-server执行完后会有类似这样的输出">正常的话，init后，原来空的那个文件夹里就会多出一些文件夹和文件，比如sources，themes等；最后hexo
+<h2 id="正常的话init后原来空的那个文件夹里就会多出一些文件夹和文件比如sourcesthemes等最后hexo-server执行完后会有类似这样的输出">正常的话，init后，原来空的那个文件夹里就会多出一些文件夹和文件，比如sources，themes等；最后hexo
 server执行完后，会有类似这样的输出：</h2>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INFO  Validating config</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/username/ . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
-<h2
-id="此时按住ctrl再左键点击这个链接就能跳转到博客的页面按道理来说就会看到一个hello-world的文档可以参考一下上面提到的那个博客它里面讲到博客构建要进行本地测试的时候有放一张图片是那个界面就没错了">此时按住ctrl再左键点击这个链接，就能跳转到博客的页面。按道理来说，就会看到一个hello
-world的文档。可以参考一下<a
-target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html">上面提到的那个博客</a>，它里面讲到博客构建，要进行本地测试的时候，有放一张图片，是那个界面就没错了</h2>
+<h2 id="此时按住ctrl再左键点击这个链接就能跳转到博客的页面按道理来说就会看到一个hello-world的文档可以参考一下上面提到的那个博客它里面讲到博客构建要进行本地测试的时候有放一张图片是那个界面就没错了">此时按住ctrl再左键点击这个链接，就能跳转到博客的页面。按道理来说，就会看到一个hello
+world的文档。可以参考一下<a target="_blank" rel="noopener" href="https://www.6young.site/blog/de56ed25.html">上面提到的那个博客</a>，它里面讲到博客构建，要进行本地测试的时候，有放一张图片，是那个界面就没错了</h2>
 <h1 id="部署到github-pages">3.部署到gitHub pages</h1>
-<h2
-id="上面虽然看到了一个页面说明博客框架搭建成功但它的网址是local-host并不是一般的网页链接我们最终的目的是希望能通过正常的网页链接访问到博客而github-pages就是一个可以借用的东西-它大概的作用是给我们提供一个免费的域名可以理解为一个网址而我们只要把博客的内容和配置文件部署或者说放到github就可以实现用它给的那个看起来正常的网址访问到我们的博客了">上面虽然看到了一个页面，说明博客框架搭建成功，但它的”网址“是local
+<h2 id="上面虽然看到了一个页面说明博客框架搭建成功但它的网址是local-host并不是一般的网页链接我们最终的目的是希望能通过正常的网页链接访问到博客而github-pages就是一个可以借用的东西-它大概的作用是给我们提供一个免费的域名可以理解为一个网址而我们只要把博客的内容和配置文件部署或者说放到github就可以实现用它给的那个看起来正常的网址访问到我们的博客了">上面虽然看到了一个页面，说明博客框架搭建成功，但它的”网址“是local
 host，并不是一般的网页链接。我们最终的目的是希望能通过正常的网页链接访问到博客。而github
 pages就是一个可以借用的东西。
 它大概的作用是，给我们提供一个免费的域名（可以理解为一个网址）。而我们只要把博客的内容和配置文件部署，或者说”放“到github，就可以实现用它给的那个”看起来正常的网址“访问到我们的博客了</h2>
 <h2 id="准备相应github仓库">3.1.准备相应github仓库</h2>
-<h3
-id="注册一个github账户然后创建一个仓库并且这个仓库的名字要和你的github用户名保持一致也就是说这是一个特殊的github仓库这一步也比较简单很多教程可以查但需要注意创建的这个仓库的权限应该置为public否则是private的话还要进行部署就需要付费了那就有点失去我们本来用github-pages的意义了">注册一个github账户，然后创建一个仓库，并且这个仓库的名字要和你的github用户名保持一致（也就是说，这是一个特殊的github仓库）（这一步也比较简单，很多教程可以查。但需要注意，创建的这个仓库的权限应该置为public，否则，是private的话，还要进行部署，就需要付费了，那就有点失去我们本来用github
+<h3 id="注册一个github账户然后创建一个仓库并且这个仓库的名字要和你的github用户名保持一致也就是说这是一个特殊的github仓库这一步也比较简单很多教程可以查但需要注意创建的这个仓库的权限应该置为public否则是private的话还要进行部署就需要付费了那就有点失去我们本来用github-pages的意义了">注册一个github账户，然后创建一个仓库，并且这个仓库的名字要和你的github用户名保持一致（也就是说，这是一个特殊的github仓库）（这一步也比较简单，很多教程可以查。但需要注意，创建的这个仓库的权限应该置为public，否则，是private的话，还要进行部署，就需要付费了，那就有点失去我们本来用github
 pages的意义了）</h3>
 <h2 id="修改blog文件夹里的配置文件">3.2.修改blog文件夹里的配置文件</h2>
-<h3
-id="注意到上面第二步初步构建博客中那个存放博客相关文件的文件夹里会多出一些初始化的文件和文件夹其中有一个_config.yml文件就是hexo的配置文件打开它在最末尾加上如下内容">注意到上面第二步：初步构建博客中，那个存放博客相关文件的文件夹里，会多出一些初始化的文件和文件夹。其中有一个_config.yml文件，就是hexo的配置文件。打开它，在最末尾加上如下内容：</h3>
+<h3 id="注意到上面第二步初步构建博客中那个存放博客相关文件的文件夹里会多出一些初始化的文件和文件夹其中有一个_config.yml文件就是hexo的配置文件打开它在最末尾加上如下内容">注意到上面第二步：初步构建博客中，那个存放博客相关文件的文件夹里，会多出一些初始化的文件和文件夹。其中有一个_config.yml文件，就是hexo的配置文件。打开它，在最末尾加上如下内容：</h3>
 <figure class="highlight java"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"></span><br><span class="line">  type: git</span><br><span class="line"></span><br><span class="line">  repository: https:<span class="comment">//github.com/username/username.git  # 你的仓库地址</span></span><br><span class="line"></span><br><span class="line">  branch: gh-pages</span><br></pre></td></tr></table></figure>
-<h3
-id="需要修改的就是repository对应的仓库地址它就是你刚刚创建的那个仓库的地址以及branch它控制的是部署的时候我们把文件放到仓库的哪个分支如果是像这里的gh-pages那么到时候就是发布到gh-pages分支这个分支一开始是没有的部署的时候会自动创建但这样会导致github会认为这是一个项目仓库而不是一个特殊的仓库最终我们得到的一个网址的格式就是httpsusername.github.iousername而不是更为常见的username.github.io结尾是io在记忆上显然是后者更为简单易记不过使用上倒也大差不差吧如果是main分支则得到的网址就是io结尾的">需要修改的就是repository对应的仓库地址（它就是你刚刚创建的那个仓库的地址），以及branch。它控制的是，部署的时候，我们把文件放到仓库的哪个分支。如果是像这里的gh-pages，那么到时候就是发布到gh-pages分支（这个分支一开始是没有的，部署的时候会自动创建），但这样会导致，github会认为这是一个项目仓库，而不是一个”特殊“的仓库，最终我们得到的一个网址的格式就是https://username.github.io/username/，而不是更为常见的username.github.io（结尾是io），在记忆上显然是后者更为简单、易记。不过使用上倒也大差不差吧。如果是main分支，则得到的网址就是io结尾的</h3>
+<h3 id="需要修改的就是repository对应的仓库地址它就是你刚刚创建的那个仓库的地址以及branch它控制的是部署的时候我们把文件放到仓库的哪个分支如果是像这里的gh-pages那么到时候就是发布到gh-pages分支这个分支一开始是没有的部署的时候会自动创建但这样会导致github会认为这是一个项目仓库而不是一个特殊的仓库最终我们得到的一个网址的格式就是httpsusername.github.iousername而不是更为常见的username.github.io结尾是io在记忆上显然是后者更为简单易记不过使用上倒也大差不差吧如果是main分支则得到的网址就是io结尾的">需要修改的就是repository对应的仓库地址（它就是你刚刚创建的那个仓库的地址），以及branch。它控制的是，部署的时候，我们把文件放到仓库的哪个分支。如果是像这里的gh-pages，那么到时候就是发布到gh-pages分支（这个分支一开始是没有的，部署的时候会自动创建），但这样会导致，github会认为这是一个项目仓库，而不是一个”特殊“的仓库，最终我们得到的一个网址的格式就是https://username.github.io/username/，而不是更为常见的username.github.io（结尾是io），在记忆上显然是后者更为简单、易记。不过使用上倒也大差不差吧。如果是main分支，则得到的网址就是io结尾的</h3>
 <h2 id="安装部署用的插件">3.3.安装部署用的插件</h2>
-<h3
-id="需要安装一下这个插件hexo-deployer-git-插件只需在power-shell中运行如下命令npm-install-hexo-deployer-git---save">需要安装一下这个插件：<code>hexo-deployer-git</code> 插件。只需在power
+<h3 id="需要安装一下这个插件hexo-deployer-git-插件只需在power-shell中运行如下命令npm-install-hexo-deployer-git---save">需要安装一下这个插件：<code>hexo-deployer-git</code> 插件。只需在power
 shell中运行如下命令<code>npm install hexo-deployer-git --save</code></h3>
 <h2 id="公私钥认证">3.4.公私钥认证</h2>
-<h3
-id="在部署之前应该先生成一对公私钥然后把公钥放到github的账号上以进行认证从而可以往github仓库上传东西这个也比较简单只要把这一串要求给ai它给出的步骤基本就是可以完全照着执行的">在部署之前，应该先生成一对公私钥，然后把公钥放到github的账号上，以进行认证，从而可以往github仓库上传东西。这个也比较简单，只要把这一串要求给AI，它给出的步骤基本就是可以完全照着执行的</h3>
+<h3 id="在部署之前应该先生成一对公私钥然后把公钥放到github的账号上以进行认证从而可以往github仓库上传东西这个也比较简单只要把这一串要求给ai它给出的步骤基本就是可以完全照着执行的">在部署之前，应该先生成一对公私钥，然后把公钥放到github的账号上，以进行认证，从而可以往github仓库上传东西。这个也比较简单，只要把这一串要求给AI，它给出的步骤基本就是可以完全照着执行的</h3>
 <h2 id="部署">3.5.部署</h2>
 <h3 id="依次在power-shell中执行如下三行命令即可">依次在power
 shell中执行如下三行命令即可：</h3>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean # 清除缓存  </span><br><span class="line">hexo generate # 生成网站  </span><br><span class="line">hexo deploy # 部署至远程网络</span><br></pre></td></tr></table></figure>
-<h3
-id="至此部署就应该完成了如果你是传到main分支那么直接搜username.github.io应该就能搜到但可能需要登上一会几分钟乃至十分钟左右如果是上传到其它分支比如gh-pages则进到那个github仓库点击上面的settings按键然后在code-and-automation栏中点击pages应该能看到your-site-is-live-at-httpsxxx网址点击这个网址或者旁边的visit-site都可以跳转到网页正常应该就能看到博客内容了">至此，部署就应该完成了。如果你是传到main分支，那么直接搜username.github.io应该就能搜到（但可能需要登上一会，几分钟乃至十分钟左右）。如果是上传到其它分支，比如gh-pages，则进到那个github仓库，点击上面的Settings按键，然后在Code
+<h3 id="至此部署就应该完成了如果你是传到main分支那么直接搜username.github.io应该就能搜到但可能需要登上一会几分钟乃至十分钟左右如果是上传到其它分支比如gh-pages则进到那个github仓库点击上面的settings按键然后在code-and-automation栏中点击pages应该能看到your-site-is-live-at-httpsxxx网址点击这个网址或者旁边的visit-site都可以跳转到网页正常应该就能看到博客内容了">至此，部署就应该完成了。如果你是传到main分支，那么直接搜username.github.io应该就能搜到（但可能需要登上一会，几分钟乃至十分钟左右）。如果是上传到其它分支，比如gh-pages，则进到那个github仓库，点击上面的Settings按键，然后在Code
 and automation栏中点击Pages，应该能看到Your site is live
 at https://xxx网址，点击这个网址，或者旁边的Visit
 site都可以跳转到网页，正常应该就能看到博客内容了</h3>
-<h3
-id="之后如果还做了什么改动一般就还是运行上面的三个命令即可">之后如果还做了什么改动，一般就还是运行上面的三个命令即可</h3>
+<h3 id="之后如果还做了什么改动一般就还是运行上面的三个命令即可">之后如果还做了什么改动，一般就还是运行上面的三个命令即可</h3>
 
     </div>
 
@@ -401,18 +379,18 @@ site都可以跳转到网页，正常应该就能看到博客内容了</span></a
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

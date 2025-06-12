@@ -208,12 +208,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/contains-duplicate/description/">在这</a></h1>
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/contains-duplicate/description/">在这</a></h1>
 <span id="more"></span>
 <h1 id="题目描述">题目描述：</h1>
-<h2
-id="给你一个整数数组-nums-如果任一值在数组中出现-至少两次-返回-true-如果数组中每个元素互不相同返回-false">给你一个整数数组 <code>nums</code> 。如果任一值在数组中出现 <strong>至少两次</strong> ，返回 <code>true</code> ；如果数组中每个元素互不相同，返回 <code>false</code> 。</h2>
+<h2 id="给你一个整数数组-nums-如果任一值在数组中出现-至少两次-返回-true-如果数组中每个元素互不相同返回-false">给你一个整数数组 <code>nums</code> 。如果任一值在数组中出现 <strong>至少两次</strong> ，返回 <code>true</code> ；如果数组中每个元素互不相同，返回 <code>false</code> 。</h2>
 <h2 id="示例-1"><strong>示例 1：</strong></h2>
 <h3 id="输入nums-1231"><strong>输入：</strong>nums = [1,2,3,1]</h3>
 <h3 id="输出true"><strong>输出：</strong>true</h3>
@@ -233,15 +231,12 @@ id="给你一个整数数组-nums-如果任一值在数组中出现-至少两次
 <code>1 &lt;= nums.length &lt;= 10^5</code></h4>
 <h4 id="numsi-109">- <code>-10^9 &lt;= nums[i] &lt;= 10^9</code></h4>
 <h1 id="思路">思路：</h1>
-<h2
-id="第一眼看过去觉得和之前的某道题特别像因为也有类似的判断重复元素的存在这个步骤其实是这道题字符串中的第一个唯一字符但那道题的思路不能直接拿过来用因为有个很关键的点在于那道题里字符串的元素只可能是26个小写字母之一我只需要开一个数组就可以表征所有的可能的字符以及用它来记录每种字符出现的次数而这道题给的是一个数组数组里的数取值范围是很大的如果还用开数组这种方法来记录每种元素出现的次数那空间开销太大了进一步想想其实这道题还可以改成连续区间吧那更是不可能用数组来记录了">第一眼看过去，觉得和之前的某道题特别像，因为也有类似的判断重复元素的存在这个步骤，其实是这道题[[字符串中的第一个唯一字符]]，但那道题的思路不能直接拿过来用，因为有个很关键的点在于，那道题里，字符串的元素只可能是26个小写字母之一，我只需要开一个数组就可以表征所有的可能的字符，以及用它来记录每种字符出现的次数。而这道题给的是一个数组，数组里的数取值范围是很大的，如果还用开数组这种方法来记录每种元素出现的次数，那空间开销太大了（进一步想想，其实这道题还可以改成连续区间吧，那更是不可能用数组来记录了）</h2>
-<h2
-id="其次倒也容易想到哈希表那一套但主要是不太熟不过哈希表它大概是可以用来快速判断某个元素是否存在的这是比较基础的基于这一点容易想到遍历一遍数组并不断判断当前在看的这个元素是否在集合里出现过出现过说明就有重复元素了直接return-true没出现过就把它加到集合里然后继续遍历cpp的话unordered_set是哈希表的一个应用它的底层是哈希表而更上层也提供了一些接口例如insertfind">其次，倒也容易想到哈希表那一套，但主要是不太熟……不过哈希表它大概是可以用来快速判断某个元素是否存在的，这是比较基础的。基于这一点，容易想到：遍历一遍数组，并不断判断当前在看的这个元素是否在集合里出现过，出现过说明就有重复元素了，直接return
+<h2 id="第一眼看过去觉得和之前的某道题特别像因为也有类似的判断重复元素的存在这个步骤其实是这道题字符串中的第一个唯一字符但那道题的思路不能直接拿过来用因为有个很关键的点在于那道题里字符串的元素只可能是26个小写字母之一我只需要开一个数组就可以表征所有的可能的字符以及用它来记录每种字符出现的次数而这道题给的是一个数组数组里的数取值范围是很大的如果还用开数组这种方法来记录每种元素出现的次数那空间开销太大了进一步想想其实这道题还可以改成连续区间吧那更是不可能用数组来记录了">第一眼看过去，觉得和之前的某道题特别像，因为也有类似的判断重复元素的存在这个步骤，其实是这道题[[字符串中的第一个唯一字符]]，但那道题的思路不能直接拿过来用，因为有个很关键的点在于，那道题里，字符串的元素只可能是26个小写字母之一，我只需要开一个数组就可以表征所有的可能的字符，以及用它来记录每种字符出现的次数。而这道题给的是一个数组，数组里的数取值范围是很大的，如果还用开数组这种方法来记录每种元素出现的次数，那空间开销太大了（进一步想想，其实这道题还可以改成连续区间吧，那更是不可能用数组来记录了）</h2>
+<h2 id="其次倒也容易想到哈希表那一套但主要是不太熟不过哈希表它大概是可以用来快速判断某个元素是否存在的这是比较基础的基于这一点容易想到遍历一遍数组并不断判断当前在看的这个元素是否在集合里出现过出现过说明就有重复元素了直接return-true没出现过就把它加到集合里然后继续遍历cpp的话unordered_set是哈希表的一个应用它的底层是哈希表而更上层也提供了一些接口例如insertfind">其次，倒也容易想到哈希表那一套，但主要是不太熟……不过哈希表它大概是可以用来快速判断某个元素是否存在的，这是比较基础的。基于这一点，容易想到：遍历一遍数组，并不断判断当前在看的这个元素是否在集合里出现过，出现过说明就有重复元素了，直接return
 true；没出现过就把它加到集合里，然后继续遍历。cpp的话，unordered_set是哈希表的一个应用，它的底层是哈希表，而更上层也提供了一些接口，例如<code>insert()</code>，<code>find()</code></h2>
 <h1 id="代码">代码：</h1>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">containsDuplicate</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        unordered_set&lt;<span class="type">int</span>&gt; elements;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> num:nums)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!elements.<span class="built_in">insert</span>(num).second) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2
-id="这里用到了unordered_set的一个insert方法它返回的是一个pairiterator-bool-其中pair.first是一个指向新插入元素的迭代器如果插入成功了或者是一个指向已经存在的相同元素的迭代器此时就是集合里已经存在这个元素了-pair.second则是bool类型的变量表示是否插入成功true的话就表明插入的这个元素在此之前不在集合里此时已经成功插入false的话就表示这个元素之前已经被插入到集合里了这一次插入失败了因为不用插入相当于没有插入了">这里用到了unordered_set的一个insert方法，它返回的是一个pair&lt;iterator,
+<h2 id="这里用到了unordered_set的一个insert方法它返回的是一个pairiterator-bool-其中pair.first是一个指向新插入元素的迭代器如果插入成功了或者是一个指向已经存在的相同元素的迭代器此时就是集合里已经存在这个元素了-pair.second则是bool类型的变量表示是否插入成功true的话就表明插入的这个元素在此之前不在集合里此时已经成功插入false的话就表示这个元素之前已经被插入到集合里了这一次插入失败了因为不用插入相当于没有插入了">这里用到了unordered_set的一个insert方法，它返回的是一个pair&lt;iterator,
 bool&gt;<br>其中，pair.first是一个指向新插入元素的迭代器（如果插入成功了）或者是一个指向已经存在的相同元素的迭代器（此时就是集合里已经存在这个元素了）<br>pair.second则是bool类型的变量，表示是否插入成功，true的话就表明插入的这个元素在此之前不在集合里，此时已经成功插入；false的话就表示这个元素之前已经被插入到集合里了，这一次插入失败了（因为不用插入相当于没有插入了）</h2>
 
     </div>
@@ -345,18 +340,18 @@ bool&gt;其中，pair.first是一个指向新插入元素的迭代器（如果�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

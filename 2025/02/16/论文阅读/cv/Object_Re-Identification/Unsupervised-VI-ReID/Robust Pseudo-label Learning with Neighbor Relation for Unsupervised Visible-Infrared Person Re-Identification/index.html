@@ -194,8 +194,7 @@
 
       
         <h1 id="acm-mm24">acm mm24</h1>
-<h1
-id="它也是要解决伪标签带噪的问题提出一个noisy-pseudo-label-calibration-module来校正伪标签提出一个nieghbor-relation-learning-module来获取模态内更加一致的特征提出一个optimal-transport-prototype-matching-module来进行跨模态的匹配建立跨模态对应关系提出一个memory-hybrid-leraning-module来更好提取出modality-invariant和modality-specific-feature">它也是要解决伪标签带噪的问题。提出一个Noisy
+<h1 id="它也是要解决伪标签带噪的问题提出一个noisy-pseudo-label-calibration-module来校正伪标签提出一个nieghbor-relation-learning-module来获取模态内更加一致的特征提出一个optimal-transport-prototype-matching-module来进行跨模态的匹配建立跨模态对应关系提出一个memory-hybrid-leraning-module来更好提取出modality-invariant和modality-specific-feature">它也是要解决伪标签带噪的问题。提出一个Noisy
 Pseudo-label Calibration
 module来<strong><em>校正伪标签</em></strong>；提出一个Nieghbor Relation
 Learning module来获取模态内更加一致的特征；提出一个Optimal Transport
@@ -204,25 +203,20 @@ module来进行跨模态的匹配，建立跨模态对应关系；提出一个Me
 Leraning module来更好提取出modality-invariant和modality-specific
 feature</h1>
 <h1 id="insight">insight</h1>
-<h1
-id="动机无监督vi-reid中伪标签带噪声是很常见的问题而论文提出一般的方法聚焦于减少带噪标签的影响但忽略了去校正带噪标签其实这么说好像也不是很严谨那些标签平滑的操作我觉得某种程度上也是在校正标签的">动机：无监督vi-reid中，伪标签带噪声是很常见的问题。而论文提出，一般的方法聚焦于减少带噪标签的影响，但忽略了去校正带噪标签（其实这么说好像也不是很严谨，那些标签平滑的操作，我觉得某种程度上也是在校正标签的）</h1>
+<h1 id="动机无监督vi-reid中伪标签带噪声是很常见的问题而论文提出一般的方法聚焦于减少带噪标签的影响但忽略了去校正带噪标签其实这么说好像也不是很严谨那些标签平滑的操作我觉得某种程度上也是在校正标签的">动机：无监督vi-reid中，伪标签带噪声是很常见的问题。而论文提出，一般的方法聚焦于减少带噪标签的影响，但忽略了去校正带噪标签（其实这么说好像也不是很严谨，那些标签平滑的操作，我觉得某种程度上也是在校正标签的）</h1>
 <h1 id="方法">方法</h1>
-<h2
-id="noisy-pseudo-label-calibrationnpc这个模块就是很显然的回应了动机里它想要校正标签的想法它评价两个样本相似度的方法是用邻居的相似度或者说重合度而不是用样本特征本身这种间接衡量相似性的方法和gur论文towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification里的操作思想上是比较相近的只不过那里用的是概率分布要尽可能相似-而它校正标签的方法则是先提取出每个簇内的可靠的样本可靠的判断方法中核心思想是一个簇内如果有很多样本和当前样本非常相似那么当前样本应该就是比较可靠的然后簇中心就初始化为这些可靠样本的均值之后每个样本再和这些新的簇中心进行比较分配到最相似的那个簇中心那里">1.Noisy
+<h2 id="noisy-pseudo-label-calibrationnpc这个模块就是很显然的回应了动机里它想要校正标签的想法它评价两个样本相似度的方法是用邻居的相似度或者说重合度而不是用样本特征本身这种间接衡量相似性的方法和gur论文towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification里的操作思想上是比较相近的只不过那里用的是概率分布要尽可能相似-而它校正标签的方法则是先提取出每个簇内的可靠的样本可靠的判断方法中核心思想是一个簇内如果有很多样本和当前样本非常相似那么当前样本应该就是比较可靠的然后簇中心就初始化为这些可靠样本的均值之后每个样本再和这些新的簇中心进行比较分配到最相似的那个簇中心那里">1.Noisy
 Pseudo-label
 Calibration（NPC），这个模块就是很显然的，回应了动机里它想要校正标签的想法。它评价两个样本相似度的方法是用邻居的相似度（或者说重合度），而不是用样本特征本身（这种间接衡量相似性的方法，和(GUR论文[[Towards
 Grand Unified Representation Learning for Unsupervised Visible-Infrared
 Person
 Re-Identification]])里的操作，思想上是比较相近的，只不过那里用的是概率分布要尽可能相似）<br>而它校正标签的方法，则是，先提取出每个簇内的“可靠”的样本（“可靠”的判断方法中，核心思想是，一个簇内，如果有很多样本和当前样本非常相似，那么当前样本应该就是比较”可靠“的），然后簇中心就初始化为这些“可靠”样本的均值；之后，每个样本再和这些新的簇中心进行比较，分配到最相似的那个簇中心那里</h2>
-<h2
-id="neighbor-relation-learningnrl原文里说是为了reduce-high-intra-class-variations我们可以认为是为了提取更好的特征以便更好地进行模态内的聚类所以它应该主要聚焦在挖掘模态内的信息但它的损失没太搞懂">2.Neighbor
+<h2 id="neighbor-relation-learningnrl原文里说是为了reduce-high-intra-class-variations我们可以认为是为了提取更好的特征以便更好地进行模态内的聚类所以它应该主要聚焦在挖掘模态内的信息但它的损失没太搞懂">2.Neighbor
 Relation Learning（NRL），原文里说是为了reduce high intra-class
 variations，我们可以认为，是为了提取更好的特征，以便更好地进行模态内的聚类。所以它应该主要聚焦在挖掘模态内的信息。但它的损失，没太搞懂。。</h2>
-<h2
-id="optimal-transport-prototype-matchingotpa聚焦于挖掘跨模态对应的信息">Optimal
+<h2 id="optimal-transport-prototype-matchingotpa聚焦于挖掘跨模态对应的信息">Optimal
 Transport Prototype Matching（OTPA），聚焦于挖掘跨模态对应的信息</h2>
-<h2
-id="memory-hybrid-learning聚焦于学习modality-invariant-feature具体来说它在经典的模态内的clusternce-loss的基础上还构建了一个modality-hybrid-memory这个memory的特征是由红外cluster和对应的可见光cluster加权求和得到然后交替地拉近红外实例可见光实例与这个混合memory中的对应cluster之间的距离">Memory
+<h2 id="memory-hybrid-learning聚焦于学习modality-invariant-feature具体来说它在经典的模态内的clusternce-loss的基础上还构建了一个modality-hybrid-memory这个memory的特征是由红外cluster和对应的可见光cluster加权求和得到然后交替地拉近红外实例可见光实例与这个混合memory中的对应cluster之间的距离">Memory
 Hybrid Learning，聚焦于学习modality-invariant
 feature。具体来说，它在经典的模态内的ClusterNCE
 loss的基础上，还构建了一个modality-hybrid
@@ -341,18 +335,18 @@ memory（这个memory的特征是由红外cluster和对应的可见光cluster加
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

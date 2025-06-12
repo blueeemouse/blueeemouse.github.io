@@ -208,8 +208,7 @@ Re-identification]]之间的差别在哪里？ # 基本概念：1.
 <pre><code>- 局部特征描述符，用于描述人体不同部位的特征。
 - 在part-based VI-ReID模型中，会对可见光和红外图像中的不同部位进行特征提取，得到相应的局部特征描述符。
 - 这些描述符可以用于后续的识别和匹配过程。</code></pre>
-<h1
-id="problemthese-global-feature-representations-solely-focus-on-the-most-discriminative-part-while-ignoring-the-diverse-parts-which-are-helpful-to-distinguish-the-person-identity这应该是提取modality-shared-feature的方法的通病了有点类似于去学习一个identity对应的平均模板但这样太死板了会遗漏一些细节的多样的信息那么就像这篇论文着眼的地方身体部位这其实就是一种细节信息如果去捕捉这种细节信息或许就可以弥补modality-shared-feature的短板类似的其实channel-augmentation-for-visible-infrared-re-identification这里注重提取的颜色信息也是那么如果同时去关注颜色和部位信息会不会比单一的方法效果要好进一步的能不能更自动地而不是依赖于我们先验设计的着眼点去提取更多细节信息提取到了以后怎么用呢就把它们和modality-shared-feature直接concatenate起来加起来用个注意力机制融合一下蒸馏一下或许都可以试试或许有更好的方法-简单来说目前用增强方式做vi-reid的方法-通常会涉及一些mixture但没有特别好的方法被设计出来-另外想利用mixup技术进行增强辅助vi-reid但直接应用可能遇到mixup本来就有的问题unlike-conventional-methods-1938446869-that-exploit-image-mixture-techniques-that-yield-unnatural-patterns-and-local-patches-with-only-background-or-single-human-part直接应用mixup的时候就可能遇到这些问题产生不自然的patterns是很好理解的看它mixup出来的图像有些非常的怪异就可以看出来重点是说mixup可能产生完全没有人的图像这就没什么用了关键它的标签还是人的标签比如cutmix它会从一幅图上切一块下来放到另一幅图像上那如果把一幅图的背景给切下来放到另一幅图像上人所在的区域就有问题了本文的改进则是不去mixup整个图像而是去mixup部分也就是我们提取出来的part感觉确实有点道理就有点类似同一个人在同一个场景下只是穿了不同的衣服那我们人类应该是很容易就能识别出来的这里串不同的有点类似不同图像的part进行mixup那这个方法应该确实有利于去提取一些共性的具有判别能力的特征">problem：these
+<h1 id="problemthese-global-feature-representations-solely-focus-on-the-most-discriminative-part-while-ignoring-the-diverse-parts-which-are-helpful-to-distinguish-the-person-identity这应该是提取modality-shared-feature的方法的通病了有点类似于去学习一个identity对应的平均模板但这样太死板了会遗漏一些细节的多样的信息那么就像这篇论文着眼的地方身体部位这其实就是一种细节信息如果去捕捉这种细节信息或许就可以弥补modality-shared-feature的短板类似的其实channel-augmentation-for-visible-infrared-re-identification这里注重提取的颜色信息也是那么如果同时去关注颜色和部位信息会不会比单一的方法效果要好进一步的能不能更自动地而不是依赖于我们先验设计的着眼点去提取更多细节信息提取到了以后怎么用呢就把它们和modality-shared-feature直接concatenate起来加起来用个注意力机制融合一下蒸馏一下或许都可以试试或许有更好的方法-简单来说目前用增强方式做vi-reid的方法-通常会涉及一些mixture但没有特别好的方法被设计出来-另外想利用mixup技术进行增强辅助vi-reid但直接应用可能遇到mixup本来就有的问题unlike-conventional-methods-1938446869-that-exploit-image-mixture-techniques-that-yield-unnatural-patterns-and-local-patches-with-only-background-or-single-human-part直接应用mixup的时候就可能遇到这些问题产生不自然的patterns是很好理解的看它mixup出来的图像有些非常的怪异就可以看出来重点是说mixup可能产生完全没有人的图像这就没什么用了关键它的标签还是人的标签比如cutmix它会从一幅图上切一块下来放到另一幅图像上那如果把一幅图的背景给切下来放到另一幅图像上人所在的区域就有问题了本文的改进则是不去mixup整个图像而是去mixup部分也就是我们提取出来的part感觉确实有点道理就有点类似同一个人在同一个场景下只是穿了不同的衣服那我们人类应该是很容易就能识别出来的这里串不同的有点类似不同图像的part进行mixup那这个方法应该确实有利于去提取一些共性的具有判别能力的特征">problem：these
 global feature representations solely focus on the most discriminative
 part while ignoring the diverse parts which are helpful to distinguish
 the person identity。（这应该是提取modality-shared
@@ -222,13 +221,10 @@ conventional methods [19,38,44,68,69] that exploit image mixture
 techniques that yield unnatural patterns, and local patches with only
 background or single human
 part,直接应用mixup的时候，就可能遇到这些问题。产生不自然的patterns是很好理解的，看它mixup出来的图像，有些非常的怪异，就可以看出来。重点是说mixup可能产生完全没有人的图像。这就没什么用了，关键它的标签还是人的标签。比如，cutmix，它会从一幅图上切一块下来，放到另一幅图像上。那如果把一幅图的背景给切下来，放到另一幅图像上人所在的区域，就有问题了）（本文的改进则是，不去mixup整个图像，而是去mixup部分，也就是我们提取出来的part）（感觉确实有点道理，就有点类似，同一个人，在同一个场景下，只是穿了不同的衣服，那我们人类应该是很容易就能识别出来的。这里串不同的有点类似不同图像的part进行mixup。那这个方法应该确实有利于去提取一些共性的、具有判别能力的特征）</h1>
-<h1
-id="motivation希望能设计出一种mixup的方法避免直接应用mixup的时候会遇到的问题同时发挥mixup防止模型过拟合的作用提取出更有效的部位信息">motivation：希望能设计出一种mixup的方法，避免直接应用mixup的时候会遇到的问题；同时发挥mixup防止模型过拟合的作用，提取出更有效的部位信息</h1>
-<h1
-id="贡献总结一下上面的内容该论文主要是提出了一种新的增强方法partmix将mixup技术应用到vi-reid针对它的方法可能产生不太靠谱的正负样本论文提出了一些防止措施">贡献：总结一下上面的内容，该论文主要是提出了一种新的增强方法partmix，将mixup技术应用到vi-reid。针对它的方法可能产生不太靠谱的正负样本，论文提出了一些防止措施</h1>
+<h1 id="motivation希望能设计出一种mixup的方法避免直接应用mixup的时候会遇到的问题同时发挥mixup防止模型过拟合的作用提取出更有效的部位信息">motivation：希望能设计出一种mixup的方法，避免直接应用mixup的时候会遇到的问题；同时发挥mixup防止模型过拟合的作用，提取出更有效的部位信息</h1>
+<h1 id="贡献总结一下上面的内容该论文主要是提出了一种新的增强方法partmix将mixup技术应用到vi-reid针对它的方法可能产生不太靠谱的正负样本论文提出了一些防止措施">贡献：总结一下上面的内容，该论文主要是提出了一种新的增强方法partmix，将mixup技术应用到vi-reid。针对它的方法可能产生不太靠谱的正负样本，论文提出了一些防止措施</h1>
 <h1 id="method">method：</h1>
-<h2
-id="对于一个mini-batch里的data提取出它们的part-descriptor进行inter-modality和intra-modality的mixupglobal-descriptor也要算但它不进行mixup因为它包含的是全局信息不符合论文提出的partmix的思想">1.对于一个mini-batch里的data，提取出它们的part
+<h2 id="对于一个mini-batch里的data提取出它们的part-descriptor进行inter-modality和intra-modality的mixupglobal-descriptor也要算但它不进行mixup因为它包含的是全局信息不符合论文提出的partmix的思想">1.对于一个mini-batch里的data，提取出它们的part
 descriptor，进行inter-modality和intra-modality的mixup（global
 descriptor也要算，但它不进行mixup，因为它包含的是全局信息，不符合论文提出的partmix的思想）</h2>
 
@@ -339,18 +335,18 @@ descriptor也要算，但它不进行mixup，因为它包含的是全局信息�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

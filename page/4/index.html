@@ -150,6 +150,168 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-26 15:08:24" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-27 15:39:54" itemprop="dateModified" datetime="2025-05-27T15:39:54+08:00">2025-05-27</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="section">#</h2>
+<p>title: chap6.深度学习中的分布式训练——算法及系统 date: 2025-05-26
+15:51 tags: [分布式训练] categories: [mlsys, foundation] --- # 1.
+分布式训练的必要性 ##
+随着问题规模的增大（包括数据量和计算量层面的），单一设备处理速度逐渐无法满足我们的需求（比如太慢了，或者是干脆单设备放不下模型了）<br>而用分布式算法，把问题划分为若干小问题后，再经过分布式系统来执行处理，能做到较快解决较大的问题
+## 这里还介绍两个并行加速定律，来说明分布式训练的意义。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">数组中的第K个最大元素</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-23 23:59:00" itemprop="dateCreated datePublished" datetime="2025-05-23T23:59:00+08:00">2025-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-26 20:34:54" itemprop="dateModified" datetime="2025-05-26T20:34:54+08:00">2025-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/kth-largest-element-in-an-array/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -389,15 +551,13 @@ information/instance-level diversity，所以提出这篇论文的改进方法</
 
       
           <h1 id="aaai24">aaai24</h1>
-<h1
-id="problemmotivationlreid任务中因为不断获得的新数据的分布可能差异很大模型要拟合新的分布自然会遇到灾难性遗忘的问题现有的基于data-replay的和基于knowledge-distillation的方法都有各自的问题前者的隐私问题很显然后者的一个问题在于现有的基于蒸馏的方法都是把所有过往知识保留下来了没有经过筛选很难保证这些蒸馏得到的知识的质量而如果这些知识的质量不够高可能会极大影响模型性能为此论文提出一种exemplar-free为了避免隐私问题的方法提出rectification-based-short-term-knowledge-transfer-module-r-stkt以筛选整合过往知识同时利用estimation-based-long-term-knowledge-consolidation-module-e-ltkc来整合新旧知识">problem&amp;motivation：LReID任务中，因为不断获得的新数据的分布可能差异很大，模型要拟合新的分布，自然会遇到灾难性遗忘的问题。现有的基于data
+<h1 id="problemmotivationlreid任务中因为不断获得的新数据的分布可能差异很大模型要拟合新的分布自然会遇到灾难性遗忘的问题现有的基于data-replay的和基于knowledge-distillation的方法都有各自的问题前者的隐私问题很显然后者的一个问题在于现有的基于蒸馏的方法都是把所有过往知识保留下来了没有经过筛选很难保证这些蒸馏得到的知识的质量而如果这些知识的质量不够高可能会极大影响模型性能为此论文提出一种exemplar-free为了避免隐私问题的方法提出rectification-based-short-term-knowledge-transfer-module-r-stkt以筛选整合过往知识同时利用estimation-based-long-term-knowledge-consolidation-module-e-ltkc来整合新旧知识">problem&amp;motivation：LReID任务中，因为不断获得的新数据的分布可能差异很大，模型要拟合新的分布，自然会遇到灾难性遗忘的问题。现有的基于data
 replay的和基于knowledge
 distillation的方法都有各自的问题。前者的隐私问题很显然。后者的一个问题在于，现有的基于蒸馏的方法，都是把所有过往知识保留下来了，没有经过筛选，很难保证这些蒸馏得到的知识的质量。而如果这些知识的质量不够高，可能会极大影响模型性能。为此，论文提出一种exemplar-free（为了避免隐私问题）的方法，提出Rectification-based
 Short-Term Knowledge Transfer module
 (R-STKT)以筛选、整合过往知识，同时利用Estimation-based Long-Term
 Knowledge Consolidation module (E-LTKC)来整合新旧知识</h1>
-<h1
-id="话说这个normalization-guided-triplet-loss是指什么里面的apn又是什么意思">话说这个normalization-guided
+<h1 id="话说这个normalization-guided-triplet-loss是指什么里面的apn又是什么意思">话说这个normalization-guided
 Triplet loss是指什么？里面的a，p，n又是什么意思？</h1>
           <!--noindex-->
             <div class="post-button">
@@ -488,8 +648,7 @@ Triplet loss是指什么？里面的a，p，n又是什么意思？</h1>
           <h1 id="method">method：</h1>
 <h2 id="continual-compatible-transfer-networkcct">1.Continual Compatible
 Transfer Network（CCT）</h2>
-<h3
-id="特征的更新主要三部分一个是自己的残差一个是新知识用模板加权表示会用特征和模板计算相互之间的权重一个是旧知识用一些网络对原来的特征进行变换期望它能保留旧知识同时能迁移到新域">特征的更新主要三部分，一个是自己的残差；一个是新知识（用模板加权表示，会用特征和模板计算相互之间的权重）；一个是旧知识（用一些网络对原来的特征进行变换，期望它能保留旧知识，同时能迁移到新域）</h3>
+<h3 id="特征的更新主要三部分一个是自己的残差一个是新知识用模板加权表示会用特征和模板计算相互之间的权重一个是旧知识用一些网络对原来的特征进行变换期望它能保留旧知识同时能迁移到新域">特征的更新主要三部分，一个是自己的残差；一个是新知识（用模板加权表示，会用特征和模板计算相互之间的权重）；一个是旧知识（用一些网络对原来的特征进行变换，期望它能保留旧知识，同时能迁移到新域）</h3>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/#more" rel="contents">
@@ -577,23 +736,19 @@ id="特征的更新主要三部分一个是自己的残差一个是新知识用�
 
       
           <h1 id="acm-mm24">acm mm24</h1>
-<h2
-id="mitigate-catastrophic-remembering-via-continual-knowledge-purification-for-noisy-lifelong-person-re-identification-in-32nd-acm-multimedia-conference">Mitigate
+<h2 id="mitigate-catastrophic-remembering-via-continual-knowledge-purification-for-noisy-lifelong-person-re-identification-in-32nd-acm-multimedia-conference">Mitigate
 Catastrophic Remembering via Continual Knowledge Purification for Noisy
 Lifelong Person Re-Identification", in 32nd ACM Multimedia
 Conference</h2>
 <h1 id="cvpr24">cvpr24</h1>
-<h2
-id="distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification">Distribution-aware
+<h2 id="distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification">Distribution-aware
 Knowledge Prototyping for Non-exemplar Lifelong Person
 Re-identification</h2>
-<h2
-id="learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification"><strong>Learning
+<h2 id="learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification"><strong>Learning
 Continual Compatible Representation for Re-indexing Free Lifelong Person
 Re-identification</strong></h2>
 <h1 id="aaai24">aaai24</h1>
-<h2
-id="lstkc-long-short-term-knowledge-consolidation-for-lifelong-person-re-identification">LSTKC:
+<h2 id="lstkc-long-short-term-knowledge-consolidation-for-lifelong-person-re-identification">LSTKC:
 Long Short-Term Knowledge Consolidation for Lifelong Person
 Re-Identification</h2>
 <h1 id="eccv24无">eccv24无</h1>
@@ -691,8 +846,7 @@ Re-Identification</h2>
 <h1 id="tasklifelong-re-id">task：Lifelong Re-id</h1>
 <h1 id="贡献">贡献：</h1>
 <h1 id="insight">insight：</h1>
-<h1
-id="动机老生常谈地想解决lifelong-reid里的灾难性遗忘问题又因为data-privacy所以不打算用exemplar这篇文章提出的缓解灾难性遗忘的方法就是adaptive-exponential-moving-average就是会把旧模型和新模型融合只不过这里的参数是adaptive的具体来说是用prompt来求得的这也是文章的主要创新点而它相比于之前的ema技术改进点在于它提出的用prompt求得的系数是依赖于数据的而之前的要么是固定的要么是按照时间变化的却忽略了新旧数据集之间的关系">动机：老生常谈地想解决lifelong
+<h1 id="动机老生常谈地想解决lifelong-reid里的灾难性遗忘问题又因为data-privacy所以不打算用exemplar这篇文章提出的缓解灾难性遗忘的方法就是adaptive-exponential-moving-average就是会把旧模型和新模型融合只不过这里的参数是adaptive的具体来说是用prompt来求得的这也是文章的主要创新点而它相比于之前的ema技术改进点在于它提出的用prompt求得的系数是依赖于数据的而之前的要么是固定的要么是按照时间变化的却忽略了新旧数据集之间的关系">动机：老生常谈地想解决lifelong
 reid里的灾难性遗忘问题，又因为data
 privacy，所以不打算用exemplar。这篇文章提出的缓解灾难性遗忘的方法就是Adaptive
 Exponential Moving
@@ -783,10 +937,8 @@ Average，就是会把旧模型和新模型融合，只不过这里的参数是A
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2
-id="它的核心动机是希望能做到从当前域的数据合成出前面的域的数据从而用这些合成数据来缓解灾难性遗忘这样我们也就不需要通过保留过往的exemplar来复习旧知识了">它的核心动机是，希望能做到：从当前域的数据，合成出前面的域的数据，从而用这些合成数据来缓解灾难性遗忘。（这样我们也就不需要通过保留过往的exemplar来复习旧知识了）</h2>
-<h2
-id="dask主要由两部分组成一是drl它主要做的是训练一个网络叫adaptive-kernel-prediction-networkakpnet注意一下这个akpnet的功能是把任意分布的输入数据转换到它学到的风格落到我们这里也就是把新域的数据转换成旧域的数据它会为每个实例都预测生成一个kernel这个kernel可以用于把这个实例转换成其它风格的实例">DASK主要由两部分组成，一是DRL，它主要做的是，训练一个网络（叫adaptive
+          <h2 id="它的核心动机是希望能做到从当前域的数据合成出前面的域的数据从而用这些合成数据来缓解灾难性遗忘这样我们也就不需要通过保留过往的exemplar来复习旧知识了">它的核心动机是，希望能做到：从当前域的数据，合成出前面的域的数据，从而用这些合成数据来缓解灾难性遗忘。（这样我们也就不需要通过保留过往的exemplar来复习旧知识了）</h2>
+<h2 id="dask主要由两部分组成一是drl它主要做的是训练一个网络叫adaptive-kernel-prediction-networkakpnet注意一下这个akpnet的功能是把任意分布的输入数据转换到它学到的风格落到我们这里也就是把新域的数据转换成旧域的数据它会为每个实例都预测生成一个kernel这个kernel可以用于把这个实例转换成其它风格的实例">DASK主要由两部分组成，一是DRL，它主要做的是，训练一个网络（叫adaptive
 kernel prediction
 network，AKPNet）（注意一下，这个AKPNet的功能是，把任意分布的输入数据转换到它学到的风格，落到我们这里，也就是把新域的数据转换成旧域的数据），它会为每个实例都预测生成一个kernel，这个kernel可以用于把这个实例转换成其它风格的实例</h2>
           <!--noindex-->
@@ -868,178 +1020,12 @@ network，AKPNet）（注意一下，这个AKPNet的功能是，把任意分布�
 
       
           <h1 id="abstract">abstract</h1>
-<h2
-id="现在的cv技术因为它是数据驱动的所以其实它是从大量数据中推测出物理规律的这种方式不够显式进而导致可解释性等不足而传统的cv技术虽然是明确有物理规律支撑的但性能又不够好比不过深度学习的那些技术那么弱国能把物理模型与深度学习的技术融合或许就能结合二者的优点既有高性能又有可解释性泛化性可证伪性而这可以认为是把物理模型当成数据驱动过程中的一个约束条件也就是我们约束深度学习模型必须满足物理规律相当于一种融入先验知识的方法">现在的cv技术，因为它是数据驱动的，所以其实它是从大量数据中“推测”出物理规律的（这种方式不够显式，进而导致可解释性等不足）；而传统的cv技术，虽然是明确有物理规律支撑的，但性能又不够好，比不过深度学习的那些技术。那么，弱国能把物理模型与深度学习的技术融合，或许就能结合二者的优点，既有高性能，又有可解释性、泛化性、可证伪性。而这可以认为是把物理模型当成数据驱动过程中的一个约束条件，也就是我们约束深度学习模型必须满足物理规律（相当于一种融入先验知识的方法）</h2>
-<h2
-id="这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术也即所谓physics-based-machine-learning">这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术，也即所谓physics-based
+<h2 id="现在的cv技术因为它是数据驱动的所以其实它是从大量数据中推测出物理规律的这种方式不够显式进而导致可解释性等不足而传统的cv技术虽然是明确有物理规律支撑的但性能又不够好比不过深度学习的那些技术那么弱国能把物理模型与深度学习的技术融合或许就能结合二者的优点既有高性能又有可解释性泛化性可证伪性而这可以认为是把物理模型当成数据驱动过程中的一个约束条件也就是我们约束深度学习模型必须满足物理规律相当于一种融入先验知识的方法">现在的cv技术，因为它是数据驱动的，所以其实它是从大量数据中“推测”出物理规律的（这种方式不够显式，进而导致可解释性等不足）；而传统的cv技术，虽然是明确有物理规律支撑的，但性能又不够好，比不过深度学习的那些技术。那么，弱国能把物理模型与深度学习的技术融合，或许就能结合二者的优点，既有高性能，又有可解释性、泛化性、可证伪性。而这可以认为是把物理模型当成数据驱动过程中的一个约束条件，也就是我们约束深度学习模型必须满足物理规律（相当于一种融入先验知识的方法）</h2>
+<h2 id="这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术也即所谓physics-based-machine-learning">这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术，也即所谓physics-based
 machine learning</h2>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/" class="post-title-link" itemprop="url">偏差与方差</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-21 00:50:00 / Modified: 00:51:11" itemprop="dateCreated datePublished" datetime="2025-05-21T00:50:00+08:00">2025-05-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1
-id="先来个粗糙的理解偏差可以简单看成是表征了这个模型族的输出与真实值之间的偏差因此如果偏差很大比较有可能是模型形式过于简单而导致的欠拟合-方差则度量了同样大小的训练集的变动导致的学习性能的变化这里注意是训练集的变动那么如果训练集有微小变动但学习性能变化很大这就是方差大的情况它表明训练出的模型性能太依赖于训练集了这表明模型的形式可能过于复杂了导致一训练就出现了过拟合的情况-因此实际训练的时候需要权衡偏差和方差也就是要注意模型的复杂度不能太复杂导致过拟合了但也不能太简单导致根本学不好某种程度上可以认为偏差反映了模型的准确性方差反映了模型的稳定性">1.先来个粗糙的理解。偏差可以简单看成是，表征了这个模型族的输出与真实值之间的偏差。因此，如果偏差很大，比较有可能是模型形式过于简单而导致的欠拟合<br>方差则度量了同样大小的训练集的变动导致的学习性能的变化（这里注意，是“训练集的变动”）。那么，如果训练集有微小变动，但学习性能变化很大，这就是方差大的情况，它表明训练出的模型性能太依赖于训练集了，这表明模型的形式可能过于复杂了，导致一训练就出现了过拟合的情况<br>因此，实际训练的时候，需要权衡偏差和方差。也就是要注意模型的复杂度，不能太复杂导致过拟合了，但也不能太简单，导致根本学不好。某种程度上，可以认为：偏差反映了模型的准确性，方差反映了模型的稳定性</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">贝叶斯分类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-20 11:57:00" itemprop="dateCreated datePublished" datetime="2025-05-20T11:57:00+08:00">2025-05-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-21 00:50:21" itemprop="dateModified" datetime="2025-05-21T00:50:21+08:00">2025-05-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">ml常见算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原理">1.原理</h1>
-<h2
-id="这个分类方法是想通过最大化后验概率来实现分类简单说假如一共有k种标签对于一个待分类的样本我们看一下把它分到哪个类别的概率最大然后就把样本分到这个类别也就是取argmax_y-pyx作为标签">这个分类方法，是想通过最大化后验概率来实现分类。简单说，假如一共有k种标签，对于一个待分类的样本，我们看一下把它分到哪个类别的概率最大，然后就把样本分到这个类别。也就是取<span
-class="math inline">\(\arg\max_{y} p(y|x)\)</span>作为标签</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1128,18 +1114,18 @@ class="math inline">\(\arg\max_{y} p(y|x)\)</span>作为标签</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

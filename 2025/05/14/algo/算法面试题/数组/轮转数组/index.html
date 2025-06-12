@@ -207,12 +207,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/rotate-array/">在这</a></h1>
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/rotate-array/">在这</a></h1>
 <span id="more"></span>
 <h1 id="题目描述">题目描述：</h1>
-<h2
-id="给定一个整数数组-nums将数组中的元素向右轮转-k-个位置其中-k-是非负数">给定一个整数数组 <code>nums</code>，将数组中的元素向右轮转 <code>k</code> 个位置，其中 <code>k</code> 是非负数。</h2>
+<h2 id="给定一个整数数组-nums将数组中的元素向右轮转-k-个位置其中-k-是非负数">给定一个整数数组 <code>nums</code>，将数组中的元素向右轮转 <code>k</code> 个位置，其中 <code>k</code> 是非负数。</h2>
 <h2 id="示例-1"><strong>示例 1:</strong></h2>
 <h3 id="输入-nums-1234567-k-3"><strong>输入:</strong> nums =
 [1,2,3,4,5,6,7], k = 3</h3>
@@ -239,20 +237,16 @@ id="给定一个整数数组-nums将数组中的元素向右轮转-k-个位置�
 <code>-2^31 &lt;= nums[i] &lt;= 2^31 - 1</code></h3>
 <h3 id="k-105">- <code>0 &lt;= k &lt;= 10^5</code></h3>
 <h2 id="进阶"><strong>进阶：</strong></h2>
-<h3
-id="尽可能想出更多的解决方案至少有-三种-不同的方法可以解决这个问题">-
+<h3 id="尽可能想出更多的解决方案至少有-三种-不同的方法可以解决这个问题">-
 尽可能想出更多的解决方案，至少有 <strong>三种</strong> 不同的方法可以解决这个问题。</h3>
 <h3 id="你可以使用空间复杂度为-o1-的-原地-算法解决这个问题吗">-
 你可以使用空间复杂度为 <code>O(1)</code> 的 <strong>原地</strong> 算法解决这个问题吗？</h3>
 <h1 id="思路">思路：</h1>
-<h2
-id="emm目前我想到的应该是最粗糙最简单的办法吧题目意思很好懂如果抛开计算机让人来做这件事那我应该会是把第一个元素往后移k个位置再把第二个元素往后移k个位置以此类推-如果就想试试把这个方法给实现一下呢会发现第一个元素移完以后假设它没走到数组的末尾吧那第k1个元素就被覆盖了肯定得拿个东西记住它否则之后要移动原来的第k1个元素时就不记得它是什么了再把第二个元素往后移动k个位置则第k2个元素也被覆盖了也得记住它这样往后得记录很多个元素还有点麻烦但更关键的是我们还得把对元素的索引给记下来可能得拿个pair来记录或者是构建两个数组分别记录值和索引等等感觉实操起来有点麻烦">emm，目前我想到的应该是最粗糙、最简单的办法吧。题目意思很好懂。如果抛开计算机，让人来做这件事，那我应该会是：把第一个元素往后移k个位置，再把第二个元素往后移k个位置，以此类推……<br>如果就想试试把这个方法给实现一下呢？会发现，第一个元素移完以后，假设它没走到数组的末尾吧，那第k+1个元素就被覆盖了，肯定得拿个东西记住它，否则之后要移动原来的第k+1个元素时，就不记得它是什么了；再把第二个元素往后移动k个位置，则第k+2个元素也被覆盖了，也得记住它。这样往后，得记录很多个元素，还有点麻烦，但更关键的是，我们还得把对元素的索引给记下来，可能得拿个pair来记录，或者是构建两个数组，分别记录值和索引等等，感觉实操起来有点麻烦</h2>
-<h2
-id="另外容易观察到k是有周期的且周期就是数组的长度所以我们只需要考虑k小于数组长度的情况即可也就是先对长度取个模就行接下来又注意到原来的第len-k1个元素此时索引从1开始它在向右轮转k个位置以后会到达结果数组的第一个位置或者说是第len-k个元素此时索引是从0开始后面还是统一默认用索引为0开始来表述吧如果是索引从1开始会单独说那如果我们拿一个新的数组来记录结果那结果数组的第一个元素就是原来数组的第len-k个元素它的第二个元素就是原来数组的第len-k1个元素这样我们一直往后走到原来数组的结尾可以得到结果数组的前k个元素而至于结果数组后面的元素是什么呢其实就是原数组里前面的部分一直到len-k那个特殊元素之前之所以特殊因为它处于移动后刚好会超过数组末尾转到头部的那个位置">另外，容易观察到，k是有周期的，且周期就是数组的长度，所以我们只需要考虑k小于数组长度的情况即可，也就是先对长度取个模就行。接下来，又注意到，原来的第len-k+1个元素（此时索引从1开始），它在向右轮转k个位置以后，会到达结果数组的第一个位置（或者说，是第len-k个元素，此时索引是从0开始。后面还是统一默认用索引为0开始来表述吧，如果是索引从1开始，会单独说）。那如果我们拿一个新的数组来记录结果，那结果数组的第一个元素就是原来数组的第len-k个元素，它的第二个元素就是原来数组的第len-k+1个元素，这样我们一直往后走到原来数组的结尾，可以得到结果数组的前k个元素。而至于结果数组后面的元素是什么呢？其实就是原数组里前面的部分，一直到len-k那个特殊元素之前（之所以特殊，因为它处于移动后刚好会超过数组末尾，转到头部的那个位置）</h2>
+<h2 id="emm目前我想到的应该是最粗糙最简单的办法吧题目意思很好懂如果抛开计算机让人来做这件事那我应该会是把第一个元素往后移k个位置再把第二个元素往后移k个位置以此类推-如果就想试试把这个方法给实现一下呢会发现第一个元素移完以后假设它没走到数组的末尾吧那第k1个元素就被覆盖了肯定得拿个东西记住它否则之后要移动原来的第k1个元素时就不记得它是什么了再把第二个元素往后移动k个位置则第k2个元素也被覆盖了也得记住它这样往后得记录很多个元素还有点麻烦但更关键的是我们还得把对元素的索引给记下来可能得拿个pair来记录或者是构建两个数组分别记录值和索引等等感觉实操起来有点麻烦">emm，目前我想到的应该是最粗糙、最简单的办法吧。题目意思很好懂。如果抛开计算机，让人来做这件事，那我应该会是：把第一个元素往后移k个位置，再把第二个元素往后移k个位置，以此类推……<br>如果就想试试把这个方法给实现一下呢？会发现，第一个元素移完以后，假设它没走到数组的末尾吧，那第k+1个元素就被覆盖了，肯定得拿个东西记住它，否则之后要移动原来的第k+1个元素时，就不记得它是什么了；再把第二个元素往后移动k个位置，则第k+2个元素也被覆盖了，也得记住它。这样往后，得记录很多个元素，还有点麻烦，但更关键的是，我们还得把对元素的索引给记下来，可能得拿个pair来记录，或者是构建两个数组，分别记录值和索引等等，感觉实操起来有点麻烦</h2>
+<h2 id="另外容易观察到k是有周期的且周期就是数组的长度所以我们只需要考虑k小于数组长度的情况即可也就是先对长度取个模就行接下来又注意到原来的第len-k1个元素此时索引从1开始它在向右轮转k个位置以后会到达结果数组的第一个位置或者说是第len-k个元素此时索引是从0开始后面还是统一默认用索引为0开始来表述吧如果是索引从1开始会单独说那如果我们拿一个新的数组来记录结果那结果数组的第一个元素就是原来数组的第len-k个元素它的第二个元素就是原来数组的第len-k1个元素这样我们一直往后走到原来数组的结尾可以得到结果数组的前k个元素而至于结果数组后面的元素是什么呢其实就是原数组里前面的部分一直到len-k那个特殊元素之前之所以特殊因为它处于移动后刚好会超过数组末尾转到头部的那个位置">另外，容易观察到，k是有周期的，且周期就是数组的长度，所以我们只需要考虑k小于数组长度的情况即可，也就是先对长度取个模就行。接下来，又注意到，原来的第len-k+1个元素（此时索引从1开始），它在向右轮转k个位置以后，会到达结果数组的第一个位置（或者说，是第len-k个元素，此时索引是从0开始。后面还是统一默认用索引为0开始来表述吧，如果是索引从1开始，会单独说）。那如果我们拿一个新的数组来记录结果，那结果数组的第一个元素就是原来数组的第len-k个元素，它的第二个元素就是原来数组的第len-k+1个元素，这样我们一直往后走到原来数组的结尾，可以得到结果数组的前k个元素。而至于结果数组后面的元素是什么呢？其实就是原数组里前面的部分，一直到len-k那个特殊元素之前（之所以特殊，因为它处于移动后刚好会超过数组末尾，转到头部的那个位置）</h2>
 <h1 id="代码">代码：</h1>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">rotate</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; res;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        k = k % len;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// cout &lt;&lt; k;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = len - k; i &lt; len; i++) res.<span class="built_in">push_back</span>(nums[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len - k; i++) res.<span class="built_in">push_back</span>(nums[i]);</span><br><span class="line"></span><br><span class="line">        nums = res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2
-id="很显然时间和空间上都有很大改进空间这里甚至还专门开了一个和原数组一样大的空间来中间存储一下时间上倒是只遍历了一遍">很显然时间和空间上都有很大改进空间。这里甚至还专门开了一个和原数组一样大的空间来中间存储一下，时间上倒是只遍历了一遍</h2>
+<h2 id="很显然时间和空间上都有很大改进空间这里甚至还专门开了一个和原数组一样大的空间来中间存储一下时间上倒是只遍历了一遍">很显然时间和空间上都有很大改进空间。这里甚至还专门开了一个和原数组一样大的空间来中间存储一下，时间上倒是只遍历了一遍</h2>
 
     </div>
 
@@ -360,18 +354,18 @@ id="很显然时间和空间上都有很大改进空间这里甚至还专门开�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

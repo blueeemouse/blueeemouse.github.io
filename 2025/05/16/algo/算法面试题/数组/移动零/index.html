@@ -208,14 +208,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="原题链接在这">原题链接<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/description/">在这</a></h1>
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/description/">在这</a></h1>
 <span id="more"></span>
 <h1 id="题目描述">题目描述：</h1>
-<h2
-id="给定一个数组-nums编写一个函数将所有-0-移动到数组的末尾同时保持非零元素的相对顺序">给定一个数组 <code>nums</code>，编写一个函数将所有 <code>0</code> 移动到数组的末尾，同时保持非零元素的相对顺序。</h2>
-<h2
-id="请注意-必须在不复制数组的情况下原地对数组进行操作"><strong>请注意</strong> ，必须在不复制数组的情况下原地对数组进行操作。</h2>
+<h2 id="给定一个数组-nums编写一个函数将所有-0-移动到数组的末尾同时保持非零元素的相对顺序">给定一个数组 <code>nums</code>，编写一个函数将所有 <code>0</code> 移动到数组的末尾，同时保持非零元素的相对顺序。</h2>
+<h2 id="请注意-必须在不复制数组的情况下原地对数组进行操作"><strong>请注意</strong> ，必须在不复制数组的情况下原地对数组进行操作。</h2>
 <h2 id="示例-1"><strong>示例 1:</strong></h2>
 <h3 id="输入-nums-010312"><strong>输入:</strong> nums =
 <code>[0,1,0,3,12]</code></h3>
@@ -230,13 +227,10 @@ id="请注意-必须在不复制数组的情况下原地对数组进行操作"><
 <h3 id="numsi-231---1">-
 <code>-2^31 &lt;= nums[i] &lt;= 2^31 - 1</code></h3>
 <h1 id="思路">思路：</h1>
-<h2
-id="简单看一下因为要保证非零元素的相对顺序所以一些直接把零元素放到后面的操作不太行然后想到了挨个交换相邻元素这种操作也是因为题目要求了非零元素的相对顺序但如果是从左到右那不太行因为假如我们看到了一个0要把它通过挨个交换的方式交换到末尾我们不能确定是不是有新的0被交换到前面去了也就是交换的时候我们得看看当前的0和它右边的这个要被交换的数确保右边这个数不是0才能交换否则做了无用功了但如果要检查一下右边这个数是不是0又有点麻烦了这时想到如果从右到左呢好像就没有这个问题了我们从倒数第二个元素开始往前看如果它是0就挨个交换到末尾如果不是0则继续往左遍历此时一定可以确保从末尾开始往左会有一段连续的0且我们这个交换的过程中不会有0被交换到当前遍历的元素的左边所以会比较方便不过也容易看到这个方法时间复杂度比较高它的代码如下">简单看一下，因为要保证非零元素的相对顺序，所以一些直接把零元素放到后面的操作不太行。然后想到了挨个交换相邻元素这种操作（也是因为题目要求了非零元素的相对顺序），但如果是从左到右，那不太行，因为假如我们看到了一个0，要把它通过挨个交换的方式交换到末尾，我们不能确定是不是有新的0被交换到前面去了，也就是交换的时候，我们得看看当前的0和它右边的这个要被交换的数，确保右边这个数不是0，才能交换，否则做了无用功了；但如果要检查一下右边这个数是不是0，又有点麻烦了。这时想到，如果从右到左呢？好像就没有这个问题了。我们从倒数第二个元素开始往前看，如果它是0，就挨个交换到末尾；如果不是0，则继续往左遍历。此时一定可以确保从末尾开始往左，会有一段连续的0，且我们这个交换的过程中，不会有0被交换到当前遍历的元素的左边。所以会比较方便。不过也容易看到这个方法时间复杂度比较高，它的代码如下：</h2>
+<h2 id="简单看一下因为要保证非零元素的相对顺序所以一些直接把零元素放到后面的操作不太行然后想到了挨个交换相邻元素这种操作也是因为题目要求了非零元素的相对顺序但如果是从左到右那不太行因为假如我们看到了一个0要把它通过挨个交换的方式交换到末尾我们不能确定是不是有新的0被交换到前面去了也就是交换的时候我们得看看当前的0和它右边的这个要被交换的数确保右边这个数不是0才能交换否则做了无用功了但如果要检查一下右边这个数是不是0又有点麻烦了这时想到如果从右到左呢好像就没有这个问题了我们从倒数第二个元素开始往前看如果它是0就挨个交换到末尾如果不是0则继续往左遍历此时一定可以确保从末尾开始往左会有一段连续的0且我们这个交换的过程中不会有0被交换到当前遍历的元素的左边所以会比较方便不过也容易看到这个方法时间复杂度比较高它的代码如下">简单看一下，因为要保证非零元素的相对顺序，所以一些直接把零元素放到后面的操作不太行。然后想到了挨个交换相邻元素这种操作（也是因为题目要求了非零元素的相对顺序），但如果是从左到右，那不太行，因为假如我们看到了一个0，要把它通过挨个交换的方式交换到末尾，我们不能确定是不是有新的0被交换到前面去了，也就是交换的时候，我们得看看当前的0和它右边的这个要被交换的数，确保右边这个数不是0，才能交换，否则做了无用功了；但如果要检查一下右边这个数是不是0，又有点麻烦了。这时想到，如果从右到左呢？好像就没有这个问题了。我们从倒数第二个元素开始往前看，如果它是0，就挨个交换到末尾；如果不是0，则继续往左遍历。此时一定可以确保从末尾开始往左，会有一段连续的0，且我们这个交换的过程中，不会有0被交换到当前遍历的元素的左边。所以会比较方便。不过也容易看到这个方法时间复杂度比较高，它的代码如下：</h2>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">moveZeroes</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> zero_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = len - <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (nums[i] == <span class="number">0</span>)&#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = i<span class="number">+1</span>; j &lt; len-zero_num; j++)&#123;</span><br><span class="line"></span><br><span class="line">                    <span class="built_in">my_swap</span>(nums, j<span class="number">-1</span>, j);</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                zero_num++;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">my_swap</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> i, <span class="type">int</span> j)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> tmp = nums[i];</span><br><span class="line"></span><br><span class="line">        nums[i] = nums[j];</span><br><span class="line"></span><br><span class="line">        nums[j] = tmp;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2
-id="这里的代码还做了一点优化就是末尾的多个0是不需要再交换的所以我们统计一下已经把都少个0移动到末尾了交换的时候就不需要把当前的0交换到最末尾交换到末尾那一串0的左边就好也就是假如是这么一些数124035000我们遍历到了4右边的那个0现在要把它交换到末尾其实只需要把它交换到5右边那个位置即可">这里的代码还做了一点优化，就是，末尾的多个0是不需要再交换的。所以，我们统计一下已经把都少个0移动到末尾了，交换的时候就不需要把当前的0交换到最末尾，交换到末尾那一串0的左边就好（也就是，假如是这么一些数：1，2，4，0，3，5，0，0，0，我们遍历到了4右边的那个0，现在要把它交换到末尾，其实只需要把它交换到5右边那个位置即可）</h2>
-<h2 id="另一套思路是原地栈参考的这个题解">另一套思路是原地栈，参考的<a
-target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/solutions/2969353/kuai-man-zhi-zhen-wei-shi-yao-ke-yi-ba-s-1h8x">这个题解</a></h2>
+<h2 id="这里的代码还做了一点优化就是末尾的多个0是不需要再交换的所以我们统计一下已经把都少个0移动到末尾了交换的时候就不需要把当前的0交换到最末尾交换到末尾那一串0的左边就好也就是假如是这么一些数124035000我们遍历到了4右边的那个0现在要把它交换到末尾其实只需要把它交换到5右边那个位置即可">这里的代码还做了一点优化，就是，末尾的多个0是不需要再交换的。所以，我们统计一下已经把都少个0移动到末尾了，交换的时候就不需要把当前的0交换到最末尾，交换到末尾那一串0的左边就好（也就是，假如是这么一些数：1，2，4，0，3，5，0，0，0，我们遍历到了4右边的那个0，现在要把它交换到末尾，其实只需要把它交换到5右边那个位置即可）</h2>
+<h2 id="另一套思路是原地栈参考的这个题解">另一套思路是原地栈，参考的<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/solutions/2969353/kuai-man-zhi-zhen-wei-shi-yao-ke-yi-ba-s-1h8x">这个题解</a></h2>
 
     </div>
 
@@ -339,18 +333,18 @@ target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/so
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

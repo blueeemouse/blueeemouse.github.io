@@ -204,17 +204,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1
-id="问题如标题所述当我们记录的笔记和博客的src文件夹目前用hexogithub-pages搭建的博客是有个src文件夹存放那些发布到博客上的内容的不同的时候又想把笔记发布到博客上应该怎么办如果总是手动把要发布的内容复制到src文件夹下一是很麻烦二是如果有更改的话还得把更改了的内容手动更新到src文件夹下然而很可能会忘记这回事">问题如标题所述，当我们记录的笔记和博客的src文件夹（目前用hexo+github
+        <h1 id="问题如标题所述当我们记录的笔记和博客的src文件夹目前用hexogithub-pages搭建的博客是有个src文件夹存放那些发布到博客上的内容的不同的时候又想把笔记发布到博客上应该怎么办如果总是手动把要发布的内容复制到src文件夹下一是很麻烦二是如果有更改的话还得把更改了的内容手动更新到src文件夹下然而很可能会忘记这回事">问题如标题所述，当我们记录的笔记和博客的src文件夹（目前用hexo+github
 pages搭建的博客是有个src文件夹，存放那些发布到博客上的内容的）不同的时候，又想把笔记发布到博客上，应该怎么办？如果总是手动把要发布的内容复制到src文件夹下，一是很麻烦，二是如果有更改的话，还得把更改了的内容手动更新到src文件夹下，然而很可能会忘记这回事……</h1>
 <span id="more"></span>
-<h1
-id="所以有什么解决办法吗目前尝试用的是创建一个软链接也即如果笔记里有一个文件夹想发布它下面的所有内容那就可以创建一个软链接到src文件夹下这样不管在笔记文件夹下做了什么改动都可以直接同步问了一下ai好像也有其它方法比如写一个脚本定时把文件同步一下但感觉这个比创建软链接还麻烦另一个是用onedrivegoogle-drivedropbox之类的云盘当中介大概思想好像是让云盘同步本地的笔记文件夹然后再让博客同步云盘从而达成同步可能需要这些云盘开会员不过好像onedrive免费的额度其实也挺够用的总之是懒得用这个来捣鼓了还是先软链接凑合一下吧不知道有没有更聪明的方法">所以有什么解决办法吗？目前尝试用的是，创建一个软链接，也即，如果笔记里有一个文件夹，想发布它下面的所有内容，那就可以创建一个软链接到src文件夹下，这样不管在笔记文件夹下做了什么改动，都可以直接同步（问了一下ai，好像也有其它方法，比如写一个脚本，定时把文件同步一下（但感觉这个比创建软链接还麻烦……），另一个是用Onedrive、Google
+<h1 id="所以有什么解决办法吗目前尝试用的是创建一个软链接也即如果笔记里有一个文件夹想发布它下面的所有内容那就可以创建一个软链接到src文件夹下这样不管在笔记文件夹下做了什么改动都可以直接同步问了一下ai好像也有其它方法比如写一个脚本定时把文件同步一下但感觉这个比创建软链接还麻烦另一个是用onedrivegoogle-drivedropbox之类的云盘当中介大概思想好像是让云盘同步本地的笔记文件夹然后再让博客同步云盘从而达成同步可能需要这些云盘开会员不过好像onedrive免费的额度其实也挺够用的总之是懒得用这个来捣鼓了还是先软链接凑合一下吧不知道有没有更聪明的方法">所以有什么解决办法吗？目前尝试用的是，创建一个软链接，也即，如果笔记里有一个文件夹，想发布它下面的所有内容，那就可以创建一个软链接到src文件夹下，这样不管在笔记文件夹下做了什么改动，都可以直接同步（问了一下ai，好像也有其它方法，比如写一个脚本，定时把文件同步一下（但感觉这个比创建软链接还麻烦……），另一个是用Onedrive、Google
 drive、Dropbox之类的云盘当中介，大概思想好像是，让云盘同步本地的笔记文件夹，然后再让博客同步云盘，从而达成同步（可能需要这些云盘开会员？不过好像OneDrive免费的额度其实也挺够用的？总之是懒得用这个来捣鼓了，还是先软链接凑合一下吧……不知道有没有更聪明的方法）</h1>
-<h1
-id="创建软链接问ai就知道了这里仅以windows11为例">创建软链接，问ai就知道了。这里仅以windows11为例。</h1>
-<h2
-id="使用-powershell打开-powershell管理员权限使用-new-item-命令创建软链接例如new-item--itemtype-symboliclink--path-e博客srcobsidian内容--target-dobsidian笔记要注意的一点是-path后面跟着的是被同步的路径-target后面跟着的是源路径也就是被同步的路径那个文件夹会同步源路径里的改动另一个点在于被同步的路径是不能存在的要由这个命令来创建也就是不需要我们提前建立好文件夹直接用命令即可">-
+<h1 id="创建软链接问ai就知道了这里仅以windows11为例">创建软链接，问ai就知道了。这里仅以windows11为例。</h1>
+<h2 id="使用-powershell打开-powershell管理员权限使用-new-item-命令创建软链接例如new-item--itemtype-symboliclink--path-e博客srcobsidian内容--target-dobsidian笔记要注意的一点是-path后面跟着的是被同步的路径-target后面跟着的是源路径也就是被同步的路径那个文件夹会同步源路径里的改动另一个点在于被同步的路径是不能存在的要由这个命令来创建也就是不需要我们提前建立好文件夹直接用命令即可">-
 <strong>使用 PowerShell</strong>：打开
 PowerShell（管理员权限），使用 <code>New-Item</code> 命令创建软链接。例如，<code>New-Item -ItemType SymbolicLink -Path E:\博客src\obsidian内容 -Target D:\obsidian笔记</code>。（要注意的一点是，-Path后面跟着的是被同步的路径，-Target后面跟着的是源路径，也就是，被同步的路径（那个文件夹）会同步源路径里的改动。另一个点在于，被同步的路径是不能存在的，要由这个命令来创建。也就是不需要我们提前建立好文件夹，直接用命令即可）</h2>
 
@@ -319,18 +315,18 @@ PowerShell（管理员权限），使用 New-Item 命令创建软链接。例�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">69</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
