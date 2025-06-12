@@ -150,6 +150,74 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%A9%BA%E4%BB%93%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AFgithub%E4%BB%93%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%A9%BA%E4%BB%93%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AFgithub%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-14 14:26:22" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="以本机的ubuntu的旧的obsidian笔记仓库连接到远端的更加新的obsidian仓库并同步数据为例">以本机的ubuntu的旧的obsidian笔记仓库连接到远端的更加新的obsidian仓库并同步数据为例</h1>
+<h1 id="首先得在本地仓库初始化一个新的git仓库我这里是本地还没初始化过git仓库不知道如果是初始化过的连接过github仓库的应该怎么做先不管了到时候用到了再查吧切到那个本地仓库的目录下打开终端git-init">首先得在本地仓库初始化一个新的git仓库（我这里是本地还没初始化过git仓库。不知道如果是初始化过的/连接过github仓库的应该怎么做。先不管了，到时候用到了再查吧）。切到那个本地仓库的目录下，打开终端，<code>git init</code></h1>
+<h1 id="然后添加远端仓库bashgit-remote-add-origin-httpsgithub.comyour-usernameyour-repository.git注意这里本地分支名字要和将要上传到的远端仓库的分支名字一样如果不一样比如远端是main但本地初始化的时候默认成了master重命名一下即可这个挺简单的问问ai就行">然后，添加远端仓库，<code>bashgit remote add origin https://github.com/your-username/your-repository.git</code>（注意，这里本地分支名字要和将要上传到的远端仓库的分支名字一样。如果不一样，比如远端是main，但本地初始化的时候默认成了master，重命名一下即可。这个挺简单的，问问ai就行）</h1>
+<h1 id="接着是先和远端同步之后才能上传文件这里我的情况是本地的文件夹的内容是远端仓库的子集所以即使被远端的内容完全覆盖了也没啥问题这算是比较简单友好的情况了因为操作可以稍微无脑一点执行如下代码段即可">接着是先和远端同步，之后才能上传文件。这里我的情况是，本地的文件夹的内容是远端仓库的子集，所以即使被远端的内容完全覆盖了也没啥问题。这算是比较简单友好的情况了，因为操作可以稍微无脑一点。执行如下代码段即可</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/main</span><br></pre></td></tr></table></figure>
+<h1 id="它的主要作用是拉取远端仓库内容并覆盖本地内容当然保险起见还是可以先备份一下本地文件的以免真的有啥重要的文件不见了">它的主要作用是<strong>拉取远端仓库内容并覆盖本地内容</strong>（当然，保险起见，还是可以先备份一下本地文件的，以免真的有啥重要的文件不见了）</h1>
+<h1 id="上面可能会出现一个问题就是它需要一个认证的过程估计是因为这个远端仓库已经先和windows里的一个文件夹连接了那里我记得好像没有这个步骤的不过也可能是因为在那边创建的反正现在是需要一个认证的步骤它会让你输入github的用户名和密码如果只是单纯的输入它会报一些错最重要的可能是这条fatal-不支持-200https-协议大概意思好像是说这种用户名加密码的认证方式现在不认可了得换一种认证方式搜索一下这个报错信息能找到好一些解法这里放一下实操过的方法确实有效就是用token令牌认证大体流程是去github帐号的个人主页那边创建一个token或者如果已经有能用的话用那个应该也可以前提是得记得内容那个token的内容好像只会在创建的时候显示一次之后就看不到了得自己保存它就起到一个密码的作用可以看成是一个强度更高的密码不留神的话自己也忘了创建token的时候记得选上相应的权限这样通过token认证之后才能做相应的操作-这一通操作完了再回到认证那边用户名正常输入密码就输入token内容即可注意一般我们是会复制token内容粘贴到终端的此时是看不见粘贴进去的东西的这是没问题的正常的话到这里应该就认证成功了上面的git-fetch和git-reset的操作应该也都能正常执行了更详细的步骤可以参考这个网站">上面可能会出现一个问题，就是它需要一个认证的过程（估计是因为这个远端仓库已经先和windows里的一个文件夹连接了。那里我记得好像没有这个步骤的。不过也可能是因为在那边创建的。反正现在是需要一个认证的步骤。它会让你输入github的用户名和密码。如果只是单纯的输入，它会报一些错，最重要的可能是这条——fatal:
+不支持 '?200~https'
+协议。大概意思好像是说，这种用户名加密码的认证方式，现在不认可了。得换一种认证方式。搜索一下这个报错信息能找到好一些解法，这里放一下实操过的方法，确实有效，就是用token（令牌）认证。大体流程是去github帐号的个人主页那边，创建一个token（或者如果已经有能用的话，用那个应该也可以，前提是得记得内容，那个token的内容好像只会在创建的时候显示一次，之后就看不到了，得自己保存。它就起到一个密码的作用，可以看成是一个强度更高的密码，不留神的话自己也忘了。创建token的时候，记得选上相应的权限。这样通过token认证之后才能做相应的操作。<br>这一通操作完了，再回到认证那边，用户名正常输入，密码就输入token内容即可。注意，一般我们是会复制token内容，粘贴到终端的。此时是看不见粘贴进去的东西的，这是没问题的。正常的话，到这里应该就认证成功了，上面的git
+fetch和git reset的操作应该也都能正常执行了。更详细的步骤可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/leviopku/article/details/126727575">网站</a>）</h1>
+<h1 id="至此已经完成了本地仓库与远端仓库的连接和同步了之后如果要上传东西到github仓库应该就正常操作就行了还没实验过">至此，已经完成了本地仓库与远端仓库的连接和同步了。之后如果要上传东西到github仓库，应该就正常操作就行了（还没实验过）</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%97%B6%E9%81%87%E5%88%B0%E5%81%87%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -922,98 +990,6 @@ Feature Aggregation Block（MFA 模块）</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/PartMix---Regularization%20Strategy%20to%20Learn%20Part%20Discovery%20for%20Visible-Infrared%20%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/PartMix---Regularization%20Strategy%20to%20Learn%20Part%20Discovery%20for%20Visible-Infrared%20%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-30 14:11:13 / Modified: 20:06:12" itemprop="dateCreated datePublished" datetime="2024-10-30T14:11:13+08:00">2024-10-30</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr23">cvpr23</h1>
-<p>这篇论文是基于part-based model来改进的。所谓part-based
-model，大概就是去提取图像中各种不同部分的特征。可以看看它是怎么提取这些不同部分的特征的，和[[WRIM-Net---Wide-Ranging
-Information Mining Network for Visible-Infrared Person
-Re-Identification]]还有[[High-Order Structure Based Middle-Feature
-Learning for Visible-Infrared Person
-Re-identification]]之间的差别在哪里？ # 基本概念：1.
-<strong>Mixture-based technique</strong>:</p>
-<pre><code>- 一种基于混合的技术，用于数据增强。
-- 它通过混合图像和相应的标签来合成虚拟训练样本，从而扩大训练集。
-- 这种技术可以帮助模型在各种计算机视觉应用中避免过拟合到训练数据。</code></pre>
-<h1 id="part-descriptors">2. <strong>Part-descriptors</strong>:</h1>
-<pre><code>- 局部特征描述符，用于描述人体不同部位的特征。
-- 在part-based VI-ReID模型中，会对可见光和红外图像中的不同部位进行特征提取，得到相应的局部特征描述符。
-- 这些描述符可以用于后续的识别和匹配过程。</code></pre>
-<h1 id="problemthese-global-feature-representations-solely-focus-on-the-most-discriminative-part-while-ignoring-the-diverse-parts-which-are-helpful-to-distinguish-the-person-identity这应该是提取modality-shared-feature的方法的通病了有点类似于去学习一个identity对应的平均模板但这样太死板了会遗漏一些细节的多样的信息那么就像这篇论文着眼的地方身体部位这其实就是一种细节信息如果去捕捉这种细节信息或许就可以弥补modality-shared-feature的短板类似的其实channel-augmentation-for-visible-infrared-re-identification这里注重提取的颜色信息也是那么如果同时去关注颜色和部位信息会不会比单一的方法效果要好进一步的能不能更自动地而不是依赖于我们先验设计的着眼点去提取更多细节信息提取到了以后怎么用呢就把它们和modality-shared-feature直接concatenate起来加起来用个注意力机制融合一下蒸馏一下或许都可以试试或许有更好的方法-简单来说目前用增强方式做vi-reid的方法-通常会涉及一些mixture但没有特别好的方法被设计出来-另外想利用mixup技术进行增强辅助vi-reid但直接应用可能遇到mixup本来就有的问题unlike-conventional-methods-1938446869-that-exploit-image-mixture-techniques-that-yield-unnatural-patterns-and-local-patches-with-only-background-or-single-human-part直接应用mixup的时候就可能遇到这些问题产生不自然的patterns是很好理解的看它mixup出来的图像有些非常的怪异就可以看出来重点是说mixup可能产生完全没有人的图像这就没什么用了关键它的标签还是人的标签比如cutmix它会从一幅图上切一块下来放到另一幅图像上那如果把一幅图的背景给切下来放到另一幅图像上人所在的区域就有问题了本文的改进则是不去mixup整个图像而是去mixup部分也就是我们提取出来的part感觉确实有点道理就有点类似同一个人在同一个场景下只是穿了不同的衣服那我们人类应该是很容易就能识别出来的这里串不同的有点类似不同图像的part进行mixup那这个方法应该确实有利于去提取一些共性的具有判别能力的特征">problem：these
-global feature representations solely focus on the most discriminative
-part while ignoring the diverse parts which are helpful to distinguish
-the person identity。（这应该是提取modality-shared
-feature的方法的通病了，有点类似于去学习一个identity对应的平均模板。但这样太死板了，会遗漏一些细节的、多样的信息）（那么，就像这篇论文着眼的地方——身体部位，这其实就是一种细节信息。如果去捕捉这种细节信息，或许就可以弥补modality-shared
-feature的短板。类似的，其实[[Channel Augmentation for Visible-Infrared
-Re-Identification]]这里注重提取的颜色信息也是。那么，如果同时去关注颜色和部位信息，会不会比单一的方法效果要好？进一步的，能不能更自动地，而不是依赖于我们先验设计的着眼点，去提取更多细节信息？提取到了以后，怎么用呢？就把它们和modality-shared
-feature直接concatenate起来？加起来？用个注意力机制融合一下？蒸馏一下？或许都可以试试，或许有更好的方法）<br>简单来说，目前用增强方式做VI-ReID的方法，
-通常会涉及一些mixture，但没有特别好的方法被设计出来<br>另外，想利用mixup技术进行增强，辅助vi-reid，但直接应用可能遇到mixup本来就有的问题。（Unlike
-conventional methods [19,38,44,68,69] that exploit image mixture
-techniques that yield unnatural patterns, and local patches with only
-background or single human
-part,直接应用mixup的时候，就可能遇到这些问题。产生不自然的patterns是很好理解的，看它mixup出来的图像，有些非常的怪异，就可以看出来。重点是说mixup可能产生完全没有人的图像。这就没什么用了，关键它的标签还是人的标签。比如，cutmix，它会从一幅图上切一块下来，放到另一幅图像上。那如果把一幅图的背景给切下来，放到另一幅图像上人所在的区域，就有问题了）（本文的改进则是，不去mixup整个图像，而是去mixup部分，也就是我们提取出来的part）（感觉确实有点道理，就有点类似，同一个人，在同一个场景下，只是穿了不同的衣服，那我们人类应该是很容易就能识别出来的。这里串不同的有点类似不同图像的part进行mixup。那这个方法应该确实有利于去提取一些共性的、具有判别能力的特征）</h1>
-<h1 id="motivation希望能设计出一种mixup的方法避免直接应用mixup的时候会遇到的问题同时发挥mixup防止模型过拟合的作用提取出更有效的部位信息">motivation：希望能设计出一种mixup的方法，避免直接应用mixup的时候会遇到的问题；同时发挥mixup防止模型过拟合的作用，提取出更有效的部位信息</h1>
-<h1 id="贡献总结一下上面的内容该论文主要是提出了一种新的增强方法partmix将mixup技术应用到vi-reid针对它的方法可能产生不太靠谱的正负样本论文提出了一些防止措施">贡献：总结一下上面的内容，该论文主要是提出了一种新的增强方法partmix，将mixup技术应用到vi-reid。针对它的方法可能产生不太靠谱的正负样本，论文提出了一些防止措施</h1>
-<h1 id="method">method：</h1>
-<h2 id="对于一个mini-batch里的data提取出它们的part-descriptor进行inter-modality和intra-modality的mixupglobal-descriptor也要算但它不进行mixup因为它包含的是全局信息不符合论文提出的partmix的思想">1.对于一个mini-batch里的data，提取出它们的part
-descriptor，进行inter-modality和intra-modality的mixup（global
-descriptor也要算，但它不进行mixup，因为它包含的是全局信息，不符合论文提出的partmix的思想）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1083,7 +1059,7 @@ descriptor也要算，但它不进行mixup，因为它包含的是全局信息�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1094,7 +1070,7 @@ descriptor也要算，但它不进行mixup，因为它包含的是全局信息�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">68</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
