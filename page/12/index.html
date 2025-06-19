@@ -150,6 +150,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:06" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="有可能突然某一天在终端里运行nvidia-smi的时候会报错failed-to-initialize-nvmldriverlibrary-version-mismatch">有可能突然某一天，在终端里运行nvidia-smi的时候，会报错：Failed
+to initialize NVML：Driver/Library version mismatch</h1>
+<h2 id="这个问题很可能是因为ubuntu会自己更新gpu驱动导致nvidia内核驱动版本与系统驱动不一致虽说我不是太懂这里的-gpu驱动nvidia驱动系统驱动-之间的关系到底是怎样的但操作上来讲如果cat-procdrivernvidiaversion这行命令的输出的版本和nvidia-smi输出的驱动版本是一致的那应该就没什么问题了">这个问题很可能是因为ubuntu会自己更新gpu驱动，导致nvidia内核驱动版本与系统驱动不一致（虽说我不是太懂这里的
+gpu驱动/nvidia驱动/系统驱动
+之间的关系到底是怎样的，但操作上来讲，如果cat
+/proc/driver/nvidia/version这行命令的输出的版本和nvidia-smi输出的驱动版本是一致的，那应该就没什么问题了）</h2>
+<h2 id="cat-procdrivernvidiaversion一般输出如下-nvrm-version-nvidia-unix-x86_64-kernel-module-535.183.01-sun-may-12-193915-utc-2024-gcc-version-gcc-version-12.3.0-ubuntu-12.3.0-1ubuntu122.04">cat
+/proc/driver/nvidia/version一般输出如下：<br>NVRM version: NVIDIA UNIX
+x86_64 Kernel Module 535.183.01 Sun May 12 19:39:15 UTC 2024<br>GCC
+version: gcc version 12.3.0 (Ubuntu 12.3.0-1ubuntu1~22.04)</h2>
+<h2 id="nvidia-smi输出这里我们只关注驱动相关的信息-thu-nov-7-174832-2024-----------------------------------------------------------------------------------------nvidia-smi-535.183.01-driver-version-535.183.01-cuda-version-12.2">nvidia-smi输出（这里我们只关注驱动相关的信息）：<br>Thu
+Nov 7 17:48:32 2024
+<br>+---------------------------------------------------------------------------------------+<br>|
+NVIDIA-SMI 535.183.01 Driver Version: 535.183.01 CUDA Version: 12.2
+|</h2>
+<h2 id="这里能观察到两条命令输出的驱动版本都是535.183.01一致了确实没问题了但话又说回来nvidia-smi能正常执行的话也应该不会有这个问题了难绷">这里能观察到，两条命令输出的驱动版本都是535.183.01，一致了，确实没问题了（但话又说回来，nvidia-smi能正常执行的话，也应该不会有这个问题了。。。难绷）</h2>
+<h2 id="解决方法的话可以尝试-1.重启反正我这次是重启就解决了-2.卸载驱动重新装感觉这个是最后的办法但它也很有道理毕竟你的问题不就是驱动版本不一致嘛我给你装个一致的理论上就没问题了但卸载我好像还没卸载过不知道会出什么幺蛾子得仔细查一下卸载干净了再重新装或许可以稍微参考一下这个网站虽然它这里也可能不全">解决方法的话，可以尝试：<br>1.重启（反正我这次是重启就解决了）<br>2.卸载驱动，重新装（感觉这个是最后的办法，但它也很有道理，毕竟你的问题不就是驱动版本不一致嘛，我给你装个一致的，理论上就没问题了。但卸载我好像还没卸载过，不知道会出什么幺蛾子，得仔细查一下，卸载干净了，再重新装）（或许可以稍微参考一下这个<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2066902">网站</a>，虽然它这里也可能不全）</h2>
+<h2 id="要防止这种问题的话一般是得把ubuntu的自动更新给关掉即执行一下这个命令-禁用内核更新-sudo-apt-mark-hold-linux-generic-linux-image-generic-linux-headers-generic-更多详细内容可以参考这个网站它写的貌似还可以">要防止这种问题的话，一般是得把ubuntu的自动更新给关掉，即执行一下这个命令：<br>
+# 禁用内核更新 <br>sudo apt-mark hold linux-generic linux-image-generic
+linux-headers-generic<br>更多详细内容可以参考这个<a target="_blank" rel="noopener" href="https://sysin.org/blog/disable-ubuntu-auto-update/">网站</a>，它写的貌似还可以</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -893,85 +971,6 @@ Matching中的Progressive的由来：它会把剩下的没对应上去的可见�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-31 14:12:37 / Modified: 15:11:58" itemprop="dateCreated datePublished" datetime="2024-10-31T14:12:37+08:00">2024-10-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr23">cvpr23</h1>
-<h1 id="problem老生常谈之modality-gap导致学习modality-shared-feature很困难这篇论文聚焦于学习shape即人物的轮廓信息不由得让人想到之前的channel-augmentation-for-visible-infrared-re-identification主要想学习颜色信息也是想去学习某种特定的属性">problem：老生常谈之modality
-gap导致学习modality-shared
-feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel
-Augmentation for Visible-Infrared
-Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性）</h1>
-<h1 id="motivation希望能通过一种方法把表征分成两部分一部分是shape相关另一部分是shape无关然后先利用shape无关的表征去学习这样会逼迫这部分特征学习其它方面的内容不去利用shape信息进行判别最后把这部分表征和shape相关表征组合起来就能得到更强的表征">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</h1>
-<h1 id="method">method：</h1>
-<h2 id="关于shape信息的提取用到一篇20年tpami提出的分割人体形状的模型给定一幅图模型会给出各个像素属于头部躯干四肢等部位的概率最终整幅图上各个位置都有一个概率进行可视化理论上那些对应概率高的就显示出一个人的轮廓">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部/躯干/四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</h2>
-<h2 id="shape-erased-feature-learning-paradigm">Shape-Erased Feature
-Learning Paradigm</h2>
-<h3 id="这里有个关键的假设即shape-related-feature和shape-erased-feature之间是独立的这样才能做到学习一个特征而不影响另一个特征注意到前面motivation里已经说了它是要单独去学习一下shape-erased-feature此时这部分表征里没有了shape-feature于是这会逼迫它去学习其它的特征这样就达成了特征多样性的目的-论文提出严格的描述两个特征独立的方法是互信息为0但互信息求解起来太麻烦了虽然我不知道为什么于是松弛一下用个简化的条件即两个特征正交-guoqu-关于具体的shape-erased-feature-learning总的来说它用到各种互信息进行推导没太看懂忘得七七八八了但几个比较关键的公式背后的要求期望还是比较合理的或许可以借鉴一下其中的insightequation4期望用shape-erased-feature也能尽可能好地预测出identity毕竟前面说了这是训练中重要的一环5是为了优化4中的第一项而提出的好吧真不好写提出一大堆损失一些是用来训练shape-erased-feature的一些是用来消除shape-related-feature中的modality-specific成分的从而让它更加modality-shared最后一些是常规损失就是分类损失那些">这里有个关键的假设，即shape-related
-feature和shape-erased
-feature之间是独立的。这样才能做到，学习一个特征，而不影响另一个特征（注意到，前面motivation里已经说了，它是要单独去学习一下shape-erased
-feature，此时这部分表征里没有了shape
-feature，于是这会逼迫它去学习其它的特征，这样就达成了特征多样性的目的）<br>论文提出，严格的描述两个特征独立的方法是互信息为0，但互信息求解起来太麻烦了（虽然我不知道为什么。。。），于是松弛一下，用个简化的条件，即两个特征正交<br>guoqu<br>关于具体的shape-erased
-feature
-learning，总的来说，它用到各种互信息进行推导，没太看懂。。忘得七七八八了。但几个比较关键的公式，背后的要求/期望还是比较合理的。或许可以借鉴一下其中的insight。equation（4）期望用shape-erased
-feature也能尽可能好地预测出identity（毕竟前面说了，这是训练中重要的一环）；（5）是为了优化（4）中的第一项而提出的；好吧，真不好写。提出一大堆损失，一些是用来训练shape-erased
-feature的，一些是用来消除shape-related
-feature中的modality-specific成分的，从而让它更加modality-shared；最后一些是常规损失，就是分类损失那些</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1041,7 +1040,7 @@ feature中的modality-specific成分的，从而让它更加modality-shared；�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1052,7 +1051,7 @@ feature中的modality-specific成分的，从而让它更加modality-shared；�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">72</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
