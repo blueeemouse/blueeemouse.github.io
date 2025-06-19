@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="现在好像已经没问题了，就正常上传就行 在windows系统中，进入D:_note这个目录下，打开终端，git add . git commit -m &#39;xxx&#39; git push origin main即可 在ubuntu系统也是类似的 上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。 在ubuntu系统pull windows的东西，还">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="现在好像已经没问题了，就正常上传就行 在windows系统中，进入D:_note这个目录下，打开终端，git add . git commit -m &#39;xxx&#39; git push origin main即可 在ubuntu系统也是类似的 上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。 在ubuntu系统pull windows的东西，还">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-11-20T02:59:10.118Z">
+<meta property="article:modified_time" content="2024-11-20T02:59:10.118Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="现在好像已经没问题了就正常上传就行">现在好像已经没问题了，就正常上传就行</h1>
+<h1 id="在windows系统中进入d_note这个目录下打开终端git-add-.-git-commit--m-xxx-git-push-origin-main即可">在windows系统中，进入D:_note这个目录下，打开终端，git
+add . git commit -m 'xxx' git push origin main即可</h1>
+<h1 id="在ubuntu系统也是类似的">在ubuntu系统也是类似的</h1>
+<h1 id="上面只是单方面的从一个系统中进行上传还有一个问题就是上传了之后怎么在另一个系统里pull下来">上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。</h1>
+<h1 id="在ubuntu系统pull-windows的东西还挺方便的好像就是正常的git-pull-origin-main即可前提是进去之后先别修改东西但好像也不是其实还是会因为那个workspace.json文件有一些问题下面是一个简单粗暴的方法后续或许可以改进一下">在ubuntu系统pull
+windows的东西，还挺方便的，好像就是正常的git pull origin
+main即可（前提是进去之后先别修改东西）（但好像也不是，其实还是会因为那个workspace.json文件有一些问题。下面是一个简单粗暴的方法。后续或许可以改进一下）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard origin/main</span><br><span class="line">git push origin main</span><br><span class="line">git fetch origin</span><br></pre></td></tr></table></figure>
+<h1 id="因为每次我在一个系统要同步远端仓库的时候远端一定是更加新的也就是即使远端仓库完全覆盖了我本地的仓库也没关系话虽如此也需也有极少数时候真的不能这样所以才有第一行的比较简单粗暴的命令">（因为每次我在一个系统要同步远端仓库的时候，远端一定是更加新的，也就是即使远端仓库完全覆盖了我本地的仓库，也没关系（话虽如此，也需也有极少数时候真的不能这样），所以才有第一行的比较简单粗暴的命令）</h1>
+<h1 id="在windows里pull-ubuntu系统的东西就比较麻烦了windows系统和ubuntu系统处理lf和crlf的方法好像不太一样大概就是换行之类的东西然而ubuntu似乎会自动处理我们感觉不到但windows就不行一定会报问题一个比较简单粗暴的方法是">在windows里pull
+ubuntu系统的东西就比较麻烦了，windows系统和ubuntu系统处理LF和CRLF的方法好像不太一样（大概就是换行之类的东西），然而ubuntu似乎会自动处理，我们感觉不到，但windows就不行，一定会报问题。一个比较简单粗暴的方法是：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout origin/main -- .obsidian/workspace.json</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h1 id="第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json这样这个文件就不会报错了因为之前报错主要就是这个文件的一些换行符之类的问题剩下就是正常pull了">第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json，这样这个文件就不会报错了（因为之前报错主要就是这个文件的一些换行符之类的问题）。剩下就是正常pull了</h1>
+<h1 id="另一种比较一劳永逸的方法就是在windows系统的终端里进行如下配置">另一种比较一劳永逸的方法，就是在windows系统的终端里进行如下配置：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h1 id="这个大概是因为下摘录自ai原文在windows上git默认会在检出文件时将lf转换为crlf而在提交文件时将crlf转换为lf这种行为是为了确保文件在windows上显示和编辑时能够正确处理换行符然而这种转换可能导致文件内容的更改从而引发冲突通过将-core.autocrlf-配置为-false你可以告诉git在检出文件时保留原始的换行符避免因换行符转换而导致的文件内容更改这对于需要在多个平台上协作开发的项目特别有用因为它可以确保文件在所有平台上都以相同的方式处理换行符-不过我目前还没试过">这个大概是因为：（下摘录自ai原文）在Windows上，Git默认会在检出文件时将LF转换为CRLF，而在提交文件时将CRLF转换为LF。这种行为是为了确保文件在Windows上显示和编辑时能够正确处理换行符。然而，这种转换可能导致文件内容的更改，从而引发冲突。通过将
+<code>core.autocrlf</code> 配置为
+<code>false</code>，你可以告诉Git在检出文件时保留原始的换行符，避免因换行符转换而导致的文件内容更改。这对于需要在多个平台上协作开发的项目特别有用，因为它可以确保文件在所有平台上都以相同的方式处理换行符。<br>不过我目前还没试过</h1>
+<h1 id="btw附带一个实战例子虽然是有点操作失误的例子">btw，附带一个实战例子，虽然是有点操作失误的例子</h1>
+<h1 id="我在windows系统里进行pull的时候没成功反而还在windows里修改了一些笔记并add和commit了导致此时windows中的笔记与远端不同步且还有更新之后我再次尝试正常pull失败了后面我就用上面提到的简单粗暴的方法先完成了从远端的pull此时我上github仓库发现远端还没有拿到我在windows本地进行的更新也是毕竟我还没push上去再进行push成功了并且检查远端仓库确实更新了-这里先强制pull下来了做到了和远端的同步之后再把已经暂存的也就是完成了commit的内容给push上去即可">我在windows系统里进行pull的时候，没成功，反而还在windows里修改了一些笔记，并add和commit了，导致此时windows中的笔记与远端不同步，且还有更新。之后我再次尝试正常pull，失败了。后面我就用上面提到的简单粗暴的方法，先完成了从远端的pull，（此时我上github仓库，发现远端还没有拿到我在windows本地进行的更新。也是，毕竟我还没push上去）再进行push，成功了，并且检查远端仓库，确实更新了。<br>这里先强制pull下来了，做到了和远端的同步，之后再把已经暂存的（也就是完成了commit的）内容给push上去，即可</h1>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E5%A5%BD%E5%83%8F%E5%B7%B2%E7%BB%8F%E6%B2%A1%E9%97%AE%E9%A2%98%E4%BA%86%E5%B0%B1%E6%AD%A3%E5%B8%B8%E4%B8%8A%E4%BC%A0%E5%B0%B1%E8%A1%8C"><span class="nav-number">1.</span> <span class="nav-text">现在好像已经没问题了，就正常上传就行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E5%85%A5d_note%E8%BF%99%E4%B8%AA%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%93%E5%BC%80%E7%BB%88%E7%AB%AFgit-add-.-git-commit--m-xxx-git-push-origin-main%E5%8D%B3%E5%8F%AF"><span class="nav-number">2.</span> <span class="nav-text">在windows系统中，进入D:_note这个目录下，打开终端，git
+add . git commit -m &#39;xxx&#39; git push origin main即可</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8ubuntu%E7%B3%BB%E7%BB%9F%E4%B9%9F%E6%98%AF%E7%B1%BB%E4%BC%BC%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">在ubuntu系统也是类似的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E5%8F%AA%E6%98%AF%E5%8D%95%E6%96%B9%E9%9D%A2%E7%9A%84%E4%BB%8E%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%BF%9B%E8%A1%8C%E4%B8%8A%E4%BC%A0%E8%BF%98%E6%9C%89%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E5%B0%B1%E6%98%AF%E4%B8%8A%E4%BC%A0%E4%BA%86%E4%B9%8B%E5%90%8E%E6%80%8E%E4%B9%88%E5%9C%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E9%87%8Cpull%E4%B8%8B%E6%9D%A5"><span class="nav-number">4.</span> <span class="nav-text">上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8ubuntu%E7%B3%BB%E7%BB%9Fpull-windows%E7%9A%84%E4%B8%9C%E8%A5%BF%E8%BF%98%E6%8C%BA%E6%96%B9%E4%BE%BF%E7%9A%84%E5%A5%BD%E5%83%8F%E5%B0%B1%E6%98%AF%E6%AD%A3%E5%B8%B8%E7%9A%84git-pull-origin-main%E5%8D%B3%E5%8F%AF%E5%89%8D%E6%8F%90%E6%98%AF%E8%BF%9B%E5%8E%BB%E4%B9%8B%E5%90%8E%E5%85%88%E5%88%AB%E4%BF%AE%E6%94%B9%E4%B8%9C%E8%A5%BF%E4%BD%86%E5%A5%BD%E5%83%8F%E4%B9%9F%E4%B8%8D%E6%98%AF%E5%85%B6%E5%AE%9E%E8%BF%98%E6%98%AF%E4%BC%9A%E5%9B%A0%E4%B8%BA%E9%82%A3%E4%B8%AAworkspace.json%E6%96%87%E4%BB%B6%E6%9C%89%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E4%B8%8B%E9%9D%A2%E6%98%AF%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E7%9A%84%E6%96%B9%E6%B3%95%E5%90%8E%E7%BB%AD%E6%88%96%E8%AE%B8%E5%8F%AF%E4%BB%A5%E6%94%B9%E8%BF%9B%E4%B8%80%E4%B8%8B"><span class="nav-number">5.</span> <span class="nav-text">在ubuntu系统pull
+windows的东西，还挺方便的，好像就是正常的git pull origin
+main即可（前提是进去之后先别修改东西）（但好像也不是，其实还是会因为那个workspace.json文件有一些问题。下面是一个简单粗暴的方法。后续或许可以改进一下）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E6%AF%8F%E6%AC%A1%E6%88%91%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E8%A6%81%E5%90%8C%E6%AD%A5%E8%BF%9C%E7%AB%AF%E4%BB%93%E5%BA%93%E7%9A%84%E6%97%B6%E5%80%99%E8%BF%9C%E7%AB%AF%E4%B8%80%E5%AE%9A%E6%98%AF%E6%9B%B4%E5%8A%A0%E6%96%B0%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%8D%B3%E4%BD%BF%E8%BF%9C%E7%AB%AF%E4%BB%93%E5%BA%93%E5%AE%8C%E5%85%A8%E8%A6%86%E7%9B%96%E4%BA%86%E6%88%91%E6%9C%AC%E5%9C%B0%E7%9A%84%E4%BB%93%E5%BA%93%E4%B9%9F%E6%B2%A1%E5%85%B3%E7%B3%BB%E8%AF%9D%E8%99%BD%E5%A6%82%E6%AD%A4%E4%B9%9F%E9%9C%80%E4%B9%9F%E6%9C%89%E6%9E%81%E5%B0%91%E6%95%B0%E6%97%B6%E5%80%99%E7%9C%9F%E7%9A%84%E4%B8%8D%E8%83%BD%E8%BF%99%E6%A0%B7%E6%89%80%E4%BB%A5%E6%89%8D%E6%9C%89%E7%AC%AC%E4%B8%80%E8%A1%8C%E7%9A%84%E6%AF%94%E8%BE%83%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">6.</span> <span class="nav-text">（因为每次我在一个系统要同步远端仓库的时候，远端一定是更加新的，也就是即使远端仓库完全覆盖了我本地的仓库，也没关系（话虽如此，也需也有极少数时候真的不能这样），所以才有第一行的比较简单粗暴的命令）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8windows%E9%87%8Cpull-ubuntu%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%9C%E8%A5%BF%E5%B0%B1%E6%AF%94%E8%BE%83%E9%BA%BB%E7%83%A6%E4%BA%86windows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%E5%A4%84%E7%90%86lf%E5%92%8Ccrlf%E7%9A%84%E6%96%B9%E6%B3%95%E5%A5%BD%E5%83%8F%E4%B8%8D%E5%A4%AA%E4%B8%80%E6%A0%B7%E5%A4%A7%E6%A6%82%E5%B0%B1%E6%98%AF%E6%8D%A2%E8%A1%8C%E4%B9%8B%E7%B1%BB%E7%9A%84%E4%B8%9C%E8%A5%BF%E7%84%B6%E8%80%8Cubuntu%E4%BC%BC%E4%B9%8E%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86%E6%88%91%E4%BB%AC%E6%84%9F%E8%A7%89%E4%B8%8D%E5%88%B0%E4%BD%86windows%E5%B0%B1%E4%B8%8D%E8%A1%8C%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%8A%A5%E9%97%AE%E9%A2%98%E4%B8%80%E4%B8%AA%E6%AF%94%E8%BE%83%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF"><span class="nav-number">7.</span> <span class="nav-text">在windows里pull
+ubuntu系统的东西就比较麻烦了，windows系统和ubuntu系统处理LF和CRLF的方法好像不太一样（大概就是换行之类的东西），然而ubuntu似乎会自动处理，我们感觉不到，但windows就不行，一定会报问题。一个比较简单粗暴的方法是：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%B8%BB%E8%A6%81%E6%98%AF%E8%AE%A9git%E5%BC%BA%E5%88%B6%E6%8A%8A%E8%BF%9C%E7%AB%AF%E7%9A%84workspace.json%E6%96%87%E4%BB%B6%E6%8B%89%E4%B8%8B%E6%9D%A5%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0%E7%9A%84workspace.json%E8%BF%99%E6%A0%B7%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E5%B0%B1%E4%B8%8D%E4%BC%9A%E6%8A%A5%E9%94%99%E4%BA%86%E5%9B%A0%E4%B8%BA%E4%B9%8B%E5%89%8D%E6%8A%A5%E9%94%99%E4%B8%BB%E8%A6%81%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8D%A2%E8%A1%8C%E7%AC%A6%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98%E5%89%A9%E4%B8%8B%E5%B0%B1%E6%98%AF%E6%AD%A3%E5%B8%B8pull%E4%BA%86"><span class="nav-number">8.</span> <span class="nav-text">第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json，这样这个文件就不会报错了（因为之前报错主要就是这个文件的一些换行符之类的问题）。剩下就是正常pull了</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%AF%94%E8%BE%83%E4%B8%80%E5%8A%B3%E6%B0%B8%E9%80%B8%E7%9A%84%E6%96%B9%E6%B3%95%E5%B0%B1%E6%98%AF%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%88%E7%AB%AF%E9%87%8C%E8%BF%9B%E8%A1%8C%E5%A6%82%E4%B8%8B%E9%85%8D%E7%BD%AE"><span class="nav-number">9.</span> <span class="nav-text">另一种比较一劳永逸的方法，就是在windows系统的终端里进行如下配置：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E5%A4%A7%E6%A6%82%E6%98%AF%E5%9B%A0%E4%B8%BA%E4%B8%8B%E6%91%98%E5%BD%95%E8%87%AAai%E5%8E%9F%E6%96%87%E5%9C%A8windows%E4%B8%8Agit%E9%BB%98%E8%AE%A4%E4%BC%9A%E5%9C%A8%E6%A3%80%E5%87%BA%E6%96%87%E4%BB%B6%E6%97%B6%E5%B0%86lf%E8%BD%AC%E6%8D%A2%E4%B8%BAcrlf%E8%80%8C%E5%9C%A8%E6%8F%90%E4%BA%A4%E6%96%87%E4%BB%B6%E6%97%B6%E5%B0%86crlf%E8%BD%AC%E6%8D%A2%E4%B8%BAlf%E8%BF%99%E7%A7%8D%E8%A1%8C%E4%B8%BA%E6%98%AF%E4%B8%BA%E4%BA%86%E7%A1%AE%E4%BF%9D%E6%96%87%E4%BB%B6%E5%9C%A8windows%E4%B8%8A%E6%98%BE%E7%A4%BA%E5%92%8C%E7%BC%96%E8%BE%91%E6%97%B6%E8%83%BD%E5%A4%9F%E6%AD%A3%E7%A1%AE%E5%A4%84%E7%90%86%E6%8D%A2%E8%A1%8C%E7%AC%A6%E7%84%B6%E8%80%8C%E8%BF%99%E7%A7%8D%E8%BD%AC%E6%8D%A2%E5%8F%AF%E8%83%BD%E5%AF%BC%E8%87%B4%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E7%9A%84%E6%9B%B4%E6%94%B9%E4%BB%8E%E8%80%8C%E5%BC%95%E5%8F%91%E5%86%B2%E7%AA%81%E9%80%9A%E8%BF%87%E5%B0%86-core.autocrlf-%E9%85%8D%E7%BD%AE%E4%B8%BA-false%E4%BD%A0%E5%8F%AF%E4%BB%A5%E5%91%8A%E8%AF%89git%E5%9C%A8%E6%A3%80%E5%87%BA%E6%96%87%E4%BB%B6%E6%97%B6%E4%BF%9D%E7%95%99%E5%8E%9F%E5%A7%8B%E7%9A%84%E6%8D%A2%E8%A1%8C%E7%AC%A6%E9%81%BF%E5%85%8D%E5%9B%A0%E6%8D%A2%E8%A1%8C%E7%AC%A6%E8%BD%AC%E6%8D%A2%E8%80%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E6%9B%B4%E6%94%B9%E8%BF%99%E5%AF%B9%E4%BA%8E%E9%9C%80%E8%A6%81%E5%9C%A8%E5%A4%9A%E4%B8%AA%E5%B9%B3%E5%8F%B0%E4%B8%8A%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%89%B9%E5%88%AB%E6%9C%89%E7%94%A8%E5%9B%A0%E4%B8%BA%E5%AE%83%E5%8F%AF%E4%BB%A5%E7%A1%AE%E4%BF%9D%E6%96%87%E4%BB%B6%E5%9C%A8%E6%89%80%E6%9C%89%E5%B9%B3%E5%8F%B0%E4%B8%8A%E9%83%BD%E4%BB%A5%E7%9B%B8%E5%90%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E5%A4%84%E7%90%86%E6%8D%A2%E8%A1%8C%E7%AC%A6-%E4%B8%8D%E8%BF%87%E6%88%91%E7%9B%AE%E5%89%8D%E8%BF%98%E6%B2%A1%E8%AF%95%E8%BF%87"><span class="nav-number">10.</span> <span class="nav-text">这个大概是因为：（下摘录自ai原文）在Windows上，Git默认会在检出文件时将LF转换为CRLF，而在提交文件时将CRLF转换为LF。这种行为是为了确保文件在Windows上显示和编辑时能够正确处理换行符。然而，这种转换可能导致文件内容的更改，从而引发冲突。通过将
+core.autocrlf 配置为
+false，你可以告诉Git在检出文件时保留原始的换行符，避免因换行符转换而导致的文件内容更改。这对于需要在多个平台上协作开发的项目特别有用，因为它可以确保文件在所有平台上都以相同的方式处理换行符。不过我目前还没试过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#btw%E9%99%84%E5%B8%A6%E4%B8%80%E4%B8%AA%E5%AE%9E%E6%88%98%E4%BE%8B%E5%AD%90%E8%99%BD%E7%84%B6%E6%98%AF%E6%9C%89%E7%82%B9%E6%93%8D%E4%BD%9C%E5%A4%B1%E8%AF%AF%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">11.</span> <span class="nav-text">btw，附带一个实战例子，虽然是有点操作失误的例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%88%91%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E9%87%8C%E8%BF%9B%E8%A1%8Cpull%E7%9A%84%E6%97%B6%E5%80%99%E6%B2%A1%E6%88%90%E5%8A%9F%E5%8F%8D%E8%80%8C%E8%BF%98%E5%9C%A8windows%E9%87%8C%E4%BF%AE%E6%94%B9%E4%BA%86%E4%B8%80%E4%BA%9B%E7%AC%94%E8%AE%B0%E5%B9%B6add%E5%92%8Ccommit%E4%BA%86%E5%AF%BC%E8%87%B4%E6%AD%A4%E6%97%B6windows%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0%E4%B8%8E%E8%BF%9C%E7%AB%AF%E4%B8%8D%E5%90%8C%E6%AD%A5%E4%B8%94%E8%BF%98%E6%9C%89%E6%9B%B4%E6%96%B0%E4%B9%8B%E5%90%8E%E6%88%91%E5%86%8D%E6%AC%A1%E5%B0%9D%E8%AF%95%E6%AD%A3%E5%B8%B8pull%E5%A4%B1%E8%B4%A5%E4%BA%86%E5%90%8E%E9%9D%A2%E6%88%91%E5%B0%B1%E7%94%A8%E4%B8%8A%E9%9D%A2%E6%8F%90%E5%88%B0%E7%9A%84%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E7%9A%84%E6%96%B9%E6%B3%95%E5%85%88%E5%AE%8C%E6%88%90%E4%BA%86%E4%BB%8E%E8%BF%9C%E7%AB%AF%E7%9A%84pull%E6%AD%A4%E6%97%B6%E6%88%91%E4%B8%8Agithub%E4%BB%93%E5%BA%93%E5%8F%91%E7%8E%B0%E8%BF%9C%E7%AB%AF%E8%BF%98%E6%B2%A1%E6%9C%89%E6%8B%BF%E5%88%B0%E6%88%91%E5%9C%A8windows%E6%9C%AC%E5%9C%B0%E8%BF%9B%E8%A1%8C%E7%9A%84%E6%9B%B4%E6%96%B0%E4%B9%9F%E6%98%AF%E6%AF%95%E7%AB%9F%E6%88%91%E8%BF%98%E6%B2%A1push%E4%B8%8A%E5%8E%BB%E5%86%8D%E8%BF%9B%E8%A1%8Cpush%E6%88%90%E5%8A%9F%E4%BA%86%E5%B9%B6%E4%B8%94%E6%A3%80%E6%9F%A5%E8%BF%9C%E7%AB%AF%E4%BB%93%E5%BA%93%E7%A1%AE%E5%AE%9E%E6%9B%B4%E6%96%B0%E4%BA%86-%E8%BF%99%E9%87%8C%E5%85%88%E5%BC%BA%E5%88%B6pull%E4%B8%8B%E6%9D%A5%E4%BA%86%E5%81%9A%E5%88%B0%E4%BA%86%E5%92%8C%E8%BF%9C%E7%AB%AF%E7%9A%84%E5%90%8C%E6%AD%A5%E4%B9%8B%E5%90%8E%E5%86%8D%E6%8A%8A%E5%B7%B2%E7%BB%8F%E6%9A%82%E5%AD%98%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%AE%8C%E6%88%90%E4%BA%86commit%E7%9A%84%E5%86%85%E5%AE%B9%E7%BB%99push%E4%B8%8A%E5%8E%BB%E5%8D%B3%E5%8F%AF"><span class="nav-number">12.</span> <span class="nav-text">我在windows系统里进行pull的时候，没成功，反而还在windows里修改了一些笔记，并add和commit了，导致此时windows中的笔记与远端不同步，且还有更新。之后我再次尝试正常pull，失败了。后面我就用上面提到的简单粗暴的方法，先完成了从远端的pull，（此时我上github仓库，发现远端还没有拿到我在windows本地进行的更新。也是，毕竟我还没push上去）再进行push，成功了，并且检查远端仓库，确实更新了。这里先强制pull下来了，做到了和远端的同步，之后再把已经暂存的（也就是完成了commit的）内容给push上去，即可</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="因为写报告需要用到模板，本来找好了模板要用overleaf写的，结果编译时间太长，超出免费版的时间限制了，故试试用本地的latex。遇到一些问题，稍微记录一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本地latex初步使用">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/06/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/%E6%9C%AC%E5%9C%B0latex%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="因为写报告需要用到模板，本来找好了模板要用overleaf写的，结果编译时间太长，超出免费版的时间限制了，故试试用本地的latex。遇到一些问题，稍微记录一下">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-19T08:35:00.000Z">
+<meta property="article:modified_time" content="2025-06-19T08:43:48.159Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="latex配置">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/06/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/%E6%9C%AC%E5%9C%B0latex%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>本地latex初步使用 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/%E6%9C%AC%E5%9C%B0latex%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          本地latex初步使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-06-19 16:35:00 / Modified: 16:43:48" itemprop="dateCreated datePublished" datetime="2025-06-19T16:35:00+08:00">2025-06-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/" itemprop="url" rel="index"><span itemprop="name">本地latex</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="因为写报告需要用到模板本来找好了模板要用overleaf写的结果编译时间太长超出免费版的时间限制了故试试用本地的latex遇到一些问题稍微记录一下">因为写报告需要用到模板，本来找好了模板要用overleaf写的，结果编译时间太长，超出免费版的时间限制了，故试试用本地的latex。遇到一些问题，稍微记录一下</h1>
+<span id="more"></span>
+<h1 id="参考文献引用">参考文献引用：</h1>
+<h2 id="简单说引用方式分两种自动的和手动的手动的比较好理解就是在文末一条一条地加上参考文献注意编号编号似乎是自动的反正overleaf上是自动的本地不太清楚之后正文里想要引用哪一篇就引用对应文献的编号即可-自动的则是先把所有的要引用的参考文献放到一个bib文件里一般是叫做reference.bib每篇文献的格式大概是类似于这样的">简单说，引用方式分两种，自动的和手动的。手动的比较好理解，就是在文末一条一条地加上参考文献，注意编号（编号似乎是自动的？反正overleaf上是自动的，本地不太清楚），之后正文里想要引用哪一篇就引用对应文献的编号即可<br>自动的则是，先把所有的要引用的参考文献放到一个bib文件里（一般是叫做reference.bib），每篇文献的格式大概是类似于这样的：</h2>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@article&#123;Wang<span class="built_in">_</span>2024,</span><br><span class="line"></span><br><span class="line">   title=&#123;A survey on large language model based autonomous agents&#125;,</span><br><span class="line"></span><br><span class="line">   volume=&#123;18&#125;,</span><br><span class="line"></span><br><span class="line">   ISSN=&#123;2095-2236&#125;,</span><br><span class="line"></span><br><span class="line">   url=&#123;http://dx.doi.org/10.1007/s11704-024-40231-1&#125;,</span><br><span class="line"></span><br><span class="line">   DOI=&#123;10.1007/s11704-024-40231-1&#125;,</span><br><span class="line"></span><br><span class="line">   number=&#123;6&#125;,</span><br><span class="line"></span><br><span class="line">   journal=&#123;Frontiers of Computer Science&#125;,</span><br><span class="line"></span><br><span class="line">   publisher=&#123;Springer Science and Business Media LLC&#125;,</span><br><span class="line"></span><br><span class="line">   author=&#123;Wang, Lei and Ma, Chen and Feng, Xueyang and Zhang, Zeyu and Yang, Hao and Zhang, Jingsen and Chen, Zhiyuan and Tang, Jiakai and Chen, Xu and Lin, Yankai and Zhao, Wayne Xin and Wei, Zhewei and Wen, Jirong&#125;,</span><br><span class="line"></span><br><span class="line">   year=&#123;2024&#125;,</span><br><span class="line"></span><br><span class="line">   month=mar &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="article后面跟着的就是文献的简称引用的时候用简称就行当然简称可以自定义不过后面的文献相关信息是不能动的否则出错了"><span class="citation" data-cites="article后面跟着的就是文献的">@article后面跟着的就是文献的</span>“简称”，引用的时候用简称就行。当然简称可以自定义。不过后面的文献相关信息是不能动的，否则出错了</h3>
+<h1 id="加入参考文献之后的编译">加入参考文献之后的编译</h1>
+<h2 id="一般来说需要xelatex--bibtex--xelatex--xelatex这样编译四次特别麻烦所以就想有没有什么改进的方法查了一下似乎是可以用vscode里的一个插件我的本地latex使用是搭配vscode的叫latex-workshop里面可以自定义recipe简单理解recipe就是编译的方式因此我们可以自定义一个一键四次的recipe但查到的一个方法虽然可行可是会把默认的编译方式给替换掉如果要用默认的替换方式就不能用自定义的recipe不知道有没有更好的方法-另一个快速解决带参考文献的编译方法是用latexmk好像似乎也是可行的不过怎么用它编译的时候直接给我单独跳出来一个office界面展示pdf了不是预览了吗">一般来说，需要xelatex--&gt;bibtex--&gt;xelatex--&gt;xelatex这样编译四次，特别麻烦。所以就想有没有什么改进的方法？查了一下，似乎是可以用vscode里的一个插件（我的本地latex使用是搭配vscode的），叫LaTeX
+Workshop，里面可以自定义recipe（简单理解recipe，就是编译的方式）。因此我们可以自定义一个“一键四次”的recipe（但查到的一个方法，虽然可行，可是会把默认的编译方式给替换掉；如果要用默认的替换方式，就不能用自定义的recipe……不知道有没有更好的方法）<br>另一个快速解决带参考文献的编译方法是，用latexmk好像。似乎也是可行的（不过怎么用它编译的时候直接给我单独跳出来一个office界面展示pdf了？不是预览了吗？）</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/latex%E9%85%8D%E7%BD%AE/" rel="tag"># latex配置</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/19/%E6%8D%A3%E9%BC%93blog/%E5%9C%A8%E5%8D%9A%E5%AE%A2%E4%B8%AD%E5%8A%A0%E4%B8%8A%E5%9B%BE%E7%89%87/" rel="prev" title="在博客中加上图片">
+      <i class="fa fa-chevron-left"></i> 在博客中加上图片
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E5%86%99%E6%8A%A5%E5%91%8A%E9%9C%80%E8%A6%81%E7%94%A8%E5%88%B0%E6%A8%A1%E6%9D%BF%E6%9C%AC%E6%9D%A5%E6%89%BE%E5%A5%BD%E4%BA%86%E6%A8%A1%E6%9D%BF%E8%A6%81%E7%94%A8overleaf%E5%86%99%E7%9A%84%E7%BB%93%E6%9E%9C%E7%BC%96%E8%AF%91%E6%97%B6%E9%97%B4%E5%A4%AA%E9%95%BF%E8%B6%85%E5%87%BA%E5%85%8D%E8%B4%B9%E7%89%88%E7%9A%84%E6%97%B6%E9%97%B4%E9%99%90%E5%88%B6%E4%BA%86%E6%95%85%E8%AF%95%E8%AF%95%E7%94%A8%E6%9C%AC%E5%9C%B0%E7%9A%84latex%E9%81%87%E5%88%B0%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%A8%8D%E5%BE%AE%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B"><span class="nav-number">1.</span> <span class="nav-text">因为写报告需要用到模板，本来找好了模板要用overleaf写的，结果编译时间太长，超出免费版的时间限制了，故试试用本地的latex。遇到一些问题，稍微记录一下</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%BC%95%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">参考文献引用：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%AF%B4%E5%BC%95%E7%94%A8%E6%96%B9%E5%BC%8F%E5%88%86%E4%B8%A4%E7%A7%8D%E8%87%AA%E5%8A%A8%E7%9A%84%E5%92%8C%E6%89%8B%E5%8A%A8%E7%9A%84%E6%89%8B%E5%8A%A8%E7%9A%84%E6%AF%94%E8%BE%83%E5%A5%BD%E7%90%86%E8%A7%A3%E5%B0%B1%E6%98%AF%E5%9C%A8%E6%96%87%E6%9C%AB%E4%B8%80%E6%9D%A1%E4%B8%80%E6%9D%A1%E5%9C%B0%E5%8A%A0%E4%B8%8A%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%B3%A8%E6%84%8F%E7%BC%96%E5%8F%B7%E7%BC%96%E5%8F%B7%E4%BC%BC%E4%B9%8E%E6%98%AF%E8%87%AA%E5%8A%A8%E7%9A%84%E5%8F%8D%E6%AD%A3overleaf%E4%B8%8A%E6%98%AF%E8%87%AA%E5%8A%A8%E7%9A%84%E6%9C%AC%E5%9C%B0%E4%B8%8D%E5%A4%AA%E6%B8%85%E6%A5%9A%E4%B9%8B%E5%90%8E%E6%AD%A3%E6%96%87%E9%87%8C%E6%83%B3%E8%A6%81%E5%BC%95%E7%94%A8%E5%93%AA%E4%B8%80%E7%AF%87%E5%B0%B1%E5%BC%95%E7%94%A8%E5%AF%B9%E5%BA%94%E6%96%87%E7%8C%AE%E7%9A%84%E7%BC%96%E5%8F%B7%E5%8D%B3%E5%8F%AF-%E8%87%AA%E5%8A%A8%E7%9A%84%E5%88%99%E6%98%AF%E5%85%88%E6%8A%8A%E6%89%80%E6%9C%89%E7%9A%84%E8%A6%81%E5%BC%95%E7%94%A8%E7%9A%84%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%94%BE%E5%88%B0%E4%B8%80%E4%B8%AAbib%E6%96%87%E4%BB%B6%E9%87%8C%E4%B8%80%E8%88%AC%E6%98%AF%E5%8F%AB%E5%81%9Areference.bib%E6%AF%8F%E7%AF%87%E6%96%87%E7%8C%AE%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%A4%A7%E6%A6%82%E6%98%AF%E7%B1%BB%E4%BC%BC%E4%BA%8E%E8%BF%99%E6%A0%B7%E7%9A%84"><span class="nav-number">2.1.</span> <span class="nav-text">简单说，引用方式分两种，自动的和手动的。手动的比较好理解，就是在文末一条一条地加上参考文献，注意编号（编号似乎是自动的？反正overleaf上是自动的，本地不太清楚），之后正文里想要引用哪一篇就引用对应文献的编号即可自动的则是，先把所有的要引用的参考文献放到一个bib文件里（一般是叫做reference.bib），每篇文献的格式大概是类似于这样的：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#article%E5%90%8E%E9%9D%A2%E8%B7%9F%E7%9D%80%E7%9A%84%E5%B0%B1%E6%98%AF%E6%96%87%E7%8C%AE%E7%9A%84%E7%AE%80%E7%A7%B0%E5%BC%95%E7%94%A8%E7%9A%84%E6%97%B6%E5%80%99%E7%94%A8%E7%AE%80%E7%A7%B0%E5%B0%B1%E8%A1%8C%E5%BD%93%E7%84%B6%E7%AE%80%E7%A7%B0%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8D%E8%BF%87%E5%90%8E%E9%9D%A2%E7%9A%84%E6%96%87%E7%8C%AE%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF%E6%98%AF%E4%B8%8D%E8%83%BD%E5%8A%A8%E7%9A%84%E5%90%A6%E5%88%99%E5%87%BA%E9%94%99%E4%BA%86"><span class="nav-number">2.1.1.</span> <span class="nav-text">@article后面跟着的就是文献的“简称”，引用的时候用简称就行。当然简称可以自定义。不过后面的文献相关信息是不能动的，否则出错了</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E4%B9%8B%E5%90%8E%E7%9A%84%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">加入参考文献之后的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%9D%A5%E8%AF%B4%E9%9C%80%E8%A6%81xelatex--bibtex--xelatex--xelatex%E8%BF%99%E6%A0%B7%E7%BC%96%E8%AF%91%E5%9B%9B%E6%AC%A1%E7%89%B9%E5%88%AB%E9%BA%BB%E7%83%A6%E6%89%80%E4%BB%A5%E5%B0%B1%E6%83%B3%E6%9C%89%E6%B2%A1%E6%9C%89%E4%BB%80%E4%B9%88%E6%94%B9%E8%BF%9B%E7%9A%84%E6%96%B9%E6%B3%95%E6%9F%A5%E4%BA%86%E4%B8%80%E4%B8%8B%E4%BC%BC%E4%B9%8E%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%94%A8vscode%E9%87%8C%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6%E6%88%91%E7%9A%84%E6%9C%AC%E5%9C%B0latex%E4%BD%BF%E7%94%A8%E6%98%AF%E6%90%AD%E9%85%8Dvscode%E7%9A%84%E5%8F%ABlatex-workshop%E9%87%8C%E9%9D%A2%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%AE%9A%E4%B9%89recipe%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3recipe%E5%B0%B1%E6%98%AF%E7%BC%96%E8%AF%91%E7%9A%84%E6%96%B9%E5%BC%8F%E5%9B%A0%E6%AD%A4%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E4%B8%80%E9%94%AE%E5%9B%9B%E6%AC%A1%E7%9A%84recipe%E4%BD%86%E6%9F%A5%E5%88%B0%E7%9A%84%E4%B8%80%E4%B8%AA%E6%96%B9%E6%B3%95%E8%99%BD%E7%84%B6%E5%8F%AF%E8%A1%8C%E5%8F%AF%E6%98%AF%E4%BC%9A%E6%8A%8A%E9%BB%98%E8%AE%A4%E7%9A%84%E7%BC%96%E8%AF%91%E6%96%B9%E5%BC%8F%E7%BB%99%E6%9B%BF%E6%8D%A2%E6%8E%89%E5%A6%82%E6%9E%9C%E8%A6%81%E7%94%A8%E9%BB%98%E8%AE%A4%E7%9A%84%E6%9B%BF%E6%8D%A2%E6%96%B9%E5%BC%8F%E5%B0%B1%E4%B8%8D%E8%83%BD%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84recipe%E4%B8%8D%E7%9F%A5%E9%81%93%E6%9C%89%E6%B2%A1%E6%9C%89%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%96%B9%E6%B3%95-%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%BF%AB%E9%80%9F%E8%A7%A3%E5%86%B3%E5%B8%A6%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E7%9A%84%E7%BC%96%E8%AF%91%E6%96%B9%E6%B3%95%E6%98%AF%E7%94%A8latexmk%E5%A5%BD%E5%83%8F%E4%BC%BC%E4%B9%8E%E4%B9%9F%E6%98%AF%E5%8F%AF%E8%A1%8C%E7%9A%84%E4%B8%8D%E8%BF%87%E6%80%8E%E4%B9%88%E7%94%A8%E5%AE%83%E7%BC%96%E8%AF%91%E7%9A%84%E6%97%B6%E5%80%99%E7%9B%B4%E6%8E%A5%E7%BB%99%E6%88%91%E5%8D%95%E7%8B%AC%E8%B7%B3%E5%87%BA%E6%9D%A5%E4%B8%80%E4%B8%AAoffice%E7%95%8C%E9%9D%A2%E5%B1%95%E7%A4%BApdf%E4%BA%86%E4%B8%8D%E6%98%AF%E9%A2%84%E8%A7%88%E4%BA%86%E5%90%97"><span class="nav-number">3.1.</span> <span class="nav-text">一般来说，需要xelatex--&gt;bibtex--&gt;xelatex--&gt;xelatex这样编译四次，特别麻烦。所以就想有没有什么改进的方法？查了一下，似乎是可以用vscode里的一个插件（我的本地latex使用是搭配vscode的），叫LaTeX
+Workshop，里面可以自定义recipe（简单理解recipe，就是编译的方式）。因此我们可以自定义一个“一键四次”的recipe（但查到的一个方法，虽然可行，可是会把默认的编译方式给替换掉；如果要用默认的替换方式，就不能用自定义的recipe……不知道有没有更好的方法）另一个快速解决带参考文献的编译方法是，用latexmk好像。似乎也是可行的（不过怎么用它编译的时候直接给我单独跳出来一个office界面展示pdf了？不是预览了吗？）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

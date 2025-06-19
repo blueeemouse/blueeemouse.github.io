@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的参数定">
+  <meta name="description" content="有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的 结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="bluemouse&#39;s blog">
 <meta property="og:url" content="https://blueeemouse.github.io/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的参数定">
+<meta property="og:description" content="有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的 结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-08T17:27:48.200Z">
 <meta property="article:modified_time" content="2025-02-08T17:36:25.561Z">
@@ -193,7 +193,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的<br>结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的<br>参数定义（用torch.nn调用的话，它们都是继承了torch.nn.Module类，所以一旦初始化，就已经有参数了；而用torch.nn.functional调用，则需要自己定义参数，并且在调用的时候手动传入，相比之下复杂许多）<br>参数管理（比如，用类的时候就可以结合优化器，自动更新参数；而如果是用torch.nn.functional来调用，不仅参数需要我们自己传入，还需要我们自己指定是否要求梯度，并且即使我们指定了要求梯度，优化器也不能实现自动更新参数，必须得我们手动更细，极其麻烦）<br>设备控制（就是控制在cpu还是gpu&#x2F;哪块gpu）<br>模型参数保存（torch.nn类保存参数可以用torch.save(model.state_dict(), ‘model.pth’)这种语句很快捷地保存，而torch.nn.functional的话，就需要手动保存和加载参数）<br>等方面都要方便很多</p>
+        <p>有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的
+结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的
+参数定义（用torch.nn调用的话，它们都是继承了torch.nn.Module类，所以一旦初始化，就已经有参数了；而用torch.nn.functional调用，则需要自己定义参数，并且在调用的时候手动传入，相比之下复杂许多）
+参数管理（比如，用类的时候就可以结合优化器，自动更新参数；而如果是用torch.nn.functional来调用，不仅参数需要我们自己传入，还需要我们自己指定是否要求梯度，并且即使我们指定了要求梯度，优化器也不能实现自动更新参数，必须得我们手动更细，极其麻烦）
+设备控制（就是控制在cpu还是gpu/哪块gpu）
+模型参数保存（torch.nn类保存参数可以用torch.save(model.state_dict(),
+'model.pth')这种语句很快捷地保存，而torch.nn.functional的话，就需要手动保存和加载参数）
+等方面都要方便很多</p>
 
     </div>
 
@@ -287,18 +294,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">70</span>
+        <span class="site-state-item-count">71</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
