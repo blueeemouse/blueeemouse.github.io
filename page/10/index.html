@@ -150,6 +150,70 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-16 00:07:08 / Modified: 15:04:15" itemprop="dateCreated datePublished" datetime="2025-02-16T00:07:08+08:00">2025-02-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="无监督vi-reid大多数的流程都是先通过某种聚类方法通常是dbscan得到一批伪标签然后开始构建跨模态的对应一般是对应簇而不是一个一个实例去对应因为对应完簇我们就认为这两个簇里的实例都是一个id的所以其实可以说一个常见的范式是在各个模态内进行聚类然后进行跨模态的簇的对应这么说来eccv24那篇有没有可能提出了一个新的范式就是在聚类的时候就已经考虑上跨模态的对应了">无监督vi-reid，大多数的流程都是，先通过某种聚类方法（通常是DBSCAN），得到一批伪标签，然后开始构建跨模态的对应（一般是对应簇，而不是一个一个实例去对应。因为对应完簇，我们就认为这两个簇里的实例都是一个ID的）。所以其实可以说，一个常见的范式是，在各个模态内进行聚类，然后进行跨模态的簇的对应（这么说来，ECCV24那篇，有没有可能提出了一个新的范式，就是在聚类的时候就已经考虑上跨模态的对应了？）</h1>
+<h1 id="通常的改进会聚焦在">通常的改进会聚焦在，</h1>
+<h2 id="如何更好的构建伪标签的跨模态对应pgmotpm">如何更好的构建伪标签的跨模态对应（PGM）（OTPM）</h2>
+<h3 id="毕竟没标签很难对应上最理想的情况当然是我们的聚类结果恰好就等于真实标签此时无监督vi-reid就会变成vi-reid实际还有个很重要的问题就是我们的对应很可能是有错的怎么在有错误对应即所谓噪声的情况下不断改进对应结果也是很重要的所以才会有很多progressive的方法">（毕竟没标签，很难对应上；最理想的情况当然是我们的聚类结果恰好就等于真实标签，此时无监督vi-reid就会变成vi-reid）（实际还有个很重要的问题，就是，我们的对应很可能是有错的，怎么在有错误对应（即所谓噪声）的情况下不断改进对应结果也是很重要的。所以才会有很多progressive的方法）；</h3>
+<h2 id="还有一部分可能会聚焦在伪标签的可靠性上multi-memorypgm">还有一部分可能会聚焦在伪标签的可靠性上？（Multi-memory，PGM）</h2>
+<h2 id="提取更加鲁棒的特征以改善聚类效果shallow-deepgur">提取更加鲁棒的特征，以改善聚类效果（Shallow-Deep，GUR）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94%20unsupervised%20vi-reid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1066,78 +1130,6 @@ loss还是BLEU指标，都是用warmup的效果比不用warmup的效果要好。
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-12-19 15:30:23" itemprop="dateCreated datePublished" datetime="2024-12-19T15:30:23+08:00">2024-12-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-01-10 03:53:53" itemprop="dateModified" datetime="2025-01-10T03:53:53+08:00">2025-01-10</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="不知道是不是apex库的0.1版本用的比较多啊反正前几天配idkl的环境的时候它是要求装这个版本的但是它也不给个详细的步骤只说要装这个库不纯折磨人嘛">不知道是不是apex库的0.1版本用的比较多啊，反正前几天配IDKL的环境的时候它是要求装这个版本的，但是它也不给个详细的步骤，只说要装这个库，不纯折磨人嘛</h1>
-<h1 id="说回来可以参考这个教程但是需要注意一下如果是apex0.1版本则clone库的时候要选择22.04-dev的branchclone那个别直接git-clone-网址了clone指定branch的库应该是有个特殊的命令的可以问问aiclone了对的库之后就可以按照教程里的做了从它的第2步开始然后关于它的第3步我安装的时候是没加-user的也成功了应该就是哪个指令能成功就用哪个">说回来，可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/piaoliangjinjin/article/details/137566614">教程</a>（但是需要注意一下，如果是apex0.1版本，则clone库的时候要选择22.04-dev的branch，clone那个，别直接git
-clone
-+网址了。（clone指定branch的库应该是有个特殊的命令的，可以问问ai）。clone了对的库之后，就可以按照教程里的做了（从它的第2步开始）（然后关于它的第3步，我安装的时候是没加-user的，也成功了，应该就是哪个指令能成功就用哪个）</h1>
-<h1 id="如果要安装其它版本的apex就需要根据自己的torch版本和cuda版本进行选择了未必就是apex库的22.04-dev-branch的内容了或许可以参考这个教程但我没试过它这里提到可以一次多试几个版本感觉有点麻烦了不知道有没有对应的版本可以查询的">如果要安装其它版本的apex，就需要根据自己的torch版本和cuda版本进行选择了，未必就是apex库的22.04-dev
-branch的内容了。或许可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33440910/article/details/134812895?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-134812895-blog-137566614.235%5Ev43%5Epc_blog_bottom_relevance_base9&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">这个教程</a>（但我没试过）（它这里提到可以一次多试几个版本，感觉有点麻烦了，不知道有没有对应的版本可以查询的）</h1>
-<h1 id="另外有可能运行代码的时候会遇到这个报错-indexerror-tuple-index-out-of-range可以参考这个链接的解决方法反正我试过一次是可行的">另外，有可能运行代码的时候会遇到这个报错：
-‘IndexError: tuple index out of range‘，可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/starvapour/article/details/122275439">这个链接</a>的解决方法，反正我试过一次，是可行的</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1207,18 +1199,18 @@ branch的内容了。或许可以参考<a target="_blank" rel="noopener" href="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">148</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">72</span>
+        <span class="site-state-item-count">73</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

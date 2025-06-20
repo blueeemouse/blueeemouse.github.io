@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬楼梯">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/06/20/algo/Leetcode-hot100/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%88%AC%E6%A5%BC%E6%A2%AF/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-20T08:09:00.000Z">
+<meta property="article:modified_time" content="2025-06-20T08:32:07.437Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/06/20/algo/Leetcode-hot100/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%88%AC%E6%A5%BC%E6%A2%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>爬楼梯 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/20/algo/Leetcode-hot100/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%88%AC%E6%A5%BC%E6%A2%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          爬楼梯
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-06-20 16:09:00 / Modified: 16:32:07" itemprop="dateCreated datePublished" datetime="2025-06-20T16:09:00+08:00">2025-06-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/Leetcode-hot100/" itemprop="url" rel="index"><span itemprop="name">Leetcode-hot100</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/Leetcode-hot100/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/climbing-stairs/description/?envType=study-plan-v2&amp;envId=top-100-liked">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="假设你正在爬楼梯需要-n-阶你才能到达楼顶">假设你正在爬楼梯。需要 <code>n</code> 阶你才能到达楼顶。</h2>
+<h2 id="每次你可以爬-1-或-2-个台阶你有多少种不同的方法可以爬到楼顶呢">每次你可以爬 <code>1</code> 或 <code>2</code> 个台阶。你有多少种不同的方法可以爬到楼顶呢？</h2>
+<h2 id="示例-1"><strong>示例 1：</strong></h2>
+<h3 id="输入n-2"><strong>输入：</strong>n = 2</h3>
+<h3 id="输出2"><strong>输出：</strong>2</h3>
+<h3 id="解释有两种方法可以爬到楼顶"><strong>解释：</strong>有两种方法可以爬到楼顶。</h3>
+<h4 id="阶-1-阶">1. 1 阶 + 1 阶</h4>
+<h4 id="阶">2. 2 阶</h4>
+<h2 id="示例-2"><strong>示例 2：</strong></h2>
+<h3 id="输入n-3"><strong>输入：</strong>n = 3</h3>
+<h3 id="输出3"><strong>输出：</strong>3</h3>
+<h3 id="解释有三种方法可以爬到楼顶"><strong>解释：</strong>有三种方法可以爬到楼顶。</h3>
+<h4 id="阶-1-阶-1-阶">1. 1 阶 + 1 阶 + 1 阶</h4>
+<h4 id="阶-2-阶">2. 1 阶 + 2 阶</h4>
+<h4 id="阶-1-阶-1">3. 2 阶 + 1 阶</h4>
+<h2 id="提示"><strong>提示：</strong></h2>
+<ul>
+<li><h3 id="n-45"><code>1 &lt;= n &lt;= 45</code></h3>
+<h1 id="思路">思路：</h1>
+<h2 id="题目本身倒是挺简单的也很经典容易想到类似分解化归的做法我们要爬到第n层那么在此之前要么已经爬到第n-1层要么已经爬到第n-2层如果我们能求出爬到第n-1层的方法数和爬到第n-2层的方法数则二者相加就是最终结果爬到第n-1层的时候只需要再爬一阶就行根据乘法法则这种爬到第n层的方法数恰好就是爬到第n-1层的方法数而爬到第n-2层的时候可以一步爬两层注意这里我们不考虑爬一层再爬一层的做法因为这已经算在了刚才的先爬到第n-1层再爬到第n层的方法里了还是根据乘法法则可以知道先爬到第n-2层再爬到第n层的方法数就是爬到第n-2层的方法数">题目本身倒是挺简单的，也很经典，容易想到类似分解、化归的做法：我们要爬到第n层，那么在此之前要么已经爬到第n-1层，要么已经爬到第n-2层。如果我们能求出爬到第n-1层的方法数和爬到第n-2层的方法数，则二者相加就是最终结果（爬到第n-1层的时候，只需要再爬一阶就行；根据乘法法则，这种爬到第n层的方法数恰好就是爬到第n-1层的方法数。而爬到第n-2层的时候，可以一步爬两层（注意这里我们不考虑爬一层再爬一层的做法。因为这已经算在了刚才的“先爬到第n-1层，再爬到第n层”的方法里了），还是根据乘法法则，可以知道，先爬到“第n-2层，再爬到第n层”的方法数就是爬到第n-2层的方法数）</h2>
+<h2 id="上面显得有点啰嗦假如我们定义一个函数叫findfindn就表示爬到第n层的方法数那么应该有findnfindn-1findn-2-这种把一个问题分解成几个相似的子问题且每个子问题的规模都减小的方法就可以用递归解决这种的代码还是很容易实现的">上面显得有点啰嗦。假如我们定义一个函数叫find()，find(n)就表示爬到第n层的方法数，那么应该有<span class="math inline">\(find(n)=find(n-1)+find(n-2)\)</span><br>这种把一个问题分解成几个相似的子问题，且每个子问题的规模都减小的方法，就可以用递归解决。这种的代码还是很容易实现的：</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">climbStairs</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> res = <span class="built_in">find</span>(n);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">find</span>(n<span class="number">-1</span>) + <span class="built_in">find</span>(n<span class="number">-2</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="容易发现测试样例是能过的但是整题通不过因为超时了此时不妨来分析一下上面代码的时间复杂度要求findn就要求findn-1和findn-2类似的递归求findn-1的时候我们会再去求findn-2和findn-3而递归着求findn-2注意这里求的findn-2是findn分解出来的那个又需要求findn-3和findn-4-此时如果我们想象一下把一个findx想象成一个节点它依赖的findx-1和findx-2想象成它的两个子节点那其实这就很类似从findn开始不断向下二分叉数的高度是n所以整体应该时间复杂度是o2n这就可以解释为什么n仅仅是不超过45但还是会超时了-而且我们也可以从上面的分析过程看出为什么时间复杂度会如此高因为我们有重复求递归值的情况比如上面我们求findn的时候需要求一次findn-2的值而之后我们求findn-1的时候又需要求一次findn-2的值两次明明值是一样的但我们却要求两次而且可以想到findn-2计算量应该不小类似的情况还有很多所以这就是需要改进的地方">容易发现，测试样例是能过的，但是整题通不过。因为超时了。此时不妨来分析一下上面代码的时间复杂度。要求find(n)，就要求find(n-1)和find(n-2)；类似的，递归求find(n-1)的时候，我们会再去求find(n-2)和find(n-3)；而递归着求find(n-2)（注意，这里求的find(n-2)是find(n)分解出来的那个），又需要求find(n-3)和find(n-4)……<br>此时如果我们想象一下，把一个find(x)想象成一个节点，它依赖的find(x-1)和find(x-2)想象成它的两个子节点，那其实这就很类似从find(n)开始不断向下二分叉。数的高度是n，所以整体应该时间复杂度是<span class="math inline">\(O(2^{n})\)</span>。这就可以解释为什么n仅仅是不超过45，但还是会超时了<br>而且我们也可以从上面的分析过程，看出为什么时间复杂度会如此高：因为我们有重复求递归值的情况。比如，上面我们求find(n)的时候，需要求一次find(n-2)的值；而之后我们求find(n-1)的时候，又需要求一次find(n-2)的值，两次明明值是一样的，但我们却要求两次。而且可以想到，find(n-2)计算量应该不小。类似的情况还有很多。所以这就是需要改进的地方</h2>
+<h2 id="既然慢的原因是重复计算了那就考虑把算过的值存一下之后我们计算某个递归值之前先检查一下是否计算过算过的话直接返回没算过再去递归算此时我们来想一下时间复杂度是多少算findn的时候要算findn-1和findn-2那假设是先算findn-1它没算过则继续递归算findn-2和findn-3此时这两个值也都还没算过则继续递归这里需要注意我们写的代码可以规定它是这样findnfindn-1findn-2也就是其实先算的是findx-1的部分所以在递归算findn-1的时候虽然要算findn-2和findn-3但其实有个先后顺序要先算findn-2类似的递归算findn-2的时候要算findn-3和findn-4但我们还是先算findn-3-此时不难发现我们一直优先算算到find1终于可以开始return了且这个return的过程里我们把find从n到1的值都会算出来因此一旦我们存起来了后面其它的递归计算就都可以调用这些存下来的值不需要再递归算了因此现在的时间复杂度是on了因为我们相当于只遍历计算了一次一个长度为n的数组这个做法叫记忆化搜索还是很形象的">既然慢的原因是重复计算了，那就考虑把算过的值存一下，之后我们计算某个递归值之前，先检查一下是否计算过，算过的话直接返回；没算过再去递归算。此时我们来想一下时间复杂度是多少。算find(n)的时候要算find(n-1)和find(n-2)，那假设是先算find(n-1)。它没算过，则继续递归算find(n-2)和find(n-3)，此时这两个值也都还没算过，则继续递归。这里需要注意，我们写的代码，可以规定它是这样：<code>find(n)=find(n-1)+find(n-2)</code>，也就是其实先算的是find(x-1)的部分。所以，在递归算find(n-1)的时候，虽然要算find(n-2)和find(n-3)，但其实有个先后顺序，要先算find(n-2)；类似的，递归算find(n-2)的时候，要算find(n-3)和find(n-4)，但我们还是先算find(n-3)……<br>此时不难发现，我们一直优先算，算到find(1)，终于可以开始return了。且这个return的过程里，我们把find从n到1的值都会算出来。因此，一旦我们存起来了，后面其它的递归计算就都可以调用这些存下来的值，不需要再递归算了。因此，现在的时间复杂度是<span class="math inline">\(O(n)\)</span>了，因为我们相当于只遍历计算了一次一个长度为n的数组。这个做法叫“记忆化搜索”，还是很形象的</h2>
+<h3 id="实现的时候有个小细节我们要用一个东西比如数组来存储递归的结果它会有一个初始化的值我们必须要求初始化的值是可以一眼看出来这个值还没算过也就是初始化的值必须是一个正常递归算不出来的值在这题里我们根据题意可以初始化为-1当然还有很多的可以用的值">实现的时候有个小细节：我们要用一个东西，比如数组，来存储递归的结果。它会有一个初始化的值。我们必须要求初始化的值是可以一眼看出来“这个值还没算过”，也就是初始化的值必须是一个正常递归算不出来的值。在这题里，我们根据题意可以初始化为-1，当然还有很多的可以用的值。</h3>
+<h1 id="代码">代码：</h1></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/windows11%E9%85%8D%E7%BD%AEmujoco%E7%8E%AF%E5%A2%83/" rel="prev" title="windows11配置mujoco环境">
+      <i class="fa fa-chevron-left"></i> windows11配置mujoco环境
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E4%BD%A0%E6%AD%A3%E5%9C%A8%E7%88%AC%E6%A5%BC%E6%A2%AF%E9%9C%80%E8%A6%81-n-%E9%98%B6%E4%BD%A0%E6%89%8D%E8%83%BD%E5%88%B0%E8%BE%BE%E6%A5%BC%E9%A1%B6"><span class="nav-number">2.1.</span> <span class="nav-text">假设你正在爬楼梯。需要 n 阶你才能到达楼顶。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E6%AC%A1%E4%BD%A0%E5%8F%AF%E4%BB%A5%E7%88%AC-1-%E6%88%96-2-%E4%B8%AA%E5%8F%B0%E9%98%B6%E4%BD%A0%E6%9C%89%E5%A4%9A%E5%B0%91%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%AF%E4%BB%A5%E7%88%AC%E5%88%B0%E6%A5%BC%E9%A1%B6%E5%91%A2"><span class="nav-number">2.2.</span> <span class="nav-text">每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.3.</span> <span class="nav-text">示例 1：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5n-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">输入：n &#x3D; 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA2"><span class="nav-number">2.3.2.</span> <span class="nav-text">输出：2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%9C%89%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95%E5%8F%AF%E4%BB%A5%E7%88%AC%E5%88%B0%E6%A5%BC%E9%A1%B6"><span class="nav-number">2.3.3.</span> <span class="nav-text">解释：有两种方法可以爬到楼顶。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6-1-%E9%98%B6"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">1. 1 阶 + 1 阶</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">2. 2 阶</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.4.</span> <span class="nav-text">示例 2：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5n-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">输入：n &#x3D; 3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA3"><span class="nav-number">2.4.2.</span> <span class="nav-text">输出：3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%9C%89%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95%E5%8F%AF%E4%BB%A5%E7%88%AC%E5%88%B0%E6%A5%BC%E9%A1%B6"><span class="nav-number">2.4.3.</span> <span class="nav-text">解释：有三种方法可以爬到楼顶。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6-1-%E9%98%B6-1-%E9%98%B6"><span class="nav-number">2.4.3.1.</span> <span class="nav-text">1. 1 阶 + 1 阶 + 1 阶</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6-2-%E9%98%B6"><span class="nav-number">2.4.3.2.</span> <span class="nav-text">2. 1 阶 + 2 阶</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6-1-%E9%98%B6-1"><span class="nav-number">2.4.3.3.</span> <span class="nav-text">3. 2 阶 + 1 阶</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.5.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#n-45"><span class="nav-number">2.5.1.</span> <span class="nav-text">1 &lt;&#x3D; n &lt;&#x3D; 45</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%9C%AC%E8%BA%AB%E5%80%92%E6%98%AF%E6%8C%BA%E7%AE%80%E5%8D%95%E7%9A%84%E4%B9%9F%E5%BE%88%E7%BB%8F%E5%85%B8%E5%AE%B9%E6%98%93%E6%83%B3%E5%88%B0%E7%B1%BB%E4%BC%BC%E5%88%86%E8%A7%A3%E5%8C%96%E5%BD%92%E7%9A%84%E5%81%9A%E6%B3%95%E6%88%91%E4%BB%AC%E8%A6%81%E7%88%AC%E5%88%B0%E7%AC%ACn%E5%B1%82%E9%82%A3%E4%B9%88%E5%9C%A8%E6%AD%A4%E4%B9%8B%E5%89%8D%E8%A6%81%E4%B9%88%E5%B7%B2%E7%BB%8F%E7%88%AC%E5%88%B0%E7%AC%ACn-1%E5%B1%82%E8%A6%81%E4%B9%88%E5%B7%B2%E7%BB%8F%E7%88%AC%E5%88%B0%E7%AC%ACn-2%E5%B1%82%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E8%83%BD%E6%B1%82%E5%87%BA%E7%88%AC%E5%88%B0%E7%AC%ACn-1%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E5%92%8C%E7%88%AC%E5%88%B0%E7%AC%ACn-2%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E5%88%99%E4%BA%8C%E8%80%85%E7%9B%B8%E5%8A%A0%E5%B0%B1%E6%98%AF%E6%9C%80%E7%BB%88%E7%BB%93%E6%9E%9C%E7%88%AC%E5%88%B0%E7%AC%ACn-1%E5%B1%82%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%AA%E9%9C%80%E8%A6%81%E5%86%8D%E7%88%AC%E4%B8%80%E9%98%B6%E5%B0%B1%E8%A1%8C%E6%A0%B9%E6%8D%AE%E4%B9%98%E6%B3%95%E6%B3%95%E5%88%99%E8%BF%99%E7%A7%8D%E7%88%AC%E5%88%B0%E7%AC%ACn%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E6%81%B0%E5%A5%BD%E5%B0%B1%E6%98%AF%E7%88%AC%E5%88%B0%E7%AC%ACn-1%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E8%80%8C%E7%88%AC%E5%88%B0%E7%AC%ACn-2%E5%B1%82%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%AF%E4%BB%A5%E4%B8%80%E6%AD%A5%E7%88%AC%E4%B8%A4%E5%B1%82%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E4%B8%8D%E8%80%83%E8%99%91%E7%88%AC%E4%B8%80%E5%B1%82%E5%86%8D%E7%88%AC%E4%B8%80%E5%B1%82%E7%9A%84%E5%81%9A%E6%B3%95%E5%9B%A0%E4%B8%BA%E8%BF%99%E5%B7%B2%E7%BB%8F%E7%AE%97%E5%9C%A8%E4%BA%86%E5%88%9A%E6%89%8D%E7%9A%84%E5%85%88%E7%88%AC%E5%88%B0%E7%AC%ACn-1%E5%B1%82%E5%86%8D%E7%88%AC%E5%88%B0%E7%AC%ACn%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E9%87%8C%E4%BA%86%E8%BF%98%E6%98%AF%E6%A0%B9%E6%8D%AE%E4%B9%98%E6%B3%95%E6%B3%95%E5%88%99%E5%8F%AF%E4%BB%A5%E7%9F%A5%E9%81%93%E5%85%88%E7%88%AC%E5%88%B0%E7%AC%ACn-2%E5%B1%82%E5%86%8D%E7%88%AC%E5%88%B0%E7%AC%ACn%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E5%B0%B1%E6%98%AF%E7%88%AC%E5%88%B0%E7%AC%ACn-2%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">题目本身倒是挺简单的，也很经典，容易想到类似分解、化归的做法：我们要爬到第n层，那么在此之前要么已经爬到第n-1层，要么已经爬到第n-2层。如果我们能求出爬到第n-1层的方法数和爬到第n-2层的方法数，则二者相加就是最终结果（爬到第n-1层的时候，只需要再爬一阶就行；根据乘法法则，这种爬到第n层的方法数恰好就是爬到第n-1层的方法数。而爬到第n-2层的时候，可以一步爬两层（注意这里我们不考虑爬一层再爬一层的做法。因为这已经算在了刚才的“先爬到第n-1层，再爬到第n层”的方法里了），还是根据乘法法则，可以知道，先爬到“第n-2层，再爬到第n层”的方法数就是爬到第n-2层的方法数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E6%98%BE%E5%BE%97%E6%9C%89%E7%82%B9%E5%95%B0%E5%97%A6%E5%81%87%E5%A6%82%E6%88%91%E4%BB%AC%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%E5%8F%ABfindfindn%E5%B0%B1%E8%A1%A8%E7%A4%BA%E7%88%AC%E5%88%B0%E7%AC%ACn%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E9%82%A3%E4%B9%88%E5%BA%94%E8%AF%A5%E6%9C%89findnfindn-1findn-2-%E8%BF%99%E7%A7%8D%E6%8A%8A%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E5%88%86%E8%A7%A3%E6%88%90%E5%87%A0%E4%B8%AA%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%94%E6%AF%8F%E4%B8%AA%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%84%E6%A8%A1%E9%83%BD%E5%87%8F%E5%B0%8F%E7%9A%84%E6%96%B9%E6%B3%95%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%94%A8%E9%80%92%E5%BD%92%E8%A7%A3%E5%86%B3%E8%BF%99%E7%A7%8D%E7%9A%84%E4%BB%A3%E7%A0%81%E8%BF%98%E6%98%AF%E5%BE%88%E5%AE%B9%E6%98%93%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-number">3.2.</span> <span class="nav-text">上面显得有点啰嗦。假如我们定义一个函数叫find()，find(n)就表示爬到第n层的方法数，那么应该有\(find(n)&#x3D;find(n-1)+find(n-2)\)这种把一个问题分解成几个相似的子问题，且每个子问题的规模都减小的方法，就可以用递归解决。这种的代码还是很容易实现的：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E6%98%93%E5%8F%91%E7%8E%B0%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B%E6%98%AF%E8%83%BD%E8%BF%87%E7%9A%84%E4%BD%86%E6%98%AF%E6%95%B4%E9%A2%98%E9%80%9A%E4%B8%8D%E8%BF%87%E5%9B%A0%E4%B8%BA%E8%B6%85%E6%97%B6%E4%BA%86%E6%AD%A4%E6%97%B6%E4%B8%8D%E5%A6%A8%E6%9D%A5%E5%88%86%E6%9E%90%E4%B8%80%E4%B8%8B%E4%B8%8A%E9%9D%A2%E4%BB%A3%E7%A0%81%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%A6%81%E6%B1%82findn%E5%B0%B1%E8%A6%81%E6%B1%82findn-1%E5%92%8Cfindn-2%E7%B1%BB%E4%BC%BC%E7%9A%84%E9%80%92%E5%BD%92%E6%B1%82findn-1%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E4%BC%9A%E5%86%8D%E5%8E%BB%E6%B1%82findn-2%E5%92%8Cfindn-3%E8%80%8C%E9%80%92%E5%BD%92%E7%9D%80%E6%B1%82findn-2%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E6%B1%82%E7%9A%84findn-2%E6%98%AFfindn%E5%88%86%E8%A7%A3%E5%87%BA%E6%9D%A5%E7%9A%84%E9%82%A3%E4%B8%AA%E5%8F%88%E9%9C%80%E8%A6%81%E6%B1%82findn-3%E5%92%8Cfindn-4-%E6%AD%A4%E6%97%B6%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%83%B3%E8%B1%A1%E4%B8%80%E4%B8%8B%E6%8A%8A%E4%B8%80%E4%B8%AAfindx%E6%83%B3%E8%B1%A1%E6%88%90%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9%E5%AE%83%E4%BE%9D%E8%B5%96%E7%9A%84findx-1%E5%92%8Cfindx-2%E6%83%B3%E8%B1%A1%E6%88%90%E5%AE%83%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%AD%90%E8%8A%82%E7%82%B9%E9%82%A3%E5%85%B6%E5%AE%9E%E8%BF%99%E5%B0%B1%E5%BE%88%E7%B1%BB%E4%BC%BC%E4%BB%8Efindn%E5%BC%80%E5%A7%8B%E4%B8%8D%E6%96%AD%E5%90%91%E4%B8%8B%E4%BA%8C%E5%88%86%E5%8F%89%E6%95%B0%E7%9A%84%E9%AB%98%E5%BA%A6%E6%98%AFn%E6%89%80%E4%BB%A5%E6%95%B4%E4%BD%93%E5%BA%94%E8%AF%A5%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AFo2n%E8%BF%99%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%A7%A3%E9%87%8A%E4%B8%BA%E4%BB%80%E4%B9%88n%E4%BB%85%E4%BB%85%E6%98%AF%E4%B8%8D%E8%B6%85%E8%BF%8745%E4%BD%86%E8%BF%98%E6%98%AF%E4%BC%9A%E8%B6%85%E6%97%B6%E4%BA%86-%E8%80%8C%E4%B8%94%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%BB%8E%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B%E7%9C%8B%E5%87%BA%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E4%BC%9A%E5%A6%82%E6%AD%A4%E9%AB%98%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E6%9C%89%E9%87%8D%E5%A4%8D%E6%B1%82%E9%80%92%E5%BD%92%E5%80%BC%E7%9A%84%E6%83%85%E5%86%B5%E6%AF%94%E5%A6%82%E4%B8%8A%E9%9D%A2%E6%88%91%E4%BB%AC%E6%B1%82findn%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E6%B1%82%E4%B8%80%E6%AC%A1findn-2%E7%9A%84%E5%80%BC%E8%80%8C%E4%B9%8B%E5%90%8E%E6%88%91%E4%BB%AC%E6%B1%82findn-1%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%88%E9%9C%80%E8%A6%81%E6%B1%82%E4%B8%80%E6%AC%A1findn-2%E7%9A%84%E5%80%BC%E4%B8%A4%E6%AC%A1%E6%98%8E%E6%98%8E%E5%80%BC%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%86%E6%88%91%E4%BB%AC%E5%8D%B4%E8%A6%81%E6%B1%82%E4%B8%A4%E6%AC%A1%E8%80%8C%E4%B8%94%E5%8F%AF%E4%BB%A5%E6%83%B3%E5%88%B0findn-2%E8%AE%A1%E7%AE%97%E9%87%8F%E5%BA%94%E8%AF%A5%E4%B8%8D%E5%B0%8F%E7%B1%BB%E4%BC%BC%E7%9A%84%E6%83%85%E5%86%B5%E8%BF%98%E6%9C%89%E5%BE%88%E5%A4%9A%E6%89%80%E4%BB%A5%E8%BF%99%E5%B0%B1%E6%98%AF%E9%9C%80%E8%A6%81%E6%94%B9%E8%BF%9B%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">3.3.</span> <span class="nav-text">容易发现，测试样例是能过的，但是整题通不过。因为超时了。此时不妨来分析一下上面代码的时间复杂度。要求find(n)，就要求find(n-1)和find(n-2)；类似的，递归求find(n-1)的时候，我们会再去求find(n-2)和find(n-3)；而递归着求find(n-2)（注意，这里求的find(n-2)是find(n)分解出来的那个），又需要求find(n-3)和find(n-4)……此时如果我们想象一下，把一个find(x)想象成一个节点，它依赖的find(x-1)和find(x-2)想象成它的两个子节点，那其实这就很类似从find(n)开始不断向下二分叉。数的高度是n，所以整体应该时间复杂度是\(O(2^{n})\)。这就可以解释为什么n仅仅是不超过45，但还是会超时了而且我们也可以从上面的分析过程，看出为什么时间复杂度会如此高：因为我们有重复求递归值的情况。比如，上面我们求find(n)的时候，需要求一次find(n-2)的值；而之后我们求find(n-1)的时候，又需要求一次find(n-2)的值，两次明明值是一样的，但我们却要求两次。而且可以想到，find(n-2)计算量应该不小。类似的情况还有很多。所以这就是需要改进的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A2%E7%84%B6%E6%85%A2%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%98%AF%E9%87%8D%E5%A4%8D%E8%AE%A1%E7%AE%97%E4%BA%86%E9%82%A3%E5%B0%B1%E8%80%83%E8%99%91%E6%8A%8A%E7%AE%97%E8%BF%87%E7%9A%84%E5%80%BC%E5%AD%98%E4%B8%80%E4%B8%8B%E4%B9%8B%E5%90%8E%E6%88%91%E4%BB%AC%E8%AE%A1%E7%AE%97%E6%9F%90%E4%B8%AA%E9%80%92%E5%BD%92%E5%80%BC%E4%B9%8B%E5%89%8D%E5%85%88%E6%A3%80%E6%9F%A5%E4%B8%80%E4%B8%8B%E6%98%AF%E5%90%A6%E8%AE%A1%E7%AE%97%E8%BF%87%E7%AE%97%E8%BF%87%E7%9A%84%E8%AF%9D%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E6%B2%A1%E7%AE%97%E8%BF%87%E5%86%8D%E5%8E%BB%E9%80%92%E5%BD%92%E7%AE%97%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E6%9D%A5%E6%83%B3%E4%B8%80%E4%B8%8B%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AF%E5%A4%9A%E5%B0%91%E7%AE%97findn%E7%9A%84%E6%97%B6%E5%80%99%E8%A6%81%E7%AE%97findn-1%E5%92%8Cfindn-2%E9%82%A3%E5%81%87%E8%AE%BE%E6%98%AF%E5%85%88%E7%AE%97findn-1%E5%AE%83%E6%B2%A1%E7%AE%97%E8%BF%87%E5%88%99%E7%BB%A7%E7%BB%AD%E9%80%92%E5%BD%92%E7%AE%97findn-2%E5%92%8Cfindn-3%E6%AD%A4%E6%97%B6%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%80%BC%E4%B9%9F%E9%83%BD%E8%BF%98%E6%B2%A1%E7%AE%97%E8%BF%87%E5%88%99%E7%BB%A7%E7%BB%AD%E9%80%92%E5%BD%92%E8%BF%99%E9%87%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E6%88%91%E4%BB%AC%E5%86%99%E7%9A%84%E4%BB%A3%E7%A0%81%E5%8F%AF%E4%BB%A5%E8%A7%84%E5%AE%9A%E5%AE%83%E6%98%AF%E8%BF%99%E6%A0%B7findnfindn-1findn-2%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%85%B6%E5%AE%9E%E5%85%88%E7%AE%97%E7%9A%84%E6%98%AFfindx-1%E7%9A%84%E9%83%A8%E5%88%86%E6%89%80%E4%BB%A5%E5%9C%A8%E9%80%92%E5%BD%92%E7%AE%97findn-1%E7%9A%84%E6%97%B6%E5%80%99%E8%99%BD%E7%84%B6%E8%A6%81%E7%AE%97findn-2%E5%92%8Cfindn-3%E4%BD%86%E5%85%B6%E5%AE%9E%E6%9C%89%E4%B8%AA%E5%85%88%E5%90%8E%E9%A1%BA%E5%BA%8F%E8%A6%81%E5%85%88%E7%AE%97findn-2%E7%B1%BB%E4%BC%BC%E7%9A%84%E9%80%92%E5%BD%92%E7%AE%97findn-2%E7%9A%84%E6%97%B6%E5%80%99%E8%A6%81%E7%AE%97findn-3%E5%92%8Cfindn-4%E4%BD%86%E6%88%91%E4%BB%AC%E8%BF%98%E6%98%AF%E5%85%88%E7%AE%97findn-3-%E6%AD%A4%E6%97%B6%E4%B8%8D%E9%9A%BE%E5%8F%91%E7%8E%B0%E6%88%91%E4%BB%AC%E4%B8%80%E7%9B%B4%E4%BC%98%E5%85%88%E7%AE%97%E7%AE%97%E5%88%B0find1%E7%BB%88%E4%BA%8E%E5%8F%AF%E4%BB%A5%E5%BC%80%E5%A7%8Breturn%E4%BA%86%E4%B8%94%E8%BF%99%E4%B8%AAreturn%E7%9A%84%E8%BF%87%E7%A8%8B%E9%87%8C%E6%88%91%E4%BB%AC%E6%8A%8Afind%E4%BB%8En%E5%88%B01%E7%9A%84%E5%80%BC%E9%83%BD%E4%BC%9A%E7%AE%97%E5%87%BA%E6%9D%A5%E5%9B%A0%E6%AD%A4%E4%B8%80%E6%97%A6%E6%88%91%E4%BB%AC%E5%AD%98%E8%B5%B7%E6%9D%A5%E4%BA%86%E5%90%8E%E9%9D%A2%E5%85%B6%E5%AE%83%E7%9A%84%E9%80%92%E5%BD%92%E8%AE%A1%E7%AE%97%E5%B0%B1%E9%83%BD%E5%8F%AF%E4%BB%A5%E8%B0%83%E7%94%A8%E8%BF%99%E4%BA%9B%E5%AD%98%E4%B8%8B%E6%9D%A5%E7%9A%84%E5%80%BC%E4%B8%8D%E9%9C%80%E8%A6%81%E5%86%8D%E9%80%92%E5%BD%92%E7%AE%97%E4%BA%86%E5%9B%A0%E6%AD%A4%E7%8E%B0%E5%9C%A8%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AFon%E4%BA%86%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E7%9B%B8%E5%BD%93%E4%BA%8E%E5%8F%AA%E9%81%8D%E5%8E%86%E8%AE%A1%E7%AE%97%E4%BA%86%E4%B8%80%E6%AC%A1%E4%B8%80%E4%B8%AA%E9%95%BF%E5%BA%A6%E4%B8%BAn%E7%9A%84%E6%95%B0%E7%BB%84%E8%BF%99%E4%B8%AA%E5%81%9A%E6%B3%95%E5%8F%AB%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E8%BF%98%E6%98%AF%E5%BE%88%E5%BD%A2%E8%B1%A1%E7%9A%84"><span class="nav-number">3.4.</span> <span class="nav-text">既然慢的原因是重复计算了，那就考虑把算过的值存一下，之后我们计算某个递归值之前，先检查一下是否计算过，算过的话直接返回；没算过再去递归算。此时我们来想一下时间复杂度是多少。算find(n)的时候要算find(n-1)和find(n-2)，那假设是先算find(n-1)。它没算过，则继续递归算find(n-2)和find(n-3)，此时这两个值也都还没算过，则继续递归。这里需要注意，我们写的代码，可以规定它是这样：find(n)&#x3D;find(n-1)+find(n-2)，也就是其实先算的是find(x-1)的部分。所以，在递归算find(n-1)的时候，虽然要算find(n-2)和find(n-3)，但其实有个先后顺序，要先算find(n-2)；类似的，递归算find(n-2)的时候，要算find(n-3)和find(n-4)，但我们还是先算find(n-3)……此时不难发现，我们一直优先算，算到find(1)，终于可以开始return了。且这个return的过程里，我们把find从n到1的值都会算出来。因此，一旦我们存起来了，后面其它的递归计算就都可以调用这些存下来的值，不需要再递归算了。因此，现在的时间复杂度是\(O(n)\)了，因为我们相当于只遍历计算了一次一个长度为n的数组。这个做法叫“记忆化搜索”，还是很形象的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%97%B6%E5%80%99%E6%9C%89%E4%B8%AA%E5%B0%8F%E7%BB%86%E8%8A%82%E6%88%91%E4%BB%AC%E8%A6%81%E7%94%A8%E4%B8%80%E4%B8%AA%E4%B8%9C%E8%A5%BF%E6%AF%94%E5%A6%82%E6%95%B0%E7%BB%84%E6%9D%A5%E5%AD%98%E5%82%A8%E9%80%92%E5%BD%92%E7%9A%84%E7%BB%93%E6%9E%9C%E5%AE%83%E4%BC%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%80%BC%E6%88%91%E4%BB%AC%E5%BF%85%E9%A1%BB%E8%A6%81%E6%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%80%BC%E6%98%AF%E5%8F%AF%E4%BB%A5%E4%B8%80%E7%9C%BC%E7%9C%8B%E5%87%BA%E6%9D%A5%E8%BF%99%E4%B8%AA%E5%80%BC%E8%BF%98%E6%B2%A1%E7%AE%97%E8%BF%87%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%80%BC%E5%BF%85%E9%A1%BB%E6%98%AF%E4%B8%80%E4%B8%AA%E6%AD%A3%E5%B8%B8%E9%80%92%E5%BD%92%E7%AE%97%E4%B8%8D%E5%87%BA%E6%9D%A5%E7%9A%84%E5%80%BC%E5%9C%A8%E8%BF%99%E9%A2%98%E9%87%8C%E6%88%91%E4%BB%AC%E6%A0%B9%E6%8D%AE%E9%A2%98%E6%84%8F%E5%8F%AF%E4%BB%A5%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BA-1%E5%BD%93%E7%84%B6%E8%BF%98%E6%9C%89%E5%BE%88%E5%A4%9A%E7%9A%84%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%9A%84%E5%80%BC"><span class="nav-number">3.4.1.</span> <span class="nav-text">实现的时候有个小细节：我们要用一个东西，比如数组，来存储递归的结果。它会有一个初始化的值。我们必须要求初始化的值是可以一眼看出来“这个值还没算过”，也就是初始化的值必须是一个正常递归算不出来的值。在这题里，我们根据题意可以初始化为-1，当然还有很多的可以用的值。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
