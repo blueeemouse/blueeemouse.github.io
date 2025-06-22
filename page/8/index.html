@@ -150,6 +150,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/05/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/05/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/" class="post-title-link" itemprop="url">无重复字符的最长字串（关于滑动窗口）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-05 10:53:00" itemprop="dateCreated datePublished" datetime="2025-05-05T10:53:00+08:00">2025-05-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-06-01 11:52:13" itemprop="dateModified" datetime="2025-06-01T11:52:13+08:00">2025-06-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" itemprop="url" rel="index"><span itemprop="name">滑动窗口</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" itemprop="url" rel="index"><span itemprop="name">不定长滑动窗口</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目描述原题链接">题目描述（<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/?envType=company&amp;envId=huawei&amp;favoriteSlug=huawei-thirty-days">原题链接</a>）</h1>
+<h2 id="给定一个字符串-s-请你找出其中不含有重复字符的-最长-子串-的长度">给定一个字符串 <code>s</code> ，请你找出其中不含有重复字符的 <strong>最长 子串</strong> 的长度。</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/05/algo/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2%EF%BC%88%E5%85%B3%E4%BA%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/%E6%8D%A3%E9%BC%93blog/%E5%9F%BA%E4%BA%8Ewindows11%E7%9A%84blog%E6%90%AD%E5%BB%BA---hexo+github%20pages/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -818,71 +908,6 @@ https://download.pytorch.org/whl/cu117 也可以。例如，</h1>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%AE%A9%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%A6%81%E8%BF%9B%E5%85%A5%E9%BB%98%E8%AE%A4%E7%9A%84base%E7%8E%AF%E5%A2%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%AE%A9%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%A6%81%E8%BF%9B%E5%85%A5%E9%BB%98%E8%AE%A4%E7%9A%84base%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-20 16:19:19 / Modified: 16:23:22" itemprop="dateCreated datePublished" datetime="2025-03-20T16:19:19+08:00">2025-03-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题描述安装完condaminiconda-之后一旦激活那么每次打开终端命令行前面就会有base的字样其实就是每次启动终端都会自动激活conda的基础环境这个嘛以前我倒是挺介意的不过现在已经习惯了但好歹记录一下吧以前的懒得解决的一个小问题">问题描述：安装完conda/miniconda
-之后，一旦激活，那么每次打开终端，命令行前面就会有(base)的字样，其实就是每次启动终端，都会自动激活conda的基础环境。这个嘛，以前我倒是挺介意的，不过现在已经习惯了，但好歹记录一下吧，以前的懒得解决的一个小问题</h1>
-<h1 id="解决方法">解决方法：</h1>
-<h2 id="每次都通过conda-deactivate当然可以退出这个默认环境但也有点麻烦永久的方法的话就是修改一下终端的配置文件让它不要每次一启动就激活conda即可具体就是执行以下命令">每次都通过conda
-deactivate当然可以退出这个默认环境，但也有点麻烦。永久的方法的话，就是修改一下终端的配置文件，让它不要每次一启动就激活conda即可。具体就是执行以下命令</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<h2 id="如果之后又想自动激活了那就把false改为true再执行一次即可">如果之后又想自动激活了，那就把false改为true，再执行一次即可</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -952,7 +977,7 @@ deactivate当然可以退出这个默认环境，但也有点麻烦。永久的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">150</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -963,7 +988,7 @@ deactivate当然可以退出这个默认环境，但也有点麻烦。永久的�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">75</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

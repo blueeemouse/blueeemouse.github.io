@@ -150,6 +150,71 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%AE%A9%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%A6%81%E8%BF%9B%E5%85%A5%E9%BB%98%E8%AE%A4%E7%9A%84base%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%AE%A9%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%A6%81%E8%BF%9B%E5%85%A5%E9%BB%98%E8%AE%A4%E7%9A%84base%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-20 16:19:19 / Modified: 16:23:22" itemprop="dateCreated datePublished" datetime="2025-03-20T16:19:19+08:00">2025-03-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="问题描述安装完condaminiconda-之后一旦激活那么每次打开终端命令行前面就会有base的字样其实就是每次启动终端都会自动激活conda的基础环境这个嘛以前我倒是挺介意的不过现在已经习惯了但好歹记录一下吧以前的懒得解决的一个小问题">问题描述：安装完conda/miniconda
+之后，一旦激活，那么每次打开终端，命令行前面就会有(base)的字样，其实就是每次启动终端，都会自动激活conda的基础环境。这个嘛，以前我倒是挺介意的，不过现在已经习惯了，但好歹记录一下吧，以前的懒得解决的一个小问题</h1>
+<h1 id="解决方法">解决方法：</h1>
+<h2 id="每次都通过conda-deactivate当然可以退出这个默认环境但也有点麻烦永久的方法的话就是修改一下终端的配置文件让它不要每次一启动就激活conda即可具体就是执行以下命令">每次都通过conda
+deactivate当然可以退出这个默认环境，但也有点麻烦。永久的方法的话，就是修改一下终端的配置文件，让它不要每次一启动就激活conda即可。具体就是执行以下命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2 id="如果之后又想自动激活了那就把false改为true再执行一次即可">如果之后又想自动激活了，那就把false改为true，再执行一次即可</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -888,78 +953,6 @@ memory（这个memory的特征是由红外cluster和对应的可见光cluster加
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-16 10:28:47" itemprop="dateCreated datePublished" datetime="2025-02-16T10:28:47+08:00">2025-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-18 15:34:16" itemprop="dateModified" datetime="2025-02-18T15:34:16+08:00">2025-02-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>首先，无监督条件下的跨模态对应依然是难点。而加入了lifelong条件之后，显然会有lifelong的常见问题，就是灾难性遗忘。并且，
-在新数据集上，因为分布不同，所以之前学到的跨模态对应知识，以及单模态内的知识可能都不适用，而这会导致在学习新数据集的时候，初期的特征不够好，进而会导致聚类得到的伪标签也不够好，后续对应也很难对好，故训练完得到的模型性能可能也不够好/在新数据集上，反而是有一些先验知识会比较好，有利于度过初期训练？（如果是会产生负面影响，那么标签校正应该是非常有必要的了）</p>
-<p>解决方法上，提出一种比较有效的标签置信度求解方法，来帮助过度前期训练，或许是一个解决方法（比如，对每个实例，都找出和它距离前k近的实例，把这些邻居的标签加权求和，看看求和得到的标签和它的簇标签之间的距离远近？）
-或许修正标签是更加直接的方法（修正，而不是直接把带噪声的标签给去除掉）</p>
-<p>尝试：一个momentum encoder，一个online
-encoder，然后在新数据集上，用online
-encoder先学一下并聚类（可以适当加载一些momentum
-encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1029,7 +1022,7 @@ encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">150</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1040,7 +1033,7 @@ encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">75</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
