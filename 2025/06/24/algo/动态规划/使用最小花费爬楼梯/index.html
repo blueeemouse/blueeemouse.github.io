@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用最小花费爬楼梯">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/06/24/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-24T05:18:00.000Z">
+<meta property="article:modified_time" content="2025-06-24T05:37:13.207Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/06/24/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>使用最小花费爬楼梯 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/24/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用最小花费爬楼梯
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-06-24 13:18:00 / Modified: 13:37:13" itemprop="dateCreated datePublished" datetime="2025-06-24T13:18:00+08:00">2025-06-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E7%88%AC%E6%A5%BC%E6%A2%AF%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">爬楼梯类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/min-cost-climbing-stairs/description/">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="给你一个整数数组-cost-其中-costi-是从楼梯第-i-个台阶向上爬需要支付的费用一旦你支付此费用即可选择向上爬一个或者两个台阶">给你一个整数数组 <code>cost</code> ，其中 <code>cost[i]</code> 是从楼梯第 <code>i</code> 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。</h2>
+<h2 id="你可以选择从下标为-0-或下标为-1-的台阶开始爬楼梯">你可以选择从下标为 <code>0</code> 或下标为 <code>1</code> 的台阶开始爬楼梯。</h2>
+<h2 id="请你计算并返回达到楼梯顶部的最低花费">请你计算并返回达到楼梯顶部的最低花费。</h2>
+<h2 id="示例-1"><strong>示例 1：</strong></h2>
+<h3 id="输入cost-101520"><strong>输入：</strong>cost =
+[10,<em><strong>15</strong></em>,20]</h3>
+<h3 id="输出15"><strong>输出：</strong>15</h3>
+<h3 id="解释你将从下标为-1-的台阶开始"><strong>解释：</strong>你将从下标为 1
+的台阶开始。</h3>
+<ul>
+<li><h4 id="支付-15-向上爬两个台阶到达楼梯顶部">支付 15
+，向上爬两个台阶，到达楼梯顶部。</h4>
+<h4 id="总花费为-15">总花费为 15 。</h4>
+<h2 id="示例-2"><strong>示例 2：</strong></h2>
+<h3 id="输入cost-_1_100_1_1_1_100_1__1_100_1_"><strong>输入：</strong><code>cost = [_**1**_,100,_**1**_,1,_**1**_,100,_**1**_,_**1**_,100,_**1**_]</code></h3>
+<h3 id="输出6"><strong>输出：</strong>6</h3>
+<h3 id="解释你将从下标为-0-的台阶开始"><strong>解释：</strong>你将从下标为 0
+的台阶开始。</h3></li>
+<li><h4 id="支付-1-向上爬两个台阶到达下标为-2-的台阶">支付 1
+，向上爬两个台阶，到达下标为 2 的台阶。</h4></li>
+<li><h4 id="支付-1-向上爬两个台阶到达下标为-4-的台阶">支付 1
+，向上爬两个台阶，到达下标为 4 的台阶。</h4></li>
+<li><h4 id="支付-1-向上爬两个台阶到达下标为-6-的台阶">支付 1
+，向上爬两个台阶，到达下标为 6 的台阶。</h4></li>
+<li><h4 id="支付-1-向上爬一个台阶到达下标为-7-的台阶">支付 1
+，向上爬一个台阶，到达下标为 7 的台阶。</h4></li>
+<li><h4 id="支付-1-向上爬两个台阶到达下标为-9-的台阶">支付 1
+，向上爬两个台阶，到达下标为 9 的台阶。</h4></li>
+<li><h4 id="支付-1-向上爬一个台阶到达楼梯顶部">支付 1
+，向上爬一个台阶，到达楼梯顶部。</h4>
+<h4 id="总花费为-6">总花费为 6 。</h4>
+<h2 id="提示"><strong>提示：</strong></h2></li>
+<li><h3 id="cost.length-1000"><code>2 &lt;= cost.length &lt;= 1000</code></h3></li>
+<li><h3 id="costi-999"><code>0 &lt;= cost[i] &lt;= 999</code></h3>
+<h1 id="思路">思路：</h1>
+<h2 id="这个题看起来也很像之前的爬楼梯实质上是一类题只不过维护的东西不一样在爬楼梯的原题里我们维护的或者说要求的是到达每一层的方法数而在这里我们要求的则是到达每一层的最小的花费">这个题看起来也很像之前的爬楼梯。实质上是一类题，只不过维护的东西不一样。在爬楼梯的原题里，我们维护的，或者说要求的是，到达每一层的方法数；而在这里，我们要求的则是到达每一层的最小的花费。</h2>
+<h2 id="到达第n层方法还是两种因为这题依然是一次往上爬一层或两层其实也可以想到再拓展一下比如从每层台阶可以根据题意最小的花费要么是先用最小花费到达第n-1层然后再支付第n-1层上的开销爬一层到达第n层要么是先用最小花费到达第n-2层之后再支付第n-2层上的开销爬两层到达第n层肯定不可能从第n-2层爬一层到n-1再爬一层到n这样会白白花钱-换句话说到达第n层的最小花费就应该是这二者中的较小值如果抽象成数学公式那么就是min-costnminmin-costn-1costn-1-min-costn-2costn-2其中min-cost是一个数组它的第i个元素的值表示的是到达第i层的最小花费这里的层我们都规定是从0开始计数的因为题目是这个意思-cost则是表征开销的数组它的第i个元素表示的是从第i层向上爬的开销">到达第n层，方法还是两种（因为这题依然是一次往上爬一层或两层）（其实也可以想到，再拓展一下，比如从每层台阶，可以；根据题意，最小的花费，要么是先用最小花费到达第n-1层，然后再支付第n-1层上的开销，爬一层到达第n层；要么是先用最小花费到达第n-2层，之后再支付第n-2层上的开销，爬两层到达第n层（肯定不可能从第n-2层爬一层到n-1，再爬一层到n，这样会白白花钱）。<br>换句话说，到达第n层的最小花费，就应该是这二者中的较小值。如果抽象成数学公式，那么就是：<span class="math display">\[min\ cost[n]=\min(min\ cost[n-1]+cost[n-1],\ min\
+cost[n-2]+cost[n-2])\]</span>其中，<span class="math inline">\(min\
+cost\)</span>是一个数组，它的第i个元素的值表示的是到达第i层的最小花费（这里的层，我们都规定是从0开始计数的。因为题目是这个意思）<br>cost则是表征开销的数组，它的第i个元素表示的是从第i层向上爬的开销</h2>
+<h2 id="递归的大体思路已经定下来了剩下就是一些实现时候的细节比如min-cost里有两个元素是可以直接初始化的也就是min-cost0和min-cost1因为根据题意我们可以直接选择从0或1层出发以及coste的长度是大于等于2的换句话说其实也就是我们没必要到达第0层或第1层所以这两个元素就置为0之后就开始递归算了以及这里也可以用到记忆化搜索的技巧">递归的大体思路已经定下来了，剩下就是一些实现时候的细节。比如，<span class="math inline">\(min\
+cost\)</span>里有两个元素是可以直接初始化的，也就是<span class="math inline">\(min\ cost[0]\)</span>和<span class="math inline">\(min\
+cost[1]\)</span>（因为根据题意，我们可以直接选择从0或1层出发，以及coste的长度是大于等于2的，换句话说其实也就是我们没必要”到达“第0层或第1层，所以这两个元素就置为0；之后就开始递归算了（以及，这里也可以用到记忆化搜索的技巧）</h2>
+<h1 id="代码">代码：</h1>
+<h2 id="注意里面有个细节顶楼应该是第n层而不是n-1层所以我们求解的时候find里面传入的是cost.size这就表示了n">注意里面有个细节，顶楼应该是第n层，而不是n-1层，所以我们求解的时候，find里面传入的是cost.size()，这就表示了n</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> min_cost[<span class="number">1002</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Solution</span>() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">fill</span>(min_cost, min_cost<span class="number">+1002</span>, <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minCostClimbingStairs</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; cost)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// min_cost[0] = 0, min_cost[1] = cost[0];</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">find</span>(cost, cost.<span class="built_in">size</span>());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> min_cost[cost.<span class="built_in">size</span>()];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">find</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; cost, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 这题因为cost长度有限制，至少是2，以及每次是往上爬1或2层，所以我们递归的时候是不会</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 出现min_cost[n]里面的n是负数的情况的</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">0</span> <span class="keyword">or</span> n == <span class="number">1</span>) min_cost[n] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// else if (n == 1) min_cost[n] = cost[0];</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 记忆化搜索</span></span><br><span class="line">            <span class="keyword">if</span> (min_cost[n<span class="number">-1</span>] == <span class="number">-1</span>) <span class="built_in">find</span>(cost, n<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (min_cost[n<span class="number">-2</span>] == <span class="number">-1</span>) <span class="built_in">find</span>(cost, n<span class="number">-2</span>);</span><br><span class="line"></span><br><span class="line">            min_cost[n] = <span class="built_in">min</span>(min_cost[n<span class="number">-1</span>] + cost[n<span class="number">-1</span>], min_cost[n<span class="number">-2</span>]+cost[n<span class="number">-2</span>]);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="进一步的优化其实也是可以的主要是在空间复杂度上的优化具体来说我们观察上面递归的式子可以发现要求到达第n层的最小开销其实只需要知道到达第n-1和第n-2层的最小开销即可再往前的层我们已经不关心了所以我们其实可以只用两个变量来存储递归更新所需要用到的信息而不是直接开一个数组">进一步的优化其实也是可以的，主要是在空间复杂度上的优化。具体来说，我们观察上面递归的式子，可以发现，要求到达第n层的最小开销，其实只需要知道到达第n-1和第n-2层的最小开销即可，再往前的层，我们已经不关心了。所以，我们其实可以只用两个变量来存储递归更新所需要用到的信息，而不是直接开一个数组</h2></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/23/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib%E7%94%BB%E5%9B%BE%E6%97%B6%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA%E4%B8%BA%E4%B9%B1%E7%A0%81/" rel="prev" title="matplotlib画图时中文显示为乱码">
+      <i class="fa fa-chevron-left"></i> matplotlib画图时中文显示为乱码
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E4%BD%A0%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0%E6%95%B0%E7%BB%84-cost-%E5%85%B6%E4%B8%AD-costi-%E6%98%AF%E4%BB%8E%E6%A5%BC%E6%A2%AF%E7%AC%AC-i-%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%90%91%E4%B8%8A%E7%88%AC%E9%9C%80%E8%A6%81%E6%94%AF%E4%BB%98%E7%9A%84%E8%B4%B9%E7%94%A8%E4%B8%80%E6%97%A6%E4%BD%A0%E6%94%AF%E4%BB%98%E6%AD%A4%E8%B4%B9%E7%94%A8%E5%8D%B3%E5%8F%AF%E9%80%89%E6%8B%A9%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%80%E4%B8%AA%E6%88%96%E8%80%85%E4%B8%A4%E4%B8%AA%E5%8F%B0%E9%98%B6"><span class="nav-number">2.1.</span> <span class="nav-text">给你一个整数数组 cost ，其中 cost[i] 是从楼梯第 i 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E5%8F%AF%E4%BB%A5%E9%80%89%E6%8B%A9%E4%BB%8E%E4%B8%8B%E6%A0%87%E4%B8%BA-0-%E6%88%96%E4%B8%8B%E6%A0%87%E4%B8%BA-1-%E7%9A%84%E5%8F%B0%E9%98%B6%E5%BC%80%E5%A7%8B%E7%88%AC%E6%A5%BC%E6%A2%AF"><span class="nav-number">2.2.</span> <span class="nav-text">你可以选择从下标为 0 或下标为 1 的台阶开始爬楼梯。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E4%BD%A0%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%BF%94%E5%9B%9E%E8%BE%BE%E5%88%B0%E6%A5%BC%E6%A2%AF%E9%A1%B6%E9%83%A8%E7%9A%84%E6%9C%80%E4%BD%8E%E8%8A%B1%E8%B4%B9"><span class="nav-number">2.3.</span> <span class="nav-text">请你计算并返回达到楼梯顶部的最低花费。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.4.</span> <span class="nav-text">示例 1：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5cost-101520"><span class="nav-number">2.4.1.</span> <span class="nav-text">输入：cost &#x3D;
+[10,15,20]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA15"><span class="nav-number">2.4.2.</span> <span class="nav-text">输出：15</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E4%BD%A0%E5%B0%86%E4%BB%8E%E4%B8%8B%E6%A0%87%E4%B8%BA-1-%E7%9A%84%E5%8F%B0%E9%98%B6%E5%BC%80%E5%A7%8B"><span class="nav-number">2.4.3.</span> <span class="nav-text">解释：你将从下标为 1
+的台阶开始。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-15-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%A4%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E6%A5%BC%E6%A2%AF%E9%A1%B6%E9%83%A8"><span class="nav-number">2.4.3.1.</span> <span class="nav-text">支付 15
+，向上爬两个台阶，到达楼梯顶部。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E8%8A%B1%E8%B4%B9%E4%B8%BA-15"><span class="nav-number">2.4.3.2.</span> <span class="nav-text">总花费为 15 。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.5.</span> <span class="nav-text">示例 2：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5cost-_1_100_1_1_1_100_1__1_100_1_"><span class="nav-number">2.5.1.</span> <span class="nav-text">输入：cost &#x3D; [_**1**_,100,_**1**_,1,_**1**_,100,_**1**_,_**1**_,100,_**1**_]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA6"><span class="nav-number">2.5.2.</span> <span class="nav-text">输出：6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E4%BD%A0%E5%B0%86%E4%BB%8E%E4%B8%8B%E6%A0%87%E4%B8%BA-0-%E7%9A%84%E5%8F%B0%E9%98%B6%E5%BC%80%E5%A7%8B"><span class="nav-number">2.5.3.</span> <span class="nav-text">解释：你将从下标为 0
+的台阶开始。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-1-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%A4%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E4%B8%8B%E6%A0%87%E4%B8%BA-2-%E7%9A%84%E5%8F%B0%E9%98%B6"><span class="nav-number">2.5.3.1.</span> <span class="nav-text">支付 1
+，向上爬两个台阶，到达下标为 2 的台阶。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-1-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%A4%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E4%B8%8B%E6%A0%87%E4%B8%BA-4-%E7%9A%84%E5%8F%B0%E9%98%B6"><span class="nav-number">2.5.3.2.</span> <span class="nav-text">支付 1
+，向上爬两个台阶，到达下标为 4 的台阶。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-1-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%A4%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E4%B8%8B%E6%A0%87%E4%B8%BA-6-%E7%9A%84%E5%8F%B0%E9%98%B6"><span class="nav-number">2.5.3.3.</span> <span class="nav-text">支付 1
+，向上爬两个台阶，到达下标为 6 的台阶。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-1-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%80%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E4%B8%8B%E6%A0%87%E4%B8%BA-7-%E7%9A%84%E5%8F%B0%E9%98%B6"><span class="nav-number">2.5.3.4.</span> <span class="nav-text">支付 1
+，向上爬一个台阶，到达下标为 7 的台阶。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-1-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%A4%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E4%B8%8B%E6%A0%87%E4%B8%BA-9-%E7%9A%84%E5%8F%B0%E9%98%B6"><span class="nav-number">2.5.3.5.</span> <span class="nav-text">支付 1
+，向上爬两个台阶，到达下标为 9 的台阶。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98-1-%E5%90%91%E4%B8%8A%E7%88%AC%E4%B8%80%E4%B8%AA%E5%8F%B0%E9%98%B6%E5%88%B0%E8%BE%BE%E6%A5%BC%E6%A2%AF%E9%A1%B6%E9%83%A8"><span class="nav-number">2.5.3.6.</span> <span class="nav-text">支付 1
+，向上爬一个台阶，到达楼梯顶部。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E8%8A%B1%E8%B4%B9%E4%B8%BA-6"><span class="nav-number">2.5.3.7.</span> <span class="nav-text">总花费为 6 。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.6.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cost.length-1000"><span class="nav-number">2.6.1.</span> <span class="nav-text">2 &lt;&#x3D; cost.length &lt;&#x3D; 1000</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#costi-999"><span class="nav-number">2.6.2.</span> <span class="nav-text">0 &lt;&#x3D; cost[i] &lt;&#x3D; 999</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E9%A2%98%E7%9C%8B%E8%B5%B7%E6%9D%A5%E4%B9%9F%E5%BE%88%E5%83%8F%E4%B9%8B%E5%89%8D%E7%9A%84%E7%88%AC%E6%A5%BC%E6%A2%AF%E5%AE%9E%E8%B4%A8%E4%B8%8A%E6%98%AF%E4%B8%80%E7%B1%BB%E9%A2%98%E5%8F%AA%E4%B8%8D%E8%BF%87%E7%BB%B4%E6%8A%A4%E7%9A%84%E4%B8%9C%E8%A5%BF%E4%B8%8D%E4%B8%80%E6%A0%B7%E5%9C%A8%E7%88%AC%E6%A5%BC%E6%A2%AF%E7%9A%84%E5%8E%9F%E9%A2%98%E9%87%8C%E6%88%91%E4%BB%AC%E7%BB%B4%E6%8A%A4%E7%9A%84%E6%88%96%E8%80%85%E8%AF%B4%E8%A6%81%E6%B1%82%E7%9A%84%E6%98%AF%E5%88%B0%E8%BE%BE%E6%AF%8F%E4%B8%80%E5%B1%82%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B0%E8%80%8C%E5%9C%A8%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E8%A6%81%E6%B1%82%E7%9A%84%E5%88%99%E6%98%AF%E5%88%B0%E8%BE%BE%E6%AF%8F%E4%B8%80%E5%B1%82%E7%9A%84%E6%9C%80%E5%B0%8F%E7%9A%84%E8%8A%B1%E8%B4%B9"><span class="nav-number">3.1.</span> <span class="nav-text">这个题看起来也很像之前的爬楼梯。实质上是一类题，只不过维护的东西不一样。在爬楼梯的原题里，我们维护的，或者说要求的是，到达每一层的方法数；而在这里，我们要求的则是到达每一层的最小的花费。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%B0%E8%BE%BE%E7%AC%ACn%E5%B1%82%E6%96%B9%E6%B3%95%E8%BF%98%E6%98%AF%E4%B8%A4%E7%A7%8D%E5%9B%A0%E4%B8%BA%E8%BF%99%E9%A2%98%E4%BE%9D%E7%84%B6%E6%98%AF%E4%B8%80%E6%AC%A1%E5%BE%80%E4%B8%8A%E7%88%AC%E4%B8%80%E5%B1%82%E6%88%96%E4%B8%A4%E5%B1%82%E5%85%B6%E5%AE%9E%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%83%B3%E5%88%B0%E5%86%8D%E6%8B%93%E5%B1%95%E4%B8%80%E4%B8%8B%E6%AF%94%E5%A6%82%E4%BB%8E%E6%AF%8F%E5%B1%82%E5%8F%B0%E9%98%B6%E5%8F%AF%E4%BB%A5%E6%A0%B9%E6%8D%AE%E9%A2%98%E6%84%8F%E6%9C%80%E5%B0%8F%E7%9A%84%E8%8A%B1%E8%B4%B9%E8%A6%81%E4%B9%88%E6%98%AF%E5%85%88%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E5%88%B0%E8%BE%BE%E7%AC%ACn-1%E5%B1%82%E7%84%B6%E5%90%8E%E5%86%8D%E6%94%AF%E4%BB%98%E7%AC%ACn-1%E5%B1%82%E4%B8%8A%E7%9A%84%E5%BC%80%E9%94%80%E7%88%AC%E4%B8%80%E5%B1%82%E5%88%B0%E8%BE%BE%E7%AC%ACn%E5%B1%82%E8%A6%81%E4%B9%88%E6%98%AF%E5%85%88%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E5%88%B0%E8%BE%BE%E7%AC%ACn-2%E5%B1%82%E4%B9%8B%E5%90%8E%E5%86%8D%E6%94%AF%E4%BB%98%E7%AC%ACn-2%E5%B1%82%E4%B8%8A%E7%9A%84%E5%BC%80%E9%94%80%E7%88%AC%E4%B8%A4%E5%B1%82%E5%88%B0%E8%BE%BE%E7%AC%ACn%E5%B1%82%E8%82%AF%E5%AE%9A%E4%B8%8D%E5%8F%AF%E8%83%BD%E4%BB%8E%E7%AC%ACn-2%E5%B1%82%E7%88%AC%E4%B8%80%E5%B1%82%E5%88%B0n-1%E5%86%8D%E7%88%AC%E4%B8%80%E5%B1%82%E5%88%B0n%E8%BF%99%E6%A0%B7%E4%BC%9A%E7%99%BD%E7%99%BD%E8%8A%B1%E9%92%B1-%E6%8D%A2%E5%8F%A5%E8%AF%9D%E8%AF%B4%E5%88%B0%E8%BE%BE%E7%AC%ACn%E5%B1%82%E7%9A%84%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E5%B0%B1%E5%BA%94%E8%AF%A5%E6%98%AF%E8%BF%99%E4%BA%8C%E8%80%85%E4%B8%AD%E7%9A%84%E8%BE%83%E5%B0%8F%E5%80%BC%E5%A6%82%E6%9E%9C%E6%8A%BD%E8%B1%A1%E6%88%90%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E9%82%A3%E4%B9%88%E5%B0%B1%E6%98%AFmin-costnminmin-costn-1costn-1-min-costn-2costn-2%E5%85%B6%E4%B8%ADmin-cost%E6%98%AF%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E5%AE%83%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E5%80%BC%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E5%88%B0%E8%BE%BE%E7%AC%ACi%E5%B1%82%E7%9A%84%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E8%BF%99%E9%87%8C%E7%9A%84%E5%B1%82%E6%88%91%E4%BB%AC%E9%83%BD%E8%A7%84%E5%AE%9A%E6%98%AF%E4%BB%8E0%E5%BC%80%E5%A7%8B%E8%AE%A1%E6%95%B0%E7%9A%84%E5%9B%A0%E4%B8%BA%E9%A2%98%E7%9B%AE%E6%98%AF%E8%BF%99%E4%B8%AA%E6%84%8F%E6%80%9D-cost%E5%88%99%E6%98%AF%E8%A1%A8%E5%BE%81%E5%BC%80%E9%94%80%E7%9A%84%E6%95%B0%E7%BB%84%E5%AE%83%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%85%83%E7%B4%A0%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E4%BB%8E%E7%AC%ACi%E5%B1%82%E5%90%91%E4%B8%8A%E7%88%AC%E7%9A%84%E5%BC%80%E9%94%80"><span class="nav-number">3.2.</span> <span class="nav-text">到达第n层，方法还是两种（因为这题依然是一次往上爬一层或两层）（其实也可以想到，再拓展一下，比如从每层台阶，可以；根据题意，最小的花费，要么是先用最小花费到达第n-1层，然后再支付第n-1层上的开销，爬一层到达第n层；要么是先用最小花费到达第n-2层，之后再支付第n-2层上的开销，爬两层到达第n层（肯定不可能从第n-2层爬一层到n-1，再爬一层到n，这样会白白花钱）。换句话说，到达第n层的最小花费，就应该是这二者中的较小值。如果抽象成数学公式，那么就是：\[min\ cost[n]&#x3D;\min(min\ cost[n-1]+cost[n-1],\ min\
+cost[n-2]+cost[n-2])\]其中，\(min\
+cost\)是一个数组，它的第i个元素的值表示的是到达第i层的最小花费（这里的层，我们都规定是从0开始计数的。因为题目是这个意思）cost则是表征开销的数组，它的第i个元素表示的是从第i层向上爬的开销</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E7%9A%84%E5%A4%A7%E4%BD%93%E6%80%9D%E8%B7%AF%E5%B7%B2%E7%BB%8F%E5%AE%9A%E4%B8%8B%E6%9D%A5%E4%BA%86%E5%89%A9%E4%B8%8B%E5%B0%B1%E6%98%AF%E4%B8%80%E4%BA%9B%E5%AE%9E%E7%8E%B0%E6%97%B6%E5%80%99%E7%9A%84%E7%BB%86%E8%8A%82%E6%AF%94%E5%A6%82min-cost%E9%87%8C%E6%9C%89%E4%B8%A4%E4%B8%AA%E5%85%83%E7%B4%A0%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AFmin-cost0%E5%92%8Cmin-cost1%E5%9B%A0%E4%B8%BA%E6%A0%B9%E6%8D%AE%E9%A2%98%E6%84%8F%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E9%80%89%E6%8B%A9%E4%BB%8E0%E6%88%961%E5%B1%82%E5%87%BA%E5%8F%91%E4%BB%A5%E5%8F%8Acoste%E7%9A%84%E9%95%BF%E5%BA%A6%E6%98%AF%E5%A4%A7%E4%BA%8E%E7%AD%89%E4%BA%8E2%E7%9A%84%E6%8D%A2%E5%8F%A5%E8%AF%9D%E8%AF%B4%E5%85%B6%E5%AE%9E%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E6%B2%A1%E5%BF%85%E8%A6%81%E5%88%B0%E8%BE%BE%E7%AC%AC0%E5%B1%82%E6%88%96%E7%AC%AC1%E5%B1%82%E6%89%80%E4%BB%A5%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%85%83%E7%B4%A0%E5%B0%B1%E7%BD%AE%E4%B8%BA0%E4%B9%8B%E5%90%8E%E5%B0%B1%E5%BC%80%E5%A7%8B%E9%80%92%E5%BD%92%E7%AE%97%E4%BA%86%E4%BB%A5%E5%8F%8A%E8%BF%99%E9%87%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%88%B0%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E7%9A%84%E6%8A%80%E5%B7%A7"><span class="nav-number">3.3.</span> <span class="nav-text">递归的大体思路已经定下来了，剩下就是一些实现时候的细节。比如，\(min\
+cost\)里有两个元素是可以直接初始化的，也就是\(min\ cost[0]\)和\(min\
+cost[1]\)（因为根据题意，我们可以直接选择从0或1层出发，以及coste的长度是大于等于2的，换句话说其实也就是我们没必要”到达“第0层或第1层，所以这两个元素就置为0；之后就开始递归算了（以及，这里也可以用到记忆化搜索的技巧）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E9%87%8C%E9%9D%A2%E6%9C%89%E4%B8%AA%E7%BB%86%E8%8A%82%E9%A1%B6%E6%A5%BC%E5%BA%94%E8%AF%A5%E6%98%AF%E7%AC%ACn%E5%B1%82%E8%80%8C%E4%B8%8D%E6%98%AFn-1%E5%B1%82%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E6%B1%82%E8%A7%A3%E7%9A%84%E6%97%B6%E5%80%99find%E9%87%8C%E9%9D%A2%E4%BC%A0%E5%85%A5%E7%9A%84%E6%98%AFcost.size%E8%BF%99%E5%B0%B1%E8%A1%A8%E7%A4%BA%E4%BA%86n"><span class="nav-number">4.1.</span> <span class="nav-text">注意里面有个细节，顶楼应该是第n层，而不是n-1层，所以我们求解的时候，find里面传入的是cost.size()，这就表示了n</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E7%9A%84%E4%BC%98%E5%8C%96%E5%85%B6%E5%AE%9E%E4%B9%9F%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%9A%84%E4%B8%BB%E8%A6%81%E6%98%AF%E5%9C%A8%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E4%B8%8A%E7%9A%84%E4%BC%98%E5%8C%96%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%88%91%E4%BB%AC%E8%A7%82%E5%AF%9F%E4%B8%8A%E9%9D%A2%E9%80%92%E5%BD%92%E7%9A%84%E5%BC%8F%E5%AD%90%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E8%A6%81%E6%B1%82%E5%88%B0%E8%BE%BE%E7%AC%ACn%E5%B1%82%E7%9A%84%E6%9C%80%E5%B0%8F%E5%BC%80%E9%94%80%E5%85%B6%E5%AE%9E%E5%8F%AA%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E5%88%B0%E8%BE%BE%E7%AC%ACn-1%E5%92%8C%E7%AC%ACn-2%E5%B1%82%E7%9A%84%E6%9C%80%E5%B0%8F%E5%BC%80%E9%94%80%E5%8D%B3%E5%8F%AF%E5%86%8D%E5%BE%80%E5%89%8D%E7%9A%84%E5%B1%82%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F%E4%B8%8D%E5%85%B3%E5%BF%83%E4%BA%86%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%85%B6%E5%AE%9E%E5%8F%AF%E4%BB%A5%E5%8F%AA%E7%94%A8%E4%B8%A4%E4%B8%AA%E5%8F%98%E9%87%8F%E6%9D%A5%E5%AD%98%E5%82%A8%E9%80%92%E5%BD%92%E6%9B%B4%E6%96%B0%E6%89%80%E9%9C%80%E8%A6%81%E7%94%A8%E5%88%B0%E7%9A%84%E4%BF%A1%E6%81%AF%E8%80%8C%E4%B8%8D%E6%98%AF%E7%9B%B4%E6%8E%A5%E5%BC%80%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84"><span class="nav-number">4.2.</span> <span class="nav-text">进一步的优化其实也是可以的，主要是在空间复杂度上的优化。具体来说，我们观察上面递归的式子，可以发现，要求到达第n层的最小开销，其实只需要知道到达第n-1和第n-2层的最小开销即可，再往前的层，我们已经不关心了。所以，我们其实可以只用两个变量来存储递归更新所需要用到的信息，而不是直接开一个数组</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
