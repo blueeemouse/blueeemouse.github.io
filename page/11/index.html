@@ -150,6 +150,121 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/RAG/Retrieval-Augmented%20Generation%20for%20%20AI-Generated%20Content%20%20A%20Survey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/RAG/Retrieval-Augmented%20Generation%20for%20%20AI-Generated%20Content%20%20A%20Survey/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-01-18 21:48:08" itemprop="dateCreated datePublished" datetime="2025-01-18T21:48:08+08:00">2025-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-01-19 10:49:54" itemprop="dateModified" datetime="2025-01-19T10:49:54+08:00">2025-01-19</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="结构可以从下面几个部分来阅读总结论文">1.结构：可以从下面几个部分来阅读、总结论文</h1>
+<h2 id="介绍一下rag中的基本概念">1.0.介绍一下RAG中的基本概念</h2>
+<h2 id="根据retriever是如何辅助生成内容的对rag技术进行分类这个在文章中被称为underlinefoundational-paradigms简称underlinefoundations">1.1.根据retriever是如何辅助生成内容的，对RAG技术进行分类（这个在文章中被称为<span class="math inline">\(\underline{foundational \
+paradigms}\)</span>，简称<span class="math inline">\(\underline{foundations}\)</span></h2>
+<h2 id="总结一下其它的提高rag的手段">1.2.总结一下其它的提高RAG的手段</h2>
+<h2 id="调研rag在不同模态数据和不同任务下的应用场景文本的搜索和rag应该是目前最常见也是研究最多的但-不同模态数据的检索其实也可能为文本rag带来一些启发而一些常见的不同模态的检索包括但不限于识图听歌识曲">1.3.调研RAG在不同模态数据和不同任务下的应用场景（文本的搜索和RAG应该是目前最常见、也是研究最多的。但
+不同模态数据的检索，其实也可能为文本RAG带来一些启发。而一些常见的不同模态的检索，包括但不限于识图、听歌识曲）</h2>
+<h2 id="介绍一下rag的benchmark并讨论现有rag系统的一些问题局限性也讨论了一下未来的发展方向">1.4.介绍一下RAG的benchmark，并讨论现有RAG系统的一些问题/局限性，也讨论了一下未来的发展方向</h2>
+<h1 id="preliminary-of-rag">2.preliminary of RAG</h1>
+<h2 id="overview">2.1.overview</h2>
+<h3 id="rag系统一般就是包含两个核心模块retriever和generatorretriever用于根据用户的请求进行检索把找到的一些相关信息和输入一起给generator让它进行生成这就是一个大致的流程-我们可以分为三步">RAG系统一般就是包含两个核心模块：retriever和generator。retriever用于根据用户的请求进行检索，把找到的一些相关信息和输入一起给generator，让它进行生成。这就是一个大致的流程。
+我们可以分为三步：</h3>
+<h4 id="retriever根据输入请求检索相关信息">1.retriever根据输入请求检索相关信息</h4>
+<h4 id="原来的请求比如生成图像的时候我们的指令就是原来的请求和检索的结果一起给到generator这里如何把检索的结果和原来的请求进行结合是非常关键的一步也是对rag进行分类的一个判据可能是结合的方式不同可能是结合的位置不同">2.原来的请求（比如，生成图像的时候，我们的指令就是“原来的请求”）和检索的结果一起给到generator（这里如何把检索的结果和原来的请求进行结合，是非常关键的一步，也是对RAG进行分类的一个判据。可能是结合的方式不同，可能是结合的位置不同）</h4>
+<h4 id="generator生成结果">3.generator生成结果</h4>
+<h3 id="rag中generator主要包括transformer-modellstmdiffusion-modelgan">RAG中，generator主要包括transformer
+model，LSTM，diffusion model，GAN</h3>
+<h3 id="retriever主要分三类sparse-retrieverdense-retrieverothers-sparse-retriever感觉主要是传统的方法通常用于文档索引就是nlp课上讲的那些比较古老的方法-dense-retriever核心思想是用一些embedding来对query和key进行表征之后通过衡量query和key之间的相似性找出和query相似性高的那些key对应的结果就是检索结果这里有两个关键点一个是embedding一般是用一些预训练好的大模型对数据进行编码这种方法和sparse-retriever中用词袋模型等简单的统计模型进行的表征不同那些简单统计模型我的理解是考虑的信息更加简单局部以及通常会比较稀疏而相比之下深度学习进行编码得到的embedding则更加复杂但也包含更多信息也不会非常稀疏这应该也是为什么这种方法叫dense-retriever另一个关键点就是检索哪些key和query相似性高当数据量很大的时候想根据一个query计算它和所有key之间的相似性再来排序筛选计算量就太大了更别说多个query的情况了所以需要用到最近邻近似approximate-nearest-neighborann方法它的目的就是实现高效的最近邻搜索-others主要是在衡量相似性或者检索上有一些不同也是依据使用场景而定的如对文本我们可以直接用类似于最小编辑距离的指标进行相似度衡量而不是用embedding表示再衡量key和query之间的相似度对于代码我们也可以考虑用抽象语法树abstract-syntax-treesast来衡量代码片段相似度在知识图谱中我们进行检索其实就可以根据节点之间的关系进行索引比如对知识图谱的某个节点进行k-hop邻居搜索这些方法其实都算不上通用吧只是在一些特定领域里可能是可以用的但效果也不好说一定就比上面的dense-retriever要好">retriever主要分三类，sparse
+retriever，dense retriever，others<br>sparse
+retriever感觉主要是传统的方法，通常用于文档索引（就是nlp课上讲的那些比较古老的方法）<br>dense
+retriever核心思想是，用一些embedding来对query和key进行表征，之后通过衡量query和key之间的相似性，找出和query相似性高的那些key，对应的结果就是检索结果。这里有两个关键点，一个是embedding，一般是用一些预训练好的大模型对数据进行编码。这种方法和sparse
+retriever中用词袋模型等简单的统计模型进行的表征不同（那些简单统计模型，我的理解是，考虑的信息更加简单、局部，以及通常会比较稀疏；而相比之下，深度学习进行编码得到的embedding，则更加复杂、但也包含更多信息，也不会非常稀疏。这应该也是为什么这种方法叫dense
+retriever）。另一个关键点就是检索哪些key和query相似性高。当数据量很大的时候，想根据一个query，计算它和所有key之间的相似性，再来排序、筛选，计算量就太大了，更别说多个query的情况了。所以需要用到最近邻近似（Approximate
+Nearest
+Neighbor，ANN）方法。它的目的就是实现高效的最近邻搜索<br>others主要是在衡量相似性或者检索上有一些不同，也是依据使用场景而定的。如，对文本，我们可以直接用类似于最小编辑距离的指标进行相似度衡量，而不是用embedding表示再衡量key和query之间的相似度；对于代码，我们也可以考虑用抽象语法树（Abstract
+Syntax
+Trees，AST）来衡量代码片段相似度；在知识图谱中，我们进行检索，其实就可以根据节点之间的关系进行索引，比如对知识图谱的某个节点进行k-hop邻居搜索。（这些方法其实都算不上通用吧，只是在一些特定领域里可能是可以用的，但效果也不好说一定就比上面的dense
+retriever要好）</h3>
+<h1 id="rag-foundations">3.RAG Foundations</h1>
+<h2 id="query-based-rag">3.1.Query-based RAG</h2>
+<h3 id="其实就是在把输入送到generator之前把retriever获得的信息一起融合得到一个新的输入再把新的输入送到generator也即feed-the-retrieved-information-directly-into-the-initial-stage-of-the-generators-input这里的directly和initial-stage很重要和后面的方法不同">其实就是在把输入送到generator之前，把retriever获得的信息一起融合，得到一个新的输入，再把新的输入送到generator。也即，feed
+the retrieved information directly into the initial stage of the
+generator's input（这里的directly和initial
+stage很重要，和后面的方法不同）</h3>
+<h2 id="latent-representation-based-rag">3.2.Latent Representation-based
+RAG</h2>
+<h3 id="这里的核心思想是把检索到的信息进行编码同时把原本的query也进行编码再将编码后的二者进行一个结合此处结合的手段也很多有大家魔改出来的模块也有经典模块如cross-attention">这里的核心思想是，把检索到的信息进行编码，同时把原本的query也进行编码，再将编码后的二者进行一个结合。此处结合的手段也很多，有大家魔改出来的模块，也有经典模块，如Cross
+Attention</h3>
+<h3 id="经典方法如fid">经典方法如FiD</h3>
+<h2 id="logit-based-rag">3.3.Logit-based RAG</h2>
+<h3 id="这种方法主要适用于序列生成的情形generator正常会在生成下一个token的时候有一个候选token概率分布而检索到的信息也可以用于获取一个概率分布可视为一种先验概率分布再把两种概率分布进行结合就得到最终的概率分布因为是从概率分布的角度上讲所以是logit-based">这种方法主要适用于序列生成的情形。generator正常会在生成下一个token的时候，有一个候选token概率分布；而检索到的信息，也可以用于获取一个概率分布（可视为一种先验概率分布），再把两种概率分布进行结合，就得到最终的概率分布。因为是从概率分布的角度上讲，所以是“Logit-based”</h3>
+<h3 id="经典方法有knn-lm">经典方法有kNN-LM</h3>
+<h2 id="speculative-rag">3.4.Speculative RAG</h2>
+<h3 id="这个看着有点像是用rag代替了generator">这个看着有点像是用RAG代替了generator</h3>
+<h1 id="rag-enhancements">4.RAG Enhancements</h1>
+<h2 id="根据enhance的目标对象不同进行分类分五类input-enhancementretriever-enhancementgenerator-enhancementresult-enhancementrag-pipeline-enhancement">根据enhance的目标对象不同，进行分类。分五类：Input
+Enhancement，Retriever Enhancement，Generator Enhancement，Result
+Enhancement，RAG Pipeline Enhancement</h2>
+<h2 id="input-enhancement">4.1.Input Enhancement</h2>
+<h3 id="这类方法从输入上入手可以对query进行变换即query-transformation也可以对检索结果进行增强data-augmentation">这类方法从输入上入手。可以对query进行变换（即Query
+Transformation），也可以对检索结果进行增强（Data Augmentation）</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -886,92 +1001,6 @@ data也进行这个操作。因为即使是旧数据，也要能识别出来是�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr24">cvpr24</h1>
-<h1 id="problem主流的方法是提取modality-shared-feature然后用它来进行重识别但这种方法忽略了modality-specific-feature而这些feature也并非毫无用处它们可能也含有一些关键的有利于判别的信息intro里有一段说的挺好的虽然我们想利用这些信息但也不能直接利用因为它们本来是modality-specific的差异会比较大需要用一些手段比如蒸馏消去这种差异的同时保留能帮助判别的信息">problem：主流的方法是提取modality-shared
-feature，然后用它来进行重识别。但这种方法忽略了modality-specific
-feature，而这些feature也并非毫无用处，它们可能也含有一些关键的有利于判别的信息（intro里有一段说的挺好的，虽然我们想利用这些信息，但也不能直接利用，因为它们本来是modality-specific的，差异会比较大。需要用一些手段，比如蒸馏，消去这种差异的同时，保留能帮助判别的信息）</h1>
-<h1 id="motivation希望也能用上modality-specific-feature">motivation：希望也能用上modality-specific
-feature</h1>
-<h1 id="一些想法intro里提到了单纯的想把两种模态的数据投影到一个公共特征空间里虽然想法很好但总归得到的特征会有些gap就是说不太能真正做到完美的投影到一个公共空间这种方法是有上限的换成其它方法结合其它方法">一些想法：intro里提到了，单纯的想把两种模态的数据投影到一个公共特征空间里，虽然想法很好，但总归得到的特征会有些gap？就是说不太能真正做到完美的投影到一个公共空间。这种方法是有上限的？换成其它方法/结合其它方法？</h1>
-<h1 id="method">method：</h1>
-<h2 id="modality-confuser-and-discriminator为了学习modality-specificshared-feature">1.Modality
-Confuser and Discriminator（为了学习modality-specific/shared
-feature）</h2>
-<h3 id="用两套网络分别提取modality-shared-feature和modality-specific-feature后具体进行训练就需要用到confuser和discriminatorconfuser的输入是modality-shared-feature它希望confuser尽可能分不出feature来自于哪个模态这样我们可以认为此时的输入feature是不区分模态的则我们认为学到的是modality-shared-featurediscriminator的输入则是modality-specific-feature我们希望它能尽可能正确分类feature来源的模态这样我们认为这些输入特征确实是modality-specific的">用两套网络分别提取modality-shared
-feature和modality-specific
-feature后，具体进行训练，就需要用到confuser和discriminator。confuser的输入是modality-shared
-feature，它希望confuser尽可能分不出feature来自于哪个模态。这样我们可以认为此时的输入feature是不区分模态的，则我们认为学到的是modality-shared
-feature。discriminator的输入则是modality-specific
-feature，我们希望它能尽可能正确分类feature来源的模态，这样我们认为这些输入特征确实是modality-specific的</h3>
-<h2 id="information-purifier">2.Information Purifier</h2>
-<h3 id="这一部分的目的是想尽可能消除modality-specific-feature之间的差异但又要尽可能保留它modality-specific的信息一是用了in二是引入两个可学习的mask一个是用来消除差异reduction-of-discrepancies另一个是用来保留modality-specific信息的enhancement-of-discriminative-characteristics">这一部分的目的是想尽可能消除modality-specific
-feature之间的差异，但又要尽可能保留它modality-specific的信息。一是用了IN，二是引入两个可学习的mask，一个是用来消除差异（reduction
-of discrepancies），另一个是用来保留modality-specific信息的（enhancement
-of discriminative characteristics）</h3>
-<h2 id="implicit-knowledge-distillation">3.Implicit Knowledge
-Distillation</h2>
-<h2 id="modality-discrepancy-reduction">4.Modality Discrepancy
-Reduction</h2>
-<h1 id="改进看流程图pasted-image-20241101142934.png">改进：看流程图![[Pasted
-image 20241101142934.png]]</h1>
-<h1 id="发现此时就没怎么利用到所谓浅层特征那么在特征进入confuser和discriminator之前是否可以先把浅层信息给结合进来其实主要修改的就是前面的主干网络了">发现，此时就没怎么利用到所谓浅层特征。那么，在特征进入confuser和discriminator之前，是否可以先把浅层信息给结合进来？其实主要修改的就是前面的主干网络了</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1041,14 +1070,14 @@ image 20241101142934.png]]</h1>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

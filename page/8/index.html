@@ -150,6 +150,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/" class="post-title-link" itemprop="url">第一弹</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-08 22:42:08" itemprop="dateModified" datetime="2025-05-08T22:42:08+08:00">2025-05-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">安装库的常见难题和解决方法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="这里简单记录一些看起来有些共性的配置环境中遇到的问题">这里简单记录一些看起来有些共性的，配置环境中遇到的问题</h1>
+<h1 id="pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt报错如下">1.pip
+install -i https://pypi.tuna.tsinghua.edu.cn/simple -r
+requirements.txt报错如下：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">ERROR: Could not find a version that satisfies the requirement glfw&gt;=1.4.0 (from versions: none)</span><br><span class="line">ERROR: No matching distribution found <span class="keyword">for</span> glfw&gt;=1.4.0</span><br><span class="line">WARNING: There was an error checking the latest version of pip.</span><br></pre></td></tr></table></figure>
+<h2 id="这个问题其实看起来还挺正常的而它最后的warning显示应该是版本的一些不匹配的问题然而我是新创建了一个python环境来配置mujoco且也是按照网上的教程来的虽然不排除是版本问题可是人家是走通了的我这里也没先装上什么库应该不太会有库之间的冲突吧经评论区提醒关掉梯子之后再执行就没问题了但尚且不清楚原因">这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）</h2>
+<h2 id="后面安装其它库的时候也有类似的报错">后面安装其它库的时候，也有类似的报错：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.dev.txt</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br></pre></td></tr></table></figure>
+<h2 id="看到这种类似的错一样可以按照上面的方法尝试一下因为都有可能是网络问题还有可能出现把梯子关掉再尝试之后依然不行然后又尝试不指定源直接下也不行这时可以试试把梯子开了再下然后关掉再下有可能就成了有点难绷但确实是一种方法实操过是有效的其实感觉这样一通操作下来就验证了很有可能是网络问题了">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/05/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/%E6%8E%8C%E6%8F%A1%E7%A8%8B%E5%BA%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -845,77 +932,6 @@ conda，完了再尝试激活conda环境，依然报错，不过报的错变了�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/05/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84+=/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/04/05/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84+=/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-04-05 15:28:50 / Modified: 15:49:17" itemprop="dateCreated datePublished" datetime="2025-04-05T15:28:50+08:00">2025-04-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="简单来说对一个变量如果实施比如targets-add_num此时它的修改时就地的虽然省了内存但如果后面还要用原来的targets就会出问题-而targets-targets-add_num则是targets-add_num会创建一个新的tensor对象这里实际的例子是在对pytorch张量进行运算之后再把这个新的tensor赋值给变量targets">简单来说，对一个变量，如果实施+=，比如targets
-+=
-add_num，此时它的修改时就地的，虽然省了内存，但如果后面还要用原来的targets，就会出问题<br>而targets
-= targets + add_num，则是：targets +
-add_num会创建一个新的tensor对象（这里实际的例子是在对pytorch张量进行运算），之后再把这个新的tensor赋值给变量targets</h1>
-<h1 id="附上原来的代码吧这样能更清晰的看出为什么原来会报错因为其实这个错感觉还不太容易触发">附上原来的代码吧，这样能更清晰的看出为什么原来会报错，因为其实这个错感觉还不太容易触发：</h1>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(train_iters):</span><br><span class="line"></span><br><span class="line">            train_inputs = data_loader_train.<span class="built_in">next</span>()</span><br><span class="line"></span><br><span class="line">            data_time.update(time.time() - end)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            s_inputs,imgs_origin, targets, cids, domains, = <span class="variable language_">self</span>._parse_data(train_inputs)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> training_phase&gt;<span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">                <span class="keyword">with</span> torch.no_grad():</span><br><span class="line"></span><br><span class="line">                    kernel = rehearser(imgs_origin)</span><br><span class="line"></span><br><span class="line">                inputs_r=decode_transfer_img(<span class="variable language_">self</span>.args,imgs_origin,kernel)              </span><br><span class="line"></span><br><span class="line">                datas=[</span><br><span class="line"></span><br><span class="line">                    [s_inputs,imgs_origin, targets, cids, domains],</span><br><span class="line"></span><br><span class="line">                    [inputs_r,imgs_origin, targets, cids, domains]</span><br><span class="line"></span><br><span class="line">                ]            </span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">                datas=[</span><br><span class="line"></span><br><span class="line">                    [s_inputs,imgs_origin, targets, cids, domains]</span><br><span class="line"></span><br><span class="line">                ]</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            loss=<span class="number">0</span>    </span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> idx, (s_inputs,imgs_origin, targets, cids, domains) <span class="keyword">in</span> <span class="built_in">enumerate</span>(datas):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># targets_origin=targets</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># targets =targets+ add_num</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 上面两行才是正确的做法</span></span><br><span class="line">                targets += add_num    <span class="comment"># 错误代码</span></span><br></pre></td></tr></table></figure>
-<h2 id="这是一段深度学习里进行训练的代码在每个iter开头我们都先取出数据然后如果training_phase1则对其中的imgs_origin进行一个类似于变换的操作得到新的一个数据inputs_r它的形状和s_inputs是一样的我们这里只关注training_phase1的情况毕竟错是在这个情况下报的-到了下面我们看到会循环datas那这里的大概意思是说如果training_phase等于1则我们只学习一份数据而如果training_phase1则我们会学习两份数据重点来了我的错误做法是要加上add_num的时候直接用targets-add_num然而在下一个循环里我依然要用到targets且根据上面datas在training_phase1情况下的定义可以看到两组数据里的targets是一样的这就表明我是要用一样的targets的而且它们都是用的targets那么引用的本质上是同一个内存块这点很重要这在后面就导致了错误如果我此时就地修改那么第一份数据里没问题我们给targets加上add_num而后因为第一份第二份数据的targets是指向同一块内存的所以此时第二份数据的targets就也已经加上了add_num但到了第二份数据的循环我们依然会对它的targets加上add_num那就相当于加了两次这就导致了标签越界了所以最终会报错">这是一段深度学习里进行训练的代码。在每个iter开头，我们都先取出数据，然后如果training_phase&gt;1，则对其中的imgs_origin进行一个类似于变换的操作，得到新的一个数据inputs_r（它的形状和s_inputs是一样的）（我们这里只关注training_phase&gt;1的情况，毕竟错是在这个情况下报的）<br>到了下面，我们看到会循环datas。那这里的大概意思是说，如果training_phase等于1，则我们只学习一份数据；而如果training_phase&gt;1，则我们会学习两份数据。重点来了，我的错误做法是，要加上add_num的时候，直接用targets
-+=
-add_num。然而，在下一个循环里，我依然要用到targets，且根据上面datas在training_phase&gt;1情况下的定义，可以看到，两组数据里的targets是一样的，这就表明我是要用一样的targets的（而且它们都是用的targets，那么引用的本质上是同一个内存块。这点很重要，这在后面就导致了错误）。如果我此时就地修改，那么第一份数据里没问题，我们给targets加上add_num，而后，因为第一份第二份数据的targets是指向同一块内存的，所以，此时第二份数据的targets就也已经加上了add_num；但到了第二份数据的循环，我们依然会对它的targets加上add_num，那就相当于加了两次，这就导致了标签越界了，所以最终会报错。</h2>
-<h2 id="再来看看正确做法为什么对其实它的那行targets_origintargets感觉没必要因为它后面也没用到targets_origin而且这一步也并不是规避错误的关键关键在于用targets-targets-add_num正如上所述它会创建一个新的tensor对象之后再把这个新的tensor赋值给变量targets而第二份数据里的targets则还是指向原来的那块没加上add_num的targets的内存所以到了第二份数据的循环的时候我们就是只对它加一次add_num所以总结一下正确代码之所以对就是因为它的加法不是in-place的">再来看看正确做法为什么对。其实它的那行targets_origin=targets感觉没必要，因为它后面也没用到targets_origin，而且这一步也并不是规避错误的关键。关键在于用targets
-= targets +
-add_num。正如上所述，它会创建一个新的tensor对象，之后再把这个新的tensor赋值给变量targets；而第二份数据里的targets，则还是指向原来的那块，没加上add_num的targets的内存。所以到了第二份数据的循环的时候，我们就是只对它加一次add_num。所以，总结一下，正确代码之所以对，就是因为它的加法不是in-place的</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -985,14 +1001,14 @@ add_num。正如上所述，它会创建一个新的tensor对象，之后再把�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

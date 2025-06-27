@@ -150,6 +150,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr24">cvpr24</h1>
+<h1 id="problem主流的方法是提取modality-shared-feature然后用它来进行重识别但这种方法忽略了modality-specific-feature而这些feature也并非毫无用处它们可能也含有一些关键的有利于判别的信息intro里有一段说的挺好的虽然我们想利用这些信息但也不能直接利用因为它们本来是modality-specific的差异会比较大需要用一些手段比如蒸馏消去这种差异的同时保留能帮助判别的信息">problem：主流的方法是提取modality-shared
+feature，然后用它来进行重识别。但这种方法忽略了modality-specific
+feature，而这些feature也并非毫无用处，它们可能也含有一些关键的有利于判别的信息（intro里有一段说的挺好的，虽然我们想利用这些信息，但也不能直接利用，因为它们本来是modality-specific的，差异会比较大。需要用一些手段，比如蒸馏，消去这种差异的同时，保留能帮助判别的信息）</h1>
+<h1 id="motivation希望也能用上modality-specific-feature">motivation：希望也能用上modality-specific
+feature</h1>
+<h1 id="一些想法intro里提到了单纯的想把两种模态的数据投影到一个公共特征空间里虽然想法很好但总归得到的特征会有些gap就是说不太能真正做到完美的投影到一个公共空间这种方法是有上限的换成其它方法结合其它方法">一些想法：intro里提到了，单纯的想把两种模态的数据投影到一个公共特征空间里，虽然想法很好，但总归得到的特征会有些gap？就是说不太能真正做到完美的投影到一个公共空间。这种方法是有上限的？换成其它方法/结合其它方法？</h1>
+<h1 id="method">method：</h1>
+<h2 id="modality-confuser-and-discriminator为了学习modality-specificshared-feature">1.Modality
+Confuser and Discriminator（为了学习modality-specific/shared
+feature）</h2>
+<h3 id="用两套网络分别提取modality-shared-feature和modality-specific-feature后具体进行训练就需要用到confuser和discriminatorconfuser的输入是modality-shared-feature它希望confuser尽可能分不出feature来自于哪个模态这样我们可以认为此时的输入feature是不区分模态的则我们认为学到的是modality-shared-featurediscriminator的输入则是modality-specific-feature我们希望它能尽可能正确分类feature来源的模态这样我们认为这些输入特征确实是modality-specific的">用两套网络分别提取modality-shared
+feature和modality-specific
+feature后，具体进行训练，就需要用到confuser和discriminator。confuser的输入是modality-shared
+feature，它希望confuser尽可能分不出feature来自于哪个模态。这样我们可以认为此时的输入feature是不区分模态的，则我们认为学到的是modality-shared
+feature。discriminator的输入则是modality-specific
+feature，我们希望它能尽可能正确分类feature来源的模态，这样我们认为这些输入特征确实是modality-specific的</h3>
+<h2 id="information-purifier">2.Information Purifier</h2>
+<h3 id="这一部分的目的是想尽可能消除modality-specific-feature之间的差异但又要尽可能保留它modality-specific的信息一是用了in二是引入两个可学习的mask一个是用来消除差异reduction-of-discrepancies另一个是用来保留modality-specific信息的enhancement-of-discriminative-characteristics">这一部分的目的是想尽可能消除modality-specific
+feature之间的差异，但又要尽可能保留它modality-specific的信息。一是用了IN，二是引入两个可学习的mask，一个是用来消除差异（reduction
+of discrepancies），另一个是用来保留modality-specific信息的（enhancement
+of discriminative characteristics）</h3>
+<h2 id="implicit-knowledge-distillation">3.Implicit Knowledge
+Distillation</h2>
+<h2 id="modality-discrepancy-reduction">4.Modality Discrepancy
+Reduction</h2>
+<h1 id="改进看流程图pasted-image-20241101142934.png">改进：看流程图![[Pasted
+image 20241101142934.png]]</h1>
+<h1 id="发现此时就没怎么利用到所谓浅层特征那么在特征进入confuser和discriminator之前是否可以先把浅层信息给结合进来其实主要修改的就是前面的主干网络了">发现，此时就没怎么利用到所谓浅层特征。那么，在特征进入confuser和discriminator之前，是否可以先把浅层信息给结合进来？其实主要修改的就是前面的主干网络了</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/torch.DataParallel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -796,66 +882,6 @@ cv, object-reid, noisy lifelong reid] ---</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-31 22:27:12 / Modified: 22:35:06" itemprop="dateCreated datePublished" datetime="2024-10-31T22:27:12+08:00">2024-10-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="iccv23">iccv23</h1>
-<p>attention concordance是指什么？</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -925,14 +951,14 @@ cv, object-reid, noisy lifelong reid] ---</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
