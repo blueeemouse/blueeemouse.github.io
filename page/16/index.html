@@ -150,6 +150,146 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/08/27/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/pytorch%E9%87%8C%E7%9A%84dataloader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/27/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/pytorch%E9%87%8C%E7%9A%84dataloader/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-08-27 22:54:31 / Modified: 23:04:17" itemprop="dateCreated datePublished" datetime="2024-08-27T22:54:31+08:00">2024-08-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>关于dataloader中的collate_fn参数，它的作用是，如果一个batch内的data需要进行一些“统一”的操作，就可以交由它来进行。比如下面这个例子：
+如果我们现在有一个句子数据集 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataset = [&#x27;the cat sat on the mat&#x27;, &#x27;a dog is barking&#x27;, &#x27;birds are flying&#x27;]</span><br></pre></td></tr></table></figure>
+然后我们要把这些句子批量输送到nn里，就需要保持句子的长度一致，就可以写一个类似下面这样的函数
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from torch.nn.utils.rnn import pad_sequence</span><br><span class="line">import torch</span><br><span class="line"></span><br><span class="line">def collate_fn(batch):</span><br><span class="line">    # 将每个句子分割成单词列表</span><br><span class="line">    sentences = [torch.tensor(sentence.split()) for sentence in batch]</span><br><span class="line">    # 使用 pad_sequence 来填充句子，使其长度相同</span><br><span class="line">    padded_sentences = pad_sequence(sentences, batch_first=True, padding_value=0)</span><br><span class="line">    return padded_sentences</span><br><span class="line"></span><br><span class="line"># 假设这是 DataLoader 返回的一个批量</span><br><span class="line">batch = [&#x27;the cat sat on the mat&#x27;, &#x27;a dog is barking&#x27;, &#x27;birds are flying&#x27;]</span><br><span class="line"></span><br><span class="line"># 应用 collate_fn</span><br><span class="line">padded_batch = collate_fn(batch)</span><br><span class="line">print(padded_batch)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/kaggle%E7%AD%89%E6%AF%94%E8%B5%9B/DialogueGCN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/kaggle%E7%AD%89%E6%AF%94%E8%B5%9B/DialogueGCN/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-08-27 17:43:59 / Modified: 18:05:58" itemprop="dateCreated datePublished" datetime="2024-08-27T17:43:59+08:00">2024-08-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="dialoguegcn-a-graph-convolutional-neural-network-for-emotion-recognition-in-conversation">DialogueGCN:
+A Graph Convolutional Neural Network for Emotion Recognition in
+Conversation</h1>
+<h3 id="大体训练流程">大体训练流程</h3>
+<h4 id="预处理得到文本的初步特征具体来说是用一些卷积操作提取特征这里应该是单独训一个网络用标签来训练">1.预处理得到文本的初步特征（具体来说，是用一些卷积操作提取特征，这里应该是单独训一个网络，用标签来训练）</h4>
+<h4 id="利用对话之间的关系进一步提取特征">2.利用对话之间的关系，进一步提取特征</h4>
+<h5 id="把上面经过预处理的特征送到一个双向的gru里进行进一步的处理">2.1
+把上面经过预处理的特征，送到一个双向的GRU里进行进一步的处理</h5>
+<h4 id="构建graph然后进行类似gcn的操作">2.2
+构建graph，然后进行类似GCN的操作</h4>
+<h5 id="构建graph">2.2.1 构建graph</h5>
+<h6 id="节点一个对话场景下每一句话就是一个节点然后如果考虑最一般的情况认为每一句话之间都有相互影响那么构建的graph将是全连接图计算复杂度可能会过高因此进行简化即考虑past-window和future-window很经典的操作还有这里考虑的是有向图也比较合理因为前面说的话可能会影响到后面说的话的感情但后面说的话的感情却不能影响前面说过的话的感情">节点：一个对话场景下，每一句话就是一个节点。然后如果考虑最一般的情况，认为每一句话之间都有相互影响，那么构建的graph将是全连接图，计算复杂度可能会过高。因此进行简化，即考虑past
+window和future
+window（很经典的操作）。还有，这里考虑的是有向图，也比较合理，因为前面说的话可能会影响到后面说的话的感情，但后面说的话的感情却不能影响前面说过的话的感情</h6>
+<h6 id="边考虑边的属性此处只考虑权重和类别对于边的权重我们希望每个节点上的入边的权重和为1因此会用一个相似性的操作即乘一个矩阵进行一次变换再做点积然后进行softmax对于边的类别论文认为影响因素主要有两方面一个是两句话的说话人是谁同一句话不同的人说出来对我的影响也可能不同另一方面是两句话的先后顺序对于边ij而言有两种情况i先或者i后综上边的类别应该有m-m-2种m为说话人的数量">边：考虑边的属性（此处只考虑权重）和类别。对于边的权重，我们希望每个节点上的入边的权重和为1，因此会用一个相似性的操作（即乘一个矩阵，进行一次变换，再做点积），然后进行softmax。对于边的类别，论文认为影响因素主要有两方面，一个是两句话的说话人是谁，同一句话，不同的人说出来，对“我”的影响也可能不同；另一方面是两句话的先后顺序，对于边i，j而言有两种情况，i先或者i后。综上，边的类别应该有M
+* M * 2种（M为说话人的数量）</h6>
+<h5 id="类gcn操作">2.2.2 类GCN操作</h5>
+<h6 id="就是根据不同的边的类别进行加权求和中间掺杂了线性变换和激活函数等参考原论文即可">就是根据不同的边的类别，进行加权求和，中间掺杂了线性变换和激活函数等，参考原论文即可</h6>
+<h4 id="经过一个分类器得到预测的标签">2.3
+经过一个分类器，得到预测的标签</h4>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/08/25/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pyg%20messagepassing%E5%9F%BA%E7%B1%BB%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -356,7 +496,7 @@ d)的节点特征矩阵x中通过边的索引提取出来的</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

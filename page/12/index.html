@@ -150,6 +150,213 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="现在好像已经没问题了就正常上传就行">现在好像已经没问题了，就正常上传就行</h1>
+<h1 id="在windows系统中进入d_note这个目录下打开终端git-add-.-git-commit--m-xxx-git-push-origin-main即可">在windows系统中，进入D:_note这个目录下，打开终端，git
+add . git commit -m 'xxx' git push origin main即可</h1>
+<h1 id="在ubuntu系统也是类似的">在ubuntu系统也是类似的</h1>
+<h1 id="上面只是单方面的从一个系统中进行上传还有一个问题就是上传了之后怎么在另一个系统里pull下来">上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。</h1>
+<h1 id="在ubuntu系统pull-windows的东西还挺方便的好像就是正常的git-pull-origin-main即可前提是进去之后先别修改东西但好像也不是其实还是会因为那个workspace.json文件有一些问题下面是一个简单粗暴的方法后续或许可以改进一下">在ubuntu系统pull
+windows的东西，还挺方便的，好像就是正常的git pull origin
+main即可（前提是进去之后先别修改东西）（但好像也不是，其实还是会因为那个workspace.json文件有一些问题。下面是一个简单粗暴的方法。后续或许可以改进一下）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard origin/main</span><br><span class="line">git push origin main</span><br><span class="line">git fetch origin</span><br></pre></td></tr></table></figure>
+<h1 id="因为每次我在一个系统要同步远端仓库的时候远端一定是更加新的也就是即使远端仓库完全覆盖了我本地的仓库也没关系话虽如此也需也有极少数时候真的不能这样所以才有第一行的比较简单粗暴的命令">（因为每次我在一个系统要同步远端仓库的时候，远端一定是更加新的，也就是即使远端仓库完全覆盖了我本地的仓库，也没关系（话虽如此，也需也有极少数时候真的不能这样），所以才有第一行的比较简单粗暴的命令）</h1>
+<h1 id="在windows里pull-ubuntu系统的东西就比较麻烦了windows系统和ubuntu系统处理lf和crlf的方法好像不太一样大概就是换行之类的东西然而ubuntu似乎会自动处理我们感觉不到但windows就不行一定会报问题一个比较简单粗暴的方法是">在windows里pull
+ubuntu系统的东西就比较麻烦了，windows系统和ubuntu系统处理LF和CRLF的方法好像不太一样（大概就是换行之类的东西），然而ubuntu似乎会自动处理，我们感觉不到，但windows就不行，一定会报问题。一个比较简单粗暴的方法是：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout origin/main -- .obsidian/workspace.json</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h1 id="第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json这样这个文件就不会报错了因为之前报错主要就是这个文件的一些换行符之类的问题剩下就是正常pull了">第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json，这样这个文件就不会报错了（因为之前报错主要就是这个文件的一些换行符之类的问题）。剩下就是正常pull了</h1>
+<h1 id="另一种比较一劳永逸的方法就是在windows系统的终端里进行如下配置">另一种比较一劳永逸的方法，就是在windows系统的终端里进行如下配置：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h1 id="这个大概是因为下摘录自ai原文在windows上git默认会在检出文件时将lf转换为crlf而在提交文件时将crlf转换为lf这种行为是为了确保文件在windows上显示和编辑时能够正确处理换行符然而这种转换可能导致文件内容的更改从而引发冲突通过将-core.autocrlf-配置为-false你可以告诉git在检出文件时保留原始的换行符避免因换行符转换而导致的文件内容更改这对于需要在多个平台上协作开发的项目特别有用因为它可以确保文件在所有平台上都以相同的方式处理换行符-不过我目前还没试过">这个大概是因为：（下摘录自ai原文）在Windows上，Git默认会在检出文件时将LF转换为CRLF，而在提交文件时将CRLF转换为LF。这种行为是为了确保文件在Windows上显示和编辑时能够正确处理换行符。然而，这种转换可能导致文件内容的更改，从而引发冲突。通过将
+<code>core.autocrlf</code> 配置为
+<code>false</code>，你可以告诉Git在检出文件时保留原始的换行符，避免因换行符转换而导致的文件内容更改。这对于需要在多个平台上协作开发的项目特别有用，因为它可以确保文件在所有平台上都以相同的方式处理换行符。<br>不过我目前还没试过</h1>
+<h1 id="btw附带一个实战例子虽然是有点操作失误的例子">btw，附带一个实战例子，虽然是有点操作失误的例子</h1>
+<h1 id="我在windows系统里进行pull的时候没成功反而还在windows里修改了一些笔记并add和commit了导致此时windows中的笔记与远端不同步且还有更新之后我再次尝试正常pull失败了后面我就用上面提到的简单粗暴的方法先完成了从远端的pull此时我上github仓库发现远端还没有拿到我在windows本地进行的更新也是毕竟我还没push上去再进行push成功了并且检查远端仓库确实更新了-这里先强制pull下来了做到了和远端的同步之后再把已经暂存的也就是完成了commit的内容给push上去即可">我在windows系统里进行pull的时候，没成功，反而还在windows里修改了一些笔记，并add和commit了，导致此时windows中的笔记与远端不同步，且还有更新。之后我再次尝试正常pull，失败了。后面我就用上面提到的简单粗暴的方法，先完成了从远端的pull，（此时我上github仓库，发现远端还没有拿到我在windows本地进行的更新。也是，毕竟我还没push上去）再进行push，成功了，并且检查远端仓库，确实更新了。<br>这里先强制pull下来了，做到了和远端的同步，之后再把已经暂存的（也就是完成了commit的）内容给push上去，即可</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-11 10:36:00" itemprop="dateModified" datetime="2025-03-11T10:36:00+08:00">2025-03-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="motivation它先强调了lifelong-re-id的重要性这个是没错的然后提到有时候没有visible-images比如晚上但如果是这样的话那它实验的时候为什么只用四个跨模态数据集到时候看看它实验的具体设定是怎样的更恰当的实验设定不应该是考虑到ir检索rgbrgb检索irir检索irrgb检索rgb吗">motivation：它先强调了lifelong
+re-id的重要性（这个是没错的），然后提到有时候没有visible
+images（比如晚上）。但如果是这样的话，那它实验的时候为什么只用四个跨模态数据集？到时候看看它实验的具体设定是怎样的。更恰当的实验设定不应该是考虑到IR检索RGB，RGB检索IR，IR检索IR，RGB检索RGB吗？</h1>
+<h1 id="trick">trick：</h1>
+<h2 id="concatenate不同类型的token如果用的是注意力机制">1.concatenate不同类型的token（如果用的是注意力机制）</h2>
+<h2 id="训练一些特殊的token有点像prompt-engineering在基于transformer的架构中训练特殊token是很自然的事那如果对其它架构的网络也训练一个类似token的东西用来提点能不能做到用比较少的算力来提升性能这是否算一个小小的亮点">2.训练一些特殊的token，有点像prompt
+engineering。在基于transformer的架构中，训练特殊token是很自然的事。那如果对其它架构的网络，也训练一个类似token的东西，用来提点。能不能做到，用比较少的算力，来提升性能？这是否算一个小小的亮点？</h2>
+<h1 id="一些intuition">一些intuition：</h1>
+<h2 id="这个f_q有点意思它好像是为了提取domain-specific-feature这里domain指一个数据集所以这个f_q有点用来确定图像属于哪个数据集的意思关于它怎么训练这个特征它是把这个特征送到一个分类器里进行分类要么是当前这个数据集里的一个类别要么是之前见过的数据集里的类别也就是说这个特征所属的图像不属于这个数据集这里如果它能比较好地分类说明能比较好地区分当前数据集和之前的数据集的数据那侧面说明了它学到的domain-specific-feature就有点像对比学习的意思如果模型的特征能把同类的东西看成是比较相近的把不同类的东西看成是离得比较远的那某种程度上可以认为模型学到了这些类别的信息拿去做一些分类之类的下游任务也是合理的">这个<span class="math inline">\(f_q\)</span>有点意思。它好像是为了提取domain-specific
+feature（这里domain指一个数据集，所以这个<span class="math inline">\(f_q\)</span>有点用来确定图像属于哪个数据集的意思。关于它怎么训练这个特征，它是把这个特征送到一个分类器里进行分类，要么是当前这个数据集里的一个类别，要么是之前见过的数据集里的类别（也就是说这个特征所属的图像不属于这个数据集）。这里如果它能比较好地分类，说明能比较好地区分当前数据集和之前的数据集的数据，那侧面说明了它学到的domain-specific
+feature。就有点像对比学习的意思，如果模型的特征能把同类的东西看成是比较相近的，把不同类的东西看成是离得比较远的，那某种程度上可以认为，模型学到了这些类别的信息，拿去做一些分类之类的下游任务也是合理的）</h2>
+<h1 id="方法">方法</h1>
+<h2 id="baseline">1.Baseline</h2>
+<h3 id="这里也就是没做什么改进时候的方法比较常见骨干是vit有data-replay对replay的data和正在学的data都有一个分类损失还有一个l_rehearsal也就是用来巩固旧知识的就是用一个js散度来约束新模型和旧模型对当前batch-data的输出要尽可能一致以及一个l_kd它是用js散度约束新模型对不同模态下同一id的样本的输出要尽可能一致也就是拉近同id的可见光和红外数据也很朴素">这里也就是没做什么改进时候的方法。比较常见。骨干是vit，有data
+replay，对replay的data和正在学的data，都有一个分类损失；还有一个<span class="math inline">\(L_{rehearsal}\)</span>，也就是用来巩固旧知识的，就是用一个JS散度来约束新模型和旧模型对当前batch
+data的输出要尽可能一致；以及一个<span class="math inline">\(L_{kd}\)</span>，它是用JS散度约束新模型对不同模态下同一id的样本的输出要尽可能一致（也就是拉近同id的可见光和红外数据，也很朴素）</h3>
+<h2 id="generalspecific-token">2.General/Specific Token</h2>
+<h3 id="这里论文设计了两种token一个是general-token一个是specific-token它们的作用就是字面意义上的general-token用于提取通用的特征所以是一个token或者说prompt是所有数据集共用的而specific-token则是用于提取每个数据集特有的特征所以是一个数据集一个最终一个数据用来检索的特征就是它的general-feature和它对应的那个specific-feature融合得到的故最后还有一个fusion-module">这里论文设计了两种token，一个是general
+token，一个是specific token。它们的作用就是字面意义上的，general
+token用于提取通用的特征，所以是一个token（或者说prompt）是所有数据集共用的；而specific
+token则是用于提取每个数据集特有的特征，所以是一个数据集一个。最终一个数据用来检索的特征，就是它的general
+feature和它对应的那个specific feature融合得到的。故最后还有一个fusion
+module</h3>
+<h3 id="specific-token具体来说当目前已经见到t个数据集时就会有t个specific-token此时对一个数据经过vit之后我们得到token-embedding序列不妨记其形状为ltimes-d然后会把这个数据前拼上第i个specific-token送到第i个specific-attention-block记为sab一个specific-attention-block就是一个class-attention-block也就是query仅有前面拼上的token产生而query以及gallery都是由数据x产生它的输出是一个d维的向量也就是一个数据对应一个d维的向量但此时就有t个结果了可是我们主要关注当前数据集的学习也就是第t个结果所以这里会用一个divergence-classifier它会对当前数据集的数据和之前数据集的数据因为有replay都进行分类但是要求对当前数据集进行精确分类而对之前数据集上的数据只要求它能区分出来这些是不属于当前数据集的即可所以它会把当前数据集的所有数据的标签加一然后进行分类空出来的第0类就被统一归类为不属于当前数据集的类所有之前数据集上的数据都是这一类然后这个divergence-classifier用的特征就是拼上了第t个specific-token之后经过第t个sab输出的特征">1.specific
+token：具体来说，当目前已经见到t个数据集时，就会有t个specific
+token。此时，对一个数据，经过vit之后，我们得到token
+embedding序列，不妨记其形状为<span class="math inline">\((L\times
+d)\)</span>，然后会把这个数据前拼上第i个specific
+token，送到第i个specific attention block（记为SAB）。一个specific
+attention block就是一个class attention
+block（也就是query仅有前面拼上的token产生，而query以及gallery都是由数据x产生），它的输出是一个d维的向量（也就是一个数据对应一个d维的向量）。但此时就有t个结果了，可是我们主要关注当前数据集的学习，也就是第t个结果，所以这里会用一个divergence
+classifier，它会对当前数据集的数据和之前数据集的数据（因为有replay）都进行分类，但是要求对当前数据集进行精确分类，而对之前数据集上的数据，只要求它能区分出来这些是不属于当前数据集的即可。所以，它会把当前数据集的所有数据的标签加一，然后进行分类；空出来的第0类就被统一归类为”不属于当前数据集的类“，所有之前数据集上的数据都是这一类（然后这个divergence
+classifier用的特征就是拼上了第t个specific
+token之后经过第t个SAB输出的特征）</h3>
+<h3 id="general-tokenshareable-general-token则是所有数据集上的数据统一用一个token也是在数据前拼上这个token然后送到一个统一的general-attention-blockgab之后会送到一个分类器里进行分类但这里就要求分类器是对所有见过的身份都要精确分类所以不是像上面那样把之前数据集的所有数据都归到一个类了">2.general
+token：shareable general
+token则是所有数据集上的数据统一用一个token。也是在数据前拼上这个token，然后送到一个统一的general
+attention
+block（GAB），之后会送到一个分类器里进行分类，但这里就要求分类器是对所有见过的身份都要精确分类（所以不是像上面那样把之前数据集的所有数据都归到一个类了）</h3>
+<p>额，它设计、利用token的时候，确实没考虑到模态啊，比如specific
+token，它就是只针对一个数据集设计一个，并没有说一个数据集有两个模态，所以设计两个token。可以改进吗？这样有什么问题吗？不能直接说我觉得这里做的不好，所以要改；而是要说明为什么做的不好，然后我要针对做的不好的地方怎么改
+### 3.fusion module：其实很简单，一个数据，会产生一个general
+feature，也会产生t个specific
+feature。它属于哪个数据集，我们就挑出那个对应的specific
+feature，然后和general
+feature进行拼接，并通过一个线性层进行融合，就得到了最终的特征（然而一个问题是，测试的时候我们不知道一个数据到底属于哪个数据集，所以才有下面的query-key
+mechanism来解决这个问题） ## 3.Query-Key mechanism ###
+上面提到的内容中，有个关键点：训练的时候，我们是知道一个数据是属于哪个数据集的，所以我们能挑选出对应的那个specific
+feature来和general
+feature进行融合。但测试的时候，我们不知道数据属于哪个数据集，所以对于它产生的t个specific
+feature，我们就不知道要选哪个出来和general
+feature进行融合了。为了解决这个问题，论文想到要能通过图像特征，匹配到它属于哪个数据集。因此论文提出了所谓query-key
+mechanism。大体上说，它是给每个数据集都构造一个key（一个key是一个d维的向量），然后一个数据会对应产生一个query（也是一个d维向量），通过query和key之间的相似性匹配就可以推测数据属于哪个数据集：它的query和哪个key最接近，就是属于哪个数据集的。
+###
+具体训练上说，我们就需要让每个数据的query尽可能的靠近正确的key。所以会有一个<span class="math inline">\(L_{pull}\)</span>来做这件事（并且它还会对rehearsal
+data也进行这个操作。因为即使是旧数据，也要能识别出来是属于哪个数据集的）</p>
+<p>模态间模态内知识如果学的不平衡了，会怎么样？</p>
+<p>每隔若干epoch（比如20个epoch），就计算一下新旧模型之间的模态内模态间差异，决定一下模态内和模态间损失二者之间的权重；然后二者的平均代表了新旧模型整体之间的差异，它决定了模态内模态间整体损失的权重（差异越小，说明旧知识保留的越好，模态内模态间损失整体权重越小，可以更多地去学习新知识；）
+但这个的动机就不完全是出于改进TTQK了，而是：我们先基于TTQK没有保留跨模态知识，提出要用模态内模态间知识的平衡保留来改进抗遗忘效果；改进之后发现抗遗忘方面是有所提升的，但新数据的学习又太差了，所以想动态调整抗遗忘损失的权重</p>
+<h1 id="section">2025.3.11</h1>
+<h2 id="模态内模态间一旦权重增大抗遗忘效果就是会上去但总体效果可能会下跌因为新数据集上学的太差了到底有什么办法可以让模型抗遗忘效果提升同时学习新数据集的效果也不要太差">模态内模态间一旦权重增大，抗遗忘效果就是会上去，但总体效果可能会下跌，因为新数据集上学的太差了。到底有什么办法可以让模型抗遗忘效果提升，同时学习新数据集的效果也不要太差？</h2>
+<p>和lstkc太像，是因为使用动态权重，还是因为计算权重的输入和方法和lstkc很像？可是对于现在的问题，使用动态权重不是很容易想到的吗（因为我们调节权重之后，是能看到一些不同的。并且，当原KL0.3，模态内模态间0.7的时候，它的总体效果好于原来的；而如果换成了原KL0.7，模态内模态间0.3的时候，前两个阶段，它比KL0.3、模态内模态间0.7的效果要好，然而到了第三个阶段又差一些了。这样的话，假设到第三个阶段的时候，我们又用KL0.3、模态内模态间0.7的权重分配，不就有可能提升性能了吗？这个应该正好验证了动态调整权重的合理性啊）
+如果是因为后者，那目前用相似性矩阵来度量模态内模态间知识，也是比较合理的，能修改的只有计算权重的方法。如果想避免过于相同，应该是可以找到一些别的映射方法的。但这样就有种为了创新而创新的感觉，没有针对问题而提出解决方法的感觉</p>
+<p>哦哦，我好像知道为什么说和lstkc很像了。其实重点还真不在于计算（虽然计算也过于相似了），而是在于思路：我们是希望根据模型旧知识保留的情况来调整抗遗忘损失的权重：如果模型忘得多，就增加抗遗忘损失的权重；如果忘得少，就减小抗遗忘损失的权重。而lstkc里，是：如果模型忘得多，则模型融合的时候增加旧模型的权重；如果模型忘得少，模型融合的时候就减少旧模型的权重
+这么一看，确实太像了。。。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -719,169 +926,6 @@ requirements可以直接成功，但也可能它里面说的不够详细，只�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-04 20:49:43" itemprop="dateCreated datePublished" datetime="2024-11-04T20:49:43+08:00">2024-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-06 14:14:42" itemprop="dateModified" datetime="2024-11-06T14:14:42+08:00">2024-11-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="格式先说明任务设定然后是现有的lreid的benchmark附上图之后说明一下现在的任务的难点以及我们设计的benchmark是怎样的也要附上图并且要说明清楚infrared-image是怎么放进去的">格式：先说明任务设定，然后是现有的lreid的benchmark，附上图；之后说明一下现在的任务的难点，以及我们设计的benchmark是怎样的（也要附上图，并且要说明清楚infrared
-image是怎么放进去的）</h1>
-<h1 id="将通常的lreid中的若干数据集目前的lreid中用到的数据集都是visible模态的即单模态的换成visible-infrared双模态的数据集也就是说此时要么是只有visible模态数据要么是同时有双模态的数据不会出现只有infrared模态数据的情况可能就是最基本的情况">1.将通常的lreid中的若干数据集（目前的lreid中用到的数据集都是visible模态的，即单模态的）换成visible-infrared双模态的数据集（也就是说此时要么是只有visible模态数据，要么是同时有双模态的数据，不会出现只有infrared模态数据的情况，可能就是最基本的情况）</h1>
-<h1 id="数据流中的数据集有单独visible模态的单独infrared模态的从双模态的数据集中取出来以及两种模态的数据集的也就是此时既有infrared模态数据的缺失也有visible模态数据的缺失这个对应了现实中的什么情况是说有一些摄像头是有两种模态的拍摄功能然后有一些是只能拍visible模态数据的其中能拍两种模态的相机在一些时段能拍到两种模态的数据比如黄昏在一些时段只能拍到一种模态的数据比如大白天基本只能拍到visible模态的数据晚上基本只能拍到infrared模态的数据">2.数据流中的数据集有单独visible模态的，单独infrared模态的（从双模态的数据集中取出来），以及两种模态的数据集的（也就是此时既有infrared模态数据的缺失，也有visible模态数据的缺失）（这个对应了现实中的什么情况？是说有一些摄像头是有两种模态的拍摄功能，然后有一些是只能拍visible模态数据的？其中能拍两种模态的相机，在一些时段能拍到两种模态的数据（比如黄昏），在一些时段只能拍到一种模态的数据（比如大白天基本只能拍到visible模态的数据，晚上基本只能拍到infrared模态的数据）</h1>
-<h1 id="数据流中的数据集中有visible模态的也有infrared模态的每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分例如identity1-10的双模态的数据这个又对应了什么情况">3.数据流中的数据集中有visible模态的，也有infrared模态的。每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分（例如，identity1-10的双模态的数据）（这个又对应了什么情况？</h1>
-<h1 id="从现实应用的角度考虑在终身学习的基础上能做到给定visibleinfrared-image都能找到对应的visibleinfrared-image也就是能完成visibleinfrared到visibleinfrared两两一共四种检索方式就行了考虑最困难的情况即训练的时候只有一种模态然而测试的时候拿的却是另一种模态的数据benchmark能考虑到这种情况不就差不多了吗这样的话第三种到底还有没有必要它的意义在哪里">4.从现实应用的角度考虑，在终身学习的基础上，能做到：给定visible/infrared
-image，都能找到对应的visible/infrared
-image，也就是能完成visible/infrared到visible/infrared两两一共四种检索方式就行了。考虑最困难的情况，即：训练的时候只有一种模态，然而测试的时候拿的却是另一种模态的数据。benchmark能考虑到这种情况，不就差不多了吗？这样的话，第三种到底还有没有必要？它的意义在哪里？</h1>
-<h1 id="初步baseline设计针对visible和infrared两种模态的数据设计两个模型单独编码visible和infrared-image的特征以及单独进行知识保存和缓解灾难性遗忘做到类似于modality-aware即visible-image的特征单独保存和利用infrared-image也是考虑到visible-image的通道数更多特征更丰富多样因此猜测不同数据集间的domain-gap可能会比较大而相比之下infrared-image的特征可能更为简单因此不同数据集的infrared-image的domain-gap可能会小一点那么在lreid中有可能两种模态的特征遗忘的-程度快慢-都是不一样的例如visible-image的特征可能遗忘的更快而infrared-image的特征可能遗忘的慢一点如果用一个模型对两种模态的图像进行编码以及同时保存知识可能会产生相互干扰的情况例如可能为了保留infrared-image的特征反而影响了visible-image特征信息的保留-后续需要对比用一个模型和两个模型效果哪个效果比较好">初步baseline设计：针对visible和infrared两种模态的数据，设计两个模型，单独编码visible和infrared
-image的特征，以及单独进行知识保存和缓解灾难性遗忘，做到类似于modality-aware（即visible
-image的特征单独保存和利用，infrared image也是）（考虑到visible
-image的通道数更多，特征更丰富多样，因此猜测不同数据集间的domain
-gap可能会比较大；而相比之下，infrared
-image的特征可能更为简单，因此不同数据集的infrared image的domain
-gap可能会小一点。那么，在lreid中，有可能两种模态的特征遗忘的 程度/快慢
-都是不一样的。例如，visible image的特征可能遗忘的更快，而infrared
-image的特征可能遗忘的慢一点。如果用一个模型对两种模态的图像进行编码，以及同时保存知识，可能会产生相互干扰的情况（例如，可能为了保留infrared
-image的特征，反而影响了visible
-image特征信息的保留）<br>后续需要对比用一个模型和两个模型效果哪个效果比较好</h1>
-<h1 id="后续安排设计明确benchmark之后尝试跑通baseline">后续安排：设计、明确benchmark，之后尝试跑通baseline</h1>
-<h1 id="问题在第二个benchmark的设定中有没有考察模型-学rgb检索ir学ir检索rgb-的能力换句话说它测试的数据集是怎样的和现有的lreid是不是不一样">问题：在第二个benchmark的设定中，有没有考察模型
-学RGB检索IR/学IR检索RGB
-的能力？换句话说，它测试的数据集是怎样的？和现有的lreid是不是不一样？</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-02 18:17:21" itemprop="dateCreated datePublished" datetime="2024-11-02T18:17:21+08:00">2024-11-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-21 17:01:18" itemprop="dateModified" datetime="2025-05-21T17:01:18+08:00">2025-05-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="acm-mm24"># acm mm24</h2>
-<p>title: Mitigate Catastrophic Remembering via Continual Knowledge
-Purification for Noisy Lifelong Person Re-Identification date:
-2025-05-21 17:00 tags: [cv, lreid, noisy label] categories: [论文阅读,
-cv, object-reid, noisy lifelong reid] ---</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -951,7 +995,7 @@ cv, object-reid, noisy lifelong reid] ---</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">154</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
