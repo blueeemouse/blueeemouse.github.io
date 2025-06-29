@@ -150,6 +150,72 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-09 01:27:48 / Modified: 01:36:25" itemprop="dateCreated datePublished" datetime="2025-02-09T01:27:48+08:00">2025-02-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的
+结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的
+参数定义（用torch.nn调用的话，它们都是继承了torch.nn.Module类，所以一旦初始化，就已经有参数了；而用torch.nn.functional调用，则需要自己定义参数，并且在调用的时候手动传入，相比之下复杂许多）
+参数管理（比如，用类的时候就可以结合优化器，自动更新参数；而如果是用torch.nn.functional来调用，不仅参数需要我们自己传入，还需要我们自己指定是否要求梯度，并且即使我们指定了要求梯度，优化器也不能实现自动更新参数，必须得我们手动更细，极其麻烦）
+设备控制（就是控制在cpu还是gpu/哪块gpu）
+模型参数保存（torch.nn类保存参数可以用torch.save(model.state_dict(),
+'model.pth')这种语句很快捷地保存，而torch.nn.functional的话，就需要手动保存和加载参数）
+等方面都要方便很多</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E5%BF%AB%E6%8E%92&%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F&%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1056,70 +1122,6 @@ loss，它会拉近rgb和ir模态与中间模态的特征之间的距离（注�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-12-12 19:33:47 / Modified: 19:43:16" itemprop="dateCreated datePublished" datetime="2024-12-12T19:33:47+08:00">2024-12-12</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="服务器可能有时候会在配置环境下载库的时候说http之类的错误类似这样">服务器可能有时候会在配置环境，下载库的时候说http之类的错误，类似这样</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
-<h1 id="也不知道是不是源出了问题而如果想在创建环境装库的时候临时指定别的源一般都是现场查问ai它会说在后面加个-c指定一下源可是有时候还是会报错让人疑惑">也不知道是不是源出了问题。而如果想在创建环境/装库的时候临时指定别的源，一般都是现场查，问ai，它会说在后面加个-c，指定一下源，可是有时候还是会报错，让人疑惑：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
-<h1 id="然而如果仔细看一下它的问题好像是压根就没按我指定的源来啊虽然不太清楚这是为什么但显然此时更根本的方法是去condarc下删掉不想用的源比如这里的阿里源而此时又会现查问ai它一般会说用什么编辑器去打开那个condarc比如vim-.condarc进去编辑完再出来config-show一下检查却发现改动好像没生效此时我怀疑有个潜藏的问题就是ai的回答是假设了你在个人电脑上用或者说假设了你的conda是装在默认路径了然而我现在用的是服务器conda是装在我指定的非默认路径下那么上面修改的condarc其实就是没用的得去修改我安装路径里的conda的condarc才行事实上最后也确实是去我的个人路径下把condarc的源给改了然后再装就成功了">然而如果仔细看一下，它的问题好像是，压根就没按我指定的源来啊。虽然不太清楚这是为什么，但显然此时更根本的方法是，去condarc下删掉不想用的源，比如这里的阿里源。而此时又会现查，问ai，它一般会说用什么编辑器去打开那个condarc，比如<code>vim ~/.condarc</code>。进去编辑完，再出来，config
-show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏的问题，就是，ai的回答，是假设了你在个人电脑上用，或者说假设了你的conda是装在默认路径了。然而，我现在用的是服务器，conda是装在我指定的，非默认路径下。那么，上面修改的condarc其实就是没用的，得去修改我安装路径里的conda的condarc才行。事实上，最后也确实是，去我的个人路径下把condarc的源给改了，然后再装，就成功了</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1189,18 +1191,18 @@ show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

@@ -150,6 +150,169 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E9%93%BE%E8%A1%A8&%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97&kmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E9%93%BE%E8%A1%A8&%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97&kmp/" class="post-title-link" itemprop="url">chap2.第一讲 链表&栈与队列&kmp</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:41:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:41:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:40" itemprop="dateModified" datetime="2025-05-05T10:55:40+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="链表">1.链表</h1>
+<h2 id="简介这里主要讲的是用数组来模拟链表的操作而不是用结构体指针实现的链表具体会实现的有单链表常用于表示邻接表因而会用于图和树结构的表示和双链表常用于优化某些问题之所以在算法题里用数组来模拟主要是如果用结构体指针来构建链表的话每次增加一个节点都需要一个new操作这个操作是比较耗时的而算法题里又经常有比较多的操作这样的话可能光这些涉及到的new操作就超时了所以不太行故转向用数组模拟的静态链表">1.1.简介：这里主要讲的是用数组来模拟链表的操作，而不是用结构体＋指针实现的链表。具体会实现的有单链表（常用于表示邻接表，因而会用于图和树结构的表示）和双链表（常用于优化某些问题）（之所以在算法题里用数组来模拟，主要是如果用结构体+指针来构建链表的话，每次增加一个节点都需要一个new操作，这个操作是比较耗时的，而算法题里又经常有比较多的操作，这样的话可能光这些涉及到的new操作就超时了，所以不太行，故转向用数组模拟的静态链表</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E9%93%BE%E8%A1%A8&%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97&kmp/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/" class="post-title-link" itemprop="url">chap2.第二讲 trie树&并查集&堆</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:41:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:41:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:47" itemprop="dateModified" datetime="2025-05-05T10:55:47+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="trie树">1.trie树</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -724,164 +887,6 @@ RE-IDENTIFICATION</h1>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/Learning%20Transferable%20Visual%20Models%20From%20Natural%20Language%20Supervision/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/Learning%20Transferable%20Visual%20Models%20From%20Natural%20Language%20Supervision/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-11 16:48:45 / Modified: 23:54:15" itemprop="dateCreated datePublished" datetime="2025-03-11T16:48:45+08:00">2025-03-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="insight">insight：</h1>
-<h1 id="motivation">motivation：</h1>
-<h2 id="在此之前视觉预训练的模型通常是用大量数据针对某一个任务进行训练比如分类任务这样得到的预训练模型局限性比较大因为它只能局限在一个特定类型的任务不方便迁移到其它任务迁移到其它下游任务都需要对应的数据进行微调而我们希望的一个好的预训练模型应该能做到比较方便地迁移到各种下游任务">在此之前，视觉预训练的模型通常是用大量数据，针对某一个任务进行训练（比如分类任务）。这样得到的预训练模型局限性比较大，因为它只能局限在一个特定类型的任务，不方便迁移到其它任务。迁移到其它下游任务，都需要对应的数据进行微调。而我们希望的一个好的预训练模型，应该能做到：比较方便地迁移到各种下游任务</h2>
-<h2 id="另外一部分愿意也是当时nlp领域里用自监督预训练得到的模型效果特别好迁移到各种不同的下游任务效果都不错zero-shot能力很强相比之下当时cv领域就还是用大量有标签数据进行预训练下游微调的范式而大量标注数据是极其费时费力的所以自然cv领域里也有人想模仿nlp领域也用自监督来预训练但效果不尽如人意一个重要的点就在于规模之前cv领域里想尝试自监督它们用到的模型和数据量都远比nlp领域里的小clip做的一个改进就是设计了一个便于scale-up的架构从而模型大起来了数据量也大起来了效果也上来了">另外一部分愿意，也是当时nlp领域里用自监督预训练得到的模型效果特别好，迁移到各种不同的下游任务效果都不错，zero-shot能力很强。相比之下，当时cv领域就还是用大量有标签数据进行预训练+下游微调的范式。而大量标注数据是极其费时费力的。所以自然cv领域里也有人想模仿nlp领域，也用自监督来预训练。但效果不尽如人意。一个重要的点就在于规模。之前cv领域里想尝试自监督，它们用到的模型和数据量都远比nlp领域里的小。clip做的一个改进就是设计了一个便于scale
-up的架构，从而模型大起来了，数据量也大起来了，效果也上来了</h2>
-<h1 id="方法">方法</h1>
-<h2 id="构建数据集">1.构建数据集</h2>
-<h3 id="这里的第一步是构建一个足够大的图像-文本数据对因为预训练的任务就是用到图像-文本数据对的之前常用的几个数据集比如ms-cocovisual-genome质量虽然够高但太小了大约100000而另一个比较大的数据集yfcc100m有大约100-million张图像量级确实够了但它是质量又不够高筛完之后大约只有15-million了一千五百万这和扩展之后的imagenet是差不多量级的imagenet-21k有大约21k个类别约1400万张图像所以确实得自己构造">这里的第一步是构建一个足够大的图像-文本数据对（因为预训练的任务就是用到图像-文本数据对的）。之前常用的几个数据集，比如MS-COCO，Visual
-Genome质量虽然够高，但太小了（大约100000）。而另一个比较大的数据集，YFCC100M，有大约100
-million张图像，量级确实够了，但它是质量又不够高。筛完之后，大约只有15
-million了（一千五百万），这和扩展之后的ImageNet是差不多量级的（ImageNet-21k，有大约21k个类别，约1400万张图像）。所以确实得自己构造</h3>
-<h3 id="它构造的大致流程是根据一定方法筛选出高频的有意义的query500000个query然后用这些query在网上进行搜索并获取数据同时为了防止数据的不平衡限制了每个query的结果最多不超过20000个图像-文本对最终得到的数据集是400-million个数据对这和gpt-2的预训练语料差不多大了那边的叫webtext-dataset这里构造出来的就叫做webimagetextwit">它构造的大致流程是，根据一定方法，筛选出高频的，有意义的query（500000个query），然后用这些query在网上进行搜索并获取数据（同时为了防止数据的不平衡，限制了每个query的结果最多不超过20000个图像-文本对）。最终得到的数据集是400
-million个数据对，这和GPT-2的预训练语料差不多大了。那边的叫WebText
-dataset，这里构造出来的就叫做WebImageText（WIT）</h3>
-<h2 id="selecting-an-efficient-pre-training-method">2.Selecting an
-Efficient Pre-Training Method</h2>
-<h3 id="之前的用文本-图像对来训练的方法是训练一个cnn来提取图像特征还有一个text-transformer接受图像特征之后要预测生成图像的caption还有一个baseline就是仍然训练一个cnn文字部分则是用词袋模型来编码之后会把提取出来的图像特征进行投影希望能得到对应的文本的词袋向量这两个方法进行比较会发现用transformer那个特别慢具体来说就是它得用很多的数据才能做到和baseline差不多的效果论文里给出结果大概是3倍的数据的关系">之前的用文本-图像对来训练的方法，是训练一个CNN来提取图像特征，还有一个text
-transformer，接受图像特征之后，要预测生成图像的caption。还有一个baseline，就是，仍然训练一个CNN，文字部分则是用词袋模型来编码，之后会把提取出来的图像特征进行投影，希望能得到对应的文本的词袋向量。这两个方法进行比较，会发现：用transformer那个，特别”慢“。具体来说，就是它得用很多的数据才能做到和baseline差不多的效果。论文里给出结果，大概是3倍的数据的关系</h3>
-<h3 id="另一方面近期的工作表明对比式的目标函数比预测式的目标函数效果要好所以论文也进行了一个替换把任务从根据图像特征预测对应文本变成根据图像特征匹配相应的文本这个任务更加简单训练的时候给定n个文本-图像对我们的训练目标就是把匹配的文本和图像特征之间尽可能拉近把不匹配的文本和图像特征之间尽可能拉远且实验上表明它的效果非常好模型学习起来的时候很快只需要用大概baseline的四分之一的数据量就能达到同一个效果当然是指定了一个精度的前提下具体可以看论文的图">另一方面，近期的工作表明对比式的目标函数比预测式的目标函数效果要好，所以论文也进行了一个替换，把任务从根据图像特征预测对应文本，变成根据图像特征，匹配相应的文本。这个任务更加简单（训练的时候，给定N个文本-图像对，我们的训练目标就是把匹配的文本和图像特征之间尽可能拉近，把不匹配的文本和图像特征之间尽可能拉远），且实验上表明它的效果非常好，模型学习起来的时候很快，只需要用大概baseline的四分之一的数据量就能达到同一个效果（当然是指定了一个精度的前提下。具体可以看论文的图）</h3>
-<h2 id="choosing-and-scaling-a-model">3.Choosing and Scaling a
-Model</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unified-ReID/Instruct-ReID++%EF%BC%9ATowards%20Universal%20Purpose%20%20Instruction-Guided%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unified-ReID/Instruct-ReID++%EF%BC%9ATowards%20Universal%20Purpose%20%20Instruction-Guided%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-11 11:36:57 / Modified: 15:06:36" itemprop="dateCreated datePublished" datetime="2025-03-11T11:36:57+08:00">2025-03-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="motivation现在reid相关的研究有很多不同的设定不同的设定就需要用不同的方法没有一个好用的统一的框架方法且现在绝大多数的检索都是用图像来检索图像然而如果是人来检索还可以通过自然语言的描述来进行检索所以论文提出一套统一的框架尝试解决方法不统一的问题同时加入用文字描述来进行检索的功能进一步提高方法的实用性显然会有一些只能用文字描述来检索图像的场景比如找犯人时可能没有犯人的照片但有被害人的证词">motivation：现在reid相关的研究，有很多不同的设定，不同的设定就需要用不同的方法，没有一个好用的统一的框架/方法。且，现在绝大多数的检索都是用图像来检索图像，然而如果是人来检索，还可以通过自然语言的描述来进行检索。所以，论文提出一套统一的框架，尝试解决方法不统一的问题，同时加入用文字描述来进行检索的功能，进一步提高方法的实用性（显然会有一些只能用文字描述来检索图像的场景。比如，找犯人时，可能没有犯人的照片，但有被害人的证词）</h1>
-<h1 id="insight">insight：</h1>
-<h1 id="方法">方法：</h1>
-<h2 id="instruction-generation">1.Instruction Generation</h2>
-<h3 id="论文之所以能把各种任务统一起来就是因为它用了一个框架query-imageinstructiongallery-image不同的设定就由instruction来指定所以instruction是非常重要的">论文之所以能把各种任务统一起来，就是因为它用了一个框架，Query
-image+instruction+Gallery
-image，不同的设定就由instruction来指定。所以instruction是非常重要的</h3>
-<h2 id="model-architecture-of-irm">2.Model Architecture of IRM</h2>
-<h3 id="这里先介绍一下irm的架构这个irm就是可以统一处理各种设定的reid任务的模型它和之后的irm有些不同">这里先介绍一下IRM的架构（这个IRM就是可以统一处理各种设定的reid任务的模型。它和之后的IRM++有些不同）</h3>
-<h3 id="简单来说它有三大部分一个是instruction-encoder-epsilon_i用于处理文字的instruction把它变成特征向量f_t这里的encoder是一个visual-language-model之所以是visual-language-model而不是单纯的文字模态的模型应该是为了把文字投影到一个图像和文字公共的空间里以便后续进行图像和文字信息的融合否则单独用一个语言模型把文字投影到一个文字模态的特征空间后续也不好用来和图像进行融合-二是editing-transformer-epsilon_e它会把图像特征和文字特征一起当作输入用于获取经过文字指导后的图像特征f-三是一个attention-module-epsilon_f它的输入是文字特征f_t和融合特征f输出即为最终特征f_out主要功能是把文字信息和图像信息进一步融合其实理论上来讲前面的f应该就已经完成了文字和图像信息的融合了这里还来和文字信息一起输入应该就是单纯的想强化一下instruction了毕竟instruction承担的是指示任务类型的作用还是很重要的否则甚至会把任务类型搞错了">简单来说，它有三大部分，一个是instruction
-encoder <span class="math inline">\(\epsilon_{i}\)</span>，用于处理文字的instruction，把它变成特征向量<span class="math inline">\(F_{T}\)</span>（这里的encoder是一个visual language
-model。之所以是visual language
-model，而不是单纯的文字模态的模型，应该是为了把文字投影到一个图像和文字公共的空间里，以便后续进行图像和文字信息的融合。否则单独用一个语言模型，把文字投影到一个文字模态的特征空间，后续也不好用来和图像进行融合）<br>二是editing
-transformer <span class="math inline">\(\epsilon_{e}\)</span>，它会把图像特征和文字特征一起当作输入，用于获取经过文字指导后的图像特征<span class="math inline">\(F\)</span><br>三是一个attention module <span class="math inline">\(\epsilon_{f}\)</span>，它的输入是文字特征<span class="math inline">\(F_{T}\)</span>和融合特征<span class="math inline">\(F\)</span>，输出即为最终特征<span class="math inline">\(F_{out}\)</span>，主要功能是把文字信息和图像信息进一步融合（其实理论上来讲，前面的<span class="math inline">\(F\)</span>应该就已经完成了文字和图像信息的融合了。这里还来和文字信息一起输入，应该就是单纯的想强化一下instruction了。毕竟instruction承担的是指示任务类型的作用，还是很重要的，否则甚至会把任务类型搞错了）</h3>
-<h3 id="这里训练的损失除了经典的分类损失还有一个论文提出的adaptive-triplet-loss对这个损失我的理解是它是针对同一id的融合了不同instruction的特征进行区分的具体来说假如有两幅图像都是id-0的样本但它们的instruction不同所以理论上图像和文字信息融合之后得到的最终特征f_out也应该尽可能远离本质上看这个损失是为了提高模型对指令的跟随和区分能力这个之所以创新也是因为这篇论文是用instruction的形式来做reid吧确实是一个新任务下的难点-则此时构造的triplet是一个anchor和一个正样本我的理解是同id且和anchor同样instruction以及一个负样本我的理解是同id但和anchor不同instruction然而看论文似乎和anchor同instruction也可以但这样的话这个损失大概率就是0意义不大了-看公式l_atrifrac1n_trisum_i1n_tri-signbeta_1-beta_2df_iaf_ir1beta_1-beta_2m-df_iaf_ir2它的中括号里第一项应该就是anchor和正样本之间的距离我们是希望它尽可能小的第二项是margin因为它是和beta_1beta_2相关的而beta_1beta_2又是和具体的三元组相关的所以它是随数据而变化的故称为所谓的adaptive-triplet-loss减去的第三项是anchor和负样本之间的距离我们希望它尽可能大从而减掉它之后整体会尽可能小损失会尽可能小到这整体是没什么问题的都是常见的思路-下面再仔细看一下中间第二项的自适应marginbeta的计算公式是beta_jiy_ay_r_jcosf_taf_tr_j它的含义是若两个数据的id相同则度量它们的instruction之间的距离这里我们先只考虑id相同的情况则beta度量的就单纯是指令之间的距离指令越相似beta越大那么回到上面的l_atri如果正样本和anchor的instruction尽可能相似乃至完全一样则beta_1就越发接近1而如果负样本和anchor之间的instruction非常不同则beta_2会尽可能接近-1此时beta_1-beta_2就会越大越接近2故margin就会越大这代表了什么呢-可以理解为同一id的数据它们遵循的instruction如果差距越大则我们希望融合了instruction之后的图像特征也应该尽可能差距大这样模型就相当于对指令有了比较好的区分能力它知道指令之间是不同的也知道即使是同一个id的特征融合了不同的指令信息之后就是不同的应该分离的此时模型应当是很好地理解了指令的也就能更好地跟随指令了故margin也应该越大因为margin大代表我们对它们的区分能力要求越高">这里训练的损失，除了经典的分类损失，还有一个论文提出的adaptive
-triplet
-loss。对这个损失，我的理解是，它是针对同一id的，融合了不同instruction的特征进行区分的。具体来说，假如有两幅图像，都是id
-0的样本，但它们的instruction不同，所以理论上图像和文字信息融合之后得到的最终特征<span class="math inline">\(F_{out}\)</span>也应该尽可能远离。（本质上看，这个损失是为了提高模型对指令的跟随和区分能力。这个之所以创新，也是因为这篇论文是用instruction的形式来做reid吧。确实是一个新任务下的难点）<br>则此时构造的triplet是一个anchor，和一个正样本（我的理解是，同id，且和anchor同样instruction），以及一个负样本（我的理解是，同id，但和anchor不同instruction。然而看论文，似乎和anchor同instruction也可以。但这样的话这个损失大概率就是0，意义不大了）<br>看公式<span class="math display">\[L_{atri}=\frac{1}{N_{tri†}}\sum_{i=1}^{N_{tri†}}\{
-Sign(\beta_{1}-\beta_{2})[d(F_{i}^{a},F_{i}^{r1})+(\beta_{1}-\beta_{2})m-d(F_{i}^{a},F_{i}^{r2})]\}\]</span>它的中括号里，第一项应该就是anchor和正样本之间的距离，我们是希望它尽可能小的；第二项是margin，因为它是和<span class="math inline">\(\beta_{1},\beta_{2}\)</span>相关的，而<span class="math inline">\(\beta_{1},\beta_{2}\)</span>又是和具体的三元组相关的，所以它是随数据而变化的，故称为所谓的adaptive
-triplet
-loss，减去的第三项是anchor和负样本之间的距离，我们希望它尽可能大，从而减掉它之后整体会尽可能小，损失会尽可能小。到这，整体是没什么问题的，都是常见的思路<br>下面再仔细看一下中间第二项的自适应margin。<span class="math inline">\(\beta\)</span>的计算公式是：<span class="math inline">\(\beta_{j}=I(y_{a}=y_{r_{j}})Cos&lt;F_{T}^{a},F_{T}^{r_{j}}&gt;\)</span>。它的含义是，若两个数据的id相同，则度量它们的instruction之间的距离。这里我们先只考虑id相同的情况，则<span class="math inline">\(\beta\)</span>度量的就单纯是指令之间的距离。指令越相似，<span class="math inline">\(\beta\)</span>越大。那么，回到上面的<span class="math inline">\(L_{atri}\)</span>，如果正样本和anchor的instruction尽可能相似乃至完全一样，则<span class="math inline">\(\beta_{1}\)</span>就越发接近1；而如果负样本和anchor之间的instruction非常不同，则<span class="math inline">\(\beta_{2}\)</span>会尽可能接近-1，此时<span class="math inline">\(\beta_{1}-\beta_{2}\)</span>就会越大（越接近2），故margin就会越大。这代表了什么呢？<br>可以理解为，同一id的数据，它们遵循的instruction如果差距越大，则我们希望，融合了instruction之后的图像特征也应该尽可能差距大，这样模型就相当于对指令有了比较好的区分能力，它知道指令之间是不同的，也知道即使是同一个id的特征，融合了不同的指令信息之后就是不同的，应该分离的。此时模型应当是很好地理解了指令的，也就能更好地跟随指令了（故margin也应该越大，因为margin大代表我们对它们的区分能力要求越高）</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -951,18 +956,18 @@ loss，减去的第三项是anchor和负样本之间的距离，我们希望它�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

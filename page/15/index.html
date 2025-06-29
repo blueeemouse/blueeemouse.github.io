@@ -150,6 +150,146 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-25 14:22:57" itemprop="dateCreated datePublished" datetime="2024-10-25T14:22:57+08:00">2024-10-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-16 22:42:49" itemprop="dateModified" datetime="2025-02-16T22:42:49+08:00">2025-02-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr24">cvpr24</h1>
+<h1 id="所研究的taskunsupervised-visible-infrared-person-re-identification相比于一般的vi-reid只是变成了无监督其它的要求还是不变的">所研究的task：Unsupervised
+Visible-Infrared Person
+Re-Identification。相比于一般的VI-ReID，只是变成了无监督，其它的要求还是不变的</h1>
+<h1 id="动机之前的方法它们提取特征都是用最后一层的输出更多的包含语义信息而浅层提取出的特征更多包含的是具体的细节信息但这部分信息被忽略了nevertheless-interfered-by-the-multiple-discrepancies-i.e.-intra-modality-variation-and-inter-modality-discrepancy-solely-relying-on-deep-features-is-insufficient-for-accurately-learning-modality-invariant-features-resulting-in-negative-optimization只不过是为了讲故事为了给它改进骨干网络做个铺垫它也并不是通过某些实验的结果分析看出来需要加上浅层特征的啊所以论文希望能把遗漏的这部分细节信息给利用上">动机：之前的方法，它们提取特征都是用最后一层的输出，更多的包含语义信息，而浅层提取出的特征更多包含的是具体的细节信息，但这部分信息被忽略了（Nevertheless,
+interfered by the multiple discrepancies, i.e., intra-modality variation
+and inter-modality discrepancy, solely relying on deep features is
+insufficient for accurately learning modality-invariant features,
+resulting in negative
+optimization）（只不过是为了讲故事？为了给它改进骨干网络做个铺垫。它也并不是通过某些实验的结果/分析看出来需要加上浅层特征的啊。。）。所以论文希望能把遗漏的这部分细节信息给利用上</h1>
+<h1 id="insight">insight</h1>
+<h1 id="方法">方法：</h1>
+<h2 id="shallow-deep-contrastive-learning">1.Shallow-Deep Contrastive
+Learning</h2>
+<h3 id="对于rgb和ir两种模态的训练数据要经过两套网络得到各自的shallow和deep-feature所谓shallow-feature就是经过一个msa层而deep-feature就是经过一个transformer都是把cls给提取出来当feature它们就组成了四个instance-memory此外两个模态的shallowdeep-feature各自进行聚类就是在shallow-rgb的feature里进行聚类在shallow-ir的feature里进行聚类一共会在四种feature里进行聚类至于cluster-memory的初始化就是把对应的那部分特征取均值比如要初始化shallow-rgb的cluster-memory那就把shallow-rgb的所有特征取均值其余类似">对于RGB和IR两种模态的训练数据，要经过两套网络得到各自的shallow和deep
+feature（所谓shallow feature就是经过一个MSA层，而deep
+feature就是经过一个transformer）（都是把CLS给提取出来当feature）。它们就组成了四个instance
+memory。此外，两个模态的shallow/deep feature各自进行聚类（就是在shallow
+RGB的feature里进行聚类，在shallow
+IR的feature里进行聚类。。。一共会在四种feature里进行聚类）。至于cluster
+memory的初始化，就是把对应的那部分特征取均值（比如，要初始化shallow
+RGB的cluster memory，那就把shallow RGB的所有特征取均值。其余类似）</h3>
+<h3 id="cluster-memory的优化主要是动量更新">cluster
+memory的优化主要是动量更新</h3>
+<h3 id="因为在四种特征里都进行了聚类比如在shallow-rgb-feature里进行聚类得到5类现在这些类就是伪标签我们要用它来进行对比学习这里的对比学习主要是优化前面提取shallowdeep-feature的网络的也就是为了更好地提取特征">因为在四种特征里都进行了聚类，比如在shallow
+RGB
+feature里进行聚类，得到5类。现在这些类就是伪标签，我们要用它来进行对比学习。这里的对比学习主要是优化前面提取shallow/deep
+feature的网络的，也就是为了更好地提取特征</h3>
+<h2 id="collaborative-neighbor-learning">2.Collaborative Neighbor
+Learning</h2>
+<h3 id="大体上做的事就是把各种特征进行对比也有跨模态的特征对比所以它一直强调cross-modality-supervision">大体上做的事就是把各种特征进行对比，也有跨模态的特征对比，所以它一直强调cross-modality
+supervision</h3>
+<h3 id="特征的相似度用余弦相似度来度量然后shallowdeep有两种选择rgbir两种选择又因为是两个特征之间进行度量理论上会有16种不同种类的特征进行相似度度量然而要注意的是shallowdeep的选择一定是同步的即要么同时度量两个shallow-feature要么同时度量两个deep-feature因为度量特征的最终目的是希望拉近某些特征的距离但我们并没有必要去拉近某个deep-feature和shallow-feature之间的距离我们的本意就是想分别利用shallow和deep-feature各自含有的不同信息这样拉近距离反而可能造成一些问题所以实际是有8种不同特征的搭配来进行度量-首先注意一个输入图像不论是rgb还是ir都会有shallow和deep两种feature-其次计算损失的时候是先给定一个batch的query每个query是一个图像它会有上面说的两种特征然后对每个query我们可以计算它的同一个模态的邻居也可以计算它的不同模态的邻居不妨以query为rgb图像要计算它的不同模态即ir模态的邻居为例我们先拿到该query的shallow-feature然后让它和所有ir模态的shallow-feature进行相似度度量因为我们这里要计算的是不同模态的邻居之后根据相似度高低进行一些筛选选出多少则是由一个超参数γ决定得到一些ir模态shallow-feature再取出该query的deep-feature让它和所有ir模态的deep-feature进行相似度度量取一些相近的deep-feature两组featured的交集即该query的不同模态的邻居其它几种邻居计算方法类似-得到每个query的邻居后开始计算对比损失大体上分成四个部分vvvrrvrrv代表rgbr代表ir不妨以vv的损失计算过程为例首先vv损失也会分成shallow和deep两部分然后shallow部分就是batch里的每个query都计算它和它的shallow邻居之间的对比损失再取均值deep部分类似二者相加shallow部分有个超参数得到vv损失其余几个损失计算方法类似-整个方法的损失就是两个部分一个是这里的四部分对比损失之和另一个就是shallow-deep-contrastive-learning里的损失">特征的相似度用余弦相似度来度量。然后shallow/deep有两种选择，RGB/IR两种选择，又因为是两个特征之间进行度量，理论上会有16种不同种类的特征进行相似度度量。然而要注意的是，shallow/deep的选择一定是同步的，即，要么同时度量两个shallow
+feature，要么同时度量两个deep
+feature。因为度量特征的最终目的是希望拉近某些特征的距离，但我们并没有必要去拉近某个deep
+feature和shallow
+feature之间的距离（我们的本意就是想分别利用shallow和deep
+feature各自含有的不同信息，这样拉近距离反而可能造成一些问题）。所以实际是有8种不同特征的搭配来进行度量。<br>首先注意，一个输入图像（不论是RGB还是IR），都会有shallow和deep两种feature。<br>其次，计算损失的时候，是先给定一个batch的query。每个query是一个图像，它会有上面说的两种特征。然后，对每个query，我们可以计算它的同一个模态的邻居，也可以计算它的不同模态的邻居。不妨以query为RGB图像，要计算它的不同模态（即IR模态）的邻居为例。我们先拿到该query的shallow
+feature，然后让它和所有IR模态的shallow
+feature进行相似度度量（因为我们这里要计算的是不同模态的邻居），之后根据相似度高低，进行一些筛选（选出多少则是由一个超参数γ决定），得到一些IR模态shallow
+feature。再取出该query的deep feature，让它和所有IR模态的deep
+feature进行相似度度量，取一些相近的deep
+feature。<strong>两组featured的交集，即该query的不同模态的邻居</strong>。其它几种邻居计算方法类似。<br>得到每个query的邻居后，开始计算对比损失。大体上分成四个部分，vv、vr、rv、rr（v代表RGB，r代表IR）。不妨以vv的损失计算过程为例。首先，vv损失也会分成shallow和deep两部分。然后shallow部分就是batch里的<strong>每个query都计算它和它的shallow邻居之间的对比损失</strong>，再取均值。deep部分类似。二者相加（shallow部分有个超参数）得到vv损失。其余几个损失计算方法类似。<br>整个方法的损失就是两个部分，一个是这里的四部分对比损失之和，另一个就是shallow-deep
+contrastive learning里的损失</h3>
+<h3 id="如果说3.1的shallow-deep-contrastive-learning主要是特征之间自己对比并且都是同一模态下的那么3.2的collaborative-neighbor-learning就是query和neighbor之间的对比并且有跨模态的对比">如果说3.1的Shallow-deep
+Contrastive
+Learning主要是特征之间自己对比，并且都是同一模态下的，那么3.2的Collaborative
+Neighbor Learning就是query和neighbor之间的对比，并且有跨模态的对比</h3>
+<h2 id="collaborative-ranking-association这一步是在利用上面的特征进行推理">3.Collaborative
+Ranking Association（这一步是在利用上面的特征进行推理）</h2>
+<h3 id="这一步的执行顺序应该是在聚类完之后根据下面两个假设对聚类的伪标签进行了一些平滑操作之后才是1.里的shallow-deep-contrastive-learning那里的contrastive-learning依赖于伪标签">这一步的执行顺序应该是在聚类完之后，根据下面两个假设，<strong>对聚类的伪标签进行了一些平滑操作</strong>。之后才是1.里的Shallow-deep
+contrastive learning（那里的contrastive learning依赖于伪标签）</h3>
+<h3 id="它是基于两个假设提出的-一是在两个模态之间用shallowdeep-feature进行相似度度量之后进行排名这两个排名应该尽可能一致-二是同一个模态内shallowdeep-feature进行相似性度量并进行排名这个一致性会相比上面的更好">它是基于两个假设提出的：<br>一是，在两个模态之间用shallow/deep
+feature进行相似度度量，之后进行排名，这两个排名应该尽可能一致<br>二是，同一个模态内shallow/deep
+feature进行相似性度量，并进行排名，这个一致性会相比上面的更好</h3>
+<h3 id="这里会有两个步骤">这里会有两个步骤</h3>
+<h3 id="一个是inter-modality-ranking-association-给定一个rgb图像我们有它的shallow和deep-feature用shallow-feature和所有的ir图像的shallow-feature进行相似性度量得到一个排序deep-feature和所有的ir图像的deep-feature进行相似性度量也得到一个排序我们假设deep-feature得到的排序里有n个结果也就是假设ir图像一共有n个统计相似性从高到低的每个结果它的标签和多少个shallow-feature的排序里的结果的标签相同这里从简我们记deep-feature的第k个结果对应和shallow-feature里n_k个结果有相同标签最后这个rgb图像的标签就应该是最大的n_k对应的那个标签最终对每幅图像都做这个操作得到一个标签矩阵每一行是一个独热向量">一个是Inter-modality
+Ranking Association<br>给定一个RGB图像，我们有它的shallow和deep
+feature。用shallow feature和所有的IR图像的shallow
+feature进行相似性度量，得到一个排序；deep feature和所有的IR图像的deep
+feature进行相似性度量，也得到一个排序。我们假设deep
+feature得到的排序里有N个结果（也就是假设IR图像一共有N个），统计相似性从高到低的每个结果，它的标签和多少个shallow
+feature的排序里的结果的标签相同。这里从简，我们记deep
+feature的第k个结果对应和shallow feature里<span class="math inline">\(n_{k}\)</span>个结果有相同标签。最后，这个RGB图像的标签就应该是最大的<span class="math inline">\(n_{k}\)</span>对应的那个标签。最终对每幅图像都做这个操作，得到一个标签矩阵，每一行是一个独热向量</h3>
+<h3 id="第二个是intra-modality-collaborative-smoothing这个还是很合理的毕竟光用deep-feature得到一个相似度矩阵其实可能不太够因为前面说了shallow-feature还是可能提供一些信息的也要利用起来但这里综合利用二者的方式是分别求得相似性矩阵然后相加有没有其它的综合方式直接融合可以吗-我们用所有rgb图像的shallowdeep-feature两两计算相似度得到两个矩阵两个矩阵相加之后每一行将前五大的数置为1其余置为0这里想做的就是根据shallow-feature-similarity和deep-feature-similarity综合考量得到每一个样本可能和哪几个样本相似性较高得到这个矩阵后用这个矩阵左乘上面的到的标签矩阵又得到一个矩阵它的形状是n-cn是rgb图像的样本数量c是ir图像的类别每一行最大的元素对应的列数就是这个样本的最终的标签">第二个是Intra-modality
+Collaborative Smoothing（这个还是很合理的。毕竟光用deep
+feature得到一个相似度矩阵，其实可能不太够，因为前面说了，shallow
+feature还是可能提供一些信息的，也要利用起来。但这里综合利用二者的方式是分别求得相似性矩阵，然后相加。有没有其它的综合方式？直接融合可以吗？）<br>我们用所有RGB图像的shallow/deep
+feature，两两计算相似度，得到两个矩阵，两个矩阵相加，之后每一行将前五大的数置为1，其余置为0（这里想做的就是根据shallow
+feature similarity和deep feature
+similarity，综合考量，得到每一个样本可能和哪几个样本相似性较高）。得到这个矩阵后，用这个矩阵左乘上面的到的标签矩阵，又得到一个矩阵，它的形状是N
+*
+C（N是RGB图像的样本数量，C是IR图像的类别），每一行最大的元素对应的列数就是这个样本的最终的标签</h3>
+<h1 id="细节">细节</h1>
+<h1 id="我的问题homogeneous-and-heterogeneous-collaboration到底是指什么">我的问题：homogeneous
+and heterogeneous collaboration到底是指什么？</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/paper%E8%B0%83%E7%A0%94%20vi-reid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -983,64 +1123,6 @@ bash，再重新开，然后再试试conda命令，看看是不是永久配置�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/13/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib.pyplot%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%93%E9%94%99%E7%94%A8%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/13/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib.pyplot%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%93%E9%94%99%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-13 11:58:01" itemprop="dateCreated datePublished" datetime="2024-10-13T11:58:01+08:00">2024-10-13</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1110,18 +1192,18 @@ bash，再重新开，然后再试试conda命令，看看是不是永久配置�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
