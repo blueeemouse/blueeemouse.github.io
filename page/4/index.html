@@ -150,6 +150,119 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-29 01:08:46 / Modified: 01:38:26" itemprop="dateCreated datePublished" datetime="2025-05-29T01:08:46+08:00">2025-05-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="文章聚焦于多智能体系统中协作任务下智能体的自适应行为构建问题现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性导致在零样本协作场景即与未知队友协作中智能体缺乏战略适应能力研究旨在解决这一挑战提出利用大语言模型llms构建可动态适应队友行为的主动协作智能体框架-proagent">文章聚焦于多智能体系统中<strong>协作任务下智能体的自适应行为构建问题</strong>。现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性，导致在<strong>零样本协作场景</strong>（即与未知队友协作）中，智能体缺乏战略适应能力。研究旨在解决这一挑战，提出利用大语言模型（LLMs）构建可动态适应队友行为的主动协作智能体框架
+ProAgent。</h1>
+<h1 id="零样本协作挑战指智能体在没有预先训练或微调的情况下与未知队友包括-ai-或人类协作时面临的适应性难题文中提到现有-zsc-方法如基于种群训练-pbt心智理论-tom需消耗大量计算资源进行数据收集和模型优化且生成的策略缺乏可解释性难以在未见过的协作场景中有效泛化例如在-overcooked-ai-环境中传统方法无法高效推断新队友的意图导致协作效率低下">零样本协作挑战指智能体在<strong>没有预先训练或微调</strong>的情况下，与未知队友（包括
+AI 或人类）协作时面临的适应性难题。文中提到，现有 ZSC
+方法（如基于种群训练 PBT、心智理论
+ToM）需消耗大量计算资源进行数据收集和模型优化，且生成的策略缺乏可解释性，难以在未见过的协作场景中有效泛化。例如，在
+Overcooked-AI
+环境中，传统方法无法高效推断新队友的意图，导致协作效率低下。</h1>
+<h1 id="动态意图推理的挑战">动态意图推理的挑战</h1>
+<h2 id="动态意图推理的挑战指在协作过程中智能体需实时推断队友的行为意图并动态调整自身策略但现有方法难以实现这一点具体而言">动态意图推理的挑战指在协作过程中，智能体需<strong>实时推断队友的行为意图并动态调整自身策略</strong>，但现有方法难以实现这一点。具体而言</h2>
+<h3 id="传统方法依赖固定训练数据无法适应队友策略的动态变化">-
+传统方法依赖固定训练数据，无法适应队友策略的动态变化；</h3>
+<h3 id="缺乏对队友实际行为与预测意图的修正机制导致推理偏差累积">-
+缺乏对队友实际行为与预测意图的修正机制，导致推理偏差累积；</h3>
+<h3 id="难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析">-
+难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析。</h3>
+<h1 id="现有方法的缺陷">现有方法的缺陷</h1>
+<h2 id="策略泛化能力受限">（1）策略泛化能力受限</h2>
+<h3 id="依赖训练阶段队友多样性无法适应未知队友例如基于自玩sp或种群训练pbt的方法在零样本场景中性能显著下降">-
+依赖训练阶段队友多样性，无法适应未知队友。例如，基于自玩（SP）或种群训练（PBT）的方法在零样本场景中性能显著下降。</h3>
+<h2 id="计算与数据效率低">（2）计算与数据效率低</h2>
+<h3 id="零样本协作方法如-pbtmep需大量数据收集和模型优化资源消耗大">-
+零样本协作方法（如 PBT、MEP）需大量数据收集和模型优化，资源消耗大。</h3>
+<h2 id="可解释性不足">（3）可解释性不足</h2>
+<h3 id="学习型方法如强化学习的策略为黑盒难以解释决策逻辑而-proagent-通过自然语言推理提升可解释性">-
+学习型方法（如强化学习）的策略为黑盒，难以解释决策逻辑，而 ProAgent
+通过自然语言推理提升可解释性。</h3>
+<h2 id="动态意图推理能力弱">（4）动态意图推理能力弱</h2>
+<h3 id="缺乏显式的意图推断与修正机制无法根据队友实时行为调整策略导致协作效率低下">-
+缺乏显式的意图推断与修正机制，无法根据队友实时行为调整策略，导致协作效率低下。</h3>
+<h1 id="解决上述挑战的方法proagent-框架">解决上述挑战的方法：ProAgent
+框架</h1>
+<h2 id="proagent-通过以下机制解决零样本协作与动态意图推理挑战">ProAgent
+通过以下机制解决零样本协作与动态意图推理挑战：</h2>
+<h3 id="基于-llm-的动态意图推理与规划">（1）基于 LLM
+的动态意图推理与规划</h3>
+<h4 id="planner-模块利用-llm-的链式思维cot推理分析当前状态并推断队友意图生成高层协作策略">-
+<strong>Planner 模块</strong>：利用 LLM
+的链式思维（CoT）推理，分析当前状态并推断队友意图，生成高层协作策略。</h4>
+<h4 id="belief-correction-信念修正机制将预测的队友意图与实际行为对比更新信念库提升后续推理准确性例如若预测队友会拾取洋葱但实际未执行机制会修正信念并调整后续计划">-
+<strong>Belief Correction
+信念修正机制</strong>：将预测的队友意图与实际行为对比，更新信念库，提升后续推理准确性。例如，若预测队友会拾取洋葱但实际未执行，机制会修正信念并调整后续计划。</h4>
+<h3 id="模块化设计支持零样本适应">（2）模块化设计支持零样本适应</h3>
+<h4 id="verificator-模块验证计划可行性若失败则通过多轮提示分析原因如前提条件不满足触发重新规划">-
+<strong>Verificator
+模块</strong>：验证计划可行性，若失败则通过多轮提示分析原因（如前提条件不满足），触发重新规划。</h4>
+<h4 id="memory-模块存储任务知识历史状态与信念支持基于上下文的快速决策无需额外训练">-
+<strong>Memory
+模块</strong>：存储任务知识、历史状态与信念，支持基于上下文的快速决策，无需额外训练。</h4>
+<h4 id="controller-模块将高层技能分解为底层动作适配不同环境如-overcooked-ai-中的路径搜索">-
+<strong>Controller
+模块</strong>：将高层技能分解为底层动作，适配不同环境（如 Overcooked-AI
+中的路径搜索）。</h4>
+<h3 id="把上面各个模块串一下有个planner模块类似于大脑会优先用它进行分析当前状态得到决策而当前状态包括环境状态以及队友状态状态是经由一个llm进行提取的提取状态时会用到一个长期的memory模块决策则包括自身的预决策也就是打算做的事以及对队友意图的预测-对队友意图的预测可能会被纠正只需要看看队友实际做了什么就知道我们是否预测对了这部分由belief-correction机制实现-自身的预决策需要先判断能否进行这个动作可能实际环境限制导致无法开展此时就需要verificator模块来验证可行性可行则由controller模块进一步细分并执行不可行则需要分析原因并重新规划">把上面各个模块串一下：有个planner模块，类似于大脑，会优先用它进行分析当前状态，得到决策。而当前状态，包括环境状态以及队友状态（状态是经由一个llm进行提取的。提取状态时，会用到一个长期的Memory模块）；决策则包括自身的预决策（也就是打算做的事），以及对队友意图的预测<br>对队友意图的预测，可能会被纠正（只需要看看队友实际做了什么，就知道我们是否预测对了。这部分由Belief
+Correction机制实现）<br>自身的预决策，需要先判断能否进行这个动作（可能实际环境限制，导致无法开展）。此时就需要Verificator模块，来验证可行性。可行，则由Controller模块进一步细分并执行；不可行，则需要分析原因，并重新规划</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E.reshape%E5%92%8C.view%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8C%BA%E5%88%AB%E5%92%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -923,88 +1036,6 @@ Run summary merge and add_summary（但这一步好像是tensorflow
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap1.深度神经网络基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-26 15:49:00 / Modified: 17:00:41" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前略一些发展历史">1.前略，一些发展历史</h1>
-<h1 id="深度神经网络计算框架">2.深度神经网络计算框架</h1>
-<h2 id="深度学习框架的必要性">2.1.深度学习框架的必要性：</h2>
-<h3 id="如果没有现在的各种计算框架例如pytorchtensorflow则我们要训练一个神经网络就需要手动实现各种层的前向以及后向且性能可能就没有现在调用库的函数那么高效每个人写出来的函数也未必完全一样可移植性也不够好同一个算子很难跑在不同的加速设备上-因此非常有必要发展深度神经网络的计算框架要是没有现在这些框架魔改模型也会更加麻烦吧门槛就更高了魔改类的文章也会更少了且上面的缺点正是框架被提出的目的">如果没有现在的各种计算框架，例如pytorch，tensorflow，则我们要训练一个神经网络，就需要手动实现各种层的前向以及后向，且性能可能就没有现在调用库的函数那么高效；每个人写出来的函数也未必完全一样，可移植性也不够好；同一个算子很难跑在不同的加速设备上<br>因此，非常有必要发展深度神经网络的计算框架（要是没有现在这些框架，魔改模型也会更加麻烦吧，门槛就更高了，魔改类的文章也会更少了……），且上面的缺点，正是框架被提出的目的</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1074,7 +1105,7 @@ Run summary merge and add_summary（但这一步好像是tensorflow
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
