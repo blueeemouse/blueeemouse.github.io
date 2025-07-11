@@ -150,6 +150,499 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/" class="post-title-link" itemprop="url">chap2.第二讲 trie树&并查集&堆</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:41:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:41:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:47" itemprop="dateModified" datetime="2025-05-05T10:55:47+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="trie树">1.trie树</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap2.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%20trie%E6%A0%91&%E5%B9%B6%E6%9F%A5%E9%9B%86&%E5%A0%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/" class="post-title-link" itemprop="url">chap1.第三讲 双指针&位运算&离散化&区间合并</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-04 16:40:00" itemprop="dateCreated datePublished" datetime="2025-05-04T16:40:00+08:00">2025-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-05 10:55:33" itemprop="dateModified" datetime="2025-05-05T10:55:33+08:00">2025-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="双指针">1.双指针</h1>
+<h2 id="简介这个其实更多是一种思想或者说思路它的主要作用是利用某种性质进行优化通常是把on2的算法优化成on这里的性质可以理解为某种单调性比如前面归并排序中有一步要把两个有序的数组合并为一个有序的数组其中就用到了双指针两个指针从两个数组的起点开始谁指向的元素更小那个元素就是当前最小的元素则放到合并后的大数组并且相应指针往后移动一位这里用到的单调性就是两个数组都是有序的当前指针后面的所有数都是大于等于当前指针指向的元素的所以每次只需要比较一下当前两个指针指向的元素谁更小不需要和后面的相比这里就剩下了时间复杂度所以最后两个指针都只需要遍历一遍数组故时间复杂度是on">1.1.简介：这个其实更多是一种思想，或者说思路。它的主要作用是利用某种性质，进行优化，通常是把<span class="math inline">\(O(n^{2})\)</span>的算法优化成<span class="math inline">\(O(n)\)</span>。这里的性质，可以理解为某种单调性。比如，前面归并排序中，有一步要把两个有序的数组合并为一个有序的数组，其中就用到了双指针：两个指针从两个数组的起点开始，谁指向的元素更小，那个元素就是当前最小的元素，则放到合并后的大数组，并且相应指针往后移动一位。这里用到的单调性就是，两个数组都是有序的，当前指针后面的所有数都是大于等于当前指针指向的元素的，所以每次只需要比较一下当前两个指针指向的元素谁更小，不需要和后面的相比——这里就剩下了时间复杂度。所以最后两个指针都只需要遍历一遍数组，故时间复杂度是<span class="math inline">\(O(n)\)</span></h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%89%E8%AE%B2%20%20%E5%8F%8C%E6%8C%87%E9%92%88&%E4%BD%8D%E8%BF%90%E7%AE%97&%E7%A6%BB%E6%95%A3%E5%8C%96&%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/hugging%20face%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDtokenizer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/hugging%20face%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDtokenizer/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-04 15:22:45 / Modified: 15:25:39" itemprop="dateCreated datePublished" datetime="2025-05-04T15:22:45+08:00">2025-05-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="完整的报错好像是这样的">完整的报错好像是这样的：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">OSError: Can’t load tokenizer <span class="keyword">for</span> ‘bert-base-chinese’. If you were trying to load it from ‘https://huggingface.co/models’, make sure you don’t have a <span class="built_in">local</span> directory with the same name. Otherwise, make sure ‘bert-base-chinese’ is the correct path to a directory containing allrelevant files <span class="keyword">for</span> a BertTokenizer tokenizer.</span><br><span class="line">————————————————</span><br><span class="line"></span><br><span class="line">版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</span><br><span class="line">                        </span><br><span class="line">原文链接：https://blog.csdn.net/weixin_48958956/article/details/137292748</span><br></pre></td></tr></table></figure>
+<h1 id="这个是我在训练一个gpt2的模型的时候遇到的此时我是在服务器上进行训练然后要加载bert-base-chinese的tokenizer而此前我已经在本地尝试过了是可以正常加载以及训练的查了一下应该是网络问题解决方法大致就是从网上把模型下载下来然后传到服务器上加载的时候指定一下路径具体的解决方法可以参考上面的博客注意一下下载下来的几个几个文件要放到同一个文件夹下">这个是我在训练一个gpt2的模型的时候遇到的。此时我是在服务器上进行训练，然后要加载bert-base-chinese的tokenizer。而此前我已经在本地尝试过了，是可以正常加载以及训练的。查了一下，应该是网络问题。解决方法大致就是从网上把模型下载下来，然后传到服务器上，加载的时候指定一下路径。具体的解决方法可以参考上面的博客（注意一下，下载下来的几个几个文件，要放到同一个文件夹下）</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-03 10:03:14 / Modified: 10:09:05" itemprop="dateCreated datePublished" datetime="2025-05-03T10:03:14+08:00">2025-05-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="大致的流程是先下载ubuntu系统的对应版本的iso文件之后下载一个可以开虚拟机的东西比如vmware好像我装的时候主要参考了这个链接而安装完vmware就要安装虚拟机了可以参考这个和这个">大致的流程是，先下载Ubuntu系统的对应版本的iso文件，之后下载一个可以开虚拟机的东西，比如VMware（好像我装的时候主要参考了<a target="_blank" rel="noopener" href="https://www.cnblogs.com/EthanS/p/18211302">这个链接</a>）。而安装完VMware，就要安装虚拟机了，可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/u012611644/article/details/80728806">这个</a>和<a target="_blank" rel="noopener" href="https://blog.csdn.net/fanyun_01/article/details/136540798">这个</a>）</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/05/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84+=/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/04/05/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84+=/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-04-05 15:28:50 / Modified: 15:49:17" itemprop="dateCreated datePublished" datetime="2025-04-05T15:28:50+08:00">2025-04-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="简单来说对一个变量如果实施比如targets-add_num此时它的修改时就地的虽然省了内存但如果后面还要用原来的targets就会出问题-而targets-targets-add_num则是targets-add_num会创建一个新的tensor对象这里实际的例子是在对pytorch张量进行运算之后再把这个新的tensor赋值给变量targets">简单来说，对一个变量，如果实施+=，比如targets
++=
+add_num，此时它的修改时就地的，虽然省了内存，但如果后面还要用原来的targets，就会出问题<br>而targets
+= targets + add_num，则是：targets +
+add_num会创建一个新的tensor对象（这里实际的例子是在对pytorch张量进行运算），之后再把这个新的tensor赋值给变量targets</h1>
+<h1 id="附上原来的代码吧这样能更清晰的看出为什么原来会报错因为其实这个错感觉还不太容易触发">附上原来的代码吧，这样能更清晰的看出为什么原来会报错，因为其实这个错感觉还不太容易触发：</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(train_iters):</span><br><span class="line"></span><br><span class="line">            train_inputs = data_loader_train.<span class="built_in">next</span>()</span><br><span class="line"></span><br><span class="line">            data_time.update(time.time() - end)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            s_inputs,imgs_origin, targets, cids, domains, = <span class="variable language_">self</span>._parse_data(train_inputs)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> training_phase&gt;<span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">                <span class="keyword">with</span> torch.no_grad():</span><br><span class="line"></span><br><span class="line">                    kernel = rehearser(imgs_origin)</span><br><span class="line"></span><br><span class="line">                inputs_r=decode_transfer_img(<span class="variable language_">self</span>.args,imgs_origin,kernel)              </span><br><span class="line"></span><br><span class="line">                datas=[</span><br><span class="line"></span><br><span class="line">                    [s_inputs,imgs_origin, targets, cids, domains],</span><br><span class="line"></span><br><span class="line">                    [inputs_r,imgs_origin, targets, cids, domains]</span><br><span class="line"></span><br><span class="line">                ]            </span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">                datas=[</span><br><span class="line"></span><br><span class="line">                    [s_inputs,imgs_origin, targets, cids, domains]</span><br><span class="line"></span><br><span class="line">                ]</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            loss=<span class="number">0</span>    </span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> idx, (s_inputs,imgs_origin, targets, cids, domains) <span class="keyword">in</span> <span class="built_in">enumerate</span>(datas):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># targets_origin=targets</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># targets =targets+ add_num</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 上面两行才是正确的做法</span></span><br><span class="line">                targets += add_num    <span class="comment"># 错误代码</span></span><br></pre></td></tr></table></figure>
+<h2 id="这是一段深度学习里进行训练的代码在每个iter开头我们都先取出数据然后如果training_phase1则对其中的imgs_origin进行一个类似于变换的操作得到新的一个数据inputs_r它的形状和s_inputs是一样的我们这里只关注training_phase1的情况毕竟错是在这个情况下报的-到了下面我们看到会循环datas那这里的大概意思是说如果training_phase等于1则我们只学习一份数据而如果training_phase1则我们会学习两份数据重点来了我的错误做法是要加上add_num的时候直接用targets-add_num然而在下一个循环里我依然要用到targets且根据上面datas在training_phase1情况下的定义可以看到两组数据里的targets是一样的这就表明我是要用一样的targets的而且它们都是用的targets那么引用的本质上是同一个内存块这点很重要这在后面就导致了错误如果我此时就地修改那么第一份数据里没问题我们给targets加上add_num而后因为第一份第二份数据的targets是指向同一块内存的所以此时第二份数据的targets就也已经加上了add_num但到了第二份数据的循环我们依然会对它的targets加上add_num那就相当于加了两次这就导致了标签越界了所以最终会报错">这是一段深度学习里进行训练的代码。在每个iter开头，我们都先取出数据，然后如果training_phase&gt;1，则对其中的imgs_origin进行一个类似于变换的操作，得到新的一个数据inputs_r（它的形状和s_inputs是一样的）（我们这里只关注training_phase&gt;1的情况，毕竟错是在这个情况下报的）<br>到了下面，我们看到会循环datas。那这里的大概意思是说，如果training_phase等于1，则我们只学习一份数据；而如果training_phase&gt;1，则我们会学习两份数据。重点来了，我的错误做法是，要加上add_num的时候，直接用targets
++=
+add_num。然而，在下一个循环里，我依然要用到targets，且根据上面datas在training_phase&gt;1情况下的定义，可以看到，两组数据里的targets是一样的，这就表明我是要用一样的targets的（而且它们都是用的targets，那么引用的本质上是同一个内存块。这点很重要，这在后面就导致了错误）。如果我此时就地修改，那么第一份数据里没问题，我们给targets加上add_num，而后，因为第一份第二份数据的targets是指向同一块内存的，所以，此时第二份数据的targets就也已经加上了add_num；但到了第二份数据的循环，我们依然会对它的targets加上add_num，那就相当于加了两次，这就导致了标签越界了，所以最终会报错。</h2>
+<h2 id="再来看看正确做法为什么对其实它的那行targets_origintargets感觉没必要因为它后面也没用到targets_origin而且这一步也并不是规避错误的关键关键在于用targets-targets-add_num正如上所述它会创建一个新的tensor对象之后再把这个新的tensor赋值给变量targets而第二份数据里的targets则还是指向原来的那块没加上add_num的targets的内存所以到了第二份数据的循环的时候我们就是只对它加一次add_num所以总结一下正确代码之所以对就是因为它的加法不是in-place的">再来看看正确做法为什么对。其实它的那行targets_origin=targets感觉没必要，因为它后面也没用到targets_origin，而且这一步也并不是规避错误的关键。关键在于用targets
+= targets +
+add_num。正如上所述，它会创建一个新的tensor对象，之后再把这个新的tensor赋值给变量targets；而第二份数据里的targets，则还是指向原来的那块，没加上add_num的targets的内存。所以到了第二份数据的循环的时候，我们就是只对它加一次add_num。所以，总结一下，正确代码之所以对，就是因为它的加法不是in-place的</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/04/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%85torch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/04/04/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%85torch/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-04-04 18:02:59" itemprop="dateCreated datePublished" datetime="2025-04-04T18:02:59+08:00">2025-04-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-04-14 22:15:57" itemprop="dateModified" datetime="2025-04-14T22:15:57+08:00">2025-04-14</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="虽然已经安装了很多遍不过每次都是得查一下版本对应然后pip-install但通常都不会太顺利总得出点幺蛾子可能是网络问题吧不过想快一点还是可以试试用whl文件首先就是确定一下要装什么版本的torch之后去这个网址里找到对应版本和系统的torchtorchvision的whl文件下载下来然后conda激活要装到的那个虚拟环境pip-install-whl文件的路径即可torchaudio的话似乎一般不装也行吧这个感觉除非是做语音的不然好像还真是一点用不到至少我现在就没用过">虽然已经安装了很多遍，不过每次都是得查一下版本对应，然后pip
+install，但通常都不会太顺利，总得出点幺蛾子。可能是网络问题吧。不过想快一点，还是可以试试用whl文件。首先就是确定一下要装什么版本的torch，之后去<a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">这个网址</a>里找到对应版本和系统的torch，torchvision的whl文件，下载下来，然后conda激活要装到的那个虚拟环境，pip
+install
+whl文件的路径，即可（torchaudio的话，似乎一般不装也行吧，这个感觉除非是做语音的，不然好像还真是一点用不到，至少我现在就没用过）</h1>
+<h2 id="另外有个小点我本来还以为windows系统里装的时候得区分是amd还是intel但看了一下那个网址里并没有intel也没有x86只有amd一开始还奇怪后来发现就是这个">另外，有个小点，我本来还以为windows系统里装的时候得区分是amd还是intel，但看了一下那个网址里，并没有intel，也没有x86，只有amd，一开始还奇怪，后来发现就是这个。。。</h2>
+<h1 id="btw似乎在pip-install的时候指定这个网址--extra-index-url-httpsdownload.pytorch.orgwhlcu117-也可以例如">btw，似乎在pip
+install的时候，指定这个网址--extra-index-url
+https://download.pytorch.org/whl/cu117 也可以。例如，</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117</span><br></pre></td></tr></table></figure>
+<h1 id="这样指定好版本之后再指定下载的网址这个网址实际就是各种whl文件的网址让它自己在这个网址里找似乎也是可以的当然要注意网址和库的版本的对应">这样。指定好版本之后，再指定下载的网址。这个网址实际就是各种whl文件的网址。让它自己在这个网址里找，似乎也是可以的。当然要注意网址和库的版本的对应</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%AE%A9%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%A6%81%E8%BF%9B%E5%85%A5%E9%BB%98%E8%AE%A4%E7%9A%84base%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%AE%A9%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%A6%81%E8%BF%9B%E5%85%A5%E9%BB%98%E8%AE%A4%E7%9A%84base%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-20 16:19:19 / Modified: 16:23:22" itemprop="dateCreated datePublished" datetime="2025-03-20T16:19:19+08:00">2025-03-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="问题描述安装完condaminiconda-之后一旦激活那么每次打开终端命令行前面就会有base的字样其实就是每次启动终端都会自动激活conda的基础环境这个嘛以前我倒是挺介意的不过现在已经习惯了但好歹记录一下吧以前的懒得解决的一个小问题">问题描述：安装完conda/miniconda
+之后，一旦激活，那么每次打开终端，命令行前面就会有(base)的字样，其实就是每次启动终端，都会自动激活conda的基础环境。这个嘛，以前我倒是挺介意的，不过现在已经习惯了，但好歹记录一下吧，以前的懒得解决的一个小问题</h1>
+<h1 id="解决方法">解决方法：</h1>
+<h2 id="每次都通过conda-deactivate当然可以退出这个默认环境但也有点麻烦永久的方法的话就是修改一下终端的配置文件让它不要每次一启动就激活conda即可具体就是执行以下命令">每次都通过conda
+deactivate当然可以退出这个默认环境，但也有点麻烦。永久的方法的话，就是修改一下终端的配置文件，让它不要每次一启动就激活conda即可。具体就是执行以下命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2 id="如果之后又想自动激活了那就把false改为true再执行一次即可">如果之后又想自动激活了，那就把false改为true，再执行一次即可</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -390,518 +883,10 @@ loss，减去的第三项是anchor和负样本之间的距离，我们希望它�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/Language%20Models%20Encode%20the%20Value%20of%20Numbers%20Linearly/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/03/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/Language%20Models%20Encode%20the%20Value%20of%20Numbers%20Linearly/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-03-02 16:15:06 / Modified: 17:05:09" itemprop="dateCreated datePublished" datetime="2025-03-02T16:15:06+08:00">2025-03-02</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="section"></h1>
-<h1 id="动机">动机</h1>
-<h1 id="贡献">贡献</h1>
-<h1 id="insight">insight</h1>
-<h1 id="方法">方法</h1>
-<h2 id="需要说明的是这个文章并不是一般的要在某个指标上刷点而是想探究一下大模型的一种编码数字的机理工作方式所以正文里讲的主要是实验的思路和相对应的设计与实验结果">需要说明的是，这个文章并不是一般的要在某个指标上刷点，而是想探究一下大模型的一种编码数字的机理/工作方式，所以正文里讲的主要是实验的思路和相对应的设计与实验结果。</h2>
-<h2 id="大体思路大模型对数字的编码信息应该就包含模型的隐状态里理论上如果它真的编码进去了那应该是有某种函数可以将其提取出来的这个函数的形式很难知晓所以不妨用神经网络来拟合而这篇文章则是考虑这个函数的形式是一个线性的所以打算用一个linear-probe也就是单个线性层来把hidden-states映射到相应的数字然而这只是一开始的设想之后文章提到考虑到数据集里涉及的数字的跨度很大有很小的有很大的直接用线性层拟合可能效果并不好所以它实际要预测的是取了对数的结果这样看其实标题里所谓的encode-linearly就是说llm先把数取个对数再用一种线性的方式编码得到隐状态">1.大体思路：大模型对数字的编码信息，应该就包含模型的隐状态里。理论上如果它真的编码进去了，那应该是有某种函数可以将其提取出来的。这个函数的形式很难知晓，所以不妨用神经网络来拟合。而这篇文章则是考虑，这个函数的形式是一个线性的，所以打算用一个linear
-probe（也就是单个线性层）来把hidden
-states映射到相应的数字。然而这只是一开始的设想。之后文章提到，考虑到数据集里涉及的数字的跨度很大，有很小的，有很大的，直接用线性层拟合，可能效果并不好，所以它实际要预测的是取了对数的结果（这样看，其实标题里所谓的Encode
-Linearly，就是说，llm先把数取个对数，再用一种线性的方式编码，得到隐状态）</h2>
-<h2 id="评价指标主要是评价两方面linear-probe探测得到的结果与输入的相关性linear-probe得到的结果的准确性相关性会用决定系数r2和皮尔逊相关系数rho来评价准确性则是先对预测的结果取个2指数因为我们预测的结果是实际数以2为底取对数的结果以期望线性层的参数会比较稳定然后再与实际的数进行比较用msemean-square-error和aaccapproximate-accuracy来比较其实就是衡量预测的结果和实际的数之间的差距">2.评价指标：主要是评价两方面，linear
-probe探测得到的结果与输入的相关性；linear
-probe得到的结果的准确性。相关性会用决定系数<span class="math inline">\(R^{2}\)</span>和皮尔逊相关系数<span class="math inline">\(\rho\)</span>来评价；准确性则是先对预测的结果取个2指数（因为我们预测的结果是实际数以2为底取对数的结果，以期望线性层的参数会比较稳定），然后再与实际的数进行比较，用MSE（Mean
-Square Error）和AAcc（Approximate
-accuracy）来比较，其实就是衡量预测的结果和实际的数之间的差距</h2>
-<h2 id="一些结论">3.一些结论：</h2>
-<h3 id="llm确实编码了数字">3.1.llm确实编码了数字：</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AA%E5%91%BD%E5%90%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AA%E5%91%BD%E5%90%8D/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-02-20 18:07:32 / Modified: 18:10:05" itemprop="dateCreated datePublished" datetime="2025-02-20T18:07:32+08:00">2025-02-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>虚拟环境的python升级版本以后，似乎所有库都需要重新装了。。。</p>
-<p>高版本faiss似乎可以替换那个什么idx_long的那个东西</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/motivation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/motivation/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-18 15:21:48" itemprop="dateCreated datePublished" datetime="2025-02-18T15:21:48+08:00">2025-02-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-ReID/Unsupervised%20Lifelong%20Person%20Re-identification%20%20via%20Contrastive%20Rehearsal/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-ReID/Unsupervised%20Lifelong%20Person%20Re-identification%20%20via%20Contrastive%20Rehearsal/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-02-17 22:22:45 / Modified: 23:22:13" itemprop="dateCreated datePublished" datetime="2025-02-17T22:22:45+08:00">2025-02-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="arxiv-22">arxiv 22</h1>
-<h1 id="这篇论文提出的设定倒是在现实生活里有意义不过它的动机好像也是提的比较模糊都是针对几个设定加起来的时候产生的问题">这篇论文提出的设定倒是在现实生活里有意义，不过它的动机好像也是提的比较模糊，都是针对几个设定加起来的时候产生的问题</h1>
-<h1 id="它讲的故事however-a-real-world-video-monitoring-system-can-record-new-data-every-day-and-from-new-locations-when-new-cameras-are-added-into-an-existing-system.when-new-data-is-recorded-every-day-people-have-to-annotate-new-data-manually-before-deployment-which-is-cumbersome-and-time-consuming.这里在说明无监督方法研究的必要性-towards-a-generalizable-reid-model-lifelong-person-reid-has-been-recently-proposed这里在说明lifelong-learning研究的必要性">它讲的故事：However,
-a real-world video monitoring system can record new data every day and
-from new locations, when new cameras are added into an existing
-system.；When new data is recorded every day, people have to annotate
-new data manually before deployment, which is cumbersome and
-time-consuming.（这里在说明，无监督方法研究的必要性）<br>Towards a
-generalizable ReID model, lifelong person ReID has been recently
-proposed（这里在说明，lifelong learning研究的必要性）</h1>
-<h1 id="它的方法设计的倒也算简单就是分别针对灾难性遗忘学习新数据的问题">它的方法，设计的倒也算简单，就是分别针对灾难性遗忘、学习新数据的问题</h1>
-<h1 id="方法">方法</h1>
-<h2 id="current-domain-contrastive-baseline">1.Current domain
-contrastive baseline</h2>
-<h3 id="它主要是进行经典的拉近样本和簇中心的距离如今已经是一个非常常见的操作了还有一个l_cam就是对同一个簇里属于同一个相机的数据也求一个prototype就是这些数据的均值并要拉近样本与这个prototype的距离还是对比损失的形式">它主要是进行经典的拉近样本和簇中心的距离（如今已经是一个非常常见的操作了），还有一个<span class="math inline">\(L_{cam}\)</span>，就是对同一个簇里，属于同一个相机的数据，也求一个prototype（就是这些数据的均值），并要拉近样本与这个prototype的距离（还是对比损失的形式）</h3>
-<h4 id="不过论文里还提到l_cam过于依赖相机标签局限在了reid任务里了如果想更加泛化其实也有其它的损失可以用比如在一个batch里与batch里的hardest-positives进行对比">不过，论文里还提到，<span class="math inline">\(L_{cam}\)</span>过于依赖相机标签，局限在了ReID任务里了；如果想更加泛化，其实也有其它的损失可以用，比如在一个batch里，与batch里的hardest
-positives进行对比</h4>
-<h4 id="另注意这个方法会有online-encoder和momentum-encoder在这一步里聚类用的特征是momentum-encoder得到的而不是online-encoder">（另，注意，这个方法会有online
-encoder和momentum encoder；在这一步里，聚类用的特征是momentum
-encoder得到的，而不是online encoder）</h4>
-<h2 id="old-domain-contrastive-rehearsal">2.Old domain contrastive
-rehearsal</h2>
-<h3 id="这个方法里会存储一些旧数据集的prototype也就是我们得到的簇中心的特征以及各个簇的若干个可靠样本就是比较接近簇中心的这一步的核心思想是给定一个已知伪标签的旧数据样本我们希望当前的online-encoder对其编码后得到的特征应该还是尽可能接近原来它所属的那个簇由此我们认为online-encoder对旧数据集知识的保存做的比较好">这个方法里会存储一些旧数据集的prototype（也就是我们得到的簇中心的特征），以及各个簇的若干个可靠样本（就是比较接近簇中心的）。这一步的核心思想是，给定一个已知伪标签的旧数据样本，我们希望当前的online
-encoder对其编码后，得到的特征应该还是尽可能接近原来它所属的那个簇（由此我们认为online
-encoder对旧数据集知识的保存做的比较好）</h3>
-<h2 id="image-to-image-similarity-constraint">3.Image-to-Image
-Similarity Constraint</h2>
-<h3 id="这一步的作用是抗遗忘然后它的核心思想是给定一个batch我们用encoder得到特征后可以得到一个样本之间的相似性矩阵如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近对于同一个batch而言那么我们就认为这个新模型保留旧知识时保留得比较好论文里新模型就对应online-encoder旧模型就对应momentum-encoder它保留了比较多的旧知识衡量两个相似性矩阵的距离时用的是kl散度">这一步的作用是抗遗忘，然后它的核心思想是，给定一个batch，我们用encoder得到特征后，可以得到一个样本之间的相似性矩阵。如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近（对于同一个batch而言），那么我们就认为这个新模型保留旧知识时，保留得比较好。论文里，新模型就对应online
-encoder，旧模型就对应momentum
-encoder（它保留了比较多的旧知识）。衡量两个相似性矩阵的距离时，用的是KL散度</h3>
-<h3 id="但此处有个小改进就是它的目标矩阵确实是用旧模型得到的但它的新的相似性矩阵计算的时候求行特征用的是新模型求列特征用的是旧模型论文里说这样的效果比单纯用新模型会好确实有一些道理吧因为求列特征用的是旧模型那么要迫使两个相似性矩阵尽可能接近就要求新模型的输出要尽可能接近旧模型的输出无形中其实就进行了蒸馏了吧">但此处有个小改进，就是，它的目标矩阵确实是用旧模型得到的，但它的新的相似性矩阵，计算的时候，求行特征用的是新模型，求列特征用的是旧模型。论文里说这样的效果比单纯用新模型会好。确实有一些道理吧，因为求列特征用的是旧模型，那么，要迫使两个相似性矩阵尽可能接近，就要求新模型的输出要尽可能接近旧模型的输出（无形中其实就进行了蒸馏了吧）</h3>
-<h1 id="trick总结">trick总结</h1>
-<h2 id="在进行对比的时候既可以和所有的prototype来对比也可以挑出若干个hard-sample保证效果的同时减少一些计算量">1.在进行对比的时候，既可以和所有的prototype来对比，也可以挑出若干个hard
-sample，保证效果的同时减少一些计算量</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Robust%20Pseudo-label%20Learning%20with%20Neighbor%20Relation%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Robust%20Pseudo-label%20Learning%20with%20Neighbor%20Relation%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-02-16 11:51:35 / Modified: 21:47:48" itemprop="dateCreated datePublished" datetime="2025-02-16T11:51:35+08:00">2025-02-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="acm-mm24">acm mm24</h1>
-<h1 id="它也是要解决伪标签带噪的问题提出一个noisy-pseudo-label-calibration-module来校正伪标签提出一个nieghbor-relation-learning-module来获取模态内更加一致的特征提出一个optimal-transport-prototype-matching-module来进行跨模态的匹配建立跨模态对应关系提出一个memory-hybrid-leraning-module来更好提取出modality-invariant和modality-specific-feature">它也是要解决伪标签带噪的问题。提出一个Noisy
-Pseudo-label Calibration
-module来<strong><em>校正伪标签</em></strong>；提出一个Nieghbor Relation
-Learning module来获取模态内更加一致的特征；提出一个Optimal Transport
-Prototype Matching
-module来进行跨模态的匹配，建立跨模态对应关系；提出一个Memory Hybrid
-Leraning module来更好提取出modality-invariant和modality-specific
-feature</h1>
-<h1 id="insight">insight</h1>
-<h1 id="动机无监督vi-reid中伪标签带噪声是很常见的问题而论文提出一般的方法聚焦于减少带噪标签的影响但忽略了去校正带噪标签其实这么说好像也不是很严谨那些标签平滑的操作我觉得某种程度上也是在校正标签的">动机：无监督vi-reid中，伪标签带噪声是很常见的问题。而论文提出，一般的方法聚焦于减少带噪标签的影响，但忽略了去校正带噪标签（其实这么说好像也不是很严谨，那些标签平滑的操作，我觉得某种程度上也是在校正标签的）</h1>
-<h1 id="方法">方法</h1>
-<h2 id="noisy-pseudo-label-calibrationnpc这个模块就是很显然的回应了动机里它想要校正标签的想法它评价两个样本相似度的方法是用邻居的相似度或者说重合度而不是用样本特征本身这种间接衡量相似性的方法和gur论文towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification里的操作思想上是比较相近的只不过那里用的是概率分布要尽可能相似-而它校正标签的方法则是先提取出每个簇内的可靠的样本可靠的判断方法中核心思想是一个簇内如果有很多样本和当前样本非常相似那么当前样本应该就是比较可靠的然后簇中心就初始化为这些可靠样本的均值之后每个样本再和这些新的簇中心进行比较分配到最相似的那个簇中心那里">1.Noisy
-Pseudo-label
-Calibration（NPC），这个模块就是很显然的，回应了动机里它想要校正标签的想法。它评价两个样本相似度的方法是用邻居的相似度（或者说重合度），而不是用样本特征本身（这种间接衡量相似性的方法，和(GUR论文[[Towards
-Grand Unified Representation Learning for Unsupervised Visible-Infrared
-Person
-Re-Identification]])里的操作，思想上是比较相近的，只不过那里用的是概率分布要尽可能相似）<br>而它校正标签的方法，则是，先提取出每个簇内的“可靠”的样本（“可靠”的判断方法中，核心思想是，一个簇内，如果有很多样本和当前样本非常相似，那么当前样本应该就是比较”可靠“的），然后簇中心就初始化为这些“可靠”样本的均值；之后，每个样本再和这些新的簇中心进行比较，分配到最相似的那个簇中心那里</h2>
-<h2 id="neighbor-relation-learningnrl原文里说是为了reduce-high-intra-class-variations我们可以认为是为了提取更好的特征以便更好地进行模态内的聚类所以它应该主要聚焦在挖掘模态内的信息但它的损失没太搞懂">2.Neighbor
-Relation Learning（NRL），原文里说是为了reduce high intra-class
-variations，我们可以认为，是为了提取更好的特征，以便更好地进行模态内的聚类。所以它应该主要聚焦在挖掘模态内的信息。但它的损失，没太搞懂。。</h2>
-<h2 id="optimal-transport-prototype-matchingotpa聚焦于挖掘跨模态对应的信息">Optimal
-Transport Prototype Matching（OTPA），聚焦于挖掘跨模态对应的信息</h2>
-<h2 id="memory-hybrid-learning聚焦于学习modality-invariant-feature具体来说它在经典的模态内的clusternce-loss的基础上还构建了一个modality-hybrid-memory这个memory的特征是由红外cluster和对应的可见光cluster加权求和得到然后交替地拉近红外实例可见光实例与这个混合memory中的对应cluster之间的距离">Memory
-Hybrid Learning，聚焦于学习modality-invariant
-feature。具体来说，它在经典的模态内的ClusterNCE
-loss的基础上，还构建了一个modality-hybrid
-memory（这个memory的特征是由红外cluster和对应的可见光cluster加权求和得到），然后交替地拉近红外实例、可见光实例与这个混合memory中的对应cluster之间的距离</h2>
-<h1 id="分析">分析</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-16 10:28:47" itemprop="dateCreated datePublished" datetime="2025-02-16T10:28:47+08:00">2025-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-18 15:34:16" itemprop="dateModified" datetime="2025-02-18T15:34:16+08:00">2025-02-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>首先，无监督条件下的跨模态对应依然是难点。而加入了lifelong条件之后，显然会有lifelong的常见问题，就是灾难性遗忘。并且，
-在新数据集上，因为分布不同，所以之前学到的跨模态对应知识，以及单模态内的知识可能都不适用，而这会导致在学习新数据集的时候，初期的特征不够好，进而会导致聚类得到的伪标签也不够好，后续对应也很难对好，故训练完得到的模型性能可能也不够好/在新数据集上，反而是有一些先验知识会比较好，有利于度过初期训练？（如果是会产生负面影响，那么标签校正应该是非常有必要的了）</p>
-<p>解决方法上，提出一种比较有效的标签置信度求解方法，来帮助过度前期训练，或许是一个解决方法（比如，对每个实例，都找出和它距离前k近的实例，把这些邻居的标签加权求和，看看求和得到的标签和它的簇标签之间的距离远近？）
-或许修正标签是更加直接的方法（修正，而不是直接把带噪声的标签给去除掉）</p>
-<p>尝试：一个momentum encoder，一个online
-encoder，然后在新数据集上，用online
-encoder先学一下并聚类（可以适当加载一些momentum
-encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-02-16 00:07:08 / Modified: 15:04:15" itemprop="dateCreated datePublished" datetime="2025-02-16T00:07:08+08:00">2025-02-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="无监督vi-reid大多数的流程都是先通过某种聚类方法通常是dbscan得到一批伪标签然后开始构建跨模态的对应一般是对应簇而不是一个一个实例去对应因为对应完簇我们就认为这两个簇里的实例都是一个id的所以其实可以说一个常见的范式是在各个模态内进行聚类然后进行跨模态的簇的对应这么说来eccv24那篇有没有可能提出了一个新的范式就是在聚类的时候就已经考虑上跨模态的对应了">无监督vi-reid，大多数的流程都是，先通过某种聚类方法（通常是DBSCAN），得到一批伪标签，然后开始构建跨模态的对应（一般是对应簇，而不是一个一个实例去对应。因为对应完簇，我们就认为这两个簇里的实例都是一个ID的）。所以其实可以说，一个常见的范式是，在各个模态内进行聚类，然后进行跨模态的簇的对应（这么说来，ECCV24那篇，有没有可能提出了一个新的范式，就是在聚类的时候就已经考虑上跨模态的对应了？）</h1>
-<h1 id="通常的改进会聚焦在">通常的改进会聚焦在，</h1>
-<h2 id="如何更好的构建伪标签的跨模态对应pgmotpm">如何更好的构建伪标签的跨模态对应（PGM）（OTPM）</h2>
-<h3 id="毕竟没标签很难对应上最理想的情况当然是我们的聚类结果恰好就等于真实标签此时无监督vi-reid就会变成vi-reid实际还有个很重要的问题就是我们的对应很可能是有错的怎么在有错误对应即所谓噪声的情况下不断改进对应结果也是很重要的所以才会有很多progressive的方法">（毕竟没标签，很难对应上；最理想的情况当然是我们的聚类结果恰好就等于真实标签，此时无监督vi-reid就会变成vi-reid）（实际还有个很重要的问题，就是，我们的对应很可能是有错的，怎么在有错误对应（即所谓噪声）的情况下不断改进对应结果也是很重要的。所以才会有很多progressive的方法）；</h3>
-<h2 id="还有一部分可能会聚焦在伪标签的可靠性上multi-memorypgm">还有一部分可能会聚焦在伪标签的可靠性上？（Multi-memory，PGM）</h2>
-<h2 id="提取更加鲁棒的特征以改善聚类效果shallow-deepgur">提取更加鲁棒的特征，以改善聚类效果（Shallow-Deep，GUR）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -967,18 +952,18 @@ encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

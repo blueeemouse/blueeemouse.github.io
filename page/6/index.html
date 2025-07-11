@@ -150,6 +150,756 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap2.Pytorch基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-26 15:49:00" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-27 16:00:43" itemprop="dateModified" datetime="2025-05-27T16:00:43+08:00">2025-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="神经网络模型搭建">1.神经网络模型搭建</h1>
+<h2 id="这里主要是通过三个例子简单介绍一下pytorch怎么建立模型">这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型</h2>
+<h2 id="例1.-lenet的搭建">例1. LeNet的搭建</h2>
+<h3 id="知道各个基本的层例如conv2d的计算过程avg-poolingmax-pooling的计算过程">知道各个基本的层，例如Conv2d的计算过程，Avg
+Pooling、Max Pooling的计算过程</h3>
+<h3 id="此外需要掌握编写神经网络的类的细节">此外，需要掌握编写神经网络的类的细节：</h3>
+<h4 id="第一网络的类一般是继承了nn.module类的">第一，网络的类一般是继承了nn.Module类的</h4>
+<h4 id="第二因为继承了这个类所以也需要先初始化一下也就是superyour_network_name-self.__-init__">第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_Network_Name,
+self).__ init__()</h4>
+<h4 id="第三一般我们把网络里可训练的层的初始化放到__-init__函数里">第三，一般我们把网络里可训练的层的初始化放到__
+init__函数里</h4>
+<h3 id="了解常见层的计算过程这里主要介绍的是cnn里常用的卷积和池化能根据输入数据的形状以及各个层的参数算出输出数据的尺寸">了解常见层的计算过程（这里主要介绍的是CNN里常用的卷积和池化），能根据输入数据的形状以及各个层的参数，算出输出数据的尺寸</h3>
+<h2 id="例2.-googlenet的搭建">例2. GoogLeNet的搭建</h2>
+<h3 id="这里也不太清楚怎么考可能是要把googlenet的网络架构记下来然后每个分支都能写出相应代码吧">这里也不太清楚怎么考，可能是要把GoogLeNet的网络架构记下来，然后每个分支都能写出相应代码吧</h3>
+<h2 id="例3.-resnet的搭建">例3. ResNet的搭建</h2>
+<h3 id="首先resnet的搭建基本就是靠堆叠残差块实现的残差块分了两种模式18和34层的resnet用的是basicblock而50及更高层数的resnet用的是bottleneck">首先，ResNet的搭建基本就是靠堆叠残差块实现的。残差块分了两种模式，18和34层的ResNet，用的是BasicBlock，而50及更高层数的ResNet用的是Bottleneck</h3>
+<h3 id="resnet的实例化一般就是通过指定每种残差块的个数来实现的一般它会被分成四个大的layer每个layer里可能有若干个残差块我们只需要通过一个列表指定这四个大layer里残差块的格式即可得到具体的resnet">ResNet的实例化，一般就是通过指定每种残差块的个数来实现的。一般它会被分成四个“大的”layer，每个layer里可能有若干个残差块，我们只需要通过一个列表，指定这四个“大”layer里残差块的格式，即可得到具体的ResNet</h3>
+<h1 id="定制数据集">2.定制数据集</h1>
+<h2 id="这里介绍了一般的关于现有数据集的一些操作以及怎么定制一个自己的数据集">这里介绍了一般的关于现有数据集的一些操作，以及怎么定制一个自己的数据集</h2>
+<h2 id="使用现有数据集">2.1. 使用现有数据集</h2>
+<h3 id="直接当函数调用即可例如要调用cifar10的训练数据则执行形如这样的代码即可trainset-torchvision.datasets.cifar10root.data-traintrue-downloadtrue-transformtransform-注意到这里有transform参数它代表了我们要对数据进行的预处理的操作传进去的一般是transforms库里的compose得到的一个一系列的操作例如transform-transforms.composetransforms.totensor-transforms.normalize0.5-0.5-0.5-0.5-0.5-0.5这里可能还需要我们了解常见的数据预处理的操作例如此处的totensor就是把numpy格式的图像数据给转化成torch格式的图像数据二者的主要区别在于channel维度在第几个维度numpy格式是htimes-wtimes-c而torch格式是ctimes-htimes-w">直接当函数调用即可。例如，要调用CIFAR10的训练数据，则执行形如这样的代码即可<code>trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)</code><br>注意到这里有transform参数，它代表了我们要对数据进行的预处理的操作。传进去的一般是transforms库里的Compose得到的一个一系列的操作，例如：<code>transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])</code>（这里可能还需要我们了解常见的数据预处理的操作。例如，此处的ToTensor就是把numpy格式的图像数据给转化成torch格式的图像数据，二者的主要区别在于Channel维度在第几个维度，numpy格式是<span class="math inline">\(H\times W\times C\)</span>，而torch格式是<span class="math inline">\(C\times H\times W\)</span></h3>
+<h3 id="上面我们得到了现有的数据集但实际使用时需要把数据放到一个dataloader里以便加载使用一般用torch.utils.data.dataloader例如trainloader-torch.utils.data.dataloadertrainset-batch_size4-shuffletrue-num_workers这里我们可以通过shuffle参数指定是否打乱数据集以及可以用multiprocessing-workers并行地加载数据">上面我们得到了现有的数据集，但实际使用时，需要把数据放到一个dataloader里，以便加载使用。一般用torch.utils.data.DataLoader，例如：<code>trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers)</code>，这里我们可以通过shuffle参数指定是否打乱数据集，以及可以用multiprocessing
+workers并行地加载数据</h3>
+<h2 id="定制自己的数据集">2.2. 定制自己的数据集</h2>
+<h3 id="定制自己的数据集首先得有自己的数据然而原始的数据可能格式不太对需要一些转换这时可能要用到一些库了">2.2.1.
+定制自己的数据集，首先得有自己的数据。然而原始的数据可能格式不太对，需要一些转换，这时可能要用到一些库了</h3>
+<h3 id="下一步是打标签这里是以经典的图像分类任务为例那可以考虑labelimg这个工具当然还有其它的例如labelme">2.2.2.
+下一步是打标签。这里是以经典的图像分类任务为例，那可以考虑labelimg这个工具。当然还有其它的，例如labelme</h3>
+<h3 id="有了数据以后类似上面调用现有数据集的方式我们还是需要一个数据集的类从而可以通过这个类来获取数据集因为本质上我们最后希望的效果是通过dataloader来获取batch-data而dataloader获取batch-data的本质是生成索引然后每个batch就用相应的batch索引从数据集类里获取数据这也是为什么实例化一个dataloader的时候我们要传入dataset-我们要继承的是一个torch.utils.data.dataset类它代表了一个数据集的抽象类我们自定义的时候重点关注三个函数__-len__函数它可以返回数据集的大小-__-getitem__函数它支持根据索引取出具体的数据例如dataseti就可以取出第i个样本这种方式的好处是我们不需要每次都把所有的数据加载到内存里毕竟这样一旦数据集大点可能内存就炸了而是要用到哪些数据时我就加载这些数据-__-init__函数一个类当然要有初始的函数了具体到这里的例子我们可能会在这里放一些类似于数据路径要对数据进行的预处理操作transform等以供__-getitem__或其它函数使用">2.2.3.
+有了数据以后，类似上面调用现有数据集的方式，我们还是需要一个数据集的类，从而可以通过这个类来获取数据集。因为本质上，我们最后希望的效果是通过dataloader来获取batch
+data，而dataloader获取batch
+data的本质是，生成索引，然后每个batch就用相应的batch索引，从数据集类里获取数据（这也是为什么实例化一个dataloader的时候我们要传入dataset）<br>我们要继承的是一个torch.utils.data.Dataset类，它代表了一个数据集的抽象类。我们自定义的时候，重点关注三个函数：__
+len__函数，它可以返回数据集的大小；<br>__
+getitem__函数，它支持根据索引取出具体的数据，例如dataset[i]就可以取出第i个样本。这种方式的好处是，我们不需要每次都把所有的数据加载到内存里（毕竟这样一旦数据集大点，可能内存就炸了），而是要用到哪些数据时，我就加载这些数据<br>__
+init__函数，一个类当然要有初始的函数了。具体到这里的例子，我们可能会在这里放一些类似于数据路径、要对数据进行的预处理操作transform等，以供__
+getitem__或其它函数使用</h3>
+<h3 id="实际使用时我们可能需要定制化的transform此时则可以考虑把操作给写成一个类然后transforms.compose的时候我们就传入这些自己写的类就行当然此时需要修改它的__-init__方法和__-call__方法以及它继承的是object类">2.2.4.
+实际使用时，我们可能需要定制化的transform，此时则可以考虑把操作给写成一个类，然后transforms.Compose的时候，我们就传入这些自己写的类就行（当然，此时需要修改它的__
+init__方法和__ call__方法。以及，它继承的是object类）</h3>
+<h3 id="综上我们定制了自己的数据集的类它可以顺利加载数据且进行相应的数据增强操作如果有并且想定制数据增强操作也是可以的之后就是按照一般流程走了实例化一个数据集的类再构造对应的dataloader即可">综上，我们定制了自己的数据集的类，它可以顺利加载数据，且进行相应的数据增强操作（如果有），并且想定制数据增强操作也是可以的。之后就是按照一般流程走了，实例化一个数据集的类，再构造对应的dataloader即可</h3>
+<h1 id="使用服务器">3.使用服务器</h1>
+<h2 id="简介">3.1. 简介：</h2>
+<h3 id="服务器一般都是linux系统且因为linux系统中一切都是文件而配置一个服务本质上就是在修改配置文件里的一些设置所以日常使用时一定会编写文档因此需要一个文档编辑器最经典的就是vim了">服务器，一般都是linux系统。且因为linux系统中，一切都是文件，而配置一个服务，本质上就是在修改配置文件里的一些设置；所以，日常使用时一定会编写文档，因此需要一个文档编辑器。最经典的就是vim了</h3>
+<h4 id="再简单介绍一下vim它有三种模式输入模式命令模式和末行模式">再简单介绍一下vim。它有三种模式，输入模式、命令模式和末行模式</h4>
+<h4 id="输入模式就是一般的模式我们打字就能编辑文档一般是通过aio等键位例如最常用的i表示换到插入模式从命令模式转到输入模式按esc键则可以从输入模式切换到命令模式从命令模式按冒号可以切换到末行模式也因此一些常用的退出保存等操作都是带个冒号的比如q就是退出w就是保存wq就是强制保存退出而从末行模式再按esc则可以切换到命令模式由此可以看出来esc键是可以在任何情况下切到命令模式的事实上命令模式也充当了一个中介的作用毕竟输入模式和末行模式相互之间无法直接切换得通过命令模式来所以切换到命令模式当然得尽量快捷简便">输入模式，就是一般的模式，我们打字，就能编辑文档。一般是通过a、i、o等键位（例如最常用的，i表示换到插入模式），从命令模式转到输入模式；按Esc键，则可以从输入模式切换到命令模式。从命令模式，按冒号可以切换到末行模式（也因此，一些常用的退出、保存等操作，都是带个冒号的。比如，<code>:q</code>就是退出，<code>:w</code>就是保存，<code>:wq</code>就是强制保存退出）；而从末行模式，再按Esc，则可以切换到命令模式（由此可以看出来，Esc键是可以在任何情况下切到命令模式的。事实上，命令模式也充当了一个中介的作用，毕竟输入模式和末行模式相互之间无法直接切换，得通过命令模式来，所以切换到命令模式当然得尽量快捷简便）</h4>
+<h2 id="框架简介与环境配置">3.2. 框架简介与环境配置：</h2>
+<h3 id="gpu环境的配置一般依赖于以下这几个东西">GPU环境的配置，一般依赖于以下这几个东西：</h3>
+<h4 id="nvidia-driver">Nvidia Driver</h4>
+<h4 id="cudnn">cuDNN</h4>
+<h4 id="cuda">CUDA</h4>
+<h4 id="pytorch">PyTorch</h4>
+<h1 id="训练过程可视化">4.训练过程可视化</h1>
+<h2 id="这里介绍的是用tensorboard进行可视化它相比于老式的一大堆print可视化效果更好也更加方便些不过这并不意味着print的方式就被彻底淘汰了">这里介绍的是用TensorBoard进行可视化（它相比于老式的一大堆print，可视化效果更好，也更加方便些）（不过这并不意味着print的方式就被彻底淘汰了）</h2>
+<h2 id="使用tensorboard的五个步骤">使用TensorBoard的五个步骤：</h2>
+<h3 id="记录想要观察的张量例如w2_hist-tf.summary.histogramweights2-w2cost_summ-tf.summary.scalarcost-cost">1.
+记录想要观察的张量。例如，<code>w2_hist = tf.summary.histogram("weights2", W2)</code>；<code>cost_summ = tf.summary.scalar("cost", cost)</code></h3>
+<h3 id="合并所有的summaries简单理解就是把所有的记录合并一下summary-tf.summary.merge_all">2.
+合并所有的summaries（简单理解，就是把所有的记录合并一下）。<code>summary = tf.summary.merge_all()</code></h3>
+<h3 id="创建writer并添加graph">3. 创建writer，并添加graph</h3>
+<h4 id="这里应该是要把结果给保存到某个路径下因此需要用到一个writer以及需要添加graph这里添加graph主要是为了得到模型的架构以方便后续的可视化还有用于分析模型的复杂度等-writer-tf.summayr.filewriter.logs-writer.add_graphsess.graph">这里应该是要把结果给保存到某个路径下，因此需要用到一个writer；以及，需要添加graph（这里添加graph，主要是为了得到模型的架构，以方便后续的可视化；还有用于分析模型的复杂度等）<br><code>writer = tf.summayr.FileWriter('./logs')</code><br><code>writer.add_graph(sess.graph)</code></h4>
+<h3 id="run-summary-merge-and-add_summary但这一步好像是tensorflow-1.x里的东西了在2.x的版本里被简化了所以感觉不会考代码啊">4.
+Run summary merge and add_summary（但这一步好像是tensorflow
+1.x里的东西了，在2.x的版本里被简化了？所以感觉不会考代码啊）</h3>
+<h3 id="launch-tensorboard">5. Launch TensorBoard</h3>
+<h4 id="这个倒是常见tensorboard---log-dir.logs指定一下记录的文件的路径就可以打开tensorboard了">这个倒是常见，<code>tensorboard --log-dir=./logs</code>，指定一下记录的文件的路径，就可以打开tensorboard了</h4>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap1.深度神经网络基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-26 15:49:00 / Modified: 17:00:41" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前略一些发展历史">1.前略，一些发展历史</h1>
+<h1 id="深度神经网络计算框架">2.深度神经网络计算框架</h1>
+<h2 id="深度学习框架的必要性">2.1.深度学习框架的必要性：</h2>
+<h3 id="如果没有现在的各种计算框架例如pytorchtensorflow则我们要训练一个神经网络就需要手动实现各种层的前向以及后向且性能可能就没有现在调用库的函数那么高效每个人写出来的函数也未必完全一样可移植性也不够好同一个算子很难跑在不同的加速设备上-因此非常有必要发展深度神经网络的计算框架要是没有现在这些框架魔改模型也会更加麻烦吧门槛就更高了魔改类的文章也会更少了且上面的缺点正是框架被提出的目的">如果没有现在的各种计算框架，例如pytorch，tensorflow，则我们要训练一个神经网络，就需要手动实现各种层的前向以及后向，且性能可能就没有现在调用库的函数那么高效；每个人写出来的函数也未必完全一样，可移植性也不够好；同一个算子很难跑在不同的加速设备上<br>因此，非常有必要发展深度神经网络的计算框架（要是没有现在这些框架，魔改模型也会更加麻烦吧，门槛就更高了，魔改类的文章也会更少了……），且上面的缺点，正是框架被提出的目的</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-26 15:08:24" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-27 15:39:54" itemprop="dateModified" datetime="2025-05-27T15:39:54+08:00">2025-05-27</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="section">#</h2>
+<p>title: chap6.深度学习中的分布式训练——算法及系统 date: 2025-05-26
+15:51 tags: [分布式训练] categories: [mlsys, foundation] --- # 1.
+分布式训练的必要性 ##
+随着问题规模的增大（包括数据量和计算量层面的），单一设备处理速度逐渐无法满足我们的需求（比如太慢了，或者是干脆单设备放不下模型了）<br>而用分布式算法，把问题划分为若干小问题后，再经过分布式系统来执行处理，能做到较快解决较大的问题
+## 这里还介绍两个并行加速定律，来说明分布式训练的意义。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">数组中的第K个最大元素</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-23 23:59:00" itemprop="dateCreated datePublished" datetime="2025-05-23T23:59:00+08:00">2025-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-26 20:34:54" itemprop="dateModified" datetime="2025-05-26T20:34:54+08:00">2025-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/kth-largest-element-in-an-array/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/" class="post-title-link" itemprop="url">最小栈</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-22 11:02:00 / Modified: 11:24:58" itemprop="dateCreated datePublished" datetime="2025-05-22T11:02:00+08:00">2025-05-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/leetbook/read/top-interview-questions/xa7r55/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/22/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%9C%80%E5%B0%8F%E6%A0%88/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DKP/DKP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DKP/DKP/" class="post-title-link" itemprop="url">DKP</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 17:02:00 / Modified: 17:50:27" itemprop="dateCreated datePublished" datetime="2025-05-21T17:02:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr24">cvpr24</h1>
+<h2 id="exemplar-based和knowledge-distillation-based-lreids方法指的是什么">exemplar-based和knowledge
+distillation-based LReIDs方法指的是什么？</h2>
+<h2 id="prototype-based又是什么">prototype-based又是什么？</h2>
+<h2 id="看摘要说是exemplar-based和knowledge-distillation-based方法都有一些问题于是采用prototype-based方法而prototype-based方法又忽视了distribution-informationinstance-level-diversity所以提出这篇论文的改进方法">看摘要，说是exemplar-based和knowledge
+distillation-based方法都有一些问题，于是采用prototype-based方法，而prototype-based方法又忽视了distribution
+information/instance-level diversity，所以提出这篇论文的改进方法</h2>
+<h1 id="基础知识">基础知识：</h1>
+<h2 id="exemplar-based方法"><strong>Exemplar-based方法</strong>：</h2>
+<h3 id="工作原理这些方法通过存储和重用过去训练步骤中的示例图像来减轻遗忘问题当学习新数据时它们会将这些示例图像与新数据一起使用以帮助模型记住旧的知识">-
+<strong>工作原理</strong>：这些方法通过存储和重用过去训练步骤中的示例图像来减轻遗忘问题。当学习新数据时，它们会将这些示例图像与新数据一起使用，以帮助模型记住旧的知识。</h3>
+<h3 id="问题然而存储人类图像往往在实际场景中是不切实际的因为这涉及到隐私问题此外存储和重用示例图像也会增加计算成本">-
+<strong>问题</strong>：然而，存储人类图像往往在实际场景中是不切实际的，因为这涉及到隐私问题。此外，存储和重用示例图像也会增加计算成本。</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DKP/DKP/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">LSTKC----Long Short-Term Knowledge Consolidation for Lifelong Person Re-Identification</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:59:00 / Modified: 16:59:49" itemprop="dateCreated datePublished" datetime="2025-05-21T16:59:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person-reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="aaai24">aaai24</h1>
+<h1 id="problemmotivationlreid任务中因为不断获得的新数据的分布可能差异很大模型要拟合新的分布自然会遇到灾难性遗忘的问题现有的基于data-replay的和基于knowledge-distillation的方法都有各自的问题前者的隐私问题很显然后者的一个问题在于现有的基于蒸馏的方法都是把所有过往知识保留下来了没有经过筛选很难保证这些蒸馏得到的知识的质量而如果这些知识的质量不够高可能会极大影响模型性能为此论文提出一种exemplar-free为了避免隐私问题的方法提出rectification-based-short-term-knowledge-transfer-module-r-stkt以筛选整合过往知识同时利用estimation-based-long-term-knowledge-consolidation-module-e-ltkc来整合新旧知识">problem&amp;motivation：LReID任务中，因为不断获得的新数据的分布可能差异很大，模型要拟合新的分布，自然会遇到灾难性遗忘的问题。现有的基于data
+replay的和基于knowledge
+distillation的方法都有各自的问题。前者的隐私问题很显然。后者的一个问题在于，现有的基于蒸馏的方法，都是把所有过往知识保留下来了，没有经过筛选，很难保证这些蒸馏得到的知识的质量。而如果这些知识的质量不够高，可能会极大影响模型性能。为此，论文提出一种exemplar-free（为了避免隐私问题）的方法，提出Rectification-based
+Short-Term Knowledge Transfer module
+(R-STKT)以筛选、整合过往知识，同时利用Estimation-based Long-Term
+Knowledge Consolidation module (E-LTKC)来整合新旧知识</h1>
+<h1 id="话说这个normalization-guided-triplet-loss是指什么里面的apn又是什么意思">话说这个normalization-guided
+Triplet loss是指什么？里面的a，p，n又是什么意思？</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/LSTKC----Long%20Short-Term%20Knowledge%20Consolidation%20for%20Lifelong%20Person%20Re-Identification/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/" class="post-title-link" itemprop="url">Learning Continual Compatible Representation for Re-indexing Free Lifelong Person Re-identification</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:58:00 / Modified: 16:58:29" itemprop="dateCreated datePublished" datetime="2025-05-21T16:58:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="method">method：</h1>
+<h2 id="continual-compatible-transfer-networkcct">1.Continual Compatible
+Transfer Network（CCT）</h2>
+<h3 id="特征的更新主要三部分一个是自己的残差一个是新知识用模板加权表示会用特征和模板计算相互之间的权重一个是旧知识用一些网络对原来的特征进行变换期望它能保留旧知识同时能迁移到新域">特征的更新主要三部分，一个是自己的残差；一个是新知识（用模板加权表示，会用特征和模板计算相互之间的权重）；一个是旧知识（用一些网络对原来的特征进行变换，期望它能保留旧知识，同时能迁移到新域）</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Learning%20Continual%20Compatible%20Representation%20for%20Re-indexing%20Free%20Lifelong%20Person%20Re-identification/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/lifelong%20reid%20paper%E8%B0%83%E7%A0%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -348,655 +1098,10 @@ Average，就是会把旧模型和新模型融合，只不过这里的参数是A
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/" class="post-title-link" itemprop="url">DASK：Distribution Rehearsing via Adaptive Style Kernel Learning for Exemplar-Free Lifelong Person Re-Identification</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-21 16:55:00 / Modified: 16:57:13" itemprop="dateCreated datePublished" datetime="2025-05-21T16:55:00+08:00">2025-05-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/" itemprop="url" rel="index"><span itemprop="name">object-reid</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/object-reid/lifelong-person-reid/" itemprop="url" rel="index"><span itemprop="name">lifelong person reid</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="它的核心动机是希望能做到从当前域的数据合成出前面的域的数据从而用这些合成数据来缓解灾难性遗忘这样我们也就不需要通过保留过往的exemplar来复习旧知识了">它的核心动机是，希望能做到：从当前域的数据，合成出前面的域的数据，从而用这些合成数据来缓解灾难性遗忘。（这样我们也就不需要通过保留过往的exemplar来复习旧知识了）</h2>
-<h2 id="dask主要由两部分组成一是drl它主要做的是训练一个网络叫adaptive-kernel-prediction-networkakpnet注意一下这个akpnet的功能是把任意分布的输入数据转换到它学到的风格落到我们这里也就是把新域的数据转换成旧域的数据它会为每个实例都预测生成一个kernel这个kernel可以用于把这个实例转换成其它风格的实例">DASK主要由两部分组成，一是DRL，它主要做的是，训练一个网络（叫adaptive
-kernel prediction
-network，AKPNet）（注意一下，这个AKPNet的功能是，把任意分布的输入数据转换到它学到的风格，落到我们这里，也就是把新域的数据转换成旧域的数据），它会为每个实例都预测生成一个kernel，这个kernel可以用于把这个实例转换成其它风格的实例</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/DASK/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/" class="post-title-link" itemprop="url">Incorporating physics into data-driven computer vision</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-21 16:53:00 / Modified: 16:54:51" itemprop="dateCreated datePublished" datetime="2025-05-21T16:53:00+08:00">2025-05-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/" itemprop="url" rel="index"><span itemprop="name">ai4s</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="abstract">abstract</h1>
-<h2 id="现在的cv技术因为它是数据驱动的所以其实它是从大量数据中推测出物理规律的这种方式不够显式进而导致可解释性等不足而传统的cv技术虽然是明确有物理规律支撑的但性能又不够好比不过深度学习的那些技术那么弱国能把物理模型与深度学习的技术融合或许就能结合二者的优点既有高性能又有可解释性泛化性可证伪性而这可以认为是把物理模型当成数据驱动过程中的一个约束条件也就是我们约束深度学习模型必须满足物理规律相当于一种融入先验知识的方法">现在的cv技术，因为它是数据驱动的，所以其实它是从大量数据中“推测”出物理规律的（这种方式不够显式，进而导致可解释性等不足）；而传统的cv技术，虽然是明确有物理规律支撑的，但性能又不够好，比不过深度学习的那些技术。那么，弱国能把物理模型与深度学习的技术融合，或许就能结合二者的优点，既有高性能，又有可解释性、泛化性、可证伪性。而这可以认为是把物理模型当成数据驱动过程中的一个约束条件，也就是我们约束深度学习模型必须满足物理规律（相当于一种融入先验知识的方法）</h2>
-<h2 id="这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术也即所谓physics-based-machine-learning">这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术，也即所谓physics-based
-machine learning</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/" class="post-title-link" itemprop="url">偏差与方差</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-21 00:50:00 / Modified: 00:51:11" itemprop="dateCreated datePublished" datetime="2025-05-21T00:50:00+08:00">2025-05-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="先来个粗糙的理解偏差可以简单看成是表征了这个模型族的输出与真实值之间的偏差因此如果偏差很大比较有可能是模型形式过于简单而导致的欠拟合-方差则度量了同样大小的训练集的变动导致的学习性能的变化这里注意是训练集的变动那么如果训练集有微小变动但学习性能变化很大这就是方差大的情况它表明训练出的模型性能太依赖于训练集了这表明模型的形式可能过于复杂了导致一训练就出现了过拟合的情况-因此实际训练的时候需要权衡偏差和方差也就是要注意模型的复杂度不能太复杂导致过拟合了但也不能太简单导致根本学不好某种程度上可以认为偏差反映了模型的准确性方差反映了模型的稳定性">1.先来个粗糙的理解。偏差可以简单看成是，表征了这个模型族的输出与真实值之间的偏差。因此，如果偏差很大，比较有可能是模型形式过于简单而导致的欠拟合<br>方差则度量了同样大小的训练集的变动导致的学习性能的变化（这里注意，是“训练集的变动”）。那么，如果训练集有微小变动，但学习性能变化很大，这就是方差大的情况，它表明训练出的模型性能太依赖于训练集了，这表明模型的形式可能过于复杂了，导致一训练就出现了过拟合的情况<br>因此，实际训练的时候，需要权衡偏差和方差。也就是要注意模型的复杂度，不能太复杂导致过拟合了，但也不能太简单，导致根本学不好。某种程度上，可以认为：偏差反映了模型的准确性，方差反映了模型的稳定性</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">贝叶斯分类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-20 11:57:00" itemprop="dateCreated datePublished" datetime="2025-05-20T11:57:00+08:00">2025-05-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-21 00:50:21" itemprop="dateModified" datetime="2025-05-21T00:50:21+08:00">2025-05-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">ml常见算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原理">1.原理</h1>
-<h2 id="这个分类方法是想通过最大化后验概率来实现分类简单说假如一共有k种标签对于一个待分类的样本我们看一下把它分到哪个类别的概率最大然后就把样本分到这个类别也就是取argmax_y-pyx作为标签">这个分类方法，是想通过最大化后验概率来实现分类。简单说，假如一共有k种标签，对于一个待分类的样本，我们看一下把它分到哪个类别的概率最大，然后就把样本分到这个类别。也就是取<span class="math inline">\(\arg\max_{y} p(y|x)\)</span>作为标签</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/19/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/19/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%E2%85%A1/" class="post-title-link" itemprop="url">两个数组的交集Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-19 23:44:00 / Modified: 23:50:00" itemprop="dateCreated datePublished" datetime="2025-05-19T23:44:00+08:00">2025-05-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/intersection-of-two-arrays-ii/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/19/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%E2%85%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/18/%E6%8D%A3%E9%BC%93blog/obsidian%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/18/%E6%8D%A3%E9%BC%93blog/obsidian%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">obsidian模板使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-18 17:37:00 / Modified: 17:37:46" itemprop="dateCreated datePublished" datetime="2025-05-18T17:37:00+08:00">2025-05-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8D%A3%E9%BC%93blog/" itemprop="url" rel="index"><span itemprop="name">捣鼓blog</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="如题主要介绍一下模板的使用因为现在博客的文章需要一些专门的格式来记录题目和时间等如果每次都手打略有些麻烦故尝试使用模板">如题，主要介绍一下模板的使用。因为现在博客的文章需要一些专门的格式来记录题目和时间等，如果每次都手打，略有些麻烦。故尝试使用模板</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/18/%E6%8D%A3%E9%BC%93blog/obsidian%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">打乱数组</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-18 16:39:00 / Modified: 17:25:22" itemprop="dateCreated datePublished" datetime="2025-05-18T16:39:00+08:00">2025-05-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/shuffle-an-array/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title-link" itemprop="url">移动零</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-16 17:24:00 / Modified: 17:33:37" itemprop="dateCreated datePublished" datetime="2025-05-16T17:24:00+08:00">2025-05-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/move-zeroes/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1062,18 +1167,18 @@ machine learning</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="先上结论，首先检查一下环境变量里有没有中文的路径（也就是看看用户变量以及系统变量里的PATH里有没有中文的，有的话试试把它去掉，可能就解决问题了）；不行的话可以再试试conda clean -a，之后再执行conda activate 问题就如标题所述。这个其实有点久了，但一直没管它。此外，似乎在桌面之类的其它地方打开power shell，再激活环境，好像是可以的；且在vscode里打">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows的power shell终端突然无法conda activate环境">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="先上结论，首先检查一下环境变量里有没有中文的路径（也就是看看用户变量以及系统变量里的PATH里有没有中文的，有的话试试把它去掉，可能就解决问题了）；不行的话可以再试试conda clean -a，之后再执行conda activate 问题就如标题所述。这个其实有点久了，但一直没管它。此外，似乎在桌面之类的其它地方打开power shell，再激活环境，好像是可以的；且在vscode里打">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-07T15:25:00.000Z">
+<meta property="article:modified_time" content="2025-07-07T15:26:16.922Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="conda">
+<meta property="article:tag" content="power shell">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>windows的power shell终端突然无法conda activate环境 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          windows的power shell终端突然无法conda activate环境
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-07 23:25:00 / Modified: 23:26:16" itemprop="dateCreated datePublished" datetime="2025-07-07T23:25:00+08:00">2025-07-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <span id="more"></span>
+<h2 id="先上结论首先检查一下环境变量里有没有中文的路径也就是看看用户变量以及系统变量里的path里有没有中文的有的话试试把它去掉可能就解决问题了不行的话可以再试试conda-clean--a之后再执行conda-activate">先上结论，首先检查一下环境变量里有没有中文的路径（也就是看看用户变量以及系统变量里的PATH里有没有中文的，有的话试试把它去掉，可能就解决问题了）；不行的话可以再试试<code>conda clean -a</code>，之后再执行conda
+activate</h2>
+<h2 id="问题就如标题所述这个其实有点久了但一直没管它此外似乎在桌面之类的其它地方打开power-shell再激活环境好像是可以的且在vscode里打开的话如果用cmd终端则也是可以正常conda激活环境的-而在power-shell里就会报错具体来说在vscode里打开终端然后选用power-shell的话一初始化就会报错大概就是会爆出一大堆环境变量里的路径类似">问题就如标题所述。这个其实有点久了，但一直没管它。此外，似乎在桌面之类的其它地方打开power
+shell，再激活环境，好像是可以的；且在vscode里打开的话，如果用cmd终端，则也是可以正常conda激活环境的<br>而在power
+shell里就会报错。具体来说，在vscode里打开终端，然后选用power
+shell的话，一初始化就会报错，大概就是会爆出一大堆环境变量里的路径，类似：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Develop\EasyEdit2_program\EasyEdit&gt; conda activate base C:\Users\lanhz\miniconda3\Lib\site-packages\conda\base\context.py:211: FutureWarning: Adding <span class="string">&#x27;defaults&#x27;</span> to channel list implicitly is deprecated and will be removed <span class="keyword">in</span> 25.9. To remove this warning, please choose a default channel explicitly with conda<span class="string">&#x27;s regular configuration system, e.g. by adding &#x27;</span>defaults<span class="string">&#x27; to the list of channels: conda config --add channels defaults For more information see [https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/use-condarc.html](https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/use-condarc.html) deprecated.topic( # &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ERROR REPORT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; Traceback (most recent call last): File &quot;C:\Users\lanhz\miniconda3\Lib\site-packages\conda\exception_handler.py&quot;, line 28, in __call__ return func(*args, **kwargs) ^^^^^^^^^^^^^^^^^^^^^ File &quot;C:\Users\lanhz\miniconda3\Lib\site-packages\conda\cli\main.py&quot;, line 87, in main_sourced print(activator.execute(), end=&quot;&quot;) UnicodeEncodeError: &#x27;</span>gbk<span class="string">&#x27; codec can&#x27;</span>t encode character <span class="string">&#x27;\ue189&#x27;</span> <span class="keyword">in</span> position 1582: illegal multibyte sequence `$ C:\Users\lanhz\miniconda3\Scripts\conda-script.py shell.powershell activate base` environment variables: CIO_TEST=&lt;not <span class="built_in">set</span>&gt; CLASSPATH=C:\LINGO12\Lingo12.jar CONDA_EXE=C:\Users\lanhz\miniconda3\Scripts\conda.exe CONDA_ROOT=C:\Users\lanhz\miniconda3 CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1 CURL_CA_BUNDLE=&lt;not <span class="built_in">set</span>&gt; FNM_MULTISHELL_PATH=C:\Users\lanhz\AppData\Local\fnm_multishells\50724_1751901324170 HOMEPATH=\Users\lanhz LD_PRELOAD=&lt;not <span class="built_in">set</span>&gt; MUJOCO_PY_MJKEY_PATH=C:\Users\lanhz\.mujoco\mjpro150\bin\mjkey.txt MUJOCO_PY_MJPRO_PATH=C:\Users\lanhz\.mujoco\mjpro150 PATH=C:\Users\lanhz\AppData\Local\fnm_multishells\50724_1751901324170;D:\VM ware\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\C UDA\v12.1\libnvvp;C:\Windows\system32;C:\Windows;C:\Windows\System32\W bem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\Op enSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA Nv DLISR;D:\spm_standalone_25.01.02_Windows\runtime_installer\R2024b\runt ime\win64;C:\Program Files\MATLAB\R2022b\bin;C:\Program Files\dotnet\; C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\Sys tem32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\LINGO12\ ;C:\Program Files\Git\cmd;D:\msys64\ucrt64\bin;D:\msys64\ucrt64\bin\gc c.exe;D:\bin;D:\cmake\bin;C:\Program Files (x86)\ZeroTier\One\;C:\Users\lanhz\miniconda3;C:\Program Files\NVIDIA Corporation\Nsight Compute 2023.1.0\;;C:\Users\lanhz\AppData\Local\Te mp\cuda\bin;D:\tex_live\texlive\2024\bin\windows;d:\cursor\cursor\reso urces\app\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem; C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSS H\;C:\Users\lanhz\.mujoco\mjpro150\bin;C:\Users\lanhz\.mujoco\mjpro150 ;C:\Users\lanhz\.mujoco;D:\璇剧▼璧勬枡涓庤搴EEG-exp\瀹為獙鍏璡label2surface\IsoSu rface;D:\ffmpeg-2025-06-26-git-09cd38e9d5-full_build\bin;;C:\Program F iles\Docker\Docker\resources\bin;D:\putty\;C:\Users\lanhz\AppData\Loca l\Programs\Python\Python311\Scripts\;C:\Users\lanhz\AppData\Local\Prog rams\Python\Python311\;C:\Users\lanhz\AppData\Local\Microsoft\WindowsA pps;C:\Users\lanhz\.dotnet\tools;C:\Program Files\JetBrains\PyCharm Community Edition 2023.1\bin;C:\Program Files\JetBrains\PyCharm 2023.2\bin;D:\Develop\vscode\Microsoft VS Code\bin;C:\Users\lanhz\Desk top\modelsim\win32;C:\Users\lanhz\AppData\Local\Programs\Ollama;D:\tex _live\texlive\2024\bin\windows;C:\Users\lanhz\AppData\Local\Microsoft\ WinGet\Packages\Schniz.fnm_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\Us ers\lanhz\AppData\Local\Pandoc\;D:\cursor\cursor\resources\app\bin;C:\ Users\lanhz\.mujoco\mjpro150\bin;C:\Users\lanhz\.mujoco\mjpro150;C:\Us ers\lanhz\.mujoco;C:\Users\lanhz\AppData\Roaming\Python\Scripts;D:\璇剧▼ 璧勬枡涓庤搴EEG-exp\瀹為獙鍏璡label2surface\IsoSurface;D:\ffmpeg-2025-06-26- git-09cd38e9d5-full_build\bin; PSMODULEPATH=C:\Users\lanhz\Documents\WindowsPowerShell\Modules;C:\Program Files\Wi ndowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Mod ules REQUESTS_CA_BUNDLE=&lt;not <span class="built_in">set</span>&gt; SSL_CERT_FILE=&lt;not <span class="built_in">set</span>&gt; active environment : None user config file : C:\Users\lanhz\.condarc populated config files : C:\Users\lanhz\.condarc conda version : 25.5.1 conda-build version : not installed python version : 3.11.4.final.0 solver : libmamba (default) virtual packages : __archspec=1=skylake __conda=25.5.1=0 __cuda=12.7=0 __win=10.0.26100=0 base environment : C:\Users\lanhz\miniconda3 (writable) conda av data <span class="built_in">dir</span> : C:\Users\lanhz\miniconda3\etc\conda conda av metadata url : None channel URLs : [https://repo.anaconda.com/pkgs/main/win-64](https://repo.anaconda.com/pkgs/main/win-64) [https://repo.anaconda.com/pkgs/main/noarch](https://repo.anaconda.com/pkgs/main/noarch) [https://repo.anaconda.com/pkgs/r/win-64](https://repo.anaconda.com/pkgs/r/win-64) [https://repo.anaconda.com/pkgs/r/noarch](https://repo.anaconda.com/pkgs/r/noarch) [https://repo.anaconda.com/pkgs/msys2/win-64](https://repo.anaconda.com/pkgs/msys2/win-64) [https://repo.anaconda.com/pkgs/msys2/noarch](https://repo.anaconda.com/pkgs/msys2/noarch) package cache : C:\Users\lanhz\miniconda3\pkgs C:\Users\lanhz\.conda\pkgs C:\Users\lanhz\AppData\Local\conda\conda\pkgs envs directories : C:\Users\lanhz\miniconda3\envs C:\Users\lanhz\.conda\envs C:\Users\lanhz\AppData\Local\conda\conda\envs platform : win-64 user-agent : conda/25.5.1 requests/2.32.3 CPython/3.11.4 Windows/10 Windows/10.0.26100 solver/libmamba conda-libmamba-solver/25.4.0 libmambapy/2.0.5 administrator : False netrc file : None offline mode : False An unexpected error has occurred. Conda has prepared the above report. If you suspect this error is being caused by a malfunctioning plugin, consider using the --no-plugins option to turn off plugins. Example: conda --no-plugins install &lt;package&gt; Alternatively, you can <span class="built_in">set</span> the CONDA_NO_PLUGINS environment variable on the <span class="built_in">command</span> line to run the <span class="built_in">command</span> without plugins enabled. Example: CONDA_NO_PLUGINS=<span class="literal">true</span> conda install &lt;package&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="最后是">最后是</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. No report sent. To permanently opt-out, use $ conda config --<span class="built_in">set</span> report_errors <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2 id="这一段如果看一下它上面爆出的路径会发现里面有几个中文的路径还有类似乱码的路径我之前确实有添加过中文的环境变量本来以为是这个问题尝试在环境变量里把这些中文的都去掉正好也是不用了结果还是不行而且设置完环境变量关掉终端再打开还是会报一样的错且路径里还是有中文的这个很奇怪但不知道是不是因为环境变量设置以后需要重启才能生效">这一段。如果看一下它上面爆出的路径，会发现里面有几个中文的路径，还有类似乱码的路径（我之前确实有添加过中文的环境变量），本来以为是这个问题，尝试在环境变量里把这些中文的都去掉（正好也是不用了），结果还是不行。而且设置完环境变量，关掉终端再打开，还是会报一样的错，且路径里还是有中文的。这个很奇怪，但不知道是不是因为环境变量设置以后需要重启才能生效）</h2>
+<h2 id="问ai之后尝试了conda-init-powershell也尝试了">问ai，之后尝试了conda
+init powershell，也尝试了</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除Conda的缓存目录 </span></span><br><span class="line">Remove-Item -Path <span class="variable">$env</span>:CONDA_ROOT\pkgs -Recurse -Force </span><br><span class="line">Remove-Item -Path <span class="variable">$env</span>:LOCALAPPDATA\conda -Recurse -Force</span><br></pre></td></tr></table></figure>
+<h2 id="依然无效">依然无效</h2>
+<h2 id="尝试查看终端的配置文件即执行notepad-profile打开来看这个文件里也挺正常的啊">尝试查看终端的配置文件，即执行<code>notepad $PROFILE</code>，打开来看，这个文件里也挺正常的啊</h2>
+<h2 id="之后想起来之前是vscode里power-shell终端不能用conda激活环境cmd终端是可以的而在cmd终端打印一下它里面的环境变量发现是有中文的路径的这样看中文路径不应该是报错的原因啊">之后想起来，之前是vscode里power
+shell终端不能用conda激活环境，cmd终端是可以的；而在cmd终端打印一下它里面的环境变量，发现是有中文的路径的。这样看，中文路径不应该是报错的原因啊？</h2>
+<h2 id="考虑到可能是乱码相关的因为爆出的路径里是有中文乱码的不知道是不是编码方式需要改但尝试了改成用utf-8执行chcp-65001在power-shell里临时设置编码方式也还是报之前的错">考虑到可能是乱码相关的（因为爆出的路径里是有中文乱码的），不知道是不是编码方式需要改，但尝试了改成用utf-8，执行<code>#chcp 65001</code>，在power
+shell里临时设置编码方式，也还是报之前的错</h2>
+<h2 id="上网查了一下似乎github上有人挂出过类似的issue其中评论区里有人说可能是conda版本太低之类的故尝试了conda-update-conda完了再尝试激活conda环境依然报错不过报的错变了前面依然是爆一大堆路径最后的则变成了">上网查了一下，似乎GitHub上有人挂出过类似的issue，其中评论区里有人说可能是conda版本太低之类的。故尝试了conda
+update
+conda，完了再尝试激活conda环境，依然报错，不过报的错变了。前面依然是爆一大堆路径，最后的则变成了：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. If you suspect this error is being caused by a malfunctioning plugin, consider using the --no-plugins option to turn off plugins. Example: conda --no-plugins install &lt;package&gt; Alternatively, you can <span class="built_in">set</span> the CONDA_NO_PLUGINS environment variable on the <span class="built_in">command</span> line to run the <span class="built_in">command</span> without plugins enabled. Example: CONDA_NO_PLUGINS=<span class="literal">true</span> conda install &lt;package&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="报错变了头很大本来之前的就没搞明白试着搜了一下这个报错发现github上还是有人给出issue且最后close掉了注意到评论区里有个人提出执行conda-clean--a就解决了不抱希望地尝试了一下竟然好了有点莫名其妙啊">报错变了，头很大……本来之前的就没搞明白……试着搜了一下这个报错，发现GitHub上还是有人给出issue，且最后close掉了；注意到评论区里有个人提出执行<code>conda clean -a</code>就解决了，不抱希望地尝试了一下，竟然好了…………有点莫名其妙啊？</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/conda/" rel="tag"># conda</a>
+              <a href="/tags/power-shell/" rel="tag"># power shell</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/" rel="prev" title="用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch">
+      <i class="fa fa-chevron-left"></i> 用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/" rel="next" title="SafetensorError：HeaderTooLarge错误">
+      SafetensorError：HeaderTooLarge错误 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E4%B8%8A%E7%BB%93%E8%AE%BA%E9%A6%96%E5%85%88%E6%A3%80%E6%9F%A5%E4%B8%80%E4%B8%8B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%87%8C%E6%9C%89%E6%B2%A1%E6%9C%89%E4%B8%AD%E6%96%87%E7%9A%84%E8%B7%AF%E5%BE%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%9C%8B%E7%9C%8B%E7%94%A8%E6%88%B7%E5%8F%98%E9%87%8F%E4%BB%A5%E5%8F%8A%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F%E9%87%8C%E7%9A%84path%E9%87%8C%E6%9C%89%E6%B2%A1%E6%9C%89%E4%B8%AD%E6%96%87%E7%9A%84%E6%9C%89%E7%9A%84%E8%AF%9D%E8%AF%95%E8%AF%95%E6%8A%8A%E5%AE%83%E5%8E%BB%E6%8E%89%E5%8F%AF%E8%83%BD%E5%B0%B1%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E4%BA%86%E4%B8%8D%E8%A1%8C%E7%9A%84%E8%AF%9D%E5%8F%AF%E4%BB%A5%E5%86%8D%E8%AF%95%E8%AF%95conda-clean--a%E4%B9%8B%E5%90%8E%E5%86%8D%E6%89%A7%E8%A1%8Cconda-activate"><span class="nav-number">1.</span> <span class="nav-text">先上结论，首先检查一下环境变量里有没有中文的路径（也就是看看用户变量以及系统变量里的PATH里有没有中文的，有的话试试把它去掉，可能就解决问题了）；不行的话可以再试试conda clean -a，之后再执行conda
+activate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%B0%B1%E5%A6%82%E6%A0%87%E9%A2%98%E6%89%80%E8%BF%B0%E8%BF%99%E4%B8%AA%E5%85%B6%E5%AE%9E%E6%9C%89%E7%82%B9%E4%B9%85%E4%BA%86%E4%BD%86%E4%B8%80%E7%9B%B4%E6%B2%A1%E7%AE%A1%E5%AE%83%E6%AD%A4%E5%A4%96%E4%BC%BC%E4%B9%8E%E5%9C%A8%E6%A1%8C%E9%9D%A2%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%85%B6%E5%AE%83%E5%9C%B0%E6%96%B9%E6%89%93%E5%BC%80power-shell%E5%86%8D%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83%E5%A5%BD%E5%83%8F%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%9A%84%E4%B8%94%E5%9C%A8vscode%E9%87%8C%E6%89%93%E5%BC%80%E7%9A%84%E8%AF%9D%E5%A6%82%E6%9E%9C%E7%94%A8cmd%E7%BB%88%E7%AB%AF%E5%88%99%E4%B9%9F%E6%98%AF%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8conda%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83%E7%9A%84-%E8%80%8C%E5%9C%A8power-shell%E9%87%8C%E5%B0%B1%E4%BC%9A%E6%8A%A5%E9%94%99%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E5%9C%A8vscode%E9%87%8C%E6%89%93%E5%BC%80%E7%BB%88%E7%AB%AF%E7%84%B6%E5%90%8E%E9%80%89%E7%94%A8power-shell%E7%9A%84%E8%AF%9D%E4%B8%80%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%B1%E4%BC%9A%E6%8A%A5%E9%94%99%E5%A4%A7%E6%A6%82%E5%B0%B1%E6%98%AF%E4%BC%9A%E7%88%86%E5%87%BA%E4%B8%80%E5%A4%A7%E5%A0%86%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%87%8C%E7%9A%84%E8%B7%AF%E5%BE%84%E7%B1%BB%E4%BC%BC"><span class="nav-number">2.</span> <span class="nav-text">问题就如标题所述。这个其实有点久了，但一直没管它。此外，似乎在桌面之类的其它地方打开power
+shell，再激活环境，好像是可以的；且在vscode里打开的话，如果用cmd终端，则也是可以正常conda激活环境的而在power
+shell里就会报错。具体来说，在vscode里打开终端，然后选用power
+shell的话，一初始化就会报错，大概就是会爆出一大堆环境变量里的路径，类似：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E6%98%AF"><span class="nav-number">3.</span> <span class="nav-text">最后是</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%80%E6%AE%B5%E5%A6%82%E6%9E%9C%E7%9C%8B%E4%B8%80%E4%B8%8B%E5%AE%83%E4%B8%8A%E9%9D%A2%E7%88%86%E5%87%BA%E7%9A%84%E8%B7%AF%E5%BE%84%E4%BC%9A%E5%8F%91%E7%8E%B0%E9%87%8C%E9%9D%A2%E6%9C%89%E5%87%A0%E4%B8%AA%E4%B8%AD%E6%96%87%E7%9A%84%E8%B7%AF%E5%BE%84%E8%BF%98%E6%9C%89%E7%B1%BB%E4%BC%BC%E4%B9%B1%E7%A0%81%E7%9A%84%E8%B7%AF%E5%BE%84%E6%88%91%E4%B9%8B%E5%89%8D%E7%A1%AE%E5%AE%9E%E6%9C%89%E6%B7%BB%E5%8A%A0%E8%BF%87%E4%B8%AD%E6%96%87%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%9C%AC%E6%9D%A5%E4%BB%A5%E4%B8%BA%E6%98%AF%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E5%B0%9D%E8%AF%95%E5%9C%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%87%8C%E6%8A%8A%E8%BF%99%E4%BA%9B%E4%B8%AD%E6%96%87%E7%9A%84%E9%83%BD%E5%8E%BB%E6%8E%89%E6%AD%A3%E5%A5%BD%E4%B9%9F%E6%98%AF%E4%B8%8D%E7%94%A8%E4%BA%86%E7%BB%93%E6%9E%9C%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A1%8C%E8%80%8C%E4%B8%94%E8%AE%BE%E7%BD%AE%E5%AE%8C%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%85%B3%E6%8E%89%E7%BB%88%E7%AB%AF%E5%86%8D%E6%89%93%E5%BC%80%E8%BF%98%E6%98%AF%E4%BC%9A%E6%8A%A5%E4%B8%80%E6%A0%B7%E7%9A%84%E9%94%99%E4%B8%94%E8%B7%AF%E5%BE%84%E9%87%8C%E8%BF%98%E6%98%AF%E6%9C%89%E4%B8%AD%E6%96%87%E7%9A%84%E8%BF%99%E4%B8%AA%E5%BE%88%E5%A5%87%E6%80%AA%E4%BD%86%E4%B8%8D%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9B%A0%E4%B8%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%AE%BE%E7%BD%AE%E4%BB%A5%E5%90%8E%E9%9C%80%E8%A6%81%E9%87%8D%E5%90%AF%E6%89%8D%E8%83%BD%E7%94%9F%E6%95%88"><span class="nav-number">4.</span> <span class="nav-text">这一段。如果看一下它上面爆出的路径，会发现里面有几个中文的路径，还有类似乱码的路径（我之前确实有添加过中文的环境变量），本来以为是这个问题，尝试在环境变量里把这些中文的都去掉（正好也是不用了），结果还是不行。而且设置完环境变量，关掉终端再打开，还是会报一样的错，且路径里还是有中文的。这个很奇怪，但不知道是不是因为环境变量设置以后需要重启才能生效）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AEai%E4%B9%8B%E5%90%8E%E5%B0%9D%E8%AF%95%E4%BA%86conda-init-powershell%E4%B9%9F%E5%B0%9D%E8%AF%95%E4%BA%86"><span class="nav-number">5.</span> <span class="nav-text">问ai，之后尝试了conda
+init powershell，也尝试了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E7%84%B6%E6%97%A0%E6%95%88"><span class="nav-number">6.</span> <span class="nav-text">依然无效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E6%9F%A5%E7%9C%8B%E7%BB%88%E7%AB%AF%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8D%B3%E6%89%A7%E8%A1%8Cnotepad-profile%E6%89%93%E5%BC%80%E6%9D%A5%E7%9C%8B%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E9%87%8C%E4%B9%9F%E6%8C%BA%E6%AD%A3%E5%B8%B8%E7%9A%84%E5%95%8A"><span class="nav-number">7.</span> <span class="nav-text">尝试查看终端的配置文件，即执行notepad $PROFILE，打开来看，这个文件里也挺正常的啊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%8B%E5%90%8E%E6%83%B3%E8%B5%B7%E6%9D%A5%E4%B9%8B%E5%89%8D%E6%98%AFvscode%E9%87%8Cpower-shell%E7%BB%88%E7%AB%AF%E4%B8%8D%E8%83%BD%E7%94%A8conda%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83cmd%E7%BB%88%E7%AB%AF%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%9A%84%E8%80%8C%E5%9C%A8cmd%E7%BB%88%E7%AB%AF%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%8B%E5%AE%83%E9%87%8C%E9%9D%A2%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8F%91%E7%8E%B0%E6%98%AF%E6%9C%89%E4%B8%AD%E6%96%87%E7%9A%84%E8%B7%AF%E5%BE%84%E7%9A%84%E8%BF%99%E6%A0%B7%E7%9C%8B%E4%B8%AD%E6%96%87%E8%B7%AF%E5%BE%84%E4%B8%8D%E5%BA%94%E8%AF%A5%E6%98%AF%E6%8A%A5%E9%94%99%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%95%8A"><span class="nav-number">8.</span> <span class="nav-text">之后想起来，之前是vscode里power
+shell终端不能用conda激活环境，cmd终端是可以的；而在cmd终端打印一下它里面的环境变量，发现是有中文的路径的。这样看，中文路径不应该是报错的原因啊？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%99%91%E5%88%B0%E5%8F%AF%E8%83%BD%E6%98%AF%E4%B9%B1%E7%A0%81%E7%9B%B8%E5%85%B3%E7%9A%84%E5%9B%A0%E4%B8%BA%E7%88%86%E5%87%BA%E7%9A%84%E8%B7%AF%E5%BE%84%E9%87%8C%E6%98%AF%E6%9C%89%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E4%B8%8D%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F%E9%9C%80%E8%A6%81%E6%94%B9%E4%BD%86%E5%B0%9D%E8%AF%95%E4%BA%86%E6%94%B9%E6%88%90%E7%94%A8utf-8%E6%89%A7%E8%A1%8Cchcp-65001%E5%9C%A8power-shell%E9%87%8C%E4%B8%B4%E6%97%B6%E8%AE%BE%E7%BD%AE%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F%E4%B9%9F%E8%BF%98%E6%98%AF%E6%8A%A5%E4%B9%8B%E5%89%8D%E7%9A%84%E9%94%99"><span class="nav-number">9.</span> <span class="nav-text">考虑到可能是乱码相关的（因为爆出的路径里是有中文乱码的），不知道是不是编码方式需要改，但尝试了改成用utf-8，执行#chcp 65001，在power
+shell里临时设置编码方式，也还是报之前的错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E7%BD%91%E6%9F%A5%E4%BA%86%E4%B8%80%E4%B8%8B%E4%BC%BC%E4%B9%8Egithub%E4%B8%8A%E6%9C%89%E4%BA%BA%E6%8C%82%E5%87%BA%E8%BF%87%E7%B1%BB%E4%BC%BC%E7%9A%84issue%E5%85%B6%E4%B8%AD%E8%AF%84%E8%AE%BA%E5%8C%BA%E9%87%8C%E6%9C%89%E4%BA%BA%E8%AF%B4%E5%8F%AF%E8%83%BD%E6%98%AFconda%E7%89%88%E6%9C%AC%E5%A4%AA%E4%BD%8E%E4%B9%8B%E7%B1%BB%E7%9A%84%E6%95%85%E5%B0%9D%E8%AF%95%E4%BA%86conda-update-conda%E5%AE%8C%E4%BA%86%E5%86%8D%E5%B0%9D%E8%AF%95%E6%BF%80%E6%B4%BBconda%E7%8E%AF%E5%A2%83%E4%BE%9D%E7%84%B6%E6%8A%A5%E9%94%99%E4%B8%8D%E8%BF%87%E6%8A%A5%E7%9A%84%E9%94%99%E5%8F%98%E4%BA%86%E5%89%8D%E9%9D%A2%E4%BE%9D%E7%84%B6%E6%98%AF%E7%88%86%E4%B8%80%E5%A4%A7%E5%A0%86%E8%B7%AF%E5%BE%84%E6%9C%80%E5%90%8E%E7%9A%84%E5%88%99%E5%8F%98%E6%88%90%E4%BA%86"><span class="nav-number">10.</span> <span class="nav-text">上网查了一下，似乎GitHub上有人挂出过类似的issue，其中评论区里有人说可能是conda版本太低之类的。故尝试了conda
+update
+conda，完了再尝试激活conda环境，依然报错，不过报的错变了。前面依然是爆一大堆路径，最后的则变成了：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99%E5%8F%98%E4%BA%86%E5%A4%B4%E5%BE%88%E5%A4%A7%E6%9C%AC%E6%9D%A5%E4%B9%8B%E5%89%8D%E7%9A%84%E5%B0%B1%E6%B2%A1%E6%90%9E%E6%98%8E%E7%99%BD%E8%AF%95%E7%9D%80%E6%90%9C%E4%BA%86%E4%B8%80%E4%B8%8B%E8%BF%99%E4%B8%AA%E6%8A%A5%E9%94%99%E5%8F%91%E7%8E%B0github%E4%B8%8A%E8%BF%98%E6%98%AF%E6%9C%89%E4%BA%BA%E7%BB%99%E5%87%BAissue%E4%B8%94%E6%9C%80%E5%90%8Eclose%E6%8E%89%E4%BA%86%E6%B3%A8%E6%84%8F%E5%88%B0%E8%AF%84%E8%AE%BA%E5%8C%BA%E9%87%8C%E6%9C%89%E4%B8%AA%E4%BA%BA%E6%8F%90%E5%87%BA%E6%89%A7%E8%A1%8Cconda-clean--a%E5%B0%B1%E8%A7%A3%E5%86%B3%E4%BA%86%E4%B8%8D%E6%8A%B1%E5%B8%8C%E6%9C%9B%E5%9C%B0%E5%B0%9D%E8%AF%95%E4%BA%86%E4%B8%80%E4%B8%8B%E7%AB%9F%E7%84%B6%E5%A5%BD%E4%BA%86%E6%9C%89%E7%82%B9%E8%8E%AB%E5%90%8D%E5%85%B6%E5%A6%99%E5%95%8A"><span class="nav-number">11.</span> <span class="nav-text">报错变了，头很大……本来之前的就没搞明白……试着搜了一下这个报错，发现GitHub上还是有人给出issue，且最后close掉了；注意到评论区里有个人提出执行conda clean -a就解决了，不抱希望地尝试了一下，竟然好了…………有点莫名其妙啊？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">92</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

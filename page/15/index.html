@@ -150,6 +150,797 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Learning%20Commonality,%20Divergence%20and%20Variety%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Learning%20Commonality,%20Divergence%20and%20Variety%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-28 22:31:54" itemprop="dateCreated datePublished" datetime="2024-10-28T22:31:54+08:00">2024-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-29 23:29:08" itemprop="dateModified" datetime="2024-10-29T23:29:08+08:00">2024-10-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>主要包括两个方法：Hard Prototype Contrastive Learning和Dynamic
+Prototype Contrastive Learning，然后用一个progressive learning
+strategy把二者结合起来</p>
+<p>有一说一，有时间的话可以看看更古早的无监督VI-ReID的方法，比如[20] Bin
+Yang, Mang Ye, Jun Chen, and Zesen Wu. Augmented dual-contrastive
+aggregation learning for unsupervised visible-infrared person
+re-identification. In ACM MM, pages 2843–2851, 2022.</p>
+<p>[21] Guoqing Zhang, Hongwei Zhang, Weisi Lin, Arun Kumar Chandran,
+and Xuan Jing. Camera contrast learning for unsupervised person
+re-identification. IEEE TCSVT, 33(8):4096–4107, 2023.</p>
+<p>[22] Bin Yang, Jun Chen, and Mang Ye. Towards grand unified
+representation learning for unsupervised visible-infrared person
+re-identification. In ICCV, pages 11069–11079, 2023.</p>
+<p>[23] Zesen Wu and Mang Ye. Unsupervised visible-infrared person
+re-identification via progressive graph matching and alternate learning.
+In CVPR, pages 9548–9558, 2023. # nips24 #
+problem：传统的方法，计算对比损失的时候，用聚类中心代表人物，可能忽略了每个人不同的特点（所以到时候看看它的方法怎么捕捉到人物的不同特点了）
+# 框架图：![[Pasted image 20241029223241.png]] # method： ## 1.Centroid
+Prototype Contrastive Learning ###
+这个好像就是很经典的方法。它是用于优化特征提取器的。具体来说，它先进行DBSCAN聚类，然后每个cluster（注意，cluster是指同一个伪标签的所有实例组成的一个集合。在这篇文章的设定中，这里还是分模态进行聚类的，即RGB和RGB的进行聚类，IR和IR的进行聚类）内的所有实例特征向量求个均值，就是这个cluster的中心。之后有个损失来进行优化。它期望的是，每个实例特征向量都尽可能靠近它所属的那个cluster的中心，然后尽可能远离它不属于的其它所有cluster的中心。（所以它的负样本就是那些和它伪标签不同的cluster的中心）（但一味的让每个特征向量都尽可能靠近它所属的那个cluster的中心，其实不太合理啊。。毕竟有同一个伪标签的向量，且不说它们的identity到底是不是一样的，就算一样，也不应该全都往一个均值上靠拢吧。。。和其它的cluster尽可能远离倒是没什么问题）（这里能不能不去计算特征向量和它所属的那个cluster的中心的距离，单纯去拉大特征向量和它不属于的cluster的中心之间的距离？但还不清楚这样会不会存在什么捷径导致塌缩。。或者借鉴一下对比学习里不需要负样本的那些方法？）
+## 2.Hard Prototype Contrastive Learning ###
+这个也是用于优化特征提取器的。不过它中间还会动量更新一下每个cluster的hard
+prototype（每个cluster的hard
+prototype就是指距离中心最远的那个特征向量）。具体来说，它这里也提出一个损失，是要拉近每个cluster内的所有特征向量和这个cluster的hard
+prototype之间的距离，同时要拉远每个特征向量和其它cluster的hard
+prototype之间的距离（可以发现，相比上面的，也就是把cluster
+centroid换成了hard
+prototype了。这里可能是希望换一个对比的对象，学一些不一样的东西。把普通的特征向量和hard
+prototype拉近，可能是希望普通的特征向量也去学习一下hard
+prototype上的一些特殊属性。或许可以举个生活中的例子来辅助思考一下。但反正这里的操作本身还是有道理的。归根到底，同一个cluster的特征向量近一点，不同cluster的特征向量远一点，一般还是没什么大问题的）另外，它还给出了一个定理，从信息熵的角度来说明hard
+prototype具有更多样的信息。这个说法未必是对的，但用信息论的角度去分析一些东西或许是可行的，可以借鉴的
+## 3.Dynamic Prototype Contrastive Learning ###
+这个也是用于优化特征提取器的。它大体上做的事就是，在更新的过程中，动态选取对比学习的正负样本。具体来说，它也是提出一个损失，然后也是要求每个cluster里的每个特征样本对应的对比损失，求和，求均值得到这个cluster的损失。所有cluster的损失求均值，则得到总的损失（注意，这里还是分模态进行的）（那就不禁让人想了，前面不是老有方法是跨模态进行的嘛，这里有没有可能也结合起来？有什么好处？）。而具体每个样本特征向量的损失怎么求，大体如下：每个cluster里都会随机挑出M个特征向量。比方说，现在对于RGB模态的第一个cluster里的第一个特征向量，我们要求它的损失。它的正样本就是它所属的那个cluster，我们已经挑出了M个样本，找到里面离它最远的那个，就是正样本。然后，对于其它不同cluster，每个cluster都找出那M个特征向量里离它最近的那个，就是负样本（这里一个最近，一个最远，挺有设计感的。但不好说清楚到底有什么作用？）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Channel%20Augmentation%20for%20Visible-Infrared%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Channel%20Augmentation%20for%20Visible-Infrared%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-28 14:46:46" itemprop="dateCreated datePublished" datetime="2024-10-28T14:46:46+08:00">2024-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-09 09:13:33" itemprop="dateModified" datetime="2025-03-09T09:13:33+08:00">2025-03-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="tpami24">tpami24</h1>
+<h1 id="贡献提出一种很简单的channel-augmentation可以无缝衔接到现有的很多baseline里提出一种weak--and-strong--augmentation-joint-learning-strategy提出一种unsupervised-augmented-label-association设计了一种baseline看样子好像只是把以前的ir和rgb模态特征一起聚类改成了ir和中间模态特征一起聚类似乎大家都默认了无监督条件下解决cross-modality-gap的一个重要方法就是聚类">贡献：提出一种很简单的channel
+augmentation，可以无缝衔接到现有的很多baseline里；提出一种weak- and
+strong- augmentation joint learning strategy；提出一种unsupervised
+augmented label
+association，设计了一种baseline（看样子好像只是把以前的”IR和RGB模态特征一起聚类“改成了”IR和中间模态特征一起聚类“。似乎大家都默认了，无监督条件下解决cross-modality
+gap的一个重要方法就是聚类？）</h1>
+<h1 id="problemmotivation还是老生常谈的large-modality-gap但文章关注的是其中的color-discrepancy由此提出channel-augmentation看fig1好像是从rgb图像往ir图像靠拢这样起码这次它不是空喊modality-gap了而是聚焦其中的一个部分并切实地提出了解决方案这就比那些文章好了-此外论文也提到了跨模态身份标注是费时费力的因此很有必要发展无监督的vi-reid这里就比较假大空了哪里都可以这么说嘛感觉更有可能是为了利用提出的ca操作也给无监督设定提出了一个新的baseline">problem&amp;motivation：还是老生常谈的large
+modality gap。但文章关注的是其中的color discrepancy，由此提出channel
+augmentation（看fig1，好像是从RGB图像往IR图像靠拢这样）（起码这次它不是空喊modality
+gap了，而是聚焦其中的一个部分，并切实地提出了解决方案。这就比那些文章好了）<br>此外，论文也提到了跨模态身份标注是费时费力的，因此很有必要发展无监督的VI-ReID（这里就比较假大空了，哪里都可以这么说嘛）。感觉更有可能是为了利用提出的CA操作，也给无监督设定提出了一个新的baseline</h1>
+<h1 id="method">method：</h1>
+<h2 id="channel-augmentationca-它就是对训练集里的rgb图像进行操作会随机选择rgb三个通道中的一个然后把剩下两个通道都换成选出的那个通道一来可视化的时候这样得到的图像与ir模态图像更为相近了认为gap更小了另一方面论文提到如果是正常的rgb三通道的图像那么在提取特征的时候特征可能捕获了rgb三个通道相互之间的关系然而ir图像是没有这种相互关系的所以这种相互关系本质是一种modality-specific-information我们不太希望提取出这个信息而通过ca三个通道是相同的了那么特征也就不会包含三个通道相互的关系了相当于少学一些modality-specific-information而是更多去学一些modality-shared-information但细究一下的话不学通道之间的相互关系这种modality-specific-information不代表不可以学习其它的啊或者说只是少学了一种modality-specific-information效果一定会好嘛-不过总的来说引入ca操作以后对rgb图像进行ca可以得到一种新的图像姑且可以认为是一种ca模态的数据它减小了rgb和ir模态之间的差异-有一说一论文给出t-sne可视化的图来说明ca模态会更靠近ir模态但感觉反而一可视化就显得有点牵强了这个可视化效果一般啊会不会ca还是不够话说用一个网络输入是rgb输出是ir让它去预测会不会学到一些二者之间的关系然后后面就用rgb图像的输出代替所谓ca模态数据毕竟提出用一个网络的本意也只是想把ca这个操作给自动化希望能学出来-这里顺带的有个小trick就是channel-level-random-erasingcre大概就是对rgb图像的各个channel都随机选择一个区域然后把区域里的像素值都替换成一个提前算好的imagenet上的对应通道均值没有什么深度新意">1.Channel
+Augmentation（CA）<br>它就是对训练集里的RGB图像进行操作，会随机选择R/G/B三个通道中的一个，然后把剩下两个通道都换成选出的那个通道。一来，可视化的时候，这样得到的图像与IR模态图像更为相近了，认为gap更小了；另一方面，论文提到，如果是正常的RGB三通道的图像，那么在提取特征的时候，特征可能捕获了R/G/B三个通道相互之间的关系。然而IR图像是没有这种相互关系的。所以这种相互关系本质是一种modality-specific
+information。我们不太希望提取出这个信息。而通过CA，三个通道是相同的了，那么特征也就不会包含三个通道相互的关系了，相当于少学一些modality-specific
+information，而是更多去学一些modality-shared
+information（但细究一下的话，不学通道之间的相互关系这种modality-specific
+information，不代表不可以学习其它的啊？或者说，只是少学了一种modality-specific
+information，效果一定会好嘛？）<br>不过，总的来说，引入CA操作以后，对RGB图像进行CA，可以得到一种新的图像，姑且可以认为是一种CA模态的数据。它减小了RGB和IR模态之间的差异<br>有一说一，论文给出t-SNE可视化的图来说明CA模态会更靠近IR模态，但感觉反而一可视化就显得有点牵强了。这个可视化效果一般啊。。。会不会CA还是不够？（话说用一个网络，输入是RGB，输出是IR，让它去预测，会不会学到一些二者之间的关系？然后后面就用RGB图像的输出代替所谓CA模态数据？毕竟提出用一个网络的本意也只是想把CA这个操作给自动化，希望能学出来）<br>这里顺带的有个小trick，就是channel-level
+random
+erasing（CRE），大概就是对RGB图像的各个channel都随机选择一个区域，然后把区域里的像素值都替换成一个提前算好的ImageNet上的对应通道均值。没有什么深度/新意</h2>
+<h2 id="weak-and-strong-augmentation-joint-learning-strategy-感觉主要的创新点以及相比于它在此之前提出的enhanced-channel-mixed-learning的不同点在于l_ws具体来说它好像希望weak-augmented-img即用常规增强方法得到的图像和strong-augmented-img即用ca得到的图像的分类输出尽可能保持一致注意一下它来约束分类结果的一致性至于分类结果的准确性是由另外两个常规损失来约束的还挺合理并且它强调说分类器是用的同一个以便确保确实在优化特征提取器但目前还没太看明白它具体计算损失的时候里面的y是指什么得回头细看了可能得看代码了感觉文章里说的就是不清楚-目前问了一下ai得到了还算合理的回答有时间看看代码对比一下但它怎么好像没公开代码pasted-image-20241028215226.png-这个损失求和里的每一样其实是交叉熵的简写里面的overline-y_iw和overline-y_is都代表一个概率分布上标是w的表示对应weak-augmented-img上标s则表示对应strong-augmented-img论文里说它们是预测概率中心其实预测概率中心应该就是一个向量举个例子说明一下什么是预测概率中心不妨假设分类任务中一共有5个类然后属于第一个类的数据有10个我们有一个网络一个输入x进去输出y都是这个输入x的属于各个类别的概率分布那么对于那10个都是第一类的数据它们都输入进去可以得到10个概率分布也就是10个5维的向量对这个10个向量取均值就得到了一个预测概率中心也就是说预测概率中心是针对一个类而言的它表征了模型整体对某个类的置信度比方说在这里的例子中如果这个预测概率中心它在第一个类上的概率很高假设是0.95那说明模型基本上是能很好地识别第一个类的它对第一个类的置信度还是很高的-总而言之从结果上看如果weak-augmented-img和strong-augmented-img的输出结果能做到非常接近说明模型确实对颜色的变化是比较鲁棒的了话说怎么确定它是学到了颜色中的信息而不是忽略了颜色信息">2.weak-and-strong
+augmentation joint learning
+strategy<br>感觉主要的创新点（以及相比于它在此之前提出的Enhanced
+Channel-Mixed Learning的不同点）在于<span class="math inline">\(L_{ws}\)</span>，具体来说，它好像希望weak-augmented
+img（即用常规增强方法得到的图像）和strong-augmented
+img（即用CA得到的图像）的分类输出尽可能保持一致？（注意一下，它来约束分类结果的一致性，至于分类结果的准确性，是由另外两个常规损失来约束的）还挺合理。并且它强调说分类器是用的同一个，以便确保确实在优化特征提取器？但目前还没太看明白它具体计算损失的时候里面的y是指什么？得回头细看了。可能得看代码了，感觉文章里说的就是不清楚<br>目前问了一下ai，得到了还算合理的回答。有时间看看代码对比一下（但它怎么好像没公开代码。。。）![[Pasted
+image
+20241028215226.png]]<br>这个损失，求和里的每一样其实是交叉熵的简写。里面的<span class="math inline">\(\overline y_{i}^{w}\)</span>和<span class="math inline">\(\overline
+y_{i}^{s}\)</span>都代表一个概率分布。（上标是w的表示对应weak augmented
+img，上标s则表示对应strong augmented
+img）论文里说它们是预测概率中心，其实预测概率中心应该就是一个向量。举个例子说明一下什么是预测概率中心。不妨假设分类任务中，一共有5个类。然后，属于第一个类的数据有10个。我们有一个网络，一个输入x进去，输出y都是这个输入x的属于各个类别的概率分布。那么，对于那10个都是第一类的数据，它们都输入进去，可以得到10个概率分布，也就是10个5维的向量。对这个10个向量，取均值，就得到了一个预测概率中心。也就是说，预测概率中心是针对一个类而言的。它表征了模型整体对某个类的置信度。比方说，在这里的例子中，如果这个预测概率中心，它在第一个类上的概率很高，假设是0.95，那说明模型基本上是能很好地识别第一个类的。它对第一个类的置信度还是很高的<br>总而言之，从结果上看，如果weak
+augmented img和strong augmented
+img的输出结果能做到非常接近，说明模型确实对颜色的变化是比较鲁棒的了<del>（话说怎么确定它是学到了颜色中的信息，而不是忽略了颜色信息。。。）</del></h2>
+<h2 id="unsupervised-augmented-label-association-文章还提出了无监督条件下的一些改进具体来说它提出了一种新的聚类方法认为可以生成更可靠的伪标签且是ca模态和ir模态的特征分别聚类之后提出一种label-association方法同时用到ca模态和ir模态其核心思想是同一个人的不同模态的聚类应该非常接近大体的流程是对于一个模态的一个聚类即所有分到同一个伪标签的实例组成的集合计算离它最近的前k个另一模态的聚类比方说有一个ca模态的聚类然后计算它和ir模态的聚类之间的距离挑出最近的k个对这k个ir模态的聚类再反过来计算它们各自的前k个最近的ca模态的聚类如果ca模态的聚类a它的最近的k个ir模态聚类里有聚类b然后b的k个最近的ca模态的聚类里有聚类a那么就认为这两个聚类足够接近给它们分配相同的标签-这种聚类层面的association比实例级别的association的计算量会小一点算是它的一个优点">3.unsupervised
+augmented label
+association<br>文章还提出了无监督条件下的一些改进。具体来说，它提出了一种新的聚类方法（认为可以生成更可靠的伪标签，且是CA模态和IR模态的特征分别聚类），之后提出一种label
+association方法，同时用到CA模态和IR模态（其核心思想是，同一个人的不同模态的聚类应该非常接近）（大体的流程是，对于一个模态的一个聚类（即所有分到同一个伪标签的实例组成的集合），计算离它最近的前k个另一模态的聚类。比方说，有一个CA模态的聚类，然后计算它和IR模态的聚类之间的距离，挑出最近的k个。对这k个IR模态的聚类，再反过来计算它们各自的前k个最近的CA模态的聚类。如果CA模态的聚类a，它的最近的k个IR模态聚类里有聚类b；然后b的k个最近的CA模态的聚类里有聚类a，那么就认为这两个聚类足够接近，给它们分配相同的标签）<br>这种聚类层面的association，比实例级别的association的计算量会小一点，算是它的一个优点</h2>
+<h1 id="实验部分">实验部分：</h1>
+<h2 id="它是逐个部分去验证的就是它提出了一个什么方法操作就单独去验证这个东西的有效性所以有很多个小部分现在先记录一下目前比较关心的">它是逐个部分去验证的。就是，它提出了一个什么方法/操作，就单独去验证这个东西的有效性，所以有很多个小部分。现在先记录一下目前比较关心的</h2>
+<h2 id="关于weak-and-strong-augmentation-learning-schemes的有效性验证-实验主要有两个部分一不知道它想说什么啊二是利用论文提出的weak-and-strong-augmentation-learning-schemes也就是加上了一个consistency的约束以后相比于上面没加consistency-regularization效果更好说明了文章所提出的框架的有效性和consistency-regularization的合理性">关于weak-and-strong
+augmentation learning
+schemes的有效性验证：<br>实验主要有两个部分，一不知道它想说什么啊。二是利用论文提出的weak-and-strong
+augmentation learning
+schemes，也就是加上了一个consistency的约束以后，相比于上面没加consistency
+regularization，效果更好，说明了文章所提出的框架的有效性和consistency
+regularization的合理性</h2>
+<p>颜色本身可能是有一些信息，但如果跨模态的时候不好提取，不妨可以略过它，更多去关注”颜色的变化“这件事？这个会不会在跨模态的时候好提取一点？
+对啊，我也想到了color jitter。它这个channel augmentation到底和color
+jitter之间有什么区别？为什么color jitter会损害语义信息，而channel
+augmentation却不会呢？ 了解一下identity loss，triplet
+loss，有时间记录一下</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/High-Order%20Structure%20Based%20Middle-Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/High-Order%20Structure%20Based%20Middle-Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-27 21:09:10" itemprop="dateCreated datePublished" datetime="2024-10-27T21:09:10+08:00">2024-10-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-11-01 20:49:22" itemprop="dateModified" datetime="2024-11-01T20:49:22+08:00">2024-11-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="tpami24">tpami24</h1>
+<p>关注一下它说的high order structure
+information是什么。。感觉又是为了讲故事而提出的一个概念，本质上可能是想说图像的不同区域之间的交互
+关注一下whitened hypergraph是啥 关注一下它所说的middle
+feature是什么，以及它是怎么利用这个middle feature的 关注一下最后的CFL
+module里，align feature具体是怎么align的？为什么要align？
+话说，它在测试的时候，用的是哪个特征？最后的middle
+feature嘛？得看看代码了 #
+简单梳理：提出HOS-Net，包括一个主干网络、一个SLE（short-and-long range
+feature extraction）、一个HSL（high-order structure learning
+module）、一个CFL（common feature space
+learning）。最大的创新点就是它提出high-order structure
+information和middle feature，并利用它们来提取更好的modality-invariant
+feature ## SLE大体是由一个CNN和一个Transformer组成，用来提取short
+range和long range
+feature（估摸着就是利用下CNN和Transformer的特性了，感觉创新性不高） ##
+HSL则是利用上面提取的long/short range
+feature，来具体地建模这种long/short range
+dependence（后面看看怎么个建模法） ##
+最后的CFL看粗略介绍不是很明白，得稍微细看一下。不过CFL里提出了一个MRIC
+loss，用以减少模态间的差异。但其实说的很玄乎，这个MRIC
+loss也就是不停的用各种模态、各种range的feature进行对比而已。。说来说去，还是在用对比损失，至于用谁来对比，似乎很多论文都大同小异，一般就是（Vis，IR，middle）之间排列组合，同ID的尽可能接近，不同ID的尽可能远离
+# 批判一下：Conventional feature-level VI-ReID methods usually learn a
+common feature space based on a contrastive-based loss, which directly
+minimizes the distances between VIS and IR features. However, such a
+manner cannot achieve a reasonable common feature space because of the
+large modality
+discrepancy.搁着说车轱辘话呢，这最后一句不就说了和没说一样吗。。large
+modality
+discrepancy都被说烂了。。。不过，这让人想到，llm那块不是一直在搞多模态嘛，那边是怎么处理多模态之间的差异的？就比如文字和图像的差异？或许可以借鉴一下。怎么现在好像没看到什么论文说是借鉴了那边的方法呢。。。以及，这个确实可以说是一种对齐啊，把不同模态的数据特征给对齐了，类似于统一到一个模态里，那也可以借鉴一下llm里对齐的技术了？可能目前在VI-ReID领域里，减小模态差异的方法主要是引入middle
+feature？不好说，得总结一下 #
+problem：论文认为现在的方法没有足够地挖掘图像中各个部分之间的相互关系，例如，身体部位相互的关系。而没有充分挖掘这种信息，导致modality
+gap依然比较大 # motivation：进一步挖掘这种关系</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/dataset/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/dataset/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-27 10:10:43 / Modified: 23:03:22" itemprop="dateCreated datePublished" datetime="2024-10-27T10:10:43+08:00">2024-10-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <table>
+<colgroup>
+<col style="width: 3%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 1%">
+<col style="width: 14%">
+<col style="width: 19%">
+<col style="width: 32%">
+<col style="width: 1%">
+</colgroup>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Person number(ID)</th>
+<th>Camera number</th>
+<th>Visible image number</th>
+<th>Infrared image number</th>
+<th>Year</th>
+<th>Training database(number of images)</th>
+<th>Testing database</th>
+<th>Validation database</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RegDB</td>
+<td>412</td>
+<td>1</td>
+<td>4120</td>
+<td>4120</td>
+<td>2017</td>
+<td>4120(randomly selected)</td>
+<td>4120(randomly selected)</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>SYSU-MM01</td>
+<td>491</td>
+<td>6</td>
+<td>30071</td>
+<td>15792</td>
+<td>2017</td>
+<td>20284(RGB)+9929(IR)(296 persons)</td>
+<td>301(RGB, randomly selected)+3803(IR)（96 persons）</td>
+<td>1974(RGB)+1980(IR)(99 persons，与Training
+database里的不同)（不用的话就归到Training database里）</td>
+<td></td>
+</tr>
+<tr>
+<td>LLCM</td>
+<td>1064</td>
+<td>9</td>
+<td>25626</td>
+<td>21141</td>
+<td>2023</td>
+<td>16946(RGB)+13975(IR)(713 persons)</td>
+<td>8680(RGB)+7166(IR)(351 persons)</td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>RegDB的划分，在提出它的那篇论文里，是大概80%用于training，20%用于testing。具体来说是这样的：![[Pasted
+image 20241027224109.png]]</p>
+<p>但好像现在的论文的划分不是这样的？
+WRIM-Net里说是training是恰好划分了一半得到training和test（现在应该大部分都是这样了。因为每个人都是10张RGB和10张IR，所以相当于随机调一半的人到训练数据集里，另一半的人就到测试数据集里）</p>
+<p>关于SYSU-MM01数据集：提出它的论文里说它一共有287268张visible
+img，然后它给的github网站上说的是一共有30071张RGB
+img。之所以原论文说有287628张visible
+img，应该是因为它给的github网站上除了SYSU-MM01数据集之外，还有一个视频的数据集。SYSU-MM01里面cam1和cam2对应的数据其实是从视频数据集里取出的一个子集。SYSU-MM01和视频数据集加起来一共有287628张visible
+img 它的训练集应该就是有22258张RGB img，11909张IR img
+它测试的时候，测试数据集的RGB图像是随机采样出来的。而两种模式下不同的地方也就在于是从哪几个RGB数据集里进行采样。参考<a target="_blank" rel="noopener" href="https://github.com/wuancong/SYSU-MM01/tree/master?tab=readme-ov-file">原github网址</a>，这个它还是勉强说明白了</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 22:41:58" itemprop="dateCreated datePublished" datetime="2024-10-26T22:41:58+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-16 21:29:22" itemprop="dateModified" datetime="2025-02-16T21:29:22+08:00">2025-02-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="eccv24">ECCV24</h1>
+<h1 id="所研究的taskunsupervised-visible-infrared-person-re-identification">所研究的task：Unsupervised
+Visible-Infrared Person Re-Identification。</h1>
+<h1 id="贡献提出了一种指标ari用来评价聚类的效果-提出了multi-memory-matching-framework可以提取更多信息以便实现更好的跨模态的对应cross-modality-correspondences">贡献：提出了一种指标ARI，用来评价聚类的效果<br>提出了Multi-Memory
+Matching
+framework，可以提取更多信息，以便实现更好的跨模态的对应（cross-modality
+correspondences）</h1>
+<h1 id="insight通过多特征匹配来提高聚类和伪标签的可靠性以及辅助跨模态的对应和一般的提高跨模态对应的方法不太一样那些更多聚焦于怎么去对应会把对应的方法转化成其它优化问题">insight：通过多特征匹配，来提高聚类和伪标签的可靠性，以及辅助跨模态的对应（和一般的提高跨模态对应的方法不太一样——那些更多聚焦于怎么去对应，会把对应的方法转化成其它优化问题）</h1>
+<h1 id="动机无监督情况下训练很大程度上依赖于聚类产生的伪标签但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究而本文先是提出一个指标用来衡量聚类产生的伪标签的效果之后发现其实以前的一些方法的伪标签效果不算好例如明明是不同identity对应的特征但是聚类的时候被分到了相同的伪标签">动机：无监督情况下，训练很大程度上依赖于聚类产生的伪标签。但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究。而本文先是提出一个指标，用来衡量聚类产生的伪标签的效果，之后发现其实以前的一些方法的伪标签效果不算好（例如，明明是不同identity对应的特征，但是聚类的时候被分到了相同的伪标签）</h1>
+<h1 id="方法">方法</h1>
+<h2 id="cross-modality-clusteringcmc整个pipeline的第一步它主要是用于生成伪标签它的大体思想是提取出图像的更多特征用于进行一个多特征的匹配而不是以往的单特征匹配以提高匹配的可靠性-而所谓单特征匹配其实就是对每幅图像我们都只提取出一个特征向量然后就开始匹配本质上我们在期望这一个特征向量就提取出足够的有意义的信息所以其实它的创新不止是在于提取更多特征这样只是增加了参数量而已至于它所说的更多特征能提取出更多细节信息多少有些讲故事了那我还是提取一个特征向量但我把维度改的更大本质上应该是一样的重点在于多特征的匹配多特征匹配也就是每幅图都有多个特征向量然后用多个特征向量来进行匹配这个是有道理的且是真正创新的下面的mmlm模块就是在实现这个步骤">1.Cross-Modality
+Clustering（CMC）（整个pipeline的第一步）它主要是用于生成伪标签（它的大体思想是，提取出图像的更多特征，用于进行一个多特征的匹配，而不是以往的单特征匹配，以提高匹配的可靠性）<br>（而所谓单特征匹配，其实就是，对每幅图像，我们都只提取出一个特征向量，然后就开始匹配。本质上我们在期望这一个特征向量就提取出足够的、有意义的信息）（所以其实它的创新不止是在于提取更多特征，这样只是增加了参数量而已，至于它所说的更多特征能提取出更多细节信息，多少有些讲故事了：那我还是提取一个特征向量，但我把维度改的更大，本质上应该是一样的；重点在于多特征的匹配。多特征匹配，也就是每幅图都有多个特征向量，然后用多个特征向量来进行匹配，这个是有道理的，且是真正创新的。下面的MMLM模块就是在实现这个步骤）</h2>
+<h2 id="multi-memory-learning-and-matchingmmlm">2.Multi-Memory Learning
+and Matching（MMLM）</h2>
+<h3 id="它做的主要是在每个簇内继续划分出多个子簇它们代表了更细节的特征跨模态匹配簇的时候还是用pgm的框架但计算簇的距离或者说节点的距离的时候用的是多个子簇而不是像往常的直接用一个簇中心的特征然后再用某种距离度量比如说余弦相似度就认为这个是簇之间的距离了">它做的主要是，在每个簇内继续划分出多个子簇，它们代表了更细节的特征。跨模态匹配簇的时候，还是用PGM的框架，但计算簇的距离（或者说节点的距离）的时候，用的是多个子簇，而不是像往常的，直接用一个簇中心的特征，然后再用某种距离度量，比如说余弦相似度，就认为这个是簇之间的距离了</h3>
+<h2 id="soft-cluster-level-alignment-还得细看">3.Soft Cluster-level
+Alignment<br>还得细看</h2>
+<h1 id="分析">分析</h1>
+<h2 id="cmc模块主要是聚类的时候把两种模态的所有数据放到一起来聚类但有个问题就是我不清楚它是一开始就把两种模态的数据放到一起只聚类一次还是说先两个模态分别聚类按照经典操作来之后再把两种模态的数据放到一起来一个混合模态的聚类得看代码了论文里没说清楚但这个问题不是很大然后不仅会在两个模态内的簇各自去拉近实例还是经典的用clusternce-loss且会有一步把实例拉近到混合簇里就是说因为两种模态的数据放到一起来聚类了所以会出现一个簇里既有可见光数据也有红外数据拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近通过这种方式间接地学到一些跨模态对应的知识">1.CMC模块，主要是聚类的时候把两种模态的所有数据放到一起来聚类，（但有个问题，就是我不清楚它是一开始就把两种模态的数据放到一起，只聚类一次；还是说先两个模态分别聚类，按照经典操作来，之后再把两种模态的数据放到一起，来一个混合模态的聚类？得看代码了，论文里没说清楚。但这个问题不是很大）然后不仅会在两个模态内的簇各自去拉近实例（还是经典的用ClusterNCE
+loss），且会有一步，把实例拉近到混合簇里（就是说，因为两种模态的数据放到一起来聚类了，所以会出现一个簇里既有可见光数据，也有红外数据；拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近。通过这种方式，间接地学到一些跨模态对应的知识）</h2>
+<h2 id="mmlm模块在1中其实已经构建了单memory也就是各个模态里的簇中心一般的操作就是直接用这些单memory进行跨模态匹配了此时我们衡量距离就是用簇中心的特征而论文提出要在每个簇指属于这个簇的所有特征的集合内再划分多个小的簇也就是multi-memory用于捕获更多细节的信息最终进行跨模态匹配的时候还是原来那些大的簇进行匹配但我们计算簇的距离的时候就会用到这两个簇里面的多个小的簇这里就是论文强调的multi-memory-matching也是它认为能提高匹配质量的地方">2.MMLM模块，在1中，其实已经构建了单memory（也就是各个模态里的簇中心），一般的操作就是直接用这些单memory进行跨模态匹配了，此时我们衡量距离就是用簇中心的特征。而论文提出，要在每个簇（指属于这个簇的所有特征的集合）内再划分多个小的簇，也就是multi-memory，用于捕获更多细节的信息。最终进行跨模态匹配的时候，还是原来那些大的簇进行匹配，但我们计算簇的距离的时候，就会用到这两个簇里面的多个小的簇（这里就是论文强调的multi-memory
+matching，也是它认为能提高匹配质量的地方）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 16:41:28" itemprop="dateCreated datePublished" datetime="2024-10-26T16:41:28+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-18 14:08:45" itemprop="dateModified" datetime="2025-03-18T14:08:45+08:00">2025-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>通常所谓提取”modality-invariant information“，”modality-shared
+feature“的方法，都是进行一些跨模态的对比学习。这一块有没有得改进？更多借鉴对比学习的技术、理论？用confuser和discriminator可能都还算比较新的了。但confuser到底有没有问题？
+# 研究问题的对比： ## 无监督： ### [[Shallow-Deep Collaborative Learning
+for Unsupervised Visible-Infrared Person
+Re-Identification]]研究的是同时利用好浅层和深层特征，来更好进行重识别。具体做的是，修改了一下骨干网络，改进了一下对比损失部分（主要改进的是谁和谁对比。这个好像有点通病了，大家都这么改），改进了一下label
+association方法 ### [[Learning Commonality, Divergence and Variety for
+Unsupervised Visible-Infrared Person
+Re-identification]]研究的是在无监督学习中，通过改进对比的对象，从而学到更多样的信息。具体做的是，除了通常的centroid
+prototype外，还提出了hard
+prototype（即一个cluster内里中心最远的，虽然也有可能受到噪声影响）和dynamic
+prototype（不局限于和cluster的中心对比，也会和每个cluster里的某个特征向量进行对比，但并不固定和谁对比，动态选取）
+## 有监督： ### [[Implicit Discriminative Knowledge Learning for
+Visible-Infrared Person
+Re-Identification]]研究的是，在提取modality-shared
+feature之余，能不能把modality-specific
+feature也用上，用它们来辅助判别。具体做的是，用一个discriminator和confuser分别提取modality
+specific/shared feature，然后用引入Information
+Purifier来减小两种特征之间的差异，后面将modality-specific
+feature的内容蒸馏进modality-shared
+feature中（感觉这里其实三个部分都相对会新一点。discriminator和confuser可能之前有人用过，但这样明确地提出如何提取shared/specific
+feature还是挺好的。蒸馏感觉尤其新，代表了不同的利用多种特征的方法啊）
+### [[WRIM-Net---Wide-Ranging Information Mining Network for
+Visible-Infrared Person
+Re-Identification]]研究的是，如何更好地提取出一个模态下的multi-dimension
+information。个人理解，也就是想更好捕捉图像中不同部分的交互信息。具体做的是，用池化、注意力机制等计算出一个mask，代表提取了重点特征和多个区域交互的特征（主要体现在多头注意力机制本身的特点，以及它的query、key、value上），然后是一个对比学习了，最重要的改进点在于计算每个query和它最不相似的k个向量之间的对比损失（发现改进点基本还是在于谁和谁比）
+### [[High-Order Structure Based Middle-Feature Learning for
+Visible-Infrared Person
+Re-identification]]研究的是，如何更好地提取出图像中不同部分的交互信息，以便更好地进行行人重识别（显然，和上面的有点重复了）。具体做的是，用CNN和Transformer分别提取长短程的信息（或许可以参考一下cv里之前的一堆把二者结合起来的工作？比如Swin-Transformer），用GAT提取交互信息，最后则还是用一堆对比损失来拉近距离，算上自己算出来的middle
+feature，有三种模态；论文又提出长短程两种range的feature，来回组合对比。。。
+### [[Channel Augmentation for Visible-Infrared
+Re-Identification]]研究的是，从visible images去匹配infrared
+images的方法，希望能利用好visible
+images中的颜色信息，但又要减小两种特征之间的差异。具体做的是，提出一种新的增强操作CA，并稍微解释了一下；然后提出weak-and-strong
+augmentation joint learning
+strategy，在其中提出了分类结果一致性的约束。感觉某种程度上比直接拉近两个特征之间的距离、算对比损失要来的合理一点
+### [[Diverse Embedding Expansion Network and Low-Light Cross-Modality
+Benchmark for Visible-Infrared Person
+Re-Identification]]研究的是从embedding角度出发，希望能生成更多样的embedding，从而学习到更好的特征（不从传统的生成模型出发，是因为论文认为配对数据不够，生成模型效果可能不够好）。具体做的是，提出一个多分支的模块，希望它的每个分支都能捕获不同的信息；然后根据三个假设，提出相应损失来优化这些分支产生的embedding，最后再设计一个模块将多个embedding聚合利用起来（有点像多头注意力，一开始多头注意力的提出，除了稳定训练过程，也是为了每个头能关注到不同的特征）
+### [[PartMix---Regularization Strategy to Learn Part Discovery for
+Visible-Infrared Person
+Re-identification]]研究的是，如何将mixup技术应用到VI-ReID而不会遇到之前mixup技术中固有的问题（比如产生不自然的pattern，即产生很奇怪的图片；或者产生了只有背景的图、没有目标对象的图）。具体做的是，先用注意力机制，得到图像的part
+descriptor和global descriptor，后面对part
+descriptor进行mixup，得到正负样本，最后进行对比 ### [[Shape-Erased
+Feature Learning for Visible-Infrared Person
+Re-Identification]]研究的是，如何更好的提取shape信息，以得到更好的modality-shared
+feature。具体做的是，将得到的表征分离为两部分，相互无关，一部分是shape-related，一部分是shape-erased，然后通过利用shape-related进行重识别，促使其学到更多具有判别性的非shape信息；最后把两部分结合起来，就既有shape信息，也有shape以外的多样的信息
+### [[Visible-Infrared Person Re-Identification via Semantic Alignment
+and Affinity Inference]]研究的是，如何更好的提取part
+feature，并且在推理的时候将行人之间的关系也纳入考虑。具体做的是，先提出SAFL，在这个过程中学习、优化部位信息。这一过程中，会有若干模板，综合利用骨干网络提取出的特征和模板，可以得到图像的latent
+semantic part features；然后推理的时候提出AIM module，计算query
+image与gallery images之间的距离的时候，既用到了query image与gallery
+images之间直接的距离衡量（余弦相似度），也用到了gallery
+images相互之间的距离，二者综合得到修正后的距离 # 方法改进对比： ##
+对比损失部分： ### 谁和谁进行对比： ####
+中间模态的相互对比（比如，[[Shallow-Deep Collaborative Learning for
+Unsupervised Visible-Infrared Person
+Re-Identification]]中，两种模态的shallow/deep
+feature就在不断对比；又比如，[[High-Order Structure Based Middle-Feature
+Learning for Visible-Infrared Person Re-identification]]里，long/short
+term feature之间也会进行对比 ####
+算上中间模态，和原来的模态一起对比（大体上就是三种模态的数据互相对比。一般都是先提出一些假设/rationale，然后基于此挑选一些对象来对比），比如[[Diverse
+Embedding Expansion Network and Low-Light Cross-Modality Benchmark for
+Visible-Infrared Person Re-Identification]] #### 和centroid
+prototype进行对比（很常见了，基本所有无监督方法里都会用到，有监督方法里也可能会用到，比如[[Visible-Infrared
+Person Re-Identification via Semantic Alignment and Affinity
+Inference]]） #### 和hard prototype进行对比（一般hard
+prototype都选取为“最离群”的特征向量。比如，[[Learning Commonality,
+Divergence and Variety for Unsupervised Visible-Infrared Person
+Re-identification]]里，直接就这么说了；但[[WRIM-Net---Wide-Ranging
+Information Mining Network for Visible-Infrared Person
+Re-Identification]]中其实也有类似的思想（就是和最不相似的k个向量进行对比）（总的来说，这类对比方法就是，找出最远的/最不相似的来进行对比，期望能学到里面的独特的信息。但有没有严谨的理论一点的分析）
+#### 增强产生的正负样本之间的对比。比如[[Channel Augmentation for
+Visible-Infrared Re-Identification]]和[[PartMix---Regularization
+Strategy to Learn Part Discovery for Visible-Infrared Person
+Re-identification]]。那这类对比一般可能多出现在基于增强的方法中 ##
+提取modality-specific feature的方法： ###
+discriminator（+confuser一起用） ## 提取modality-shared feature的方法：
+###
+专门提取共性的特征（比如，shape，或者颜色的变化。一般这种专门想针对提取某种特征的，可能都基于增强操作，也许都会提出一种新的增强操作）
+###
+把一些东西共用（譬如，把模板共同给两个模态的特征一起用，或许可以认为最终学习到的模板是含有两个模态共有的信息的。但这只是一种直观上的理解，还不太有理论上的严格证明？）
+## 减小modality gap的方法： ###
+跨模态的对比（基本是标配了）（至于怎么对比，和谁对比，就是上面的问题了）
+###
+利用IN等Normalization方法（这种方法或许是解决分布不同的一种常用方法）[[Implicit
+Discriminative Knowledge Learning for Visible-Infrared Person
+Re-Identification]] ### 利用一些可学习的mask来筛选信息（同上） ### ##
+提取区域交互信息的方法： ### CNN+Transformer提取，GAT提取具体的交互 ###
+用池化、注意力等算出一个mask ## 利用提取出来的多种信息的方法： ###
+提出专门的聚合的模块（[[Diverse Embedding Expansion Network and
+Low-Light Cross-Modality Benchmark for Visible-Infrared Person
+Re-Identification]]） ### ## label association方法： #
+能不能整理出有监督和无监督方法的各自的pipeline？然后考究一下各个方法都在改进哪些部分？
+#
+其它相关领域：多模态（很显然是有关的，看看别的领域怎么处理多种模态的数据，尤其是统一的方法）；domain
+adaptation/transfer
+learning（跨领域，感觉和跨模态其实有点相似，都是会遇到不同的数据） #
+画图 ## 可以参考一下CROSS-MODALITY TRANSFORMER WITH MODALITY MINING FOR
+VISIBLE-INFRARED PERSON
+RE-IDENTIFICATION这篇论文里最后用t-SNE画的那个图，感觉效果一看就特别好。特别是它给每个id的两种模态的特征给圈到一起，这样就能直观看出来embedding效果有多好。而且也能一眼看出来不同id的特征都是分得比较开的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -709,453 +1500,10 @@ compensation<br>这种方法通常是由一种模态生成另一种模态的数�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/NCL%EF%BC%88Non%20Negative%20Contrastive%20Learning%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/NCL%EF%BC%88Non%20Negative%20Contrastive%20Learning%EF%BC%89/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-18 10:48:18 / Modified: 11:18:31" itemprop="dateCreated datePublished" datetime="2024-10-18T10:48:18+08:00">2024-10-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="脉络">脉络：</h1>
-<h2 id="文章基于提高对比学习得到的表征的可解释性由对比学习和mf之间的联系提出结合nmf技术的ncl方法之后还是根据对比学习和mf之间的联系借鉴地分析ncl的性质sparsityorthogonalitydisentanglement最后看看它的下游应用效果如何发现确实比经典cl有提高且还可以扩展到其它领域比如监督学习可扩展性不错类似插件">文章基于提高对比学习得到的表征的可解释性，由对比学习和MF之间的联系，提出结合NMF技术的NCL方法。之后，还是根据对比学习和MF之间的联系，借鉴地分析NCL的性质（sparsity，orthogonality，disentanglement）。最后，看看它的下游应用效果如何，发现确实比经典CL有提高，且还可以扩展到其它领域，比如监督学习（可扩展性不错，类似插件）</h2>
-<h1 id="问题">问题：</h1>
-<h2 id="ncl相比于正常的clcontrastive-learning怎么提高了可解释性">NCL相比于正常的CL（Contrastive
-Learning），怎么提高了可解释性？</h2>
-<h2 id="梳理它是如何提高表征的sparsityorthogonality以及disentanglement的之所以要提高这几个属性原文是引用bengio的论文认为拥有这几个属性的表征是比较好的但可以进一步思考一下这几个属性究竟好在哪">梳理它是如何提高表征的sparsity，orthogonality以及disentanglement的？（之所以要提高这几个属性，原文是引用bengio的论文，认为拥有这几个属性的表征是比较好的，但可以进一步思考一下这几个属性究竟好在哪）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/Swav/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/Swav/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-16 22:36:22" itemprop="dateCreated datePublished" datetime="2024-10-16T22:36:22+08:00">2024-10-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-17 15:02:22" itemprop="dateModified" datetime="2024-10-17T15:02:22+08:00">2024-10-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题">问题：</h1>
-<h2 id="从一个view出发计算得到的code或者说cluster-assignment到底是什么其形状为怎么计算得到它的含义是什么">从一个view出发计算得到的code（或者说cluster
-assignment）到底是什么？其形状为？怎么计算得到？它的含义是什么？</h2>
-<h3 id="code就是指样本属于各个prototype的概率分布-先说一下它的求解顺序实际上求解它之前需要先计算特征和各个prototype之间的相似度相似度就是余弦相似度特征和prototype都会被归一化举个例子一个batch-data的特征形状为batch_size-dimprototype的那个矩阵形状为dimnum_prototypes二者进行矩阵乘法即可求解出这个还不算完这个还不是最终的code并不是因为还没归一化而是因为我们对它有一定的约束即我们希望batch-data均匀地分布在各个prototype之间否则有可能模型求得平凡解就是把全部样本都输出为一个表征然后每个表征从属于各个prototype的概率都均等而加了约束就相当于求解一个优化问题所以论文里提到要用sinkhorn-knopp算法进行迭代求解并且这部分操作是不计算梯度的也就是说每一个训练的step里我们会计算cluster-assignment但它只是用于计算梯度我们不会去反向传播优化cluster-assignment-在代码里code是一个列表每个元素是batch-data的一个augmentation的code也就是说每个元素是一个张量其形状为batch_size-num_prototypes它的计算并不是通过对比损失得到而是要用一个sinkhorn-knopp算法迭代求解一下">code就是指样本属于各个prototype的概率分布。<br>先说一下它的求解顺序。实际上，求解它之前需要先计算特征和各个prototype之间的相似度。相似度就是余弦相似度（特征和prototype都会被归一化）。举个例子，一个batch
-data的特征，形状为（batch_size,
-dim），prototype的那个矩阵，形状为（dim，num_prototypes），二者进行矩阵乘法即可。求解出这个还不算完，这个还不是最终的code。并不是因为还没归一化，而是因为我们对它有一定的约束，即我们希望batch
-data均匀地分布在各个prototype之间，否则有可能模型求得平凡解，就是把全部样本都输出为一个表征，然后每个表征从属于各个prototype的概率都均等。而加了约束，就相当于求解一个优化问题，所以论文里提到要用Sinkhorn-Knopp算法进行迭代求解，并且这部分操作是不计算梯度的，也就是说，每一个训练的step里，我们会计算cluster
-assignment，但它只是用于计算梯度，我们不会去反向传播优化cluster
-assignment。<br>在代码里，code是一个列表，每个元素是batch
-data的一个augmentation的code，也就是说，每个元素是一个张量，其形状为（batch_size,
-num_prototypes）。它的计算并不是通过对比损失得到，而是要用一个Sinkhorn-Knopp算法迭代求解一下，</h3>
-<h2 id="swav这么对比其出发点是合理吗相比于之前的直接对比特征有什么区别优劣何在">swav这么对比，其出发点是？合理吗？相比于之前的直接对比特征，有什么区别？优劣何在？</h2>
-<h3 id="出发点就是如果是同一图像的不同视图它们的表征应该尽可能相同这样的话由一个视图a1经过一个操作p1得到一个结果r1然后我用另一个视图a2也去做这样的操作p得到的结果r2应该和上面那个结果r1很相似具体到swav它觉得由一个视图a1的特征计算得到prototype但实现的时候就像上面说的只是求得一个概率分布应该和用a2的特征计算得到的prototype很相似">出发点就是，如果是同一图像的不同视图，它们的表征应该尽可能相同，这样的话由一个视图a1，经过一个操作p1得到一个结果r1，然后我用另一个视图a2，也去做这样的操作p，得到的结果r2应该和上面那个结果r1很相似。具体到swav，它觉得，由一个视图a1的特征，计算得到prototype（但实现的时候，就像上面说的，只是求得一个概率分布），应该和用a2的特征计算得到的prototype很相似</h3>
-<h2 id="swav计算对比损失和优化prototype指优化那些prototype模板不是计算code的过程的顺序是怎样的谁先谁后还是同时">swav计算对比损失和优化prototype（指优化那些prototype模板，不是计算code）的过程的顺序是怎样的？谁先谁后？还是同时？</h2>
-<h3 id="如果只是优化那个模板矩阵每一列表示一个prototype在代码里也就是一个不带bias的linear层那么其实就是计算完对比损失和分类损失之后反向传播的时候就在优化了比较令人困惑的点应该是code其实并不需要优化这点在第一个问题的回答里已经说明了">如果只是优化那个模板矩阵（每一列表示一个prototype）（在代码里也就是一个不带bias的Linear层），那么其实就是计算完对比损失和分类损失之后，反向传播的时候就在优化了。比较令人困惑的点应该是，code其实并不需要优化。这点在第一个问题的回答里已经说明了</h3>
-<h2 id="求解code被转化成了一个优化问题这个优化问题的求解用到iterative-sinkhorn-knopp算法这个算法的流程和细节是怎样的">求解code被转化成了一个优化问题？这个优化问题的求解用到iterative
-Sinkhorn-Knopp算法？这个算法的流程和细节是怎样的？</h2>
-<h3 id="是的求解code就是在我们的约束下的一个优化问题至于用到的这个算法只能说没啥兴趣去了解而且个人感觉这个所谓的用prototype去enforce样本之间的一致性好像不够简单本质只能算个trick它之所以提点了估摸着也是multi-crop的功劳居多吧">是的，求解code就是在我们的约束下的一个优化问题。至于用到的这个算法，只能说没啥兴趣去了解。而且，个人感觉，这个所谓的用prototype去enforce样本之间的一致性，好像不够简单本质，只能算个trick。它之所以提点了，估摸着也是multi-crop的功劳居多吧</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/self-supervised%20learning/SimCLR/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-15 14:58:26 / Modified: 16:17:10" itemprop="dateCreated datePublished" datetime="2024-10-15T14:58:26+08:00">2024-10-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="结论">结论：</h3>
-<h4 id="对于对比学习data-augmentation很重要尤其是一些特定的augmentation可能起到很大的作用">对于对比学习，data
-augmentation很重要，尤其是一些特定的augmentation，可能起到很大的作用</h4>
-<h4 id="最后简单加的一个projection-head却能极大地提升效果">最后简单加的一个projection
-head，却能极大地提升效果</h4>
-<h4 id="用更大的batch-size训练得更久都能明显提高simclr的效果">用更大的batch
-size/训练得更久，都能明显提高SimCLR的效果</h4>
-<h3 id="方法框架图a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_10_47.png-损失函数a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-15_12_35.png-需要注意的是这个损失其实表示的是正样本i对正样本j的损失它不等于l_ji也就是这个损失是不对称的">方法框架图：![[A
-Simple Framework for Contrastive Learning of Visual Representations -
-Chen 等 - 2020 - Zotero 2024_10_15 15_10_47.png]]<br>损失函数![[A Simple
-Framework for Contrastive Learning of Visual Representations - Chen 等 -
-2020 - Zotero 2024_10_15
-15_12_35.png]]<br>需要注意的是，这个损失其实表示的是正样本i“对”正样本j的损失，它不等于<span class="math inline">\(l_{j,i}\)</span>，也就是这个损失是不对称的。</h3>
-<h3 id="值得学习的细节">值得学习的细节：</h3>
-<h4 id="论文为了研究哪种data-augmentation效果比较好做了严格的消融实验它考虑两两组合augmentation看看效果如何最后把结果用一幅热力图展现还是很形象的a-simple-framework-for-contrastive-learning-of-visual-representations---chen-等---2020---zotero-2024_10_15-16_14_08.png-另外论文也发现对比学习很吃data-augmentation相比之下supervised-learning则不怎么需要甚至augmentation太过的话还可能损害效果">论文为了研究哪种data
-augmentation效果比较好，做了严格的消融实验。它考虑两两组合augmentation，看看效果如何，最后把结果用一幅热力图展现，还是很形象的![[A
-Simple Framework for Contrastive Learning of Visual Representations -
-Chen 等 - 2020 - Zotero 2024_10_15
-16_14_08.png]]<br>另外，论文也发现对比学习很吃data
-augmentation，相比之下supervised
-learning则不怎么需要，甚至augmentation太过的话还可能损害效果</h4>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%B7%B1%E5%AE%9A%E4%B9%89%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-15 12:07:53 / Modified: 12:12:01" itemprop="dateCreated datePublished" datetime="2024-10-15T12:07:53+08:00">2024-10-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="在进行数据预处理的时候一般都会有一个类似train_transform这样的数据增强的列表它里面包含了一系列操作通常是调用库里的那些操作但如果需要自己定义一些预处理操作则需要自己写一个类一般有这些要求">在进行数据预处理的时候，一般都会有一个类似train_transform这样的数据增强的“列表”，它里面包含了一系列操作。通常是调用库里的那些操作。但如果需要自己定义一些预处理操作，则需要自己写一个类。一般有这些要求：</h2>
-<h3 id="类定义自定义的数据操作一般是定义为类如-cifar10policy并且实现了-__call__-方法__call__-方法使得类的实例可以像函数一样直接被调用">1.
-<strong>类定义</strong>：自定义的数据操作一般是定义为类（如
-<code>CIFAR10Policy</code>），并且实现了 <code>__call__</code>
-方法。<code>__call__</code>
-方法使得类的实例可以像函数一样直接被调用。</h3>
-<h3 id="实现-__call__-方法当类的实例通过-transforms.compose-被应用到图像时实际上是调用了该类的-__call__-方法因此在-__call__-方法中你可以定义自定义的图像变换逻辑">2.
-<strong>实现 <code>__call__</code> 方法</strong>：当类的实例通过
-<code>transforms.Compose</code> 被应用到图像时，实际上是调用了该类的
-<code>__call__</code> 方法。因此，在 <code>__call__</code>
-方法中，你可以定义自定义的图像变换逻辑。</h3>
-<h3 id="不变性要求数据增强和变换操作应该是无副作用的这意味着不应直接修改输入图像而是返回一个经过变换的新图像">3.
-<strong>不变性要求</strong>：数据增强和变换操作应该是“无副作用”的，这意味着不应直接修改输入图像，而是返回一个经过变换的新图像。</h3>
-<h3 id="可与其他操作链式使用自定义的数据操作通常应该与-pytorch-的其他数据转换操作如-transforms.totensor-或-transforms.normalize兼容因此要确保其输入输出类型与其他操作一致">4.
-<strong>可与其他操作链式使用</strong>：自定义的数据操作通常应该与
-PyTorch 的其他数据转换操作（如 <code>transforms.ToTensor()</code> 或
-<code>transforms.Normalize()</code>）兼容，因此要确保其输入输出类型与其他操作一致。</h3>
-<h4 id="例如">例如：</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyCustomTransform</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, some_parameter</span>):</span><br><span class="line">        <span class="variable language_">self</span>.some_parameter = some_parameter</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, img</span>):</span><br><span class="line">        <span class="comment"># 对图像 img 进行自定义处理，这里是示例逻辑</span></span><br><span class="line">        transformed_img = img + <span class="variable language_">self</span>.some_parameter  <span class="comment"># 假设是对图像进行了某种变换</span></span><br><span class="line">        <span class="keyword">return</span> transformed_img</span><br><span class="line">transforms.Compose([</span><br><span class="line">    transforms.RandomHorizontalFlip(),</span><br><span class="line">    MyCustomTransform(some_parameter=<span class="number">5</span>),  <span class="comment"># 自定义的变换操作</span></span><br><span class="line">    transforms.ToTensor()</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
-<h4 id="这样就可以和其它的pytorch提供的transform一起用了">这样，就可以和其它的pytorch提供的transform一起用了</h4>
-<h4 id="一个具体的真实的例子可以参考这个">一个具体的真实的例子可以参考这个：</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SVHNPolicy</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;&quot;&quot; Randomly choose one of the best 25 Sub-policies on SVHN.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; policy = SVHNPolicy()</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; transformed = policy(image)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Example as a PyTorch Transform:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt; transform=transforms.Compose([</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     transforms.Resize(256),</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     SVHNPolicy(),</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &gt;&gt;&gt;     transforms.ToTensor()])</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, fillcolor=(<span class="params"><span class="number">128</span>, <span class="number">128</span>, <span class="number">128</span></span>)</span>):</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.policies = [</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.2</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.7</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">5</span>, <span class="number">0.6</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">3</span>, <span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">1</span>, <span class="number">0.9</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.4</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">5</span>, <span class="number">0.2</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">6</span>, <span class="number">0.8</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">1</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">3</span>, <span class="number">0.9</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">4</span>, <span class="number">0.3</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">8</span>, <span class="number">0.7</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">5</span>, <span class="number">0.6</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">6</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.9</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, <span class="number">0.6</span>, <span class="string">&quot;equalize&quot;</span>, <span class="number">7</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.3</span>, <span class="string">&quot;contrast&quot;</span>, <span class="number">3</span>, <span class="number">0.8</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, <span class="number">0.0</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">2</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">6</span>, <span class="number">0.4</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">8</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.6</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;rotate&quot;</span>, <span class="number">4</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.3</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">7</span>, <span class="number">0.9</span>, <span class="string">&quot;translateX&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.1</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">6</span>, <span class="number">0.6</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;solarize&quot;</span>, <span class="number">2</span>, <span class="number">0.6</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">7</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">4</span>, <span class="number">0.8</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">8</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">9</span>, <span class="number">0.8</span>, <span class="string">&quot;translateY&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.8</span>, <span class="string">&quot;shearY&quot;</span>, <span class="number">5</span>, <span class="number">0.7</span>, <span class="string">&quot;autocontrast&quot;</span>, <span class="number">3</span>, fillcolor),</span><br><span class="line"></span><br><span class="line">            SubPolicy(<span class="number">0.7</span>, <span class="string">&quot;shearX&quot;</span>, <span class="number">2</span>, <span class="number">0.1</span>, <span class="string">&quot;invert&quot;</span>, <span class="number">5</span>, fillcolor)</span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, img</span>):</span><br><span class="line"></span><br><span class="line">        policy_idx = random.randint(<span class="number">0</span>, <span class="built_in">len</span>(<span class="variable language_">self</span>.policies) - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.policies[policy_idx](img)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;AutoAugment SVHN Policy&quot;</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-15 11:06:57 / Modified: 11:58:02" itemprop="dateCreated datePublished" datetime="2024-10-15T11:06:57+08:00">2024-10-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="cutmix-是一种数据增强方法它将两张图片进行随机部分的组合同时将两张图片的标签按比例加权例如">-
-<strong>CutMix</strong>
-是一种数据增强方法，它将两张图片进行随机部分的组合，同时将两张图片的标签按比例加权。例如：</h2>
-<h3 id="一部分图片-a-和一部分图片-b-被切割组合输出图像的标签是-a-标签和-b-标签按图像的组合比例加权">-
-一部分图片 A 和一部分图片 B 被切割组合，输出图像的标签是 A 标签和 B
-标签按图像的组合比例加权。</h3>
-<h2 id="rcpasterandom-cut-paste是一种随机增强方法通常涉及在图像中随机剪切部分图像并粘贴到其他区域增加图像的多样性">-
-<strong>rcpaste</strong>（Random Cut
-Paste）是一种随机增强方法，通常涉及在图像中随机剪切部分图像并粘贴到其他区域，增加图像的多样性。</h2>
-<h2 id="mixup-也是一种数据增强技术涉及将两张图片的像素和标签按某个随机比例进行线性混合它通过图像的加权平均生成新的训练样本其对应标签也按相同比例混合例如图像-a-和-b-混合后新图像的标签为-λ-标签-a-1-λ-标签-b其中-λ-是随机生成的混合比例">-
-<strong>MixUp</strong>
-也是一种数据增强技术，涉及将两张图片的像素和标签按某个随机比例进行线性混合。它通过图像的加权平均生成新的训练样本，其对应标签也按相同比例混合。例如，图像
-A 和 B 混合后新图像的标签为
-<code>λ * 标签 A + (1-λ) * 标签 B</code>，其中 <code>λ</code>
-是随机生成的混合比例。</h2>
-<h2 id="这几个操作实在是有点太像了主要区别可能在于random-cut-paste是用自己的图像完成操作而cutmix和mixup都是用到两幅图像cutmix是部分的完全组合mixup是整体的部分组合">-
-这几个操作实在是有点太像了。主要区别可能在于，random cut
-paste是用自己的图像完成操作，而cutmix和mixup都是用到两幅图像。cutmix是部分的完全组合，mixup是整体的部分组合</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">class CutMix(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, size, beta):</span><br><span class="line"></span><br><span class="line">    self.size = size</span><br><span class="line"></span><br><span class="line">    self.beta = beta</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = self._shuffle_minibatch(batch) # rand_img, rand_label</span><br><span class="line"></span><br><span class="line">    # 不是说真的随机生成的img和label，只是把一个batch里的数据给打乱顺序了</span><br><span class="line"></span><br><span class="line">    lambda_ = np.random.beta(self.beta,self.beta) # 根据beta分布生成一个lambda</span><br><span class="line"></span><br><span class="line">    r_x = np.random.uniform(0, self.size) # r_x, r_y是随机裁剪框的中心点</span><br><span class="line"></span><br><span class="line">    r_y = np.random.uniform(0, self.size)</span><br><span class="line"></span><br><span class="line">    r_w = self.size * np.sqrt(1-lambda_)  # r_w, r_h是随机裁剪框的宽和高</span><br><span class="line"></span><br><span class="line">    r_h = self.size * np.sqrt(1-lambda_)</span><br><span class="line"></span><br><span class="line">    x1 = int(np.clip(r_x - r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    x2 = int(np.clip(r_x + r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y1 = int(np.clip(r_y - r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y2 = int(np.clip(r_y + r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    # (x1, y1), (x2, y2)分别是随机裁剪框的左上角和右下角坐标</span><br><span class="line"></span><br><span class="line">    # clip防止左上角/右下角坐标超出图像范围</span><br><span class="line"></span><br><span class="line">    img[:, :, x1:x2, y1:y2] = rand_img[:, :, x1:x2, y1:y2]  # 这一步完成混合</span><br><span class="line"></span><br><span class="line">    lambda_ = 1 - (x2-x1)*(y2-y1)/(self.size*self.size) # 重新计算lambda，因为前面</span><br><span class="line"></span><br><span class="line">    # 可能裁剪框超出了图像范围，所以需要重新计算</span><br><span class="line"></span><br><span class="line">    return img, label, rand_label, lambda_</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def _shuffle_minibatch(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = img.clone(), label.clone()</span><br><span class="line"></span><br><span class="line">    rand_idx = torch.randperm(img.size(0))</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = rand_img[rand_idx], rand_label[rand_idx]</span><br><span class="line"></span><br><span class="line">    return rand_img, rand_label</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class MixUp(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, alpha=0.1):</span><br><span class="line"></span><br><span class="line">    self.alpha = alpha</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    &#x27;&#x27;&#x27;Returns mixed inputs, pairs of targets, and lambda&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    x, y = batch</span><br><span class="line"></span><br><span class="line">    lam = np.random.beta(self.alpha, self.alpha)</span><br><span class="line"></span><br><span class="line">    batch_size = x.size(0)</span><br><span class="line"></span><br><span class="line">    index = torch.randperm(batch_size)</span><br><span class="line"></span><br><span class="line">    mixed_x = lam * x + (1 - lam) * x[index, :]</span><br><span class="line"></span><br><span class="line">    y_a, y_b = y, y[index]</span><br><span class="line"></span><br><span class="line">    return mixed_x, y_a, y_b, lam</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-14 18:38:09 / Modified: 18:38:57" itemprop="dateCreated datePublished" datetime="2024-10-14T18:38:09+08:00">2024-10-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>还没解决，之后有时间再说吧。感觉这个问题也不是那么紧急，毕竟几乎不会在git
-bash下</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1221,18 +1569,18 @@ bash下</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

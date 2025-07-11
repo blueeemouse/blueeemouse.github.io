@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="不能傻傻的光是按照requirements.txt来安装。 有可能pip install -r requirements可以直接成功，但也可能它里面说的不够详细，只说了要安装哪些库，没说什么版本，导致安装一些库的时候就全都安装最新的了，而这是有可能造成版本冲突的。一个例子，配置reid的一个tutorial的时候，一边是自动安装的2.5版本的numpy，然而有好一些模块都是不能在这个高版本下">
+  <meta name="description" content="如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行： 1torch.backends.cuda.enable_mem_efficient_sdp(False) torch.backends.cuda.enable_flash_sdp(False) 经过实操，确实可以解决问题。但这样应该">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
-<meta property="og:url" content="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%85%8D%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9Btips&%E5%9D%91/index.html">
+<meta property="og:title" content="用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="不能傻傻的光是按照requirements.txt来安装。 有可能pip install -r requirements可以直接成功，但也可能它里面说的不够详细，只说了要安装哪些库，没说什么版本，导致安装一些库的时候就全都安装最新的了，而这是有可能造成版本冲突的。一个例子，配置reid的一个tutorial的时候，一边是自动安装的2.5版本的numpy，然而有好一些模块都是不能在这个高版本下">
+<meta property="og:description" content="如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行： 1torch.backends.cuda.enable_mem_efficient_sdp(False) torch.backends.cuda.enable_flash_sdp(False) 经过实操，确实可以解决问题。但这样应该">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-11-14T06:26:22.470Z">
-<meta property="article:modified_time" content="2024-11-14T06:33:10.767Z">
+<meta property="article:published_time" content="2025-07-06T16:21:00.000Z">
+<meta property="article:modified_time" content="2025-07-08T02:00:12.706Z">
 <meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="FlashAttn">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%85%8D%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9Btips&%E5%9D%91/">
+<link rel="canonical" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch | bluemouse's blog</title>
   
 
 
@@ -155,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%85%8D%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9Btips&%E5%9D%91/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch
         </h1>
 
         <div class="post-meta">
@@ -177,9 +178,28 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:10" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
+              <time title="Created: 2025-07-07 00:21:00" itemprop="dateCreated datePublished" datetime="2025-07-07T00:21:00+08:00">2025-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-08 10:00:12" itemprop="dateModified" datetime="2025-07-08T10:00:12+08:00">2025-07-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/dl/" itemprop="url" rel="index"><span itemprop="name">dl</span></a>
+                </span>
             </span>
 
           
@@ -193,11 +213,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="不能傻傻的光是按照requirements.txt来安装">不能傻傻的光是按照requirements.txt来安装。</h1>
-<h2 id="有可能pip-install--r-requirements可以直接成功但也可能它里面说的不够详细只说了要安装哪些库没说什么版本导致安装一些库的时候就全都安装最新的了而这是有可能造成版本冲突的一个例子配置reid的一个tutorial的时候一边是自动安装的2.5版本的numpy然而有好一些模块都是不能在这个高版本下的numpy运行的最起码得降到1.x才行然后吧也不是说1.x任意一个都可以因为有一些库比如matplotlib安装的时候它可能又要求numpy版本不能过低就得找个折中的版本但也许会有更蛋疼的情况就是两个要求没有交集这个时候可能就得考虑那两个库本身的版本能不能变动一下比如假如matplotlib要求的最低版本的numpy都2.0了那真是做不到了这个时候就得考虑一下matplotlib自己能不能降一下版本了">有可能pip
-install -r
-requirements可以直接成功，但也可能它里面说的不够详细，只说了要安装哪些库，没说什么版本，导致安装一些库的时候就全都安装最新的了，而这是有可能造成版本冲突的。一个例子，配置reid的一个tutorial的时候，一边是自动安装的2.5版本的numpy，然而有好一些模块都是不能在这个高版本下的numpy运行的，最起码得降到1.x才行。然后吧，也不是说1.x任意一个都可以，因为有一些库（比如matplotlib），安装的时候它可能又要求numpy版本不能过低，就得找个折中的版本。但也许会有更蛋疼的情况，就是两个要求没有交集。。。这个时候可能就得考虑，那两个库本身的版本能不能变动一下。比如，假如matplotlib要求的最低版本的numpy都2.0了，那真是做不到了，这个时候就得考虑一下matplotlib自己能不能降一下版本了。</h2>
-<h2 id="主要这些信息吧如果只是把报错信息报给ai它未必能分析出来一些报错信息还是得自己稍微看两眼">（主要这些信息吧，如果只是把报错信息报给ai，它未必能分析出来。一些报错信息还是得自己稍微看两眼）</h2>
+        <h1 id="如题但这里有个问题是我现在遇到这个问题只是因为项目里用到了flashattn但我目前的需求仅仅是跑通代码而非追求性能所以可以考虑在代码里加入以下两行">如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行：</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.backends.cuda.enable_mem_efficient_sdp(<span class="literal">False</span>) torch.backends.cuda.enable_flash_sdp(<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="经过实操确实可以解决问题但这样应该也把flashattn给取消掉了有点治标不治本查了一下似乎可能和torch版本有关系但按理来说应该不会有这个问题的因为是按照项目的requirements来配置环境的">经过实操，确实可以解决问题。但这样应该也把FlashAttn给取消掉了，有点治标不治本。查了一下似乎可能和torch版本有关系，但按理来说应该不会有这个问题的，因为是按照项目的requirements来配置环境的……</h1>
+<span id="more"></span>
 
     </div>
 
@@ -206,6 +225,9 @@ requirements可以直接成功，但也可能它里面说的不够详细，只�
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FlashAttn/" rel="tag"># FlashAttn</a>
+          </div>
 
         
 
@@ -213,12 +235,12 @@ requirements可以直接成功，但也可能它里面说的不够详细，只�
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/11/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BAwindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/" rel="prev" title="服务器上运行jupyter notebook">
+      <i class="fa fa-chevron-left"></i> 服务器上运行jupyter notebook
     </a></div>
       <div class="post-nav-item">
-    <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/" rel="next" title="windows的power shell终端突然无法conda activate环境">
+      windows的power shell终端突然无法conda activate环境 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -278,9 +300,7 @@ requirements可以直接成功，但也可能它里面说的不够详细，只�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8D%E8%83%BD%E5%82%BB%E5%82%BB%E7%9A%84%E5%85%89%E6%98%AF%E6%8C%89%E7%85%A7requirements.txt%E6%9D%A5%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">不能傻傻的光是按照requirements.txt来安装。</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E5%8F%AF%E8%83%BDpip-install--r-requirements%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E6%88%90%E5%8A%9F%E4%BD%86%E4%B9%9F%E5%8F%AF%E8%83%BD%E5%AE%83%E9%87%8C%E9%9D%A2%E8%AF%B4%E7%9A%84%E4%B8%8D%E5%A4%9F%E8%AF%A6%E7%BB%86%E5%8F%AA%E8%AF%B4%E4%BA%86%E8%A6%81%E5%AE%89%E8%A3%85%E5%93%AA%E4%BA%9B%E5%BA%93%E6%B2%A1%E8%AF%B4%E4%BB%80%E4%B9%88%E7%89%88%E6%9C%AC%E5%AF%BC%E8%87%B4%E5%AE%89%E8%A3%85%E4%B8%80%E4%BA%9B%E5%BA%93%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E5%85%A8%E9%83%BD%E5%AE%89%E8%A3%85%E6%9C%80%E6%96%B0%E7%9A%84%E4%BA%86%E8%80%8C%E8%BF%99%E6%98%AF%E6%9C%89%E5%8F%AF%E8%83%BD%E9%80%A0%E6%88%90%E7%89%88%E6%9C%AC%E5%86%B2%E7%AA%81%E7%9A%84%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90%E9%85%8D%E7%BD%AEreid%E7%9A%84%E4%B8%80%E4%B8%AAtutorial%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%80%E8%BE%B9%E6%98%AF%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85%E7%9A%842.5%E7%89%88%E6%9C%AC%E7%9A%84numpy%E7%84%B6%E8%80%8C%E6%9C%89%E5%A5%BD%E4%B8%80%E4%BA%9B%E6%A8%A1%E5%9D%97%E9%83%BD%E6%98%AF%E4%B8%8D%E8%83%BD%E5%9C%A8%E8%BF%99%E4%B8%AA%E9%AB%98%E7%89%88%E6%9C%AC%E4%B8%8B%E7%9A%84numpy%E8%BF%90%E8%A1%8C%E7%9A%84%E6%9C%80%E8%B5%B7%E7%A0%81%E5%BE%97%E9%99%8D%E5%88%B01.x%E6%89%8D%E8%A1%8C%E7%84%B6%E5%90%8E%E5%90%A7%E4%B9%9F%E4%B8%8D%E6%98%AF%E8%AF%B41.x%E4%BB%BB%E6%84%8F%E4%B8%80%E4%B8%AA%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%9B%A0%E4%B8%BA%E6%9C%89%E4%B8%80%E4%BA%9B%E5%BA%93%E6%AF%94%E5%A6%82matplotlib%E5%AE%89%E8%A3%85%E7%9A%84%E6%97%B6%E5%80%99%E5%AE%83%E5%8F%AF%E8%83%BD%E5%8F%88%E8%A6%81%E6%B1%82numpy%E7%89%88%E6%9C%AC%E4%B8%8D%E8%83%BD%E8%BF%87%E4%BD%8E%E5%B0%B1%E5%BE%97%E6%89%BE%E4%B8%AA%E6%8A%98%E4%B8%AD%E7%9A%84%E7%89%88%E6%9C%AC%E4%BD%86%E4%B9%9F%E8%AE%B8%E4%BC%9A%E6%9C%89%E6%9B%B4%E8%9B%8B%E7%96%BC%E7%9A%84%E6%83%85%E5%86%B5%E5%B0%B1%E6%98%AF%E4%B8%A4%E4%B8%AA%E8%A6%81%E6%B1%82%E6%B2%A1%E6%9C%89%E4%BA%A4%E9%9B%86%E8%BF%99%E4%B8%AA%E6%97%B6%E5%80%99%E5%8F%AF%E8%83%BD%E5%B0%B1%E5%BE%97%E8%80%83%E8%99%91%E9%82%A3%E4%B8%A4%E4%B8%AA%E5%BA%93%E6%9C%AC%E8%BA%AB%E7%9A%84%E7%89%88%E6%9C%AC%E8%83%BD%E4%B8%8D%E8%83%BD%E5%8F%98%E5%8A%A8%E4%B8%80%E4%B8%8B%E6%AF%94%E5%A6%82%E5%81%87%E5%A6%82matplotlib%E8%A6%81%E6%B1%82%E7%9A%84%E6%9C%80%E4%BD%8E%E7%89%88%E6%9C%AC%E7%9A%84numpy%E9%83%BD2.0%E4%BA%86%E9%82%A3%E7%9C%9F%E6%98%AF%E5%81%9A%E4%B8%8D%E5%88%B0%E4%BA%86%E8%BF%99%E4%B8%AA%E6%97%B6%E5%80%99%E5%B0%B1%E5%BE%97%E8%80%83%E8%99%91%E4%B8%80%E4%B8%8Bmatplotlib%E8%87%AA%E5%B7%B1%E8%83%BD%E4%B8%8D%E8%83%BD%E9%99%8D%E4%B8%80%E4%B8%8B%E7%89%88%E6%9C%AC%E4%BA%86"><span class="nav-number">1.1.</span> <span class="nav-text">有可能pip
-install -r
-requirements可以直接成功，但也可能它里面说的不够详细，只说了要安装哪些库，没说什么版本，导致安装一些库的时候就全都安装最新的了，而这是有可能造成版本冲突的。一个例子，配置reid的一个tutorial的时候，一边是自动安装的2.5版本的numpy，然而有好一些模块都是不能在这个高版本下的numpy运行的，最起码得降到1.x才行。然后吧，也不是说1.x任意一个都可以，因为有一些库（比如matplotlib），安装的时候它可能又要求numpy版本不能过低，就得找个折中的版本。但也许会有更蛋疼的情况，就是两个要求没有交集。。。这个时候可能就得考虑，那两个库本身的版本能不能变动一下。比如，假如matplotlib要求的最低版本的numpy都2.0了，那真是做不到了，这个时候就得考虑一下matplotlib自己能不能降一下版本了。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E8%BF%99%E4%BA%9B%E4%BF%A1%E6%81%AF%E5%90%A7%E5%A6%82%E6%9E%9C%E5%8F%AA%E6%98%AF%E6%8A%8A%E6%8A%A5%E9%94%99%E4%BF%A1%E6%81%AF%E6%8A%A5%E7%BB%99ai%E5%AE%83%E6%9C%AA%E5%BF%85%E8%83%BD%E5%88%86%E6%9E%90%E5%87%BA%E6%9D%A5%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99%E4%BF%A1%E6%81%AF%E8%BF%98%E6%98%AF%E5%BE%97%E8%87%AA%E5%B7%B1%E7%A8%8D%E5%BE%AE%E7%9C%8B%E4%B8%A4%E7%9C%BC"><span class="nav-number">1.2.</span> <span class="nav-text">（主要这些信息吧，如果只是把报错信息报给ai，它未必能分析出来。一些报错信息还是得自己稍微看两眼）</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E9%A2%98%E4%BD%86%E8%BF%99%E9%87%8C%E6%9C%89%E4%B8%AA%E9%97%AE%E9%A2%98%E6%98%AF%E6%88%91%E7%8E%B0%E5%9C%A8%E9%81%87%E5%88%B0%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E5%8F%AA%E6%98%AF%E5%9B%A0%E4%B8%BA%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%94%A8%E5%88%B0%E4%BA%86flashattn%E4%BD%86%E6%88%91%E7%9B%AE%E5%89%8D%E7%9A%84%E9%9C%80%E6%B1%82%E4%BB%85%E4%BB%85%E6%98%AF%E8%B7%91%E9%80%9A%E4%BB%A3%E7%A0%81%E8%80%8C%E9%9D%9E%E8%BF%BD%E6%B1%82%E6%80%A7%E8%83%BD%E6%89%80%E4%BB%A5%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E5%9C%A8%E4%BB%A3%E7%A0%81%E9%87%8C%E5%8A%A0%E5%85%A5%E4%BB%A5%E4%B8%8B%E4%B8%A4%E8%A1%8C"><span class="nav-number">1.</span> <span class="nav-text">如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E8%BF%87%E5%AE%9E%E6%93%8D%E7%A1%AE%E5%AE%9E%E5%8F%AF%E4%BB%A5%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E4%BD%86%E8%BF%99%E6%A0%B7%E5%BA%94%E8%AF%A5%E4%B9%9F%E6%8A%8Aflashattn%E7%BB%99%E5%8F%96%E6%B6%88%E6%8E%89%E4%BA%86%E6%9C%89%E7%82%B9%E6%B2%BB%E6%A0%87%E4%B8%8D%E6%B2%BB%E6%9C%AC%E6%9F%A5%E4%BA%86%E4%B8%80%E4%B8%8B%E4%BC%BC%E4%B9%8E%E5%8F%AF%E8%83%BD%E5%92%8Ctorch%E7%89%88%E6%9C%AC%E6%9C%89%E5%85%B3%E7%B3%BB%E4%BD%86%E6%8C%89%E7%90%86%E6%9D%A5%E8%AF%B4%E5%BA%94%E8%AF%A5%E4%B8%8D%E4%BC%9A%E6%9C%89%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E7%9A%84%E5%9B%A0%E4%B8%BA%E6%98%AF%E6%8C%89%E7%85%A7%E9%A1%B9%E7%9B%AE%E7%9A%84requirements%E6%9D%A5%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">经过实操，确实可以解决问题。但这样应该也把FlashAttn给取消掉了，有点治标不治本。查了一下似乎可能和torch版本有关系，但按理来说应该不会有这个问题的，因为是按照项目的requirements来配置环境的……</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -294,18 +314,18 @@ requirements可以直接成功，但也可能它里面说的不够详细，只�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">164</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">80</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
