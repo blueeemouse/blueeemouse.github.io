@@ -150,6 +150,322 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-31 14:12:37 / Modified: 15:11:58" itemprop="dateCreated datePublished" datetime="2024-10-31T14:12:37+08:00">2024-10-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr23">cvpr23</h1>
+<h1 id="problem老生常谈之modality-gap导致学习modality-shared-feature很困难这篇论文聚焦于学习shape即人物的轮廓信息不由得让人想到之前的channel-augmentation-for-visible-infrared-re-identification主要想学习颜色信息也是想去学习某种特定的属性">problem：老生常谈之modality
+gap导致学习modality-shared
+feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel
+Augmentation for Visible-Infrared
+Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性）</h1>
+<h1 id="motivation希望能通过一种方法把表征分成两部分一部分是shape相关另一部分是shape无关然后先利用shape无关的表征去学习这样会逼迫这部分特征学习其它方面的内容不去利用shape信息进行判别最后把这部分表征和shape相关表征组合起来就能得到更强的表征">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</h1>
+<h1 id="method">method：</h1>
+<h2 id="关于shape信息的提取用到一篇20年tpami提出的分割人体形状的模型给定一幅图模型会给出各个像素属于头部躯干四肢等部位的概率最终整幅图上各个位置都有一个概率进行可视化理论上那些对应概率高的就显示出一个人的轮廓">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部/躯干/四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</h2>
+<h2 id="shape-erased-feature-learning-paradigm">Shape-Erased Feature
+Learning Paradigm</h2>
+<h3 id="这里有个关键的假设即shape-related-feature和shape-erased-feature之间是独立的这样才能做到学习一个特征而不影响另一个特征注意到前面motivation里已经说了它是要单独去学习一下shape-erased-feature此时这部分表征里没有了shape-feature于是这会逼迫它去学习其它的特征这样就达成了特征多样性的目的-论文提出严格的描述两个特征独立的方法是互信息为0但互信息求解起来太麻烦了虽然我不知道为什么于是松弛一下用个简化的条件即两个特征正交-guoqu-关于具体的shape-erased-feature-learning总的来说它用到各种互信息进行推导没太看懂忘得七七八八了但几个比较关键的公式背后的要求期望还是比较合理的或许可以借鉴一下其中的insightequation4期望用shape-erased-feature也能尽可能好地预测出identity毕竟前面说了这是训练中重要的一环5是为了优化4中的第一项而提出的好吧真不好写提出一大堆损失一些是用来训练shape-erased-feature的一些是用来消除shape-related-feature中的modality-specific成分的从而让它更加modality-shared最后一些是常规损失就是分类损失那些">这里有个关键的假设，即shape-related
+feature和shape-erased
+feature之间是独立的。这样才能做到，学习一个特征，而不影响另一个特征（注意到，前面motivation里已经说了，它是要单独去学习一下shape-erased
+feature，此时这部分表征里没有了shape
+feature，于是这会逼迫它去学习其它的特征，这样就达成了特征多样性的目的）<br>论文提出，严格的描述两个特征独立的方法是互信息为0，但互信息求解起来太麻烦了（虽然我不知道为什么。。。），于是松弛一下，用个简化的条件，即两个特征正交<br>guoqu<br>关于具体的shape-erased
+feature
+learning，总的来说，它用到各种互信息进行推导，没太看懂。。忘得七七八八了。但几个比较关键的公式，背后的要求/期望还是比较合理的。或许可以借鉴一下其中的insight。equation（4）期望用shape-erased
+feature也能尽可能好地预测出identity（毕竟前面说了，这是训练中重要的一环）；（5）是为了优化（4）中的第一项而提出的；好吧，真不好写。提出一大堆损失，一些是用来训练shape-erased
+feature的，一些是用来消除shape-related
+feature中的modality-specific成分的，从而让它更加modality-shared；最后一些是常规损失，就是分类损失那些</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Diverse%20Embedding%20Expansion%20Network%20and%20Low-Light%20Cross-Modality%20Benchmark%20for%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Diverse%20Embedding%20Expansion%20Network%20and%20Low-Light%20Cross-Modality%20Benchmark%20for%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-30 17:34:28 / Modified: 19:47:41" itemprop="dateCreated datePublished" datetime="2024-10-30T17:34:28+08:00">2024-10-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>cvpr23 主要是提出一个embedding network DEEN。感觉上所谓mine diverse
+channel-wise and spatial embeddings还是想挖掘出modality-specific
+feature以及图像中不同的交互信息。还是老一套的样子</p>
+<p>我去，让生成模型拿到VIS-IR数据对，直接学习根据一种模态生成另一种模态，感觉应该挺有效的。但很显然对数据量要求比较大。之前都是用GAN。那用diffusion
+model会不会效果更好？</p>
+<h1 id="整体架构deen包含一个dee模块和mfa模块dee模块用来生成各种多样的embedding主要由一个cpm-loss实现那它应该就是用来提取特征的生成是说真的无中生有的那种还是只是提取特征而已-mfa模块用来整合汇聚特征看看它到时候是怎么汇聚的-好像还有对embedding的增强看看怎么增强的">整体架构：DEEN包含一个DEE模块和MFA模块。DEE模块用来生成各种多样的embedding，主要由一个CPM
+loss实现（那它应该就是用来提取特征的？生成是说真的无中生有的那种，还是只是提取特征而已？）<br>MFA模块用来整合、汇聚特征。（看看它到时候是怎么汇聚的？）<br>好像还有对embedding的增强？看看怎么增强的</h1>
+<h1 id="method">method：</h1>
+<h2 id="diverse-embedding-expansion-moduledee模块">1.Diverse Embedding
+Expansion Module（DEE模块）</h2>
+<h3 id="主要是用一些卷积包括膨胀卷积1-1卷积然后有多个分支生成多个embedding论文期望这些embedding能捕获到不同的信息关于怎么优化这个模块后面第二部分提出了三个我们希望这些embedding能满足的属性以及相应设计的损失">主要是用一些卷积（包括膨胀卷积，1
+*
+1卷积），然后有多个分支，生成多个embedding。论文期望这些embedding能捕获到不同的信息。关于怎么优化这个模块，后面第二部分提出了三个我们希望这些embedding能满足的属性，以及相应设计的损失</h3>
+<h2 id="center-guided-pair-mining-loss">2.Center-Guided Pair Mining
+Loss</h2>
+<h3 id="用于优化上面的dee模块提出了三个期望属性-property-1-the-generated-embeddings-should-be-as-diverse-as-possible-to-effectively-learn-the-informative-feature-representations.为此需要尽可能拉远生成出的embedding和原来的那个embedding-property-2-the-generated-embeddings-should-facilitate-reducing-the-modality-discrepancy-between-the-vis-and-ir-images.这意味着如果我们用ir模态生成多个vis模态的embedding我们要尽可能拉近原来的ir模态和生成的vis模态的embedding之间的距离反之亦然-property-3-the-intra-class-distance-should-be-less-than-the-inter-class-one.如果embedding仅仅满足前两个属性有可能不同identity的embedding反而被拉的很近了这是不允许的因此给出第三个属性起到保险的作用为此我们需要拉远不同identity的embedding-大体思想就是这样的但最后的cpm-loss还做了一些额外的处理不过核心思想是一致的-另外这一部分还提出了一个小的损失是为了让各个不同分支生成的embedding包含的信息尽可能不要重复有一个orthogonal-loss期望各个不同分支生成的embedding的内积尽可能小即希望尽可能正交或许再加个绝对值更合理如果内积是负的怎么办还是说这里的内积不会为负">用于优化上面的DEE模块。提出了三个期望属性：<br>Property
+1: The generated embeddings should be as diverse as possible to
+effectively learn the informative feature
+representations.为此，需要尽可能拉远生成出的embedding和原来的那个embedding<br>Property
+2: The generated embeddings should facilitate reducing the modality
+discrepancy between the VIS and IR
+images.这意味着，如果我们用IR模态生成多个VIS模态的embedding，我们要尽可能拉近原来的IR模态和生成的VIS模态的embedding之间的距离。反之亦然<br>Property
+3: The intra-class distance should be less than the inter-class
+one.如果embedding仅仅满足前两个属性，有可能不同identity的embedding反而被拉的很近了。这是不允许的。因此，给出第三个属性，起到保险的作用。为此，我们需要拉远不同identity的embedding<br>大体思想就是这样的，但最后的CPM
+loss还做了一些额外的处理，不过核心思想是一致的。<br>另外，这一部分还提出了一个小的损失，是为了让各个不同分支生成的embedding包含的信息尽可能不要重复，有一个orthogonal
+loss，期望各个不同分支生成的embedding的内积尽可能小（即希望尽可能正交）（或许再加个绝对值更合理？如果内积是负的怎么办？还是说这里的内积不会为负？）</h3>
+<h2 id="multistage-feature-aggregation-blockmfa-模块">3.Multistage
+Feature Aggregation Block（MFA 模块）</h2>
+<h3 id="感觉真没什么见地就是一些繁复的网络只不过用到一些卷积和相似性矩阵而已似乎没啥好说的">感觉真没什么见地，就是一些繁复的网络。只不过用到一些卷积和相似性矩阵而已。似乎没啥好说的</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/PartMix---Regularization%20Strategy%20to%20Learn%20Part%20Discovery%20for%20Visible-Infrared%20%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/PartMix---Regularization%20Strategy%20to%20Learn%20Part%20Discovery%20for%20Visible-Infrared%20%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-30 14:11:13 / Modified: 20:06:12" itemprop="dateCreated datePublished" datetime="2024-10-30T14:11:13+08:00">2024-10-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr23">cvpr23</h1>
+<p>这篇论文是基于part-based model来改进的。所谓part-based
+model，大概就是去提取图像中各种不同部分的特征。可以看看它是怎么提取这些不同部分的特征的，和[[WRIM-Net---Wide-Ranging
+Information Mining Network for Visible-Infrared Person
+Re-Identification]]还有[[High-Order Structure Based Middle-Feature
+Learning for Visible-Infrared Person
+Re-identification]]之间的差别在哪里？ # 基本概念：1.
+<strong>Mixture-based technique</strong>:</p>
+<pre><code>- 一种基于混合的技术，用于数据增强。
+- 它通过混合图像和相应的标签来合成虚拟训练样本，从而扩大训练集。
+- 这种技术可以帮助模型在各种计算机视觉应用中避免过拟合到训练数据。</code></pre>
+<h1 id="part-descriptors">2. <strong>Part-descriptors</strong>:</h1>
+<pre><code>- 局部特征描述符，用于描述人体不同部位的特征。
+- 在part-based VI-ReID模型中，会对可见光和红外图像中的不同部位进行特征提取，得到相应的局部特征描述符。
+- 这些描述符可以用于后续的识别和匹配过程。</code></pre>
+<h1 id="problemthese-global-feature-representations-solely-focus-on-the-most-discriminative-part-while-ignoring-the-diverse-parts-which-are-helpful-to-distinguish-the-person-identity这应该是提取modality-shared-feature的方法的通病了有点类似于去学习一个identity对应的平均模板但这样太死板了会遗漏一些细节的多样的信息那么就像这篇论文着眼的地方身体部位这其实就是一种细节信息如果去捕捉这种细节信息或许就可以弥补modality-shared-feature的短板类似的其实channel-augmentation-for-visible-infrared-re-identification这里注重提取的颜色信息也是那么如果同时去关注颜色和部位信息会不会比单一的方法效果要好进一步的能不能更自动地而不是依赖于我们先验设计的着眼点去提取更多细节信息提取到了以后怎么用呢就把它们和modality-shared-feature直接concatenate起来加起来用个注意力机制融合一下蒸馏一下或许都可以试试或许有更好的方法-简单来说目前用增强方式做vi-reid的方法-通常会涉及一些mixture但没有特别好的方法被设计出来-另外想利用mixup技术进行增强辅助vi-reid但直接应用可能遇到mixup本来就有的问题unlike-conventional-methods-1938446869-that-exploit-image-mixture-techniques-that-yield-unnatural-patterns-and-local-patches-with-only-background-or-single-human-part直接应用mixup的时候就可能遇到这些问题产生不自然的patterns是很好理解的看它mixup出来的图像有些非常的怪异就可以看出来重点是说mixup可能产生完全没有人的图像这就没什么用了关键它的标签还是人的标签比如cutmix它会从一幅图上切一块下来放到另一幅图像上那如果把一幅图的背景给切下来放到另一幅图像上人所在的区域就有问题了本文的改进则是不去mixup整个图像而是去mixup部分也就是我们提取出来的part感觉确实有点道理就有点类似同一个人在同一个场景下只是穿了不同的衣服那我们人类应该是很容易就能识别出来的这里串不同的有点类似不同图像的part进行mixup那这个方法应该确实有利于去提取一些共性的具有判别能力的特征">problem：these
+global feature representations solely focus on the most discriminative
+part while ignoring the diverse parts which are helpful to distinguish
+the person identity。（这应该是提取modality-shared
+feature的方法的通病了，有点类似于去学习一个identity对应的平均模板。但这样太死板了，会遗漏一些细节的、多样的信息）（那么，就像这篇论文着眼的地方——身体部位，这其实就是一种细节信息。如果去捕捉这种细节信息，或许就可以弥补modality-shared
+feature的短板。类似的，其实[[Channel Augmentation for Visible-Infrared
+Re-Identification]]这里注重提取的颜色信息也是。那么，如果同时去关注颜色和部位信息，会不会比单一的方法效果要好？进一步的，能不能更自动地，而不是依赖于我们先验设计的着眼点，去提取更多细节信息？提取到了以后，怎么用呢？就把它们和modality-shared
+feature直接concatenate起来？加起来？用个注意力机制融合一下？蒸馏一下？或许都可以试试，或许有更好的方法）<br>简单来说，目前用增强方式做VI-ReID的方法，
+通常会涉及一些mixture，但没有特别好的方法被设计出来<br>另外，想利用mixup技术进行增强，辅助vi-reid，但直接应用可能遇到mixup本来就有的问题。（Unlike
+conventional methods [19,38,44,68,69] that exploit image mixture
+techniques that yield unnatural patterns, and local patches with only
+background or single human
+part,直接应用mixup的时候，就可能遇到这些问题。产生不自然的patterns是很好理解的，看它mixup出来的图像，有些非常的怪异，就可以看出来。重点是说mixup可能产生完全没有人的图像。这就没什么用了，关键它的标签还是人的标签。比如，cutmix，它会从一幅图上切一块下来，放到另一幅图像上。那如果把一幅图的背景给切下来，放到另一幅图像上人所在的区域，就有问题了）（本文的改进则是，不去mixup整个图像，而是去mixup部分，也就是我们提取出来的part）（感觉确实有点道理，就有点类似，同一个人，在同一个场景下，只是穿了不同的衣服，那我们人类应该是很容易就能识别出来的。这里串不同的有点类似不同图像的part进行mixup。那这个方法应该确实有利于去提取一些共性的、具有判别能力的特征）</h1>
+<h1 id="motivation希望能设计出一种mixup的方法避免直接应用mixup的时候会遇到的问题同时发挥mixup防止模型过拟合的作用提取出更有效的部位信息">motivation：希望能设计出一种mixup的方法，避免直接应用mixup的时候会遇到的问题；同时发挥mixup防止模型过拟合的作用，提取出更有效的部位信息</h1>
+<h1 id="贡献总结一下上面的内容该论文主要是提出了一种新的增强方法partmix将mixup技术应用到vi-reid针对它的方法可能产生不太靠谱的正负样本论文提出了一些防止措施">贡献：总结一下上面的内容，该论文主要是提出了一种新的增强方法partmix，将mixup技术应用到vi-reid。针对它的方法可能产生不太靠谱的正负样本，论文提出了一些防止措施</h1>
+<h1 id="method">method：</h1>
+<h2 id="对于一个mini-batch里的data提取出它们的part-descriptor进行inter-modality和intra-modality的mixupglobal-descriptor也要算但它不进行mixup因为它包含的是全局信息不符合论文提出的partmix的思想">1.对于一个mini-batch里的data，提取出它们的part
+descriptor，进行inter-modality和intra-modality的mixup（global
+descriptor也要算，但它不进行mixup，因为它包含的是全局信息，不符合论文提出的partmix的思想）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E5%AF%B9%E6%AF%94/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-29 09:25:16" itemprop="dateCreated datePublished" datetime="2024-10-29T09:25:16+08:00">2024-10-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Learning%20Commonality,%20Divergence%20and%20Variety%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -937,569 +1253,6 @@ RE-IDENTIFICATION这篇论文里最后用t-SNE画的那个图，感觉效果一�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-26 10:32:01" itemprop="dateCreated datePublished" datetime="2024-10-26T10:32:01+08:00">2024-10-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-17 20:45:48" itemprop="dateModified" datetime="2025-03-17T20:45:48+08:00">2025-03-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="阅读中的问题了解miim的作用aicl的作用-到底什么叫specific-modality-multi-dimension-information-modality-invariant-information是否其实就是modality-shared-feature如果不是二者的区别在哪里">阅读中的问题：了解MIIM的作用、AICL的作用<br>到底什么叫specific-modality
-multi-dimension information？<br>modality-invariant
-information，是否其实就是modality-shared
-feature？如果不是，二者的区别在哪里？</h1>
-<h1 id="贡献提出新的模块来融合多个维度的信息提取身体部位姿势等信息">贡献：提出新的模块，来融合多个维度的信息，提取身体部位、姿势等信息</h1>
-<h1 id="吐槽只是设计网络的输出尺寸和前一个东西保持一致就可以一直强调减少了计算量嘛一直提因为计算量小可以放到浅层的网络-卷积和池化也能被说成是一个单独的压缩模块吹了半天">吐槽：只是设计网络的输出尺寸和前一个东西保持一致，就可以一直强调减少了计算量嘛。。。一直提因为计算量小，可以放到浅层的网络。。。<br>卷积和池化也能被说成是一个单独的压缩模块，吹了半天。。。</h1>
-<h1 id="有时间可以了解的文章里的上采样具体是怎样的看看代码">有时间可以了解的：文章里的上采样，具体是怎样的？看看代码</h1>
-<h1 id="problem之前的方法没有深入挖掘所谓specific-modality-multi-dimension-information具体来说它们一般只能做到挖掘一个dimension的信息而很难同时捕获多个dimension的信息这里的多个dimension不是指channel那个而是说多个维度角度比如空间信息颜色信息等">problem：之前的方法没有深入挖掘所谓specific-modality
-multi-dimension
-information。具体来说，它们一般只能做到挖掘一个dimension的信息，而很难同时捕获多个dimension的信息（这里的多个dimension不是指Channel那个，而是说多个维度/角度，比如空间信息，颜色信息等）</h1>
-<h1 id="method">method</h1>
-<h2 id="miim-module主要是用来enhances-its-non-local-spatial-interaction-capability就是捕捉类似于姿势身体部位比例之类的信息也即关注spatial-dimension和channel-dimension越想越扯这哪有什么创新啊不就是在用transformer多头注意力之前动了一下输入而已嘛">1.MIIM
-module（主要是用来enhances its non-local spatial interaction
-capability，就是捕捉类似于姿势、身体部位比例之类的信息，也即关注spatial
-dimension和channel
-dimension）（越想越扯，这哪有什么创新啊，不就是在用transformer/多头注意力之前动了一下输入而已嘛。。。）</h2>
-<h3 id="它主要做的事情就是通过一些计算得到一个和原输入形状相同的起到mask作用的一个张量m2用这个m2和输入作哈达玛积得到输出好经典啊只要是这类说提取身体部位相关的方法基本都是想方设法构造mask做哈达玛积得到feature-map但也不得不说这个方法很直观">它主要做的事情就是通过一些计算，得到一个和原输入形状相同的，起到mask作用的一个张量M2，用这个M2和输入作哈达玛积，得到输出（好经典啊，只要是这类说提取“身体部位”相关的方法，基本都是想方设法构造mask，做哈达玛积得到feature
-map。但也不得不说，这个方法很直观）</h3>
-<h3 id="m2的计算主要经过三个部分依次是sccspatial-channel-compressiongriglobal-region-interactionscrspatial-channel-restorescc就是简单的卷积和池化然后卷积的结果作后续gri的query卷积再池化的结果作后续gri的key和valuegri就是一个多头注意力块kqv如上所述而gri的输出再经过scrscr经过一些网络和上上采样操作将gri的输出形状变得和输入一样此即m2最后就是一个逐元素相乘">M2的计算主要经过三个部分，依次是：SCC（Spatial-Channel
-Compression）、GRI（Global Region Interaction）、SCR（Spatial-Channel
-Restore）。SCC就是简单的卷积和池化，然后卷积的结果作后续GRI的Query，卷积再池化的结果作后续GRI的Key和Value。GRI就是一个多头注意力块。k，q，v如上所述。而GRI的输出再经过SCR，SCR经过一些网络和上上采样操作，将GRI的输出形状变得和输入一样。此即M2。最后就是一个逐元素相乘</h3>
-<h3 id="论文认为之前的方法没能做到同时挖掘spatial-information和channel-information而这里它是认为miim中的多头注意力机制完成了对spatial-information的挖掘miim中的卷积使得channel数减少以及后面用线性层复原channel使channel数增多这里之所以可以用线性层改变channel应该是因为它把数据的channel放到最后一个维度了这两个地方就完成了channel-information的挖掘个人感觉有点扯了难道只要涉及channel变化就能说是挖掘了channel-information嘛那之前的方法应该或多或少都有吧最起码主干网络里那些卷积类的网络不都有卷积层嘛难道不会改变channel">论文认为之前的方法没能做到同时挖掘spatial
-information和channel
-information，而这里它是认为，MIIM中的多头注意力机制完成了对spatial
-information的挖掘；MIIM中的卷积（使得channel数减少）以及后面用线性层复原channel（使channel数增多）（这里之所以可以用线性层改变channel，应该是因为它把数据的channel放到最后一个维度了），这两个地方就完成了channel
-information的挖掘。。。个人感觉有点扯了，难道只要涉及channel变化就能说是挖掘了channel
-information嘛？那之前的方法应该或多或少都有吧？最起码主干网络里，那些卷积类的网络不都有卷积层嘛，难道不会改变channel？</h3>
-<h2 id="aicl-approachauxiliary-information-based-contrastive-learning-approach">2.AICL
-approach（Auxiliary-Information-based Contrastive Learning
-Approach）</h2>
-<h3 id="它是针对前面提取出的特征进行操作的具体来说pasted-image-20241026152320.png">它是针对前面提取出的特征进行操作的。具体来说，![[Pasted
-image 20241026152320.png]]</h3>
-<h3 id="是block3和block4之后的特征大体的操作流程在图上应该是能看出来的需要关注的可能就是l_cmkic-p_5等几个损失是怎么计算的还有就是它的partition操作说是沿用了另外两篇论文里的操作没明说还不清楚得回头细看一下">是block3和block4之后的特征。大体的操作流程在图上应该是能看出来的。需要关注的可能就是<span class="math inline">\(L_{CMKIC-P_{5}}\)</span>等几个损失是怎么计算的（还有就是，它的partition操作说是沿用了另外两篇论文里的操作，没明说，还不清楚，得回头细看一下）</h3>
-<h3 id="关于l_cmkic-p_5首先它会用到图里的z_5可以简单理解成提取过的特征两种模态每张图像都有一个特征向量它的组成部分其实是两个一个是l_cmkic-p_5-vi一个是l_cmkic-p_5-iv-以l_cmkic-p_5-vi为例解释一下对于训练的时候的一个batch里的rgb模态的图像特征向量我们先计算出ir模态中和它同标签但是最不相似的k个向量之后我们的目标就是拉近这个rgb特征向量与这k个向量的距离也就是计算它们之间的对比损失分母是这个rgb特征向量与所有的ir模态的特征向量的距离即点积取指数再求和别忘了外面的符号然后对这k个距离取平均完成一个样本的损失的计算那么一个batch里的rgb模态的特征都是这么算的求和即得到l_cmkic-p_5-vi至于l_cmkic-p_5-iv计算方法类似只不过我们是希望拉近ir模态和k个rgb模态的特征向量之间的距离相当于说锚点改成ir模态特征向量了">关于<span class="math inline">\(L_{CMKIC-P_{5}}\)</span>，首先它会用到图里的<span class="math inline">\(Z_{5}\)</span>，可以简单理解成提取过的特征（两种模态，每张图像都有一个特征向量）。它的组成部分其实是两个，一个是<span class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>，一个是<span class="math inline">\(L_{CMKIC-P_{5}-IV}\)</span> 。以<span class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>为例解释一下。对于训练的时候的一个batch里的RGB模态的图像特征向量，我们先计算出IR模态中和它同标签，但是最不相似的K个向量。之后我们的目标就是拉近这个RGB特征向量与这K个向量的距离，也就是计算它们之间的对比损失。分母是这个RGB特征向量与所有的IR模态的特征向量的距离（即点积）取指数再求和。别忘了外面的符号。然后对这K个距离取平均，完成一个样本的损失的计算。那么一个batch里的RGB模态的特征都是这么算的。求和即得到<span class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>。至于<span class="math inline">\(L_{CMKIC-P_{5}-IV}\)</span>，计算方法类似，只不过我们是希望拉近IR模态和K个RGB模态的特征向量之间的距离，相当于说锚点改成IR模态特征向量了</h3>
-<h3 id="剩下几个损失中l_cls这种的都是正常的分类然后计算概率分布的交叉熵损失l_tri就是一个三元组损失应该是挺常见的有时间看一下附录里是怎么说的l_total也只是前面提到的各种特征的加权组合">剩下几个损失中，<span class="math inline">\(L_{cls}\)</span>这种的，都是正常的分类，然后计算概率分布的交叉熵损失。<span class="math inline">\(L_{tri}\)</span>就是一个三元组损失，应该是挺常见的。（有时间看一下附录里是怎么说的）。<span class="math inline">\(L_{total}\)</span>也只是前面提到的各种特征的加权组合。</h3>
-<h3 id="这个方法的本意是用来提取modality-invariant-feature的精心设计的地方可能还是在于和k个最不相似且不同模态但是同标签的向量进行对比损失的计算比较工程的地方可能在于用了多个损失的组合这个和k个最不相似的向量进行对比有没有说法改成1行不行或者说用k会有什么问题但说到底这个大体还是依靠引入某种对比损失来进行所谓减少不同模态数据间的差异老一套了">这个方法的本意是用来提取modality-invariant
-feature的。精心设计的地方可能还是在于和K个最不相似，且不同模态，但是同标签的向量进行对比损失的计算。比较工程的地方可能在于用了多个损失的组合。这个”和K个最不相似的向量“进行对比，有没有说法？改成1行不行？或者说用K会有什么问题？但说到底，这个大体还是依靠引入某种对比损失来进行所谓”减少不同模态数据间的差异“。。。老一套了</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-25 14:22:57" itemprop="dateCreated datePublished" datetime="2024-10-25T14:22:57+08:00">2024-10-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-16 22:42:49" itemprop="dateModified" datetime="2025-02-16T22:42:49+08:00">2025-02-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr24">cvpr24</h1>
-<h1 id="所研究的taskunsupervised-visible-infrared-person-re-identification相比于一般的vi-reid只是变成了无监督其它的要求还是不变的">所研究的task：Unsupervised
-Visible-Infrared Person
-Re-Identification。相比于一般的VI-ReID，只是变成了无监督，其它的要求还是不变的</h1>
-<h1 id="动机之前的方法它们提取特征都是用最后一层的输出更多的包含语义信息而浅层提取出的特征更多包含的是具体的细节信息但这部分信息被忽略了nevertheless-interfered-by-the-multiple-discrepancies-i.e.-intra-modality-variation-and-inter-modality-discrepancy-solely-relying-on-deep-features-is-insufficient-for-accurately-learning-modality-invariant-features-resulting-in-negative-optimization只不过是为了讲故事为了给它改进骨干网络做个铺垫它也并不是通过某些实验的结果分析看出来需要加上浅层特征的啊所以论文希望能把遗漏的这部分细节信息给利用上">动机：之前的方法，它们提取特征都是用最后一层的输出，更多的包含语义信息，而浅层提取出的特征更多包含的是具体的细节信息，但这部分信息被忽略了（Nevertheless,
-interfered by the multiple discrepancies, i.e., intra-modality variation
-and inter-modality discrepancy, solely relying on deep features is
-insufficient for accurately learning modality-invariant features,
-resulting in negative
-optimization）（只不过是为了讲故事？为了给它改进骨干网络做个铺垫。它也并不是通过某些实验的结果/分析看出来需要加上浅层特征的啊。。）。所以论文希望能把遗漏的这部分细节信息给利用上</h1>
-<h1 id="insight">insight</h1>
-<h1 id="方法">方法：</h1>
-<h2 id="shallow-deep-contrastive-learning">1.Shallow-Deep Contrastive
-Learning</h2>
-<h3 id="对于rgb和ir两种模态的训练数据要经过两套网络得到各自的shallow和deep-feature所谓shallow-feature就是经过一个msa层而deep-feature就是经过一个transformer都是把cls给提取出来当feature它们就组成了四个instance-memory此外两个模态的shallowdeep-feature各自进行聚类就是在shallow-rgb的feature里进行聚类在shallow-ir的feature里进行聚类一共会在四种feature里进行聚类至于cluster-memory的初始化就是把对应的那部分特征取均值比如要初始化shallow-rgb的cluster-memory那就把shallow-rgb的所有特征取均值其余类似">对于RGB和IR两种模态的训练数据，要经过两套网络得到各自的shallow和deep
-feature（所谓shallow feature就是经过一个MSA层，而deep
-feature就是经过一个transformer）（都是把CLS给提取出来当feature）。它们就组成了四个instance
-memory。此外，两个模态的shallow/deep feature各自进行聚类（就是在shallow
-RGB的feature里进行聚类，在shallow
-IR的feature里进行聚类。。。一共会在四种feature里进行聚类）。至于cluster
-memory的初始化，就是把对应的那部分特征取均值（比如，要初始化shallow
-RGB的cluster memory，那就把shallow RGB的所有特征取均值。其余类似）</h3>
-<h3 id="cluster-memory的优化主要是动量更新">cluster
-memory的优化主要是动量更新</h3>
-<h3 id="因为在四种特征里都进行了聚类比如在shallow-rgb-feature里进行聚类得到5类现在这些类就是伪标签我们要用它来进行对比学习这里的对比学习主要是优化前面提取shallowdeep-feature的网络的也就是为了更好地提取特征">因为在四种特征里都进行了聚类，比如在shallow
-RGB
-feature里进行聚类，得到5类。现在这些类就是伪标签，我们要用它来进行对比学习。这里的对比学习主要是优化前面提取shallow/deep
-feature的网络的，也就是为了更好地提取特征</h3>
-<h2 id="collaborative-neighbor-learning">2.Collaborative Neighbor
-Learning</h2>
-<h3 id="大体上做的事就是把各种特征进行对比也有跨模态的特征对比所以它一直强调cross-modality-supervision">大体上做的事就是把各种特征进行对比，也有跨模态的特征对比，所以它一直强调cross-modality
-supervision</h3>
-<h3 id="特征的相似度用余弦相似度来度量然后shallowdeep有两种选择rgbir两种选择又因为是两个特征之间进行度量理论上会有16种不同种类的特征进行相似度度量然而要注意的是shallowdeep的选择一定是同步的即要么同时度量两个shallow-feature要么同时度量两个deep-feature因为度量特征的最终目的是希望拉近某些特征的距离但我们并没有必要去拉近某个deep-feature和shallow-feature之间的距离我们的本意就是想分别利用shallow和deep-feature各自含有的不同信息这样拉近距离反而可能造成一些问题所以实际是有8种不同特征的搭配来进行度量-首先注意一个输入图像不论是rgb还是ir都会有shallow和deep两种feature-其次计算损失的时候是先给定一个batch的query每个query是一个图像它会有上面说的两种特征然后对每个query我们可以计算它的同一个模态的邻居也可以计算它的不同模态的邻居不妨以query为rgb图像要计算它的不同模态即ir模态的邻居为例我们先拿到该query的shallow-feature然后让它和所有ir模态的shallow-feature进行相似度度量因为我们这里要计算的是不同模态的邻居之后根据相似度高低进行一些筛选选出多少则是由一个超参数γ决定得到一些ir模态shallow-feature再取出该query的deep-feature让它和所有ir模态的deep-feature进行相似度度量取一些相近的deep-feature两组featured的交集即该query的不同模态的邻居其它几种邻居计算方法类似-得到每个query的邻居后开始计算对比损失大体上分成四个部分vvvrrvrrv代表rgbr代表ir不妨以vv的损失计算过程为例首先vv损失也会分成shallow和deep两部分然后shallow部分就是batch里的每个query都计算它和它的shallow邻居之间的对比损失再取均值deep部分类似二者相加shallow部分有个超参数得到vv损失其余几个损失计算方法类似-整个方法的损失就是两个部分一个是这里的四部分对比损失之和另一个就是shallow-deep-contrastive-learning里的损失">特征的相似度用余弦相似度来度量。然后shallow/deep有两种选择，RGB/IR两种选择，又因为是两个特征之间进行度量，理论上会有16种不同种类的特征进行相似度度量。然而要注意的是，shallow/deep的选择一定是同步的，即，要么同时度量两个shallow
-feature，要么同时度量两个deep
-feature。因为度量特征的最终目的是希望拉近某些特征的距离，但我们并没有必要去拉近某个deep
-feature和shallow
-feature之间的距离（我们的本意就是想分别利用shallow和deep
-feature各自含有的不同信息，这样拉近距离反而可能造成一些问题）。所以实际是有8种不同特征的搭配来进行度量。<br>首先注意，一个输入图像（不论是RGB还是IR），都会有shallow和deep两种feature。<br>其次，计算损失的时候，是先给定一个batch的query。每个query是一个图像，它会有上面说的两种特征。然后，对每个query，我们可以计算它的同一个模态的邻居，也可以计算它的不同模态的邻居。不妨以query为RGB图像，要计算它的不同模态（即IR模态）的邻居为例。我们先拿到该query的shallow
-feature，然后让它和所有IR模态的shallow
-feature进行相似度度量（因为我们这里要计算的是不同模态的邻居），之后根据相似度高低，进行一些筛选（选出多少则是由一个超参数γ决定），得到一些IR模态shallow
-feature。再取出该query的deep feature，让它和所有IR模态的deep
-feature进行相似度度量，取一些相近的deep
-feature。<strong>两组featured的交集，即该query的不同模态的邻居</strong>。其它几种邻居计算方法类似。<br>得到每个query的邻居后，开始计算对比损失。大体上分成四个部分，vv、vr、rv、rr（v代表RGB，r代表IR）。不妨以vv的损失计算过程为例。首先，vv损失也会分成shallow和deep两部分。然后shallow部分就是batch里的<strong>每个query都计算它和它的shallow邻居之间的对比损失</strong>，再取均值。deep部分类似。二者相加（shallow部分有个超参数）得到vv损失。其余几个损失计算方法类似。<br>整个方法的损失就是两个部分，一个是这里的四部分对比损失之和，另一个就是shallow-deep
-contrastive learning里的损失</h3>
-<h3 id="如果说3.1的shallow-deep-contrastive-learning主要是特征之间自己对比并且都是同一模态下的那么3.2的collaborative-neighbor-learning就是query和neighbor之间的对比并且有跨模态的对比">如果说3.1的Shallow-deep
-Contrastive
-Learning主要是特征之间自己对比，并且都是同一模态下的，那么3.2的Collaborative
-Neighbor Learning就是query和neighbor之间的对比，并且有跨模态的对比</h3>
-<h2 id="collaborative-ranking-association这一步是在利用上面的特征进行推理">3.Collaborative
-Ranking Association（这一步是在利用上面的特征进行推理）</h2>
-<h3 id="这一步的执行顺序应该是在聚类完之后根据下面两个假设对聚类的伪标签进行了一些平滑操作之后才是1.里的shallow-deep-contrastive-learning那里的contrastive-learning依赖于伪标签">这一步的执行顺序应该是在聚类完之后，根据下面两个假设，<strong>对聚类的伪标签进行了一些平滑操作</strong>。之后才是1.里的Shallow-deep
-contrastive learning（那里的contrastive learning依赖于伪标签）</h3>
-<h3 id="它是基于两个假设提出的-一是在两个模态之间用shallowdeep-feature进行相似度度量之后进行排名这两个排名应该尽可能一致-二是同一个模态内shallowdeep-feature进行相似性度量并进行排名这个一致性会相比上面的更好">它是基于两个假设提出的：<br>一是，在两个模态之间用shallow/deep
-feature进行相似度度量，之后进行排名，这两个排名应该尽可能一致<br>二是，同一个模态内shallow/deep
-feature进行相似性度量，并进行排名，这个一致性会相比上面的更好</h3>
-<h3 id="这里会有两个步骤">这里会有两个步骤</h3>
-<h3 id="一个是inter-modality-ranking-association-给定一个rgb图像我们有它的shallow和deep-feature用shallow-feature和所有的ir图像的shallow-feature进行相似性度量得到一个排序deep-feature和所有的ir图像的deep-feature进行相似性度量也得到一个排序我们假设deep-feature得到的排序里有n个结果也就是假设ir图像一共有n个统计相似性从高到低的每个结果它的标签和多少个shallow-feature的排序里的结果的标签相同这里从简我们记deep-feature的第k个结果对应和shallow-feature里n_k个结果有相同标签最后这个rgb图像的标签就应该是最大的n_k对应的那个标签最终对每幅图像都做这个操作得到一个标签矩阵每一行是一个独热向量">一个是Inter-modality
-Ranking Association<br>给定一个RGB图像，我们有它的shallow和deep
-feature。用shallow feature和所有的IR图像的shallow
-feature进行相似性度量，得到一个排序；deep feature和所有的IR图像的deep
-feature进行相似性度量，也得到一个排序。我们假设deep
-feature得到的排序里有N个结果（也就是假设IR图像一共有N个），统计相似性从高到低的每个结果，它的标签和多少个shallow
-feature的排序里的结果的标签相同。这里从简，我们记deep
-feature的第k个结果对应和shallow feature里<span class="math inline">\(n_{k}\)</span>个结果有相同标签。最后，这个RGB图像的标签就应该是最大的<span class="math inline">\(n_{k}\)</span>对应的那个标签。最终对每幅图像都做这个操作，得到一个标签矩阵，每一行是一个独热向量</h3>
-<h3 id="第二个是intra-modality-collaborative-smoothing这个还是很合理的毕竟光用deep-feature得到一个相似度矩阵其实可能不太够因为前面说了shallow-feature还是可能提供一些信息的也要利用起来但这里综合利用二者的方式是分别求得相似性矩阵然后相加有没有其它的综合方式直接融合可以吗-我们用所有rgb图像的shallowdeep-feature两两计算相似度得到两个矩阵两个矩阵相加之后每一行将前五大的数置为1其余置为0这里想做的就是根据shallow-feature-similarity和deep-feature-similarity综合考量得到每一个样本可能和哪几个样本相似性较高得到这个矩阵后用这个矩阵左乘上面的到的标签矩阵又得到一个矩阵它的形状是n-cn是rgb图像的样本数量c是ir图像的类别每一行最大的元素对应的列数就是这个样本的最终的标签">第二个是Intra-modality
-Collaborative Smoothing（这个还是很合理的。毕竟光用deep
-feature得到一个相似度矩阵，其实可能不太够，因为前面说了，shallow
-feature还是可能提供一些信息的，也要利用起来。但这里综合利用二者的方式是分别求得相似性矩阵，然后相加。有没有其它的综合方式？直接融合可以吗？）<br>我们用所有RGB图像的shallow/deep
-feature，两两计算相似度，得到两个矩阵，两个矩阵相加，之后每一行将前五大的数置为1，其余置为0（这里想做的就是根据shallow
-feature similarity和deep feature
-similarity，综合考量，得到每一个样本可能和哪几个样本相似性较高）。得到这个矩阵后，用这个矩阵左乘上面的到的标签矩阵，又得到一个矩阵，它的形状是N
-*
-C（N是RGB图像的样本数量，C是IR图像的类别），每一行最大的元素对应的列数就是这个样本的最终的标签</h3>
-<h1 id="细节">细节</h1>
-<h1 id="我的问题homogeneous-and-heterogeneous-collaboration到底是指什么">我的问题：homogeneous
-and heterogeneous collaboration到底是指什么？</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/paper%E8%B0%83%E7%A0%94%20vi-reid/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/paper%E8%B0%83%E7%A0%94%20vi-reid/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-25 09:38:09" itemprop="dateCreated datePublished" datetime="2024-10-25T09:38:09+08:00">2024-10-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-03-09 11:00:18" itemprop="dateModified" datetime="2025-03-09T11:00:18+08:00">2025-03-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="updatecvpr25有一篇相关论文from-laboratory-to-real-world-a-new-benchmark-towards-privacy-preserved-visible-infrared-person-re-identification但还没放出论文">update：cvpr25有一篇相关论文<strong>From
-Laboratory to Real World: A New Benchmark Towards Privacy-Preserved
-Visible-Infrared Person Re-Identification</strong>，但还没放出论文</h1>
-<h1 id="cvpr24">cvpr24</h1>
-<h2 id="shallow-deep-collaborative-learning-for-unsupervised-visible-infrared-person-re-identification强相关"><strong>Shallow-Deep
-Collaborative Learning for Unsupervised Visible-Infrared Person
-Re-Identification</strong>（强相关）</h2>
-<h2 id="fusing-personal-and-environmental-cues-for-identification-and-segmentation-of-first-person-camera-wearers-in-third-person-views"><strong>Fusing
-Personal and Environmental Cues for Identification and Segmentation of
-First-Person Camera Wearers in Third-Person Views</strong></h2>
-<h2 id="instruct-reid-a-multi-purpose-person-re-identification-task-with-instructions"><strong>Instruct-ReID:
-A Multi-purpose Person Re-identification Task with
-Instructions</strong></h2>
-<h2 id="efficient-hyperparameter-optimization-with-adaptive-fidelity-identification"><strong>Efficient
-Hyperparameter Optimization with Adaptive Fidelity
-Identification</strong></h2>
-<h2 id="activity-biometrics-person-identification-from-daily-activities"><strong>Activity-Biometrics:
-Person Identification from Daily Activities</strong></h2>
-<h2 id="ca-jaccard-camera-aware-jaccard-distance-for-person-re-identification"><strong>CA-Jaccard:
-Camera-aware Jaccard Distance for Person Re-identification</strong></h2>
-<h2 id="lidar-based-person-re-identification">LiDAR-based Person
-Re-identification</h2>
-<h2 id="distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification本组"><strong>Distribution-aware
-Knowledge Prototyping for Non-exemplar Lifelong Person
-Re-identification</strong>（本组）</h2>
-<h2 id="all-in-one-framework-for-multimodal-re-identification-in-the-wild"><strong>All
-in One Framework for Multimodal Re-identification in the
-Wild</strong></h2>
-<h2 id="day-night-cross-domain-vehicle-re-identification"><strong>Day-Night
-Cross-domain Vehicle Re-identification</strong></h2>
-<h2 id="seas-shape-aligned-supervision-for-person-re-identification"><strong>SEAS:
-ShapE-Aligned Supervision for Person Re-Identification</strong></h2>
-<h2 id="implicit-discriminative-knowledge-learning-for-visible-infrared-person-re-identification强相关"><strong>Implicit
-Discriminative Knowledge Learning for Visible-Infrared Person
-Re-Identification</strong>（强相关）</h2>
-<h2 id="learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification本组"><strong>Learning
-Continual Compatible Representation for Re-indexing Free Lifelong Person
-Re-identification</strong>（本组）</h2>
-<h2 id="view-decoupled-transformer-for-person-re-identification-under-aerial-ground-camera-network"><strong>View-decoupled
-Transformer for Person Re-identification under Aerial-ground Camera
-Network</strong></h2>
-<h1 id="eccv24">eccv24</h1>
-<h2 id="multi-memory-matching-for-unsupervised-visible-infrared-person-re-identification强相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/2819_ECCV_2024_paper.php">Multi-Memory
-Matching for Unsupervised Visible-Infrared Person
-Re-Identification</a>(强相关)</h2>
-<h2 id="privacy-preserving-adaptive-re-identification-without-image-transfer"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6850_ECCV_2024_paper.php">Privacy-Preserving
-Adaptive Re-Identification without Image Transfer</a></h2>
-<h2 id="wrim-net-wide-ranging-information-mining-network-for-visible-infrared-person-re-identification强相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6947_ECCV_2024_paper.php">WRIM-Net:
-Wide-Ranging Information Mining Network for Visible-Infrared Person
-Re-Identification</a>（强相关）</h2>
-<h2 id="rethinking-normalization-layers-for-domain-generalizable-person-re-identification"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/8753_ECCV_2024_paper.php">Rethinking
-Normalization Layers for Domain Generalizable Person
-Re-identification</a></h2>
-<h2 id="domain-shifting-a-generalized-solution-for-heterogeneous-cross-modality-person-re-identification"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/9119_ECCV_2024_paper.php">Domain
-Shifting: A Generalized Solution for Heterogeneous Cross-Modality Person
-Re-Identification</a></h2>
-<h2 id="keypoint-promptable-re-identification"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/10180_ECCV_2024_paper.php">Keypoint
-Promptable Re-Identification</a></h2>
-<h1 id="aaai24">aaai24</h1>
-<h2 id="high-order-structure-based-middle-feature-learning-for-visible-infrared-person-re-identification强相关">High-Order
-Structure Based Middle-Feature Learning for Visible-Infrared Person
-Re-identification（强相关）</h2>
-<h1 id="tpami23-24">tpami23-24</h1>
-<h2 id="channel-augmentation-for-visible-infrared-re-identification">Channel
-Augmentation for Visible-Infrared Re-Identification</h2>
-<h1 id="nips24">nips24</h1>
-<h2 id="learning-commonality-divergence-and-variety-for-unsupervised-visible-infrared-person-re-identification强相关">Learning
-Commonality, Divergence and Variety for Unsupervised Visible-Infrared
-Person Re-identification（强相关）</h2>
-<h2 id="empowering-visible-infrared-person-re-identification-with-large-foundation-models这个好像还没公开出来谷歌学术和arxiv上都没有"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/93497">Empowering
-Visible-Infrared Person Re-Identification with Large Foundation
-Models</a>（这个好像还没公开出来，谷歌学术和arxiv上都没有）</h2>
-<h2 id="feature-level-adversarial-attacks-and-ranking-disruption-for-visible-infrared-person-re-identification同上还没公开"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/95162">Feature-Level
-Adversarial Attacks and Ranking Disruption for Visible-Infrared Person
-Re-identification</a>（同上，还没公开）</h2>
-<h1 id="ijcv23-24上应该是没有相关论文了">ijcv23-24上应该是没有相关论文了</h1>
-<h1 id="cvpr23">cvpr23</h1>
-<h2 id="toplight-lightweight-neural-networks-with-task-oriented-pretraining-for-visible-infrared-recognition但这是recognition和re-identification不太一样吧"><strong>TOPLight:
-Lightweight Neural Networks With Task-Oriented Pretraining for
-Visible-Infrared
-Recognition</strong>（但这是recognition，和re-identification不太一样吧）</h2>
-<h2 id="diverse-embedding-expansion-network-and-low-light-cross-modality-benchmark-for-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://github.com/ZYK100/LLCM">Diverse Embedding Expansion
-Network and Low-Light Cross-Modality Benchmark for Visible-Infrared
-Person Re-Identification</a></h2>
-<h2 id="unsupervised-visible-infrared-person-re-identification-via-progressive-graph-matching-and-alternate-learning"><a target="_blank" rel="noopener" href="https://github.com/zesenwu23/USL-VI-ReID">Unsupervised
-Visible-Infrared Person Re-Identification via Progressive Graph Matching
-and Alternate Learning</a></h2>
-<h2 id="shape-erased-feature-learning-for-visible-infrared-person-re-identification"><strong>Shape-Erased
-Feature Learning for Visible-Infrared Person
-Re-Identification</strong></h2>
-<h2 id="partmix-regularization-strategy-to-learn-part-discovery-for-visible-infrared-person-re-identification"><strong>PartMix:
-Regularization Strategy To Learn Part Discovery for Visible-Infrared
-Person Re-Identification</strong></h2>
-<h1 id="aaai23">aaai23</h1>
-<h2 id="mrcn-a-novel-modality-restitution-and-compensation-network-for-visible-infrared-person-re-identification">MRCN:
-A Novel Modality Restitution and Compensation Network for
-Visible-Infrared Person Re-identification</h2>
-<h2 id="learning-progressive-modality-shared-transformers-for-effective-visible-infrared-person-re-identification">Learning
-Progressive Modality-Shared Transformers for Effective Visible-Infrared
-Person Re-identification</h2>
-<h1 id="iccv23">iccv23</h1>
-<h2 id="towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification无监督"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Yang_Towards_Grand_Unified_Representation_Learning_for_Unsupervised_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Towards
-Grand Unified Representation Learning for Unsupervised Visible-Infrared
-Person Re-Identification</a>（无监督）</h2>
-<h2 id="visible-infrared-person-re-identification-via-semantic-alignment-and-affinity-inference"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Fang_Visible-Infrared_Person_Re-Identification_via_Semantic_Alignment_and_Affinity_Inference_ICCV_2023_paper.html">Visible-Infrared
-Person Re-Identification via Semantic Alignment and Affinity
-Inference</a></h2>
-<h2 id="learning-concordant-attention-via-target-aware-alignment-for-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Wu_Learning_Concordant_Attention_via_Target-aware_Alignment_for_Visible-Infrared_Person_Re-identification_ICCV_2023_paper.html">Learning
-Concordant Attention via Target-aware Alignment for Visible-Infrared
-Person Re-identification</a></h2>
-<h2 id="modality-unifying-network-for-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Yu_Modality_Unifying_Network_for_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Modality
-Unifying Network for Visible-Infrared Person Re-Identification</a></h2>
-<h2 id="dual-pseudo-labels-interactive-self-training-for-semi-supervised-visible-infrared-person-re-identification这篇是半监督的啊"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Shi_Dual_Pseudo-Labels_Interactive_Self-Training_for_Semi-Supervised_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Dual
-Pseudo-Labels Interactive Self-Training for Semi-Supervised
-Visible-Infrared Person Re-Identification</a>（这篇是半监督的啊）</h2>
-<h1 id="acm-mm24">acm mm24</h1>
-<h2 id="enhancing-unsupervised-visible-infrared-person-re-identification-with-bidirectional-consistency-gradual-matching无监督的"><strong>Enhancing
-Unsupervised Visible-Infrared Person Re-Identification with
-Bidirectional-Consistency Gradual Matching</strong>（无监督的）</h2>
-<h2 id="semi-supervised-visible-infrared-person-re-identification-via-modality-unification-and-confidence-guidance半监督的"><strong>Semi-supervised
-Visible-Infrared Person Re-identification via Modality Unification and
-Confidence Guidance</strong>（半监督的）</h2>
-<h2 id="robust-pseudo-label-learning-with-neighbor-relation-for-unsupervised-visible-infrared-person-re-identification无监督的"><strong>Robust
-Pseudo-label Learning with Neighbor Relation for Unsupervised
-Visible-Infrared Person Re-Identification</strong>（无监督的）</h2>
-<h1 id="acm-mm23">acm mm23</h1>
-<h2 id="protohpe-prototype-guided-high-frequency-patch-enhancement-for-visible-infrared-person-re-identification.">ProtoHPE:
-Prototype-guided High-frequency Patch Enhancement for Visible-Infrared
-Person Re-identification.</h2>
-<h2 id="video-based-visible-infrared-person-re-identification-via-style-disturbance-defense-and-dual-interaction">Video-based
-Visible-Infrared Person Re-Identification via Style Disturbance Defense
-and Dual Interaction</h2>
-<h2 id="efficient-bilateral-cross-modality-cluster-matching-for-unsupervised-visible-infrared-person-reid无监督">Efficient
-Bilateral Cross-Modality Cluster Matching for Unsupervised
-Visible-Infrared Person ReID（无监督）</h2>
-<h2 id="unveiling-the-power-of-clip-in-unsupervised-visible-infrared-person-re-identification无监督">Unveiling
-the Power of CLIP in Unsupervised Visible-Infrared Person
-Re-Identification（无监督）</h2>
-<h2 id="unsupervised-visible-infrared-person-reid-by-collaborative-learning-with-neighbor-guided-label-refinement无监督">Unsupervised
-Visible-Infrared Person ReID by Collaborative Learning with
-Neighbor-Guided Label Refinement（无监督）</h2>
-<h1 id="ijcai23-24好像都没有来着">ijcai23-24好像都没有来着</h1>
-<h1 id="三大会23年也没有">三大会23年也没有</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/survey----Deep%20learning%20for%20visible-infrared%20cross-modality%20person%20re-identification%20%20A%20comprehensive%20review/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/survey----Deep%20learning%20for%20visible-infrared%20cross-modality%20person%20re-identification%20%20A%20comprehensive%20review/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-24 21:45:24" itemprop="dateCreated datePublished" datetime="2024-10-24T21:45:24+08:00">2024-10-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-25 09:13:53" itemprop="dateModified" datetime="2024-10-25T09:13:53+08:00">2024-10-25</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="intro">1.intro</h1>
-<h2 id="person-re-identification-reid是一个重要课题主要应用在智能监控系统上其中有个问题现有的模型大多是只基于图像即只有一个模态这背后的问题是在光线不好的时候图像可能质量很差导致模型表现很差这极大阻碍了24-7的监控系统的构建而注意到红外成像即使是在光线不好的情况下也能生效加上很多摄像头是有图像红外线两种模式的而且可以智能地根据环境光线进行切换因此visible-infrared-cross-modality-person-re-identificationvi-reid即基于image和红外成像的行人重识别是很有必要的">Person
-Re-IDentification
-(ReID)，是一个重要课题。主要应用在智能监控系统上。其中有个问题，现有的模型大多是只基于图像，即只有一个模态。这背后的问题是：在光线不好的时候，图像可能质量很差，导致模型表现很差。这极大阻碍了24
-*
-7的监控系统的构建。而注意到红外成像即使是在光线不好的情况下也能生效，加上很多摄像头是有图像/红外线两种模式的，而且可以智能地根据环境光线进行切换，因此visible-infrared
-cross-modality person
-re-identification（VI-ReID），即基于image和红外成像的行人重识别是很有必要的</h2>
-<h2 id="在此之前的行人重识别的综述中关于vi-reid的描述都不够详细而少有的专门介绍vi-reid的综述它的分类比较粗糙而且甚至有的方法都不能归到任意一个类里因此有了这篇综述它希望能给出合理的分类清楚的讲述各个方法的动机和优缺点提供一个big-picture">在此之前的行人重识别的综述中，关于VI-ReID的描述都不够详细，而少有的专门介绍VI-ReID的综述，它的分类比较粗糙，而且甚至有的方法都不能归到任意一个类里。因此，有了这篇综述，它希望能给出合理的分类，清楚的讲述各个方法的动机和优缺点，提供一个big
-picture</h2>
-<h1 id="definitions-and-challenges">2.definitions and challenges</h1>
-<h2 id="关于vi-reid的定义它也是要进行一个匹配即将一个输入的probequery-image与gallery-images里的n张图像进行匹配但二者的模态不同可能probe是rgb的gallery-images是ir的也可能反过来">关于VI-ReID的定义：它也是要进行一个匹配，即将一个输入的probe/query
-image，与gallery
-images里的N张图像进行匹配，但二者的模态不同。可能probe是RGB的，gallery
-images是IR的，也可能反过来</h2>
-<h2 id="关于vi-reid的困难">关于VI-ReID的困难：</h2>
-<h3 id="因为涉及两个模态自然的两个模态之间的差异是需要考虑的这也就是所谓的cross-modality-variations比如rgb图像显然有丰富的颜色纹理等细节信息但ir图像一般就没有具体来说可能导致这个问题several-misalignment-problems-across-different-modalities-for-the-same-identity也就是说同一个人在不同模态里我们却可能匹配不出来举个例子一个行人我们显然希望它的rgb图像能和它的ir图像匹配上毕竟是同一个人但因为两个模态之间的巨大差异可能不太能匹配上甚至可能有这种情况probe是a的一个rgb图像然后gallery-images是一些行人的ir图像然而进行匹配的时候却把probe匹配到了gallery-images里b的ir图像了这也是因为我们要进行两种模态之间的匹配那么用到的信息应当是两个模态共有的而rgb模态和ir模态共有的信息显然是比单一的rgbir模态的信息要少的那么信息量更少任务却不变显然难度更大了">因为涉及两个模态，自然的，两个模态之间的差异是需要考虑的。这也就是所谓的cross-modality
-variations。比如，RGB图像显然有丰富的颜色、纹理等细节信息，但IR图像一般就没有。具体来说，可能导致这个问题：several
-misalignment problems across different modalities for the same
-identity。也就是说，同一个人，在不同模态里我们却可能匹配不出来。举个例子，一个行人，我们显然希望它的RGB图像能和它的IR图像匹配上，毕竟是同一个人。但因为两个模态之间的巨大差异，可能不太能匹配上。甚至可能有这种情况：probe是A的一个RGB图像，然后gallery
-images是一些行人的IR图像。然而进行匹配的时候，却把probe匹配到了gallery
-images里B的IR图像了。这也是因为，我们要进行两种模态之间的匹配，那么用到的信息应当是两个模态共有的。而RGB模态和IR模态共有的信息显然是比单一的RGB/IR模态的信息要少的。那么，信息量更少，任务却不变，显然难度更大了</h3>
-<h3 id="另外每个模态内自己固有的差异也还是存在的就比如说即使都是rgb图像因为各个图像的视角不同可能有些遮挡之类的图像里人的姿态可能也不一样那么光在rgb-modal内进行重识别依然有难度这其实也是传统的行人重识别中就有的问题">另外，每个模态内自己固有的差异也还是存在的。就比如说，即使都是RGB图像，因为各个图像的视角不同，可能有些遮挡之类的，图像里人的姿态可能也不一样，那么光在RGB
-modal内进行重识别依然有难度。这其实也是传统的行人重识别中就有的问题。</h3>
-<h1 id="datasets-and-evaluation-metrics">3.datasets and evaluation
-metrics</h1>
-<h2 id="datasets有两个常用的一个是sysu-mm01一个是regdb详细信息看论文吧已经说的挺清楚的了">datasets：有两个常用的，一个是SYSU-MM01，一个是RegDB（详细信息看论文吧，已经说的挺清楚的了）</h2>
-<h2 id="metrics两个常用的一个是cumulative-matching-characteristicscmc另一个是mean-average-precisionmap可以参考博客">metrics：两个常用的，一个是Cumulative
-Matching Characteristics（CMC），另一个是mean Average
-Precision（mAP）（可以参考<a target="_blank" rel="noopener" href="https://wrong.wang/blog/20190223-reid%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84cmc%E5%92%8Cmap/">博客</a>）</h2>
-<h1 id="methods">4.methods</h1>
-<h2 id="modality-shared-feature-learning">4.1. modality-shared feature
-learning</h2>
-<h3 id="这个方法主要聚焦于提取出不同模态共有的特征比如可能rgb模态和ir模态都有比较好的轮廓的信息于是可以尝试提取两个模态里都有的轮廓依靠轮廓来进行行人重识别其中这种方法又有三种不同实现方法">这个方法主要聚焦于提取出不同模态共有的特征。比如，可能RGB模态和IR模态都有比较好的轮廓的信息，于是可以尝试提取两个模态里都有的轮廓，依靠轮廓来进行行人重识别。其中，这种方法又有三种不同实现方法</h3>
-<h4 id="feature-projection">4.1.1. feature projection</h4>
-<h5 id="这类方法有三种常见架构one-stream-structuretwo-stream-structure和asymmetric-fully-connected-layer-structure-one-stream-structure就是用一套卷积网络去提取两个模态的共同特征用一套卷积网络显然参数是共享的此时两种模态的输入是可以混合的-two-stream-structure则是先用两套卷积网络和全连接层去分别提取两个模态自己的特征显然这里参数是不共享的然后再用一个公共的卷积网络把提取出来的特征变换到一个公共的特征空间里也就是说我们期望这个特征空间是两个模态共有的-asymmetric-fully-connected-layer-structure则是几乎全程都是共享参数前面和one-stream很像但两个模态分别输入且最后会用两个不同的全连接层得到两个不同输出-因为这三种框架比较好它们直接影响了最终对modality-shared-feature的提取所以后续的很多工作都是在改进这三种框架里共享的网络结构希望能更好地提取特征而改进的方法又被分为6类">这类方法有三种常见架构：one-stream
-structure，two-stream structure和asymmetric fully-connected layer
-structure<br>one-stream
-structure就是用一套卷积网络去提取两个模态的共同特征（用一套卷积网络，显然参数是共享的）。此时两种模态的输入是可以混合的<br>two-stream
-structure则是先用两套卷积网络和全连接层去分别提取两个模态自己的特征（显然这里参数是不共享的），然后再用一个公共的卷积网络，把提取出来的特征变换到一个公共的特征空间里（也就是说，我们期望这个特征空间是两个模态共有的）<br>asymmetric
-fully-connected layer
-structure则是几乎全程都是共享参数，前面和one-stream很像，但两个模态分别输入，且最后会用两个不同的全连接层得到两个不同输出<br>因为这三种框架比较好，它们直接影响了最终对modality-shared
-feature的提取，所以后续的很多工作都是在改进这三种框架里共享的网络结构，希望能更好地提取特征。而改进的方法又被分为6类：</h5>
-<h6 id="士大夫">士大夫</h6>
-<h2 id="modality-specific-information-compensation">4.2.
-modality-specific information compensation</h2>
-<h3 id="这种方法主要是基于一种模态生成另一种模态的数据然后把它们一起用提取特征">这种方法主要是基于一种模态生成另一种模态的数据，然后把它们一起用提取特征</h3>
-<h3 id="single-modality-information-compensation-这种方法通常是由一种模态生成另一种模态的数据比如只用rgb模态生成ir模态而不会说相互生成指既用rgb生成ir也用ir生成rgb">4.2.1.
-single modality information
-compensation<br>这种方法通常是由一种模态生成另一种模态的数据（比如只用RGB模态生成IR模态），而不会说相互生成（指既用RGB生成IR，也用IR生成RGB）</h3>
-<h3 id="section">4.2.2.</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1569,7 +1322,7 @@ compensation<br>这种方法通常是由一种模态生成另一种模态的数�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1580,7 +1333,7 @@ compensation<br>这种方法通常是由一种模态生成另一种模态的数�
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">92</span>
+        <span class="site-state-item-count">97</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

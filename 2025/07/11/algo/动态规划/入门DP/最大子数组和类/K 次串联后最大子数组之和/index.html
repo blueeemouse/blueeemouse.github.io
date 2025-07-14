@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K 次串联后最大子数组之和">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/K%20%E6%AC%A1%E4%B8%B2%E8%81%94%E5%90%8E%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-11T15:18:00.000Z">
+<meta property="article:modified_time" content="2025-07-11T16:06:53.219Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/K%20%E6%AC%A1%E4%B8%B2%E8%81%94%E5%90%8E%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>K 次串联后最大子数组之和 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/K%20%E6%AC%A1%E4%B8%B2%E8%81%94%E5%90%8E%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          K 次串联后最大子数组之和
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-11 23:18:00" itemprop="dateCreated datePublished" datetime="2025-07-11T23:18:00+08:00">2025-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-12 00:06:53" itemprop="dateModified" datetime="2025-07-12T00:06:53+08:00">2025-07-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">最大子数组和类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/k-concatenation-maximum-sum/description/">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="给定一个整数数组-arr-和一个整数-k-通过重复-k-次来修改数组">给定一个整数数组 <code>arr</code> 和一个整数 <code>k</code> ，通过重复 <code>k</code> 次来修改数组。</h2>
+<h2 id="例如如果-arr-1-2-k-3-那么修改后的数组将是-1-2-1-2-1-2">例如，如果 <code>arr = [1, 2]</code> ， <code>k = 3</code> ，那么修改后的数组将是 <code>[1, 2, 1, 2, 1, 2]</code> 。</h2>
+<h2 id="返回修改后的数组中的最大的子数组之和注意子数组长度可以是-0在这种情况下它的总和也是-0">返回修改后的数组中的最大的子数组之和。注意，子数组长度可以是 <code>0</code>，在这种情况下它的总和也是 <code>0</code>。</h2>
+<h2 id="由于-结果可能会很大需要返回的-109-7-的-模">由于 <strong>结果可能会很大</strong>，需要返回的 <code>10^9 + 7</code> 的 <strong>模</strong> 。</h2>
+<h2 id="示例-1"><strong>示例 1：</strong></h2>
+<h3 id="输入arr-12-k-3"><strong>输入：</strong>arr = [1,2], k = 3</h3>
+<h3 id="输出9"><strong>输出：</strong>9</h3>
+<h2 id="示例-2"><strong>示例 2：</strong></h2>
+<h3 id="输入arr-1-21-k-5"><strong>输入：</strong>arr = [1,-2,1], k =
+5</h3>
+<h3 id="输出2"><strong>输出：</strong>2</h3>
+<h2 id="示例-3"><strong>示例 3：</strong></h2>
+<h3 id="输入arr--1-2-k-7"><strong>输入：</strong>arr = [-1,-2], k =
+7</h3>
+<h3 id="输出0"><strong>输出：</strong>0</h3>
+<h2 id="提示"><strong>提示：</strong></h2>
+<ul>
+<li><h3 id="arr.length-105"><code>1 &lt;= arr.length &lt;= 10^5</code></h3></li>
+<li><h3 id="k-105"><code>1 &lt;= k &lt;= 10^5</code></h3></li>
+<li><h3 id="arri-104"><code>-10^4 &lt;= arr[i] &lt;= 10^4</code></h3>
+<h1 id="思路">思路：</h1>
+<h2 id="说实话这题乍一看似乎挺简单一种最粗暴的方法当然是构造重复了k次的数组然后按照一般的求最大子数组和的方法来解即可但这样显然空间和时间开销都很大了都是okn的级别了再看一下题目里的arr-length范围以及k的范围估摸着这个方法是不太行了-不过基于这个朴素的想法我们可能可以想到对空间复杂度的优化在递推地求解最大子数组和的时候每一次递推我们实质上只依赖两个量当前数组的第i个元素以及以前一个元素即第i-1个元素结尾的最大子数组和所以可以用两个变量就完成递推把空间复杂度降到常数级别至于结果我们可以在递推过程中动态维护res-maxres-max_fi不过即使这样操作时间复杂度依然是okn还是无法承受">说实话，这题乍一看似乎挺简单，一种最粗暴的方法当然是构造重复了k次的数组，然后按照一般的求最大子数组和的方法来解即可。但这样显然空间和时间开销都很大了，都是<span class="math inline">\(O(kn)\)</span>的级别了。再看一下题目里的arr
+length范围以及k的范围，估摸着这个方法是不太行了<br>不过，基于这个朴素的想法，我们可能可以想到对空间复杂度的优化：在递推地求解最大子数组和的时候，每一次递推我们实质上只依赖两个量（当前数组的第i个元素，以及以前一个元素（即第i-1个元素）结尾的最大子数组和），所以可以用两个变量就完成递推，把空间复杂度降到常数级别；至于结果，我们可以在递推过程中动态维护（<code>res = max(res, max_f[i])</code>）。不过即使这样操作，时间复杂度依然是<span class="math inline">\(O(kn)\)</span>，还是无法承受</h2>
+<h2 id="现在再审视一下题目特意强调这个重复k次那有可能因为重复我们可以做一些化简从而不需要这么高的时间复杂度很自然的会想到当数组arr的全部元素的和为正的时候且如果k很大那么我们几乎可以判断最大的子数组的和应该是横跨了所有的k个数组的这是很直观的也可以反证但如果k不那么大且arr的全部元素和也不那么大呢那就未必要横跨那么多数组了吧会不会我们只需要横跨两个数组就够了例如arr本身是前面一部分正的中间一部分负的且非常负就是负数且绝对值很大的意思后面又是一部分正的此时我们的最大子数组和的情况可能就是横跨两个arr且是由前一个arr的后面后一个arr的前面组成的这两种情况怎么判断区别开来呢而且会不会还有其它的情况呢-此时直觉上似乎会想到答案是不是就在以下的情况之中呢单个arr里的最大子数组之和两个arr拼起来的最大子数组之和横跨所有k个arr的最大子数组之和-这里面第二个情况看起来好像有点突兀但感性上它似乎也有点道理感觉它是不是对应了arr全部元素之和不为正的情况呢因为如果arr全部元素为正那么就可以反证如果最大子数组之和对应的子数组仅仅横跨两个arr但arr全部元素和为正那我们在这个最大子数组后面应该可以再凑出一个完整的arr这样就得到了一个更大的子数组矛盾了后面可以补一下形式化的证明">现在，再审视一下题目，特意强调这个重复k次，那有可能因为重复，我们可以做一些化简，从而不需要这么高的时间复杂度。很自然的，会想到：当数组arr的全部元素的和为正的时候，且如果k很大，那么我们几乎可以判断，最大的子数组的和，应该是横跨了所有的k个数组的（这是很直观的，也可以反证）。但如果k不那么大，且arr的全部元素和也不那么大呢？那就未必要横跨那么多数组了吧？会不会我们只需要横跨两个数组就够了？例如arr本身是前面一部分正的，中间一部分负的，且非常负（就是负数，且绝对值很大的意思），后面又是一部分正的，此时我们的最大子数组和的情况，可能就是横跨两个arr，且是由前一个arr的“后面”+后一个arr的“前面”组成的。这两种情况怎么判断区别开来呢？而且会不会还有其它的情况呢？<br>此时，直觉上，似乎会想到：答案是不是就在以下的情况之中呢——单个arr里的最大子数组之和，两个arr拼起来的最大子数组之和，横跨所有k个arr的最大子数组之和？<br>这里面第二个情况看起来好像有点突兀，但感性上它似乎也有点道理，感觉它是不是对应了arr全部元素之和不为正的情况呢（因为如果arr全部元素为正，那么就可以反证：如果最大子数组之和对应的子数组，仅仅横跨两个arr，但arr全部元素和为正，那我们在这个最大子数组后面应该可以再凑出一个完整的arr，这样就得到了一个更大的子数组，矛盾了。后面可以补一下形式化的证明）</h2>
+<h2 id="实际上这确实是对的事实上有一个定理描述如下如果数组arr的全部元素和为正那么arrarr组成的一个新的数组里最大子数组之和对应的子数组一定是横跨两个arr的还是可以反证这个定理其实我们在上面考虑答案的第二个情况里就已经自然地用到了这里给出形式化的证明">实际上，这确实是对的。事实上有一个定理，描述如下：如果数组arr的全部元素和为正，那么，arr+arr组成的一个新的数组里，最大子数组之和对应的子数组，一定是横跨两个arr的。还是可以反证。这个定理其实我们在上面考虑答案的第二个情况里就已经自然地用到了。这里给出形式化的证明：</h2>
+<h4 id="假设最大子数组之和对应的子数值仅仅在一个arr里不妨考虑它出现在前一个arr里且记它的起止索引为i和j也就是说cdotsicdotsjcdotscdotsicdotsjcdots中第一个数组里i到j的部分就是最大子数组但是我们可以发现如果把第一个arr里j后面的所有部分以及第二个arr里从开头到j索引的部分加到前面的最大子数组后面组成的新的子数组的和一定是更大的因为此时后面新加的部分刚好凑出了一个完整的arr的和而根据定理的条件arr所有元素之和是正的所有加了一个正数一定会变大故引出矛盾所以最大子数组确实应该横跨两个arr至于说如果我们前面假设最大子数组仅出现在一个arr里且假设它出现在后一个arr里证明也是类似的只需要往前面凑出一个完整的arr即可">假设最大子数组之和对应的子数值仅仅在一个arr里，不妨考虑它出现在前一个arr里，且记它的起止索引为i和j，也就是说，<span class="math inline">\([\cdots,i,\cdots,j,\cdots]+[\cdots,i,\cdots,j,\cdots]\)</span>中，第一个数组里i到j的部分就是最大子数组。但是，我们可以发现，如果把第一个arr里j后面的所有部分以及第二个arr里从开头到j索引的部分加到前面的最大子数组后面，组成的新的子数组的和一定是更大的（因为此时后面新加的部分刚好凑出了一个完整的arr的和，而根据定理的条件，arr所有元素之和是正的，所有加了一个正数，一定会变大），故引出矛盾。所以，最大子数组确实应该横跨两个arr。至于说如果我们前面假设最大子数组仅出现在一个arr里，且假设它出现在后一个arr里，证明也是类似的，只需要往前面凑出一个完整的arr即可</h4>
+<h2 id="我们还可以联想到把这个定理扩展一下即使是k个arr拼接起来当arr的全部元素之和大于0的时候最大子数组之和对应的子数组也一定会横跨所有的k个arr注意这里的横跨本身是说这k个arr一定都会有元素出现在这个最大子数组里落到这里的设定则有最大子数组一定会把中间的k-2的arr完全包括也一定会包含头尾的arr的一些元素但就不一定是全部元素了同样可以反证思路也和上面类似所以我们回到题目可以先判断一下arr里的元素和是不是正的如果是那么就应该是横跨了k个arr的如果不是那就不是横跨k个arr的此时应该是这两种情况里的一种最大子数组出现在一个arr里最大子数组横跨两个相邻arr下面仔细讨论一下">我们还可以联想到，把这个定理扩展一下，即使是k个arr拼接起来，当arr的全部元素之和大于0的时候，最大子数组之和对应的子数组，也一定会横跨所有的k个arr（注意，这里的横跨，本身是说，这k个arr一定都会有元素出现在这个最大子数组里。落到这里的设定，则有：最大子数组一定会把中间的k-2的arr完全包括，也一定会包含头尾的arr的一些元素，但就不一定是全部元素了）。同样可以反证，思路也和上面类似。所以，我们回到题目，可以先判断一下arr里的元素和是不是正的，如果是，那么就应该是横跨了k个arr的。如果不是，那就不是横跨k个arr的，此时应该是这两种情况里的一种（最大子数组出现在一个arr里；最大子数组横跨两个相邻arr）。下面仔细讨论一下：</h2>
+<h3 id="arr全部元素和为正">arr全部元素和为正：</h3>
+<h4 id="此时根据上面的定理最大子数组会横跨k个arr且中间的k-2个arr被完全包含因为我们考虑的时候自然地假设了k很大但实际k有可能很小也就是小于3即k可能为1和2所以又需要分类讨论一下不过还是先讨论最简单的k很大也即k大于等于3的情况">此时，根据上面的定理，最大子数组会横跨k个arr。且中间的k-2个arr被完全包含。因为我们考虑的时候自然地假设了k很大，但实际k有可能很小，也就是小于3，即k可能为1和2。所以又需要分类讨论一下。不过还是先讨论最简单的，k很大（也即k大于等于3）的情况</h4>
+<h5 id="k大于等于3中间k-2个arr都被囊括而头尾的arr呢应该包含哪些元素可以想到开头那个arr我们一定会包含它的结尾元素因为子数组是连续的而且最大子数组既然一定有开头arr的元素又包含了第二个arr那就一定会有开头arr的结尾元素那开头的arr里包含的元素之和应该就取max_fn-1这里的max_f数组的第i个元素表示以arr里第i个元素结尾的连续子数组的最大的和且我们不妨定义arr的长度为nmax_f的索引从0开始计这样就能理解为什么是取max_fn-1了-而结尾的arr要包含哪些部分呢类似的结尾部分的arr一定会包含它的开头元素所以我们只需要知道arr里以第一个元素为起点的子数组的最大和这个问题可以用前缀和数组解决故这种情况下最终的大答案应该是k-2times-sumarrmax_fn-1max_prefix_sum">k大于等于3。中间k-2个arr都被囊括。而头尾的arr呢？应该包含哪些元素？可以想到，开头那个arr，我们一定会包含它的结尾元素（因为子数组是连续的，而且最大子数组既然一定有开头arr的元素，又包含了第二个arr，那就一定会有开头arr的结尾元素），那开头的arr里包含的元素之和，应该就取max_f[n-1]（这里的max_f数组的第i个元素表示，以arr里第i个元素结尾的连续子数组的最大的和。且我们不妨定义arr的长度为n，max_f的索引从0开始计。这样就能理解为什么是取max_f[n-1]了）<br>而结尾的arr要包含哪些部分呢？类似的，结尾部分的arr一定会包含它的开头元素，所以我们只需要知道arr里，以第一个元素为起点的子数组的最大和。这个问题可以用前缀和数组解决。故，这种情况下，最终的大答案应该是<span class="math inline">\((k-2)\times
+sum(arr)+max\_f[n-1]+max\_prefix\_sum\)</span></h5>
+<h5 id="k等于1之所以先看这个因为它很简单此时就退化成了单纯的求最大子数组之和了没有那么多弯弯绕绕了">k等于1。之所以先看这个，因为它很简单，此时就退化成了单纯的求最大子数组之和了，没有那么多弯弯绕绕了</h5>
+<h5 id="k等于2稍微麻烦一点但因为k仅为2其实这里我们可以用最开始提到的朴素思路来解决也就是相当于把2个arr展开然后从前往后递推地求最大子数组和并且也可以用上空间优化的技巧">k等于2。稍微麻烦一点。但因为k仅为2，其实这里我们可以用最开始提到的朴素思路来解决，也就是相当于把2个arr展开，然后从前往后递推地求最大子数组和。并且也可以用上空间优化的技巧</h5>
+<h3 id="arr全部元素和非正">arr全部元素和非正：</h3>
+<h4 id="非正要么是为0要么是负的此时都没必要横跨k个arr了顶多是横跨2个arr或者干脆就是最大子数组仅出现在单个arr里可以证明如果横跨了3个及以上的arr则中间一定会包含完整的arr但因为现在arr的全部元素和非正去掉之后子数组和也一定不会变小还可能变大所以显然是可以去掉的arr和为0的情况确实是去不去都行但为了简洁我们不妨都考虑去掉而如果arr和为负则一定要去掉且去掉之后子数组和变大了引起了矛盾故此时确实不会横跨3个及以上的arr那我们也可以直接根据k的大小来判断k为1则是简单的最大子数组和问题k大于等于2一律当成2个arr的问题也是直接做">非正，要么是为0，要么是负的，此时都没必要横跨k个arr了，顶多是横跨2个arr，或者干脆就是最大子数组仅出现在单个arr里（可以证明，如果横跨了3个及以上的arr，则中间一定会包含完整的arr，但因为现在arr的全部元素和非正，去掉之后子数组和也一定不会变小，还可能变大，所以显然是可以去掉的。arr和为0的情况确实是去不去都行，但为了简洁，我们不妨都考虑去掉。而如果arr和为负，则一定要去掉，且去掉之后子数组和变大了，引起了矛盾。故，此时确实不会横跨3个及以上的arr）。那我们也可以直接根据k的大小来判断，k为1，则是简单的最大子数组和问题；k大于等于2，一律当成2个arr的问题，也是直接做</h4>
+<h2 id="至此思路大概是分析完了剩下的代码实现相对算简单吧就是可能有些繁琐然后有些地方是可以优化的尤其是这里又一次出现了取模的问题取模除了在运算过程中要取模还可能需要中间改变一下变量类型因为比如这题要对1000000007取模可能我们中间计算的一个式子atimes-b需要对这个数取模如果我们仅仅这样操作aconsttimesbconst其中const指代上面的1000000007还是有可能发生溢出因为a和b可能各自都是很接近const的比如一个是999999999一个是1000000006每个单独确实取模也不影响但乘起来它们就是很大的了可能这个结果就直接溢出了超出了int的限制范围所以这里乘法的时候我们需要给它转一下类型具体来说是用一个乘法乘上1ll转成long-long类型这里的1ll的值其实就是1不过类型的long-long因为long-long乘上int会把结果转成long-long">至此，思路大概是分析完了。剩下的代码实现相对算简单吧，就是可能有些繁琐，然后有些地方是可以优化的（尤其是这里又一次出现了取模的问题。取模，除了在运算过程中要取模，还可能需要中间改变一下变量类型。因为，比如这题要对1000000007取模，可能我们中间计算的一个式子<span class="math inline">\(a\times
+b\)</span>需要对这个数取模，如果我们仅仅这样操作：<span class="math inline">\((a\%const)\times(b\%const)\)</span>（其中const指代上面的1000000007），还是有可能发生溢出。因为，a和b可能各自都是很接近const的，比如一个是999999999，一个是1000000006，每个单独确实取模也不影响，但乘起来它们就是很大的了，可能这个结果就直接溢出了，超出了int的限制范围。所以这里乘法的时候我们需要给它转一下类型，具体来说是用一个乘法，乘上1LL，转成long
+long类型（这里的1LL的值其实就是1，不过类型的long long，因为long
+long乘上int，会把结果转成long long）</h2>
+<h1 id="代码">代码：</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> MAX = <span class="number">1000000007</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">kConcatenationMaxSum</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; arr, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> max_f[<span class="number">100001</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">fill</span>(max_f, max_f<span class="number">+100001</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> n = arr.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        max_f[<span class="number">0</span>] = arr[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> s = arr[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> res = <span class="built_in">max</span>(<span class="number">0</span>, arr[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line"></span><br><span class="line">            max_f[i] = <span class="built_in">max</span>(max_f[i<span class="number">-1</span>]+arr[i], arr[i]);</span><br><span class="line"></span><br><span class="line">            res = <span class="built_in">max</span>(res, max_f[i]);</span><br><span class="line"></span><br><span class="line">            s += arr[i];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (k == <span class="number">1</span>) <span class="keyword">return</span> res % MAX;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> max_f_2_arr[<span class="number">100001</span>], prefix_sum[<span class="number">100001</span>];</span><br><span class="line"></span><br><span class="line">            <span class="built_in">fill</span>(max_f_2_arr, max_f_2_arr<span class="number">+100001</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">            <span class="built_in">fill</span>(prefix_sum, prefix_sum<span class="number">+100001</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">            max_f_2_arr[<span class="number">0</span>] = <span class="built_in">max</span>(arr[<span class="number">0</span>], max_f[n<span class="number">-1</span>]+arr[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">            prefix_sum[<span class="number">0</span>] = arr[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> max_prefix_sum = <span class="built_in">max</span>(arr[<span class="number">0</span>], <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> res_2_arr = <span class="built_in">max</span>(res, max_f_2_arr[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line"></span><br><span class="line">                max_f_2_arr[i] = <span class="built_in">max</span>(max_f_2_arr[i<span class="number">-1</span>]+arr[i], arr[i]);</span><br><span class="line"></span><br><span class="line">                res_2_arr = <span class="built_in">max</span>(res_2_arr, max_f_2_arr[i]);</span><br><span class="line"></span><br><span class="line">                prefix_sum[i] = prefix_sum[i<span class="number">-1</span>] + arr[i];</span><br><span class="line"></span><br><span class="line">                max_prefix_sum = <span class="built_in">max</span>(max_prefix_sum, prefix_sum[i]);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (k == <span class="number">2</span>) <span class="keyword">return</span> res_2_arr % MAX;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (s &gt; <span class="number">0</span>) <span class="built_in">return</span>((<span class="number">1LL</span> * s % (MAX) * (k<span class="number">-2</span>) + max_prefix_sum % MAX) % MAX + max_f[n<span class="number">-1</span>]) % MAX;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> res_2_arr % MAX;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/%E4%BB%BB%E6%84%8F%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E7%BB%9D%E5%AF%B9%E5%80%BC%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" rel="prev" title="任意子数组和的绝对值的最大值">
+      <i class="fa fa-chevron-left"></i> 任意子数组和的绝对值的最大值
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/13/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/RepoCoder%EF%BC%9ARepository-Level%20Code%20Completion%20Through%20Iterative%20Retrieval%20and%20Generation/" rel="next" title="RepoCoder：Repository-Level Code Completion Through Iterative Retrieval and Generation">
+      RepoCoder：Repository-Level Code Completion Through Iterative Retrieval and Generation <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0%E6%95%B0%E7%BB%84-arr-%E5%92%8C%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0-k-%E9%80%9A%E8%BF%87%E9%87%8D%E5%A4%8D-k-%E6%AC%A1%E6%9D%A5%E4%BF%AE%E6%94%B9%E6%95%B0%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">给定一个整数数组 arr 和一个整数 k ，通过重复 k 次来修改数组。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%A6%82%E5%A6%82%E6%9E%9C-arr-1-2-k-3-%E9%82%A3%E4%B9%88%E4%BF%AE%E6%94%B9%E5%90%8E%E7%9A%84%E6%95%B0%E7%BB%84%E5%B0%86%E6%98%AF-1-2-1-2-1-2"><span class="nav-number">2.2.</span> <span class="nav-text">例如，如果 arr &#x3D; [1, 2] ， k &#x3D; 3 ，那么修改后的数组将是 [1, 2, 1, 2, 1, 2] 。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E4%BF%AE%E6%94%B9%E5%90%8E%E7%9A%84%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E6%B3%A8%E6%84%8F%E5%AD%90%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E5%8F%AF%E4%BB%A5%E6%98%AF-0%E5%9C%A8%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8B%E5%AE%83%E7%9A%84%E6%80%BB%E5%92%8C%E4%B9%9F%E6%98%AF-0"><span class="nav-number">2.3.</span> <span class="nav-text">返回修改后的数组中的最大的子数组之和。注意，子数组长度可以是 0，在这种情况下它的总和也是 0。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B1%E4%BA%8E-%E7%BB%93%E6%9E%9C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%BE%88%E5%A4%A7%E9%9C%80%E8%A6%81%E8%BF%94%E5%9B%9E%E7%9A%84-109-7-%E7%9A%84-%E6%A8%A1"><span class="nav-number">2.4.</span> <span class="nav-text">由于 结果可能会很大，需要返回的 10^9 + 7 的 模 。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.5.</span> <span class="nav-text">示例 1：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5arr-12-k-3"><span class="nav-number">2.5.1.</span> <span class="nav-text">输入：arr &#x3D; [1,2], k &#x3D; 3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA9"><span class="nav-number">2.5.2.</span> <span class="nav-text">输出：9</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.6.</span> <span class="nav-text">示例 2：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5arr-1-21-k-5"><span class="nav-number">2.6.1.</span> <span class="nav-text">输入：arr &#x3D; [1,-2,1], k &#x3D;
+5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA2"><span class="nav-number">2.6.2.</span> <span class="nav-text">输出：2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-3"><span class="nav-number">2.7.</span> <span class="nav-text">示例 3：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5arr--1-2-k-7"><span class="nav-number">2.7.1.</span> <span class="nav-text">输入：arr &#x3D; [-1,-2], k &#x3D;
+7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA0"><span class="nav-number">2.7.2.</span> <span class="nav-text">输出：0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.8.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#arr.length-105"><span class="nav-number">2.8.1.</span> <span class="nav-text">1 &lt;&#x3D; arr.length &lt;&#x3D; 10^5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-105"><span class="nav-number">2.8.2.</span> <span class="nav-text">1 &lt;&#x3D; k &lt;&#x3D; 10^5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#arri-104"><span class="nav-number">2.8.3.</span> <span class="nav-text">-10^4 &lt;&#x3D; arr[i] &lt;&#x3D; 10^4</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E5%AE%9E%E8%AF%9D%E8%BF%99%E9%A2%98%E4%B9%8D%E4%B8%80%E7%9C%8B%E4%BC%BC%E4%B9%8E%E6%8C%BA%E7%AE%80%E5%8D%95%E4%B8%80%E7%A7%8D%E6%9C%80%E7%B2%97%E6%9A%B4%E7%9A%84%E6%96%B9%E6%B3%95%E5%BD%93%E7%84%B6%E6%98%AF%E6%9E%84%E9%80%A0%E9%87%8D%E5%A4%8D%E4%BA%86k%E6%AC%A1%E7%9A%84%E6%95%B0%E7%BB%84%E7%84%B6%E5%90%8E%E6%8C%89%E7%85%A7%E4%B8%80%E8%88%AC%E7%9A%84%E6%B1%82%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E6%96%B9%E6%B3%95%E6%9D%A5%E8%A7%A3%E5%8D%B3%E5%8F%AF%E4%BD%86%E8%BF%99%E6%A0%B7%E6%98%BE%E7%84%B6%E7%A9%BA%E9%97%B4%E5%92%8C%E6%97%B6%E9%97%B4%E5%BC%80%E9%94%80%E9%83%BD%E5%BE%88%E5%A4%A7%E4%BA%86%E9%83%BD%E6%98%AFokn%E7%9A%84%E7%BA%A7%E5%88%AB%E4%BA%86%E5%86%8D%E7%9C%8B%E4%B8%80%E4%B8%8B%E9%A2%98%E7%9B%AE%E9%87%8C%E7%9A%84arr-length%E8%8C%83%E5%9B%B4%E4%BB%A5%E5%8F%8Ak%E7%9A%84%E8%8C%83%E5%9B%B4%E4%BC%B0%E6%91%B8%E7%9D%80%E8%BF%99%E4%B8%AA%E6%96%B9%E6%B3%95%E6%98%AF%E4%B8%8D%E5%A4%AA%E8%A1%8C%E4%BA%86-%E4%B8%8D%E8%BF%87%E5%9F%BA%E4%BA%8E%E8%BF%99%E4%B8%AA%E6%9C%B4%E7%B4%A0%E7%9A%84%E6%83%B3%E6%B3%95%E6%88%91%E4%BB%AC%E5%8F%AF%E8%83%BD%E5%8F%AF%E4%BB%A5%E6%83%B3%E5%88%B0%E5%AF%B9%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%9A%84%E4%BC%98%E5%8C%96%E5%9C%A8%E9%80%92%E6%8E%A8%E5%9C%B0%E6%B1%82%E8%A7%A3%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E6%97%B6%E5%80%99%E6%AF%8F%E4%B8%80%E6%AC%A1%E9%80%92%E6%8E%A8%E6%88%91%E4%BB%AC%E5%AE%9E%E8%B4%A8%E4%B8%8A%E5%8F%AA%E4%BE%9D%E8%B5%96%E4%B8%A4%E4%B8%AA%E9%87%8F%E5%BD%93%E5%89%8D%E6%95%B0%E7%BB%84%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%85%83%E7%B4%A0%E4%BB%A5%E5%8F%8A%E4%BB%A5%E5%89%8D%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E5%8D%B3%E7%AC%ACi-1%E4%B8%AA%E5%85%83%E7%B4%A0%E7%BB%93%E5%B0%BE%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E6%89%80%E4%BB%A5%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%A4%E4%B8%AA%E5%8F%98%E9%87%8F%E5%B0%B1%E5%AE%8C%E6%88%90%E9%80%92%E6%8E%A8%E6%8A%8A%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E9%99%8D%E5%88%B0%E5%B8%B8%E6%95%B0%E7%BA%A7%E5%88%AB%E8%87%B3%E4%BA%8E%E7%BB%93%E6%9E%9C%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%9C%A8%E9%80%92%E6%8E%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%8A%A8%E6%80%81%E7%BB%B4%E6%8A%A4res-maxres-max_fi%E4%B8%8D%E8%BF%87%E5%8D%B3%E4%BD%BF%E8%BF%99%E6%A0%B7%E6%93%8D%E4%BD%9C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E4%BE%9D%E7%84%B6%E6%98%AFokn%E8%BF%98%E6%98%AF%E6%97%A0%E6%B3%95%E6%89%BF%E5%8F%97"><span class="nav-number">3.1.</span> <span class="nav-text">说实话，这题乍一看似乎挺简单，一种最粗暴的方法当然是构造重复了k次的数组，然后按照一般的求最大子数组和的方法来解即可。但这样显然空间和时间开销都很大了，都是\(O(kn)\)的级别了。再看一下题目里的arr
+length范围以及k的范围，估摸着这个方法是不太行了不过，基于这个朴素的想法，我们可能可以想到对空间复杂度的优化：在递推地求解最大子数组和的时候，每一次递推我们实质上只依赖两个量（当前数组的第i个元素，以及以前一个元素（即第i-1个元素）结尾的最大子数组和），所以可以用两个变量就完成递推，把空间复杂度降到常数级别；至于结果，我们可以在递推过程中动态维护（res &#x3D; max(res, max_f[i])）。不过即使这样操作，时间复杂度依然是\(O(kn)\)，还是无法承受</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E5%86%8D%E5%AE%A1%E8%A7%86%E4%B8%80%E4%B8%8B%E9%A2%98%E7%9B%AE%E7%89%B9%E6%84%8F%E5%BC%BA%E8%B0%83%E8%BF%99%E4%B8%AA%E9%87%8D%E5%A4%8Dk%E6%AC%A1%E9%82%A3%E6%9C%89%E5%8F%AF%E8%83%BD%E5%9B%A0%E4%B8%BA%E9%87%8D%E5%A4%8D%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%81%9A%E4%B8%80%E4%BA%9B%E5%8C%96%E7%AE%80%E4%BB%8E%E8%80%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E8%BF%99%E4%B9%88%E9%AB%98%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%BE%88%E8%87%AA%E7%84%B6%E7%9A%84%E4%BC%9A%E6%83%B3%E5%88%B0%E5%BD%93%E6%95%B0%E7%BB%84arr%E7%9A%84%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E7%9A%84%E5%92%8C%E4%B8%BA%E6%AD%A3%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%94%E5%A6%82%E6%9E%9Ck%E5%BE%88%E5%A4%A7%E9%82%A3%E4%B9%88%E6%88%91%E4%BB%AC%E5%87%A0%E4%B9%8E%E5%8F%AF%E4%BB%A5%E5%88%A4%E6%96%AD%E6%9C%80%E5%A4%A7%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E5%92%8C%E5%BA%94%E8%AF%A5%E6%98%AF%E6%A8%AA%E8%B7%A8%E4%BA%86%E6%89%80%E6%9C%89%E7%9A%84k%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E8%BF%99%E6%98%AF%E5%BE%88%E7%9B%B4%E8%A7%82%E7%9A%84%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%8F%8D%E8%AF%81%E4%BD%86%E5%A6%82%E6%9E%9Ck%E4%B8%8D%E9%82%A3%E4%B9%88%E5%A4%A7%E4%B8%94arr%E7%9A%84%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E5%92%8C%E4%B9%9F%E4%B8%8D%E9%82%A3%E4%B9%88%E5%A4%A7%E5%91%A2%E9%82%A3%E5%B0%B1%E6%9C%AA%E5%BF%85%E8%A6%81%E6%A8%AA%E8%B7%A8%E9%82%A3%E4%B9%88%E5%A4%9A%E6%95%B0%E7%BB%84%E4%BA%86%E5%90%A7%E4%BC%9A%E4%B8%8D%E4%BC%9A%E6%88%91%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E6%A8%AA%E8%B7%A8%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E5%B0%B1%E5%A4%9F%E4%BA%86%E4%BE%8B%E5%A6%82arr%E6%9C%AC%E8%BA%AB%E6%98%AF%E5%89%8D%E9%9D%A2%E4%B8%80%E9%83%A8%E5%88%86%E6%AD%A3%E7%9A%84%E4%B8%AD%E9%97%B4%E4%B8%80%E9%83%A8%E5%88%86%E8%B4%9F%E7%9A%84%E4%B8%94%E9%9D%9E%E5%B8%B8%E8%B4%9F%E5%B0%B1%E6%98%AF%E8%B4%9F%E6%95%B0%E4%B8%94%E7%BB%9D%E5%AF%B9%E5%80%BC%E5%BE%88%E5%A4%A7%E7%9A%84%E6%84%8F%E6%80%9D%E5%90%8E%E9%9D%A2%E5%8F%88%E6%98%AF%E4%B8%80%E9%83%A8%E5%88%86%E6%AD%A3%E7%9A%84%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E6%83%85%E5%86%B5%E5%8F%AF%E8%83%BD%E5%B0%B1%E6%98%AF%E6%A8%AA%E8%B7%A8%E4%B8%A4%E4%B8%AAarr%E4%B8%94%E6%98%AF%E7%94%B1%E5%89%8D%E4%B8%80%E4%B8%AAarr%E7%9A%84%E5%90%8E%E9%9D%A2%E5%90%8E%E4%B8%80%E4%B8%AAarr%E7%9A%84%E5%89%8D%E9%9D%A2%E7%BB%84%E6%88%90%E7%9A%84%E8%BF%99%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E5%8C%BA%E5%88%AB%E5%BC%80%E6%9D%A5%E5%91%A2%E8%80%8C%E4%B8%94%E4%BC%9A%E4%B8%8D%E4%BC%9A%E8%BF%98%E6%9C%89%E5%85%B6%E5%AE%83%E7%9A%84%E6%83%85%E5%86%B5%E5%91%A2-%E6%AD%A4%E6%97%B6%E7%9B%B4%E8%A7%89%E4%B8%8A%E4%BC%BC%E4%B9%8E%E4%BC%9A%E6%83%B3%E5%88%B0%E7%AD%94%E6%A1%88%E6%98%AF%E4%B8%8D%E6%98%AF%E5%B0%B1%E5%9C%A8%E4%BB%A5%E4%B8%8B%E7%9A%84%E6%83%85%E5%86%B5%E4%B9%8B%E4%B8%AD%E5%91%A2%E5%8D%95%E4%B8%AAarr%E9%87%8C%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E4%B8%A4%E4%B8%AAarr%E6%8B%BC%E8%B5%B7%E6%9D%A5%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E6%A8%AA%E8%B7%A8%E6%89%80%E6%9C%89k%E4%B8%AAarr%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C-%E8%BF%99%E9%87%8C%E9%9D%A2%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%83%85%E5%86%B5%E7%9C%8B%E8%B5%B7%E6%9D%A5%E5%A5%BD%E5%83%8F%E6%9C%89%E7%82%B9%E7%AA%81%E5%85%80%E4%BD%86%E6%84%9F%E6%80%A7%E4%B8%8A%E5%AE%83%E4%BC%BC%E4%B9%8E%E4%B9%9F%E6%9C%89%E7%82%B9%E9%81%93%E7%90%86%E6%84%9F%E8%A7%89%E5%AE%83%E6%98%AF%E4%B8%8D%E6%98%AF%E5%AF%B9%E5%BA%94%E4%BA%86arr%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E4%B9%8B%E5%92%8C%E4%B8%8D%E4%B8%BA%E6%AD%A3%E7%9A%84%E6%83%85%E5%86%B5%E5%91%A2%E5%9B%A0%E4%B8%BA%E5%A6%82%E6%9E%9Carr%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E4%B8%BA%E6%AD%A3%E9%82%A3%E4%B9%88%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%8F%8D%E8%AF%81%E5%A6%82%E6%9E%9C%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E4%BB%85%E4%BB%85%E6%A8%AA%E8%B7%A8%E4%B8%A4%E4%B8%AAarr%E4%BD%86arr%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E5%92%8C%E4%B8%BA%E6%AD%A3%E9%82%A3%E6%88%91%E4%BB%AC%E5%9C%A8%E8%BF%99%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%90%8E%E9%9D%A2%E5%BA%94%E8%AF%A5%E5%8F%AF%E4%BB%A5%E5%86%8D%E5%87%91%E5%87%BA%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84arr%E8%BF%99%E6%A0%B7%E5%B0%B1%E5%BE%97%E5%88%B0%E4%BA%86%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%A7%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E7%9F%9B%E7%9B%BE%E4%BA%86%E5%90%8E%E9%9D%A2%E5%8F%AF%E4%BB%A5%E8%A1%A5%E4%B8%80%E4%B8%8B%E5%BD%A2%E5%BC%8F%E5%8C%96%E7%9A%84%E8%AF%81%E6%98%8E"><span class="nav-number">3.2.</span> <span class="nav-text">现在，再审视一下题目，特意强调这个重复k次，那有可能因为重复，我们可以做一些化简，从而不需要这么高的时间复杂度。很自然的，会想到：当数组arr的全部元素的和为正的时候，且如果k很大，那么我们几乎可以判断，最大的子数组的和，应该是横跨了所有的k个数组的（这是很直观的，也可以反证）。但如果k不那么大，且arr的全部元素和也不那么大呢？那就未必要横跨那么多数组了吧？会不会我们只需要横跨两个数组就够了？例如arr本身是前面一部分正的，中间一部分负的，且非常负（就是负数，且绝对值很大的意思），后面又是一部分正的，此时我们的最大子数组和的情况，可能就是横跨两个arr，且是由前一个arr的“后面”+后一个arr的“前面”组成的。这两种情况怎么判断区别开来呢？而且会不会还有其它的情况呢？此时，直觉上，似乎会想到：答案是不是就在以下的情况之中呢——单个arr里的最大子数组之和，两个arr拼起来的最大子数组之和，横跨所有k个arr的最大子数组之和？这里面第二个情况看起来好像有点突兀，但感性上它似乎也有点道理，感觉它是不是对应了arr全部元素之和不为正的情况呢（因为如果arr全部元素为正，那么就可以反证：如果最大子数组之和对应的子数组，仅仅横跨两个arr，但arr全部元素和为正，那我们在这个最大子数组后面应该可以再凑出一个完整的arr，这样就得到了一个更大的子数组，矛盾了。后面可以补一下形式化的证明）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E4%B8%8A%E8%BF%99%E7%A1%AE%E5%AE%9E%E6%98%AF%E5%AF%B9%E7%9A%84%E4%BA%8B%E5%AE%9E%E4%B8%8A%E6%9C%89%E4%B8%80%E4%B8%AA%E5%AE%9A%E7%90%86%E6%8F%8F%E8%BF%B0%E5%A6%82%E4%B8%8B%E5%A6%82%E6%9E%9C%E6%95%B0%E7%BB%84arr%E7%9A%84%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E5%92%8C%E4%B8%BA%E6%AD%A3%E9%82%A3%E4%B9%88arrarr%E7%BB%84%E6%88%90%E7%9A%84%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E6%95%B0%E7%BB%84%E9%87%8C%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E4%B8%80%E5%AE%9A%E6%98%AF%E6%A8%AA%E8%B7%A8%E4%B8%A4%E4%B8%AAarr%E7%9A%84%E8%BF%98%E6%98%AF%E5%8F%AF%E4%BB%A5%E5%8F%8D%E8%AF%81%E8%BF%99%E4%B8%AA%E5%AE%9A%E7%90%86%E5%85%B6%E5%AE%9E%E6%88%91%E4%BB%AC%E5%9C%A8%E4%B8%8A%E9%9D%A2%E8%80%83%E8%99%91%E7%AD%94%E6%A1%88%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%83%85%E5%86%B5%E9%87%8C%E5%B0%B1%E5%B7%B2%E7%BB%8F%E8%87%AA%E7%84%B6%E5%9C%B0%E7%94%A8%E5%88%B0%E4%BA%86%E8%BF%99%E9%87%8C%E7%BB%99%E5%87%BA%E5%BD%A2%E5%BC%8F%E5%8C%96%E7%9A%84%E8%AF%81%E6%98%8E"><span class="nav-number">3.3.</span> <span class="nav-text">实际上，这确实是对的。事实上有一个定理，描述如下：如果数组arr的全部元素和为正，那么，arr+arr组成的一个新的数组里，最大子数组之和对应的子数组，一定是横跨两个arr的。还是可以反证。这个定理其实我们在上面考虑答案的第二个情况里就已经自然地用到了。这里给出形式化的证明：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%AD%90%E6%95%B0%E5%80%BC%E4%BB%85%E4%BB%85%E5%9C%A8%E4%B8%80%E4%B8%AAarr%E9%87%8C%E4%B8%8D%E5%A6%A8%E8%80%83%E8%99%91%E5%AE%83%E5%87%BA%E7%8E%B0%E5%9C%A8%E5%89%8D%E4%B8%80%E4%B8%AAarr%E9%87%8C%E4%B8%94%E8%AE%B0%E5%AE%83%E7%9A%84%E8%B5%B7%E6%AD%A2%E7%B4%A2%E5%BC%95%E4%B8%BAi%E5%92%8Cj%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4cdotsicdotsjcdotscdotsicdotsjcdots%E4%B8%AD%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E9%87%8Ci%E5%88%B0j%E7%9A%84%E9%83%A8%E5%88%86%E5%B0%B1%E6%98%AF%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%BD%86%E6%98%AF%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E5%A6%82%E6%9E%9C%E6%8A%8A%E7%AC%AC%E4%B8%80%E4%B8%AAarr%E9%87%8Cj%E5%90%8E%E9%9D%A2%E7%9A%84%E6%89%80%E6%9C%89%E9%83%A8%E5%88%86%E4%BB%A5%E5%8F%8A%E7%AC%AC%E4%BA%8C%E4%B8%AAarr%E9%87%8C%E4%BB%8E%E5%BC%80%E5%A4%B4%E5%88%B0j%E7%B4%A2%E5%BC%95%E7%9A%84%E9%83%A8%E5%88%86%E5%8A%A0%E5%88%B0%E5%89%8D%E9%9D%A2%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%90%8E%E9%9D%A2%E7%BB%84%E6%88%90%E7%9A%84%E6%96%B0%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E5%92%8C%E4%B8%80%E5%AE%9A%E6%98%AF%E6%9B%B4%E5%A4%A7%E7%9A%84%E5%9B%A0%E4%B8%BA%E6%AD%A4%E6%97%B6%E5%90%8E%E9%9D%A2%E6%96%B0%E5%8A%A0%E7%9A%84%E9%83%A8%E5%88%86%E5%88%9A%E5%A5%BD%E5%87%91%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84arr%E7%9A%84%E5%92%8C%E8%80%8C%E6%A0%B9%E6%8D%AE%E5%AE%9A%E7%90%86%E7%9A%84%E6%9D%A1%E4%BB%B6arr%E6%89%80%E6%9C%89%E5%85%83%E7%B4%A0%E4%B9%8B%E5%92%8C%E6%98%AF%E6%AD%A3%E7%9A%84%E6%89%80%E6%9C%89%E5%8A%A0%E4%BA%86%E4%B8%80%E4%B8%AA%E6%AD%A3%E6%95%B0%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%8F%98%E5%A4%A7%E6%95%85%E5%BC%95%E5%87%BA%E7%9F%9B%E7%9B%BE%E6%89%80%E4%BB%A5%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E7%A1%AE%E5%AE%9E%E5%BA%94%E8%AF%A5%E6%A8%AA%E8%B7%A8%E4%B8%A4%E4%B8%AAarr%E8%87%B3%E4%BA%8E%E8%AF%B4%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E5%89%8D%E9%9D%A2%E5%81%87%E8%AE%BE%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%BB%85%E5%87%BA%E7%8E%B0%E5%9C%A8%E4%B8%80%E4%B8%AAarr%E9%87%8C%E4%B8%94%E5%81%87%E8%AE%BE%E5%AE%83%E5%87%BA%E7%8E%B0%E5%9C%A8%E5%90%8E%E4%B8%80%E4%B8%AAarr%E9%87%8C%E8%AF%81%E6%98%8E%E4%B9%9F%E6%98%AF%E7%B1%BB%E4%BC%BC%E7%9A%84%E5%8F%AA%E9%9C%80%E8%A6%81%E5%BE%80%E5%89%8D%E9%9D%A2%E5%87%91%E5%87%BA%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84arr%E5%8D%B3%E5%8F%AF"><span class="nav-number">3.3.0.1.</span> <span class="nav-text">假设最大子数组之和对应的子数值仅仅在一个arr里，不妨考虑它出现在前一个arr里，且记它的起止索引为i和j，也就是说，\([\cdots,i,\cdots,j,\cdots]+[\cdots,i,\cdots,j,\cdots]\)中，第一个数组里i到j的部分就是最大子数组。但是，我们可以发现，如果把第一个arr里j后面的所有部分以及第二个arr里从开头到j索引的部分加到前面的最大子数组后面，组成的新的子数组的和一定是更大的（因为此时后面新加的部分刚好凑出了一个完整的arr的和，而根据定理的条件，arr所有元素之和是正的，所有加了一个正数，一定会变大），故引出矛盾。所以，最大子数组确实应该横跨两个arr。至于说如果我们前面假设最大子数组仅出现在一个arr里，且假设它出现在后一个arr里，证明也是类似的，只需要往前面凑出一个完整的arr即可</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E8%BF%98%E5%8F%AF%E4%BB%A5%E8%81%94%E6%83%B3%E5%88%B0%E6%8A%8A%E8%BF%99%E4%B8%AA%E5%AE%9A%E7%90%86%E6%89%A9%E5%B1%95%E4%B8%80%E4%B8%8B%E5%8D%B3%E4%BD%BF%E6%98%AFk%E4%B8%AAarr%E6%8B%BC%E6%8E%A5%E8%B5%B7%E6%9D%A5%E5%BD%93arr%E7%9A%84%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E4%B9%8B%E5%92%8C%E5%A4%A7%E4%BA%8E0%E7%9A%84%E6%97%B6%E5%80%99%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%9F%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%A8%AA%E8%B7%A8%E6%89%80%E6%9C%89%E7%9A%84k%E4%B8%AAarr%E6%B3%A8%E6%84%8F%E8%BF%99%E9%87%8C%E7%9A%84%E6%A8%AA%E8%B7%A8%E6%9C%AC%E8%BA%AB%E6%98%AF%E8%AF%B4%E8%BF%99k%E4%B8%AAarr%E4%B8%80%E5%AE%9A%E9%83%BD%E4%BC%9A%E6%9C%89%E5%85%83%E7%B4%A0%E5%87%BA%E7%8E%B0%E5%9C%A8%E8%BF%99%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E9%87%8C%E8%90%BD%E5%88%B0%E8%BF%99%E9%87%8C%E7%9A%84%E8%AE%BE%E5%AE%9A%E5%88%99%E6%9C%89%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%8A%8A%E4%B8%AD%E9%97%B4%E7%9A%84k-2%E7%9A%84arr%E5%AE%8C%E5%85%A8%E5%8C%85%E6%8B%AC%E4%B9%9F%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%8C%85%E5%90%AB%E5%A4%B4%E5%B0%BE%E7%9A%84arr%E7%9A%84%E4%B8%80%E4%BA%9B%E5%85%83%E7%B4%A0%E4%BD%86%E5%B0%B1%E4%B8%8D%E4%B8%80%E5%AE%9A%E6%98%AF%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E4%BA%86%E5%90%8C%E6%A0%B7%E5%8F%AF%E4%BB%A5%E5%8F%8D%E8%AF%81%E6%80%9D%E8%B7%AF%E4%B9%9F%E5%92%8C%E4%B8%8A%E9%9D%A2%E7%B1%BB%E4%BC%BC%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%9B%9E%E5%88%B0%E9%A2%98%E7%9B%AE%E5%8F%AF%E4%BB%A5%E5%85%88%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%8Barr%E9%87%8C%E7%9A%84%E5%85%83%E7%B4%A0%E5%92%8C%E6%98%AF%E4%B8%8D%E6%98%AF%E6%AD%A3%E7%9A%84%E5%A6%82%E6%9E%9C%E6%98%AF%E9%82%A3%E4%B9%88%E5%B0%B1%E5%BA%94%E8%AF%A5%E6%98%AF%E6%A8%AA%E8%B7%A8%E4%BA%86k%E4%B8%AAarr%E7%9A%84%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AF%E9%82%A3%E5%B0%B1%E4%B8%8D%E6%98%AF%E6%A8%AA%E8%B7%A8k%E4%B8%AAarr%E7%9A%84%E6%AD%A4%E6%97%B6%E5%BA%94%E8%AF%A5%E6%98%AF%E8%BF%99%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%E9%87%8C%E7%9A%84%E4%B8%80%E7%A7%8D%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%87%BA%E7%8E%B0%E5%9C%A8%E4%B8%80%E4%B8%AAarr%E9%87%8C%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E6%A8%AA%E8%B7%A8%E4%B8%A4%E4%B8%AA%E7%9B%B8%E9%82%BBarr%E4%B8%8B%E9%9D%A2%E4%BB%94%E7%BB%86%E8%AE%A8%E8%AE%BA%E4%B8%80%E4%B8%8B"><span class="nav-number">3.4.</span> <span class="nav-text">我们还可以联想到，把这个定理扩展一下，即使是k个arr拼接起来，当arr的全部元素之和大于0的时候，最大子数组之和对应的子数组，也一定会横跨所有的k个arr（注意，这里的横跨，本身是说，这k个arr一定都会有元素出现在这个最大子数组里。落到这里的设定，则有：最大子数组一定会把中间的k-2的arr完全包括，也一定会包含头尾的arr的一些元素，但就不一定是全部元素了）。同样可以反证，思路也和上面类似。所以，我们回到题目，可以先判断一下arr里的元素和是不是正的，如果是，那么就应该是横跨了k个arr的。如果不是，那就不是横跨k个arr的，此时应该是这两种情况里的一种（最大子数组出现在一个arr里；最大子数组横跨两个相邻arr）。下面仔细讨论一下：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#arr%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E5%92%8C%E4%B8%BA%E6%AD%A3"><span class="nav-number">3.4.1.</span> <span class="nav-text">arr全部元素和为正：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A4%E6%97%B6%E6%A0%B9%E6%8D%AE%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%AE%9A%E7%90%86%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%BC%9A%E6%A8%AA%E8%B7%A8k%E4%B8%AAarr%E4%B8%94%E4%B8%AD%E9%97%B4%E7%9A%84k-2%E4%B8%AAarr%E8%A2%AB%E5%AE%8C%E5%85%A8%E5%8C%85%E5%90%AB%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E8%80%83%E8%99%91%E7%9A%84%E6%97%B6%E5%80%99%E8%87%AA%E7%84%B6%E5%9C%B0%E5%81%87%E8%AE%BE%E4%BA%86k%E5%BE%88%E5%A4%A7%E4%BD%86%E5%AE%9E%E9%99%85k%E6%9C%89%E5%8F%AF%E8%83%BD%E5%BE%88%E5%B0%8F%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%B0%8F%E4%BA%8E3%E5%8D%B3k%E5%8F%AF%E8%83%BD%E4%B8%BA1%E5%92%8C2%E6%89%80%E4%BB%A5%E5%8F%88%E9%9C%80%E8%A6%81%E5%88%86%E7%B1%BB%E8%AE%A8%E8%AE%BA%E4%B8%80%E4%B8%8B%E4%B8%8D%E8%BF%87%E8%BF%98%E6%98%AF%E5%85%88%E8%AE%A8%E8%AE%BA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84k%E5%BE%88%E5%A4%A7%E4%B9%9F%E5%8D%B3k%E5%A4%A7%E4%BA%8E%E7%AD%89%E4%BA%8E3%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">3.4.1.1.</span> <span class="nav-text">此时，根据上面的定理，最大子数组会横跨k个arr。且中间的k-2个arr被完全包含。因为我们考虑的时候自然地假设了k很大，但实际k有可能很小，也就是小于3，即k可能为1和2。所以又需要分类讨论一下。不过还是先讨论最简单的，k很大（也即k大于等于3）的情况</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#k%E5%A4%A7%E4%BA%8E%E7%AD%89%E4%BA%8E3%E4%B8%AD%E9%97%B4k-2%E4%B8%AAarr%E9%83%BD%E8%A2%AB%E5%9B%8A%E6%8B%AC%E8%80%8C%E5%A4%B4%E5%B0%BE%E7%9A%84arr%E5%91%A2%E5%BA%94%E8%AF%A5%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%85%83%E7%B4%A0%E5%8F%AF%E4%BB%A5%E6%83%B3%E5%88%B0%E5%BC%80%E5%A4%B4%E9%82%A3%E4%B8%AAarr%E6%88%91%E4%BB%AC%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%8C%85%E5%90%AB%E5%AE%83%E7%9A%84%E7%BB%93%E5%B0%BE%E5%85%83%E7%B4%A0%E5%9B%A0%E4%B8%BA%E5%AD%90%E6%95%B0%E7%BB%84%E6%98%AF%E8%BF%9E%E7%BB%AD%E7%9A%84%E8%80%8C%E4%B8%94%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E6%97%A2%E7%84%B6%E4%B8%80%E5%AE%9A%E6%9C%89%E5%BC%80%E5%A4%B4arr%E7%9A%84%E5%85%83%E7%B4%A0%E5%8F%88%E5%8C%85%E5%90%AB%E4%BA%86%E7%AC%AC%E4%BA%8C%E4%B8%AAarr%E9%82%A3%E5%B0%B1%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%9C%89%E5%BC%80%E5%A4%B4arr%E7%9A%84%E7%BB%93%E5%B0%BE%E5%85%83%E7%B4%A0%E9%82%A3%E5%BC%80%E5%A4%B4%E7%9A%84arr%E9%87%8C%E5%8C%85%E5%90%AB%E7%9A%84%E5%85%83%E7%B4%A0%E4%B9%8B%E5%92%8C%E5%BA%94%E8%AF%A5%E5%B0%B1%E5%8F%96max_fn-1%E8%BF%99%E9%87%8C%E7%9A%84max_f%E6%95%B0%E7%BB%84%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%85%83%E7%B4%A0%E8%A1%A8%E7%A4%BA%E4%BB%A5arr%E9%87%8C%E7%AC%ACi%E4%B8%AA%E5%85%83%E7%B4%A0%E7%BB%93%E5%B0%BE%E7%9A%84%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E7%9A%84%E5%92%8C%E4%B8%94%E6%88%91%E4%BB%AC%E4%B8%8D%E5%A6%A8%E5%AE%9A%E4%B9%89arr%E7%9A%84%E9%95%BF%E5%BA%A6%E4%B8%BAnmax_f%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%8E0%E5%BC%80%E5%A7%8B%E8%AE%A1%E8%BF%99%E6%A0%B7%E5%B0%B1%E8%83%BD%E7%90%86%E8%A7%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%96max_fn-1%E4%BA%86-%E8%80%8C%E7%BB%93%E5%B0%BE%E7%9A%84arr%E8%A6%81%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E9%83%A8%E5%88%86%E5%91%A2%E7%B1%BB%E4%BC%BC%E7%9A%84%E7%BB%93%E5%B0%BE%E9%83%A8%E5%88%86%E7%9A%84arr%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%8C%85%E5%90%AB%E5%AE%83%E7%9A%84%E5%BC%80%E5%A4%B4%E5%85%83%E7%B4%A0%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93arr%E9%87%8C%E4%BB%A5%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E4%B8%BA%E8%B5%B7%E7%82%B9%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%89%8D%E7%BC%80%E5%92%8C%E6%95%B0%E7%BB%84%E8%A7%A3%E5%86%B3%E6%95%85%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8B%E6%9C%80%E7%BB%88%E7%9A%84%E5%A4%A7%E7%AD%94%E6%A1%88%E5%BA%94%E8%AF%A5%E6%98%AFk-2times-sumarrmax_fn-1max_prefix_sum"><span class="nav-number">3.4.1.1.1.</span> <span class="nav-text">k大于等于3。中间k-2个arr都被囊括。而头尾的arr呢？应该包含哪些元素？可以想到，开头那个arr，我们一定会包含它的结尾元素（因为子数组是连续的，而且最大子数组既然一定有开头arr的元素，又包含了第二个arr，那就一定会有开头arr的结尾元素），那开头的arr里包含的元素之和，应该就取max_f[n-1]（这里的max_f数组的第i个元素表示，以arr里第i个元素结尾的连续子数组的最大的和。且我们不妨定义arr的长度为n，max_f的索引从0开始计。这样就能理解为什么是取max_f[n-1]了）而结尾的arr要包含哪些部分呢？类似的，结尾部分的arr一定会包含它的开头元素，所以我们只需要知道arr里，以第一个元素为起点的子数组的最大和。这个问题可以用前缀和数组解决。故，这种情况下，最终的大答案应该是\((k-2)\times
+sum(arr)+max\_f[n-1]+max\_prefix\_sum\)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#k%E7%AD%89%E4%BA%8E1%E4%B9%8B%E6%89%80%E4%BB%A5%E5%85%88%E7%9C%8B%E8%BF%99%E4%B8%AA%E5%9B%A0%E4%B8%BA%E5%AE%83%E5%BE%88%E7%AE%80%E5%8D%95%E6%AD%A4%E6%97%B6%E5%B0%B1%E9%80%80%E5%8C%96%E6%88%90%E4%BA%86%E5%8D%95%E7%BA%AF%E7%9A%84%E6%B1%82%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C%E4%BA%86%E6%B2%A1%E6%9C%89%E9%82%A3%E4%B9%88%E5%A4%9A%E5%BC%AF%E5%BC%AF%E7%BB%95%E7%BB%95%E4%BA%86"><span class="nav-number">3.4.1.1.2.</span> <span class="nav-text">k等于1。之所以先看这个，因为它很简单，此时就退化成了单纯的求最大子数组之和了，没有那么多弯弯绕绕了</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#k%E7%AD%89%E4%BA%8E2%E7%A8%8D%E5%BE%AE%E9%BA%BB%E7%83%A6%E4%B8%80%E7%82%B9%E4%BD%86%E5%9B%A0%E4%B8%BAk%E4%BB%85%E4%B8%BA2%E5%85%B6%E5%AE%9E%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%94%A8%E6%9C%80%E5%BC%80%E5%A7%8B%E6%8F%90%E5%88%B0%E7%9A%84%E6%9C%B4%E7%B4%A0%E6%80%9D%E8%B7%AF%E6%9D%A5%E8%A7%A3%E5%86%B3%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%9B%B8%E5%BD%93%E4%BA%8E%E6%8A%8A2%E4%B8%AAarr%E5%B1%95%E5%BC%80%E7%84%B6%E5%90%8E%E4%BB%8E%E5%89%8D%E5%BE%80%E5%90%8E%E9%80%92%E6%8E%A8%E5%9C%B0%E6%B1%82%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E5%B9%B6%E4%B8%94%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%8A%E7%A9%BA%E9%97%B4%E4%BC%98%E5%8C%96%E7%9A%84%E6%8A%80%E5%B7%A7"><span class="nav-number">3.4.1.1.3.</span> <span class="nav-text">k等于2。稍微麻烦一点。但因为k仅为2，其实这里我们可以用最开始提到的朴素思路来解决，也就是相当于把2个arr展开，然后从前往后递推地求最大子数组和。并且也可以用上空间优化的技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#arr%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%AD%A3"><span class="nav-number">3.4.2.</span> <span class="nav-text">arr全部元素和非正：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E6%AD%A3%E8%A6%81%E4%B9%88%E6%98%AF%E4%B8%BA0%E8%A6%81%E4%B9%88%E6%98%AF%E8%B4%9F%E7%9A%84%E6%AD%A4%E6%97%B6%E9%83%BD%E6%B2%A1%E5%BF%85%E8%A6%81%E6%A8%AA%E8%B7%A8k%E4%B8%AAarr%E4%BA%86%E9%A1%B6%E5%A4%9A%E6%98%AF%E6%A8%AA%E8%B7%A82%E4%B8%AAarr%E6%88%96%E8%80%85%E5%B9%B2%E8%84%86%E5%B0%B1%E6%98%AF%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%BB%85%E5%87%BA%E7%8E%B0%E5%9C%A8%E5%8D%95%E4%B8%AAarr%E9%87%8C%E5%8F%AF%E4%BB%A5%E8%AF%81%E6%98%8E%E5%A6%82%E6%9E%9C%E6%A8%AA%E8%B7%A8%E4%BA%863%E4%B8%AA%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%9A%84arr%E5%88%99%E4%B8%AD%E9%97%B4%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%8C%85%E5%90%AB%E5%AE%8C%E6%95%B4%E7%9A%84arr%E4%BD%86%E5%9B%A0%E4%B8%BA%E7%8E%B0%E5%9C%A8arr%E7%9A%84%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%AD%A3%E5%8E%BB%E6%8E%89%E4%B9%8B%E5%90%8E%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E4%B9%9F%E4%B8%80%E5%AE%9A%E4%B8%8D%E4%BC%9A%E5%8F%98%E5%B0%8F%E8%BF%98%E5%8F%AF%E8%83%BD%E5%8F%98%E5%A4%A7%E6%89%80%E4%BB%A5%E6%98%BE%E7%84%B6%E6%98%AF%E5%8F%AF%E4%BB%A5%E5%8E%BB%E6%8E%89%E7%9A%84arr%E5%92%8C%E4%B8%BA0%E7%9A%84%E6%83%85%E5%86%B5%E7%A1%AE%E5%AE%9E%E6%98%AF%E5%8E%BB%E4%B8%8D%E5%8E%BB%E9%83%BD%E8%A1%8C%E4%BD%86%E4%B8%BA%E4%BA%86%E7%AE%80%E6%B4%81%E6%88%91%E4%BB%AC%E4%B8%8D%E5%A6%A8%E9%83%BD%E8%80%83%E8%99%91%E5%8E%BB%E6%8E%89%E8%80%8C%E5%A6%82%E6%9E%9Carr%E5%92%8C%E4%B8%BA%E8%B4%9F%E5%88%99%E4%B8%80%E5%AE%9A%E8%A6%81%E5%8E%BB%E6%8E%89%E4%B8%94%E5%8E%BB%E6%8E%89%E4%B9%8B%E5%90%8E%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E5%8F%98%E5%A4%A7%E4%BA%86%E5%BC%95%E8%B5%B7%E4%BA%86%E7%9F%9B%E7%9B%BE%E6%95%85%E6%AD%A4%E6%97%B6%E7%A1%AE%E5%AE%9E%E4%B8%8D%E4%BC%9A%E6%A8%AA%E8%B7%A83%E4%B8%AA%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%9A%84arr%E9%82%A3%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E6%A0%B9%E6%8D%AEk%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%9D%A5%E5%88%A4%E6%96%ADk%E4%B8%BA1%E5%88%99%E6%98%AF%E7%AE%80%E5%8D%95%E7%9A%84%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E9%97%AE%E9%A2%98k%E5%A4%A7%E4%BA%8E%E7%AD%89%E4%BA%8E2%E4%B8%80%E5%BE%8B%E5%BD%93%E6%88%902%E4%B8%AAarr%E7%9A%84%E9%97%AE%E9%A2%98%E4%B9%9F%E6%98%AF%E7%9B%B4%E6%8E%A5%E5%81%9A"><span class="nav-number">3.4.2.1.</span> <span class="nav-text">非正，要么是为0，要么是负的，此时都没必要横跨k个arr了，顶多是横跨2个arr，或者干脆就是最大子数组仅出现在单个arr里（可以证明，如果横跨了3个及以上的arr，则中间一定会包含完整的arr，但因为现在arr的全部元素和非正，去掉之后子数组和也一定不会变小，还可能变大，所以显然是可以去掉的。arr和为0的情况确实是去不去都行，但为了简洁，我们不妨都考虑去掉。而如果arr和为负，则一定要去掉，且去掉之后子数组和变大了，引起了矛盾。故，此时确实不会横跨3个及以上的arr）。那我们也可以直接根据k的大小来判断，k为1，则是简单的最大子数组和问题；k大于等于2，一律当成2个arr的问题，也是直接做</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%B3%E6%AD%A4%E6%80%9D%E8%B7%AF%E5%A4%A7%E6%A6%82%E6%98%AF%E5%88%86%E6%9E%90%E5%AE%8C%E4%BA%86%E5%89%A9%E4%B8%8B%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%9B%B8%E5%AF%B9%E7%AE%97%E7%AE%80%E5%8D%95%E5%90%A7%E5%B0%B1%E6%98%AF%E5%8F%AF%E8%83%BD%E6%9C%89%E4%BA%9B%E7%B9%81%E7%90%90%E7%84%B6%E5%90%8E%E6%9C%89%E4%BA%9B%E5%9C%B0%E6%96%B9%E6%98%AF%E5%8F%AF%E4%BB%A5%E4%BC%98%E5%8C%96%E7%9A%84%E5%B0%A4%E5%85%B6%E6%98%AF%E8%BF%99%E9%87%8C%E5%8F%88%E4%B8%80%E6%AC%A1%E5%87%BA%E7%8E%B0%E4%BA%86%E5%8F%96%E6%A8%A1%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%96%E6%A8%A1%E9%99%A4%E4%BA%86%E5%9C%A8%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%A6%81%E5%8F%96%E6%A8%A1%E8%BF%98%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E4%B8%AD%E9%97%B4%E6%94%B9%E5%8F%98%E4%B8%80%E4%B8%8B%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E5%9B%A0%E4%B8%BA%E6%AF%94%E5%A6%82%E8%BF%99%E9%A2%98%E8%A6%81%E5%AF%B91000000007%E5%8F%96%E6%A8%A1%E5%8F%AF%E8%83%BD%E6%88%91%E4%BB%AC%E4%B8%AD%E9%97%B4%E8%AE%A1%E7%AE%97%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BC%8F%E5%AD%90atimes-b%E9%9C%80%E8%A6%81%E5%AF%B9%E8%BF%99%E4%B8%AA%E6%95%B0%E5%8F%96%E6%A8%A1%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E4%BB%85%E4%BB%85%E8%BF%99%E6%A0%B7%E6%93%8D%E4%BD%9Caconsttimesbconst%E5%85%B6%E4%B8%ADconst%E6%8C%87%E4%BB%A3%E4%B8%8A%E9%9D%A2%E7%9A%841000000007%E8%BF%98%E6%98%AF%E6%9C%89%E5%8F%AF%E8%83%BD%E5%8F%91%E7%94%9F%E6%BA%A2%E5%87%BA%E5%9B%A0%E4%B8%BAa%E5%92%8Cb%E5%8F%AF%E8%83%BD%E5%90%84%E8%87%AA%E9%83%BD%E6%98%AF%E5%BE%88%E6%8E%A5%E8%BF%91const%E7%9A%84%E6%AF%94%E5%A6%82%E4%B8%80%E4%B8%AA%E6%98%AF999999999%E4%B8%80%E4%B8%AA%E6%98%AF1000000006%E6%AF%8F%E4%B8%AA%E5%8D%95%E7%8B%AC%E7%A1%AE%E5%AE%9E%E5%8F%96%E6%A8%A1%E4%B9%9F%E4%B8%8D%E5%BD%B1%E5%93%8D%E4%BD%86%E4%B9%98%E8%B5%B7%E6%9D%A5%E5%AE%83%E4%BB%AC%E5%B0%B1%E6%98%AF%E5%BE%88%E5%A4%A7%E7%9A%84%E4%BA%86%E5%8F%AF%E8%83%BD%E8%BF%99%E4%B8%AA%E7%BB%93%E6%9E%9C%E5%B0%B1%E7%9B%B4%E6%8E%A5%E6%BA%A2%E5%87%BA%E4%BA%86%E8%B6%85%E5%87%BA%E4%BA%86int%E7%9A%84%E9%99%90%E5%88%B6%E8%8C%83%E5%9B%B4%E6%89%80%E4%BB%A5%E8%BF%99%E9%87%8C%E4%B9%98%E6%B3%95%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E7%BB%99%E5%AE%83%E8%BD%AC%E4%B8%80%E4%B8%8B%E7%B1%BB%E5%9E%8B%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%98%AF%E7%94%A8%E4%B8%80%E4%B8%AA%E4%B9%98%E6%B3%95%E4%B9%98%E4%B8%8A1ll%E8%BD%AC%E6%88%90long-long%E7%B1%BB%E5%9E%8B%E8%BF%99%E9%87%8C%E7%9A%841ll%E7%9A%84%E5%80%BC%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF1%E4%B8%8D%E8%BF%87%E7%B1%BB%E5%9E%8B%E7%9A%84long-long%E5%9B%A0%E4%B8%BAlong-long%E4%B9%98%E4%B8%8Aint%E4%BC%9A%E6%8A%8A%E7%BB%93%E6%9E%9C%E8%BD%AC%E6%88%90long-long"><span class="nav-number">3.5.</span> <span class="nav-text">至此，思路大概是分析完了。剩下的代码实现相对算简单吧，就是可能有些繁琐，然后有些地方是可以优化的（尤其是这里又一次出现了取模的问题。取模，除了在运算过程中要取模，还可能需要中间改变一下变量类型。因为，比如这题要对1000000007取模，可能我们中间计算的一个式子\(a\times
+b\)需要对这个数取模，如果我们仅仅这样操作：\((a\%const)\times(b\%const)\)（其中const指代上面的1000000007），还是有可能发生溢出。因为，a和b可能各自都是很接近const的，比如一个是999999999，一个是1000000006，每个单独确实取模也不影响，但乘起来它们就是很大的了，可能这个结果就直接溢出了，超出了int的限制范围。所以这里乘法的时候我们需要给它转一下类型，具体来说是用一个乘法，乘上1LL，转成long
+long类型（这里的1LL的值其实就是1，不过类型的long long，因为long
+long乘上int，会把结果转成long long）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">97</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
