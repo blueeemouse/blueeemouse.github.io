@@ -150,6 +150,170 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/" class="post-title-link" itemprop="url">用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-07 00:21:00" itemprop="dateCreated datePublished" datetime="2025-07-07T00:21:00+08:00">2025-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-08 10:00:12" itemprop="dateModified" datetime="2025-07-08T10:00:12+08:00">2025-07-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/dl/" itemprop="url" rel="index"><span itemprop="name">dl</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="如题但这里有个问题是我现在遇到这个问题只是因为项目里用到了flashattn但我目前的需求仅仅是跑通代码而非追求性能所以可以考虑在代码里加入以下两行">如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行：</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.backends.cuda.enable_mem_efficient_sdp(<span class="literal">False</span>) torch.backends.cuda.enable_flash_sdp(<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="经过实操确实可以解决问题但这样应该也把flashattn给取消掉了有点治标不治本查了一下似乎可能和torch版本有关系但按理来说应该不会有这个问题的因为是按照项目的requirements来配置环境的">经过实操，确实可以解决问题。但这样应该也把FlashAttn给取消掉了，有点治标不治本。查了一下似乎可能和torch版本有关系，但按理来说应该不会有这个问题的，因为是按照项目的requirements来配置环境的……</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/" class="post-title-link" itemprop="url">服务器上运行jupyter notebook</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-06 09:45:00 / Modified: 09:59:48" itemprop="dateCreated datePublished" datetime="2025-07-06T09:45:00+08:00">2025-07-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="需求就是标题之所以要用jupyter-notebook来跑主要是它好调试但可能本地卡不行所以需要用服务器来跑-正常来说服务器上应该跑不了jupyter-notebook因为上面没有相关插件尤其是如果还是租的服务器那更不方便装插件所以只能想象其它方法如果是组里的服务器可能稍微好一点说不定已经有人配置好了">需求就是标题。之所以要用jupyter
+notebook来跑，主要是它好调试。但可能本地卡不行，所以需要用服务器来跑<br>正常来说，服务器上应该跑不了jupyter
+notebook，因为上面没有相关插件。尤其是，如果还是租的服务器，那更不方便装插件，所以只能想象其它方法（如果是组里的服务器，可能稍微好一点，说不定已经有人配置好了）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/venv%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -848,186 +1012,6 @@ prediction（left-to-right/right-to-left）（虽然现在这俩任务好像已�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E2%85%A1/" class="post-title-link" itemprop="url">打家劫舍Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-06-27 17:57:00" itemprop="dateCreated datePublished" datetime="2025-06-27T17:57:00+08:00">2025-06-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-28 09:47:29" itemprop="dateModified" datetime="2025-06-28T09:47:29+08:00">2025-06-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">打家劫舍类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber-ii/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E2%85%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/" class="post-title-link" itemprop="url">打家劫舍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-06-27 12:01:00 / Modified: 17:01:52" itemprop="dateCreated datePublished" datetime="2025-06-27T12:01:00+08:00">2025-06-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">打家劫舍类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1097,18 +1081,18 @@ prediction（left-to-right/right-to-left）（虽然现在这俩任务好像已�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">170</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">97</span>
+        <span class="site-state-item-count">98</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

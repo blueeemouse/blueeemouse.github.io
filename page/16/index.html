@@ -150,6 +150,256 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Multi-Memory%20Matching%20for%20Unsupervised%20%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 22:41:58" itemprop="dateCreated datePublished" datetime="2024-10-26T22:41:58+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-16 21:29:22" itemprop="dateModified" datetime="2025-02-16T21:29:22+08:00">2025-02-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="eccv24">ECCV24</h1>
+<h1 id="所研究的taskunsupervised-visible-infrared-person-re-identification">所研究的task：Unsupervised
+Visible-Infrared Person Re-Identification。</h1>
+<h1 id="贡献提出了一种指标ari用来评价聚类的效果-提出了multi-memory-matching-framework可以提取更多信息以便实现更好的跨模态的对应cross-modality-correspondences">贡献：提出了一种指标ARI，用来评价聚类的效果<br>提出了Multi-Memory
+Matching
+framework，可以提取更多信息，以便实现更好的跨模态的对应（cross-modality
+correspondences）</h1>
+<h1 id="insight通过多特征匹配来提高聚类和伪标签的可靠性以及辅助跨模态的对应和一般的提高跨模态对应的方法不太一样那些更多聚焦于怎么去对应会把对应的方法转化成其它优化问题">insight：通过多特征匹配，来提高聚类和伪标签的可靠性，以及辅助跨模态的对应（和一般的提高跨模态对应的方法不太一样——那些更多聚焦于怎么去对应，会把对应的方法转化成其它优化问题）</h1>
+<h1 id="动机无监督情况下训练很大程度上依赖于聚类产生的伪标签但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究而本文先是提出一个指标用来衡量聚类产生的伪标签的效果之后发现其实以前的一些方法的伪标签效果不算好例如明明是不同identity对应的特征但是聚类的时候被分到了相同的伪标签">动机：无监督情况下，训练很大程度上依赖于聚类产生的伪标签。但这个伪标签的准确度以及跨模态图像的对应性并没有被很好地研究。而本文先是提出一个指标，用来衡量聚类产生的伪标签的效果，之后发现其实以前的一些方法的伪标签效果不算好（例如，明明是不同identity对应的特征，但是聚类的时候被分到了相同的伪标签）</h1>
+<h1 id="方法">方法</h1>
+<h2 id="cross-modality-clusteringcmc整个pipeline的第一步它主要是用于生成伪标签它的大体思想是提取出图像的更多特征用于进行一个多特征的匹配而不是以往的单特征匹配以提高匹配的可靠性-而所谓单特征匹配其实就是对每幅图像我们都只提取出一个特征向量然后就开始匹配本质上我们在期望这一个特征向量就提取出足够的有意义的信息所以其实它的创新不止是在于提取更多特征这样只是增加了参数量而已至于它所说的更多特征能提取出更多细节信息多少有些讲故事了那我还是提取一个特征向量但我把维度改的更大本质上应该是一样的重点在于多特征的匹配多特征匹配也就是每幅图都有多个特征向量然后用多个特征向量来进行匹配这个是有道理的且是真正创新的下面的mmlm模块就是在实现这个步骤">1.Cross-Modality
+Clustering（CMC）（整个pipeline的第一步）它主要是用于生成伪标签（它的大体思想是，提取出图像的更多特征，用于进行一个多特征的匹配，而不是以往的单特征匹配，以提高匹配的可靠性）<br>（而所谓单特征匹配，其实就是，对每幅图像，我们都只提取出一个特征向量，然后就开始匹配。本质上我们在期望这一个特征向量就提取出足够的、有意义的信息）（所以其实它的创新不止是在于提取更多特征，这样只是增加了参数量而已，至于它所说的更多特征能提取出更多细节信息，多少有些讲故事了：那我还是提取一个特征向量，但我把维度改的更大，本质上应该是一样的；重点在于多特征的匹配。多特征匹配，也就是每幅图都有多个特征向量，然后用多个特征向量来进行匹配，这个是有道理的，且是真正创新的。下面的MMLM模块就是在实现这个步骤）</h2>
+<h2 id="multi-memory-learning-and-matchingmmlm">2.Multi-Memory Learning
+and Matching（MMLM）</h2>
+<h3 id="它做的主要是在每个簇内继续划分出多个子簇它们代表了更细节的特征跨模态匹配簇的时候还是用pgm的框架但计算簇的距离或者说节点的距离的时候用的是多个子簇而不是像往常的直接用一个簇中心的特征然后再用某种距离度量比如说余弦相似度就认为这个是簇之间的距离了">它做的主要是，在每个簇内继续划分出多个子簇，它们代表了更细节的特征。跨模态匹配簇的时候，还是用PGM的框架，但计算簇的距离（或者说节点的距离）的时候，用的是多个子簇，而不是像往常的，直接用一个簇中心的特征，然后再用某种距离度量，比如说余弦相似度，就认为这个是簇之间的距离了</h3>
+<h2 id="soft-cluster-level-alignment-还得细看">3.Soft Cluster-level
+Alignment<br>还得细看</h2>
+<h1 id="分析">分析</h1>
+<h2 id="cmc模块主要是聚类的时候把两种模态的所有数据放到一起来聚类但有个问题就是我不清楚它是一开始就把两种模态的数据放到一起只聚类一次还是说先两个模态分别聚类按照经典操作来之后再把两种模态的数据放到一起来一个混合模态的聚类得看代码了论文里没说清楚但这个问题不是很大然后不仅会在两个模态内的簇各自去拉近实例还是经典的用clusternce-loss且会有一步把实例拉近到混合簇里就是说因为两种模态的数据放到一起来聚类了所以会出现一个簇里既有可见光数据也有红外数据拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近通过这种方式间接地学到一些跨模态对应的知识">1.CMC模块，主要是聚类的时候把两种模态的所有数据放到一起来聚类，（但有个问题，就是我不清楚它是一开始就把两种模态的数据放到一起，只聚类一次；还是说先两个模态分别聚类，按照经典操作来，之后再把两种模态的数据放到一起，来一个混合模态的聚类？得看代码了，论文里没说清楚。但这个问题不是很大）然后不仅会在两个模态内的簇各自去拉近实例（还是经典的用ClusterNCE
+loss），且会有一步，把实例拉近到混合簇里（就是说，因为两种模态的数据放到一起来聚类了，所以会出现一个簇里既有可见光数据，也有红外数据；拉近的时候会同时把这个簇里的可见光数据与红外数据都往这个簇的中心去拉近。通过这种方式，间接地学到一些跨模态对应的知识）</h2>
+<h2 id="mmlm模块在1中其实已经构建了单memory也就是各个模态里的簇中心一般的操作就是直接用这些单memory进行跨模态匹配了此时我们衡量距离就是用簇中心的特征而论文提出要在每个簇指属于这个簇的所有特征的集合内再划分多个小的簇也就是multi-memory用于捕获更多细节的信息最终进行跨模态匹配的时候还是原来那些大的簇进行匹配但我们计算簇的距离的时候就会用到这两个簇里面的多个小的簇这里就是论文强调的multi-memory-matching也是它认为能提高匹配质量的地方">2.MMLM模块，在1中，其实已经构建了单memory（也就是各个模态里的簇中心），一般的操作就是直接用这些单memory进行跨模态匹配了，此时我们衡量距离就是用簇中心的特征。而论文提出，要在每个簇（指属于这个簇的所有特征的集合）内再划分多个小的簇，也就是multi-memory，用于捕获更多细节的信息。最终进行跨模态匹配的时候，还是原来那些大的簇进行匹配，但我们计算簇的距离的时候，就会用到这两个簇里面的多个小的簇（这里就是论文强调的multi-memory
+matching，也是它认为能提高匹配质量的地方）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 16:41:28" itemprop="dateCreated datePublished" datetime="2024-10-26T16:41:28+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-18 14:08:45" itemprop="dateModified" datetime="2025-03-18T14:08:45+08:00">2025-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>通常所谓提取”modality-invariant information“，”modality-shared
+feature“的方法，都是进行一些跨模态的对比学习。这一块有没有得改进？更多借鉴对比学习的技术、理论？用confuser和discriminator可能都还算比较新的了。但confuser到底有没有问题？
+# 研究问题的对比： ## 无监督： ### [[Shallow-Deep Collaborative Learning
+for Unsupervised Visible-Infrared Person
+Re-Identification]]研究的是同时利用好浅层和深层特征，来更好进行重识别。具体做的是，修改了一下骨干网络，改进了一下对比损失部分（主要改进的是谁和谁对比。这个好像有点通病了，大家都这么改），改进了一下label
+association方法 ### [[Learning Commonality, Divergence and Variety for
+Unsupervised Visible-Infrared Person
+Re-identification]]研究的是在无监督学习中，通过改进对比的对象，从而学到更多样的信息。具体做的是，除了通常的centroid
+prototype外，还提出了hard
+prototype（即一个cluster内里中心最远的，虽然也有可能受到噪声影响）和dynamic
+prototype（不局限于和cluster的中心对比，也会和每个cluster里的某个特征向量进行对比，但并不固定和谁对比，动态选取）
+## 有监督： ### [[Implicit Discriminative Knowledge Learning for
+Visible-Infrared Person
+Re-Identification]]研究的是，在提取modality-shared
+feature之余，能不能把modality-specific
+feature也用上，用它们来辅助判别。具体做的是，用一个discriminator和confuser分别提取modality
+specific/shared feature，然后用引入Information
+Purifier来减小两种特征之间的差异，后面将modality-specific
+feature的内容蒸馏进modality-shared
+feature中（感觉这里其实三个部分都相对会新一点。discriminator和confuser可能之前有人用过，但这样明确地提出如何提取shared/specific
+feature还是挺好的。蒸馏感觉尤其新，代表了不同的利用多种特征的方法啊）
+### [[WRIM-Net---Wide-Ranging Information Mining Network for
+Visible-Infrared Person
+Re-Identification]]研究的是，如何更好地提取出一个模态下的multi-dimension
+information。个人理解，也就是想更好捕捉图像中不同部分的交互信息。具体做的是，用池化、注意力机制等计算出一个mask，代表提取了重点特征和多个区域交互的特征（主要体现在多头注意力机制本身的特点，以及它的query、key、value上），然后是一个对比学习了，最重要的改进点在于计算每个query和它最不相似的k个向量之间的对比损失（发现改进点基本还是在于谁和谁比）
+### [[High-Order Structure Based Middle-Feature Learning for
+Visible-Infrared Person
+Re-identification]]研究的是，如何更好地提取出图像中不同部分的交互信息，以便更好地进行行人重识别（显然，和上面的有点重复了）。具体做的是，用CNN和Transformer分别提取长短程的信息（或许可以参考一下cv里之前的一堆把二者结合起来的工作？比如Swin-Transformer），用GAT提取交互信息，最后则还是用一堆对比损失来拉近距离，算上自己算出来的middle
+feature，有三种模态；论文又提出长短程两种range的feature，来回组合对比。。。
+### [[Channel Augmentation for Visible-Infrared
+Re-Identification]]研究的是，从visible images去匹配infrared
+images的方法，希望能利用好visible
+images中的颜色信息，但又要减小两种特征之间的差异。具体做的是，提出一种新的增强操作CA，并稍微解释了一下；然后提出weak-and-strong
+augmentation joint learning
+strategy，在其中提出了分类结果一致性的约束。感觉某种程度上比直接拉近两个特征之间的距离、算对比损失要来的合理一点
+### [[Diverse Embedding Expansion Network and Low-Light Cross-Modality
+Benchmark for Visible-Infrared Person
+Re-Identification]]研究的是从embedding角度出发，希望能生成更多样的embedding，从而学习到更好的特征（不从传统的生成模型出发，是因为论文认为配对数据不够，生成模型效果可能不够好）。具体做的是，提出一个多分支的模块，希望它的每个分支都能捕获不同的信息；然后根据三个假设，提出相应损失来优化这些分支产生的embedding，最后再设计一个模块将多个embedding聚合利用起来（有点像多头注意力，一开始多头注意力的提出，除了稳定训练过程，也是为了每个头能关注到不同的特征）
+### [[PartMix---Regularization Strategy to Learn Part Discovery for
+Visible-Infrared Person
+Re-identification]]研究的是，如何将mixup技术应用到VI-ReID而不会遇到之前mixup技术中固有的问题（比如产生不自然的pattern，即产生很奇怪的图片；或者产生了只有背景的图、没有目标对象的图）。具体做的是，先用注意力机制，得到图像的part
+descriptor和global descriptor，后面对part
+descriptor进行mixup，得到正负样本，最后进行对比 ### [[Shape-Erased
+Feature Learning for Visible-Infrared Person
+Re-Identification]]研究的是，如何更好的提取shape信息，以得到更好的modality-shared
+feature。具体做的是，将得到的表征分离为两部分，相互无关，一部分是shape-related，一部分是shape-erased，然后通过利用shape-related进行重识别，促使其学到更多具有判别性的非shape信息；最后把两部分结合起来，就既有shape信息，也有shape以外的多样的信息
+### [[Visible-Infrared Person Re-Identification via Semantic Alignment
+and Affinity Inference]]研究的是，如何更好的提取part
+feature，并且在推理的时候将行人之间的关系也纳入考虑。具体做的是，先提出SAFL，在这个过程中学习、优化部位信息。这一过程中，会有若干模板，综合利用骨干网络提取出的特征和模板，可以得到图像的latent
+semantic part features；然后推理的时候提出AIM module，计算query
+image与gallery images之间的距离的时候，既用到了query image与gallery
+images之间直接的距离衡量（余弦相似度），也用到了gallery
+images相互之间的距离，二者综合得到修正后的距离 # 方法改进对比： ##
+对比损失部分： ### 谁和谁进行对比： ####
+中间模态的相互对比（比如，[[Shallow-Deep Collaborative Learning for
+Unsupervised Visible-Infrared Person
+Re-Identification]]中，两种模态的shallow/deep
+feature就在不断对比；又比如，[[High-Order Structure Based Middle-Feature
+Learning for Visible-Infrared Person Re-identification]]里，long/short
+term feature之间也会进行对比 ####
+算上中间模态，和原来的模态一起对比（大体上就是三种模态的数据互相对比。一般都是先提出一些假设/rationale，然后基于此挑选一些对象来对比），比如[[Diverse
+Embedding Expansion Network and Low-Light Cross-Modality Benchmark for
+Visible-Infrared Person Re-Identification]] #### 和centroid
+prototype进行对比（很常见了，基本所有无监督方法里都会用到，有监督方法里也可能会用到，比如[[Visible-Infrared
+Person Re-Identification via Semantic Alignment and Affinity
+Inference]]） #### 和hard prototype进行对比（一般hard
+prototype都选取为“最离群”的特征向量。比如，[[Learning Commonality,
+Divergence and Variety for Unsupervised Visible-Infrared Person
+Re-identification]]里，直接就这么说了；但[[WRIM-Net---Wide-Ranging
+Information Mining Network for Visible-Infrared Person
+Re-Identification]]中其实也有类似的思想（就是和最不相似的k个向量进行对比）（总的来说，这类对比方法就是，找出最远的/最不相似的来进行对比，期望能学到里面的独特的信息。但有没有严谨的理论一点的分析）
+#### 增强产生的正负样本之间的对比。比如[[Channel Augmentation for
+Visible-Infrared Re-Identification]]和[[PartMix---Regularization
+Strategy to Learn Part Discovery for Visible-Infrared Person
+Re-identification]]。那这类对比一般可能多出现在基于增强的方法中 ##
+提取modality-specific feature的方法： ###
+discriminator（+confuser一起用） ## 提取modality-shared feature的方法：
+###
+专门提取共性的特征（比如，shape，或者颜色的变化。一般这种专门想针对提取某种特征的，可能都基于增强操作，也许都会提出一种新的增强操作）
+###
+把一些东西共用（譬如，把模板共同给两个模态的特征一起用，或许可以认为最终学习到的模板是含有两个模态共有的信息的。但这只是一种直观上的理解，还不太有理论上的严格证明？）
+## 减小modality gap的方法： ###
+跨模态的对比（基本是标配了）（至于怎么对比，和谁对比，就是上面的问题了）
+###
+利用IN等Normalization方法（这种方法或许是解决分布不同的一种常用方法）[[Implicit
+Discriminative Knowledge Learning for Visible-Infrared Person
+Re-Identification]] ### 利用一些可学习的mask来筛选信息（同上） ### ##
+提取区域交互信息的方法： ### CNN+Transformer提取，GAT提取具体的交互 ###
+用池化、注意力等算出一个mask ## 利用提取出来的多种信息的方法： ###
+提出专门的聚合的模块（[[Diverse Embedding Expansion Network and
+Low-Light Cross-Modality Benchmark for Visible-Infrared Person
+Re-Identification]]） ### ## label association方法： #
+能不能整理出有监督和无监督方法的各自的pipeline？然后考究一下各个方法都在改进哪些部分？
+#
+其它相关领域：多模态（很显然是有关的，看看别的领域怎么处理多种模态的数据，尤其是统一的方法）；domain
+adaptation/transfer
+learning（跨领域，感觉和跨模态其实有点相似，都是会遇到不同的数据） #
+画图 ## 可以参考一下CROSS-MODALITY TRANSFORMER WITH MODALITY MINING FOR
+VISIBLE-INFRARED PERSON
+RE-IDENTIFICATION这篇论文里最后用t-SNE画的那个图，感觉效果一看就特别好。特别是它给每个id的两种模态的特征给圈到一起，这样就能直观看出来embedding效果有多好。而且也能一眼看出来不同id的特征都是分得比较开的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1014,144 +1264,6 @@ PyTorch 的其他数据转换操作（如 <code>transforms.ToTensor()</code> 或
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-15 11:06:57 / Modified: 11:58:02" itemprop="dateCreated datePublished" datetime="2024-10-15T11:06:57+08:00">2024-10-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="cutmix-是一种数据增强方法它将两张图片进行随机部分的组合同时将两张图片的标签按比例加权例如">-
-<strong>CutMix</strong>
-是一种数据增强方法，它将两张图片进行随机部分的组合，同时将两张图片的标签按比例加权。例如：</h2>
-<h3 id="一部分图片-a-和一部分图片-b-被切割组合输出图像的标签是-a-标签和-b-标签按图像的组合比例加权">-
-一部分图片 A 和一部分图片 B 被切割组合，输出图像的标签是 A 标签和 B
-标签按图像的组合比例加权。</h3>
-<h2 id="rcpasterandom-cut-paste是一种随机增强方法通常涉及在图像中随机剪切部分图像并粘贴到其他区域增加图像的多样性">-
-<strong>rcpaste</strong>（Random Cut
-Paste）是一种随机增强方法，通常涉及在图像中随机剪切部分图像并粘贴到其他区域，增加图像的多样性。</h2>
-<h2 id="mixup-也是一种数据增强技术涉及将两张图片的像素和标签按某个随机比例进行线性混合它通过图像的加权平均生成新的训练样本其对应标签也按相同比例混合例如图像-a-和-b-混合后新图像的标签为-λ-标签-a-1-λ-标签-b其中-λ-是随机生成的混合比例">-
-<strong>MixUp</strong>
-也是一种数据增强技术，涉及将两张图片的像素和标签按某个随机比例进行线性混合。它通过图像的加权平均生成新的训练样本，其对应标签也按相同比例混合。例如，图像
-A 和 B 混合后新图像的标签为
-<code>λ * 标签 A + (1-λ) * 标签 B</code>，其中 <code>λ</code>
-是随机生成的混合比例。</h2>
-<h2 id="这几个操作实在是有点太像了主要区别可能在于random-cut-paste是用自己的图像完成操作而cutmix和mixup都是用到两幅图像cutmix是部分的完全组合mixup是整体的部分组合">-
-这几个操作实在是有点太像了。主要区别可能在于，random cut
-paste是用自己的图像完成操作，而cutmix和mixup都是用到两幅图像。cutmix是部分的完全组合，mixup是整体的部分组合</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">class CutMix(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, size, beta):</span><br><span class="line"></span><br><span class="line">    self.size = size</span><br><span class="line"></span><br><span class="line">    self.beta = beta</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = self._shuffle_minibatch(batch) # rand_img, rand_label</span><br><span class="line"></span><br><span class="line">    # 不是说真的随机生成的img和label，只是把一个batch里的数据给打乱顺序了</span><br><span class="line"></span><br><span class="line">    lambda_ = np.random.beta(self.beta,self.beta) # 根据beta分布生成一个lambda</span><br><span class="line"></span><br><span class="line">    r_x = np.random.uniform(0, self.size) # r_x, r_y是随机裁剪框的中心点</span><br><span class="line"></span><br><span class="line">    r_y = np.random.uniform(0, self.size)</span><br><span class="line"></span><br><span class="line">    r_w = self.size * np.sqrt(1-lambda_)  # r_w, r_h是随机裁剪框的宽和高</span><br><span class="line"></span><br><span class="line">    r_h = self.size * np.sqrt(1-lambda_)</span><br><span class="line"></span><br><span class="line">    x1 = int(np.clip(r_x - r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    x2 = int(np.clip(r_x + r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y1 = int(np.clip(r_y - r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y2 = int(np.clip(r_y + r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    # (x1, y1), (x2, y2)分别是随机裁剪框的左上角和右下角坐标</span><br><span class="line"></span><br><span class="line">    # clip防止左上角/右下角坐标超出图像范围</span><br><span class="line"></span><br><span class="line">    img[:, :, x1:x2, y1:y2] = rand_img[:, :, x1:x2, y1:y2]  # 这一步完成混合</span><br><span class="line"></span><br><span class="line">    lambda_ = 1 - (x2-x1)*(y2-y1)/(self.size*self.size) # 重新计算lambda，因为前面</span><br><span class="line"></span><br><span class="line">    # 可能裁剪框超出了图像范围，所以需要重新计算</span><br><span class="line"></span><br><span class="line">    return img, label, rand_label, lambda_</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def _shuffle_minibatch(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = img.clone(), label.clone()</span><br><span class="line"></span><br><span class="line">    rand_idx = torch.randperm(img.size(0))</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = rand_img[rand_idx], rand_label[rand_idx]</span><br><span class="line"></span><br><span class="line">    return rand_img, rand_label</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class MixUp(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, alpha=0.1):</span><br><span class="line"></span><br><span class="line">    self.alpha = alpha</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    &#x27;&#x27;&#x27;Returns mixed inputs, pairs of targets, and lambda&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    x, y = batch</span><br><span class="line"></span><br><span class="line">    lam = np.random.beta(self.alpha, self.alpha)</span><br><span class="line"></span><br><span class="line">    batch_size = x.size(0)</span><br><span class="line"></span><br><span class="line">    index = torch.randperm(batch_size)</span><br><span class="line"></span><br><span class="line">    mixed_x = lam * x + (1 - lam) * x[index, :]</span><br><span class="line"></span><br><span class="line">    y_a, y_b = y, y[index]</span><br><span class="line"></span><br><span class="line">    return mixed_x, y_a, y_b, lam</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-14 18:38:09 / Modified: 18:38:57" itemprop="dateCreated datePublished" datetime="2024-10-14T18:38:09+08:00">2024-10-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>还没解决，之后有时间再说吧。感觉这个问题也不是那么紧急，毕竟几乎不会在git
-bash下</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1221,18 +1333,18 @@ bash下</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">170</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">97</span>
+        <span class="site-state-item-count">98</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

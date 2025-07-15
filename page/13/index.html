@@ -150,6 +150,192 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-01-08 10:27:51 / Modified: 10:31:09" itemprop="dateCreated datePublished" datetime="2025-01-08T10:27:51+08:00">2025-01-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="这是一篇survey主要内容包括一下几个方面列出了常用的模型架构和训练流程对常见的mm-llms截至2024.2进行分类主要依据模型的specific-formulations回顾部分挑出的模型在主流benchmark上的性能并总结一下关键的训练语料配比探索一下mm-llms未来比较有前景的发展方向">这是一篇survey。主要内容包括一下几个方面：列出了常用的模型架构和训练流程；对常见的MM-LLMs（截至2024.2）进行分类（主要依据模型的specific
+formulations）；回顾部分挑出的模型在主流benchmark上的性能，并总结一下关键的训练语料配比；探索一下MM-LLMs未来比较有前景的发展方向</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20Layer%20Normalization%20in%20the%20Transformer%20Architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20Layer%20Normalization%20in%20the%20Transformer%20Architecture/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-01-02 20:10:52" itemprop="dateCreated datePublished" datetime="2025-01-02T20:10:52+08:00">2025-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-01-04 10:41:43" itemprop="dateModified" datetime="2025-01-04T10:41:43+08:00">2025-01-04</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="icml2020pkumsra">ICML2020，pku，msra</h1>
+<h1 id="authorsruibin-xiong-1-2-yunchang-yang-3-di-he-4-5-kai-zheng-4-shuxin-zheng-5-chen-xing-6-huishuai-zhang-5-yanyan-lan-1-2-liwei-wang-4-3-tie-yan-liu-5">authors：Ruibin
+Xiong†* 1 2 Yunchang Yang* 3 Di He 4 5 Kai Zheng 4 Shuxin Zheng 5 Chen
+Xing 6 Huishuai Zhang 5 Yanyan Lan 1 2 Liwei Wang 4 3 Tie-Yan Liu 5</h1>
+<h1 id="problemmotivationtransformer模型极为常用但训练它的时候通常需要一个精心设计的warm-up阶段实验表明这一步对最终的性能表现影响很大但加上这个步骤却减缓了优化的速度同时需要调更多的参数所以本质上我们希望不需要warm-up也能达到同样好的性能这样优化的速度更快调参的工作量也少了这个工作的意义在训练大型模型的时候才能更加显现出来吧如果只是平时训练解决一些小任务作业之类的意义就没那么大了吧">problem&amp;motivation：transformer模型极为常用。但训练它的时候通常需要一个精心设计的warm-up阶段。实验表明，这一步对最终的性能表现影响很大，但加上这个步骤却减缓了优化的速度，同时需要调更多的参数（所以本质上，我们希望不需要warm-up，也能达到同样好的性能。这样优化的速度更快，调参的工作量也少了。这个工作的意义在训练大型模型的时候才能更加显现出来吧，如果只是平时训练，解决一些小任务、作业之类的，意义就没那么大了吧）</h1>
+<h1 id="contribution用mean-field-theory证明了为何warm-up阶段很重要且证明了layer-norm的位置也很重要对结果影响很大">contribution：用mean
+field theory证明了为何warm-up阶段很重要，且证明了layer
+norm的位置也很重要，对结果影响很大</h1>
+<h1 id="insight原来的经典transformer架构中它把layer-norm放到了残差连接层后面也就是post-ln而这时输出层的梯度会很大所以如果一开始就用一个比较大的lr它就在这里炸了因此需要warm-up而如果把layer-norm放到residual-blocks里面也就是所谓pre-ln梯度就正常了不会过大此时再去掉warm-up效果是差不多的但是达到了我们最初的目的去掉warm-up优化更快调参更少有没有图可以看一下什么叫putting-the-layer-norm-between-the-residual-blocks">insight：原来的经典transformer架构中，它把layer
+norm放到了残差连接层后面，也就是Post-LN。而这时输出层的梯度会很大，所以如果一开始就用一个比较大的lr，它就在这里炸了，因此需要warm-up。而如果把layer
+norm放到residual
+blocks里面（也就是所谓Pre-LN），梯度就正常了，不会过大。此时再去掉warm-up，效果是差不多的，但是达到了我们最初的目的：去掉warm-up，优化更快，调参更少（有没有图可以看一下什么叫putting
+the layer norm between the residual blocks？）</h1>
+<h1 id="related-works脉络梳理">related works（脉络梳理）：</h1>
+<h2 id="在以往的cnnrnn式的网络中一般都是大lr然后慢慢减小warm-up很少用一般也就是在batch-size很大的时候采用">在以往的cnn/rnn式的网络中，一般都是大lr，然后慢慢减小。warm-up很少用，一般也就是在batch
+size很大的时候采用</h2>
+<h2 id="后面出现的transformer模型则非常需要warm-up且有论文发现对于post-ln-transformer-model不用用很少的warm-up模型都发散pre-ln-transformer-model也有人提出但它们依然还是需要warm-up">后面出现的transformer模型，则非常需要warm-up（且有论文发现，对于Post-LN
+transformer model，不用/用很少的warm-up，模型都发散）。Pre-LN
+transformer model也有人提出，但它们依然还是需要warm-up</h2>
+<h2 id="有研究认为warm-up的效果来自于对adam优化器里的adaptive-learning-rate的方差进行了限制然而warm-up并不只是对adam优化器起作用即使是用其它优化器的时候warm-up也经常有用下面的实验证明了对于sgd也是有效的所以它的收益应该不来自于这里尽管同期有工作发现pre-ln-transformer可以不需要warm-up但他们是经验上发现结论而这篇论文给出了一个理论的解释">有研究认为warm-up的效果来自于对Adam优化器里的adaptive
+learning
+rate的方差进行了限制。然而warm-up并不只是对Adam优化器起作用，即使是用其它优化器的时候，warm-up也经常有用（下面的实验证明了，对于SGD也是有效的）（所以它的收益应该不来自于这里）。尽管同期有工作发现Pre-LN
+Transformer可以不需要warm-up，但他们是经验上发现结论，而这篇论文给出了一个理论的解释</h2>
+<h1 id="optimization-for-the-transformer正文精读">Optimization for the
+Transformer（正文精读）</h1>
+<h2 id="介绍经典现有transformer结构它主要是由堆叠的transformer-layer组成而每个transformer-layer都有两种sub-layerthe-multi_head-self-attention-sub-layer和the-position-wise-feed-forward-network-sub-layer">1.介绍经典现有Transformer结构。它主要是由堆叠的Transformer
+layer组成，而每个Transformer layer都有两种sub-layer：the (multi_head)
+self-attention sub-layer和the position-wise feed-forward network
+sub-layer</h2>
+<h3 id="the-multi-head-self-attention-sub-layer">1.1.the (multi-head)
+self-attention sub-layer：</h3>
+<h4 id="先一个多头注意力然后是一个残差链接之后是一个ln">先一个多头注意力，然后是一个残差链接，之后是一个LN</h4>
+<h3 id="the-position-wise-feed-forward-network-sub-layer">1.2.the
+position-wise feed-forward network sub-layer：</h3>
+<h4 id="先一个两层前馈网络再一个残差链接之后是一个ln">先一个两层前馈网络，再一个残差链接，之后是一个LN</h4>
+<h2 id="改进后的pre-ln还是由这两种sub-layer组成只不过里面的具体顺序稍微调换了一下">2.改进后的Pre-LN，还是由这两种sub-layer组成，只不过里面的具体顺序稍微调换了一下</h2>
+<h3 id="the-multi-head-self-attention-sub-layer-1">2.1.the (multi-head)
+self-attention sub-layer</h3>
+<h4 id="先ln再多头注意力加残差">先LN，再多头注意力加残差</h4>
+<h3 id="the-position-wise-feed-forward-network-sub-layer-1">2.2.the
+position-wise feed-forward network sub-layer</h3>
+<h4 id="先ln再两层前馈加残差">先LN，再两层前馈加残差</h4>
+<h2 id="实验结果">3.实验结果</h2>
+<h3 id="实验目的实验部分主要想研究的是warm-up-stage具体来说想要探讨的是">3.1.实验目的：实验部分主要想研究的是warm-up
+stage，具体来说，想要探讨的是：</h3>
+<h4 id="warm-up阶段是否重要有多重要">1.warm-up阶段是否重要（有多重要）</h4>
+<h4 id="模型性能对于warm-up的迭代次数t_warmup是否敏感">2.模型性能对于warm-up的迭代次数<span class="math inline">\(T_{warmup}\)</span>是否敏感</h4>
+<h3 id="实验设计">3.2.实验设计：</h3>
+<h4 id="做一个机器翻译的任务即iwslt14-german-to-englishde-enmachine-translation-task">做一个机器翻译的任务，即IWSLT14
+German-to-English（De-En）machine translation task</h4>
+<h4 id="对于第一个问题实验考虑用两种优化器adam和sgd变量主要在于warmup-iterations-t_warmup-adam在一个固定的初始学习率上做三组实验t_warmup15004000这里的1代表不进行warmup所以后面的结果就能看出有没有warmup的模型性能差异就能验证warm-up-stage是否重要同时500和4000两种不同的warmup-iterations也能来验证模型性能是否对t_warmup很敏感虽然感觉这里做的实验有点少了不应该再多试几个t_warmup嘛此外每种优化器的初始学习率会尝试两种5e-4和1e-3">对于第一个问题，实验考虑用两种优化器（Adam和SGD），变量主要在于warmup
+iterations <span class="math inline">\(T_{warmup}\)</span>
+。Adam在一个固定的初始学习率上，做三组实验（<span class="math inline">\(T_{warmup}=1/500/4000\)</span>（这里的1代表不进行warmup。所以后面的结果就能看出有没有warmup的模型性能差异，就能验证warm-up
+stage是否重要。同时，500和4000两种不同的warmup
+iterations，也能来验证模型性能是否对<span class="math inline">\(T_{warmup}\)</span>很敏感（虽然感觉这里做的实验有点少了，不应该再多试几个<span class="math inline">\(T_{warmup}\)</span>嘛？（此外，每种优化器的初始学习率会尝试两种，5e-4和1e-3
+）</h4>
+<h4 id="sgd也是类似只是用它做实验的时候t_warmup只尝试了1和4000">SGD也是类似，只是用它做实验的时候，<span class="math inline">\(T_{warmup}\)</span>只尝试了1和4000</h4>
+<h3 id="结果分析">3.3.结果分析：</h3>
+<h4 id="首先对于两种优化器来说无论是用validation-loss还是bleu指标都是用warmup的效果比不用warmup的效果要好这证明了warmup在训练transformer中的重要性">首先，对于两种优化器来说，无论是用validation
+loss还是BLEU指标，都是用warmup的效果比不用warmup的效果要好。这证明了warmup在训练Transformer中的重要性</h4>
+<h4 id="其次warm-up阶段确实是对t_warmup很敏感的如果用的是原论文推荐的4000效果就比500要好得多总感觉实验做少了">其次，warm-up阶段确实是对<span class="math inline">\(T_{warmup}\)</span>很敏感的。如果用的是原论文推荐的4000，效果就比500要好得多（总感觉实验做少了。。。）</h4>
+<h2 id="理论解析">4.理论解析</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -786,132 +972,6 @@ image 20241101142934.png]]</h1>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/torch.DataParallel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/torch.DataParallel/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-14 14:26:22" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="它起到一个包装的作用包装完会把模型复制到多个gpu上要么是指定的多个gpu上要么是默认的所有空闲gpu上">它起到一个包装的作用，包装完会把模型复制到多个gpu上（要么是指定的多个gpu上，要么是默认的所有空闲gpu上）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%A9%BA%E4%BB%93%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AFgithub%E4%BB%93%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%A9%BA%E4%BB%93%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AFgithub%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-14 14:26:22" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="以本机的ubuntu的旧的obsidian笔记仓库连接到远端的更加新的obsidian仓库并同步数据为例">以本机的ubuntu的旧的obsidian笔记仓库连接到远端的更加新的obsidian仓库并同步数据为例</h1>
-<h1 id="首先得在本地仓库初始化一个新的git仓库我这里是本地还没初始化过git仓库不知道如果是初始化过的连接过github仓库的应该怎么做先不管了到时候用到了再查吧切到那个本地仓库的目录下打开终端git-init">首先得在本地仓库初始化一个新的git仓库（我这里是本地还没初始化过git仓库。不知道如果是初始化过的/连接过github仓库的应该怎么做。先不管了，到时候用到了再查吧）。切到那个本地仓库的目录下，打开终端，<code>git init</code></h1>
-<h1 id="然后添加远端仓库bashgit-remote-add-origin-httpsgithub.comyour-usernameyour-repository.git注意这里本地分支名字要和将要上传到的远端仓库的分支名字一样如果不一样比如远端是main但本地初始化的时候默认成了master重命名一下即可这个挺简单的问问ai就行">然后，添加远端仓库，<code>bashgit remote add origin https://github.com/your-username/your-repository.git</code>（注意，这里本地分支名字要和将要上传到的远端仓库的分支名字一样。如果不一样，比如远端是main，但本地初始化的时候默认成了master，重命名一下即可。这个挺简单的，问问ai就行）</h1>
-<h1 id="接着是先和远端同步之后才能上传文件这里我的情况是本地的文件夹的内容是远端仓库的子集所以即使被远端的内容完全覆盖了也没啥问题这算是比较简单友好的情况了因为操作可以稍微无脑一点执行如下代码段即可">接着是先和远端同步，之后才能上传文件。这里我的情况是，本地的文件夹的内容是远端仓库的子集，所以即使被远端的内容完全覆盖了也没啥问题。这算是比较简单友好的情况了，因为操作可以稍微无脑一点。执行如下代码段即可</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/main</span><br></pre></td></tr></table></figure>
-<h1 id="它的主要作用是拉取远端仓库内容并覆盖本地内容当然保险起见还是可以先备份一下本地文件的以免真的有啥重要的文件不见了">它的主要作用是<strong>拉取远端仓库内容并覆盖本地内容</strong>（当然，保险起见，还是可以先备份一下本地文件的，以免真的有啥重要的文件不见了）</h1>
-<h1 id="上面可能会出现一个问题就是它需要一个认证的过程估计是因为这个远端仓库已经先和windows里的一个文件夹连接了那里我记得好像没有这个步骤的不过也可能是因为在那边创建的反正现在是需要一个认证的步骤它会让你输入github的用户名和密码如果只是单纯的输入它会报一些错最重要的可能是这条fatal-不支持-200https-协议大概意思好像是说这种用户名加密码的认证方式现在不认可了得换一种认证方式搜索一下这个报错信息能找到好一些解法这里放一下实操过的方法确实有效就是用token令牌认证大体流程是去github帐号的个人主页那边创建一个token或者如果已经有能用的话用那个应该也可以前提是得记得内容那个token的内容好像只会在创建的时候显示一次之后就看不到了得自己保存它就起到一个密码的作用可以看成是一个强度更高的密码不留神的话自己也忘了创建token的时候记得选上相应的权限这样通过token认证之后才能做相应的操作-这一通操作完了再回到认证那边用户名正常输入密码就输入token内容即可注意一般我们是会复制token内容粘贴到终端的此时是看不见粘贴进去的东西的这是没问题的正常的话到这里应该就认证成功了上面的git-fetch和git-reset的操作应该也都能正常执行了更详细的步骤可以参考这个网站">上面可能会出现一个问题，就是它需要一个认证的过程（估计是因为这个远端仓库已经先和windows里的一个文件夹连接了。那里我记得好像没有这个步骤的。不过也可能是因为在那边创建的。反正现在是需要一个认证的步骤。它会让你输入github的用户名和密码。如果只是单纯的输入，它会报一些错，最重要的可能是这条——fatal:
-不支持 '?200~https'
-协议。大概意思好像是说，这种用户名加密码的认证方式，现在不认可了。得换一种认证方式。搜索一下这个报错信息能找到好一些解法，这里放一下实操过的方法，确实有效，就是用token（令牌）认证。大体流程是去github帐号的个人主页那边，创建一个token（或者如果已经有能用的话，用那个应该也可以，前提是得记得内容，那个token的内容好像只会在创建的时候显示一次，之后就看不到了，得自己保存。它就起到一个密码的作用，可以看成是一个强度更高的密码，不留神的话自己也忘了。创建token的时候，记得选上相应的权限。这样通过token认证之后才能做相应的操作。<br>这一通操作完了，再回到认证那边，用户名正常输入，密码就输入token内容即可。注意，一般我们是会复制token内容，粘贴到终端的。此时是看不见粘贴进去的东西的，这是没问题的。正常的话，到这里应该就认证成功了，上面的git
-fetch和git reset的操作应该也都能正常执行了。更详细的步骤可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/leviopku/article/details/126727575">网站</a>）</h1>
-<h1 id="至此已经完成了本地仓库与远端仓库的连接和同步了之后如果要上传东西到github仓库应该就正常操作就行了还没实验过">至此，已经完成了本地仓库与远端仓库的连接和同步了。之后如果要上传东西到github仓库，应该就正常操作就行了（还没实验过）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -981,18 +1041,18 @@ fetch和git reset的操作应该也都能正常执行了。更详细的步骤可
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">170</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">97</span>
+        <span class="site-state-item-count">98</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
