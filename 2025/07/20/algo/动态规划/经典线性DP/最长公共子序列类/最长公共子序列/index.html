@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最长公共子序列">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-20T14:05:00.000Z">
+<meta property="article:modified_time" content="2025-07-20T16:46:01.077Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>最长公共子序列 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最长公共子序列
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-20 22:05:00" itemprop="dateCreated datePublished" datetime="2025-07-20T22:05:00+08:00">2025-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-21 00:46:01" itemprop="dateModified" datetime="2025-07-21T00:46:01+08:00">2025-07-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a href>在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="给定两个字符串-text1-和-text2返回这两个字符串的最长-公共子序列-的长度如果不存在-公共子序列-返回-0">给定两个字符串 <code>text1</code> 和 <code>text2</code>，返回这两个字符串的最长 <strong>公共子序列</strong> 的长度。如果不存在 <strong>公共子序列</strong> ，返回 <code>0</code> 。</h2>
+<h2 id="一个字符串的-子序列-是指这样一个新的字符串它是由原字符串在不改变字符的相对顺序的情况下删除某些字符也可以不删除任何字符后组成的新字符串">一个字符串的 <strong>子序列</strong> 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。</h2>
+<ul>
+<li><h3 id="例如ace-是-abcde-的子序列但-aec-不是-abcde-的子序列">例如，<code>"ace"</code> 是 <code>"abcde"</code> 的子序列，但 <code>"aec"</code> 不是 <code>"abcde"</code> 的子序列。</h3>
+<h2 id="两个字符串的-公共子序列-是这两个字符串所共同拥有的子序列">两个字符串的 <strong>公共子序列</strong> 是这两个字符串所共同拥有的子序列。</h2>
+<h2 id="示例-1"><strong>示例 1：</strong></h2>
+<h3 id="输入text1-abcde-text2-ace"><strong>输入：</strong>text1 =
+"abcde", text2 = "ace"</h3>
+<h3 id="输出3"><strong>输出：</strong>3</h3>
+<h3 id="解释最长公共子序列是-ace-它的长度为-3"><strong>解释：</strong>最长公共子序列是
+"ace" ，它的长度为 3 。</h3>
+<h2 id="示例-2"><strong>示例 2：</strong></h2>
+<h3 id="输入text1-abc-text2-abc"><strong>输入：</strong>text1 = "abc",
+text2 = "abc"</h3>
+<h3 id="输出3-1"><strong>输出：</strong>3</h3>
+<h3 id="解释最长公共子序列是-abc-它的长度为-3"><strong>解释：</strong>最长公共子序列是
+"abc" ，它的长度为 3 。</h3>
+<h2 id="示例-3"><strong>示例 3：</strong></h2>
+<h3 id="输入text1-abc-text2-def"><strong>输入：</strong>text1 = "abc",
+text2 = "def"</h3>
+<h3 id="输出0"><strong>输出：</strong>0</h3>
+<h3 id="解释两个字符串没有公共子序列返回-0"><strong>解释：</strong>两个字符串没有公共子序列，返回
+0 。</h3>
+<h2 id="提示"><strong>提示：</strong></h2></li>
+<li><h3 id="text1.length-text2.length-1000"><code>1 &lt;= text1.length, text2.length &lt;= 1000</code></h3></li>
+<li><h3 id="text1-和-text2-仅由小写英文字符组成"><code>text1</code> 和 <code>text2</code> 仅由小写英文字符组成。</h3>
+<h1 id="思路">思路：</h1>
+<h2 id="首先得对一些基本的术语进行说明一般子数组子串这种说法它们是连续的而子序列则未必比如这题的子序列按照它的定义就是可以不连续的">首先得对一些基本的术语进行说明。一般，子数组、子串，这种说法，它们是连续的。而子序列则未必（比如这题的子序列，按照它的定义，就是可以不连续的）</h2>
+<h2 id="下面来看这道题因为这题的子序列的定义看重的是字符之间的相对顺序所以两个字符串s1和s2的最长公共子序列lcs其构造可以看成是两个字符串各自都选出了一些字符筛掉了一些字符不妨以题目里的示例1为例它的最长公共子序列是ace可以看成是text1里选了第135个字符以及text2里选择了所有字符这样我们就可以转而去讨论每一个字符是否被选择了故用动态规划的话假设我们想知道text1的前i个字符组成的子串于text2的前j个字符组成的子串的lcslongest-common-subsequence最长公共子序列的缩写下均用lcs指代最长公共子序列的长度不妨记为k那么可以有这样的递推关系">下面来看这道题。因为这题的子序列的定义，看重的是字符之间的相对顺序，所以两个字符串s1和s2的最长公共子序列lcs，其构造可以看成是，两个字符串各自都选出了一些字符，筛掉了一些字符。不妨以题目里的示例1为例，它的最长公共子序列是"ace"，可以看成是text1里选了第1、3、5个字符，以及text2里选择了所有字符。这样，我们就可以转而去讨论每一个字符是否被选择了。故，用动态规划的话，假设我们想知道text1的前i个字符组成的子串于text2的前j个字符组成的子串的lcs（longest
+Common
+Subsequence，最长公共子序列的缩写，下均用lcs指代最长公共子序列）的长度（不妨记为k），那么，可以有这样的递推关系：</h2>
+<h3 id="这里为了记号的方便我们考虑引入一个二维数组lcs其元素lcsij表示以text1的前i个字符组成的子串与text2的前j个字符组成的子串的lcs的长度">（这里为了记号的方便，我们考虑引入一个二维数组lcs，其元素<code>lcs[i][j]</code>表示以text1的前i个字符组成的子串与text2的前j个字符组成的子串的lcs的长度）</h3>
+<h3 id="如果text1的第i个字符和text2的第j个字符是相同的则直观上想我们为了获得最长的公共子序列似乎应该把text1的第i个字符和text2的第j个字符都选上此时就可以把问题转换成求text1的前i-1个字符组成的子串和text2的前j-1个字符组成的子串的lcs长度因为得到了这个最长公共子序列之后它们都拼上最后的text1的第i个字符以及拼上text2的第j个字符就得到了最终的最长公共子序列最后加个1就行即有递推式lcsijlcsi-1j-11">如果text1的第i个字符和text2的第j个字符是相同的，则直观上想，我们为了获得最长的公共子序列，似乎应该把text1的第i个字符和text2的第j个字符都选上，此时就可以把问题转换成求text1的前i-1个字符组成的子串和text2的前j-1个字符组成的子串的lcs长度（因为得到了这个最长公共子序列之后，它们都拼上最后的text1的第i个字符，以及拼上text2的第j个字符就得到了最终的最长公共子序列），最后加个1就行，即有递推式：<span class="math display">\[lcs[i][j]=lcs[i-1][j-1]+1\]</span></h3>
+<h3 id="如果text1的第i个字符和text2的第j个字符是不同的那直观上想我们要获得最长的公共子序列就不能同时选上text1的第i个字符和text2的第j个字符了只能是选一个则有递推式lcsijmaxlcsij-1lcsi-1">如果text1的第i个字符和text2的第j个字符是不同的，那直观上想，我们要获得最长的公共子序列，就不能同时选上text1的第i个字符和text2的第j个字符了，只能是选一个。则有递推式：<span class="math display">\[lcs[i][j]=\max(lcs[i][j-1],lcs[i-1])\]</span></h3>
+<h2 id="上面的递推式虽然很简单但其实证明上是有些不严谨的比如当text1itext2j时为什么在取lcs的时候一定会把text1i和text2j都选上呢就不能有一个不选吗注意二者都不选显然是不行的因为这样得到的lcs一定会比都选上时的lcs要小有没有可能比如我不选text1i然后text2j就能和text1里的其它字符对应上最终反而lcs会更长呢实际是可以严格证明的不过还挺麻烦">上面的递推式虽然很简单，但其实证明上是有些不严谨的。比如，当<code>text1[i]==text2[j]</code>时，为什么在取lcs的时候，一定会把text1[i]和text2[j]都选上呢？就不能有一个不选吗？（注意，二者都不选显然是不行的，因为这样得到的lcs一定会比都选上时的lcs要小）有没有可能，比如我不选text1[i]，然后text2[j]就能和text1里的其它字符对应上，最终反而lcs会更长呢？实际是可以严格证明的，不过还挺麻烦</h2>
+<h3 id="给一些记号以便证明考虑记两个字符串分别为s和t我们现在考虑当sitjlcsijlcsi-1j-11lcsi-1j左式表示si和tj都选上右式表示不选si只选tj至于另一种的只选si不选tj基本是对称的证明方法类似">给一些记号，以便证明。考虑记两个字符串分别为s和t。我们现在考虑，当<code>s[i]==t[j]</code>，<code>lcs[i][j]=lcs[i-1][j-1]+1</code>&gt;<code>lcs[i-1][j]</code>（左式表示s[i]和t[j]都选上，右式表示不选s[i]，只选t[j]。至于另一种的只选s[i]，不选t[j]，基本是对称的，证明方法类似。</h3>
+<h3 id="我们的思路其实是先证明当si只在s里出现一次的时候上面的结论显然成立当si在s里不止出现一次的时候则需要额外证明">我们的思路其实是，先证明，当s[i]只在s里出现一次的时候，上面的结论显然成立；当s[i]在s里不止出现一次的时候，则需要额外证明</h3>
+<h3 id="首先因为lcsij的含义是s的前i个字符组成的子串与t的前j个字符组成的子串的lcs所以我们考虑lcsij的时候其实不需要考虑s在i个字符后面以及t在j个字符后面的内容了所以简单起见我们可以直接假设s一共就i个字符t一共就j个字符">首先，因为<code>lcs[i][j]</code>的含义是，s的前i个字符组成的子串与t的前j个字符组成的子串的lcs，所以我们考虑<code>lcs[i][j]</code>的时候，其实不需要考虑s在i个字符后面以及t在j个字符后面的内容了。所以简单起见，我们可以直接假设s一共就i个字符，t一共就j个字符</h3>
+<h3 id="接下来我们先证明当si只在s里出现一次的时候结论成立">接下来，我们先证明，当s[i]只在s里出现一次的时候，结论成立</h3>
+<h4 id="此时如果我们不选si因为si只在s里出现过一次但我们在t里面又选了tj而tj等于si则会出现tj在s里没有人对应了只有一个si可以对应但是这里我们又不选所以其实相当于这种情况下要是不选si那也就不能选tj了这不就退化成了lcsi-1j-1吗而且si和tj相等所以这肯定就是白白小了1所以结论成立此时应该就是si和tj都选才是最优的">此时，如果我们不选s[i]，因为s[i]只在s里出现过一次，但我们在t里面又选了t[j]，而t[j]等于s[i]，则会出现，t[j]在s里没有人对应了（只有一个s[i]可以对应，但是这里我们又不选）。所以，其实相当于，这种情况下要是不选s[i]，那也就不能选t[j]了，这不就退化成了<code>lcs[i-1][j-1]</code>吗，而且s[i]和t[j]相等，所以这肯定就是白白小了1，所以结论成立，此时应该就是s[i]和t[j]都选才是最优的</h4>
+<h3 id="然后我们来证明当si在s里出现不止一次的时候结论还是成立">然后，我们来证明，当s[i]在s里出现不止一次的时候，结论还是成立</h3>
+<h4 id="此时我们不选si了但是又选了tj所以tj就必须对应到si在更前面一点出现的位置了因为此时已经明确si在s里出现不止一次为了便于理解我们不妨假设si就是字符a因此tj也是a不妨再假设tj对应到的a出现在s里的位置为p则此时相当于变成了lcspjtj已经是t的最后一个字符了它对应到s的哪个字符s取子序列的时候也就终止到那个位置且根据假设应该有lcspjlcsij-不妨再记lcsij为x则应有lcspjx1而因为sptj当我们同时把sp和tj去掉考虑lcsp-1j-1的时候又有lcsp-1j-1x">此时，我们不选s[i]了，但是又选了t[j]，所以t[j]就必须对应到s[i]在更前面一点出现的位置了（因为此时已经明确，s[i]在s里出现不止一次）。为了便于理解，我们不妨假设，s[i]就是字符a，因此t[j]也是a。不妨再假设，t[j]对应到的a出现在s里的位置为p，则此时相当于变成了<code>lcs[p][j]</code>（t[j]已经是t的最后一个字符了，它对应到s的哪个字符，s取子序列的时候也就终止到那个位置），且根据假设，应该有<code>lcs[p][j]&gt;lcs[i][j]</code><br>不妨再记<code>lcs[i][j]</code>为x，则应有<code>lcs[p][j]</code>&gt;=x+1；而因为<code>s[p]==t[j]</code>，当我们同时把s[p]和t[j]去掉，考虑<code>lcs[p-1][j-1]</code>的时候，又有<code>lcs[p-1][j-1]</code>&gt;=x</h4>
+<h1 id="代码">代码：</h1>
+<h2 id="要点其实还是那几个就是为了防止爆内存需要用记忆化搜索或者直接用递推从前往后写就行就不用记忆化搜索了以及如果用递推那么根据实际使用到的中间变量我们可以进行空间复杂度的优化下面是一个简单的未经优化的递推实现代码">要点其实还是那几个，就是为了防止爆内存，需要用记忆化搜索；或者直接用递推，从前往后写就行，就不用记忆化搜索了；以及，如果用递推，那么根据实际使用到的中间变量，我们可以进行空间复杂度的优化。下面是一个简单的、未经优化的递推实现代码</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(string text1, string text2)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> m = text<span class="number">1.</span><span class="built_in">size</span>(), n = text<span class="number">2.</span><span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">lcs</span>(m<span class="number">+1</span>, std::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(n<span class="number">+1</span>, <span class="number">0</span>));  <span class="comment">// m行n列，全0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (text1[i<span class="number">-1</span>] == text2[j<span class="number">-1</span>]) lcs[i][j] = lcs[i<span class="number">-1</span>][j<span class="number">-1</span>] + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">else</span> lcs[i][j] = <span class="built_in">max</span>(lcs[i<span class="number">-1</span>][j], lcs[i][j<span class="number">-1</span>]);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> lcs[m][n];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/19/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/21/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/" rel="next" title="最长递增子序列">
+      最长递增子序列 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2-text1-%E5%92%8C-text2%E8%BF%94%E5%9B%9E%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%9C%80%E9%95%BF-%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97-%E7%9A%84%E9%95%BF%E5%BA%A6%E5%A6%82%E6%9E%9C%E4%B8%8D%E5%AD%98%E5%9C%A8-%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97-%E8%BF%94%E5%9B%9E-0"><span class="nav-number">2.1.</span> <span class="nav-text">给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84-%E5%AD%90%E5%BA%8F%E5%88%97-%E6%98%AF%E6%8C%87%E8%BF%99%E6%A0%B7%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AE%83%E6%98%AF%E7%94%B1%E5%8E%9F%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9C%A8%E4%B8%8D%E6%94%B9%E5%8F%98%E5%AD%97%E7%AC%A6%E7%9A%84%E7%9B%B8%E5%AF%B9%E9%A1%BA%E5%BA%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%88%A0%E9%99%A4%E6%9F%90%E4%BA%9B%E5%AD%97%E7%AC%A6%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%B8%8D%E5%88%A0%E9%99%A4%E4%BB%BB%E4%BD%95%E5%AD%97%E7%AC%A6%E5%90%8E%E7%BB%84%E6%88%90%E7%9A%84%E6%96%B0%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">2.2.</span> <span class="nav-text">一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%A6%82ace-%E6%98%AF-abcde-%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97%E4%BD%86-aec-%E4%B8%8D%E6%98%AF-abcde-%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97"><span class="nav-number">2.2.1.</span> <span class="nav-text">例如，&quot;ace&quot; 是 &quot;abcde&quot; 的子序列，但 &quot;aec&quot; 不是 &quot;abcde&quot; 的子序列。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84-%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97-%E6%98%AF%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%89%80%E5%85%B1%E5%90%8C%E6%8B%A5%E6%9C%89%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97"><span class="nav-number">2.3.</span> <span class="nav-text">两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.4.</span> <span class="nav-text">示例 1：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5text1-abcde-text2-ace"><span class="nav-number">2.4.1.</span> <span class="nav-text">输入：text1 &#x3D;
+&quot;abcde&quot;, text2 &#x3D; &quot;ace&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA3"><span class="nav-number">2.4.2.</span> <span class="nav-text">输出：3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E6%98%AF-ace-%E5%AE%83%E7%9A%84%E9%95%BF%E5%BA%A6%E4%B8%BA-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">解释：最长公共子序列是
+&quot;ace&quot; ，它的长度为 3 。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.5.</span> <span class="nav-text">示例 2：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5text1-abc-text2-abc"><span class="nav-number">2.5.1.</span> <span class="nav-text">输入：text1 &#x3D; &quot;abc&quot;,
+text2 &#x3D; &quot;abc&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA3-1"><span class="nav-number">2.5.2.</span> <span class="nav-text">输出：3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E6%98%AF-abc-%E5%AE%83%E7%9A%84%E9%95%BF%E5%BA%A6%E4%B8%BA-3"><span class="nav-number">2.5.3.</span> <span class="nav-text">解释：最长公共子序列是
+&quot;abc&quot; ，它的长度为 3 。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-3"><span class="nav-number">2.6.</span> <span class="nav-text">示例 3：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5text1-abc-text2-def"><span class="nav-number">2.6.1.</span> <span class="nav-text">输入：text1 &#x3D; &quot;abc&quot;,
+text2 &#x3D; &quot;def&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA0"><span class="nav-number">2.6.2.</span> <span class="nav-text">输出：0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B2%A1%E6%9C%89%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E8%BF%94%E5%9B%9E-0"><span class="nav-number">2.6.3.</span> <span class="nav-text">解释：两个字符串没有公共子序列，返回
+0 。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.7.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#text1.length-text2.length-1000"><span class="nav-number">2.7.1.</span> <span class="nav-text">1 &lt;&#x3D; text1.length, text2.length &lt;&#x3D; 1000</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#text1-%E5%92%8C-text2-%E4%BB%85%E7%94%B1%E5%B0%8F%E5%86%99%E8%8B%B1%E6%96%87%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90"><span class="nav-number">2.7.2.</span> <span class="nav-text">text1 和 text2 仅由小写英文字符组成。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E5%BE%97%E5%AF%B9%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%9C%AF%E8%AF%AD%E8%BF%9B%E8%A1%8C%E8%AF%B4%E6%98%8E%E4%B8%80%E8%88%AC%E5%AD%90%E6%95%B0%E7%BB%84%E5%AD%90%E4%B8%B2%E8%BF%99%E7%A7%8D%E8%AF%B4%E6%B3%95%E5%AE%83%E4%BB%AC%E6%98%AF%E8%BF%9E%E7%BB%AD%E7%9A%84%E8%80%8C%E5%AD%90%E5%BA%8F%E5%88%97%E5%88%99%E6%9C%AA%E5%BF%85%E6%AF%94%E5%A6%82%E8%BF%99%E9%A2%98%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97%E6%8C%89%E7%85%A7%E5%AE%83%E7%9A%84%E5%AE%9A%E4%B9%89%E5%B0%B1%E6%98%AF%E5%8F%AF%E4%BB%A5%E4%B8%8D%E8%BF%9E%E7%BB%AD%E7%9A%84"><span class="nav-number">3.1.</span> <span class="nav-text">首先得对一些基本的术语进行说明。一般，子数组、子串，这种说法，它们是连续的。而子序列则未必（比如这题的子序列，按照它的定义，就是可以不连续的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E6%9D%A5%E7%9C%8B%E8%BF%99%E9%81%93%E9%A2%98%E5%9B%A0%E4%B8%BA%E8%BF%99%E9%A2%98%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E5%AE%9A%E4%B9%89%E7%9C%8B%E9%87%8D%E7%9A%84%E6%98%AF%E5%AD%97%E7%AC%A6%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E5%AF%B9%E9%A1%BA%E5%BA%8F%E6%89%80%E4%BB%A5%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2s1%E5%92%8Cs2%E7%9A%84%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97lcs%E5%85%B6%E6%9E%84%E9%80%A0%E5%8F%AF%E4%BB%A5%E7%9C%8B%E6%88%90%E6%98%AF%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%90%84%E8%87%AA%E9%83%BD%E9%80%89%E5%87%BA%E4%BA%86%E4%B8%80%E4%BA%9B%E5%AD%97%E7%AC%A6%E7%AD%9B%E6%8E%89%E4%BA%86%E4%B8%80%E4%BA%9B%E5%AD%97%E7%AC%A6%E4%B8%8D%E5%A6%A8%E4%BB%A5%E9%A2%98%E7%9B%AE%E9%87%8C%E7%9A%84%E7%A4%BA%E4%BE%8B1%E4%B8%BA%E4%BE%8B%E5%AE%83%E7%9A%84%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E6%98%AFace%E5%8F%AF%E4%BB%A5%E7%9C%8B%E6%88%90%E6%98%AFtext1%E9%87%8C%E9%80%89%E4%BA%86%E7%AC%AC135%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%BB%A5%E5%8F%8Atext2%E9%87%8C%E9%80%89%E6%8B%A9%E4%BA%86%E6%89%80%E6%9C%89%E5%AD%97%E7%AC%A6%E8%BF%99%E6%A0%B7%E6%88%91%E4%BB%AC%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%BD%AC%E8%80%8C%E5%8E%BB%E8%AE%A8%E8%AE%BA%E6%AF%8F%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E6%98%AF%E5%90%A6%E8%A2%AB%E9%80%89%E6%8B%A9%E4%BA%86%E6%95%85%E7%94%A8%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%9A%84%E8%AF%9D%E5%81%87%E8%AE%BE%E6%88%91%E4%BB%AC%E6%83%B3%E7%9F%A5%E9%81%93text1%E7%9A%84%E5%89%8Di%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E4%BA%8Etext2%E7%9A%84%E5%89%8Dj%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E7%9A%84lcslongest-common-subsequence%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E7%BC%A9%E5%86%99%E4%B8%8B%E5%9D%87%E7%94%A8lcs%E6%8C%87%E4%BB%A3%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6%E4%B8%8D%E5%A6%A8%E8%AE%B0%E4%B8%BAk%E9%82%A3%E4%B9%88%E5%8F%AF%E4%BB%A5%E6%9C%89%E8%BF%99%E6%A0%B7%E7%9A%84%E9%80%92%E6%8E%A8%E5%85%B3%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text">下面来看这道题。因为这题的子序列的定义，看重的是字符之间的相对顺序，所以两个字符串s1和s2的最长公共子序列lcs，其构造可以看成是，两个字符串各自都选出了一些字符，筛掉了一些字符。不妨以题目里的示例1为例，它的最长公共子序列是&quot;ace&quot;，可以看成是text1里选了第1、3、5个字符，以及text2里选择了所有字符。这样，我们就可以转而去讨论每一个字符是否被选择了。故，用动态规划的话，假设我们想知道text1的前i个字符组成的子串于text2的前j个字符组成的子串的lcs（longest
+Common
+Subsequence，最长公共子序列的缩写，下均用lcs指代最长公共子序列）的长度（不妨记为k），那么，可以有这样的递推关系：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E4%B8%BA%E4%BA%86%E8%AE%B0%E5%8F%B7%E7%9A%84%E6%96%B9%E4%BE%BF%E6%88%91%E4%BB%AC%E8%80%83%E8%99%91%E5%BC%95%E5%85%A5%E4%B8%80%E4%B8%AA%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84lcs%E5%85%B6%E5%85%83%E7%B4%A0lcsij%E8%A1%A8%E7%A4%BA%E4%BB%A5text1%E7%9A%84%E5%89%8Di%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E4%B8%8Etext2%E7%9A%84%E5%89%8Dj%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E7%9A%84lcs%E7%9A%84%E9%95%BF%E5%BA%A6"><span class="nav-number">3.2.1.</span> <span class="nav-text">（这里为了记号的方便，我们考虑引入一个二维数组lcs，其元素lcs[i][j]表示以text1的前i个字符组成的子串与text2的前j个字符组成的子串的lcs的长度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9Ctext1%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%92%8Ctext2%E7%9A%84%E7%AC%ACj%E4%B8%AA%E5%AD%97%E7%AC%A6%E6%98%AF%E7%9B%B8%E5%90%8C%E7%9A%84%E5%88%99%E7%9B%B4%E8%A7%82%E4%B8%8A%E6%83%B3%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BA%86%E8%8E%B7%E5%BE%97%E6%9C%80%E9%95%BF%E7%9A%84%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E4%BC%BC%E4%B9%8E%E5%BA%94%E8%AF%A5%E6%8A%8Atext1%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%92%8Ctext2%E7%9A%84%E7%AC%ACj%E4%B8%AA%E5%AD%97%E7%AC%A6%E9%83%BD%E9%80%89%E4%B8%8A%E6%AD%A4%E6%97%B6%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%8A%8A%E9%97%AE%E9%A2%98%E8%BD%AC%E6%8D%A2%E6%88%90%E6%B1%82text1%E7%9A%84%E5%89%8Di-1%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E5%92%8Ctext2%E7%9A%84%E5%89%8Dj-1%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E7%9A%84lcs%E9%95%BF%E5%BA%A6%E5%9B%A0%E4%B8%BA%E5%BE%97%E5%88%B0%E4%BA%86%E8%BF%99%E4%B8%AA%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E4%B9%8B%E5%90%8E%E5%AE%83%E4%BB%AC%E9%83%BD%E6%8B%BC%E4%B8%8A%E6%9C%80%E5%90%8E%E7%9A%84text1%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%BB%A5%E5%8F%8A%E6%8B%BC%E4%B8%8Atext2%E7%9A%84%E7%AC%ACj%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%B0%B1%E5%BE%97%E5%88%B0%E4%BA%86%E6%9C%80%E7%BB%88%E7%9A%84%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E6%9C%80%E5%90%8E%E5%8A%A0%E4%B8%AA1%E5%B0%B1%E8%A1%8C%E5%8D%B3%E6%9C%89%E9%80%92%E6%8E%A8%E5%BC%8Flcsijlcsi-1j-11"><span class="nav-number">3.2.2.</span> <span class="nav-text">如果text1的第i个字符和text2的第j个字符是相同的，则直观上想，我们为了获得最长的公共子序列，似乎应该把text1的第i个字符和text2的第j个字符都选上，此时就可以把问题转换成求text1的前i-1个字符组成的子串和text2的前j-1个字符组成的子串的lcs长度（因为得到了这个最长公共子序列之后，它们都拼上最后的text1的第i个字符，以及拼上text2的第j个字符就得到了最终的最长公共子序列），最后加个1就行，即有递推式：\[lcs[i][j]&#x3D;lcs[i-1][j-1]+1\]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9Ctext1%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%92%8Ctext2%E7%9A%84%E7%AC%ACj%E4%B8%AA%E5%AD%97%E7%AC%A6%E6%98%AF%E4%B8%8D%E5%90%8C%E7%9A%84%E9%82%A3%E7%9B%B4%E8%A7%82%E4%B8%8A%E6%83%B3%E6%88%91%E4%BB%AC%E8%A6%81%E8%8E%B7%E5%BE%97%E6%9C%80%E9%95%BF%E7%9A%84%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E5%B0%B1%E4%B8%8D%E8%83%BD%E5%90%8C%E6%97%B6%E9%80%89%E4%B8%8Atext1%E7%9A%84%E7%AC%ACi%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%92%8Ctext2%E7%9A%84%E7%AC%ACj%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%BA%86%E5%8F%AA%E8%83%BD%E6%98%AF%E9%80%89%E4%B8%80%E4%B8%AA%E5%88%99%E6%9C%89%E9%80%92%E6%8E%A8%E5%BC%8Flcsijmaxlcsij-1lcsi-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">如果text1的第i个字符和text2的第j个字符是不同的，那直观上想，我们要获得最长的公共子序列，就不能同时选上text1的第i个字符和text2的第j个字符了，只能是选一个。则有递推式：\[lcs[i][j]&#x3D;\max(lcs[i][j-1],lcs[i-1])\]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E7%9A%84%E9%80%92%E6%8E%A8%E5%BC%8F%E8%99%BD%E7%84%B6%E5%BE%88%E7%AE%80%E5%8D%95%E4%BD%86%E5%85%B6%E5%AE%9E%E8%AF%81%E6%98%8E%E4%B8%8A%E6%98%AF%E6%9C%89%E4%BA%9B%E4%B8%8D%E4%B8%A5%E8%B0%A8%E7%9A%84%E6%AF%94%E5%A6%82%E5%BD%93text1itext2j%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9C%A8%E5%8F%96lcs%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%8A%8Atext1i%E5%92%8Ctext2j%E9%83%BD%E9%80%89%E4%B8%8A%E5%91%A2%E5%B0%B1%E4%B8%8D%E8%83%BD%E6%9C%89%E4%B8%80%E4%B8%AA%E4%B8%8D%E9%80%89%E5%90%97%E6%B3%A8%E6%84%8F%E4%BA%8C%E8%80%85%E9%83%BD%E4%B8%8D%E9%80%89%E6%98%BE%E7%84%B6%E6%98%AF%E4%B8%8D%E8%A1%8C%E7%9A%84%E5%9B%A0%E4%B8%BA%E8%BF%99%E6%A0%B7%E5%BE%97%E5%88%B0%E7%9A%84lcs%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%AF%94%E9%83%BD%E9%80%89%E4%B8%8A%E6%97%B6%E7%9A%84lcs%E8%A6%81%E5%B0%8F%E6%9C%89%E6%B2%A1%E6%9C%89%E5%8F%AF%E8%83%BD%E6%AF%94%E5%A6%82%E6%88%91%E4%B8%8D%E9%80%89text1i%E7%84%B6%E5%90%8Etext2j%E5%B0%B1%E8%83%BD%E5%92%8Ctext1%E9%87%8C%E7%9A%84%E5%85%B6%E5%AE%83%E5%AD%97%E7%AC%A6%E5%AF%B9%E5%BA%94%E4%B8%8A%E6%9C%80%E7%BB%88%E5%8F%8D%E8%80%8Clcs%E4%BC%9A%E6%9B%B4%E9%95%BF%E5%91%A2%E5%AE%9E%E9%99%85%E6%98%AF%E5%8F%AF%E4%BB%A5%E4%B8%A5%E6%A0%BC%E8%AF%81%E6%98%8E%E7%9A%84%E4%B8%8D%E8%BF%87%E8%BF%98%E6%8C%BA%E9%BA%BB%E7%83%A6"><span class="nav-number">3.3.</span> <span class="nav-text">上面的递推式虽然很简单，但其实证明上是有些不严谨的。比如，当text1[i]&#x3D;&#x3D;text2[j]时，为什么在取lcs的时候，一定会把text1[i]和text2[j]都选上呢？就不能有一个不选吗？（注意，二者都不选显然是不行的，因为这样得到的lcs一定会比都选上时的lcs要小）有没有可能，比如我不选text1[i]，然后text2[j]就能和text1里的其它字符对应上，最终反而lcs会更长呢？实际是可以严格证明的，不过还挺麻烦</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99%E4%B8%80%E4%BA%9B%E8%AE%B0%E5%8F%B7%E4%BB%A5%E4%BE%BF%E8%AF%81%E6%98%8E%E8%80%83%E8%99%91%E8%AE%B0%E4%B8%A4%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%86%E5%88%AB%E4%B8%BAs%E5%92%8Ct%E6%88%91%E4%BB%AC%E7%8E%B0%E5%9C%A8%E8%80%83%E8%99%91%E5%BD%93sitjlcsijlcsi-1j-11lcsi-1j%E5%B7%A6%E5%BC%8F%E8%A1%A8%E7%A4%BAsi%E5%92%8Ctj%E9%83%BD%E9%80%89%E4%B8%8A%E5%8F%B3%E5%BC%8F%E8%A1%A8%E7%A4%BA%E4%B8%8D%E9%80%89si%E5%8F%AA%E9%80%89tj%E8%87%B3%E4%BA%8E%E5%8F%A6%E4%B8%80%E7%A7%8D%E7%9A%84%E5%8F%AA%E9%80%89si%E4%B8%8D%E9%80%89tj%E5%9F%BA%E6%9C%AC%E6%98%AF%E5%AF%B9%E7%A7%B0%E7%9A%84%E8%AF%81%E6%98%8E%E6%96%B9%E6%B3%95%E7%B1%BB%E4%BC%BC"><span class="nav-number">3.3.1.</span> <span class="nav-text">给一些记号，以便证明。考虑记两个字符串分别为s和t。我们现在考虑，当s[i]&#x3D;&#x3D;t[j]，lcs[i][j]&#x3D;lcs[i-1][j-1]+1&gt;lcs[i-1][j]（左式表示s[i]和t[j]都选上，右式表示不选s[i]，只选t[j]。至于另一种的只选s[i]，不选t[j]，基本是对称的，证明方法类似。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E7%9A%84%E6%80%9D%E8%B7%AF%E5%85%B6%E5%AE%9E%E6%98%AF%E5%85%88%E8%AF%81%E6%98%8E%E5%BD%93si%E5%8F%AA%E5%9C%A8s%E9%87%8C%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%8A%E9%9D%A2%E7%9A%84%E7%BB%93%E8%AE%BA%E6%98%BE%E7%84%B6%E6%88%90%E7%AB%8B%E5%BD%93si%E5%9C%A8s%E9%87%8C%E4%B8%8D%E6%AD%A2%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%97%B6%E5%80%99%E5%88%99%E9%9C%80%E8%A6%81%E9%A2%9D%E5%A4%96%E8%AF%81%E6%98%8E"><span class="nav-number">3.3.2.</span> <span class="nav-text">我们的思路其实是，先证明，当s[i]只在s里出现一次的时候，上面的结论显然成立；当s[i]在s里不止出现一次的时候，则需要额外证明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E5%9B%A0%E4%B8%BAlcsij%E7%9A%84%E5%90%AB%E4%B9%89%E6%98%AFs%E7%9A%84%E5%89%8Di%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E4%B8%8Et%E7%9A%84%E5%89%8Dj%E4%B8%AA%E5%AD%97%E7%AC%A6%E7%BB%84%E6%88%90%E7%9A%84%E5%AD%90%E4%B8%B2%E7%9A%84lcs%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E8%80%83%E8%99%91lcsij%E7%9A%84%E6%97%B6%E5%80%99%E5%85%B6%E5%AE%9E%E4%B8%8D%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91s%E5%9C%A8i%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%90%8E%E9%9D%A2%E4%BB%A5%E5%8F%8At%E5%9C%A8j%E4%B8%AA%E5%AD%97%E7%AC%A6%E5%90%8E%E9%9D%A2%E7%9A%84%E5%86%85%E5%AE%B9%E4%BA%86%E6%89%80%E4%BB%A5%E7%AE%80%E5%8D%95%E8%B5%B7%E8%A7%81%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%81%87%E8%AE%BEs%E4%B8%80%E5%85%B1%E5%B0%B1i%E4%B8%AA%E5%AD%97%E7%AC%A6t%E4%B8%80%E5%85%B1%E5%B0%B1j%E4%B8%AA%E5%AD%97%E7%AC%A6"><span class="nav-number">3.3.3.</span> <span class="nav-text">首先，因为lcs[i][j]的含义是，s的前i个字符组成的子串与t的前j个字符组成的子串的lcs，所以我们考虑lcs[i][j]的时候，其实不需要考虑s在i个字符后面以及t在j个字符后面的内容了。所以简单起见，我们可以直接假设s一共就i个字符，t一共就j个字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E6%88%91%E4%BB%AC%E5%85%88%E8%AF%81%E6%98%8E%E5%BD%93si%E5%8F%AA%E5%9C%A8s%E9%87%8C%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%97%B6%E5%80%99%E7%BB%93%E8%AE%BA%E6%88%90%E7%AB%8B"><span class="nav-number">3.3.4.</span> <span class="nav-text">接下来，我们先证明，当s[i]只在s里出现一次的时候，结论成立</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A4%E6%97%B6%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E4%B8%8D%E9%80%89si%E5%9B%A0%E4%B8%BAsi%E5%8F%AA%E5%9C%A8s%E9%87%8C%E5%87%BA%E7%8E%B0%E8%BF%87%E4%B8%80%E6%AC%A1%E4%BD%86%E6%88%91%E4%BB%AC%E5%9C%A8t%E9%87%8C%E9%9D%A2%E5%8F%88%E9%80%89%E4%BA%86tj%E8%80%8Ctj%E7%AD%89%E4%BA%8Esi%E5%88%99%E4%BC%9A%E5%87%BA%E7%8E%B0tj%E5%9C%A8s%E9%87%8C%E6%B2%A1%E6%9C%89%E4%BA%BA%E5%AF%B9%E5%BA%94%E4%BA%86%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AAsi%E5%8F%AF%E4%BB%A5%E5%AF%B9%E5%BA%94%E4%BD%86%E6%98%AF%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%8F%88%E4%B8%8D%E9%80%89%E6%89%80%E4%BB%A5%E5%85%B6%E5%AE%9E%E7%9B%B8%E5%BD%93%E4%BA%8E%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8B%E8%A6%81%E6%98%AF%E4%B8%8D%E9%80%89si%E9%82%A3%E4%B9%9F%E5%B0%B1%E4%B8%8D%E8%83%BD%E9%80%89tj%E4%BA%86%E8%BF%99%E4%B8%8D%E5%B0%B1%E9%80%80%E5%8C%96%E6%88%90%E4%BA%86lcsi-1j-1%E5%90%97%E8%80%8C%E4%B8%94si%E5%92%8Ctj%E7%9B%B8%E7%AD%89%E6%89%80%E4%BB%A5%E8%BF%99%E8%82%AF%E5%AE%9A%E5%B0%B1%E6%98%AF%E7%99%BD%E7%99%BD%E5%B0%8F%E4%BA%861%E6%89%80%E4%BB%A5%E7%BB%93%E8%AE%BA%E6%88%90%E7%AB%8B%E6%AD%A4%E6%97%B6%E5%BA%94%E8%AF%A5%E5%B0%B1%E6%98%AFsi%E5%92%8Ctj%E9%83%BD%E9%80%89%E6%89%8D%E6%98%AF%E6%9C%80%E4%BC%98%E7%9A%84"><span class="nav-number">3.3.4.1.</span> <span class="nav-text">此时，如果我们不选s[i]，因为s[i]只在s里出现过一次，但我们在t里面又选了t[j]，而t[j]等于s[i]，则会出现，t[j]在s里没有人对应了（只有一个s[i]可以对应，但是这里我们又不选）。所以，其实相当于，这种情况下要是不选s[i]，那也就不能选t[j]了，这不就退化成了lcs[i-1][j-1]吗，而且s[i]和t[j]相等，所以这肯定就是白白小了1，所以结论成立，此时应该就是s[i]和t[j]都选才是最优的</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%E6%88%91%E4%BB%AC%E6%9D%A5%E8%AF%81%E6%98%8E%E5%BD%93si%E5%9C%A8s%E9%87%8C%E5%87%BA%E7%8E%B0%E4%B8%8D%E6%AD%A2%E4%B8%80%E6%AC%A1%E7%9A%84%E6%97%B6%E5%80%99%E7%BB%93%E8%AE%BA%E8%BF%98%E6%98%AF%E6%88%90%E7%AB%8B"><span class="nav-number">3.3.5.</span> <span class="nav-text">然后，我们来证明，当s[i]在s里出现不止一次的时候，结论还是成立</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E4%B8%8D%E9%80%89si%E4%BA%86%E4%BD%86%E6%98%AF%E5%8F%88%E9%80%89%E4%BA%86tj%E6%89%80%E4%BB%A5tj%E5%B0%B1%E5%BF%85%E9%A1%BB%E5%AF%B9%E5%BA%94%E5%88%B0si%E5%9C%A8%E6%9B%B4%E5%89%8D%E9%9D%A2%E4%B8%80%E7%82%B9%E5%87%BA%E7%8E%B0%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%BA%86%E5%9B%A0%E4%B8%BA%E6%AD%A4%E6%97%B6%E5%B7%B2%E7%BB%8F%E6%98%8E%E7%A1%AEsi%E5%9C%A8s%E9%87%8C%E5%87%BA%E7%8E%B0%E4%B8%8D%E6%AD%A2%E4%B8%80%E6%AC%A1%E4%B8%BA%E4%BA%86%E4%BE%BF%E4%BA%8E%E7%90%86%E8%A7%A3%E6%88%91%E4%BB%AC%E4%B8%8D%E5%A6%A8%E5%81%87%E8%AE%BEsi%E5%B0%B1%E6%98%AF%E5%AD%97%E7%AC%A6a%E5%9B%A0%E6%AD%A4tj%E4%B9%9F%E6%98%AFa%E4%B8%8D%E5%A6%A8%E5%86%8D%E5%81%87%E8%AE%BEtj%E5%AF%B9%E5%BA%94%E5%88%B0%E7%9A%84a%E5%87%BA%E7%8E%B0%E5%9C%A8s%E9%87%8C%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%B8%BAp%E5%88%99%E6%AD%A4%E6%97%B6%E7%9B%B8%E5%BD%93%E4%BA%8E%E5%8F%98%E6%88%90%E4%BA%86lcspjtj%E5%B7%B2%E7%BB%8F%E6%98%AFt%E7%9A%84%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%BA%86%E5%AE%83%E5%AF%B9%E5%BA%94%E5%88%B0s%E7%9A%84%E5%93%AA%E4%B8%AA%E5%AD%97%E7%AC%A6s%E5%8F%96%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E5%B0%B1%E7%BB%88%E6%AD%A2%E5%88%B0%E9%82%A3%E4%B8%AA%E4%BD%8D%E7%BD%AE%E4%B8%94%E6%A0%B9%E6%8D%AE%E5%81%87%E8%AE%BE%E5%BA%94%E8%AF%A5%E6%9C%89lcspjlcsij-%E4%B8%8D%E5%A6%A8%E5%86%8D%E8%AE%B0lcsij%E4%B8%BAx%E5%88%99%E5%BA%94%E6%9C%89lcspjx1%E8%80%8C%E5%9B%A0%E4%B8%BAsptj%E5%BD%93%E6%88%91%E4%BB%AC%E5%90%8C%E6%97%B6%E6%8A%8Asp%E5%92%8Ctj%E5%8E%BB%E6%8E%89%E8%80%83%E8%99%91lcsp-1j-1%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%88%E6%9C%89lcsp-1j-1x"><span class="nav-number">3.3.5.1.</span> <span class="nav-text">此时，我们不选s[i]了，但是又选了t[j]，所以t[j]就必须对应到s[i]在更前面一点出现的位置了（因为此时已经明确，s[i]在s里出现不止一次）。为了便于理解，我们不妨假设，s[i]就是字符a，因此t[j]也是a。不妨再假设，t[j]对应到的a出现在s里的位置为p，则此时相当于变成了lcs[p][j]（t[j]已经是t的最后一个字符了，它对应到s的哪个字符，s取子序列的时候也就终止到那个位置），且根据假设，应该有lcs[p][j]&gt;lcs[i][j]不妨再记lcs[i][j]为x，则应有lcs[p][j]&gt;&#x3D;x+1；而因为s[p]&#x3D;&#x3D;t[j]，当我们同时把s[p]和t[j]去掉，考虑lcs[p-1][j-1]的时候，又有lcs[p-1][j-1]&gt;&#x3D;x</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%81%E7%82%B9%E5%85%B6%E5%AE%9E%E8%BF%98%E6%98%AF%E9%82%A3%E5%87%A0%E4%B8%AA%E5%B0%B1%E6%98%AF%E4%B8%BA%E4%BA%86%E9%98%B2%E6%AD%A2%E7%88%86%E5%86%85%E5%AD%98%E9%9C%80%E8%A6%81%E7%94%A8%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E6%88%96%E8%80%85%E7%9B%B4%E6%8E%A5%E7%94%A8%E9%80%92%E6%8E%A8%E4%BB%8E%E5%89%8D%E5%BE%80%E5%90%8E%E5%86%99%E5%B0%B1%E8%A1%8C%E5%B0%B1%E4%B8%8D%E7%94%A8%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E4%BA%86%E4%BB%A5%E5%8F%8A%E5%A6%82%E6%9E%9C%E7%94%A8%E9%80%92%E6%8E%A8%E9%82%A3%E4%B9%88%E6%A0%B9%E6%8D%AE%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E4%B8%AD%E9%97%B4%E5%8F%98%E9%87%8F%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%BF%9B%E8%A1%8C%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%9A%84%E4%BC%98%E5%8C%96%E4%B8%8B%E9%9D%A2%E6%98%AF%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%9C%AA%E7%BB%8F%E4%BC%98%E5%8C%96%E7%9A%84%E9%80%92%E6%8E%A8%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.</span> <span class="nav-text">要点其实还是那几个，就是为了防止爆内存，需要用记忆化搜索；或者直接用递推，从前往后写就行，就不用记忆化搜索了；以及，如果用递推，那么根据实际使用到的中间变量，我们可以进行空间复杂度的优化。下面是一个简单的、未经优化的递推实现代码</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">178</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">99</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
