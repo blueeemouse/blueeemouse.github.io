@@ -150,6 +150,67 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/hugging%20face%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDtokenizer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/04/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/hugging%20face%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDtokenizer/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-04 15:22:45 / Modified: 15:25:39" itemprop="dateCreated datePublished" datetime="2025-05-04T15:22:45+08:00">2025-05-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="完整的报错好像是这样的">完整的报错好像是这样的：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">OSError: Can’t load tokenizer <span class="keyword">for</span> ‘bert-base-chinese’. If you were trying to load it from ‘https://huggingface.co/models’, make sure you don’t have a <span class="built_in">local</span> directory with the same name. Otherwise, make sure ‘bert-base-chinese’ is the correct path to a directory containing allrelevant files <span class="keyword">for</span> a BertTokenizer tokenizer.</span><br><span class="line">————————————————</span><br><span class="line"></span><br><span class="line">版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</span><br><span class="line">                        </span><br><span class="line">原文链接：https://blog.csdn.net/weixin_48958956/article/details/137292748</span><br></pre></td></tr></table></figure>
+<h1 id="这个是我在训练一个gpt2的模型的时候遇到的此时我是在服务器上进行训练然后要加载bert-base-chinese的tokenizer而此前我已经在本地尝试过了是可以正常加载以及训练的查了一下应该是网络问题解决方法大致就是从网上把模型下载下来然后传到服务器上加载的时候指定一下路径具体的解决方法可以参考上面的博客注意一下下载下来的几个几个文件要放到同一个文件夹下">这个是我在训练一个gpt2的模型的时候遇到的。此时我是在服务器上进行训练，然后要加载bert-base-chinese的tokenizer。而此前我已经在本地尝试过了，是可以正常加载以及训练的。查了一下，应该是网络问题。解决方法大致就是从网上把模型下载下来，然后传到服务器上，加载的时候指定一下路径。具体的解决方法可以参考上面的博客（注意一下，下载下来的几个几个文件，要放到同一个文件夹下）</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -794,64 +855,6 @@ accuracy）来比较，其实就是衡量预测的结果和实际的数之间的
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/motivation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/motivation/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-02-18 15:21:48" itemprop="dateCreated datePublished" datetime="2025-02-18T15:21:48+08:00">2025-02-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -921,7 +924,7 @@ accuracy）来比较，其实就是衡量预测的结果和实际的数之间的
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

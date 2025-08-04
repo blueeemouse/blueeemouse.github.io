@@ -150,6 +150,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/" class="post-title-link" itemprop="url">Self-collaboration Code Generation via ChatGPT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-17 12:52:00 / Modified: 13:22:35" itemprop="dateCreated datePublished" datetime="2025-07-17T12:52:00+08:00">2025-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venue">Venue：</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有-llm-在复杂代码生成任务如多文件依赖长逻辑任务中表现不足而人类通过团队协作解决复杂任务的模式可被借鉴">现有
+LLM
+在复杂代码生成任务（如多文件依赖、长逻辑任务）中表现不足，而人类通过团队协作解决复杂任务的模式可被借鉴</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="通过简单的角色指令本质就是prompt-engineering就能让llm化作不同的角色从而实现用一个llm就完成多个角色的分工所以其实可以理解为我们用不同的prompt激发了llm的不同方面的能力从而实现了self-collaborationself-collaboration就是说我们完成一个任务可能它很复杂需要分工有多个角色要完成各自的任务我们可以用同一个llm然后依次让它扮演相应角色并给它相应的prompt">通过简单的“角色指令”（本质就是prompt
+engineering），就能让llm化作不同的角色，从而实现用一个llm就完成多个角色的分工（所以其实可以理解为，我们用不同的prompt激发了llm的不同方面的能力，从而实现了self-collaboration。self-collaboration就是说，我们完成一个任务，可能它很复杂，需要分工，有多个角色要完成各自的任务。我们可以用同一个llm，然后依次让它扮演相应角色，并给它相应的prompt）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一套框架可以让llm扮演不同角色处理复杂任务感觉本质上就是一套提示词工程">提出了一套框架，可以让llm扮演不同角色，处理复杂任务（感觉本质上就是一套提示词工程）</h2>
+<h2 id="基于软件开发方法论设计了三个角色并组成一个虚拟团队明确了分工和协作的规则这里有点讲故事的嫌疑为它们设计的三个role找到背书">基于软件开发方法论，设计了三个角色，并组成一个虚拟团队，明确了分工和协作的规则（这里有点讲故事的嫌疑，为它们设计的三个role找到背书）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -987,81 +1085,6 @@ interventions。好处就是很方便，只要给几个我们期望的例子，�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/" class="post-title-link" itemprop="url">SafetensorError：HeaderTooLarge错误</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-08 20:58:00 / Modified: 21:00:43" itemprop="dateCreated datePublished" datetime="2025-07-08T20:58:00+08:00">2025-07-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="简单说遇到这个错比较有可能的是模型没下载全不妨看一下safetensor的大小和官网的模型大小是否一致如果明显小很多基本可以确定是没下载全那此时问题基本可以转化成如何把很大的模型下载下来这就有比较多的方法了">简单说，遇到这个错，比较有可能的是模型没下载全。不妨看一下safetensor的大小和官网的模型大小是否一致。如果明显小很多，基本可以确定是没下载全。那此时问题基本可以转化成：如何把很大的模型下载下来。这就有比较多的方法了</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1131,7 +1154,7 @@ interventions。好处就是很方便，只要给几个我们期望的例子，�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-count">182</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
