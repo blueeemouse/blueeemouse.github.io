@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原题链接在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分割等和子集">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原题链接在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-08-11T07:39:00.000Z">
+<meta property="article:modified_time" content="2025-08-12T06:09:55.695Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="0-1背包">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>分割等和子集 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分割等和子集
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-11 15:39:00" itemprop="dateCreated datePublished" datetime="2025-08-11T15:39:00+08:00">2025-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-12 14:09:55" itemprop="dateModified" datetime="2025-08-12T14:09:55+08:00">2025-08-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/partition-equal-subset-sum/">在这</a></h1>
+<span id="more"></span>
+<h1 id="题目描述">题目描述：</h1>
+<h2 id="给你一个-只包含正整数-的-非空-数组-nums-请你判断是否可以将这个数组分割成两个子集使得两个子集的元素和相等">给你一个 <strong>只包含正整数</strong> 的 <strong>非空</strong> 数组 <code>nums</code> 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。</h2>
+<h2 id="示例-1"><strong>示例 1：</strong></h2>
+<h3 id="输入nums-15115"><strong>输入：</strong>nums = [1,5,11,5]</h3>
+<h3 id="输出true"><strong>输出：</strong>true</h3>
+<h3 id="解释数组可以分割成-1-5-5-和-11"><strong>解释：</strong>数组可以分割成
+[1, 5, 5] 和 [11] 。</h3>
+<h2 id="示例-2"><strong>示例 2：</strong></h2>
+<h3 id="输入nums-1235"><strong>输入：</strong>nums = [1,2,3,5]</h3>
+<h3 id="输出false"><strong>输出：</strong>false</h3>
+<h3 id="解释数组不能分割成两个元素和相等的子集"><strong>解释：</strong>数组不能分割成两个元素和相等的子集。</h3>
+<h2 id="提示"><strong>提示：</strong></h2>
+<ul>
+<li><h3 id="nums.length-200"><code>1 &lt;= nums.length &lt;= 200</code></h3></li>
+<li><h3 id="numsi-100"><code>1 &lt;= nums[i] &lt;= 100</code></h3>
+<h1 id="思路">思路：</h1>
+<h2 id="首先或许得了解一下基本的背包问题是啥一般的背包问题或者说最简单的那种就是给定一堆物品每个物品都有一定的体积和价值我们给定背包的容量c要求在不超过背包容量的情况下捡出总价值最高的物品集合那这里其实关键的要求在于不超过背包容量以及要尽可能高的总价值变体则也主要在这两个方面-关于背包容量可以是不超过恰好至少-关于目标则可以是求尽可能高低的价值或者是求可行的方案数">首先或许得了解一下基本的背包问题是啥。一般的背包问题，或者说最简单的那种，就是，给定一堆物品，每个物品都有一定的体积和价值。我们给定背包的容量c，要求在不超过背包容量的情况下，捡出总价值最高的物品集合。那这里其实关键的要求在于“不超过背包容量”，以及要“尽可能高的总价值”。变体则也主要在这两个方面<br>关于背包容量，可以是不超过/恰好/至少；<br>关于目标，则可以是求尽可能高/低的价值，或者是求可行的方案数</h2>
+<h2 id="上面这些就是0-1背包了而背包问题其实还有另一种大类就是完全背包问题简单说完全背包和0-1背包的一大区别就在于物品是否能选多次上面提到的0-1背包每个物品只能选择一次而完全背包问题中所有物品都可以无限次选择在题意的理解上可以看成是给定了一系列物品的种类每个类别的物品都可以随意拿">上面这些就是0-1背包了。而背包问题其实还有另一种大类，就是完全背包问题。简单说，完全背包和0-1背包的一大区别就在于物品是否能选多次。上面提到的0-1背包，每个物品只能选择一次；而完全背包问题中，所有物品都可以无限次选择（在题意的理解上，可以看成是给定了一系列物品的种类，每个类别的物品都可以随意拿）</h2>
+<h2 id="虽然细节不尽相同但核心的思路都是在于递归当然能写递归也能写成递推不过理解上可能还是递归会好理解一点这里就以0-1背包为背景要求恰好装够背包容量的方案数为例进行讲解吧其余的类似">虽然细节不尽相同，但核心的思路都是在于递归（当然，能写递归，也能写成递推。不过理解上可能还是递归会好理解一点）。这里就以0-1背包为背景，要求恰好装够背包容量的方案数为例进行讲解吧，其余的类似</h2>
+<h3 id="那我们假设给定数组w其中wi表示下标为i的物品的体积下标记成从0开始吧再给定一个数组vvi表示下标为i的物品的价值总共n个物品我们的背包容量记为c那怎么考虑呢我们如果去思考每个物品是否要拿那么就有可能转化成递归问题因为会出现相似的子问题比如我们考虑第n个物品是否要拿如果当前方案拿了第n个物品那么它在前n-1个物品堆里就需要凑出总体积为c-wn-1的物品如果当前方案不拿第n个物品那么它就要在前n-1个物品堆里凑出总体积为c的物品这两个子问题和原问题是类似的都是要在若干物品里取出总体积为一定值的物品并且规模都有所减小原问题是从n个物品里选子问题则是从n-1个物品里选">那我们假设给定数组w，其中w[i]表示下标为i的物品的体积（下标记成从0开始吧）；再给定一个数组v，v[i]表示下标为i的物品的价值。总共n个物品。我们的背包容量记为c。那怎么考虑呢？我们如果去思考每个物品是否要拿，那么就有可能转化成递归问题，因为会出现相似的子问题。比如，我们考虑第n个物品是否要拿。如果当前方案拿了第n个物品，那么它在前n-1个物品堆里，就需要凑出总体积为c-w[n-1]的物品；如果当前方案不拿第n个物品，那么它就要在前n-1个物品堆里，凑出总体积为c的物品。这两个子问题和原问题是类似的，都是要在若干物品里取出总体积为一定值的物品，并且规模都有所减小（原问题是从n个物品里选，子问题则是从n-1个物品里选）</h3>
+<h3 id="因此如果我们给一个函数find_sum_ways它有两个参数i和s第一个参数i表示从起始下标到i下标的这部分物品是可供选择的而第二个参数s表示选出的所有物品的总体积的要求也就是函数为find_sum_waysi-s而其返回值为该要求下的可行方案数那么我们就可以得到如下的递推式find_sum_waysisfind_sum_waysi-1sfind_sum_waysi-1s-wi">因此，如果我们给一个函数find_sum_ways，它有两个参数i和s，第一个参数i表示从起始下标到i下标的这部分物品是可供选择的，而第二个参数s表示选出的所有物品的总体积的要求（也就是函数为<code>find_sum_ways(i, s)</code>)，而其返回值为该要求下的可行方案数。那么，我们就可以得到如下的递推式：<span class="math display">\[find\_sum\_ways(i,s)=find\_sum\_ways(i-1,s)+find\_sum\_ways(i-1,s-w[i])\]</span></h3>
+<h3 id="那么这就是背包问题大体的思路了不过因为是递推所以落实到代码上有一些细节需要注意不妨之后结合下面的代码来看">那么这就是背包问题大体的思路了。不过因为是递推，所以落实到代码上有一些细节需要注意。不妨之后结合下面的代码来看</h3>
+<h2 id="注意到此我们了解了背包问题大概的思路变体当然会有一些不一样的地方但是需要注意题目并不是那种浅显直白的背包至少乍一看是看不出来的其实需要一定的转换题目问能不能找到划分使得两个子集的和均为总体和的一半其实我们找到一个子集之后剩下的自然就是另一个子集了那么问题其实可以转化成我们是否能找到一个子集使得子集里的全部元素的和是总体元素的和的一半也就是说考虑转化成背包问题我们的背包容量就是一半的总体元素的和所有的元素就是可选的物品的对应体积我们的目标其实就是判断是否存在可行的方案换句话说就是方案数是不是大于0并且需要注意因为所有元素都是正整数所以怎么加都不会有小数的因此如果总体的元素和是个奇数那我们可以提前知道一定不存在可行的方案数可以提前return这就是落实到这一题上的思路了">注意，到此，我们了解了背包问题大概的思路（变体当然会有一些不一样的地方）。但是需要注意，题目并不是那种浅显直白的背包，至少乍一看是看不出来的。其实需要一定的转换。题目问能不能找到划分，使得两个子集的和均为总体和的一半。其实我们找到一个子集之后，剩下的自然就是另一个子集了。那么问题其实可以转化成，我们是否能找到一个子集，使得子集里的全部元素的和是总体元素的和的一半。也就是说，考虑转化成背包问题，我们的背包容量就是一半的总体元素的和，所有的元素就是可选的物品的对应体积，我们的目标其实就是判断是否存在可行的方案，换句话说就是方案数是不是大于0。并且需要注意，因为所有元素都是正整数，所以怎么加都不会有小数的。因此，如果总体的元素和是个奇数，那我们可以提前知道一定不存在可行的方案数，可以提前return。这就是落实到这一题上的思路了</h2>
+<h1 id="代码">代码：</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">canPartition</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> s = <span class="built_in">accumulate</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (s % <span class="number">2</span> == <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> half = s / <span class="number">2</span>, n = nums.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">record</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(half<span class="number">+1</span>, <span class="number">-1</span>));</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> res = <span class="built_in">find_sum_ways</span>(nums, record, n<span class="number">-1</span>, half);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res &gt; <span class="number">0</span> ? <span class="literal">true</span> : <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">find_sum_ways</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; record, <span class="type">int</span> i, <span class="type">int</span> s)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span>) <span class="keyword">return</span> s == <span class="number">0</span> ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (record[i][s] != <span class="number">-1</span>) <span class="keyword">return</span> record[i][s];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nums[i] &gt; s) &#123;</span><br><span class="line"></span><br><span class="line">            record[i][s] = <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> record[i][s];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        record[i][s] = <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s) || <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s-nums[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> record[i][s];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="看上面的代码这一部分">看上面的代码，这一部分</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">        <span class="type">int</span> s = <span class="built_in">accumulate</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (s % <span class="number">2</span> == <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> half = s / <span class="number">2</span>, n = nums.<span class="built_in">size</span>();</span><br></pre></td></tr></table></figure>
+<h3 id="很容易懂就是一些初始的工作以及提前的判断">很容易懂，就是一些初始的工作以及提前的判断</h3>
+<h2 id="接下来是-vectorvectorint-recordn-vectorinthalf1--1">接下来是<br><code>vector&lt;vector&lt;int&gt;&gt; record(n, vector&lt;int&gt;(half+1, -1));</code></h2>
+<h3 id="这一行主要是构造一个二维vector用于记录因为我们是递推实现的需要记忆化搜索的技巧否则时间复杂度过高无法通过">这一行主要是构造一个二维vector，用于记录，因为我们是递推实现的，需要记忆化搜索的技巧，否则时间复杂度过高，无法通过</h3>
+<h2 id="之后就是核心的调用函数了int-res-find_sum_waysnums-record-n-1-half不妨来仔细看看这个find_sum_ways函数">之后就是核心的调用函数了，<code>int res = find_sum_ways(nums, record, n-1, half);</code>，不妨来仔细看看这个find_sum_ways函数</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span>) <span class="keyword">return</span> s == <span class="number">0</span> ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (record[i][s] != <span class="number">-1</span>) <span class="keyword">return</span> record[i][s];</span><br></pre></td></tr></table></figure>
+<h3 id="这头两行主要是处理特殊情况的第一行是负责处理递归的最终终止条件的这个函数int-find_sum_waysvectorint-nums-vectorvectorint-record-int-i-int-s的含义就是判断从0到下标i的这些物品中是否有能恰好凑出和为s的情方案因此当我们一路递推到了i为0的时候我们其实要做的就是看下标为0的那个物品它的体积是否等于此时的s如果numsis也就是说下标为0的物品它的体积大于此时的s则会进入到我们后面的一段代码">这头两行主要是处理特殊情况的。第一行是负责处理递归的最终终止条件的。这个函数<code>int find_sum_ways(vector&lt;int&gt;&amp; nums, vector&lt;vector&lt;int&gt;&gt;&amp; record, int i, int s)</code>的含义就是判断，从0到下标i的这些物品中，是否有能恰好凑出和为s的情方案。因此，当我们一路递推，到了i为0的时候，我们其实要做的就是看下标为0的那个物品它的体积是否等于此时的s。如果nums[i]&gt;s，也就是说下标为0的物品它的体积大于此时的s，则会进入到我们后面的一段代码</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> (nums[i] &gt; s) &#123;</span><br><span class="line"></span><br><span class="line">            record[i][s] = <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> record[i][s];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="此时会继续递归调用从而出现find_sum_ways中的参数i为-1的情况而如果numsis即下标为0的物品它的体积小于等于此时的s则会进入到这一段代码">此时会继续递归调用，从而出现find_sum_ways中的参数i为-1的情况；而如果nums[i]&lt;=s，即下标为0的物品它的体积小于等于此时的s，则会进入到这一段代码</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">record[i][s] = <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s) || <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s-nums[i]);</span><br></pre></td></tr></table></figure>
+<h3 id="同样的还是会出现find_sum_ways中的参数i为-1的情况故其实i为-1的情况就是最终递归要结束的情况而如果一种方案可行那么它递归到下标为0的那个物品的时候剩余的体积要求s应该恰好为numsi也就是说此时把物品0挑上就好或者是恰好为0也就是不需要拿上物品0前者应该对应了find_sum_waysnums-record-i-1-s-numsi后者则应该对应了find_sum_waysnums-record-i-1-s-两种情况下最后调用find_sum_ways函数的时候传入的s参数恰好都是0-故在i为-1的时候我们要判断s是否为0s是0说明当前方案可行则return-1否则说明当前方案不可行return-0">同样的，还是会出现find_sum_ways中的参数i为-1的情况。故，其实i为-1的情况就是最终递归要结束的情况。而如果一种方案可行，那么它递归到下标为0的那个物品的时候，剩余的体积要求s应该恰好为nums[i]（也就是说此时把物品0挑上就好）或者是恰好为0（也就是不需要拿上物品0）。前者应该对应了<code>find_sum_ways(nums, record, i-1, s-nums[i])</code>，后者则应该对应了<code>find_sum_ways(nums, record, i-1, s)</code><br>两种情况下，最后调用find_sum_ways函数的时候，传入的s参数恰好都是0<br>故，在i为-1的时候，我们要判断s是否为0，s是0，说明当前方案可行，则return
+1；否则说明当前方案不可行，return 0</h3>
+<h3 id="因此我们看这段代码">因此我们看这段代码</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">record[i][s] = <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s) || <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s-nums[i]);</span><br></pre></td></tr></table></figure>
+<h4 id="它的意思就是我们判断从0到i的物品中挑出体积和为s是否有可行方案就等价于判断从0到i-1的物品中挑出体积和为s是否有可行方案并上从0到i-1的物品中挑出体积和为s-numsi是否有可行方案我们的最终情况return的是0和1所以用并就能判断是否存在至少一种可行的方案">它的意思就是，我们判断从0到i的物品中挑出体积和为s是否有可行方案，就等价于判断从0到i-1的物品中挑出体积和为s是否有可行方案，并上从0到i-1的物品中挑出体积和为s-nums[i]是否有可行方案（我们的最终情况return的是0和1，所以用并就能判断是否存在至少一种可行的方案）</h4>
+<h3 id="至于说当前物品体积过大的情况也就是下标为i的物品的体积大于了体积和要求在上面有专门的处理代码了道理类似的">至于说当前物品体积过大的情况（也就是下标为i的物品的体积大于了体积和要求，在上面有专门的处理代码了，道理类似的）</h3>
+<h2 id="再看看record这个二维vector它就是用来记录的从而实现记忆化搜索其第一个维度为物品的个数第二个维度则是half1也就是说recordij表示的是从物品0到物品i我们挑出体积和为j是否有可行的方案数">再看看record这个二维vector，它就是用来记录的，从而实现记忆化搜索。其第一个维度为物品的个数，第二个维度则是half＋1，也就是说，record[i][j]表示的是，从物品0到物品i，我们挑出体积和为j，是否有可行的方案数</h2>
+<h2 id="另外一个小细节是本来我实现这个函数的时候就是打算求方案数的因此函数名是find_sum_ways所以最后这段代码里是加号而不是并">另外一个小细节是，本来我实现这个函数的时候，就是打算求方案数的（因此函数名是find_sum_ways），所以最后这段代码里是加号而不是并</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">record[i][s] = <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s) + <span class="built_in">find_sum_ways</span>(nums, record, i<span class="number">-1</span>, s-nums[i]);</span><br></pre></td></tr></table></figure>
+<h3 id="但发生了溢出就是两个数相加过大超出了int的表示范围猜测这应该与题目给的数据范围有关也就是说题目给的数据范围可能比较大所以至少用int的话是求不出可行的方案数的因此题目才要求说只需要判断是否有可行的方案就行了后面改了改代码不过函数名就懒得改了">但发生了溢出，就是两个数相加过大，超出了int的表示范围。猜测这应该与题目给的数据范围有关，也就是说，题目给的数据范围可能比较大，所以至少用int的话是求不出可行的方案数的，因此题目才要求说只需要判断是否有可行的方案就行了（后面改了改代码，不过函数名就懒得改了）</h3>
+<h2 id="关于代码的空间复杂度应该就是ontarget了毕竟主要的空间开销就是那个record数组不过准确一点的话应该说是onhalf至于时间复杂度最坏的情况应该是把record里的所有位置的结果都算出来所以是onhalf也即ontarget不过得再理解一下为什么我觉得也是指数级的或许可以这样理解我们计算record里一个位置上的结果就是调用一次这个find_sum_ways函数而根据上面的代码调用一次find_sum_ways函数要么会再调用两次这个函数要么就只再调用这个函数一次而调用函数以后如果子问题的结果我们算过那么我们会记录也就是记忆化搜索所以直接return就行而如果子问题的结果我们没算过那么它会继续调用函数一直这么递归下去最坏的情况也就是一路上遇到的子问题都没算过递归到了边界情况之后再逐步返回把中间的结果给记录上归根到底最重要的是我们用了记忆化搜索所以record里每个位置我们只会算一次以及一共就onhalf个状态全都算了也就是这个时间复杂度">关于代码的空间复杂度，应该就是<span class="math inline">\(O(n*target)\)</span>了（毕竟主要的空间开销就是那个record数组；不过准确一点的话，应该说是<span class="math inline">\(O(n*half)\)</span>）；至于时间复杂度，最坏的情况应该是把record里的所有位置的结果都算出来，所以是<span class="math inline">\(O(n*half)\)</span>，也即<span class="math inline">\(O(n*target)\)</span>（不过得再理解一下，为什么我觉得也是指数级的？）（或许可以这样理解，我们计算record里一个位置上的结果，就是调用一次这个find_sum_ways函数；而根据上面的代码，调用一次find_sum_ways函数，要么会再调用两次这个函数，要么就只再调用这个函数一次。而调用函数以后，如果子问题的结果我们算过，那么我们会记录（也就是记忆化搜索），所以直接return就行；而如果子问题的结果我们没算过，那么它会继续调用函数，一直这么递归下去，最坏的情况也就是一路上遇到的子问题都没算过，递归到了边界情况；之后再逐步返回，把中间的结果给记录上。归根到底，最重要的是我们用了记忆化搜索，所以record里每个位置我们只会算一次；以及，一共就<span class="math inline">\(O(n*half)\)</span>个状态，全都算了也就是这个时间复杂度）</h2>
+<h1 id="改进">改进：</h1>
+<h2 id="上面写的是递归的代码一般能写成递归的话也能写成递推并且对于这题而言递推并不那么直观写一下有助于理解方法直接上代码吧">上面写的是递归的代码。一般能写成递归的话，也能写成递推。并且对于这题而言，递推并不那么直观，写一下有助于理解方法。直接上代码吧</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">canPartition</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> s = <span class="built_in">accumulate</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (s % <span class="number">2</span> == <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> half = s / <span class="number">2</span>, n = nums.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">record</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(s<span class="number">+1</span>, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        record[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>, record[<span class="number">0</span>][nums[<span class="number">0</span>]] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; half<span class="number">+1</span>; j++) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (nums[i] &gt; j) record[i][j] = record[i<span class="number">-1</span>][j];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">else</span> record[i][j] = record[i<span class="number">-1</span>][j] || record[i<span class="number">-1</span>][j-nums[i]];</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> res = record[n<span class="number">-1</span>][half];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res &gt; <span class="number">0</span> ? <span class="literal">true</span> : <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="核心的代码其实就是这些">核心的代码其实就是这些：</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">        record[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>, record[<span class="number">0</span>][nums[<span class="number">0</span>]] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; half<span class="number">+1</span>; j++) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (nums[i] &gt; j) record[i][j] = record[i<span class="number">-1</span>][j];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">else</span> record[i][j] = record[i<span class="number">-1</span>][j] || record[i<span class="number">-1</span>][j-nums[i]];</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="我们来具体看一下这里的record依然是一个二维的vector并且我们recordij表示的含义和上面一样也就是从物品0到物品i从这些物品里是否存在方案可以使得挑出的物品的体积和恰为j若存在则该元素为1否则为0-那么record00-1-record0nums0-1这一行的初始化代表了什么呢其实这里就对应了不选选物品0的两种情况如果我们不选物品0那么从物品0里可以认为存在方案使得挑出的物品的体积和为0类似的从物品0中我们也可以认为存在方案使得挑出的物品的体积和为nums0只需要恰好挑出物品0即可至于其它的体积和我们从物品0里是无法满足的-后面怎么递推呢我们其实可以直接给出一个一般的递推式就是上面的二重for循环下的两行代码">我们来具体看一下。这里的record依然是一个二维的vector，并且我们<code>record[i][j]</code>表示的含义和上面一样（也就是从物品0到物品i，从这些物品里是否存在方案可以使得挑出的物品的体积和恰为j。若存在，则该元素为1，否则为0）<br>那么<code>record[0][0] = 1, record[0][nums[0]] = 1;</code>这一行的初始化代表了什么呢？其实这里就对应了不选/选物品0的两种情况。如果我们不选物品0，那么从物品0里可以认为存在方案，使得挑出的物品的体积和为0；类似的，从物品0中，我们也可以认为存在方案，使得挑出的物品的体积和为nums[0]（只需要恰好挑出物品0即可）。至于其它的体积和，我们从物品0里是无法满足的<br>后面怎么递推呢？我们其实可以直接给出一个一般的递推式，就是上面的二重for循环下的两行代码：</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">                <span class="keyword">if</span> (nums[i] &gt; j) record[i][j] = record[i<span class="number">-1</span>][j];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">else</span> record[i][j] = record[i<span class="number">-1</span>][j] || record[i<span class="number">-1</span>][j-nums[i]];</span><br></pre></td></tr></table></figure>
+<h3 id="如果我们的体积和要求为j且我们已经有了record的第一个维度从0到i-1的所有位置的结果现在我们要递推出record的第一个维度为i的位置上的所有元素需要讨论当前物品i的体积是否已经超出了体积和j如果是那么显然我们不能选物品i那么从物品0到物品i中挑出体积和为j的方案就恰好等于从物品0到物品i-1中挑出体积和为j的方案所以才有recordij-recordi-1j-而如果物品i的体积还没超过体积和要求j那么物品i就有可能选也有可能不选两种都需要讨论当选上物品i时我们就要求从物品0到物品i-1需要存在能挑出体积和为j-numsi的方案如果不选物品i则我们要求从物品0到物品i-1需要存在能挑出体积和为j的方案最终只需要两种情况下至少有一种成立我们就可以给recordij赋值为1了">如果我们的体积和要求为j，且我们已经有了record的第一个维度从0到i-1的所有位置的结果，现在我们要递推出record的第一个维度为i的位置上的所有元素。需要讨论，当前物品i的体积是否已经超出了体积和j。如果是，那么显然我们不能选物品i，那么从物品0到物品i中挑出体积和为j的方案，就恰好等于从物品0到物品i-1中挑出体积和为j的方案；所以才有<code>record[i][j] = record[i-1][j];</code><br>而如果物品i的体积还没超过体积和要求j，那么物品i就有可能选，也有可能不选，两种都需要讨论。当选上物品i时，我们就要求从物品0到物品i-1，需要存在能挑出体积和为j-nums[i]的方案；如果不选物品i，则我们要求从物品0到物品i-1，需要存在能挑出体积和为j的方案。最终只需要两种情况下至少有一种成立，我们就可以给<code>record[i][j]</code>赋值为1了</h3>
+<h2 id="至于说为什么这里初始化的时候我们给record的第二个维度置为了s1而不是像之前那样的half1主要是因为此处的递推我们是从前往后在考虑给record的不同位置赋值的时候有可能出现在第二个维度上取到元素本身比如record00-1-record0nums0-1这里就存在在第二个维度上取nums0这个位置的索引但元素本身是有可能超出half的举个极端的例子也是实际当时一开始没通过的例子nums只有一个元素100那么half就是50如果我们初始化为half1那100一定超索引了-所以我们在record的第二个维度上应该略微设置得大一点设置为s1当然是最保险的因为单个元素一定小于所有元素之和加上1即使只有一个元素不过呢其实可以发现取record的第二个维度的时候在双重的for循环里我们是最多取到half也就只有在初始化的时候会用nums0来取一下索引所以其实不那么浪费空间的做法应该是把第二个维度初始化成maxnums0-half1当然这只不过是一个小细节不影响空间复杂度的级别就是了">至于说为什么这里初始化的时候，我们给record的第二个维度置为了s+1，而不是像之前那样的half+1，主要是因为，此处的递推我们是从前往后，在考虑给record的不同位置赋值的时候，有可能出现在第二个维度上，取到元素本身（比如<code>record[0][0] = 1, record[0][nums[0]] = 1;</code>这里，就存在“在第二个维度上取nums[0]这个位置的索引”）；但元素本身是有可能超出half的（举个极端的例子，也是实际当时一开始没通过的例子，nums只有一个元素100，那么half就是50，如果我们初始化为half+1，那100一定超索引了）<br>所以，我们在record的第二个维度上应该略微设置得大一点。设置为s+1当然是最保险的，因为单个元素一定小于所有元素之和加上1（即使只有一个元素）<BR>不过呢，其实可以发现，取record的第二个维度的时候，在双重的for循环里，我们是最多取到half；也就只有在初始化的时候，会用nums[0]来取一下索引。所以其实不那么浪费空间的做法应该是把第二个维度初始化成<span class="math inline">\(\max(nums[0],
+half)+1\)</span>（当然这只不过是一个小细节，不影响空间复杂度的级别就是了）</BR></h2></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/0-1%E8%83%8C%E5%8C%85/" rel="tag"># 0-1背包</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/08/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/" rel="prev" title="Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks">
+      <i class="fa fa-chevron-left"></i> Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/" rel="next" title="Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy">
+      Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E9%A2%98%E9%93%BE%E6%8E%A5%E5%9C%A8%E8%BF%99"><span class="nav-number">1.</span> <span class="nav-text">原题链接在这</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">题目描述：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E4%BD%A0%E4%B8%80%E4%B8%AA-%E5%8F%AA%E5%8C%85%E5%90%AB%E6%AD%A3%E6%95%B4%E6%95%B0-%E7%9A%84-%E9%9D%9E%E7%A9%BA-%E6%95%B0%E7%BB%84-nums-%E8%AF%B7%E4%BD%A0%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E5%B0%86%E8%BF%99%E4%B8%AA%E6%95%B0%E7%BB%84%E5%88%86%E5%89%B2%E6%88%90%E4%B8%A4%E4%B8%AA%E5%AD%90%E9%9B%86%E4%BD%BF%E5%BE%97%E4%B8%A4%E4%B8%AA%E5%AD%90%E9%9B%86%E7%9A%84%E5%85%83%E7%B4%A0%E5%92%8C%E7%9B%B8%E7%AD%89"><span class="nav-number">2.1.</span> <span class="nav-text">给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.2.</span> <span class="nav-text">示例 1：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5nums-15115"><span class="nav-number">2.2.1.</span> <span class="nav-text">输入：nums &#x3D; [1,5,11,5]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BAtrue"><span class="nav-number">2.2.2.</span> <span class="nav-text">输出：true</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%95%B0%E7%BB%84%E5%8F%AF%E4%BB%A5%E5%88%86%E5%89%B2%E6%88%90-1-5-5-%E5%92%8C-11"><span class="nav-number">2.2.3.</span> <span class="nav-text">解释：数组可以分割成
+[1, 5, 5] 和 [11] 。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">2.3.</span> <span class="nav-text">示例 2：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5nums-1235"><span class="nav-number">2.3.1.</span> <span class="nav-text">输入：nums &#x3D; [1,2,3,5]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BAfalse"><span class="nav-number">2.3.2.</span> <span class="nav-text">输出：false</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E6%95%B0%E7%BB%84%E4%B8%8D%E8%83%BD%E5%88%86%E5%89%B2%E6%88%90%E4%B8%A4%E4%B8%AA%E5%85%83%E7%B4%A0%E5%92%8C%E7%9B%B8%E7%AD%89%E7%9A%84%E5%AD%90%E9%9B%86"><span class="nav-number">2.3.3.</span> <span class="nav-text">解释：数组不能分割成两个元素和相等的子集。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">2.4.</span> <span class="nav-text">提示：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nums.length-200"><span class="nav-number">2.4.1.</span> <span class="nav-text">1 &lt;&#x3D; nums.length &lt;&#x3D; 200</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numsi-100"><span class="nav-number">2.4.2.</span> <span class="nav-text">1 &lt;&#x3D; nums[i] &lt;&#x3D; 100</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E6%88%96%E8%AE%B8%E5%BE%97%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E5%9F%BA%E6%9C%AC%E7%9A%84%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E6%98%AF%E5%95%A5%E4%B8%80%E8%88%AC%E7%9A%84%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E6%88%96%E8%80%85%E8%AF%B4%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E9%82%A3%E7%A7%8D%E5%B0%B1%E6%98%AF%E7%BB%99%E5%AE%9A%E4%B8%80%E5%A0%86%E7%89%A9%E5%93%81%E6%AF%8F%E4%B8%AA%E7%89%A9%E5%93%81%E9%83%BD%E6%9C%89%E4%B8%80%E5%AE%9A%E7%9A%84%E4%BD%93%E7%A7%AF%E5%92%8C%E4%BB%B7%E5%80%BC%E6%88%91%E4%BB%AC%E7%BB%99%E5%AE%9A%E8%83%8C%E5%8C%85%E7%9A%84%E5%AE%B9%E9%87%8Fc%E8%A6%81%E6%B1%82%E5%9C%A8%E4%B8%8D%E8%B6%85%E8%BF%87%E8%83%8C%E5%8C%85%E5%AE%B9%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E6%8D%A1%E5%87%BA%E6%80%BB%E4%BB%B7%E5%80%BC%E6%9C%80%E9%AB%98%E7%9A%84%E7%89%A9%E5%93%81%E9%9B%86%E5%90%88%E9%82%A3%E8%BF%99%E9%87%8C%E5%85%B6%E5%AE%9E%E5%85%B3%E9%94%AE%E7%9A%84%E8%A6%81%E6%B1%82%E5%9C%A8%E4%BA%8E%E4%B8%8D%E8%B6%85%E8%BF%87%E8%83%8C%E5%8C%85%E5%AE%B9%E9%87%8F%E4%BB%A5%E5%8F%8A%E8%A6%81%E5%B0%BD%E5%8F%AF%E8%83%BD%E9%AB%98%E7%9A%84%E6%80%BB%E4%BB%B7%E5%80%BC%E5%8F%98%E4%BD%93%E5%88%99%E4%B9%9F%E4%B8%BB%E8%A6%81%E5%9C%A8%E8%BF%99%E4%B8%A4%E4%B8%AA%E6%96%B9%E9%9D%A2-%E5%85%B3%E4%BA%8E%E8%83%8C%E5%8C%85%E5%AE%B9%E9%87%8F%E5%8F%AF%E4%BB%A5%E6%98%AF%E4%B8%8D%E8%B6%85%E8%BF%87%E6%81%B0%E5%A5%BD%E8%87%B3%E5%B0%91-%E5%85%B3%E4%BA%8E%E7%9B%AE%E6%A0%87%E5%88%99%E5%8F%AF%E4%BB%A5%E6%98%AF%E6%B1%82%E5%B0%BD%E5%8F%AF%E8%83%BD%E9%AB%98%E4%BD%8E%E7%9A%84%E4%BB%B7%E5%80%BC%E6%88%96%E8%80%85%E6%98%AF%E6%B1%82%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">首先或许得了解一下基本的背包问题是啥。一般的背包问题，或者说最简单的那种，就是，给定一堆物品，每个物品都有一定的体积和价值。我们给定背包的容量c，要求在不超过背包容量的情况下，捡出总价值最高的物品集合。那这里其实关键的要求在于“不超过背包容量”，以及要“尽可能高的总价值”。变体则也主要在这两个方面关于背包容量，可以是不超过&#x2F;恰好&#x2F;至少；关于目标，则可以是求尽可能高&#x2F;低的价值，或者是求可行的方案数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E8%BF%99%E4%BA%9B%E5%B0%B1%E6%98%AF0-1%E8%83%8C%E5%8C%85%E4%BA%86%E8%80%8C%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E5%85%B6%E5%AE%9E%E8%BF%98%E6%9C%89%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%A4%A7%E7%B1%BB%E5%B0%B1%E6%98%AF%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E7%AE%80%E5%8D%95%E8%AF%B4%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E5%92%8C0-1%E8%83%8C%E5%8C%85%E7%9A%84%E4%B8%80%E5%A4%A7%E5%8C%BA%E5%88%AB%E5%B0%B1%E5%9C%A8%E4%BA%8E%E7%89%A9%E5%93%81%E6%98%AF%E5%90%A6%E8%83%BD%E9%80%89%E5%A4%9A%E6%AC%A1%E4%B8%8A%E9%9D%A2%E6%8F%90%E5%88%B0%E7%9A%840-1%E8%83%8C%E5%8C%85%E6%AF%8F%E4%B8%AA%E7%89%A9%E5%93%81%E5%8F%AA%E8%83%BD%E9%80%89%E6%8B%A9%E4%B8%80%E6%AC%A1%E8%80%8C%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E4%B8%AD%E6%89%80%E6%9C%89%E7%89%A9%E5%93%81%E9%83%BD%E5%8F%AF%E4%BB%A5%E6%97%A0%E9%99%90%E6%AC%A1%E9%80%89%E6%8B%A9%E5%9C%A8%E9%A2%98%E6%84%8F%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8A%E5%8F%AF%E4%BB%A5%E7%9C%8B%E6%88%90%E6%98%AF%E7%BB%99%E5%AE%9A%E4%BA%86%E4%B8%80%E7%B3%BB%E5%88%97%E7%89%A9%E5%93%81%E7%9A%84%E7%A7%8D%E7%B1%BB%E6%AF%8F%E4%B8%AA%E7%B1%BB%E5%88%AB%E7%9A%84%E7%89%A9%E5%93%81%E9%83%BD%E5%8F%AF%E4%BB%A5%E9%9A%8F%E6%84%8F%E6%8B%BF"><span class="nav-number">3.2.</span> <span class="nav-text">上面这些就是0-1背包了。而背包问题其实还有另一种大类，就是完全背包问题。简单说，完全背包和0-1背包的一大区别就在于物品是否能选多次。上面提到的0-1背包，每个物品只能选择一次；而完全背包问题中，所有物品都可以无限次选择（在题意的理解上，可以看成是给定了一系列物品的种类，每个类别的物品都可以随意拿）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%BD%E7%84%B6%E7%BB%86%E8%8A%82%E4%B8%8D%E5%B0%BD%E7%9B%B8%E5%90%8C%E4%BD%86%E6%A0%B8%E5%BF%83%E7%9A%84%E6%80%9D%E8%B7%AF%E9%83%BD%E6%98%AF%E5%9C%A8%E4%BA%8E%E9%80%92%E5%BD%92%E5%BD%93%E7%84%B6%E8%83%BD%E5%86%99%E9%80%92%E5%BD%92%E4%B9%9F%E8%83%BD%E5%86%99%E6%88%90%E9%80%92%E6%8E%A8%E4%B8%8D%E8%BF%87%E7%90%86%E8%A7%A3%E4%B8%8A%E5%8F%AF%E8%83%BD%E8%BF%98%E6%98%AF%E9%80%92%E5%BD%92%E4%BC%9A%E5%A5%BD%E7%90%86%E8%A7%A3%E4%B8%80%E7%82%B9%E8%BF%99%E9%87%8C%E5%B0%B1%E4%BB%A50-1%E8%83%8C%E5%8C%85%E4%B8%BA%E8%83%8C%E6%99%AF%E8%A6%81%E6%B1%82%E6%81%B0%E5%A5%BD%E8%A3%85%E5%A4%9F%E8%83%8C%E5%8C%85%E5%AE%B9%E9%87%8F%E7%9A%84%E6%96%B9%E6%A1%88%E6%95%B0%E4%B8%BA%E4%BE%8B%E8%BF%9B%E8%A1%8C%E8%AE%B2%E8%A7%A3%E5%90%A7%E5%85%B6%E4%BD%99%E7%9A%84%E7%B1%BB%E4%BC%BC"><span class="nav-number">3.3.</span> <span class="nav-text">虽然细节不尽相同，但核心的思路都是在于递归（当然，能写递归，也能写成递推。不过理解上可能还是递归会好理解一点）。这里就以0-1背包为背景，要求恰好装够背包容量的方案数为例进行讲解吧，其余的类似</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%A3%E6%88%91%E4%BB%AC%E5%81%87%E8%AE%BE%E7%BB%99%E5%AE%9A%E6%95%B0%E7%BB%84w%E5%85%B6%E4%B8%ADwi%E8%A1%A8%E7%A4%BA%E4%B8%8B%E6%A0%87%E4%B8%BAi%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E4%BD%93%E7%A7%AF%E4%B8%8B%E6%A0%87%E8%AE%B0%E6%88%90%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%90%A7%E5%86%8D%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84vvi%E8%A1%A8%E7%A4%BA%E4%B8%8B%E6%A0%87%E4%B8%BAi%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E4%BB%B7%E5%80%BC%E6%80%BB%E5%85%B1n%E4%B8%AA%E7%89%A9%E5%93%81%E6%88%91%E4%BB%AC%E7%9A%84%E8%83%8C%E5%8C%85%E5%AE%B9%E9%87%8F%E8%AE%B0%E4%B8%BAc%E9%82%A3%E6%80%8E%E4%B9%88%E8%80%83%E8%99%91%E5%91%A2%E6%88%91%E4%BB%AC%E5%A6%82%E6%9E%9C%E5%8E%BB%E6%80%9D%E8%80%83%E6%AF%8F%E4%B8%AA%E7%89%A9%E5%93%81%E6%98%AF%E5%90%A6%E8%A6%81%E6%8B%BF%E9%82%A3%E4%B9%88%E5%B0%B1%E6%9C%89%E5%8F%AF%E8%83%BD%E8%BD%AC%E5%8C%96%E6%88%90%E9%80%92%E5%BD%92%E9%97%AE%E9%A2%98%E5%9B%A0%E4%B8%BA%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%AD%90%E9%97%AE%E9%A2%98%E6%AF%94%E5%A6%82%E6%88%91%E4%BB%AC%E8%80%83%E8%99%91%E7%AC%ACn%E4%B8%AA%E7%89%A9%E5%93%81%E6%98%AF%E5%90%A6%E8%A6%81%E6%8B%BF%E5%A6%82%E6%9E%9C%E5%BD%93%E5%89%8D%E6%96%B9%E6%A1%88%E6%8B%BF%E4%BA%86%E7%AC%ACn%E4%B8%AA%E7%89%A9%E5%93%81%E9%82%A3%E4%B9%88%E5%AE%83%E5%9C%A8%E5%89%8Dn-1%E4%B8%AA%E7%89%A9%E5%93%81%E5%A0%86%E9%87%8C%E5%B0%B1%E9%9C%80%E8%A6%81%E5%87%91%E5%87%BA%E6%80%BB%E4%BD%93%E7%A7%AF%E4%B8%BAc-wn-1%E7%9A%84%E7%89%A9%E5%93%81%E5%A6%82%E6%9E%9C%E5%BD%93%E5%89%8D%E6%96%B9%E6%A1%88%E4%B8%8D%E6%8B%BF%E7%AC%ACn%E4%B8%AA%E7%89%A9%E5%93%81%E9%82%A3%E4%B9%88%E5%AE%83%E5%B0%B1%E8%A6%81%E5%9C%A8%E5%89%8Dn-1%E4%B8%AA%E7%89%A9%E5%93%81%E5%A0%86%E9%87%8C%E5%87%91%E5%87%BA%E6%80%BB%E4%BD%93%E7%A7%AF%E4%B8%BAc%E7%9A%84%E7%89%A9%E5%93%81%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%AD%90%E9%97%AE%E9%A2%98%E5%92%8C%E5%8E%9F%E9%97%AE%E9%A2%98%E6%98%AF%E7%B1%BB%E4%BC%BC%E7%9A%84%E9%83%BD%E6%98%AF%E8%A6%81%E5%9C%A8%E8%8B%A5%E5%B9%B2%E7%89%A9%E5%93%81%E9%87%8C%E5%8F%96%E5%87%BA%E6%80%BB%E4%BD%93%E7%A7%AF%E4%B8%BA%E4%B8%80%E5%AE%9A%E5%80%BC%E7%9A%84%E7%89%A9%E5%93%81%E5%B9%B6%E4%B8%94%E8%A7%84%E6%A8%A1%E9%83%BD%E6%9C%89%E6%89%80%E5%87%8F%E5%B0%8F%E5%8E%9F%E9%97%AE%E9%A2%98%E6%98%AF%E4%BB%8En%E4%B8%AA%E7%89%A9%E5%93%81%E9%87%8C%E9%80%89%E5%AD%90%E9%97%AE%E9%A2%98%E5%88%99%E6%98%AF%E4%BB%8En-1%E4%B8%AA%E7%89%A9%E5%93%81%E9%87%8C%E9%80%89"><span class="nav-number">3.3.1.</span> <span class="nav-text">那我们假设给定数组w，其中w[i]表示下标为i的物品的体积（下标记成从0开始吧）；再给定一个数组v，v[i]表示下标为i的物品的价值。总共n个物品。我们的背包容量记为c。那怎么考虑呢？我们如果去思考每个物品是否要拿，那么就有可能转化成递归问题，因为会出现相似的子问题。比如，我们考虑第n个物品是否要拿。如果当前方案拿了第n个物品，那么它在前n-1个物品堆里，就需要凑出总体积为c-w[n-1]的物品；如果当前方案不拿第n个物品，那么它就要在前n-1个物品堆里，凑出总体积为c的物品。这两个子问题和原问题是类似的，都是要在若干物品里取出总体积为一定值的物品，并且规模都有所减小（原问题是从n个物品里选，子问题则是从n-1个物品里选）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%AD%A4%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E7%BB%99%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0find_sum_ways%E5%AE%83%E6%9C%89%E4%B8%A4%E4%B8%AA%E5%8F%82%E6%95%B0i%E5%92%8Cs%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%82%E6%95%B0i%E8%A1%A8%E7%A4%BA%E4%BB%8E%E8%B5%B7%E5%A7%8B%E4%B8%8B%E6%A0%87%E5%88%B0i%E4%B8%8B%E6%A0%87%E7%9A%84%E8%BF%99%E9%83%A8%E5%88%86%E7%89%A9%E5%93%81%E6%98%AF%E5%8F%AF%E4%BE%9B%E9%80%89%E6%8B%A9%E7%9A%84%E8%80%8C%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0s%E8%A1%A8%E7%A4%BA%E9%80%89%E5%87%BA%E7%9A%84%E6%89%80%E6%9C%89%E7%89%A9%E5%93%81%E7%9A%84%E6%80%BB%E4%BD%93%E7%A7%AF%E7%9A%84%E8%A6%81%E6%B1%82%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%87%BD%E6%95%B0%E4%B8%BAfind_sum_waysi-s%E8%80%8C%E5%85%B6%E8%BF%94%E5%9B%9E%E5%80%BC%E4%B8%BA%E8%AF%A5%E8%A6%81%E6%B1%82%E4%B8%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%96%B9%E6%A1%88%E6%95%B0%E9%82%A3%E4%B9%88%E6%88%91%E4%BB%AC%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%BE%97%E5%88%B0%E5%A6%82%E4%B8%8B%E7%9A%84%E9%80%92%E6%8E%A8%E5%BC%8Ffind_sum_waysisfind_sum_waysi-1sfind_sum_waysi-1s-wi"><span class="nav-number">3.3.2.</span> <span class="nav-text">因此，如果我们给一个函数find_sum_ways，它有两个参数i和s，第一个参数i表示从起始下标到i下标的这部分物品是可供选择的，而第二个参数s表示选出的所有物品的总体积的要求（也就是函数为find_sum_ways(i, s))，而其返回值为该要求下的可行方案数。那么，我们就可以得到如下的递推式：\[find\_sum\_ways(i,s)&#x3D;find\_sum\_ways(i-1,s)+find\_sum\_ways(i-1,s-w[i])\]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E8%BF%99%E5%B0%B1%E6%98%AF%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E5%A4%A7%E4%BD%93%E7%9A%84%E6%80%9D%E8%B7%AF%E4%BA%86%E4%B8%8D%E8%BF%87%E5%9B%A0%E4%B8%BA%E6%98%AF%E9%80%92%E6%8E%A8%E6%89%80%E4%BB%A5%E8%90%BD%E5%AE%9E%E5%88%B0%E4%BB%A3%E7%A0%81%E4%B8%8A%E6%9C%89%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%B8%8D%E5%A6%A8%E4%B9%8B%E5%90%8E%E7%BB%93%E5%90%88%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9D%A5%E7%9C%8B"><span class="nav-number">3.3.3.</span> <span class="nav-text">那么这就是背包问题大体的思路了。不过因为是递推，所以落实到代码上有一些细节需要注意。不妨之后结合下面的代码来看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%88%B0%E6%AD%A4%E6%88%91%E4%BB%AC%E4%BA%86%E8%A7%A3%E4%BA%86%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E5%A4%A7%E6%A6%82%E7%9A%84%E6%80%9D%E8%B7%AF%E5%8F%98%E4%BD%93%E5%BD%93%E7%84%B6%E4%BC%9A%E6%9C%89%E4%B8%80%E4%BA%9B%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E5%9C%B0%E6%96%B9%E4%BD%86%E6%98%AF%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E9%A2%98%E7%9B%AE%E5%B9%B6%E4%B8%8D%E6%98%AF%E9%82%A3%E7%A7%8D%E6%B5%85%E6%98%BE%E7%9B%B4%E7%99%BD%E7%9A%84%E8%83%8C%E5%8C%85%E8%87%B3%E5%B0%91%E4%B9%8D%E4%B8%80%E7%9C%8B%E6%98%AF%E7%9C%8B%E4%B8%8D%E5%87%BA%E6%9D%A5%E7%9A%84%E5%85%B6%E5%AE%9E%E9%9C%80%E8%A6%81%E4%B8%80%E5%AE%9A%E7%9A%84%E8%BD%AC%E6%8D%A2%E9%A2%98%E7%9B%AE%E9%97%AE%E8%83%BD%E4%B8%8D%E8%83%BD%E6%89%BE%E5%88%B0%E5%88%92%E5%88%86%E4%BD%BF%E5%BE%97%E4%B8%A4%E4%B8%AA%E5%AD%90%E9%9B%86%E7%9A%84%E5%92%8C%E5%9D%87%E4%B8%BA%E6%80%BB%E4%BD%93%E5%92%8C%E7%9A%84%E4%B8%80%E5%8D%8A%E5%85%B6%E5%AE%9E%E6%88%91%E4%BB%AC%E6%89%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E5%AD%90%E9%9B%86%E4%B9%8B%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E8%87%AA%E7%84%B6%E5%B0%B1%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AD%90%E9%9B%86%E4%BA%86%E9%82%A3%E4%B9%88%E9%97%AE%E9%A2%98%E5%85%B6%E5%AE%9E%E5%8F%AF%E4%BB%A5%E8%BD%AC%E5%8C%96%E6%88%90%E6%88%91%E4%BB%AC%E6%98%AF%E5%90%A6%E8%83%BD%E6%89%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E5%AD%90%E9%9B%86%E4%BD%BF%E5%BE%97%E5%AD%90%E9%9B%86%E9%87%8C%E7%9A%84%E5%85%A8%E9%83%A8%E5%85%83%E7%B4%A0%E7%9A%84%E5%92%8C%E6%98%AF%E6%80%BB%E4%BD%93%E5%85%83%E7%B4%A0%E7%9A%84%E5%92%8C%E7%9A%84%E4%B8%80%E5%8D%8A%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E8%80%83%E8%99%91%E8%BD%AC%E5%8C%96%E6%88%90%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E6%88%91%E4%BB%AC%E7%9A%84%E8%83%8C%E5%8C%85%E5%AE%B9%E9%87%8F%E5%B0%B1%E6%98%AF%E4%B8%80%E5%8D%8A%E7%9A%84%E6%80%BB%E4%BD%93%E5%85%83%E7%B4%A0%E7%9A%84%E5%92%8C%E6%89%80%E6%9C%89%E7%9A%84%E5%85%83%E7%B4%A0%E5%B0%B1%E6%98%AF%E5%8F%AF%E9%80%89%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E5%AF%B9%E5%BA%94%E4%BD%93%E7%A7%AF%E6%88%91%E4%BB%AC%E7%9A%84%E7%9B%AE%E6%A0%87%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88%E6%8D%A2%E5%8F%A5%E8%AF%9D%E8%AF%B4%E5%B0%B1%E6%98%AF%E6%96%B9%E6%A1%88%E6%95%B0%E6%98%AF%E4%B8%8D%E6%98%AF%E5%A4%A7%E4%BA%8E0%E5%B9%B6%E4%B8%94%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E5%9B%A0%E4%B8%BA%E6%89%80%E6%9C%89%E5%85%83%E7%B4%A0%E9%83%BD%E6%98%AF%E6%AD%A3%E6%95%B4%E6%95%B0%E6%89%80%E4%BB%A5%E6%80%8E%E4%B9%88%E5%8A%A0%E9%83%BD%E4%B8%8D%E4%BC%9A%E6%9C%89%E5%B0%8F%E6%95%B0%E7%9A%84%E5%9B%A0%E6%AD%A4%E5%A6%82%E6%9E%9C%E6%80%BB%E4%BD%93%E7%9A%84%E5%85%83%E7%B4%A0%E5%92%8C%E6%98%AF%E4%B8%AA%E5%A5%87%E6%95%B0%E9%82%A3%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E6%8F%90%E5%89%8D%E7%9F%A5%E9%81%93%E4%B8%80%E5%AE%9A%E4%B8%8D%E5%AD%98%E5%9C%A8%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88%E6%95%B0%E5%8F%AF%E4%BB%A5%E6%8F%90%E5%89%8Dreturn%E8%BF%99%E5%B0%B1%E6%98%AF%E8%90%BD%E5%AE%9E%E5%88%B0%E8%BF%99%E4%B8%80%E9%A2%98%E4%B8%8A%E7%9A%84%E6%80%9D%E8%B7%AF%E4%BA%86"><span class="nav-number">3.4.</span> <span class="nav-text">注意，到此，我们了解了背包问题大概的思路（变体当然会有一些不一样的地方）。但是需要注意，题目并不是那种浅显直白的背包，至少乍一看是看不出来的。其实需要一定的转换。题目问能不能找到划分，使得两个子集的和均为总体和的一半。其实我们找到一个子集之后，剩下的自然就是另一个子集了。那么问题其实可以转化成，我们是否能找到一个子集，使得子集里的全部元素的和是总体元素的和的一半。也就是说，考虑转化成背包问题，我们的背包容量就是一半的总体元素的和，所有的元素就是可选的物品的对应体积，我们的目标其实就是判断是否存在可行的方案，换句话说就是方案数是不是大于0。并且需要注意，因为所有元素都是正整数，所以怎么加都不会有小数的。因此，如果总体的元素和是个奇数，那我们可以提前知道一定不存在可行的方案数，可以提前return。这就是落实到这一题上的思路了</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E8%BF%99%E4%B8%80%E9%83%A8%E5%88%86"><span class="nav-number">4.1.</span> <span class="nav-text">看上面的代码，这一部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%88%E5%AE%B9%E6%98%93%E6%87%82%E5%B0%B1%E6%98%AF%E4%B8%80%E4%BA%9B%E5%88%9D%E5%A7%8B%E7%9A%84%E5%B7%A5%E4%BD%9C%E4%BB%A5%E5%8F%8A%E6%8F%90%E5%89%8D%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">4.1.1.</span> <span class="nav-text">很容易懂，就是一些初始的工作以及提前的判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E6%98%AF-vectorvectorint-recordn-vectorinthalf1--1"><span class="nav-number">4.2.</span> <span class="nav-text">接下来是vector&lt;vector&lt;int&gt;&gt; record(n, vector&lt;int&gt;(half+1, -1));</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%80%E8%A1%8C%E4%B8%BB%E8%A6%81%E6%98%AF%E6%9E%84%E9%80%A0%E4%B8%80%E4%B8%AA%E4%BA%8C%E7%BB%B4vector%E7%94%A8%E4%BA%8E%E8%AE%B0%E5%BD%95%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E6%98%AF%E9%80%92%E6%8E%A8%E5%AE%9E%E7%8E%B0%E7%9A%84%E9%9C%80%E8%A6%81%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E7%9A%84%E6%8A%80%E5%B7%A7%E5%90%A6%E5%88%99%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%BF%87%E9%AB%98%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87"><span class="nav-number">4.2.1.</span> <span class="nav-text">这一行主要是构造一个二维vector，用于记录，因为我们是递推实现的，需要记忆化搜索的技巧，否则时间复杂度过高，无法通过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%8B%E5%90%8E%E5%B0%B1%E6%98%AF%E6%A0%B8%E5%BF%83%E7%9A%84%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0%E4%BA%86int-res-find_sum_waysnums-record-n-1-half%E4%B8%8D%E5%A6%A8%E6%9D%A5%E4%BB%94%E7%BB%86%E7%9C%8B%E7%9C%8B%E8%BF%99%E4%B8%AAfind_sum_ways%E5%87%BD%E6%95%B0"><span class="nav-number">4.3.</span> <span class="nav-text">之后就是核心的调用函数了，int res &#x3D; find_sum_ways(nums, record, n-1, half);，不妨来仔细看看这个find_sum_ways函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E5%A4%B4%E4%B8%A4%E8%A1%8C%E4%B8%BB%E8%A6%81%E6%98%AF%E5%A4%84%E7%90%86%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5%E7%9A%84%E7%AC%AC%E4%B8%80%E8%A1%8C%E6%98%AF%E8%B4%9F%E8%B4%A3%E5%A4%84%E7%90%86%E9%80%92%E5%BD%92%E7%9A%84%E6%9C%80%E7%BB%88%E7%BB%88%E6%AD%A2%E6%9D%A1%E4%BB%B6%E7%9A%84%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0int-find_sum_waysvectorint-nums-vectorvectorint-record-int-i-int-s%E7%9A%84%E5%90%AB%E4%B9%89%E5%B0%B1%E6%98%AF%E5%88%A4%E6%96%AD%E4%BB%8E0%E5%88%B0%E4%B8%8B%E6%A0%87i%E7%9A%84%E8%BF%99%E4%BA%9B%E7%89%A9%E5%93%81%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E8%83%BD%E6%81%B0%E5%A5%BD%E5%87%91%E5%87%BA%E5%92%8C%E4%B8%BAs%E7%9A%84%E6%83%85%E6%96%B9%E6%A1%88%E5%9B%A0%E6%AD%A4%E5%BD%93%E6%88%91%E4%BB%AC%E4%B8%80%E8%B7%AF%E9%80%92%E6%8E%A8%E5%88%B0%E4%BA%86i%E4%B8%BA0%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E5%85%B6%E5%AE%9E%E8%A6%81%E5%81%9A%E7%9A%84%E5%B0%B1%E6%98%AF%E7%9C%8B%E4%B8%8B%E6%A0%87%E4%B8%BA0%E7%9A%84%E9%82%A3%E4%B8%AA%E7%89%A9%E5%93%81%E5%AE%83%E7%9A%84%E4%BD%93%E7%A7%AF%E6%98%AF%E5%90%A6%E7%AD%89%E4%BA%8E%E6%AD%A4%E6%97%B6%E7%9A%84s%E5%A6%82%E6%9E%9Cnumsis%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E4%B8%8B%E6%A0%87%E4%B8%BA0%E7%9A%84%E7%89%A9%E5%93%81%E5%AE%83%E7%9A%84%E4%BD%93%E7%A7%AF%E5%A4%A7%E4%BA%8E%E6%AD%A4%E6%97%B6%E7%9A%84s%E5%88%99%E4%BC%9A%E8%BF%9B%E5%85%A5%E5%88%B0%E6%88%91%E4%BB%AC%E5%90%8E%E9%9D%A2%E7%9A%84%E4%B8%80%E6%AE%B5%E4%BB%A3%E7%A0%81"><span class="nav-number">4.3.1.</span> <span class="nav-text">这头两行主要是处理特殊情况的。第一行是负责处理递归的最终终止条件的。这个函数int find_sum_ways(vector&lt;int&gt;&amp; nums, vector&lt;vector&lt;int&gt;&gt;&amp; record, int i, int s)的含义就是判断，从0到下标i的这些物品中，是否有能恰好凑出和为s的情方案。因此，当我们一路递推，到了i为0的时候，我们其实要做的就是看下标为0的那个物品它的体积是否等于此时的s。如果nums[i]&gt;s，也就是说下标为0的物品它的体积大于此时的s，则会进入到我们后面的一段代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A4%E6%97%B6%E4%BC%9A%E7%BB%A7%E7%BB%AD%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8%E4%BB%8E%E8%80%8C%E5%87%BA%E7%8E%B0find_sum_ways%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0i%E4%B8%BA-1%E7%9A%84%E6%83%85%E5%86%B5%E8%80%8C%E5%A6%82%E6%9E%9Cnumsis%E5%8D%B3%E4%B8%8B%E6%A0%87%E4%B8%BA0%E7%9A%84%E7%89%A9%E5%93%81%E5%AE%83%E7%9A%84%E4%BD%93%E7%A7%AF%E5%B0%8F%E4%BA%8E%E7%AD%89%E4%BA%8E%E6%AD%A4%E6%97%B6%E7%9A%84s%E5%88%99%E4%BC%9A%E8%BF%9B%E5%85%A5%E5%88%B0%E8%BF%99%E4%B8%80%E6%AE%B5%E4%BB%A3%E7%A0%81"><span class="nav-number">4.3.2.</span> <span class="nav-text">此时会继续递归调用，从而出现find_sum_ways中的参数i为-1的情况；而如果nums[i]&lt;&#x3D;s，即下标为0的物品它的体积小于等于此时的s，则会进入到这一段代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%A0%B7%E7%9A%84%E8%BF%98%E6%98%AF%E4%BC%9A%E5%87%BA%E7%8E%B0find_sum_ways%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0i%E4%B8%BA-1%E7%9A%84%E6%83%85%E5%86%B5%E6%95%85%E5%85%B6%E5%AE%9Ei%E4%B8%BA-1%E7%9A%84%E6%83%85%E5%86%B5%E5%B0%B1%E6%98%AF%E6%9C%80%E7%BB%88%E9%80%92%E5%BD%92%E8%A6%81%E7%BB%93%E6%9D%9F%E7%9A%84%E6%83%85%E5%86%B5%E8%80%8C%E5%A6%82%E6%9E%9C%E4%B8%80%E7%A7%8D%E6%96%B9%E6%A1%88%E5%8F%AF%E8%A1%8C%E9%82%A3%E4%B9%88%E5%AE%83%E9%80%92%E5%BD%92%E5%88%B0%E4%B8%8B%E6%A0%87%E4%B8%BA0%E7%9A%84%E9%82%A3%E4%B8%AA%E7%89%A9%E5%93%81%E7%9A%84%E6%97%B6%E5%80%99%E5%89%A9%E4%BD%99%E7%9A%84%E4%BD%93%E7%A7%AF%E8%A6%81%E6%B1%82s%E5%BA%94%E8%AF%A5%E6%81%B0%E5%A5%BD%E4%B8%BAnumsi%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E6%AD%A4%E6%97%B6%E6%8A%8A%E7%89%A9%E5%93%810%E6%8C%91%E4%B8%8A%E5%B0%B1%E5%A5%BD%E6%88%96%E8%80%85%E6%98%AF%E6%81%B0%E5%A5%BD%E4%B8%BA0%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%B8%8D%E9%9C%80%E8%A6%81%E6%8B%BF%E4%B8%8A%E7%89%A9%E5%93%810%E5%89%8D%E8%80%85%E5%BA%94%E8%AF%A5%E5%AF%B9%E5%BA%94%E4%BA%86find_sum_waysnums-record-i-1-s-numsi%E5%90%8E%E8%80%85%E5%88%99%E5%BA%94%E8%AF%A5%E5%AF%B9%E5%BA%94%E4%BA%86find_sum_waysnums-record-i-1-s-%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8B%E6%9C%80%E5%90%8E%E8%B0%83%E7%94%A8find_sum_ways%E5%87%BD%E6%95%B0%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%A0%E5%85%A5%E7%9A%84s%E5%8F%82%E6%95%B0%E6%81%B0%E5%A5%BD%E9%83%BD%E6%98%AF0-%E6%95%85%E5%9C%A8i%E4%B8%BA-1%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E8%A6%81%E5%88%A4%E6%96%ADs%E6%98%AF%E5%90%A6%E4%B8%BA0s%E6%98%AF0%E8%AF%B4%E6%98%8E%E5%BD%93%E5%89%8D%E6%96%B9%E6%A1%88%E5%8F%AF%E8%A1%8C%E5%88%99return-1%E5%90%A6%E5%88%99%E8%AF%B4%E6%98%8E%E5%BD%93%E5%89%8D%E6%96%B9%E6%A1%88%E4%B8%8D%E5%8F%AF%E8%A1%8Creturn-0"><span class="nav-number">4.3.3.</span> <span class="nav-text">同样的，还是会出现find_sum_ways中的参数i为-1的情况。故，其实i为-1的情况就是最终递归要结束的情况。而如果一种方案可行，那么它递归到下标为0的那个物品的时候，剩余的体积要求s应该恰好为nums[i]（也就是说此时把物品0挑上就好）或者是恰好为0（也就是不需要拿上物品0）。前者应该对应了find_sum_ways(nums, record, i-1, s-nums[i])，后者则应该对应了find_sum_ways(nums, record, i-1, s)两种情况下，最后调用find_sum_ways函数的时候，传入的s参数恰好都是0故，在i为-1的时候，我们要判断s是否为0，s是0，说明当前方案可行，则return
+1；否则说明当前方案不可行，return 0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%AD%A4%E6%88%91%E4%BB%AC%E7%9C%8B%E8%BF%99%E6%AE%B5%E4%BB%A3%E7%A0%81"><span class="nav-number">4.3.4.</span> <span class="nav-text">因此我们看这段代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%83%E7%9A%84%E6%84%8F%E6%80%9D%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E5%88%A4%E6%96%AD%E4%BB%8E0%E5%88%B0i%E7%9A%84%E7%89%A9%E5%93%81%E4%B8%AD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAs%E6%98%AF%E5%90%A6%E6%9C%89%E5%8F%AF%E8%A1%8C%E6%96%B9%E6%A1%88%E5%B0%B1%E7%AD%89%E4%BB%B7%E4%BA%8E%E5%88%A4%E6%96%AD%E4%BB%8E0%E5%88%B0i-1%E7%9A%84%E7%89%A9%E5%93%81%E4%B8%AD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAs%E6%98%AF%E5%90%A6%E6%9C%89%E5%8F%AF%E8%A1%8C%E6%96%B9%E6%A1%88%E5%B9%B6%E4%B8%8A%E4%BB%8E0%E5%88%B0i-1%E7%9A%84%E7%89%A9%E5%93%81%E4%B8%AD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAs-numsi%E6%98%AF%E5%90%A6%E6%9C%89%E5%8F%AF%E8%A1%8C%E6%96%B9%E6%A1%88%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%80%E7%BB%88%E6%83%85%E5%86%B5return%E7%9A%84%E6%98%AF0%E5%92%8C1%E6%89%80%E4%BB%A5%E7%94%A8%E5%B9%B6%E5%B0%B1%E8%83%BD%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E8%87%B3%E5%B0%91%E4%B8%80%E7%A7%8D%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">4.3.4.1.</span> <span class="nav-text">它的意思就是，我们判断从0到i的物品中挑出体积和为s是否有可行方案，就等价于判断从0到i-1的物品中挑出体积和为s是否有可行方案，并上从0到i-1的物品中挑出体积和为s-nums[i]是否有可行方案（我们的最终情况return的是0和1，所以用并就能判断是否存在至少一种可行的方案）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%B3%E4%BA%8E%E8%AF%B4%E5%BD%93%E5%89%8D%E7%89%A9%E5%93%81%E4%BD%93%E7%A7%AF%E8%BF%87%E5%A4%A7%E7%9A%84%E6%83%85%E5%86%B5%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%B8%8B%E6%A0%87%E4%B8%BAi%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E4%BD%93%E7%A7%AF%E5%A4%A7%E4%BA%8E%E4%BA%86%E4%BD%93%E7%A7%AF%E5%92%8C%E8%A6%81%E6%B1%82%E5%9C%A8%E4%B8%8A%E9%9D%A2%E6%9C%89%E4%B8%93%E9%97%A8%E7%9A%84%E5%A4%84%E7%90%86%E4%BB%A3%E7%A0%81%E4%BA%86%E9%81%93%E7%90%86%E7%B1%BB%E4%BC%BC%E7%9A%84"><span class="nav-number">4.3.5.</span> <span class="nav-text">至于说当前物品体积过大的情况（也就是下标为i的物品的体积大于了体积和要求，在上面有专门的处理代码了，道理类似的）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E7%9C%8B%E7%9C%8Brecord%E8%BF%99%E4%B8%AA%E4%BA%8C%E7%BB%B4vector%E5%AE%83%E5%B0%B1%E6%98%AF%E7%94%A8%E6%9D%A5%E8%AE%B0%E5%BD%95%E7%9A%84%E4%BB%8E%E8%80%8C%E5%AE%9E%E7%8E%B0%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E5%85%B6%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%B8%BA%E7%89%A9%E5%93%81%E7%9A%84%E4%B8%AA%E6%95%B0%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E5%88%99%E6%98%AFhalf1%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4recordij%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E4%BB%8E%E7%89%A9%E5%93%810%E5%88%B0%E7%89%A9%E5%93%81i%E6%88%91%E4%BB%AC%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAj%E6%98%AF%E5%90%A6%E6%9C%89%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88%E6%95%B0"><span class="nav-number">4.4.</span> <span class="nav-text">再看看record这个二维vector，它就是用来记录的，从而实现记忆化搜索。其第一个维度为物品的个数，第二个维度则是half＋1，也就是说，record[i][j]表示的是，从物品0到物品i，我们挑出体积和为j，是否有可行的方案数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E4%B8%80%E4%B8%AA%E5%B0%8F%E7%BB%86%E8%8A%82%E6%98%AF%E6%9C%AC%E6%9D%A5%E6%88%91%E5%AE%9E%E7%8E%B0%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E6%98%AF%E6%89%93%E7%AE%97%E6%B1%82%E6%96%B9%E6%A1%88%E6%95%B0%E7%9A%84%E5%9B%A0%E6%AD%A4%E5%87%BD%E6%95%B0%E5%90%8D%E6%98%AFfind_sum_ways%E6%89%80%E4%BB%A5%E6%9C%80%E5%90%8E%E8%BF%99%E6%AE%B5%E4%BB%A3%E7%A0%81%E9%87%8C%E6%98%AF%E5%8A%A0%E5%8F%B7%E8%80%8C%E4%B8%8D%E6%98%AF%E5%B9%B6"><span class="nav-number">4.5.</span> <span class="nav-text">另外一个小细节是，本来我实现这个函数的时候，就是打算求方案数的（因此函数名是find_sum_ways），所以最后这段代码里是加号而不是并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%86%E5%8F%91%E7%94%9F%E4%BA%86%E6%BA%A2%E5%87%BA%E5%B0%B1%E6%98%AF%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9B%B8%E5%8A%A0%E8%BF%87%E5%A4%A7%E8%B6%85%E5%87%BA%E4%BA%86int%E7%9A%84%E8%A1%A8%E7%A4%BA%E8%8C%83%E5%9B%B4%E7%8C%9C%E6%B5%8B%E8%BF%99%E5%BA%94%E8%AF%A5%E4%B8%8E%E9%A2%98%E7%9B%AE%E7%BB%99%E7%9A%84%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E6%9C%89%E5%85%B3%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E9%A2%98%E7%9B%AE%E7%BB%99%E7%9A%84%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E5%8F%AF%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E6%89%80%E4%BB%A5%E8%87%B3%E5%B0%91%E7%94%A8int%E7%9A%84%E8%AF%9D%E6%98%AF%E6%B1%82%E4%B8%8D%E5%87%BA%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88%E6%95%B0%E7%9A%84%E5%9B%A0%E6%AD%A4%E9%A2%98%E7%9B%AE%E6%89%8D%E8%A6%81%E6%B1%82%E8%AF%B4%E5%8F%AA%E9%9C%80%E8%A6%81%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%9C%89%E5%8F%AF%E8%A1%8C%E7%9A%84%E6%96%B9%E6%A1%88%E5%B0%B1%E8%A1%8C%E4%BA%86%E5%90%8E%E9%9D%A2%E6%94%B9%E4%BA%86%E6%94%B9%E4%BB%A3%E7%A0%81%E4%B8%8D%E8%BF%87%E5%87%BD%E6%95%B0%E5%90%8D%E5%B0%B1%E6%87%92%E5%BE%97%E6%94%B9%E4%BA%86"><span class="nav-number">4.5.1.</span> <span class="nav-text">但发生了溢出，就是两个数相加过大，超出了int的表示范围。猜测这应该与题目给的数据范围有关，也就是说，题目给的数据范围可能比较大，所以至少用int的话是求不出可行的方案数的，因此题目才要求说只需要判断是否有可行的方案就行了（后面改了改代码，不过函数名就懒得改了）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%BB%A3%E7%A0%81%E7%9A%84%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%BA%94%E8%AF%A5%E5%B0%B1%E6%98%AFontarget%E4%BA%86%E6%AF%95%E7%AB%9F%E4%B8%BB%E8%A6%81%E7%9A%84%E7%A9%BA%E9%97%B4%E5%BC%80%E9%94%80%E5%B0%B1%E6%98%AF%E9%82%A3%E4%B8%AArecord%E6%95%B0%E7%BB%84%E4%B8%8D%E8%BF%87%E5%87%86%E7%A1%AE%E4%B8%80%E7%82%B9%E7%9A%84%E8%AF%9D%E5%BA%94%E8%AF%A5%E8%AF%B4%E6%98%AFonhalf%E8%87%B3%E4%BA%8E%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%9C%80%E5%9D%8F%E7%9A%84%E6%83%85%E5%86%B5%E5%BA%94%E8%AF%A5%E6%98%AF%E6%8A%8Arecord%E9%87%8C%E7%9A%84%E6%89%80%E6%9C%89%E4%BD%8D%E7%BD%AE%E7%9A%84%E7%BB%93%E6%9E%9C%E9%83%BD%E7%AE%97%E5%87%BA%E6%9D%A5%E6%89%80%E4%BB%A5%E6%98%AFonhalf%E4%B9%9F%E5%8D%B3ontarget%E4%B8%8D%E8%BF%87%E5%BE%97%E5%86%8D%E7%90%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E8%A7%89%E5%BE%97%E4%B9%9F%E6%98%AF%E6%8C%87%E6%95%B0%E7%BA%A7%E7%9A%84%E6%88%96%E8%AE%B8%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E7%90%86%E8%A7%A3%E6%88%91%E4%BB%AC%E8%AE%A1%E7%AE%97record%E9%87%8C%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE%E4%B8%8A%E7%9A%84%E7%BB%93%E6%9E%9C%E5%B0%B1%E6%98%AF%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1%E8%BF%99%E4%B8%AAfind_sum_ways%E5%87%BD%E6%95%B0%E8%80%8C%E6%A0%B9%E6%8D%AE%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1find_sum_ways%E5%87%BD%E6%95%B0%E8%A6%81%E4%B9%88%E4%BC%9A%E5%86%8D%E8%B0%83%E7%94%A8%E4%B8%A4%E6%AC%A1%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0%E8%A6%81%E4%B9%88%E5%B0%B1%E5%8F%AA%E5%86%8D%E8%B0%83%E7%94%A8%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0%E4%B8%80%E6%AC%A1%E8%80%8C%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0%E4%BB%A5%E5%90%8E%E5%A6%82%E6%9E%9C%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E7%BB%93%E6%9E%9C%E6%88%91%E4%BB%AC%E7%AE%97%E8%BF%87%E9%82%A3%E4%B9%88%E6%88%91%E4%BB%AC%E4%BC%9A%E8%AE%B0%E5%BD%95%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E6%89%80%E4%BB%A5%E7%9B%B4%E6%8E%A5return%E5%B0%B1%E8%A1%8C%E8%80%8C%E5%A6%82%E6%9E%9C%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84%E7%BB%93%E6%9E%9C%E6%88%91%E4%BB%AC%E6%B2%A1%E7%AE%97%E8%BF%87%E9%82%A3%E4%B9%88%E5%AE%83%E4%BC%9A%E7%BB%A7%E7%BB%AD%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0%E4%B8%80%E7%9B%B4%E8%BF%99%E4%B9%88%E9%80%92%E5%BD%92%E4%B8%8B%E5%8E%BB%E6%9C%80%E5%9D%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%B8%80%E8%B7%AF%E4%B8%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%AD%90%E9%97%AE%E9%A2%98%E9%83%BD%E6%B2%A1%E7%AE%97%E8%BF%87%E9%80%92%E5%BD%92%E5%88%B0%E4%BA%86%E8%BE%B9%E7%95%8C%E6%83%85%E5%86%B5%E4%B9%8B%E5%90%8E%E5%86%8D%E9%80%90%E6%AD%A5%E8%BF%94%E5%9B%9E%E6%8A%8A%E4%B8%AD%E9%97%B4%E7%9A%84%E7%BB%93%E6%9E%9C%E7%BB%99%E8%AE%B0%E5%BD%95%E4%B8%8A%E5%BD%92%E6%A0%B9%E5%88%B0%E5%BA%95%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E6%88%91%E4%BB%AC%E7%94%A8%E4%BA%86%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2%E6%89%80%E4%BB%A5record%E9%87%8C%E6%AF%8F%E4%B8%AA%E4%BD%8D%E7%BD%AE%E6%88%91%E4%BB%AC%E5%8F%AA%E4%BC%9A%E7%AE%97%E4%B8%80%E6%AC%A1%E4%BB%A5%E5%8F%8A%E4%B8%80%E5%85%B1%E5%B0%B1onhalf%E4%B8%AA%E7%8A%B6%E6%80%81%E5%85%A8%E9%83%BD%E7%AE%97%E4%BA%86%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">4.6.</span> <span class="nav-text">关于代码的空间复杂度，应该就是\(O(n*target)\)了（毕竟主要的空间开销就是那个record数组；不过准确一点的话，应该说是\(O(n*half)\)）；至于时间复杂度，最坏的情况应该是把record里的所有位置的结果都算出来，所以是\(O(n*half)\)，也即\(O(n*target)\)（不过得再理解一下，为什么我觉得也是指数级的？）（或许可以这样理解，我们计算record里一个位置上的结果，就是调用一次这个find_sum_ways函数；而根据上面的代码，调用一次find_sum_ways函数，要么会再调用两次这个函数，要么就只再调用这个函数一次。而调用函数以后，如果子问题的结果我们算过，那么我们会记录（也就是记忆化搜索），所以直接return就行；而如果子问题的结果我们没算过，那么它会继续调用函数，一直这么递归下去，最坏的情况也就是一路上遇到的子问题都没算过，递归到了边界情况；之后再逐步返回，把中间的结果给记录上。归根到底，最重要的是我们用了记忆化搜索，所以record里每个位置我们只会算一次；以及，一共就\(O(n*half)\)个状态，全都算了也就是这个时间复杂度）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B"><span class="nav-number">5.</span> <span class="nav-text">改进：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E9%9D%A2%E5%86%99%E7%9A%84%E6%98%AF%E9%80%92%E5%BD%92%E7%9A%84%E4%BB%A3%E7%A0%81%E4%B8%80%E8%88%AC%E8%83%BD%E5%86%99%E6%88%90%E9%80%92%E5%BD%92%E7%9A%84%E8%AF%9D%E4%B9%9F%E8%83%BD%E5%86%99%E6%88%90%E9%80%92%E6%8E%A8%E5%B9%B6%E4%B8%94%E5%AF%B9%E4%BA%8E%E8%BF%99%E9%A2%98%E8%80%8C%E8%A8%80%E9%80%92%E6%8E%A8%E5%B9%B6%E4%B8%8D%E9%82%A3%E4%B9%88%E7%9B%B4%E8%A7%82%E5%86%99%E4%B8%80%E4%B8%8B%E6%9C%89%E5%8A%A9%E4%BA%8E%E7%90%86%E8%A7%A3%E6%96%B9%E6%B3%95%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BB%A3%E7%A0%81%E5%90%A7"><span class="nav-number">5.1.</span> <span class="nav-text">上面写的是递归的代码。一般能写成递归的话，也能写成递推。并且对于这题而言，递推并不那么直观，写一下有助于理解方法。直接上代码吧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%9A%84%E4%BB%A3%E7%A0%81%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E8%BF%99%E4%BA%9B"><span class="nav-number">5.2.</span> <span class="nav-text">核心的代码其实就是这些：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E6%9D%A5%E5%85%B7%E4%BD%93%E7%9C%8B%E4%B8%80%E4%B8%8B%E8%BF%99%E9%87%8C%E7%9A%84record%E4%BE%9D%E7%84%B6%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BA%8C%E7%BB%B4%E7%9A%84vector%E5%B9%B6%E4%B8%94%E6%88%91%E4%BB%ACrecordij%E8%A1%A8%E7%A4%BA%E7%9A%84%E5%90%AB%E4%B9%89%E5%92%8C%E4%B8%8A%E9%9D%A2%E4%B8%80%E6%A0%B7%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%BB%8E%E7%89%A9%E5%93%810%E5%88%B0%E7%89%A9%E5%93%81i%E4%BB%8E%E8%BF%99%E4%BA%9B%E7%89%A9%E5%93%81%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%96%B9%E6%A1%88%E5%8F%AF%E4%BB%A5%E4%BD%BF%E5%BE%97%E6%8C%91%E5%87%BA%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E4%BD%93%E7%A7%AF%E5%92%8C%E6%81%B0%E4%B8%BAj%E8%8B%A5%E5%AD%98%E5%9C%A8%E5%88%99%E8%AF%A5%E5%85%83%E7%B4%A0%E4%B8%BA1%E5%90%A6%E5%88%99%E4%B8%BA0-%E9%82%A3%E4%B9%88record00-1-record0nums0-1%E8%BF%99%E4%B8%80%E8%A1%8C%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BB%A3%E8%A1%A8%E4%BA%86%E4%BB%80%E4%B9%88%E5%91%A2%E5%85%B6%E5%AE%9E%E8%BF%99%E9%87%8C%E5%B0%B1%E5%AF%B9%E5%BA%94%E4%BA%86%E4%B8%8D%E9%80%89%E9%80%89%E7%89%A9%E5%93%810%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E4%B8%8D%E9%80%89%E7%89%A9%E5%93%810%E9%82%A3%E4%B9%88%E4%BB%8E%E7%89%A9%E5%93%810%E9%87%8C%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E5%AD%98%E5%9C%A8%E6%96%B9%E6%A1%88%E4%BD%BF%E5%BE%97%E6%8C%91%E5%87%BA%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BA0%E7%B1%BB%E4%BC%BC%E7%9A%84%E4%BB%8E%E7%89%A9%E5%93%810%E4%B8%AD%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E5%AD%98%E5%9C%A8%E6%96%B9%E6%A1%88%E4%BD%BF%E5%BE%97%E6%8C%91%E5%87%BA%E7%9A%84%E7%89%A9%E5%93%81%E7%9A%84%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAnums0%E5%8F%AA%E9%9C%80%E8%A6%81%E6%81%B0%E5%A5%BD%E6%8C%91%E5%87%BA%E7%89%A9%E5%93%810%E5%8D%B3%E5%8F%AF%E8%87%B3%E4%BA%8E%E5%85%B6%E5%AE%83%E7%9A%84%E4%BD%93%E7%A7%AF%E5%92%8C%E6%88%91%E4%BB%AC%E4%BB%8E%E7%89%A9%E5%93%810%E9%87%8C%E6%98%AF%E6%97%A0%E6%B3%95%E6%BB%A1%E8%B6%B3%E7%9A%84-%E5%90%8E%E9%9D%A2%E6%80%8E%E4%B9%88%E9%80%92%E6%8E%A8%E5%91%A2%E6%88%91%E4%BB%AC%E5%85%B6%E5%AE%9E%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E7%BB%99%E5%87%BA%E4%B8%80%E4%B8%AA%E4%B8%80%E8%88%AC%E7%9A%84%E9%80%92%E6%8E%A8%E5%BC%8F%E5%B0%B1%E6%98%AF%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%BA%8C%E9%87%8Dfor%E5%BE%AA%E7%8E%AF%E4%B8%8B%E7%9A%84%E4%B8%A4%E8%A1%8C%E4%BB%A3%E7%A0%81"><span class="nav-number">5.3.</span> <span class="nav-text">我们来具体看一下。这里的record依然是一个二维的vector，并且我们record[i][j]表示的含义和上面一样（也就是从物品0到物品i，从这些物品里是否存在方案可以使得挑出的物品的体积和恰为j。若存在，则该元素为1，否则为0）那么record[0][0] &#x3D; 1, record[0][nums[0]] &#x3D; 1;这一行的初始化代表了什么呢？其实这里就对应了不选&#x2F;选物品0的两种情况。如果我们不选物品0，那么从物品0里可以认为存在方案，使得挑出的物品的体积和为0；类似的，从物品0中，我们也可以认为存在方案，使得挑出的物品的体积和为nums[0]（只需要恰好挑出物品0即可）。至于其它的体积和，我们从物品0里是无法满足的后面怎么递推呢？我们其实可以直接给出一个一般的递推式，就是上面的二重for循环下的两行代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E7%9A%84%E4%BD%93%E7%A7%AF%E5%92%8C%E8%A6%81%E6%B1%82%E4%B8%BAj%E4%B8%94%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F%E6%9C%89%E4%BA%86record%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%BB%8E0%E5%88%B0i-1%E7%9A%84%E6%89%80%E6%9C%89%E4%BD%8D%E7%BD%AE%E7%9A%84%E7%BB%93%E6%9E%9C%E7%8E%B0%E5%9C%A8%E6%88%91%E4%BB%AC%E8%A6%81%E9%80%92%E6%8E%A8%E5%87%BArecord%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%B8%BAi%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%B8%8A%E7%9A%84%E6%89%80%E6%9C%89%E5%85%83%E7%B4%A0%E9%9C%80%E8%A6%81%E8%AE%A8%E8%AE%BA%E5%BD%93%E5%89%8D%E7%89%A9%E5%93%81i%E7%9A%84%E4%BD%93%E7%A7%AF%E6%98%AF%E5%90%A6%E5%B7%B2%E7%BB%8F%E8%B6%85%E5%87%BA%E4%BA%86%E4%BD%93%E7%A7%AF%E5%92%8Cj%E5%A6%82%E6%9E%9C%E6%98%AF%E9%82%A3%E4%B9%88%E6%98%BE%E7%84%B6%E6%88%91%E4%BB%AC%E4%B8%8D%E8%83%BD%E9%80%89%E7%89%A9%E5%93%81i%E9%82%A3%E4%B9%88%E4%BB%8E%E7%89%A9%E5%93%810%E5%88%B0%E7%89%A9%E5%93%81i%E4%B8%AD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAj%E7%9A%84%E6%96%B9%E6%A1%88%E5%B0%B1%E6%81%B0%E5%A5%BD%E7%AD%89%E4%BA%8E%E4%BB%8E%E7%89%A9%E5%93%810%E5%88%B0%E7%89%A9%E5%93%81i-1%E4%B8%AD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAj%E7%9A%84%E6%96%B9%E6%A1%88%E6%89%80%E4%BB%A5%E6%89%8D%E6%9C%89recordij-recordi-1j-%E8%80%8C%E5%A6%82%E6%9E%9C%E7%89%A9%E5%93%81i%E7%9A%84%E4%BD%93%E7%A7%AF%E8%BF%98%E6%B2%A1%E8%B6%85%E8%BF%87%E4%BD%93%E7%A7%AF%E5%92%8C%E8%A6%81%E6%B1%82j%E9%82%A3%E4%B9%88%E7%89%A9%E5%93%81i%E5%B0%B1%E6%9C%89%E5%8F%AF%E8%83%BD%E9%80%89%E4%B9%9F%E6%9C%89%E5%8F%AF%E8%83%BD%E4%B8%8D%E9%80%89%E4%B8%A4%E7%A7%8D%E9%83%BD%E9%9C%80%E8%A6%81%E8%AE%A8%E8%AE%BA%E5%BD%93%E9%80%89%E4%B8%8A%E7%89%A9%E5%93%81i%E6%97%B6%E6%88%91%E4%BB%AC%E5%B0%B1%E8%A6%81%E6%B1%82%E4%BB%8E%E7%89%A9%E5%93%810%E5%88%B0%E7%89%A9%E5%93%81i-1%E9%9C%80%E8%A6%81%E5%AD%98%E5%9C%A8%E8%83%BD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAj-numsi%E7%9A%84%E6%96%B9%E6%A1%88%E5%A6%82%E6%9E%9C%E4%B8%8D%E9%80%89%E7%89%A9%E5%93%81i%E5%88%99%E6%88%91%E4%BB%AC%E8%A6%81%E6%B1%82%E4%BB%8E%E7%89%A9%E5%93%810%E5%88%B0%E7%89%A9%E5%93%81i-1%E9%9C%80%E8%A6%81%E5%AD%98%E5%9C%A8%E8%83%BD%E6%8C%91%E5%87%BA%E4%BD%93%E7%A7%AF%E5%92%8C%E4%B8%BAj%E7%9A%84%E6%96%B9%E6%A1%88%E6%9C%80%E7%BB%88%E5%8F%AA%E9%9C%80%E8%A6%81%E4%B8%A4%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8B%E8%87%B3%E5%B0%91%E6%9C%89%E4%B8%80%E7%A7%8D%E6%88%90%E7%AB%8B%E6%88%91%E4%BB%AC%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%BB%99recordij%E8%B5%8B%E5%80%BC%E4%B8%BA1%E4%BA%86"><span class="nav-number">5.3.1.</span> <span class="nav-text">如果我们的体积和要求为j，且我们已经有了record的第一个维度从0到i-1的所有位置的结果，现在我们要递推出record的第一个维度为i的位置上的所有元素。需要讨论，当前物品i的体积是否已经超出了体积和j。如果是，那么显然我们不能选物品i，那么从物品0到物品i中挑出体积和为j的方案，就恰好等于从物品0到物品i-1中挑出体积和为j的方案；所以才有record[i][j] &#x3D; record[i-1][j];而如果物品i的体积还没超过体积和要求j，那么物品i就有可能选，也有可能不选，两种都需要讨论。当选上物品i时，我们就要求从物品0到物品i-1，需要存在能挑出体积和为j-nums[i]的方案；如果不选物品i，则我们要求从物品0到物品i-1，需要存在能挑出体积和为j的方案。最终只需要两种情况下至少有一种成立，我们就可以给record[i][j]赋值为1了</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%B3%E4%BA%8E%E8%AF%B4%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E9%87%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E7%BB%99record%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E7%BD%AE%E4%B8%BA%E4%BA%86s1%E8%80%8C%E4%B8%8D%E6%98%AF%E5%83%8F%E4%B9%8B%E5%89%8D%E9%82%A3%E6%A0%B7%E7%9A%84half1%E4%B8%BB%E8%A6%81%E6%98%AF%E5%9B%A0%E4%B8%BA%E6%AD%A4%E5%A4%84%E7%9A%84%E9%80%92%E6%8E%A8%E6%88%91%E4%BB%AC%E6%98%AF%E4%BB%8E%E5%89%8D%E5%BE%80%E5%90%8E%E5%9C%A8%E8%80%83%E8%99%91%E7%BB%99record%E7%9A%84%E4%B8%8D%E5%90%8C%E4%BD%8D%E7%BD%AE%E8%B5%8B%E5%80%BC%E7%9A%84%E6%97%B6%E5%80%99%E6%9C%89%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%9C%A8%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%B8%8A%E5%8F%96%E5%88%B0%E5%85%83%E7%B4%A0%E6%9C%AC%E8%BA%AB%E6%AF%94%E5%A6%82record00-1-record0nums0-1%E8%BF%99%E9%87%8C%E5%B0%B1%E5%AD%98%E5%9C%A8%E5%9C%A8%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%B8%8A%E5%8F%96nums0%E8%BF%99%E4%B8%AA%E4%BD%8D%E7%BD%AE%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BD%86%E5%85%83%E7%B4%A0%E6%9C%AC%E8%BA%AB%E6%98%AF%E6%9C%89%E5%8F%AF%E8%83%BD%E8%B6%85%E5%87%BAhalf%E7%9A%84%E4%B8%BE%E4%B8%AA%E6%9E%81%E7%AB%AF%E7%9A%84%E4%BE%8B%E5%AD%90%E4%B9%9F%E6%98%AF%E5%AE%9E%E9%99%85%E5%BD%93%E6%97%B6%E4%B8%80%E5%BC%80%E5%A7%8B%E6%B2%A1%E9%80%9A%E8%BF%87%E7%9A%84%E4%BE%8B%E5%AD%90nums%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0100%E9%82%A3%E4%B9%88half%E5%B0%B1%E6%98%AF50%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BAhalf1%E9%82%A3100%E4%B8%80%E5%AE%9A%E8%B6%85%E7%B4%A2%E5%BC%95%E4%BA%86-%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%9C%A8record%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E4%B8%8A%E5%BA%94%E8%AF%A5%E7%95%A5%E5%BE%AE%E8%AE%BE%E7%BD%AE%E5%BE%97%E5%A4%A7%E4%B8%80%E7%82%B9%E8%AE%BE%E7%BD%AE%E4%B8%BAs1%E5%BD%93%E7%84%B6%E6%98%AF%E6%9C%80%E4%BF%9D%E9%99%A9%E7%9A%84%E5%9B%A0%E4%B8%BA%E5%8D%95%E4%B8%AA%E5%85%83%E7%B4%A0%E4%B8%80%E5%AE%9A%E5%B0%8F%E4%BA%8E%E6%89%80%E6%9C%89%E5%85%83%E7%B4%A0%E4%B9%8B%E5%92%8C%E5%8A%A0%E4%B8%8A1%E5%8D%B3%E4%BD%BF%E5%8F%AA%E6%9C%89%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E4%B8%8D%E8%BF%87%E5%91%A2%E5%85%B6%E5%AE%9E%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E5%8F%96record%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E7%9A%84%E6%97%B6%E5%80%99%E5%9C%A8%E5%8F%8C%E9%87%8D%E7%9A%84for%E5%BE%AA%E7%8E%AF%E9%87%8C%E6%88%91%E4%BB%AC%E6%98%AF%E6%9C%80%E5%A4%9A%E5%8F%96%E5%88%B0half%E4%B9%9F%E5%B0%B1%E5%8F%AA%E6%9C%89%E5%9C%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E7%94%A8nums0%E6%9D%A5%E5%8F%96%E4%B8%80%E4%B8%8B%E7%B4%A2%E5%BC%95%E6%89%80%E4%BB%A5%E5%85%B6%E5%AE%9E%E4%B8%8D%E9%82%A3%E4%B9%88%E6%B5%AA%E8%B4%B9%E7%A9%BA%E9%97%B4%E7%9A%84%E5%81%9A%E6%B3%95%E5%BA%94%E8%AF%A5%E6%98%AF%E6%8A%8A%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%E5%88%9D%E5%A7%8B%E5%8C%96%E6%88%90maxnums0-half1%E5%BD%93%E7%84%B6%E8%BF%99%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%98%AF%E4%B8%80%E4%B8%AA%E5%B0%8F%E7%BB%86%E8%8A%82%E4%B8%8D%E5%BD%B1%E5%93%8D%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%9A%84%E7%BA%A7%E5%88%AB%E5%B0%B1%E6%98%AF%E4%BA%86"><span class="nav-number">5.4.</span> <span class="nav-text">至于说为什么这里初始化的时候，我们给record的第二个维度置为了s+1，而不是像之前那样的half+1，主要是因为，此处的递推我们是从前往后，在考虑给record的不同位置赋值的时候，有可能出现在第二个维度上，取到元素本身（比如record[0][0] &#x3D; 1, record[0][nums[0]] &#x3D; 1;这里，就存在“在第二个维度上取nums[0]这个位置的索引”）；但元素本身是有可能超出half的（举个极端的例子，也是实际当时一开始没通过的例子，nums只有一个元素100，那么half就是50，如果我们初始化为half+1，那100一定超索引了）所以，我们在record的第二个维度上应该略微设置得大一点。设置为s+1当然是最保险的，因为单个元素一定小于所有元素之和加上1（即使只有一个元素）不过呢，其实可以发现，取record的第二个维度的时候，在双重的for循环里，我们是最多取到half；也就只有在初始化的时候，会用nums[0]来取一下索引。所以其实不那么浪费空间的做法应该是把第二个维度初始化成\(\max(nums[0],
+half)+1\)（当然这只不过是一个小细节，不影响空间复杂度的级别就是了）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">102</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

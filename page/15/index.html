@@ -150,6 +150,219 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-15 01:02:57 / Modified: 13:13:14" itemprop="dateCreated datePublished" datetime="2024-12-15T01:02:57+08:00">2024-12-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ijcv24实际是23年10月投的24年才中的">ijcv24（实际是23年10月投的，24年才中的）</h1>
+<h1 id="一点吐槽这个跨模态数据集里有一些红外数据本身的质量真的差到不行啊这样子人也没办法来重识别啊说到底数据已经决定了模型的上限了啊">一点吐槽：这个跨模态数据集里，有一些红外数据本身的质量真的差到不行啊，这样子，人也没办法来重识别啊，说到底，数据已经决定了模型的上限了啊</h1>
+<h1 id="等会得看看它所谓的自适应中间模态到底是怎样的如果还是把两种模态的数据投影到一个公共的模态那和之前的方法的本质就没区别啊真正有区别的应该是说把rgb模态的投影到一个中间模态1把ir模态的投影到一个中间模态2然后去拉近中间模态1和中间模态2-至少这样是看起来更为合理的如果原来rgb和ir模态差距太大了不好一口气直接投影到一个公共的空间那么就一步一步来有点像扩散模型那样扩散模型也是如果想直接从噪声里还原出一幅图像那可能太难了所以它才一步一步地往回逆向这样讲故事起码是更合理的事实上或许还可以尝试多套几个中间模态看看最终的中间模态会不会效果更好">等会得看看它所谓的自适应中间模态，到底是怎样的，如果还是把两种模态的数据投影到一个公共的模态，那和之前的方法的本质就没区别啊。。真正有区别的，应该是说，把rgb模态的投影到一个中间模态1，把ir模态的投影到一个中间模态2，然后去拉近中间模态1和中间模态2
+。至少这样是看起来更为合理的：如果原来rgb和ir模态差距太大了，不好一口气直接投影到一个公共的空间，那么就一步一步来。有点像扩散模型那样。扩散模型也是，如果想直接从噪声里还原出一幅图像，那可能太难了，所以它才一步一步地往回逆向。这样讲故事起码是更合理的。事实上，或许还可以尝试，多套几个中间模态，看看最终的中间模态会不会效果更好？</h1>
+<h1 id="method">method：</h1>
+<h2 id="提出adaptive-middle-modality-generator-amg-module它可以生成一种中间模态的图像后续会用到但它的输入是谁哪种模态的图像">1.提出Adaptive
+Middle-modality Generator (AMG)
+module，它可以生成一种中间模态的图像，后续会用到（但它的输入是谁？哪种模态的图像？）</h2>
+<h3 id="详细讲解">详细讲解：</h3>
+<h4 id="这个module有两个submodule一个是middle-modality-generator-mmg-sub-module一个是adaptive-middle-modality-mixup-amm-sub-module先从宏观上看这里两个submodule的作用是mmg根据输入的一对同id的rgb和ir图像各自生成一个中间模态数据也就是会用rgb的数据生成一个中间数据1再用ir数据生成一个中间数据2-而amm则会根据上面的两个中间数据进行一个mixup操作最终得到一个中间模态数据这个数据就是之后要用的">这个module有两个submodule，一个是Middle-modality
+Generator (MMG) Sub-module，一个是Adaptive Middle-modality Mixup (AMM)
+Sub-module。先从宏观上看，这里两个submodule的作用是，MMG根据输入的一对同id的rgb和ir图像，各自生成一个中间模态数据（也就是会用rgb的数据生成一个中间数据1，再用ir数据生成一个中间数据2
+。而AMM则会根据上面的两个中间数据，进行一个mixup操作，最终得到一个中间模态数据。这个数据就是之后要用的</h4>
+<h4 id="可以说它确实相比之前的方法有改进了吧它是用两个分支去处理输入的两种模态的数据主要是一些11的卷积层毕竟经常要进行channel数的变换另外一个比较合理的地方在于它并没有说用一个11的卷积层就完了而是还加上了一个relu这里我觉得是很有道理的如果单纯是卷积而卷积的本质就是加权求和只用卷积相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间这不太对吧rgb数据的通道信息明显丰富多了你要说同一id的rgb数据和ir数据之间的关系仅仅是一种线性关系感觉没道理的并且它也引用了论文说了这之中的关系是高度非线性的所以引入一个relu层看起来操作层面上是很简单的但这个解释明显是能自圆其说的">可以说，它确实相比之前的方法有改进了吧。它是用两个分支去处理输入的两种模态的数据，主要是一些1×1的卷积层（毕竟经常要进行channel数的变换）。另外一个比较合理的地方在于，它并没有说，用一个1×1的卷积层就完了，而是还加上了一个relu。这里我觉得是很有道理的。如果单纯是卷积，而卷积的本质就是加权求和，只用卷积，相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间。这不太对吧，rgb数据的通道信息明显丰富多了，你要说同一id的rgb数据和ir数据之间的关系，仅仅是一种线性关系，感觉没道理的。并且它也引用了论文，说了这之中的关系是高度非线性的，所以引入一个relu层。看起来操作层面上是很简单的，但这个解释明显是能自圆其说的</h4>
+<h4 id="mmg模块会根据rgb数据和ir数据各自生成单通道的中间数据和三通道的中间数据而amm会用单通道的中间数据来算mixup的时候两种模态的factor之后会把mmg生成的三通道的中间数据进行mixup得到最终的中间数据">MMG模块会根据rgb数据和ir数据，各自生成单通道的中间数据和三通道的中间数据。而AMM会用单通道的中间数据来算mixup的时候，两种模态的factor，之后会把MMG生成的三通道的中间数据进行mixup，得到最终的中间数据</h4>
+<h4 id="好繁琐啊">（好繁琐啊。。。）</h4>
+<h2 id="提出adaptive-distribution-alignment-ada-loss会拉近中间模态数据特征的分布和rgbir模态数据特征的分布的距离是一种从特征层面入手的措施这里的话术是拉近特征的分布嗯分布感觉有点玄乎有待商榷不过可以学习一下他们都是怎么去挖掘利用拉近分布信息的尤其注意这个分布它和下面的第三个method有些联系">2.提出Adaptive
+Distribution Alignment (ADA)
+loss，会拉近中间模态数据特征的分布和rgb，ir模态数据特征的分布的距离，是一种从特征层面入手的措施（这里的话术是，拉近特征的分布。。嗯，分布，感觉有点玄乎，有待商榷）（不过可以学习一下，他们都是怎么去挖掘、利用、拉近分布信息的）（尤其注意这个分布，它和下面的第三个method有些联系）</h2>
+<h2 id="提出center-based-diverse-distribution-learning-cddl-loss它会拉近rgb和ir模态与中间模态的特征之间的距离注意这里不是说分布了如果这里还是说分布那就和上面的2矛盾了也会去拉近rgb和ir模态数据特征之间的距离按他说的这样既可以学到多样的特征应该就是指通过拉远rgbir模态与中间模态的距离让中间模态学到一些不一样的知识这个操作和之前的deen那篇很像啊然后是经典的拉近rgb和ir模态特征之间的距离这个真不能少主要想一下如果只是拉远了rgbir模态特征与中间模态特征的距离两个东西都离同一个东西很远这未必就说明这两个东西本身就离得很近所以保底的措施还是要的但这也让人怀疑如果你有这种担忧了为什么要去做这个拉远rgbir模态与中间模态的特征之间的距离-这个操作呢说白了这个操作本身就不好说到底会不会影响我们的保底措施即直接拉近rgb和ir模态特征之间的距离的效果它自己单独也未必有用只能说加上这个操作是为了学到一些不一样的知识吧也就是中间模态里含有的知识当然也需要看看他是怎么利用这个中间模态的知识的别学完了不用那就纯浪费了而且就是纯为了创新而创新了">3.提出Center-based
+Diverse Distribution Learning (CDDL)
+loss，它会拉近rgb和ir模态与中间模态的特征之间的距离（注意，这里不是说分布了。如果这里还是说分布，那就和上面的2矛盾了），也会去拉近rgb和ir模态数据特征之间的距离。（按他说的，这样既可以学到多样的特征——应该就是指通过拉远rgb/ir模态与中间模态的距离，让中间模态学到一些不一样的知识。这个操作和之前的DEEN那篇很像啊。。。然后是经典的拉近rgb和ir模态特征之间的距离。这个真不能少。主要想一下，如果只是拉远了rgb/ir模态特征与中间模态特征的距离，两个东西都离同一个东西很远，这未必就说明这两个东西本身就离得很近。所以保底的措施还是要的。但这也让人怀疑，如果你有这种担忧了，为什么要去做这个拉远rgb/ir模态与中间模态的特征之间的距离
+这个操作呢？说白了，这个操作本身，就不好说到底会不会影响我们的保底措施（即直接拉近rgb和ir模态特征之间的距离）的效果，它自己单独也未必有用。只能说，加上这个操作，是为了学到一些不一样的知识吧，也就是中间模态里含有的知识。当然，也需要看看他是怎么利用这个中间模态的知识的，别学完了不用，那就纯浪费了，而且就是纯为了创新而创新了</h2>
+<h2 id="一些问题虽然说2操作的是分布3操作的是特征本身没有直接的矛盾但这样23一起用就相当于希望irrgb中间模态三者的特征的分布是一致的但是具体的特征上ir和rgb希望尽可能一致而希望中间模态对应的特征与它们不一样这合理吗如果中间模态的特征尽可能不一样那还能说它的特征分布和rgbir的特征分布比较接近吗说到底这种树立一个公共敌人朋友的方法到底有没有效果不是很好说啊">一些问题：虽然说，2操作的是分布，3操作的是特征，本身没有直接的矛盾，但这样2，3一起用，就相当于希望ir/rgb/中间模态三者的特征的分布是一致的，但是具体的特征上，ir和rgb希望尽可能一致，而希望中间模态对应的特征与它们不一样。这合理吗？如果中间模态的特征尽可能不一样，那还能说它的特征分布和rgb/ir的特征分布比较接近吗？说到底，这种树立一个公共敌人/朋友的方法，到底有没有效果，不是很好说啊</h2>
+<h2 id="总体来说这个方法的目标就是通过构造一个中间模态训练的时候同时用三种模态的数据以此来拉近rgbir模态的数据之间的距离这是最终目的">总体来说，这个方法的目标，就是通过构造一个中间模态，训练的时候同时用三种模态的数据，以此来拉近rgb/ir模态的数据之间的距离（这是最终目的）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-12 19:33:47 / Modified: 19:43:16" itemprop="dateCreated datePublished" datetime="2024-12-12T19:33:47+08:00">2024-12-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="服务器可能有时候会在配置环境下载库的时候说http之类的错误类似这样">服务器可能有时候会在配置环境，下载库的时候说http之类的错误，类似这样</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
+<h1 id="也不知道是不是源出了问题而如果想在创建环境装库的时候临时指定别的源一般都是现场查问ai它会说在后面加个-c指定一下源可是有时候还是会报错让人疑惑">也不知道是不是源出了问题。而如果想在创建环境/装库的时候临时指定别的源，一般都是现场查，问ai，它会说在后面加个-c，指定一下源，可是有时候还是会报错，让人疑惑：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
+<h1 id="然而如果仔细看一下它的问题好像是压根就没按我指定的源来啊虽然不太清楚这是为什么但显然此时更根本的方法是去condarc下删掉不想用的源比如这里的阿里源而此时又会现查问ai它一般会说用什么编辑器去打开那个condarc比如vim-.condarc进去编辑完再出来config-show一下检查却发现改动好像没生效此时我怀疑有个潜藏的问题就是ai的回答是假设了你在个人电脑上用或者说假设了你的conda是装在默认路径了然而我现在用的是服务器conda是装在我指定的非默认路径下那么上面修改的condarc其实就是没用的得去修改我安装路径里的conda的condarc才行事实上最后也确实是去我的个人路径下把condarc的源给改了然后再装就成功了">然而如果仔细看一下，它的问题好像是，压根就没按我指定的源来啊。虽然不太清楚这是为什么，但显然此时更根本的方法是，去condarc下删掉不想用的源，比如这里的阿里源。而此时又会现查，问ai，它一般会说用什么编辑器去打开那个condarc，比如<code>vim ~/.condarc</code>。进去编辑完，再出来，config
+show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏的问题，就是，ai的回答，是假设了你在个人电脑上用，或者说假设了你的conda是装在默认路径了。然而，我现在用的是服务器，conda是装在我指定的，非默认路径下。那么，上面修改的condarc其实就是没用的，得去修改我安装路径里的conda的condarc才行。事实上，最后也确实是，去我的个人路径下把condarc的源给改了，然后再装，就成功了</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-03 10:40:48 / Modified: 10:51:08" itemprop="dateCreated datePublished" datetime="2024-12-03T10:40:48+08:00">2024-12-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="问题就如上所述目前勉勉强强算解决了终端初始化速度阳间了很多但至于程序速度我不好说">问题就如上所述。目前勉勉强强算解决了？终端初始化速度阳间了很多，但至于程序速度，我不好说</h1>
+<h1 id="终端初始化变慢可能是一直以来的一些日志之类的没清理过堆积的太多了不过我怎么感觉这个变慢是突然的而不是渐渐的还是因为变慢得超过一个节点了所以一下就感受到了不好说反正慢的时候得初始化几分钟就有点离谱了">终端初始化变慢，可能是一直以来的一些日志之类的没清理过，堆积的太多了（不过我怎么感觉这个变慢是突然的，而不是渐渐的？还是因为变慢得超过一个节点了，所以一下就感受到了？不好说。反正慢的时候得初始化几分钟就有点离谱了）</h1>
+<h2 id="如果是想清理一下当前这个用户的日志之类的只清理当前用户的日志避免影响了服务器上其他用户以及避免影响自己的正常使用可以考虑在终端运行一下命令">如果是想清理一下当前这个用户的日志之类的（只清理<strong>当前用户</strong>的<strong>日志</strong>，避免影响了服务器上其他用户，以及避免影响自己的正常使用），可以考虑在终端运行一下命令：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf ~/.local/share/* </span><br><span class="line"><span class="built_in">rm</span> -rf ~/Library/Logs/* </span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/*</span><br></pre></td></tr></table></figure>
+<h2 id="感觉上好像清掉以后确实快一些了起码终端的初始化似乎是快了很多了">感觉上，好像清掉以后确实快一些了，起码终端的初始化似乎是快了很多了</h2>
+<h1 id="另外tmux别开太多开了一个以后可以用一段时间但建议还是用一段时间以后就kill掉别一直用这个可能也会造成影响虽然还没实际验证过">另外，tmux别开太多，开了一个以后，可以用一段时间，但建议还是用一段时间以后就kill掉，别一直用，这个可能也会造成影响（虽然还没实际验证过）</h1>
+<h1 id="最后一个可能的原因是其他人用cpu用的太猛了但感觉有点没道理以前他们又不是没有运行程序怎么就没见这么卡呢这个可能性似乎不太大">最后，一个可能的原因是，其他人用cpu用的太猛了？但感觉有点没道理。以前他们又不是没有运行程序，怎么就没见这么卡呢，这个可能性似乎不太大</h1>
+<h1 id="看网上的相关问题教程似乎很多人都是在.bashrc里找到一些问题然后从这里入手但我瞄了一眼似乎它也没有变得很臃肿吧应该没有什么东西一直在往.bashrc里写东西吧">看网上的相关问题教程，似乎很多人都是在.bashrc里找到一些问题，然后从这里入手。但我瞄了一眼，似乎它也没有变得很臃肿吧，应该没有什么东西一直在往.bashrc里写东西吧。。</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -700,231 +913,6 @@ fetch和git reset的操作应该也都能正常执行了。更详细的步骤可
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:06" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="有可能突然某一天在终端里运行nvidia-smi的时候会报错failed-to-initialize-nvmldriverlibrary-version-mismatch">有可能突然某一天，在终端里运行nvidia-smi的时候，会报错：Failed
-to initialize NVML：Driver/Library version mismatch</h1>
-<h2 id="这个问题很可能是因为ubuntu会自己更新gpu驱动导致nvidia内核驱动版本与系统驱动不一致虽说我不是太懂这里的-gpu驱动nvidia驱动系统驱动-之间的关系到底是怎样的但操作上来讲如果cat-procdrivernvidiaversion这行命令的输出的版本和nvidia-smi输出的驱动版本是一致的那应该就没什么问题了">这个问题很可能是因为ubuntu会自己更新gpu驱动，导致nvidia内核驱动版本与系统驱动不一致（虽说我不是太懂这里的
-gpu驱动/nvidia驱动/系统驱动
-之间的关系到底是怎样的，但操作上来讲，如果cat
-/proc/driver/nvidia/version这行命令的输出的版本和nvidia-smi输出的驱动版本是一致的，那应该就没什么问题了）</h2>
-<h2 id="cat-procdrivernvidiaversion一般输出如下-nvrm-version-nvidia-unix-x86_64-kernel-module-535.183.01-sun-may-12-193915-utc-2024-gcc-version-gcc-version-12.3.0-ubuntu-12.3.0-1ubuntu122.04">cat
-/proc/driver/nvidia/version一般输出如下：<br>NVRM version: NVIDIA UNIX
-x86_64 Kernel Module 535.183.01 Sun May 12 19:39:15 UTC 2024<br>GCC
-version: gcc version 12.3.0 (Ubuntu 12.3.0-1ubuntu1~22.04)</h2>
-<h2 id="nvidia-smi输出这里我们只关注驱动相关的信息-thu-nov-7-174832-2024-----------------------------------------------------------------------------------------nvidia-smi-535.183.01-driver-version-535.183.01-cuda-version-12.2">nvidia-smi输出（这里我们只关注驱动相关的信息）：<br>Thu
-Nov 7 17:48:32 2024
-<br>+---------------------------------------------------------------------------------------+<br>|
-NVIDIA-SMI 535.183.01 Driver Version: 535.183.01 CUDA Version: 12.2
-|</h2>
-<h2 id="这里能观察到两条命令输出的驱动版本都是535.183.01一致了确实没问题了但话又说回来nvidia-smi能正常执行的话也应该不会有这个问题了难绷">这里能观察到，两条命令输出的驱动版本都是535.183.01，一致了，确实没问题了（但话又说回来，nvidia-smi能正常执行的话，也应该不会有这个问题了。。。难绷）</h2>
-<h2 id="解决方法的话可以尝试-1.重启反正我这次是重启就解决了-2.卸载驱动重新装感觉这个是最后的办法但它也很有道理毕竟你的问题不就是驱动版本不一致嘛我给你装个一致的理论上就没问题了但卸载我好像还没卸载过不知道会出什么幺蛾子得仔细查一下卸载干净了再重新装或许可以稍微参考一下这个网站虽然它这里也可能不全">解决方法的话，可以尝试：<br>1.重启（反正我这次是重启就解决了）<br>2.卸载驱动，重新装（感觉这个是最后的办法，但它也很有道理，毕竟你的问题不就是驱动版本不一致嘛，我给你装个一致的，理论上就没问题了。但卸载我好像还没卸载过，不知道会出什么幺蛾子，得仔细查一下，卸载干净了，再重新装）（或许可以稍微参考一下这个<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2066902">网站</a>，虽然它这里也可能不全）</h2>
-<h2 id="要防止这种问题的话一般是得把ubuntu的自动更新给关掉即执行一下这个命令-禁用内核更新-sudo-apt-mark-hold-linux-generic-linux-image-generic-linux-headers-generic-更多详细内容可以参考这个网站它写的貌似还可以">要防止这种问题的话，一般是得把ubuntu的自动更新给关掉，即执行一下这个命令：<br>
-# 禁用内核更新 <br>sudo apt-mark hold linux-generic linux-image-generic
-linux-headers-generic<br>更多详细内容可以参考这个<a target="_blank" rel="noopener" href="https://sysin.org/blog/disable-ubuntu-auto-update/">网站</a>，它写的貌似还可以</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:08" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="记录一下这次捣鼓服务器的conda安装过程虽然其实这个理论上挺简单的也安装过但因为这次是在大组的服务器上安装生怕把别人的啥环境给搞坏了所以提心吊胆而且经典的在网上找教程的时候五花八门不知道到底要用哪个现在给一个大杂烩版本综合了一些答案以及官网的操作">记录一下这次捣鼓服务器的conda安装过程。虽然其实这个理论上挺简单的，也安装过，但因为这次是在大组的服务器上安装，生怕把别人的啥环境给搞坏了，所以提心吊胆，而且经典的，在网上找教程的时候五花八门，不知道到底要用哪个。现在给一个大杂烩版本，综合了一些答案，以及官网的操作</h1>
-<h1 id="首先下载那个.sh文件不管是anaconda还是miniconda都是.sh这里因为我是安装的miniconda所以下面不再提conda都默认指minicondaanaconda安装方法应该是一样的吧可以参考一下官网的命令但其实这个命令哪里都可以搜到而且就算不用命令直接下载了然后上传到服务器也行当然版本不一定就是下面这个命令里的版本可以自行换掉">1.首先下载那个.sh文件，不管是anaconda还是miniconda，都是.sh（这里因为我是安装的miniconda，所以下面不再提，conda都默认指miniconda。anaconda安装方法应该是一样的，吧？）可以参考一下官网的命令（但其实这个命令哪里都可以搜到，而且就算不用命令，直接下载了然后上传到服务器也行）（当然，版本不一定就是下面这个命令里的版本，可以自行换掉）</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br></pre></td></tr></table></figure>
-<h1 id="安装如果是自己的电脑一般其实安装就一直回车yes就行因为安装过程中需要我们作出判断的就是安装路径的选择但这里只是linux服务器上一个非root用户的情况windows好像略有不同我这里主要遇到的一个问题是明明创建了一个叫miniconda3的文件夹想指定安装在这下面但如果只是正常bash-miniconda3.sh总是会报这个错">2.安装。如果是自己的电脑，一般其实安装就一直回车/yes就行，因为安装过程中需要我们作出判断的就是安装路径的选择（但这里只是linux服务器上，一个非root用户的情况，windows好像略有不同）。我这里主要遇到的一个问题是，明明创建了一个叫miniconda3的文件夹，想指定安装在这下面，但如果只是正常bash
-miniconda3.sh，总是会报这个错</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Miniconda3 will now be installed into this location:</span><br><span class="line">/home/lanhaozhi/miniconda3</span><br><span class="line"></span><br><span class="line">  - Press ENTER to confirm the location</span><br><span class="line">  - Press CTRL-C to abort the installation</span><br><span class="line">  - Or specify a different location below</span><br><span class="line"></span><br><span class="line">[/home/lanhaozhi/miniconda3] &gt;&gt;&gt; /data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">ERROR: File or directory already exists: <span class="string">&#x27;/data/ckpt/lanhaozhi/miniconda3&#x27;</span></span><br><span class="line">If you want to update an existing installation, use the -u option.</span><br></pre></td></tr></table></figure>
-<h1 id="不知道什么意思难道是说指定的路径还要先不存在然后等它来创建吗很奇怪但反正可以通过下面这个命令来解决">不知道什么意思。难道是说指定的路径还要先不存在，然后等它来创建吗？很奇怪。但反正可以通过下面这个命令来解决：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br></pre></td></tr></table></figure>
-<h1 id="比较关键的是这里的-b选项它表示创建一个全新的miniconda3环境而不是覆盖现有的安装-u选项表示更新现有的miniconda3环境而不是创建一个新的环境直观上看我感觉这两个选项是互相矛盾的但确实能执行不太清楚为什么有时间再研究吧最后的-p选项是指定安装路径这个时候把后面的路径改成指定路径就没问题了大概会有如下输出">比较关键的是这里的<code>-b</code>选项，它表示创建一个全新的Miniconda3环境，而不是覆盖现有的安装。<code>-u</code>选项表示更新现有的Miniconda3环境，而不是创建一个新的环境。（直观上看，我感觉这两个选项是互相矛盾的。。但确实能执行，不太清楚为什么。有时间再研究吧）最后的<code>-p</code>选项，是指定安装路径。这个时候把后面的路径改成指定路径，就没问题了。大概会有如下输出：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> bash miniconda.sh -b -u -p /data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">PREFIX=/data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">Unpacking payload ...</span><br><span class="line"></span><br><span class="line">Installing base environment...</span><br><span class="line"></span><br><span class="line">Preparing transaction: ...working... <span class="keyword">done</span></span><br><span class="line">Executing transaction: ...working... <span class="keyword">done</span></span><br><span class="line">installation finished.</span><br></pre></td></tr></table></figure>
-<h1 id="至此安装部分应该是做完了下面就是一些激活加到环境变量里的一类操作了运行如下命令">3.至此，安装部分应该是做完了。下面就是一些激活、加到环境变量里的一类操作了。运行如下命令：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br></pre></td></tr></table></figure>
-<h1 id="激活之后应该就会有这样的效果">激活之后，应该就会有这样的效果：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$ <span class="built_in">source</span> /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br><span class="line">(base) lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$</span><br></pre></td></tr></table></figure>
-<h1 id="即发现base环境被激活了推测这个命令应该作用就是在当前终端激活conda而最后要做的就是把conda在各个终端都进行初始化也就是把conda的路径写入到各个终端的配置文件里但这里不需要真的一个个手动取自己打开相应配置文件取写入可以直接用一行命令">即发现base环境被激活了。（推测这个命令应该作用就是在当前终端激活conda）。而最后要做的就是把conda在各个终端都进行初始化，也就是把conda的路径写入到各个终端的配置文件里。但这里不需要真的一个个手动取自己打开相应配置文件取写入，可以直接用一行命令：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-<h1 id="它就会完成上述功能不出意外的话输出如下">它就会完成上述功能。不出意外的话，输出如下：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(base) lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$ conda init --all</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/condabin/conda</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/conda</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/conda-env</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/deactivate</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/profile.d/conda.sh</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/fish/conf.d/conda.fish</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/shell/condabin/Conda.psm1</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/shell/condabin/conda-hook.ps1</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/lib/python3.12/site-packages/xontrib/conda.xsh</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/profile.d/conda.csh</span><br><span class="line">modified      /home/lanhaozhi/.bashrc</span><br><span class="line">modified      /home/lanhaozhi/.zshrc</span><br><span class="line">modified      /home/lanhaozhi/.config/fish/config.fish</span><br><span class="line">modified      /home/lanhaozhi/.xonshrc</span><br><span class="line">modified      /home/lanhaozhi/.tcshrc</span><br><span class="line"></span><br><span class="line">==&gt; For changes to take effect, close and re-open your current shell. &lt;==</span><br></pre></td></tr></table></figure>
-<h1 id="重点关注一下那些modified的行发现它们都是xxxrc也就是各个终端的配置文件.bashrc应该就是bash终端的配置文件其它的类似只不过我们不一定用得到其它终端而已">重点关注一下那些modified的行，发现它们都是xxxrc，也就是各个终端的配置文件。.bashrc应该就是bash终端的配置文件，其它的类似。只不过我们不一定用得到其它终端而已</h1>
-<h1 id="整个安装过程应该就结束了如果后续还有啥问题再说吧">整个安装过程应该就结束了。如果后续还有啥问题，再说吧</h1>
-<h1 id="一些参考链接">一些<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43554951/article/details/115730146">参考链接</a></h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BAwindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BAwindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-05 17:59:57" itemprop="dateCreated datePublished" datetime="2024-11-05T17:59:57+08:00">2024-11-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-06 10:30:37" itemprop="dateModified" datetime="2024-11-06T10:30:37+08:00">2024-11-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>不知道为什么，好像我windows里的cuda莫名其妙的没了。。 得重装一下
-现在安装的文件夹路径是C:
-在环境变量里，找系统变量的Path，里面放了cuda的路径。之前的路径还在，然后也还有效，好像还没被删？但是在”设置“的”应用“里找的时候却找不到。重新下载之后才找到了
-新的cuda的路径也放进去了</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -994,18 +982,18 @@ miniconda3.sh，总是会报这个错</h1>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">184</span>
+          <span class="site-state-item-count">187</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-count">102</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
