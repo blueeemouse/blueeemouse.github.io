@@ -150,6 +150,271 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 16:41:28" itemprop="dateCreated datePublished" datetime="2024-10-26T16:41:28+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-18 14:08:45" itemprop="dateModified" datetime="2025-03-18T14:08:45+08:00">2025-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>通常所谓提取”modality-invariant information“，”modality-shared
+feature“的方法，都是进行一些跨模态的对比学习。这一块有没有得改进？更多借鉴对比学习的技术、理论？用confuser和discriminator可能都还算比较新的了。但confuser到底有没有问题？
+# 研究问题的对比： ## 无监督： ### [[Shallow-Deep Collaborative Learning
+for Unsupervised Visible-Infrared Person
+Re-Identification]]研究的是同时利用好浅层和深层特征，来更好进行重识别。具体做的是，修改了一下骨干网络，改进了一下对比损失部分（主要改进的是谁和谁对比。这个好像有点通病了，大家都这么改），改进了一下label
+association方法 ### [[Learning Commonality, Divergence and Variety for
+Unsupervised Visible-Infrared Person
+Re-identification]]研究的是在无监督学习中，通过改进对比的对象，从而学到更多样的信息。具体做的是，除了通常的centroid
+prototype外，还提出了hard
+prototype（即一个cluster内里中心最远的，虽然也有可能受到噪声影响）和dynamic
+prototype（不局限于和cluster的中心对比，也会和每个cluster里的某个特征向量进行对比，但并不固定和谁对比，动态选取）
+## 有监督： ### [[Implicit Discriminative Knowledge Learning for
+Visible-Infrared Person
+Re-Identification]]研究的是，在提取modality-shared
+feature之余，能不能把modality-specific
+feature也用上，用它们来辅助判别。具体做的是，用一个discriminator和confuser分别提取modality
+specific/shared feature，然后用引入Information
+Purifier来减小两种特征之间的差异，后面将modality-specific
+feature的内容蒸馏进modality-shared
+feature中（感觉这里其实三个部分都相对会新一点。discriminator和confuser可能之前有人用过，但这样明确地提出如何提取shared/specific
+feature还是挺好的。蒸馏感觉尤其新，代表了不同的利用多种特征的方法啊）
+### [[WRIM-Net---Wide-Ranging Information Mining Network for
+Visible-Infrared Person
+Re-Identification]]研究的是，如何更好地提取出一个模态下的multi-dimension
+information。个人理解，也就是想更好捕捉图像中不同部分的交互信息。具体做的是，用池化、注意力机制等计算出一个mask，代表提取了重点特征和多个区域交互的特征（主要体现在多头注意力机制本身的特点，以及它的query、key、value上），然后是一个对比学习了，最重要的改进点在于计算每个query和它最不相似的k个向量之间的对比损失（发现改进点基本还是在于谁和谁比）
+### [[High-Order Structure Based Middle-Feature Learning for
+Visible-Infrared Person
+Re-identification]]研究的是，如何更好地提取出图像中不同部分的交互信息，以便更好地进行行人重识别（显然，和上面的有点重复了）。具体做的是，用CNN和Transformer分别提取长短程的信息（或许可以参考一下cv里之前的一堆把二者结合起来的工作？比如Swin-Transformer），用GAT提取交互信息，最后则还是用一堆对比损失来拉近距离，算上自己算出来的middle
+feature，有三种模态；论文又提出长短程两种range的feature，来回组合对比。。。
+### [[Channel Augmentation for Visible-Infrared
+Re-Identification]]研究的是，从visible images去匹配infrared
+images的方法，希望能利用好visible
+images中的颜色信息，但又要减小两种特征之间的差异。具体做的是，提出一种新的增强操作CA，并稍微解释了一下；然后提出weak-and-strong
+augmentation joint learning
+strategy，在其中提出了分类结果一致性的约束。感觉某种程度上比直接拉近两个特征之间的距离、算对比损失要来的合理一点
+### [[Diverse Embedding Expansion Network and Low-Light Cross-Modality
+Benchmark for Visible-Infrared Person
+Re-Identification]]研究的是从embedding角度出发，希望能生成更多样的embedding，从而学习到更好的特征（不从传统的生成模型出发，是因为论文认为配对数据不够，生成模型效果可能不够好）。具体做的是，提出一个多分支的模块，希望它的每个分支都能捕获不同的信息；然后根据三个假设，提出相应损失来优化这些分支产生的embedding，最后再设计一个模块将多个embedding聚合利用起来（有点像多头注意力，一开始多头注意力的提出，除了稳定训练过程，也是为了每个头能关注到不同的特征）
+### [[PartMix---Regularization Strategy to Learn Part Discovery for
+Visible-Infrared Person
+Re-identification]]研究的是，如何将mixup技术应用到VI-ReID而不会遇到之前mixup技术中固有的问题（比如产生不自然的pattern，即产生很奇怪的图片；或者产生了只有背景的图、没有目标对象的图）。具体做的是，先用注意力机制，得到图像的part
+descriptor和global descriptor，后面对part
+descriptor进行mixup，得到正负样本，最后进行对比 ### [[Shape-Erased
+Feature Learning for Visible-Infrared Person
+Re-Identification]]研究的是，如何更好的提取shape信息，以得到更好的modality-shared
+feature。具体做的是，将得到的表征分离为两部分，相互无关，一部分是shape-related，一部分是shape-erased，然后通过利用shape-related进行重识别，促使其学到更多具有判别性的非shape信息；最后把两部分结合起来，就既有shape信息，也有shape以外的多样的信息
+### [[Visible-Infrared Person Re-Identification via Semantic Alignment
+and Affinity Inference]]研究的是，如何更好的提取part
+feature，并且在推理的时候将行人之间的关系也纳入考虑。具体做的是，先提出SAFL，在这个过程中学习、优化部位信息。这一过程中，会有若干模板，综合利用骨干网络提取出的特征和模板，可以得到图像的latent
+semantic part features；然后推理的时候提出AIM module，计算query
+image与gallery images之间的距离的时候，既用到了query image与gallery
+images之间直接的距离衡量（余弦相似度），也用到了gallery
+images相互之间的距离，二者综合得到修正后的距离 # 方法改进对比： ##
+对比损失部分： ### 谁和谁进行对比： ####
+中间模态的相互对比（比如，[[Shallow-Deep Collaborative Learning for
+Unsupervised Visible-Infrared Person
+Re-Identification]]中，两种模态的shallow/deep
+feature就在不断对比；又比如，[[High-Order Structure Based Middle-Feature
+Learning for Visible-Infrared Person Re-identification]]里，long/short
+term feature之间也会进行对比 ####
+算上中间模态，和原来的模态一起对比（大体上就是三种模态的数据互相对比。一般都是先提出一些假设/rationale，然后基于此挑选一些对象来对比），比如[[Diverse
+Embedding Expansion Network and Low-Light Cross-Modality Benchmark for
+Visible-Infrared Person Re-Identification]] #### 和centroid
+prototype进行对比（很常见了，基本所有无监督方法里都会用到，有监督方法里也可能会用到，比如[[Visible-Infrared
+Person Re-Identification via Semantic Alignment and Affinity
+Inference]]） #### 和hard prototype进行对比（一般hard
+prototype都选取为“最离群”的特征向量。比如，[[Learning Commonality,
+Divergence and Variety for Unsupervised Visible-Infrared Person
+Re-identification]]里，直接就这么说了；但[[WRIM-Net---Wide-Ranging
+Information Mining Network for Visible-Infrared Person
+Re-Identification]]中其实也有类似的思想（就是和最不相似的k个向量进行对比）（总的来说，这类对比方法就是，找出最远的/最不相似的来进行对比，期望能学到里面的独特的信息。但有没有严谨的理论一点的分析）
+#### 增强产生的正负样本之间的对比。比如[[Channel Augmentation for
+Visible-Infrared Re-Identification]]和[[PartMix---Regularization
+Strategy to Learn Part Discovery for Visible-Infrared Person
+Re-identification]]。那这类对比一般可能多出现在基于增强的方法中 ##
+提取modality-specific feature的方法： ###
+discriminator（+confuser一起用） ## 提取modality-shared feature的方法：
+###
+专门提取共性的特征（比如，shape，或者颜色的变化。一般这种专门想针对提取某种特征的，可能都基于增强操作，也许都会提出一种新的增强操作）
+###
+把一些东西共用（譬如，把模板共同给两个模态的特征一起用，或许可以认为最终学习到的模板是含有两个模态共有的信息的。但这只是一种直观上的理解，还不太有理论上的严格证明？）
+## 减小modality gap的方法： ###
+跨模态的对比（基本是标配了）（至于怎么对比，和谁对比，就是上面的问题了）
+###
+利用IN等Normalization方法（这种方法或许是解决分布不同的一种常用方法）[[Implicit
+Discriminative Knowledge Learning for Visible-Infrared Person
+Re-Identification]] ### 利用一些可学习的mask来筛选信息（同上） ### ##
+提取区域交互信息的方法： ### CNN+Transformer提取，GAT提取具体的交互 ###
+用池化、注意力等算出一个mask ## 利用提取出来的多种信息的方法： ###
+提出专门的聚合的模块（[[Diverse Embedding Expansion Network and
+Low-Light Cross-Modality Benchmark for Visible-Infrared Person
+Re-Identification]]） ### ## label association方法： #
+能不能整理出有监督和无监督方法的各自的pipeline？然后考究一下各个方法都在改进哪些部分？
+#
+其它相关领域：多模态（很显然是有关的，看看别的领域怎么处理多种模态的数据，尤其是统一的方法）；domain
+adaptation/transfer
+learning（跨领域，感觉和跨模态其实有点相似，都是会遇到不同的数据） #
+画图 ## 可以参考一下CROSS-MODALITY TRANSFORMER WITH MODALITY MINING FOR
+VISIBLE-INFRARED PERSON
+RE-IDENTIFICATION这篇论文里最后用t-SNE画的那个图，感觉效果一看就特别好。特别是它给每个id的两种模态的特征给圈到一起，这样就能直观看出来embedding效果有多好。而且也能一眼看出来不同id的特征都是分得比较开的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/WRIM-Net---Wide-Ranging%20Information%20Mining%20%20Network%20for%20Visible-Infrared%20Person%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-26 10:32:01" itemprop="dateCreated datePublished" datetime="2024-10-26T10:32:01+08:00">2024-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-17 20:45:48" itemprop="dateModified" datetime="2025-03-17T20:45:48+08:00">2025-03-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="阅读中的问题了解miim的作用aicl的作用-到底什么叫specific-modality-multi-dimension-information-modality-invariant-information是否其实就是modality-shared-feature如果不是二者的区别在哪里">阅读中的问题：了解MIIM的作用、AICL的作用<br>到底什么叫specific-modality
+multi-dimension information？<br>modality-invariant
+information，是否其实就是modality-shared
+feature？如果不是，二者的区别在哪里？</h1>
+<h1 id="贡献提出新的模块来融合多个维度的信息提取身体部位姿势等信息">贡献：提出新的模块，来融合多个维度的信息，提取身体部位、姿势等信息</h1>
+<h1 id="吐槽只是设计网络的输出尺寸和前一个东西保持一致就可以一直强调减少了计算量嘛一直提因为计算量小可以放到浅层的网络-卷积和池化也能被说成是一个单独的压缩模块吹了半天">吐槽：只是设计网络的输出尺寸和前一个东西保持一致，就可以一直强调减少了计算量嘛。。。一直提因为计算量小，可以放到浅层的网络。。。<br>卷积和池化也能被说成是一个单独的压缩模块，吹了半天。。。</h1>
+<h1 id="有时间可以了解的文章里的上采样具体是怎样的看看代码">有时间可以了解的：文章里的上采样，具体是怎样的？看看代码</h1>
+<h1 id="problem之前的方法没有深入挖掘所谓specific-modality-multi-dimension-information具体来说它们一般只能做到挖掘一个dimension的信息而很难同时捕获多个dimension的信息这里的多个dimension不是指channel那个而是说多个维度角度比如空间信息颜色信息等">problem：之前的方法没有深入挖掘所谓specific-modality
+multi-dimension
+information。具体来说，它们一般只能做到挖掘一个dimension的信息，而很难同时捕获多个dimension的信息（这里的多个dimension不是指Channel那个，而是说多个维度/角度，比如空间信息，颜色信息等）</h1>
+<h1 id="method">method</h1>
+<h2 id="miim-module主要是用来enhances-its-non-local-spatial-interaction-capability就是捕捉类似于姿势身体部位比例之类的信息也即关注spatial-dimension和channel-dimension越想越扯这哪有什么创新啊不就是在用transformer多头注意力之前动了一下输入而已嘛">1.MIIM
+module（主要是用来enhances its non-local spatial interaction
+capability，就是捕捉类似于姿势、身体部位比例之类的信息，也即关注spatial
+dimension和channel
+dimension）（越想越扯，这哪有什么创新啊，不就是在用transformer/多头注意力之前动了一下输入而已嘛。。。）</h2>
+<h3 id="它主要做的事情就是通过一些计算得到一个和原输入形状相同的起到mask作用的一个张量m2用这个m2和输入作哈达玛积得到输出好经典啊只要是这类说提取身体部位相关的方法基本都是想方设法构造mask做哈达玛积得到feature-map但也不得不说这个方法很直观">它主要做的事情就是通过一些计算，得到一个和原输入形状相同的，起到mask作用的一个张量M2，用这个M2和输入作哈达玛积，得到输出（好经典啊，只要是这类说提取“身体部位”相关的方法，基本都是想方设法构造mask，做哈达玛积得到feature
+map。但也不得不说，这个方法很直观）</h3>
+<h3 id="m2的计算主要经过三个部分依次是sccspatial-channel-compressiongriglobal-region-interactionscrspatial-channel-restorescc就是简单的卷积和池化然后卷积的结果作后续gri的query卷积再池化的结果作后续gri的key和valuegri就是一个多头注意力块kqv如上所述而gri的输出再经过scrscr经过一些网络和上上采样操作将gri的输出形状变得和输入一样此即m2最后就是一个逐元素相乘">M2的计算主要经过三个部分，依次是：SCC（Spatial-Channel
+Compression）、GRI（Global Region Interaction）、SCR（Spatial-Channel
+Restore）。SCC就是简单的卷积和池化，然后卷积的结果作后续GRI的Query，卷积再池化的结果作后续GRI的Key和Value。GRI就是一个多头注意力块。k，q，v如上所述。而GRI的输出再经过SCR，SCR经过一些网络和上上采样操作，将GRI的输出形状变得和输入一样。此即M2。最后就是一个逐元素相乘</h3>
+<h3 id="论文认为之前的方法没能做到同时挖掘spatial-information和channel-information而这里它是认为miim中的多头注意力机制完成了对spatial-information的挖掘miim中的卷积使得channel数减少以及后面用线性层复原channel使channel数增多这里之所以可以用线性层改变channel应该是因为它把数据的channel放到最后一个维度了这两个地方就完成了channel-information的挖掘个人感觉有点扯了难道只要涉及channel变化就能说是挖掘了channel-information嘛那之前的方法应该或多或少都有吧最起码主干网络里那些卷积类的网络不都有卷积层嘛难道不会改变channel">论文认为之前的方法没能做到同时挖掘spatial
+information和channel
+information，而这里它是认为，MIIM中的多头注意力机制完成了对spatial
+information的挖掘；MIIM中的卷积（使得channel数减少）以及后面用线性层复原channel（使channel数增多）（这里之所以可以用线性层改变channel，应该是因为它把数据的channel放到最后一个维度了），这两个地方就完成了channel
+information的挖掘。。。个人感觉有点扯了，难道只要涉及channel变化就能说是挖掘了channel
+information嘛？那之前的方法应该或多或少都有吧？最起码主干网络里，那些卷积类的网络不都有卷积层嘛，难道不会改变channel？</h3>
+<h2 id="aicl-approachauxiliary-information-based-contrastive-learning-approach">2.AICL
+approach（Auxiliary-Information-based Contrastive Learning
+Approach）</h2>
+<h3 id="它是针对前面提取出的特征进行操作的具体来说pasted-image-20241026152320.png">它是针对前面提取出的特征进行操作的。具体来说，![[Pasted
+image 20241026152320.png]]</h3>
+<h3 id="是block3和block4之后的特征大体的操作流程在图上应该是能看出来的需要关注的可能就是l_cmkic-p_5等几个损失是怎么计算的还有就是它的partition操作说是沿用了另外两篇论文里的操作没明说还不清楚得回头细看一下">是block3和block4之后的特征。大体的操作流程在图上应该是能看出来的。需要关注的可能就是<span class="math inline">\(L_{CMKIC-P_{5}}\)</span>等几个损失是怎么计算的（还有就是，它的partition操作说是沿用了另外两篇论文里的操作，没明说，还不清楚，得回头细看一下）</h3>
+<h3 id="关于l_cmkic-p_5首先它会用到图里的z_5可以简单理解成提取过的特征两种模态每张图像都有一个特征向量它的组成部分其实是两个一个是l_cmkic-p_5-vi一个是l_cmkic-p_5-iv-以l_cmkic-p_5-vi为例解释一下对于训练的时候的一个batch里的rgb模态的图像特征向量我们先计算出ir模态中和它同标签但是最不相似的k个向量之后我们的目标就是拉近这个rgb特征向量与这k个向量的距离也就是计算它们之间的对比损失分母是这个rgb特征向量与所有的ir模态的特征向量的距离即点积取指数再求和别忘了外面的符号然后对这k个距离取平均完成一个样本的损失的计算那么一个batch里的rgb模态的特征都是这么算的求和即得到l_cmkic-p_5-vi至于l_cmkic-p_5-iv计算方法类似只不过我们是希望拉近ir模态和k个rgb模态的特征向量之间的距离相当于说锚点改成ir模态特征向量了">关于<span class="math inline">\(L_{CMKIC-P_{5}}\)</span>，首先它会用到图里的<span class="math inline">\(Z_{5}\)</span>，可以简单理解成提取过的特征（两种模态，每张图像都有一个特征向量）。它的组成部分其实是两个，一个是<span class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>，一个是<span class="math inline">\(L_{CMKIC-P_{5}-IV}\)</span> 。以<span class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>为例解释一下。对于训练的时候的一个batch里的RGB模态的图像特征向量，我们先计算出IR模态中和它同标签，但是最不相似的K个向量。之后我们的目标就是拉近这个RGB特征向量与这K个向量的距离，也就是计算它们之间的对比损失。分母是这个RGB特征向量与所有的IR模态的特征向量的距离（即点积）取指数再求和。别忘了外面的符号。然后对这K个距离取平均，完成一个样本的损失的计算。那么一个batch里的RGB模态的特征都是这么算的。求和即得到<span class="math inline">\(L_{CMKIC-P_{5}-VI}\)</span>。至于<span class="math inline">\(L_{CMKIC-P_{5}-IV}\)</span>，计算方法类似，只不过我们是希望拉近IR模态和K个RGB模态的特征向量之间的距离，相当于说锚点改成IR模态特征向量了</h3>
+<h3 id="剩下几个损失中l_cls这种的都是正常的分类然后计算概率分布的交叉熵损失l_tri就是一个三元组损失应该是挺常见的有时间看一下附录里是怎么说的l_total也只是前面提到的各种特征的加权组合">剩下几个损失中，<span class="math inline">\(L_{cls}\)</span>这种的，都是正常的分类，然后计算概率分布的交叉熵损失。<span class="math inline">\(L_{tri}\)</span>就是一个三元组损失，应该是挺常见的。（有时间看一下附录里是怎么说的）。<span class="math inline">\(L_{total}\)</span>也只是前面提到的各种特征的加权组合。</h3>
+<h3 id="这个方法的本意是用来提取modality-invariant-feature的精心设计的地方可能还是在于和k个最不相似且不同模态但是同标签的向量进行对比损失的计算比较工程的地方可能在于用了多个损失的组合这个和k个最不相似的向量进行对比有没有说法改成1行不行或者说用k会有什么问题但说到底这个大体还是依靠引入某种对比损失来进行所谓减少不同模态数据间的差异老一套了">这个方法的本意是用来提取modality-invariant
+feature的。精心设计的地方可能还是在于和K个最不相似，且不同模态，但是同标签的向量进行对比损失的计算。比较工程的地方可能在于用了多个损失的组合。这个”和K个最不相似的向量“进行对比，有没有说法？改成1行不行？或者说用K会有什么问题？但说到底，这个大体还是依靠引入某种对比损失来进行所谓”减少不同模态数据间的差异“。。。老一套了</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -991,138 +1256,6 @@ paste是用自己的图像完成操作，而cutmix和mixup都是用到两幅图�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-14 18:38:09 / Modified: 18:38:57" itemprop="dateCreated datePublished" datetime="2024-10-14T18:38:09+08:00">2024-10-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>还没解决，之后有时间再说吧。感觉这个问题也不是那么紧急，毕竟几乎不会在git
-bash下</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%85%B3%E4%BA%8Ewindows%E4%B8%8Bgit%20bash%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8conda/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%85%B3%E4%BA%8Ewindows%E4%B8%8Bgit%20bash%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8conda/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-14 18:18:52 / Modified: 18:41:18" itemprop="dateCreated datePublished" datetime="2024-10-14T18:18:52+08:00">2024-10-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>好像就windows有这个问题，mac和linux的系统似乎是自带了，反正没这个问题
-问ai和网上搜的不大一样 这里放一个目前应该已经奏效的方法</p>
-<p>临时：就打开git bash终端，然后输入 .
-C:\Users\lanhz\miniconda3\etc\profile.d\conda.sh
-！！！注意，这里因为obsidian好像把两个斜杠当成转义字符了，其实这里就是要双斜杠' '或者是一个正斜杠/的（正斜杠没试，但双反斜杠是可以的，并且单反斜杠是不行的）
-注意上面的.后面有个空格。然后后面跟着的路径是conda/miniconda下的一个sh文件（应该是要一个可执行文件的路径）
-至于怎么找到miniconda/conda的路径，可以这样：打开随便一个终端，然后输入conda
-info
---base（这个命令实际的含义应该是找到conda环境下base环境的路径。但base环境好像是安装完就自带的，所以它的路径也差不多就是conda的路径了。找到这个路径以后就好办了，因为后半部分的etc\profile.d\conda.sh这个路径应该都是一样的（只要装完conda之后没搞什么奇怪的操作就行），所以相当于只需要找到conda的安装目录的路径</p>
-<p>永久配置：在git
-bash终端里，把上面那串路径（连前面的.和空格都要带上）（再次强调，那串路径里是双反斜杠，不是单反斜杠！！！）输入到.bashrc里即可。然后不知道是不是windows本身是不带这个.bashrc的，所以可能还需要自己创建。但创建这个的话，ai还是能讲明白的（我也是问它问出来的），这里就不写了。反正创建完之后，用nano/vim之类的编辑一下这个文件，把东西写进去，保存退出（这一串操作应该都是可以问ai问出来的），最后再执行source
-~/.bashrc，正常的话应该看到没啥输出（就是有一行空行），那就试试能不能用conda相关的命令了；试完之后关掉git
-bash，再重新开，然后再试试conda命令，看看是不是永久配置好了。不出问题的话，应该是还可以正常用conda命令的，也就是配置好了
-（目前是只把C:\Users\lanhz\miniconda3这串路径加到环境变量了，其它还没加，当然自己到时候再看看也行。就是高级系统设置里找环境变量，然后在下面的环境变量里找叫做PATH的，看看里面有哪些路径）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1192,7 +1325,7 @@ bash，再重新开，然后再试试conda命令，看看是不是永久配置�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-count">189</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
