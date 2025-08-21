@@ -150,6 +150,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/" class="post-title-link" itemprop="url">Code Graph Model (CGM)：A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-15 23:06:00" itemprop="dateCreated datePublished" datetime="2025-07-15T23:06:00+08:00">2025-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-16 15:44:00" itemprop="dateModified" datetime="2025-07-16T15:44:00+08:00">2025-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-06-23">date：2025-06-23</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="感觉动机这一块其实挺常见的llm发展很快将其应用到单文件的各种代码任务都表现得很好但是到了更加真实复杂的se-task上例如repo-level的任务上它的表现就不够好了">感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE
+task上，例如repo-level的任务上，它的表现就不够好了</h2>
+<h2 id="而现有的方法表现更好的是利用闭源模型的基于agent的方法但这类方法因为依赖于闭源模型所以难以接触到模型权重因而难以进行改进同时基于agent的方法通常推理步骤会很长因此中间的错误可能会不断积累导致影响决策-所以为了避免这些问题我们会想用开源模型并且避免用agent的方法但现在基于开源模型的方法性能还是比上面提到的那类要差一截还不太能处理repo-level-task因此是有极大的改进空间的-而论文尝试做出的改进则是想让模型对repo的理解更上一层楼具体来说是让模型更加了解repo里的代码文件本身的含义以及相互之间的关系">而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于agent的方法，通常推理步骤会很长，因此中间的错误可能会不断积累导致影响决策<br>所以，为了避免这些问题，我们会想用开源模型，并且避免用agent的方法。但现在基于开源模型的方法，性能还是比上面提到的那类要差一截，还不太能处理repo-level
+task，因此是有极大的改进空间的<br>而论文尝试做出的改进，则是想让模型对repo的理解更上一层楼，具体来说是让模型更加了解repo里的代码文件本身的含义，以及相互之间的关系</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="怎么乍一看没什么新奇的呢也是想提高模型对repo的理解语义以及结构也是用graph结构也是让llm利用graph顶多是细节上不太一样框架没怎么变化吧和repograph对比一下吧">怎么乍一看，没什么新奇的呢……也是想提高模型对repo的理解（语义以及结构），也是用graph结构，也是让llm利用graph，顶多是细节上不太一样，框架没怎么变化吧（和RepoGraph对比一下吧……）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一个新的架构大概是在开源的llm上加一些新的模块用来提高llm对repo的理解然后可以一起进行微调从而适应se-tasks且性能不错最优的结果还是加上了graph-rag但话说这个设计的graph-rag是真的出于锦上添花还是说本来仅仅用新架构无法work或者说性能不够好所以特意设计了一个graph-rag来make-it-work可能得看一下实验表格里有没有单独用新架构而没用graph-rag的结果了">提出了一个新的架构，大概是在开源的llm上加一些新的模块，用来提高llm对repo的理解，然后可以一起进行微调，从而适应SE
+tasks，且性能不错（最优的结果还是加上了Graph
+RAG。但话说，这个设计的Graph
+RAG是真的出于锦上添花，还是说，本来仅仅用新架构，无法work，或者说性能不够好，所以特意设计了一个Graph
+RAG来make it work？可能得看一下实验表格里有没有单独用新架构而没用Graph
+RAG的结果了……）</h2>
+<h2 id="配套的还设计了一个graph-rag的框架可以进行辅助">配套的，还设计了一个Graph
+RAG的框架，可以进行辅助</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -983,93 +1093,6 @@ conda，完了再尝试激活conda环境，依然报错，不过报的错变了�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/" class="post-title-link" itemprop="url">用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-07 00:21:00" itemprop="dateCreated datePublished" datetime="2025-07-07T00:21:00+08:00">2025-07-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-08 10:00:12" itemprop="dateModified" datetime="2025-07-08T10:00:12+08:00">2025-07-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/dl/" itemprop="url" rel="index"><span itemprop="name">dl</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="如题但这里有个问题是我现在遇到这个问题只是因为项目里用到了flashattn但我目前的需求仅仅是跑通代码而非追求性能所以可以考虑在代码里加入以下两行">如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行：</h1>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.backends.cuda.enable_mem_efficient_sdp(<span class="literal">False</span>) torch.backends.cuda.enable_flash_sdp(<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="经过实操确实可以解决问题但这样应该也把flashattn给取消掉了有点治标不治本查了一下似乎可能和torch版本有关系但按理来说应该不会有这个问题的因为是按照项目的requirements来配置环境的">经过实操，确实可以解决问题。但这样应该也把FlashAttn给取消掉了，有点治标不治本。查了一下似乎可能和torch版本有关系，但按理来说应该不会有这个问题的，因为是按照项目的requirements来配置环境的……</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1139,7 +1162,7 @@ conda，完了再尝试激活conda环境，依然报错，不过报的错变了�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">189</span>
+          <span class="site-state-item-count">190</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
