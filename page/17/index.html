@@ -150,6 +150,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:08" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="记录一下这次捣鼓服务器的conda安装过程虽然其实这个理论上挺简单的也安装过但因为这次是在大组的服务器上安装生怕把别人的啥环境给搞坏了所以提心吊胆而且经典的在网上找教程的时候五花八门不知道到底要用哪个现在给一个大杂烩版本综合了一些答案以及官网的操作">记录一下这次捣鼓服务器的conda安装过程。虽然其实这个理论上挺简单的，也安装过，但因为这次是在大组的服务器上安装，生怕把别人的啥环境给搞坏了，所以提心吊胆，而且经典的，在网上找教程的时候五花八门，不知道到底要用哪个。现在给一个大杂烩版本，综合了一些答案，以及官网的操作</h1>
+<h1 id="首先下载那个.sh文件不管是anaconda还是miniconda都是.sh这里因为我是安装的miniconda所以下面不再提conda都默认指minicondaanaconda安装方法应该是一样的吧可以参考一下官网的命令但其实这个命令哪里都可以搜到而且就算不用命令直接下载了然后上传到服务器也行当然版本不一定就是下面这个命令里的版本可以自行换掉">1.首先下载那个.sh文件，不管是anaconda还是miniconda，都是.sh（这里因为我是安装的miniconda，所以下面不再提，conda都默认指miniconda。anaconda安装方法应该是一样的，吧？）可以参考一下官网的命令（但其实这个命令哪里都可以搜到，而且就算不用命令，直接下载了然后上传到服务器也行）（当然，版本不一定就是下面这个命令里的版本，可以自行换掉）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br></pre></td></tr></table></figure>
+<h1 id="安装如果是自己的电脑一般其实安装就一直回车yes就行因为安装过程中需要我们作出判断的就是安装路径的选择但这里只是linux服务器上一个非root用户的情况windows好像略有不同我这里主要遇到的一个问题是明明创建了一个叫miniconda3的文件夹想指定安装在这下面但如果只是正常bash-miniconda3.sh总是会报这个错">2.安装。如果是自己的电脑，一般其实安装就一直回车/yes就行，因为安装过程中需要我们作出判断的就是安装路径的选择（但这里只是linux服务器上，一个非root用户的情况，windows好像略有不同）。我这里主要遇到的一个问题是，明明创建了一个叫miniconda3的文件夹，想指定安装在这下面，但如果只是正常bash
+miniconda3.sh，总是会报这个错</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Miniconda3 will now be installed into this location:</span><br><span class="line">/home/lanhaozhi/miniconda3</span><br><span class="line"></span><br><span class="line">  - Press ENTER to confirm the location</span><br><span class="line">  - Press CTRL-C to abort the installation</span><br><span class="line">  - Or specify a different location below</span><br><span class="line"></span><br><span class="line">[/home/lanhaozhi/miniconda3] &gt;&gt;&gt; /data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">ERROR: File or directory already exists: <span class="string">&#x27;/data/ckpt/lanhaozhi/miniconda3&#x27;</span></span><br><span class="line">If you want to update an existing installation, use the -u option.</span><br></pre></td></tr></table></figure>
+<h1 id="不知道什么意思难道是说指定的路径还要先不存在然后等它来创建吗很奇怪但反正可以通过下面这个命令来解决">不知道什么意思。难道是说指定的路径还要先不存在，然后等它来创建吗？很奇怪。但反正可以通过下面这个命令来解决：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br></pre></td></tr></table></figure>
+<h1 id="比较关键的是这里的-b选项它表示创建一个全新的miniconda3环境而不是覆盖现有的安装-u选项表示更新现有的miniconda3环境而不是创建一个新的环境直观上看我感觉这两个选项是互相矛盾的但确实能执行不太清楚为什么有时间再研究吧最后的-p选项是指定安装路径这个时候把后面的路径改成指定路径就没问题了大概会有如下输出">比较关键的是这里的<code>-b</code>选项，它表示创建一个全新的Miniconda3环境，而不是覆盖现有的安装。<code>-u</code>选项表示更新现有的Miniconda3环境，而不是创建一个新的环境。（直观上看，我感觉这两个选项是互相矛盾的。。但确实能执行，不太清楚为什么。有时间再研究吧）最后的<code>-p</code>选项，是指定安装路径。这个时候把后面的路径改成指定路径，就没问题了。大概会有如下输出：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> bash miniconda.sh -b -u -p /data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">PREFIX=/data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">Unpacking payload ...</span><br><span class="line"></span><br><span class="line">Installing base environment...</span><br><span class="line"></span><br><span class="line">Preparing transaction: ...working... <span class="keyword">done</span></span><br><span class="line">Executing transaction: ...working... <span class="keyword">done</span></span><br><span class="line">installation finished.</span><br></pre></td></tr></table></figure>
+<h1 id="至此安装部分应该是做完了下面就是一些激活加到环境变量里的一类操作了运行如下命令">3.至此，安装部分应该是做完了。下面就是一些激活、加到环境变量里的一类操作了。运行如下命令：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br></pre></td></tr></table></figure>
+<h1 id="激活之后应该就会有这样的效果">激活之后，应该就会有这样的效果：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$ <span class="built_in">source</span> /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br><span class="line">(base) lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$</span><br></pre></td></tr></table></figure>
+<h1 id="即发现base环境被激活了推测这个命令应该作用就是在当前终端激活conda而最后要做的就是把conda在各个终端都进行初始化也就是把conda的路径写入到各个终端的配置文件里但这里不需要真的一个个手动取自己打开相应配置文件取写入可以直接用一行命令">即发现base环境被激活了。（推测这个命令应该作用就是在当前终端激活conda）。而最后要做的就是把conda在各个终端都进行初始化，也就是把conda的路径写入到各个终端的配置文件里。但这里不需要真的一个个手动取自己打开相应配置文件取写入，可以直接用一行命令：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
+<h1 id="它就会完成上述功能不出意外的话输出如下">它就会完成上述功能。不出意外的话，输出如下：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(base) lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$ conda init --all</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/condabin/conda</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/conda</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/conda-env</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/deactivate</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/profile.d/conda.sh</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/fish/conf.d/conda.fish</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/shell/condabin/Conda.psm1</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/shell/condabin/conda-hook.ps1</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/lib/python3.12/site-packages/xontrib/conda.xsh</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/profile.d/conda.csh</span><br><span class="line">modified      /home/lanhaozhi/.bashrc</span><br><span class="line">modified      /home/lanhaozhi/.zshrc</span><br><span class="line">modified      /home/lanhaozhi/.config/fish/config.fish</span><br><span class="line">modified      /home/lanhaozhi/.xonshrc</span><br><span class="line">modified      /home/lanhaozhi/.tcshrc</span><br><span class="line"></span><br><span class="line">==&gt; For changes to take effect, close and re-open your current shell. &lt;==</span><br></pre></td></tr></table></figure>
+<h1 id="重点关注一下那些modified的行发现它们都是xxxrc也就是各个终端的配置文件.bashrc应该就是bash终端的配置文件其它的类似只不过我们不一定用得到其它终端而已">重点关注一下那些modified的行，发现它们都是xxxrc，也就是各个终端的配置文件。.bashrc应该就是bash终端的配置文件，其它的类似。只不过我们不一定用得到其它终端而已</h1>
+<h1 id="整个安装过程应该就结束了如果后续还有啥问题再说吧">整个安装过程应该就结束了。如果后续还有啥问题，再说吧</h1>
+<h1 id="一些参考链接">一些<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43554951/article/details/115730146">参考链接</a></h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BAwindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -917,98 +996,6 @@ Feature Aggregation Block（MFA 模块）</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/PartMix---Regularization%20Strategy%20to%20Learn%20Part%20Discovery%20for%20Visible-Infrared%20%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/PartMix---Regularization%20Strategy%20to%20Learn%20Part%20Discovery%20for%20Visible-Infrared%20%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-30 14:11:13 / Modified: 20:06:12" itemprop="dateCreated datePublished" datetime="2024-10-30T14:11:13+08:00">2024-10-30</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr23">cvpr23</h1>
-<p>这篇论文是基于part-based model来改进的。所谓part-based
-model，大概就是去提取图像中各种不同部分的特征。可以看看它是怎么提取这些不同部分的特征的，和[[WRIM-Net---Wide-Ranging
-Information Mining Network for Visible-Infrared Person
-Re-Identification]]还有[[High-Order Structure Based Middle-Feature
-Learning for Visible-Infrared Person
-Re-identification]]之间的差别在哪里？ # 基本概念：1.
-<strong>Mixture-based technique</strong>:</p>
-<pre><code>- 一种基于混合的技术，用于数据增强。
-- 它通过混合图像和相应的标签来合成虚拟训练样本，从而扩大训练集。
-- 这种技术可以帮助模型在各种计算机视觉应用中避免过拟合到训练数据。</code></pre>
-<h1 id="part-descriptors">2. <strong>Part-descriptors</strong>:</h1>
-<pre><code>- 局部特征描述符，用于描述人体不同部位的特征。
-- 在part-based VI-ReID模型中，会对可见光和红外图像中的不同部位进行特征提取，得到相应的局部特征描述符。
-- 这些描述符可以用于后续的识别和匹配过程。</code></pre>
-<h1 id="problemthese-global-feature-representations-solely-focus-on-the-most-discriminative-part-while-ignoring-the-diverse-parts-which-are-helpful-to-distinguish-the-person-identity这应该是提取modality-shared-feature的方法的通病了有点类似于去学习一个identity对应的平均模板但这样太死板了会遗漏一些细节的多样的信息那么就像这篇论文着眼的地方身体部位这其实就是一种细节信息如果去捕捉这种细节信息或许就可以弥补modality-shared-feature的短板类似的其实channel-augmentation-for-visible-infrared-re-identification这里注重提取的颜色信息也是那么如果同时去关注颜色和部位信息会不会比单一的方法效果要好进一步的能不能更自动地而不是依赖于我们先验设计的着眼点去提取更多细节信息提取到了以后怎么用呢就把它们和modality-shared-feature直接concatenate起来加起来用个注意力机制融合一下蒸馏一下或许都可以试试或许有更好的方法-简单来说目前用增强方式做vi-reid的方法-通常会涉及一些mixture但没有特别好的方法被设计出来-另外想利用mixup技术进行增强辅助vi-reid但直接应用可能遇到mixup本来就有的问题unlike-conventional-methods-1938446869-that-exploit-image-mixture-techniques-that-yield-unnatural-patterns-and-local-patches-with-only-background-or-single-human-part直接应用mixup的时候就可能遇到这些问题产生不自然的patterns是很好理解的看它mixup出来的图像有些非常的怪异就可以看出来重点是说mixup可能产生完全没有人的图像这就没什么用了关键它的标签还是人的标签比如cutmix它会从一幅图上切一块下来放到另一幅图像上那如果把一幅图的背景给切下来放到另一幅图像上人所在的区域就有问题了本文的改进则是不去mixup整个图像而是去mixup部分也就是我们提取出来的part感觉确实有点道理就有点类似同一个人在同一个场景下只是穿了不同的衣服那我们人类应该是很容易就能识别出来的这里串不同的有点类似不同图像的part进行mixup那这个方法应该确实有利于去提取一些共性的具有判别能力的特征">problem：these
-global feature representations solely focus on the most discriminative
-part while ignoring the diverse parts which are helpful to distinguish
-the person identity。（这应该是提取modality-shared
-feature的方法的通病了，有点类似于去学习一个identity对应的平均模板。但这样太死板了，会遗漏一些细节的、多样的信息）（那么，就像这篇论文着眼的地方——身体部位，这其实就是一种细节信息。如果去捕捉这种细节信息，或许就可以弥补modality-shared
-feature的短板。类似的，其实[[Channel Augmentation for Visible-Infrared
-Re-Identification]]这里注重提取的颜色信息也是。那么，如果同时去关注颜色和部位信息，会不会比单一的方法效果要好？进一步的，能不能更自动地，而不是依赖于我们先验设计的着眼点，去提取更多细节信息？提取到了以后，怎么用呢？就把它们和modality-shared
-feature直接concatenate起来？加起来？用个注意力机制融合一下？蒸馏一下？或许都可以试试，或许有更好的方法）<br>简单来说，目前用增强方式做VI-ReID的方法，
-通常会涉及一些mixture，但没有特别好的方法被设计出来<br>另外，想利用mixup技术进行增强，辅助vi-reid，但直接应用可能遇到mixup本来就有的问题。（Unlike
-conventional methods [19,38,44,68,69] that exploit image mixture
-techniques that yield unnatural patterns, and local patches with only
-background or single human
-part,直接应用mixup的时候，就可能遇到这些问题。产生不自然的patterns是很好理解的，看它mixup出来的图像，有些非常的怪异，就可以看出来。重点是说mixup可能产生完全没有人的图像。这就没什么用了，关键它的标签还是人的标签。比如，cutmix，它会从一幅图上切一块下来，放到另一幅图像上。那如果把一幅图的背景给切下来，放到另一幅图像上人所在的区域，就有问题了）（本文的改进则是，不去mixup整个图像，而是去mixup部分，也就是我们提取出来的part）（感觉确实有点道理，就有点类似，同一个人，在同一个场景下，只是穿了不同的衣服，那我们人类应该是很容易就能识别出来的。这里串不同的有点类似不同图像的part进行mixup。那这个方法应该确实有利于去提取一些共性的、具有判别能力的特征）</h1>
-<h1 id="motivation希望能设计出一种mixup的方法避免直接应用mixup的时候会遇到的问题同时发挥mixup防止模型过拟合的作用提取出更有效的部位信息">motivation：希望能设计出一种mixup的方法，避免直接应用mixup的时候会遇到的问题；同时发挥mixup防止模型过拟合的作用，提取出更有效的部位信息</h1>
-<h1 id="贡献总结一下上面的内容该论文主要是提出了一种新的增强方法partmix将mixup技术应用到vi-reid针对它的方法可能产生不太靠谱的正负样本论文提出了一些防止措施">贡献：总结一下上面的内容，该论文主要是提出了一种新的增强方法partmix，将mixup技术应用到vi-reid。针对它的方法可能产生不太靠谱的正负样本，论文提出了一些防止措施</h1>
-<h1 id="method">method：</h1>
-<h2 id="对于一个mini-batch里的data提取出它们的part-descriptor进行inter-modality和intra-modality的mixupglobal-descriptor也要算但它不进行mixup因为它包含的是全局信息不符合论文提出的partmix的思想">1.对于一个mini-batch里的data，提取出它们的part
-descriptor，进行inter-modality和intra-modality的mixup（global
-descriptor也要算，但它不进行mixup，因为它包含的是全局信息，不符合论文提出的partmix的思想）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1078,7 +1065,7 @@ descriptor也要算，但它不进行mixup，因为它包含的是全局信息�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">196</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
