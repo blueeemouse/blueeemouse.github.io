@@ -150,6 +150,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%97%B6%E9%81%87%E5%88%B0%E5%81%87%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%97%B6%E9%81%87%E5%88%B0%E5%81%87%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-14 14:26:22" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-09 01:27:48" itemprop="dateModified" datetime="2025-02-09T01:27:48+08:00">2025-02-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="报错信息一般长这样oserror-errno-28-no-space-left-on-device-..marketpytorchtrain_all09670967_c6s2_115418_01.jpg">报错信息一般长这样：OSError:
+[Errno 28] No space left on device:
+'../Market/pytorch/train_all/0967/0967_c6s2_115418_01.jpg'</h1>
+<h1 id="主要是前面的oserror-errno-28-no-space-left-on-device-然而如果真的去看存储空间似乎还有很多为什么会报这个错">主要是前面的OSError:
+[Errno 28] No space left on device:
+<br>然而，如果真的去看存储空间，似乎还有很多，为什么会报这个错？</h1>
+<h1 id="好吧目前详细原因我也不太明白但大体上它可能和缓存空间有关再具体一点有可能是因为之前太多缓存文件没清理缓存空间空间不足了而不是我们的硬盘的存储空间不足了详细的原理我也不太懂那推测一下可能是程序运行的时候需要用到缓存空间但那里不够了">好吧，目前详细原因我也不太明白。但大体上，它可能和缓存空间有关。再具体一点，有可能是因为之前太多缓存文件没清理，“缓存空间“空间不足了，而不是我们的硬盘的存储空间不足了（详细的原理我也不太懂，那推测一下可能是程序运行的时候需要用到缓存空间，但那里不够了）</h1>
+<h1 id="另外目前我只在ubuntu上遇到过这个问题可能是因为windows上空间相对还是比较多的没清理缓存也没遇到这个问题而我的ubuntu上也就是从d盘割了200多g出来而已-好像执行一下这个就没问题了不过这个是在ubuntu上具体的命令可能在windows上是不一样的">另外，目前我只在ubuntu上遇到过这个问题。可能是因为windows上空间相对还是比较多的，没清理缓存也没遇到这个问题。而我的ubuntu上也就是从D盘割了200多G出来而已。<br>好像执行一下这个就没问题了（不过这个是在ubuntu上。具体的命令可能在windows上是不一样的）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf ~/.cache/*</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -908,85 +981,6 @@ Matching中的Progressive的由来：它会把剩下的没对应上去的可见�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-31 14:12:37 / Modified: 15:11:58" itemprop="dateCreated datePublished" datetime="2024-10-31T14:12:37+08:00">2024-10-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="cvpr23">cvpr23</h1>
-<h1 id="problem老生常谈之modality-gap导致学习modality-shared-feature很困难这篇论文聚焦于学习shape即人物的轮廓信息不由得让人想到之前的channel-augmentation-for-visible-infrared-re-identification主要想学习颜色信息也是想去学习某种特定的属性">problem：老生常谈之modality
-gap导致学习modality-shared
-feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel
-Augmentation for Visible-Infrared
-Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性）</h1>
-<h1 id="motivation希望能通过一种方法把表征分成两部分一部分是shape相关另一部分是shape无关然后先利用shape无关的表征去学习这样会逼迫这部分特征学习其它方面的内容不去利用shape信息进行判别最后把这部分表征和shape相关表征组合起来就能得到更强的表征">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</h1>
-<h1 id="method">method：</h1>
-<h2 id="关于shape信息的提取用到一篇20年tpami提出的分割人体形状的模型给定一幅图模型会给出各个像素属于头部躯干四肢等部位的概率最终整幅图上各个位置都有一个概率进行可视化理论上那些对应概率高的就显示出一个人的轮廓">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部/躯干/四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</h2>
-<h2 id="shape-erased-feature-learning-paradigm">Shape-Erased Feature
-Learning Paradigm</h2>
-<h3 id="这里有个关键的假设即shape-related-feature和shape-erased-feature之间是独立的这样才能做到学习一个特征而不影响另一个特征注意到前面motivation里已经说了它是要单独去学习一下shape-erased-feature此时这部分表征里没有了shape-feature于是这会逼迫它去学习其它的特征这样就达成了特征多样性的目的-论文提出严格的描述两个特征独立的方法是互信息为0但互信息求解起来太麻烦了虽然我不知道为什么于是松弛一下用个简化的条件即两个特征正交-guoqu-关于具体的shape-erased-feature-learning总的来说它用到各种互信息进行推导没太看懂忘得七七八八了但几个比较关键的公式背后的要求期望还是比较合理的或许可以借鉴一下其中的insightequation4期望用shape-erased-feature也能尽可能好地预测出identity毕竟前面说了这是训练中重要的一环5是为了优化4中的第一项而提出的好吧真不好写提出一大堆损失一些是用来训练shape-erased-feature的一些是用来消除shape-related-feature中的modality-specific成分的从而让它更加modality-shared最后一些是常规损失就是分类损失那些">这里有个关键的假设，即shape-related
-feature和shape-erased
-feature之间是独立的。这样才能做到，学习一个特征，而不影响另一个特征（注意到，前面motivation里已经说了，它是要单独去学习一下shape-erased
-feature，此时这部分表征里没有了shape
-feature，于是这会逼迫它去学习其它的特征，这样就达成了特征多样性的目的）<br>论文提出，严格的描述两个特征独立的方法是互信息为0，但互信息求解起来太麻烦了（虽然我不知道为什么。。。），于是松弛一下，用个简化的条件，即两个特征正交<br>guoqu<br>关于具体的shape-erased
-feature
-learning，总的来说，它用到各种互信息进行推导，没太看懂。。忘得七七八八了。但几个比较关键的公式，背后的要求/期望还是比较合理的。或许可以借鉴一下其中的insight。equation（4）期望用shape-erased
-feature也能尽可能好地预测出identity（毕竟前面说了，这是训练中重要的一环）；（5）是为了优化（4）中的第一项而提出的；好吧，真不好写。提出一大堆损失，一些是用来训练shape-erased
-feature的，一些是用来消除shape-related
-feature中的modality-specific成分的，从而让它更加modality-shared；最后一些是常规损失，就是分类损失那些</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1056,14 +1050,14 @@ feature中的modality-specific成分的，从而让它更加modality-shared；�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">197</span>
+          <span class="site-state-item-count">198</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
