@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：ICML 25（oral） date：2025-05-22 动机： high-resolution image perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：ICML 25（oral） date：2025-05-22 动机： high-resolution image perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-04T08:34:00.000Z">
+<meta property="article:modified_time" content="2025-09-04T15:37:03.598Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-04 16:34:00 / Modified: 23:37:03" itemprop="dateCreated datePublished" datetime="2025-09-04T16:34:00+08:00">2025-09-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/" itemprop="url" rel="index"><span itemprop="name">multi-modal-rag</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venueicml-25oral">Venue：ICML 25（oral）</h1>
+<h1 id="date2025-05-22">date：2025-05-22</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="high-resolution-image-perception对现在的mllm而言是一大难题可以理解高分辨率意味着原始的像素数很大如果不降采样就会造成token非常多计算量很大而且感知理解的时候也有困难这就类似于nlp里输入文本过长此时我们再要求模型去理解或者生成也有难度通常会进行降采样之类的操作以便减少token但这样一来会造成信息的丢失使得依赖细粒度信息的任务很难完成好ocr之类的都是对图像的细节要求很高的">high-resolution
+image
+perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进行降采样之类的操作，以便减少token。但这样一来，会造成信息的丢失，使得依赖细粒度信息的任务很难完成好（OCR之类的，都是对图像的细节要求很高的）</h2>
+<h2 id="这篇论文就是想解决这个问题它引入rag检索关键的image-crops拼成一个新的图像此时的图像比原来的图像在resolution上小很多因而减少了计算量同时因为检索到的都是关键的crops因此性能是有保证的">这篇论文就是想解决这个问题。它引入RAG，检索关键的image
+crops，拼成一个新的图像（此时的图像比原来的图像在resolution上小很多，因而减少了计算量；同时因为检索到的都是关键的crops，因此性能是有保证的）</h2>
+<h2 id="是的论文里的一句话说的很好by-enhancing-the-long-context-capability-of-mllms这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知">是的，论文里的一句话说的很好，by
+enhancing the long-context capability of
+MLLMs，这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="其实一句话概括一下论文做的事就是在hr-images-perception任务中通过rag技术检索出跟query相关的top-k的crop由此拼出一副小很多的图像从而降低resolution且尽可能确保perception质量">其实一句话概括一下论文做的事，就是，在HR
+images
+perception任务中，通过RAG技术，检索出跟query相关的top-k的crop，由此拼出一副小很多的图像，从而降低resolution且尽可能确保perception质量</h2>
+<h2 id="把rag技术应用到mllm上用于解决hr-images-perception任务很创新或者说更根本的视角在于论文注意到现有mllm处理hr-images之所以效果不够好可以归结为mllm的long-context能力不足因此想解决这一点从而借鉴了llm领域里的rag技术">把RAG技术应用到mllm上，用于解决HR
+images
+perception任务，很创新。或者说，更根本的视角在于，论文注意到现有mllm处理HR
+images之所以效果不够好，可以归结为mllm的long-context能力不足，因此想解决这一点，从而借鉴了llm领域里的RAG技术</h2>
+<h2 id="那么正如上所述观察问题并从不同的视角归纳有可能就会发现它和现有的某些问题是相通的从而可以考虑借鉴现有的技术进行解决这个过程里可能会遇到新的问题那么这也是所谓创新并且过程中或许能激发出新的研究成果">那么正如上所述，观察问题，并从不同的视角归纳，有可能就会发现它和现有的某些问题是相通的，从而可以考虑借鉴现有的技术进行解决。这个过程里可能会遇到新的问题，那么这也是所谓创新，并且过程中或许能激发出新的研究成果</h2>
+<h2 id="从这篇论文也可以学习到一个研究的一般范式和方法就是当我们发现其它领域的方法可能对解决当前领域的方法有用的时候最简单也是最理想的情况就是我们直接照搬过来也能很好的work但论文发现不行所以需要改进这就是论文的主要工作和创新点吧这本质上是因为图像和文本的天然的不同文本是一维的图像是二维的因此有位置关系类似的一个新的创新点可能在于我们如果想提升mllm感知高分辨率的长视频那么又会多一个时序的关系这可能也需要解决但考虑到现在把rag用到mllm上都没太多人做做这个感知长视频的应该更是难而且可能暂时没有人follow也疑似有点灌水了假如直接把rag技术应用到mllm想以此提高mllm的长文本能力从而提升其hr-images的感知能力那我们需要检索和当前图像问题-相关的token问题在于检索回来的token可能是top-k个我们需要确定它们的位置才能进一步决定用哪个因为有些问题可能是需要这个位置关系的这里不妨构造一个例子我们有一副人像图我们想检索说在某个人的右上方的戴帽子人有哪些因此我们需要感知检索出戴帽子的人对应的token然后再根据位置信息进行分析得是在某个人的右上方的人的token才行这个例子对吗">从这篇论文，也可以学习到一个研究的一般范式和方法。就是，当我们发现其它领域的方法可能对解决当前领域的方法有用的时候，最简单，也是最理想的情况就是，我们直接照搬过来，也能很好的work。但论文发现不行，所以需要改进（这就是论文的主要工作和创新点吧。这本质上是因为图像和文本的天然的不同。文本是一维的，图像是二维的，因此有位置关系。类似的，一个新的创新点，可能在于，我们如果想提升mllm感知高分辨率的长视频，那么又会多一个时序的关系，这可能也需要解决。但考虑到现在把RAG用到mllm上都没太多人做，做这个感知长视频的应该更是难，而且可能暂时没有人follow，也疑似有点灌水了。假如直接把RAG技术应用到mllm，想以此提高mllm的长文本能力，从而提升其HR
+images的感知能力，那我们需要检索和当前图像/问题
+相关的token。问题在于，检索回来的token可能是top-k个，我们需要确定它们的位置，才能进一步决定用哪个。因为有些问题可能是需要这个位置关系的。这里不妨构造一个例子：我们有一副人像图，我们想检索说，在某个人的右上方的戴帽子人有哪些。因此，我们需要感知、检索出戴帽子的人对应的token，然后再根据位置信息进行分析，得是在”某个人“的右上方的人的token才行（这个例子对吗？））</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="把rag技术迁移到mllm上用于解决high-resolution-images-perception问题首创做work了提出了一套免训练的方法顺带的提高了mllm的一般的多模态的能力">把RAG技术迁移到mllm上，用于解决High
+Resolution images
+perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</h2>
+<span id="more"></span>
+<h1 id="pilot-study">pilot study：</h1>
+<h2 id="这里论文率先研究了两个问题为它后面提出自己的方法奠定基础或者说提出方法的时候必然会考虑到这几个问题-当我们想把rag应用到mllm来辅助解决hr-images-perception时我们为了不损失信息是把images切成若干crop然后检索top-k的crop帮mllm进行感知那么检索回来的crops应该如何组织这是由于images是二维图像而文字是一维图像二者维度不同产生的新问题top-k的k应该如何决定-要提出自己的方法显然需要考虑这几个问题">这里论文率先研究了两个问题，为它后面提出自己的方法奠定基础（或者说，提出方法的时候必然会考虑到这几个问题）<br>当我们想把RAG应用到mllm，来辅助解决HR
+images
+perception时，我们为了不损失信息，是把images切成若干crop，然后检索top-k的crop，帮mllm进行感知。那么检索回来的crops，应该如何组织？（这是由于images是二维图像，而文字是一维图像，二者维度不同，产生的新问题）top-k的k，应该如何决定？<br>要提出自己的方法，显然需要考虑这几个问题</h2>
+<h2 id="impact-of-the-layout-of-retrieved-image-crops">impact of the
+layout of retrieved image crops</h2>
+<h3 id="取回来的crops的布局可以有几种策略">取回来的crops的布局，可以有几种策略：</h3>
+<h4 id="按照相似性分数升序排列升序降序感觉也没那么重要这个策略的重点是按照相似性分数进行排序">1.
+按照相似性分数升序排列（升序降序感觉也没那么重要。这个策略的重点是按照相似性分数进行排序）</h4>
+<h4 id="按照扫描的顺序排列也就是我们如何扫描一个个crop计算和query的相似度就如何排列检索回来的crops">2.
+按照扫描的顺序排列。也就是，我们如何扫描一个个crop，计算和query的相似度，就如何排列检索回来的crops</h4>
+<h4 id="把检索回来的crops按照它们原来在image中的相对位置进行排列因此这种策略可以保留crops之间的位置关系直观上看感觉这种策略应该比较优秀结果表明确实如此尤其是在cross-instance的任务上表现比前两个策略好">3.
+把检索回来的crops，按照它们原来在image中的相对位置进行排列（因此这种策略可以保留crops之间的位置关系。直观上看，感觉这种策略应该比较优秀。结果表明确实如此，尤其是在cross-instance的任务上，表现比前两个策略好）</h4>
+<h2 id="impact-of-the-number-of-retrieved-image-crops">impact of the
+number of retrieved image crops</h2>
+<h3 id="这里好像没太多可以说的简而言之就是对fine-grained-single-instance-perception-task较小的k就能起到比较好的效果太大反而降低效果-对于fine-grained-cross-instance-perception-task则是要相对大一些的k效果才会好当然过大依然不行">这里好像没太多可以说的，简而言之就是，对Fine-grained
+Single-Instance Perception
+task，较小的k就能起到比较好的效果，太大反而降低效果；<br>对于Fine-grained
+Cross-Instance Perception
+task，则是要相对大一些的k，效果才会好。当然过大依然不行</h3>
+<h1 id="methodretrieval-augmented-perception">method（Retrieval-Augmented
+Perception）</h1>
+<h2 id="这里其实就是在分别解决了上面的两个问题之后把提出的两个模块组合到一起形成了本文的方法为了解决检索回来的crops的组织形式问题论文提出spatial-awareness-layout-algorithm为了选择最好的超参数k论文提出retrieved-exploration-searchre-search且二者都可以一句话概括思想-前者是设计一种算法要保留crops在原来的图像中的相对位置-后者则是用模型对检索回的k个crops的confidence来决定最好的k">这里其实就是在分别解决了上面的两个问题之后，把提出的两个模块组合到一起，形成了本文的方法。为了解决检索回来的crops的组织形式问题，论文提出Spatial-Awareness
+Layout algorithm；为了选择最好的超参数K，论文提出Retrieved-Exploration
+Search（RE-Search）。且二者都可以一句话概括思想：<br>前者是设计一种算法，要保留crops在原来的图像中的相对位置；<br>后者则是用模型对检索回的K个crops的confidence，来决定最好的K</h2>
+<h1 id="可能的改进">可能的改进：</h1>
+<h2 id="欸论文的方法虽然极大提高了fsp的性能但在fcp上的性能其实降低了很多这是为什么有可能是因为cross-instance的时候涉及多个物体但是论文的方法没有检索回所有所需的crops如果是这也不应该是超参k的问题了因为经过实验发现一味增大k并不能一致提高性能所以有可能是说仅根据query有些关键crops就是检索不回来因此导致了fcp的性能很差但这一点还是需要实验验证-但为什么baseline也就是不用检索的mllm反而在fcp上效果好很多呢因为它虽然损失了信息好歹全部crops都是有在看的如果解释得通能否由此进行改进呢让rag辅助下的mlllm对于hr-images的感知不仅fsp上做的好fcp上也做的好说到底是不是应该考虑不是所有情形下都需要rag有时候不需要rag啊最基本的我们可以辨别一下单独训练一个分类器让它辨别当前query是fsp还是fcp如果是前者那启用rag如果是后者就不启用rag这一眼看上去就会效果更好吧当然实际还是需要实验验证了">欸，论文的方法，虽然极大提高了FSP的性能，但在FCP上的性能其实降低了很多。这是为什么？有可能是因为cross-instance的时候，涉及多个物体，但是论文的方法没有检索回所有所需的crops？如果是，这也不应该是超参K的问题了（因为经过实验，发现一味增大K，并不能一致提高性能）。所以有可能是说，仅根据query，有些关键crops就是检索不回来，因此导致了FCP的性能很差。（但这一点还是需要实验验证）<br>但为什么baseline（也就是不用检索的mllm）反而在FCP上效果好很多呢？因为它虽然损失了信息，好歹全部crops都是有在看的。如果解释得通，能否由此进行改进呢？让RAG辅助下的mlllm对于HR
+images的感知，不仅FSP上做的好，FCP上也做的好（说到底，是不是应该考虑，不是所有情形下都需要RAG？有时候不需要RAG啊？最基本的，我们可以辨别一下，单独训练一个分类器，让它辨别当前query是FSP还是FCP。如果是前者，那启用RAg；如果是后者，就不启用RAG。这一眼看上去就会效果更好吧？（当然实际还是需要实验验证了）</h2>
+<h3 id="但是看了论文的后半做消融实验的时候也说明了光加上visrag不用spatial-awareness-layout和探索最优k平均性能是上升了但是在fcp上的确下降了和我们一开始看到的一样而即使加上了spatial-awareness-layout反而是fsp上略有下降但fcp上上升了一些不过平均性能就差别不大了这么看很难说spatial-awareness-layout作用巨大吧但最后加上re-search探索最优k之后性能一下就上涨了很多fsp上升了尤其多fcp上也是都超越baseline了这个是为什么呢">但是看了论文的后半，做消融实验的时候也说明了，光加上VisRAG（不用Spatial-Awareness
+Layout和探索最优K），平均性能是上升了，但是在FCP上的确下降了，和我们一开始看到的一样。而即使加上了Spatial-Awareness
+Layout，反而是FSP上略有下降，但FCP上上升了一些（不过平均性能就差别不大了。这么看，很难说Spatial-Awareness
+Layout作用巨大吧？）但最后加上RE-Search，探索最优K之后，性能一下就上涨了很多，FSP上升了尤其多，FCP上也是，都超越baseline了（这个是为什么呢？）</h3>
+<h2 id="还有啊想到一个问题现在论文的方法它纯看crop和query的关系也就是说假如query是一个fcp的问题但它不涉及位置关系只是单纯的语义关系那不是我把原图像的某两个crop给交换了可能都没影响吗有没有可能存在一种情况就是某些crops之间单独看可能和query没关系但是组合起来就和query有关系了如果真有这种情况是否能部分解释论文方法做fcp做得不够好假如真是那么可能除了单独判断crop和query是否相关还需要一点全局的整体的处理才行">还有啊，想到一个问题，现在论文的方法，它纯看crop和query的关系。也就是说，假如query是一个FCP的问题，但它不涉及位置关系，只是单纯的语义关系，那不是我把原图像的某两个crop给交换了，可能都没影响吗？有没有可能存在一种情况，就是，某些crops之间，单独看可能和query没关系，但是组合起来就和query有关系了（如果真有这种情况，是否能部分解释论文方法做FCP做得不够好？假如真是，那么可能除了单独判断crop和query是否相关，还需要一点全局的、整体的处理才行）</h2>
+<h2 id="另外关于使用场景似乎的确也是值得考虑的论文之所以整体浑然天成就是因为它找的场景可以非常巧妙地用rag缓解问题如果我们的确要继续做多模态rag那么一个显然的思路当然是继续做这篇论文提出的设定做hr-images-perception但也有其它cv的任务可以考虑吧不过话说回来这就需要对其它的cv任务有一定的了解而且得明确里面有什么问题hr视频感知只不过是其中一种不同的cv任务罢了">另外，关于使用场景，似乎的确也是值得考虑的。论文之所以整体浑然天成，就是因为它找的场景可以非常巧妙地用RAG缓解问题。如果我们的确要继续做多模态RAG，那么一个显然的思路当然是继续做这篇论文提出的设定（做HR
+images
+perception），但也有其它cv的任务可以考虑吧？不过话说回来，这就需要对其它的cv任务有一定的了解，而且得明确里面有什么问题。HR视频感知只不过是其中一种不同的cv任务罢了）</h2>
+<h1 id="感想">感想：</h1>
+<h2 id="好论文啊动机很自然方法很有效也不是太复杂或者说思想上是比较简洁的写的也还行另外以及除了消融实验以外还有对方法为何work的一些分析虽然比较经验性这就是好论文的标杆吗不愧是icml的oral啊不是去抽奖的论文呢">好论文啊……动机很自然，方法很有效，也不是太复杂（或者说思想上是比较简洁的。写的也还行）。另外以及除了消融实验以外，还有对方法为何work的一些分析（虽然比较经验性）。这就是好论文的标杆吗，不愧是ICML的oral啊，不是去抽奖的论文呢</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/" rel="prev" title="安装库需要防止影响其它现有库的版本">
+      <i class="fa fa-chevron-left"></i> 安装库需要防止影响其它现有库的版本
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venueicml-25oral"><span class="nav-number">1.</span> <span class="nav-text">Venue：ICML 25（oral）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2025-05-22"><span class="nav-number">2.</span> <span class="nav-text">date：2025-05-22</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#high-resolution-image-perception%E5%AF%B9%E7%8E%B0%E5%9C%A8%E7%9A%84mllm%E8%80%8C%E8%A8%80%E6%98%AF%E4%B8%80%E5%A4%A7%E9%9A%BE%E9%A2%98%E5%8F%AF%E4%BB%A5%E7%90%86%E8%A7%A3%E9%AB%98%E5%88%86%E8%BE%A8%E7%8E%87%E6%84%8F%E5%91%B3%E7%9D%80%E5%8E%9F%E5%A7%8B%E7%9A%84%E5%83%8F%E7%B4%A0%E6%95%B0%E5%BE%88%E5%A4%A7%E5%A6%82%E6%9E%9C%E4%B8%8D%E9%99%8D%E9%87%87%E6%A0%B7%E5%B0%B1%E4%BC%9A%E9%80%A0%E6%88%90token%E9%9D%9E%E5%B8%B8%E5%A4%9A%E8%AE%A1%E7%AE%97%E9%87%8F%E5%BE%88%E5%A4%A7%E8%80%8C%E4%B8%94%E6%84%9F%E7%9F%A5%E7%90%86%E8%A7%A3%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E6%9C%89%E5%9B%B0%E9%9A%BE%E8%BF%99%E5%B0%B1%E7%B1%BB%E4%BC%BC%E4%BA%8Enlp%E9%87%8C%E8%BE%93%E5%85%A5%E6%96%87%E6%9C%AC%E8%BF%87%E9%95%BF%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E5%86%8D%E8%A6%81%E6%B1%82%E6%A8%A1%E5%9E%8B%E5%8E%BB%E7%90%86%E8%A7%A3%E6%88%96%E8%80%85%E7%94%9F%E6%88%90%E4%B9%9F%E6%9C%89%E9%9A%BE%E5%BA%A6%E9%80%9A%E5%B8%B8%E4%BC%9A%E8%BF%9B%E8%A1%8C%E9%99%8D%E9%87%87%E6%A0%B7%E4%B9%8B%E7%B1%BB%E7%9A%84%E6%93%8D%E4%BD%9C%E4%BB%A5%E4%BE%BF%E5%87%8F%E5%B0%91token%E4%BD%86%E8%BF%99%E6%A0%B7%E4%B8%80%E6%9D%A5%E4%BC%9A%E9%80%A0%E6%88%90%E4%BF%A1%E6%81%AF%E7%9A%84%E4%B8%A2%E5%A4%B1%E4%BD%BF%E5%BE%97%E4%BE%9D%E8%B5%96%E7%BB%86%E7%B2%92%E5%BA%A6%E4%BF%A1%E6%81%AF%E7%9A%84%E4%BB%BB%E5%8A%A1%E5%BE%88%E9%9A%BE%E5%AE%8C%E6%88%90%E5%A5%BDocr%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%83%BD%E6%98%AF%E5%AF%B9%E5%9B%BE%E5%83%8F%E7%9A%84%E7%BB%86%E8%8A%82%E8%A6%81%E6%B1%82%E5%BE%88%E9%AB%98%E7%9A%84"><span class="nav-number">3.1.</span> <span class="nav-text">high-resolution
+image
+perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进行降采样之类的操作，以便减少token。但这样一来，会造成信息的丢失，使得依赖细粒度信息的任务很难完成好（OCR之类的，都是对图像的细节要求很高的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E5%B0%B1%E6%98%AF%E6%83%B3%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E5%AE%83%E5%BC%95%E5%85%A5rag%E6%A3%80%E7%B4%A2%E5%85%B3%E9%94%AE%E7%9A%84image-crops%E6%8B%BC%E6%88%90%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%9B%BE%E5%83%8F%E6%AD%A4%E6%97%B6%E7%9A%84%E5%9B%BE%E5%83%8F%E6%AF%94%E5%8E%9F%E6%9D%A5%E7%9A%84%E5%9B%BE%E5%83%8F%E5%9C%A8resolution%E4%B8%8A%E5%B0%8F%E5%BE%88%E5%A4%9A%E5%9B%A0%E8%80%8C%E5%87%8F%E5%B0%91%E4%BA%86%E8%AE%A1%E7%AE%97%E9%87%8F%E5%90%8C%E6%97%B6%E5%9B%A0%E4%B8%BA%E6%A3%80%E7%B4%A2%E5%88%B0%E7%9A%84%E9%83%BD%E6%98%AF%E5%85%B3%E9%94%AE%E7%9A%84crops%E5%9B%A0%E6%AD%A4%E6%80%A7%E8%83%BD%E6%98%AF%E6%9C%89%E4%BF%9D%E8%AF%81%E7%9A%84"><span class="nav-number">3.2.</span> <span class="nav-text">这篇论文就是想解决这个问题。它引入RAG，检索关键的image
+crops，拼成一个新的图像（此时的图像比原来的图像在resolution上小很多，因而减少了计算量；同时因为检索到的都是关键的crops，因此性能是有保证的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E7%9A%84%E8%AE%BA%E6%96%87%E9%87%8C%E7%9A%84%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%AF%B4%E7%9A%84%E5%BE%88%E5%A5%BDby-enhancing-the-long-context-capability-of-mllms%E8%BF%99%E4%B8%AA%E6%94%B9%E8%BF%9B%E6%88%96%E8%AE%B8%E8%83%BD%E6%AF%94%E8%BE%83%E6%9C%AC%E8%B4%A8%E7%9A%84%E6%8F%90%E9%AB%98mllm%E5%AF%B9%E9%AB%98%E5%88%86%E8%BE%A8%E7%8E%87%E5%9B%BE%E5%83%8F%E7%9A%84%E7%90%86%E8%A7%A3%E6%84%9F%E7%9F%A5"><span class="nav-number">3.3.</span> <span class="nav-text">是的，论文里的一句话说的很好，by
+enhancing the long-context capability of
+MLLMs，这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E5%AE%9E%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%A6%82%E6%8B%AC%E4%B8%80%E4%B8%8B%E8%AE%BA%E6%96%87%E5%81%9A%E7%9A%84%E4%BA%8B%E5%B0%B1%E6%98%AF%E5%9C%A8hr-images-perception%E4%BB%BB%E5%8A%A1%E4%B8%AD%E9%80%9A%E8%BF%87rag%E6%8A%80%E6%9C%AF%E6%A3%80%E7%B4%A2%E5%87%BA%E8%B7%9Fquery%E7%9B%B8%E5%85%B3%E7%9A%84top-k%E7%9A%84crop%E7%94%B1%E6%AD%A4%E6%8B%BC%E5%87%BA%E4%B8%80%E5%89%AF%E5%B0%8F%E5%BE%88%E5%A4%9A%E7%9A%84%E5%9B%BE%E5%83%8F%E4%BB%8E%E8%80%8C%E9%99%8D%E4%BD%8Eresolution%E4%B8%94%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%A1%AE%E4%BF%9Dperception%E8%B4%A8%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text">其实一句话概括一下论文做的事，就是，在HR
+images
+perception任务中，通过RAG技术，检索出跟query相关的top-k的crop，由此拼出一副小很多的图像，从而降低resolution且尽可能确保perception质量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8Arag%E6%8A%80%E6%9C%AF%E5%BA%94%E7%94%A8%E5%88%B0mllm%E4%B8%8A%E7%94%A8%E4%BA%8E%E8%A7%A3%E5%86%B3hr-images-perception%E4%BB%BB%E5%8A%A1%E5%BE%88%E5%88%9B%E6%96%B0%E6%88%96%E8%80%85%E8%AF%B4%E6%9B%B4%E6%A0%B9%E6%9C%AC%E7%9A%84%E8%A7%86%E8%A7%92%E5%9C%A8%E4%BA%8E%E8%AE%BA%E6%96%87%E6%B3%A8%E6%84%8F%E5%88%B0%E7%8E%B0%E6%9C%89mllm%E5%A4%84%E7%90%86hr-images%E4%B9%8B%E6%89%80%E4%BB%A5%E6%95%88%E6%9E%9C%E4%B8%8D%E5%A4%9F%E5%A5%BD%E5%8F%AF%E4%BB%A5%E5%BD%92%E7%BB%93%E4%B8%BAmllm%E7%9A%84long-context%E8%83%BD%E5%8A%9B%E4%B8%8D%E8%B6%B3%E5%9B%A0%E6%AD%A4%E6%83%B3%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%80%E7%82%B9%E4%BB%8E%E8%80%8C%E5%80%9F%E9%89%B4%E4%BA%86llm%E9%A2%86%E5%9F%9F%E9%87%8C%E7%9A%84rag%E6%8A%80%E6%9C%AF"><span class="nav-number">4.2.</span> <span class="nav-text">把RAG技术应用到mllm上，用于解决HR
+images
+perception任务，很创新。或者说，更根本的视角在于，论文注意到现有mllm处理HR
+images之所以效果不够好，可以归结为mllm的long-context能力不足，因此想解决这一点，从而借鉴了llm领域里的RAG技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E6%AD%A3%E5%A6%82%E4%B8%8A%E6%89%80%E8%BF%B0%E8%A7%82%E5%AF%9F%E9%97%AE%E9%A2%98%E5%B9%B6%E4%BB%8E%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A7%86%E8%A7%92%E5%BD%92%E7%BA%B3%E6%9C%89%E5%8F%AF%E8%83%BD%E5%B0%B1%E4%BC%9A%E5%8F%91%E7%8E%B0%E5%AE%83%E5%92%8C%E7%8E%B0%E6%9C%89%E7%9A%84%E6%9F%90%E4%BA%9B%E9%97%AE%E9%A2%98%E6%98%AF%E7%9B%B8%E9%80%9A%E7%9A%84%E4%BB%8E%E8%80%8C%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E5%80%9F%E9%89%B4%E7%8E%B0%E6%9C%89%E7%9A%84%E6%8A%80%E6%9C%AF%E8%BF%9B%E8%A1%8C%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E8%BF%87%E7%A8%8B%E9%87%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E9%81%87%E5%88%B0%E6%96%B0%E7%9A%84%E9%97%AE%E9%A2%98%E9%82%A3%E4%B9%88%E8%BF%99%E4%B9%9F%E6%98%AF%E6%89%80%E8%B0%93%E5%88%9B%E6%96%B0%E5%B9%B6%E4%B8%94%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%88%96%E8%AE%B8%E8%83%BD%E6%BF%80%E5%8F%91%E5%87%BA%E6%96%B0%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C"><span class="nav-number">4.3.</span> <span class="nav-text">那么正如上所述，观察问题，并从不同的视角归纳，有可能就会发现它和现有的某些问题是相通的，从而可以考虑借鉴现有的技术进行解决。这个过程里可能会遇到新的问题，那么这也是所谓创新，并且过程中或许能激发出新的研究成果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AD%A6%E4%B9%A0%E5%88%B0%E4%B8%80%E4%B8%AA%E7%A0%94%E7%A9%B6%E7%9A%84%E4%B8%80%E8%88%AC%E8%8C%83%E5%BC%8F%E5%92%8C%E6%96%B9%E6%B3%95%E5%B0%B1%E6%98%AF%E5%BD%93%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%E5%85%B6%E5%AE%83%E9%A2%86%E5%9F%9F%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%AF%E8%83%BD%E5%AF%B9%E8%A7%A3%E5%86%B3%E5%BD%93%E5%89%8D%E9%A2%86%E5%9F%9F%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E7%94%A8%E7%9A%84%E6%97%B6%E5%80%99%E6%9C%80%E7%AE%80%E5%8D%95%E4%B9%9F%E6%98%AF%E6%9C%80%E7%90%86%E6%83%B3%E7%9A%84%E6%83%85%E5%86%B5%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E7%9B%B4%E6%8E%A5%E7%85%A7%E6%90%AC%E8%BF%87%E6%9D%A5%E4%B9%9F%E8%83%BD%E5%BE%88%E5%A5%BD%E7%9A%84work%E4%BD%86%E8%AE%BA%E6%96%87%E5%8F%91%E7%8E%B0%E4%B8%8D%E8%A1%8C%E6%89%80%E4%BB%A5%E9%9C%80%E8%A6%81%E6%94%B9%E8%BF%9B%E8%BF%99%E5%B0%B1%E6%98%AF%E8%AE%BA%E6%96%87%E7%9A%84%E4%B8%BB%E8%A6%81%E5%B7%A5%E4%BD%9C%E5%92%8C%E5%88%9B%E6%96%B0%E7%82%B9%E5%90%A7%E8%BF%99%E6%9C%AC%E8%B4%A8%E4%B8%8A%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%9B%BE%E5%83%8F%E5%92%8C%E6%96%87%E6%9C%AC%E7%9A%84%E5%A4%A9%E7%84%B6%E7%9A%84%E4%B8%8D%E5%90%8C%E6%96%87%E6%9C%AC%E6%98%AF%E4%B8%80%E7%BB%B4%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%AF%E4%BA%8C%E7%BB%B4%E7%9A%84%E5%9B%A0%E6%AD%A4%E6%9C%89%E4%BD%8D%E7%BD%AE%E5%85%B3%E7%B3%BB%E7%B1%BB%E4%BC%BC%E7%9A%84%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%88%9B%E6%96%B0%E7%82%B9%E5%8F%AF%E8%83%BD%E5%9C%A8%E4%BA%8E%E6%88%91%E4%BB%AC%E5%A6%82%E6%9E%9C%E6%83%B3%E6%8F%90%E5%8D%87mllm%E6%84%9F%E7%9F%A5%E9%AB%98%E5%88%86%E8%BE%A8%E7%8E%87%E7%9A%84%E9%95%BF%E8%A7%86%E9%A2%91%E9%82%A3%E4%B9%88%E5%8F%88%E4%BC%9A%E5%A4%9A%E4%B8%80%E4%B8%AA%E6%97%B6%E5%BA%8F%E7%9A%84%E5%85%B3%E7%B3%BB%E8%BF%99%E5%8F%AF%E8%83%BD%E4%B9%9F%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E4%BD%86%E8%80%83%E8%99%91%E5%88%B0%E7%8E%B0%E5%9C%A8%E6%8A%8Arag%E7%94%A8%E5%88%B0mllm%E4%B8%8A%E9%83%BD%E6%B2%A1%E5%A4%AA%E5%A4%9A%E4%BA%BA%E5%81%9A%E5%81%9A%E8%BF%99%E4%B8%AA%E6%84%9F%E7%9F%A5%E9%95%BF%E8%A7%86%E9%A2%91%E7%9A%84%E5%BA%94%E8%AF%A5%E6%9B%B4%E6%98%AF%E9%9A%BE%E8%80%8C%E4%B8%94%E5%8F%AF%E8%83%BD%E6%9A%82%E6%97%B6%E6%B2%A1%E6%9C%89%E4%BA%BAfollow%E4%B9%9F%E7%96%91%E4%BC%BC%E6%9C%89%E7%82%B9%E7%81%8C%E6%B0%B4%E4%BA%86%E5%81%87%E5%A6%82%E7%9B%B4%E6%8E%A5%E6%8A%8Arag%E6%8A%80%E6%9C%AF%E5%BA%94%E7%94%A8%E5%88%B0mllm%E6%83%B3%E4%BB%A5%E6%AD%A4%E6%8F%90%E9%AB%98mllm%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E8%83%BD%E5%8A%9B%E4%BB%8E%E8%80%8C%E6%8F%90%E5%8D%87%E5%85%B6hr-images%E7%9A%84%E6%84%9F%E7%9F%A5%E8%83%BD%E5%8A%9B%E9%82%A3%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E6%A3%80%E7%B4%A2%E5%92%8C%E5%BD%93%E5%89%8D%E5%9B%BE%E5%83%8F%E9%97%AE%E9%A2%98-%E7%9B%B8%E5%85%B3%E7%9A%84token%E9%97%AE%E9%A2%98%E5%9C%A8%E4%BA%8E%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84token%E5%8F%AF%E8%83%BD%E6%98%AFtop-k%E4%B8%AA%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E7%A1%AE%E5%AE%9A%E5%AE%83%E4%BB%AC%E7%9A%84%E4%BD%8D%E7%BD%AE%E6%89%8D%E8%83%BD%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%86%B3%E5%AE%9A%E7%94%A8%E5%93%AA%E4%B8%AA%E5%9B%A0%E4%B8%BA%E6%9C%89%E4%BA%9B%E9%97%AE%E9%A2%98%E5%8F%AF%E8%83%BD%E6%98%AF%E9%9C%80%E8%A6%81%E8%BF%99%E4%B8%AA%E4%BD%8D%E7%BD%AE%E5%85%B3%E7%B3%BB%E7%9A%84%E8%BF%99%E9%87%8C%E4%B8%8D%E5%A6%A8%E6%9E%84%E9%80%A0%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90%E6%88%91%E4%BB%AC%E6%9C%89%E4%B8%80%E5%89%AF%E4%BA%BA%E5%83%8F%E5%9B%BE%E6%88%91%E4%BB%AC%E6%83%B3%E6%A3%80%E7%B4%A2%E8%AF%B4%E5%9C%A8%E6%9F%90%E4%B8%AA%E4%BA%BA%E7%9A%84%E5%8F%B3%E4%B8%8A%E6%96%B9%E7%9A%84%E6%88%B4%E5%B8%BD%E5%AD%90%E4%BA%BA%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9B%A0%E6%AD%A4%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E6%84%9F%E7%9F%A5%E6%A3%80%E7%B4%A2%E5%87%BA%E6%88%B4%E5%B8%BD%E5%AD%90%E7%9A%84%E4%BA%BA%E5%AF%B9%E5%BA%94%E7%9A%84token%E7%84%B6%E5%90%8E%E5%86%8D%E6%A0%B9%E6%8D%AE%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90%E5%BE%97%E6%98%AF%E5%9C%A8%E6%9F%90%E4%B8%AA%E4%BA%BA%E7%9A%84%E5%8F%B3%E4%B8%8A%E6%96%B9%E7%9A%84%E4%BA%BA%E7%9A%84token%E6%89%8D%E8%A1%8C%E8%BF%99%E4%B8%AA%E4%BE%8B%E5%AD%90%E5%AF%B9%E5%90%97"><span class="nav-number">4.4.</span> <span class="nav-text">从这篇论文，也可以学习到一个研究的一般范式和方法。就是，当我们发现其它领域的方法可能对解决当前领域的方法有用的时候，最简单，也是最理想的情况就是，我们直接照搬过来，也能很好的work。但论文发现不行，所以需要改进（这就是论文的主要工作和创新点吧。这本质上是因为图像和文本的天然的不同。文本是一维的，图像是二维的，因此有位置关系。类似的，一个新的创新点，可能在于，我们如果想提升mllm感知高分辨率的长视频，那么又会多一个时序的关系，这可能也需要解决。但考虑到现在把RAG用到mllm上都没太多人做，做这个感知长视频的应该更是难，而且可能暂时没有人follow，也疑似有点灌水了。假如直接把RAG技术应用到mllm，想以此提高mllm的长文本能力，从而提升其HR
+images的感知能力，那我们需要检索和当前图像&#x2F;问题
+相关的token。问题在于，检索回来的token可能是top-k个，我们需要确定它们的位置，才能进一步决定用哪个。因为有些问题可能是需要这个位置关系的。这里不妨构造一个例子：我们有一副人像图，我们想检索说，在某个人的右上方的戴帽子人有哪些。因此，我们需要感知、检索出戴帽子的人对应的token，然后再根据位置信息进行分析，得是在”某个人“的右上方的人的token才行（这个例子对吗？））</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8Arag%E6%8A%80%E6%9C%AF%E8%BF%81%E7%A7%BB%E5%88%B0mllm%E4%B8%8A%E7%94%A8%E4%BA%8E%E8%A7%A3%E5%86%B3high-resolution-images-perception%E9%97%AE%E9%A2%98%E9%A6%96%E5%88%9B%E5%81%9Awork%E4%BA%86%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E5%A5%97%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E6%96%B9%E6%B3%95%E9%A1%BA%E5%B8%A6%E7%9A%84%E6%8F%90%E9%AB%98%E4%BA%86mllm%E7%9A%84%E4%B8%80%E8%88%AC%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">5.1.</span> <span class="nav-text">把RAG技术迁移到mllm上，用于解决High
+Resolution images
+perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pilot-study"><span class="nav-number">6.</span> <span class="nav-text">pilot study：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E8%AE%BA%E6%96%87%E7%8E%87%E5%85%88%E7%A0%94%E7%A9%B6%E4%BA%86%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98%E4%B8%BA%E5%AE%83%E5%90%8E%E9%9D%A2%E6%8F%90%E5%87%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%B9%E6%B3%95%E5%A5%A0%E5%AE%9A%E5%9F%BA%E7%A1%80%E6%88%96%E8%80%85%E8%AF%B4%E6%8F%90%E5%87%BA%E6%96%B9%E6%B3%95%E7%9A%84%E6%97%B6%E5%80%99%E5%BF%85%E7%84%B6%E4%BC%9A%E8%80%83%E8%99%91%E5%88%B0%E8%BF%99%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98-%E5%BD%93%E6%88%91%E4%BB%AC%E6%83%B3%E6%8A%8Arag%E5%BA%94%E7%94%A8%E5%88%B0mllm%E6%9D%A5%E8%BE%85%E5%8A%A9%E8%A7%A3%E5%86%B3hr-images-perception%E6%97%B6%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BA%86%E4%B8%8D%E6%8D%9F%E5%A4%B1%E4%BF%A1%E6%81%AF%E6%98%AF%E6%8A%8Aimages%E5%88%87%E6%88%90%E8%8B%A5%E5%B9%B2crop%E7%84%B6%E5%90%8E%E6%A3%80%E7%B4%A2top-k%E7%9A%84crop%E5%B8%AEmllm%E8%BF%9B%E8%A1%8C%E6%84%9F%E7%9F%A5%E9%82%A3%E4%B9%88%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E7%BB%84%E7%BB%87%E8%BF%99%E6%98%AF%E7%94%B1%E4%BA%8Eimages%E6%98%AF%E4%BA%8C%E7%BB%B4%E5%9B%BE%E5%83%8F%E8%80%8C%E6%96%87%E5%AD%97%E6%98%AF%E4%B8%80%E7%BB%B4%E5%9B%BE%E5%83%8F%E4%BA%8C%E8%80%85%E7%BB%B4%E5%BA%A6%E4%B8%8D%E5%90%8C%E4%BA%A7%E7%94%9F%E7%9A%84%E6%96%B0%E9%97%AE%E9%A2%98top-k%E7%9A%84k%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E5%86%B3%E5%AE%9A-%E8%A6%81%E6%8F%90%E5%87%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%BE%E7%84%B6%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E8%BF%99%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">这里论文率先研究了两个问题，为它后面提出自己的方法奠定基础（或者说，提出方法的时候必然会考虑到这几个问题）当我们想把RAG应用到mllm，来辅助解决HR
+images
+perception时，我们为了不损失信息，是把images切成若干crop，然后检索top-k的crop，帮mllm进行感知。那么检索回来的crops，应该如何组织？（这是由于images是二维图像，而文字是一维图像，二者维度不同，产生的新问题）top-k的k，应该如何决定？要提出自己的方法，显然需要考虑这几个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#impact-of-the-layout-of-retrieved-image-crops"><span class="nav-number">6.2.</span> <span class="nav-text">impact of the
+layout of retrieved image crops</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E7%9A%84%E5%B8%83%E5%B1%80%E5%8F%AF%E4%BB%A5%E6%9C%89%E5%87%A0%E7%A7%8D%E7%AD%96%E7%95%A5"><span class="nav-number">6.2.1.</span> <span class="nav-text">取回来的crops的布局，可以有几种策略：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89%E7%85%A7%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%88%86%E6%95%B0%E5%8D%87%E5%BA%8F%E6%8E%92%E5%88%97%E5%8D%87%E5%BA%8F%E9%99%8D%E5%BA%8F%E6%84%9F%E8%A7%89%E4%B9%9F%E6%B2%A1%E9%82%A3%E4%B9%88%E9%87%8D%E8%A6%81%E8%BF%99%E4%B8%AA%E7%AD%96%E7%95%A5%E7%9A%84%E9%87%8D%E7%82%B9%E6%98%AF%E6%8C%89%E7%85%A7%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%88%86%E6%95%B0%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">6.2.1.1.</span> <span class="nav-text">1.
+按照相似性分数升序排列（升序降序感觉也没那么重要。这个策略的重点是按照相似性分数进行排序）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89%E7%85%A7%E6%89%AB%E6%8F%8F%E7%9A%84%E9%A1%BA%E5%BA%8F%E6%8E%92%E5%88%97%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E5%A6%82%E4%BD%95%E6%89%AB%E6%8F%8F%E4%B8%80%E4%B8%AA%E4%B8%AAcrop%E8%AE%A1%E7%AE%97%E5%92%8Cquery%E7%9A%84%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%B0%B1%E5%A6%82%E4%BD%95%E6%8E%92%E5%88%97%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84crops"><span class="nav-number">6.2.1.2.</span> <span class="nav-text">2.
+按照扫描的顺序排列。也就是，我们如何扫描一个个crop，计算和query的相似度，就如何排列检索回来的crops</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%8A%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E6%8C%89%E7%85%A7%E5%AE%83%E4%BB%AC%E5%8E%9F%E6%9D%A5%E5%9C%A8image%E4%B8%AD%E7%9A%84%E7%9B%B8%E5%AF%B9%E4%BD%8D%E7%BD%AE%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%88%97%E5%9B%A0%E6%AD%A4%E8%BF%99%E7%A7%8D%E7%AD%96%E7%95%A5%E5%8F%AF%E4%BB%A5%E4%BF%9D%E7%95%99crops%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BD%8D%E7%BD%AE%E5%85%B3%E7%B3%BB%E7%9B%B4%E8%A7%82%E4%B8%8A%E7%9C%8B%E6%84%9F%E8%A7%89%E8%BF%99%E7%A7%8D%E7%AD%96%E7%95%A5%E5%BA%94%E8%AF%A5%E6%AF%94%E8%BE%83%E4%BC%98%E7%A7%80%E7%BB%93%E6%9E%9C%E8%A1%A8%E6%98%8E%E7%A1%AE%E5%AE%9E%E5%A6%82%E6%AD%A4%E5%B0%A4%E5%85%B6%E6%98%AF%E5%9C%A8cross-instance%E7%9A%84%E4%BB%BB%E5%8A%A1%E4%B8%8A%E8%A1%A8%E7%8E%B0%E6%AF%94%E5%89%8D%E4%B8%A4%E4%B8%AA%E7%AD%96%E7%95%A5%E5%A5%BD"><span class="nav-number">6.2.1.3.</span> <span class="nav-text">3.
+把检索回来的crops，按照它们原来在image中的相对位置进行排列（因此这种策略可以保留crops之间的位置关系。直观上看，感觉这种策略应该比较优秀。结果表明确实如此，尤其是在cross-instance的任务上，表现比前两个策略好）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#impact-of-the-number-of-retrieved-image-crops"><span class="nav-number">6.3.</span> <span class="nav-text">impact of the
+number of retrieved image crops</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E5%A5%BD%E5%83%8F%E6%B2%A1%E5%A4%AA%E5%A4%9A%E5%8F%AF%E4%BB%A5%E8%AF%B4%E7%9A%84%E7%AE%80%E8%80%8C%E8%A8%80%E4%B9%8B%E5%B0%B1%E6%98%AF%E5%AF%B9fine-grained-single-instance-perception-task%E8%BE%83%E5%B0%8F%E7%9A%84k%E5%B0%B1%E8%83%BD%E8%B5%B7%E5%88%B0%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E6%95%88%E6%9E%9C%E5%A4%AA%E5%A4%A7%E5%8F%8D%E8%80%8C%E9%99%8D%E4%BD%8E%E6%95%88%E6%9E%9C-%E5%AF%B9%E4%BA%8Efine-grained-cross-instance-perception-task%E5%88%99%E6%98%AF%E8%A6%81%E7%9B%B8%E5%AF%B9%E5%A4%A7%E4%B8%80%E4%BA%9B%E7%9A%84k%E6%95%88%E6%9E%9C%E6%89%8D%E4%BC%9A%E5%A5%BD%E5%BD%93%E7%84%B6%E8%BF%87%E5%A4%A7%E4%BE%9D%E7%84%B6%E4%B8%8D%E8%A1%8C"><span class="nav-number">6.3.1.</span> <span class="nav-text">这里好像没太多可以说的，简而言之就是，对Fine-grained
+Single-Instance Perception
+task，较小的k就能起到比较好的效果，太大反而降低效果；对于Fine-grained
+Cross-Instance Perception
+task，则是要相对大一些的k，效果才会好。当然过大依然不行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#methodretrieval-augmented-perception"><span class="nav-number">7.</span> <span class="nav-text">method（Retrieval-Augmented
+Perception）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E5%9C%A8%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BA%86%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98%E4%B9%8B%E5%90%8E%E6%8A%8A%E6%8F%90%E5%87%BA%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%A8%A1%E5%9D%97%E7%BB%84%E5%90%88%E5%88%B0%E4%B8%80%E8%B5%B7%E5%BD%A2%E6%88%90%E4%BA%86%E6%9C%AC%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%BA%E4%BA%86%E8%A7%A3%E5%86%B3%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E7%9A%84%E7%BB%84%E7%BB%87%E5%BD%A2%E5%BC%8F%E9%97%AE%E9%A2%98%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BAspatial-awareness-layout-algorithm%E4%B8%BA%E4%BA%86%E9%80%89%E6%8B%A9%E6%9C%80%E5%A5%BD%E7%9A%84%E8%B6%85%E5%8F%82%E6%95%B0k%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BAretrieved-exploration-searchre-search%E4%B8%94%E4%BA%8C%E8%80%85%E9%83%BD%E5%8F%AF%E4%BB%A5%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%A6%82%E6%8B%AC%E6%80%9D%E6%83%B3-%E5%89%8D%E8%80%85%E6%98%AF%E8%AE%BE%E8%AE%A1%E4%B8%80%E7%A7%8D%E7%AE%97%E6%B3%95%E8%A6%81%E4%BF%9D%E7%95%99crops%E5%9C%A8%E5%8E%9F%E6%9D%A5%E7%9A%84%E5%9B%BE%E5%83%8F%E4%B8%AD%E7%9A%84%E7%9B%B8%E5%AF%B9%E4%BD%8D%E7%BD%AE-%E5%90%8E%E8%80%85%E5%88%99%E6%98%AF%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%A3%80%E7%B4%A2%E5%9B%9E%E7%9A%84k%E4%B8%AAcrops%E7%9A%84confidence%E6%9D%A5%E5%86%B3%E5%AE%9A%E6%9C%80%E5%A5%BD%E7%9A%84k"><span class="nav-number">7.1.</span> <span class="nav-text">这里其实就是在分别解决了上面的两个问题之后，把提出的两个模块组合到一起，形成了本文的方法。为了解决检索回来的crops的组织形式问题，论文提出Spatial-Awareness
+Layout algorithm；为了选择最好的超参数K，论文提出Retrieved-Exploration
+Search（RE-Search）。且二者都可以一句话概括思想：前者是设计一种算法，要保留crops在原来的图像中的相对位置；后者则是用模型对检索回的K个crops的confidence，来决定最好的K</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E8%83%BD%E7%9A%84%E6%94%B9%E8%BF%9B"><span class="nav-number">8.</span> <span class="nav-text">可能的改进：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AC%B8%E8%AE%BA%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95%E8%99%BD%E7%84%B6%E6%9E%81%E5%A4%A7%E6%8F%90%E9%AB%98%E4%BA%86fsp%E7%9A%84%E6%80%A7%E8%83%BD%E4%BD%86%E5%9C%A8fcp%E4%B8%8A%E7%9A%84%E6%80%A7%E8%83%BD%E5%85%B6%E5%AE%9E%E9%99%8D%E4%BD%8E%E4%BA%86%E5%BE%88%E5%A4%9A%E8%BF%99%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AF%E5%9B%A0%E4%B8%BAcross-instance%E7%9A%84%E6%97%B6%E5%80%99%E6%B6%89%E5%8F%8A%E5%A4%9A%E4%B8%AA%E7%89%A9%E4%BD%93%E4%BD%86%E6%98%AF%E8%AE%BA%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95%E6%B2%A1%E6%9C%89%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%89%80%E6%9C%89%E6%89%80%E9%9C%80%E7%9A%84crops%E5%A6%82%E6%9E%9C%E6%98%AF%E8%BF%99%E4%B9%9F%E4%B8%8D%E5%BA%94%E8%AF%A5%E6%98%AF%E8%B6%85%E5%8F%82k%E7%9A%84%E9%97%AE%E9%A2%98%E4%BA%86%E5%9B%A0%E4%B8%BA%E7%BB%8F%E8%BF%87%E5%AE%9E%E9%AA%8C%E5%8F%91%E7%8E%B0%E4%B8%80%E5%91%B3%E5%A2%9E%E5%A4%A7k%E5%B9%B6%E4%B8%8D%E8%83%BD%E4%B8%80%E8%87%B4%E6%8F%90%E9%AB%98%E6%80%A7%E8%83%BD%E6%89%80%E4%BB%A5%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AF%E8%AF%B4%E4%BB%85%E6%A0%B9%E6%8D%AEquery%E6%9C%89%E4%BA%9B%E5%85%B3%E9%94%AEcrops%E5%B0%B1%E6%98%AF%E6%A3%80%E7%B4%A2%E4%B8%8D%E5%9B%9E%E6%9D%A5%E5%9B%A0%E6%AD%A4%E5%AF%BC%E8%87%B4%E4%BA%86fcp%E7%9A%84%E6%80%A7%E8%83%BD%E5%BE%88%E5%B7%AE%E4%BD%86%E8%BF%99%E4%B8%80%E7%82%B9%E8%BF%98%E6%98%AF%E9%9C%80%E8%A6%81%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81-%E4%BD%86%E4%B8%BA%E4%BB%80%E4%B9%88baseline%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%B8%8D%E7%94%A8%E6%A3%80%E7%B4%A2%E7%9A%84mllm%E5%8F%8D%E8%80%8C%E5%9C%A8fcp%E4%B8%8A%E6%95%88%E6%9E%9C%E5%A5%BD%E5%BE%88%E5%A4%9A%E5%91%A2%E5%9B%A0%E4%B8%BA%E5%AE%83%E8%99%BD%E7%84%B6%E6%8D%9F%E5%A4%B1%E4%BA%86%E4%BF%A1%E6%81%AF%E5%A5%BD%E6%AD%B9%E5%85%A8%E9%83%A8crops%E9%83%BD%E6%98%AF%E6%9C%89%E5%9C%A8%E7%9C%8B%E7%9A%84%E5%A6%82%E6%9E%9C%E8%A7%A3%E9%87%8A%E5%BE%97%E9%80%9A%E8%83%BD%E5%90%A6%E7%94%B1%E6%AD%A4%E8%BF%9B%E8%A1%8C%E6%94%B9%E8%BF%9B%E5%91%A2%E8%AE%A9rag%E8%BE%85%E5%8A%A9%E4%B8%8B%E7%9A%84mlllm%E5%AF%B9%E4%BA%8Ehr-images%E7%9A%84%E6%84%9F%E7%9F%A5%E4%B8%8D%E4%BB%85fsp%E4%B8%8A%E5%81%9A%E7%9A%84%E5%A5%BDfcp%E4%B8%8A%E4%B9%9F%E5%81%9A%E7%9A%84%E5%A5%BD%E8%AF%B4%E5%88%B0%E5%BA%95%E6%98%AF%E4%B8%8D%E6%98%AF%E5%BA%94%E8%AF%A5%E8%80%83%E8%99%91%E4%B8%8D%E6%98%AF%E6%89%80%E6%9C%89%E6%83%85%E5%BD%A2%E4%B8%8B%E9%83%BD%E9%9C%80%E8%A6%81rag%E6%9C%89%E6%97%B6%E5%80%99%E4%B8%8D%E9%9C%80%E8%A6%81rag%E5%95%8A%E6%9C%80%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%BE%A8%E5%88%AB%E4%B8%80%E4%B8%8B%E5%8D%95%E7%8B%AC%E8%AE%AD%E7%BB%83%E4%B8%80%E4%B8%AA%E5%88%86%E7%B1%BB%E5%99%A8%E8%AE%A9%E5%AE%83%E8%BE%A8%E5%88%AB%E5%BD%93%E5%89%8Dquery%E6%98%AFfsp%E8%BF%98%E6%98%AFfcp%E5%A6%82%E6%9E%9C%E6%98%AF%E5%89%8D%E8%80%85%E9%82%A3%E5%90%AF%E7%94%A8rag%E5%A6%82%E6%9E%9C%E6%98%AF%E5%90%8E%E8%80%85%E5%B0%B1%E4%B8%8D%E5%90%AF%E7%94%A8rag%E8%BF%99%E4%B8%80%E7%9C%BC%E7%9C%8B%E4%B8%8A%E5%8E%BB%E5%B0%B1%E4%BC%9A%E6%95%88%E6%9E%9C%E6%9B%B4%E5%A5%BD%E5%90%A7%E5%BD%93%E7%84%B6%E5%AE%9E%E9%99%85%E8%BF%98%E6%98%AF%E9%9C%80%E8%A6%81%E5%AE%9E%E9%AA%8C%E9%AA%8C%E8%AF%81%E4%BA%86"><span class="nav-number">8.1.</span> <span class="nav-text">欸，论文的方法，虽然极大提高了FSP的性能，但在FCP上的性能其实降低了很多。这是为什么？有可能是因为cross-instance的时候，涉及多个物体，但是论文的方法没有检索回所有所需的crops？如果是，这也不应该是超参K的问题了（因为经过实验，发现一味增大K，并不能一致提高性能）。所以有可能是说，仅根据query，有些关键crops就是检索不回来，因此导致了FCP的性能很差。（但这一点还是需要实验验证）但为什么baseline（也就是不用检索的mllm）反而在FCP上效果好很多呢？因为它虽然损失了信息，好歹全部crops都是有在看的。如果解释得通，能否由此进行改进呢？让RAG辅助下的mlllm对于HR
+images的感知，不仅FSP上做的好，FCP上也做的好（说到底，是不是应该考虑，不是所有情形下都需要RAG？有时候不需要RAG啊？最基本的，我们可以辨别一下，单独训练一个分类器，让它辨别当前query是FSP还是FCP。如果是前者，那启用RAg；如果是后者，就不启用RAG。这一眼看上去就会效果更好吧？（当然实际还是需要实验验证了）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%86%E6%98%AF%E7%9C%8B%E4%BA%86%E8%AE%BA%E6%96%87%E7%9A%84%E5%90%8E%E5%8D%8A%E5%81%9A%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E8%AF%B4%E6%98%8E%E4%BA%86%E5%85%89%E5%8A%A0%E4%B8%8Avisrag%E4%B8%8D%E7%94%A8spatial-awareness-layout%E5%92%8C%E6%8E%A2%E7%B4%A2%E6%9C%80%E4%BC%98k%E5%B9%B3%E5%9D%87%E6%80%A7%E8%83%BD%E6%98%AF%E4%B8%8A%E5%8D%87%E4%BA%86%E4%BD%86%E6%98%AF%E5%9C%A8fcp%E4%B8%8A%E7%9A%84%E7%A1%AE%E4%B8%8B%E9%99%8D%E4%BA%86%E5%92%8C%E6%88%91%E4%BB%AC%E4%B8%80%E5%BC%80%E5%A7%8B%E7%9C%8B%E5%88%B0%E7%9A%84%E4%B8%80%E6%A0%B7%E8%80%8C%E5%8D%B3%E4%BD%BF%E5%8A%A0%E4%B8%8A%E4%BA%86spatial-awareness-layout%E5%8F%8D%E8%80%8C%E6%98%AFfsp%E4%B8%8A%E7%95%A5%E6%9C%89%E4%B8%8B%E9%99%8D%E4%BD%86fcp%E4%B8%8A%E4%B8%8A%E5%8D%87%E4%BA%86%E4%B8%80%E4%BA%9B%E4%B8%8D%E8%BF%87%E5%B9%B3%E5%9D%87%E6%80%A7%E8%83%BD%E5%B0%B1%E5%B7%AE%E5%88%AB%E4%B8%8D%E5%A4%A7%E4%BA%86%E8%BF%99%E4%B9%88%E7%9C%8B%E5%BE%88%E9%9A%BE%E8%AF%B4spatial-awareness-layout%E4%BD%9C%E7%94%A8%E5%B7%A8%E5%A4%A7%E5%90%A7%E4%BD%86%E6%9C%80%E5%90%8E%E5%8A%A0%E4%B8%8Are-search%E6%8E%A2%E7%B4%A2%E6%9C%80%E4%BC%98k%E4%B9%8B%E5%90%8E%E6%80%A7%E8%83%BD%E4%B8%80%E4%B8%8B%E5%B0%B1%E4%B8%8A%E6%B6%A8%E4%BA%86%E5%BE%88%E5%A4%9Afsp%E4%B8%8A%E5%8D%87%E4%BA%86%E5%B0%A4%E5%85%B6%E5%A4%9Afcp%E4%B8%8A%E4%B9%9F%E6%98%AF%E9%83%BD%E8%B6%85%E8%B6%8Abaseline%E4%BA%86%E8%BF%99%E4%B8%AA%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E5%91%A2"><span class="nav-number">8.1.1.</span> <span class="nav-text">但是看了论文的后半，做消融实验的时候也说明了，光加上VisRAG（不用Spatial-Awareness
+Layout和探索最优K），平均性能是上升了，但是在FCP上的确下降了，和我们一开始看到的一样。而即使加上了Spatial-Awareness
+Layout，反而是FSP上略有下降，但FCP上上升了一些（不过平均性能就差别不大了。这么看，很难说Spatial-Awareness
+Layout作用巨大吧？）但最后加上RE-Search，探索最优K之后，性能一下就上涨了很多，FSP上升了尤其多，FCP上也是，都超越baseline了（这个是为什么呢？）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%98%E6%9C%89%E5%95%8A%E6%83%B3%E5%88%B0%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E7%8E%B0%E5%9C%A8%E8%AE%BA%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95%E5%AE%83%E7%BA%AF%E7%9C%8Bcrop%E5%92%8Cquery%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%81%87%E5%A6%82query%E6%98%AF%E4%B8%80%E4%B8%AAfcp%E7%9A%84%E9%97%AE%E9%A2%98%E4%BD%86%E5%AE%83%E4%B8%8D%E6%B6%89%E5%8F%8A%E4%BD%8D%E7%BD%AE%E5%85%B3%E7%B3%BB%E5%8F%AA%E6%98%AF%E5%8D%95%E7%BA%AF%E7%9A%84%E8%AF%AD%E4%B9%89%E5%85%B3%E7%B3%BB%E9%82%A3%E4%B8%8D%E6%98%AF%E6%88%91%E6%8A%8A%E5%8E%9F%E5%9B%BE%E5%83%8F%E7%9A%84%E6%9F%90%E4%B8%A4%E4%B8%AAcrop%E7%BB%99%E4%BA%A4%E6%8D%A2%E4%BA%86%E5%8F%AF%E8%83%BD%E9%83%BD%E6%B2%A1%E5%BD%B1%E5%93%8D%E5%90%97%E6%9C%89%E6%B2%A1%E6%9C%89%E5%8F%AF%E8%83%BD%E5%AD%98%E5%9C%A8%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E5%B0%B1%E6%98%AF%E6%9F%90%E4%BA%9Bcrops%E4%B9%8B%E9%97%B4%E5%8D%95%E7%8B%AC%E7%9C%8B%E5%8F%AF%E8%83%BD%E5%92%8Cquery%E6%B2%A1%E5%85%B3%E7%B3%BB%E4%BD%86%E6%98%AF%E7%BB%84%E5%90%88%E8%B5%B7%E6%9D%A5%E5%B0%B1%E5%92%8Cquery%E6%9C%89%E5%85%B3%E7%B3%BB%E4%BA%86%E5%A6%82%E6%9E%9C%E7%9C%9F%E6%9C%89%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E6%98%AF%E5%90%A6%E8%83%BD%E9%83%A8%E5%88%86%E8%A7%A3%E9%87%8A%E8%AE%BA%E6%96%87%E6%96%B9%E6%B3%95%E5%81%9Afcp%E5%81%9A%E5%BE%97%E4%B8%8D%E5%A4%9F%E5%A5%BD%E5%81%87%E5%A6%82%E7%9C%9F%E6%98%AF%E9%82%A3%E4%B9%88%E5%8F%AF%E8%83%BD%E9%99%A4%E4%BA%86%E5%8D%95%E7%8B%AC%E5%88%A4%E6%96%ADcrop%E5%92%8Cquery%E6%98%AF%E5%90%A6%E7%9B%B8%E5%85%B3%E8%BF%98%E9%9C%80%E8%A6%81%E4%B8%80%E7%82%B9%E5%85%A8%E5%B1%80%E7%9A%84%E6%95%B4%E4%BD%93%E7%9A%84%E5%A4%84%E7%90%86%E6%89%8D%E8%A1%8C"><span class="nav-number">8.2.</span> <span class="nav-text">还有啊，想到一个问题，现在论文的方法，它纯看crop和query的关系。也就是说，假如query是一个FCP的问题，但它不涉及位置关系，只是单纯的语义关系，那不是我把原图像的某两个crop给交换了，可能都没影响吗？有没有可能存在一种情况，就是，某些crops之间，单独看可能和query没关系，但是组合起来就和query有关系了（如果真有这种情况，是否能部分解释论文方法做FCP做得不够好？假如真是，那么可能除了单独判断crop和query是否相关，还需要一点全局的、整体的处理才行）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E4%BC%BC%E4%B9%8E%E7%9A%84%E7%A1%AE%E4%B9%9F%E6%98%AF%E5%80%BC%E5%BE%97%E8%80%83%E8%99%91%E7%9A%84%E8%AE%BA%E6%96%87%E4%B9%8B%E6%89%80%E4%BB%A5%E6%95%B4%E4%BD%93%E6%B5%91%E7%84%B6%E5%A4%A9%E6%88%90%E5%B0%B1%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%AE%83%E6%89%BE%E7%9A%84%E5%9C%BA%E6%99%AF%E5%8F%AF%E4%BB%A5%E9%9D%9E%E5%B8%B8%E5%B7%A7%E5%A6%99%E5%9C%B0%E7%94%A8rag%E7%BC%93%E8%A7%A3%E9%97%AE%E9%A2%98%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E7%9A%84%E7%A1%AE%E8%A6%81%E7%BB%A7%E7%BB%AD%E5%81%9A%E5%A4%9A%E6%A8%A1%E6%80%81rag%E9%82%A3%E4%B9%88%E4%B8%80%E4%B8%AA%E6%98%BE%E7%84%B6%E7%9A%84%E6%80%9D%E8%B7%AF%E5%BD%93%E7%84%B6%E6%98%AF%E7%BB%A7%E7%BB%AD%E5%81%9A%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BA%E7%9A%84%E8%AE%BE%E5%AE%9A%E5%81%9Ahr-images-perception%E4%BD%86%E4%B9%9F%E6%9C%89%E5%85%B6%E5%AE%83cv%E7%9A%84%E4%BB%BB%E5%8A%A1%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E5%90%A7%E4%B8%8D%E8%BF%87%E8%AF%9D%E8%AF%B4%E5%9B%9E%E6%9D%A5%E8%BF%99%E5%B0%B1%E9%9C%80%E8%A6%81%E5%AF%B9%E5%85%B6%E5%AE%83%E7%9A%84cv%E4%BB%BB%E5%8A%A1%E6%9C%89%E4%B8%80%E5%AE%9A%E7%9A%84%E4%BA%86%E8%A7%A3%E8%80%8C%E4%B8%94%E5%BE%97%E6%98%8E%E7%A1%AE%E9%87%8C%E9%9D%A2%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98hr%E8%A7%86%E9%A2%91%E6%84%9F%E7%9F%A5%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%98%AF%E5%85%B6%E4%B8%AD%E4%B8%80%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84cv%E4%BB%BB%E5%8A%A1%E7%BD%A2%E4%BA%86"><span class="nav-number">8.3.</span> <span class="nav-text">另外，关于使用场景，似乎的确也是值得考虑的。论文之所以整体浑然天成，就是因为它找的场景可以非常巧妙地用RAG缓解问题。如果我们的确要继续做多模态RAG，那么一个显然的思路当然是继续做这篇论文提出的设定（做HR
+images
+perception），但也有其它cv的任务可以考虑吧？不过话说回来，这就需要对其它的cv任务有一定的了解，而且得明确里面有什么问题。HR视频感知只不过是其中一种不同的cv任务罢了）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%84%9F%E6%83%B3"><span class="nav-number">9.</span> <span class="nav-text">感想：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E8%AE%BA%E6%96%87%E5%95%8A%E5%8A%A8%E6%9C%BA%E5%BE%88%E8%87%AA%E7%84%B6%E6%96%B9%E6%B3%95%E5%BE%88%E6%9C%89%E6%95%88%E4%B9%9F%E4%B8%8D%E6%98%AF%E5%A4%AA%E5%A4%8D%E6%9D%82%E6%88%96%E8%80%85%E8%AF%B4%E6%80%9D%E6%83%B3%E4%B8%8A%E6%98%AF%E6%AF%94%E8%BE%83%E7%AE%80%E6%B4%81%E7%9A%84%E5%86%99%E7%9A%84%E4%B9%9F%E8%BF%98%E8%A1%8C%E5%8F%A6%E5%A4%96%E4%BB%A5%E5%8F%8A%E9%99%A4%E4%BA%86%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C%E4%BB%A5%E5%A4%96%E8%BF%98%E6%9C%89%E5%AF%B9%E6%96%B9%E6%B3%95%E4%B8%BA%E4%BD%95work%E7%9A%84%E4%B8%80%E4%BA%9B%E5%88%86%E6%9E%90%E8%99%BD%E7%84%B6%E6%AF%94%E8%BE%83%E7%BB%8F%E9%AA%8C%E6%80%A7%E8%BF%99%E5%B0%B1%E6%98%AF%E5%A5%BD%E8%AE%BA%E6%96%87%E7%9A%84%E6%A0%87%E6%9D%86%E5%90%97%E4%B8%8D%E6%84%A7%E6%98%AFicml%E7%9A%84oral%E5%95%8A%E4%B8%8D%E6%98%AF%E5%8E%BB%E6%8A%BD%E5%A5%96%E7%9A%84%E8%AE%BA%E6%96%87%E5%91%A2"><span class="nav-number">9.1.</span> <span class="nav-text">好论文啊……动机很自然，方法很有效，也不是太复杂（或者说思想上是比较简洁的。写的也还行）。另外以及除了消融实验以外，还有对方法为何work的一些分析（虽然比较经验性）。这就是好论文的标杆吗，不愧是ICML的oral啊，不是去抽奖的论文呢</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">200</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

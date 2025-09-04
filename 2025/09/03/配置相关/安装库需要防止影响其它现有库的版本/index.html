@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="如题，在配置环境，需要加装一些库的时候，如果简单的pip install，可能会影响到我们现有的库，最后可能出现：新装的库没问题了，但原来没问题的库反而报错了。为此，可以考虑pip install的时候，加上--no-deps。这个是来告诉pip，“不要安装或升级这个包声明的依赖”，只装我点名的包的本体，从而防止把已经配好的库的版本打乱了（当然，一些很复杂的情况下，可能新的库和旧库的当前版本会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装库需要防止影响其它现有库的版本">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="如题，在配置环境，需要加装一些库的时候，如果简单的pip install，可能会影响到我们现有的库，最后可能出现：新装的库没问题了，但原来没问题的库反而报错了。为此，可以考虑pip install的时候，加上--no-deps。这个是来告诉pip，“不要安装或升级这个包声明的依赖”，只装我点名的包的本体，从而防止把已经配好的库的版本打乱了（当然，一些很复杂的情况下，可能新的库和旧库的当前版本会">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-03T07:37:00.000Z">
+<meta property="article:modified_time" content="2025-09-03T07:44:47.912Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="python配置">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>安装库需要防止影响其它现有库的版本 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          安装库需要防止影响其它现有库的版本
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-03 15:37:00 / Modified: 15:44:47" itemprop="dateCreated datePublished" datetime="2025-09-03T15:37:00+08:00">2025-09-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="如题在配置环境需要加装一些库的时候如果简单的pip-install可能会影响到我们现有的库最后可能出现新装的库没问题了但原来没问题的库反而报错了为此可以考虑pip-install的时候加上--no-deps这个是来告诉pip不要安装或升级这个包声明的依赖只装我点名的包的本体从而防止把已经配好的库的版本打乱了当然一些很复杂的情况下可能新的库和旧库的当前版本会出现冲突这就要视情况而定了">如题，在配置环境，需要加装一些库的时候，如果简单的pip
+install，可能会影响到我们现有的库，最后可能出现：新装的库没问题了，但原来没问题的库反而报错了。为此，可以考虑pip
+install的时候，加上<code>--no-deps</code>。这个是来告诉pip，“不要安装或升级这个包声明的依赖”，只装我点名的包的本体，从而防止把已经配好的库的版本打乱了（当然，一些很复杂的情况下，可能新的库和旧库的当前版本会出现冲突。这就要视情况而定了）</h1>
+<span id="more"></span>
+<h1 id="另外在jupyter-notebook里配置环境的时候如果要在单元格里执行终端命令那么需要加上shell魔法也就是在指令前面加上一个-还可以考虑跟一个sys.executable它是用来确保pip安装的包是安装到当前正在运行的这个环境里而不是系统的其它python里不过如果是正常在终端执行的话事先激活要安装到的那个环境应该就行了-另外有时候安装的时候会带个-m它的意思是让这个-python-去运行某个模块当作脚本python--m-pip-就是用这个-python-调用它自带的-pip避免出现-python-和-pip-指向不同环境的问题-那么一个完整的在notebook的code格里安装库的命令类似这样-sys.executable--m-pip-install-torchprofile---no-deps">另外，在jupyter
+notebook里配置环境的时候，如果要在单元格里执行终端命令，那么需要加上“shell魔法”，也就是在指令前面加上一个!<br>还可以考虑跟一个<code>"&#123;sys.executable&#125;"</code>，它是用来确保pip安装的包，是安装到当前正在运行的这个环境里，而不是系统的其它python里（不过如果是正常在终端执行的话，事先激活要安装到的那个环境，应该就行了）<br>另外，有时候安装的时候会带个<code>-m</code>，它的意思是，让这个
+Python 去运行某个模块当作脚本。python -m
+pip 就是“用这个 Python 调用它自带的 pip”，避免出现 python 和 pip 指向不同环境的问题。<br>那么一个完整的，在notebook的code格里安装库的命令，类似这样：<br><code>!"&#123;sys.executable&#125;" -m pip install torchprofile --no-deps</code></h1>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python%E9%85%8D%E7%BD%AE/" rel="tag"># python配置</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20the%20Theoretical%20Limitations%20of%20Embedding-Based%20Retrieval/" rel="prev" title="On the Theoretical Limitations of Embedding-Based Retrieval">
+      <i class="fa fa-chevron-left"></i> On the Theoretical Limitations of Embedding-Based Retrieval
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/" rel="next" title="Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG">
+      Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E9%A2%98%E5%9C%A8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E9%9C%80%E8%A6%81%E5%8A%A0%E8%A3%85%E4%B8%80%E4%BA%9B%E5%BA%93%E7%9A%84%E6%97%B6%E5%80%99%E5%A6%82%E6%9E%9C%E7%AE%80%E5%8D%95%E7%9A%84pip-install%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%88%B0%E6%88%91%E4%BB%AC%E7%8E%B0%E6%9C%89%E7%9A%84%E5%BA%93%E6%9C%80%E5%90%8E%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E6%96%B0%E8%A3%85%E7%9A%84%E5%BA%93%E6%B2%A1%E9%97%AE%E9%A2%98%E4%BA%86%E4%BD%86%E5%8E%9F%E6%9D%A5%E6%B2%A1%E9%97%AE%E9%A2%98%E7%9A%84%E5%BA%93%E5%8F%8D%E8%80%8C%E6%8A%A5%E9%94%99%E4%BA%86%E4%B8%BA%E6%AD%A4%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91pip-install%E7%9A%84%E6%97%B6%E5%80%99%E5%8A%A0%E4%B8%8A--no-deps%E8%BF%99%E4%B8%AA%E6%98%AF%E6%9D%A5%E5%91%8A%E8%AF%89pip%E4%B8%8D%E8%A6%81%E5%AE%89%E8%A3%85%E6%88%96%E5%8D%87%E7%BA%A7%E8%BF%99%E4%B8%AA%E5%8C%85%E5%A3%B0%E6%98%8E%E7%9A%84%E4%BE%9D%E8%B5%96%E5%8F%AA%E8%A3%85%E6%88%91%E7%82%B9%E5%90%8D%E7%9A%84%E5%8C%85%E7%9A%84%E6%9C%AC%E4%BD%93%E4%BB%8E%E8%80%8C%E9%98%B2%E6%AD%A2%E6%8A%8A%E5%B7%B2%E7%BB%8F%E9%85%8D%E5%A5%BD%E7%9A%84%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC%E6%89%93%E4%B9%B1%E4%BA%86%E5%BD%93%E7%84%B6%E4%B8%80%E4%BA%9B%E5%BE%88%E5%A4%8D%E6%9D%82%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%8F%AF%E8%83%BD%E6%96%B0%E7%9A%84%E5%BA%93%E5%92%8C%E6%97%A7%E5%BA%93%E7%9A%84%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%86%B2%E7%AA%81%E8%BF%99%E5%B0%B1%E8%A6%81%E8%A7%86%E6%83%85%E5%86%B5%E8%80%8C%E5%AE%9A%E4%BA%86"><span class="nav-number">1.</span> <span class="nav-text">如题，在配置环境，需要加装一些库的时候，如果简单的pip
+install，可能会影响到我们现有的库，最后可能出现：新装的库没问题了，但原来没问题的库反而报错了。为此，可以考虑pip
+install的时候，加上--no-deps。这个是来告诉pip，“不要安装或升级这个包声明的依赖”，只装我点名的包的本体，从而防止把已经配好的库的版本打乱了（当然，一些很复杂的情况下，可能新的库和旧库的当前版本会出现冲突。这就要视情况而定了）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E5%9C%A8jupyter-notebook%E9%87%8C%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E6%97%B6%E5%80%99%E5%A6%82%E6%9E%9C%E8%A6%81%E5%9C%A8%E5%8D%95%E5%85%83%E6%A0%BC%E9%87%8C%E6%89%A7%E8%A1%8C%E7%BB%88%E7%AB%AF%E5%91%BD%E4%BB%A4%E9%82%A3%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A0%E4%B8%8Ashell%E9%AD%94%E6%B3%95%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%9C%A8%E6%8C%87%E4%BB%A4%E5%89%8D%E9%9D%A2%E5%8A%A0%E4%B8%8A%E4%B8%80%E4%B8%AA-%E8%BF%98%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E8%B7%9F%E4%B8%80%E4%B8%AAsys.executable%E5%AE%83%E6%98%AF%E7%94%A8%E6%9D%A5%E7%A1%AE%E4%BF%9Dpip%E5%AE%89%E8%A3%85%E7%9A%84%E5%8C%85%E6%98%AF%E5%AE%89%E8%A3%85%E5%88%B0%E5%BD%93%E5%89%8D%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E8%BF%99%E4%B8%AA%E7%8E%AF%E5%A2%83%E9%87%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%85%B6%E5%AE%83python%E9%87%8C%E4%B8%8D%E8%BF%87%E5%A6%82%E6%9E%9C%E6%98%AF%E6%AD%A3%E5%B8%B8%E5%9C%A8%E7%BB%88%E7%AB%AF%E6%89%A7%E8%A1%8C%E7%9A%84%E8%AF%9D%E4%BA%8B%E5%85%88%E6%BF%80%E6%B4%BB%E8%A6%81%E5%AE%89%E8%A3%85%E5%88%B0%E7%9A%84%E9%82%A3%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%BA%94%E8%AF%A5%E5%B0%B1%E8%A1%8C%E4%BA%86-%E5%8F%A6%E5%A4%96%E6%9C%89%E6%97%B6%E5%80%99%E5%AE%89%E8%A3%85%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E5%B8%A6%E4%B8%AA-m%E5%AE%83%E7%9A%84%E6%84%8F%E6%80%9D%E6%98%AF%E8%AE%A9%E8%BF%99%E4%B8%AA-python-%E5%8E%BB%E8%BF%90%E8%A1%8C%E6%9F%90%E4%B8%AA%E6%A8%A1%E5%9D%97%E5%BD%93%E4%BD%9C%E8%84%9A%E6%9C%ACpython--m-pip-%E5%B0%B1%E6%98%AF%E7%94%A8%E8%BF%99%E4%B8%AA-python-%E8%B0%83%E7%94%A8%E5%AE%83%E8%87%AA%E5%B8%A6%E7%9A%84-pip%E9%81%BF%E5%85%8D%E5%87%BA%E7%8E%B0-python-%E5%92%8C-pip-%E6%8C%87%E5%90%91%E4%B8%8D%E5%90%8C%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98-%E9%82%A3%E4%B9%88%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E5%9C%A8notebook%E7%9A%84code%E6%A0%BC%E9%87%8C%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%91%BD%E4%BB%A4%E7%B1%BB%E4%BC%BC%E8%BF%99%E6%A0%B7-sys.executable--m-pip-install-torchprofile---no-deps"><span class="nav-number">2.</span> <span class="nav-text">另外，在jupyter
+notebook里配置环境的时候，如果要在单元格里执行终端命令，那么需要加上“shell魔法”，也就是在指令前面加上一个!还可以考虑跟一个&quot;{sys.executable}&quot;，它是用来确保pip安装的包，是安装到当前正在运行的这个环境里，而不是系统的其它python里（不过如果是正常在终端执行的话，事先激活要安装到的那个环境，应该就行了）另外，有时候安装的时候会带个-m，它的意思是，让这个
+Python 去运行某个模块当作脚本。python -m
+pip 就是“用这个 Python 调用它自带的 pip”，避免出现 python 和 pip 指向不同环境的问题。那么一个完整的，在notebook的code格里安装库的命令，类似这样：!&quot;{sys.executable}&quot; -m pip install torchprofile --no-deps</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">200</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
