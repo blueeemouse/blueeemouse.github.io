@@ -28,7 +28,7 @@
 <meta property="og:description" content="Venue：ICML 25（oral） date：2025-05-22 动机： high-resolution image perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-09-04T08:34:00.000Z">
-<meta property="article:modified_time" content="2025-09-04T15:37:03.598Z">
+<meta property="article:modified_time" content="2025-09-06T03:32:30.380Z">
 <meta property="article:author" content="bluemouse">
 <meta name="twitter:card" content="summary">
 
@@ -177,10 +177,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-09-04 16:34:00 / Modified: 23:37:03" itemprop="dateCreated datePublished" datetime="2025-09-04T16:34:00+08:00">2025-09-04</time>
+              <time title="Created: 2025-09-04 16:34:00" itemprop="dateCreated datePublished" datetime="2025-09-04T16:34:00+08:00">2025-09-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-06 11:32:30" itemprop="dateModified" datetime="2025-09-06T11:32:30+08:00">2025-09-06</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -247,9 +253,9 @@ Resolution images
 perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</h2>
 <span id="more"></span>
 <h1 id="pilot-study">pilot study：</h1>
-<h2 id="这里论文率先研究了两个问题为它后面提出自己的方法奠定基础或者说提出方法的时候必然会考虑到这几个问题-当我们想把rag应用到mllm来辅助解决hr-images-perception时我们为了不损失信息是把images切成若干crop然后检索top-k的crop帮mllm进行感知那么检索回来的crops应该如何组织这是由于images是二维图像而文字是一维图像二者维度不同产生的新问题top-k的k应该如何决定-要提出自己的方法显然需要考虑这几个问题">这里论文率先研究了两个问题，为它后面提出自己的方法奠定基础（或者说，提出方法的时候必然会考虑到这几个问题）<br>当我们想把RAG应用到mllm，来辅助解决HR
+<h2 id="这里论文率先研究了两个问题为它后面提出自己的方法奠定基础或者说提出方法的时候必然会考虑到这几个问题-当我们想把rag应用到mllm来辅助解决hr-images-perception时我们为了不损失信息是把images切成若干crop然后检索top-k的crop帮mllm进行感知那么检索回来的crops应该如何组织这是由于images是二维图像而文字是一维图像二者维度不同产生的新问题-top-k的k应该如何决定-要提出自己的方法显然需要考虑这几个问题">这里论文率先研究了两个问题，为它后面提出自己的方法奠定基础（或者说，提出方法的时候必然会考虑到这几个问题）<br>当我们想把RAG应用到mllm，来辅助解决HR
 images
-perception时，我们为了不损失信息，是把images切成若干crop，然后检索top-k的crop，帮mllm进行感知。那么检索回来的crops，应该如何组织？（这是由于images是二维图像，而文字是一维图像，二者维度不同，产生的新问题）top-k的k，应该如何决定？<br>要提出自己的方法，显然需要考虑这几个问题</h2>
+perception时，我们为了不损失信息，是把images切成若干crop，然后检索top-k的crop，帮mllm进行感知。那么检索回来的crops，应该如何组织？（这是由于images是二维图像，而文字是一维图像，二者维度不同，产生的新问题）<br>top-k的k，应该如何决定？<br>要提出自己的方法，显然需要考虑这几个问题</h2>
 <h2 id="impact-of-the-layout-of-retrieved-image-crops">impact of the
 layout of retrieved image crops</h2>
 <h3 id="取回来的crops的布局可以有几种策略">取回来的crops的布局，可以有几种策略：</h3>
@@ -302,7 +308,10 @@ perception），但也有其它cv的任务可以考虑吧？不过话说回来�
     <a href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/" rel="prev" title="安装库需要防止影响其它现有库的版本">
       <i class="fa fa-chevron-left"></i> 安装库需要防止影响其它现有库的版本
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/" rel="next" title="Inference Scaling for Long-Context Retrieval Augmented Generation">
+      Inference Scaling for Long-Context Retrieval Augmented Generation <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -375,7 +384,7 @@ images之所以效果不够好，可以归结为mllm的long-context能力不足�
 images的感知能力，那我们需要检索和当前图像&#x2F;问题
 相关的token。问题在于，检索回来的token可能是top-k个，我们需要确定它们的位置，才能进一步决定用哪个。因为有些问题可能是需要这个位置关系的。这里不妨构造一个例子：我们有一副人像图，我们想检索说，在某个人的右上方的戴帽子人有哪些。因此，我们需要感知、检索出戴帽子的人对应的token，然后再根据位置信息进行分析，得是在”某个人“的右上方的人的token才行（这个例子对吗？））</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8Arag%E6%8A%80%E6%9C%AF%E8%BF%81%E7%A7%BB%E5%88%B0mllm%E4%B8%8A%E7%94%A8%E4%BA%8E%E8%A7%A3%E5%86%B3high-resolution-images-perception%E9%97%AE%E9%A2%98%E9%A6%96%E5%88%9B%E5%81%9Awork%E4%BA%86%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E5%A5%97%E5%85%8D%E8%AE%AD%E7%BB%83%E7%9A%84%E6%96%B9%E6%B3%95%E9%A1%BA%E5%B8%A6%E7%9A%84%E6%8F%90%E9%AB%98%E4%BA%86mllm%E7%9A%84%E4%B8%80%E8%88%AC%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">5.1.</span> <span class="nav-text">把RAG技术迁移到mllm上，用于解决High
 Resolution images
-perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pilot-study"><span class="nav-number">6.</span> <span class="nav-text">pilot study：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E8%AE%BA%E6%96%87%E7%8E%87%E5%85%88%E7%A0%94%E7%A9%B6%E4%BA%86%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98%E4%B8%BA%E5%AE%83%E5%90%8E%E9%9D%A2%E6%8F%90%E5%87%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%B9%E6%B3%95%E5%A5%A0%E5%AE%9A%E5%9F%BA%E7%A1%80%E6%88%96%E8%80%85%E8%AF%B4%E6%8F%90%E5%87%BA%E6%96%B9%E6%B3%95%E7%9A%84%E6%97%B6%E5%80%99%E5%BF%85%E7%84%B6%E4%BC%9A%E8%80%83%E8%99%91%E5%88%B0%E8%BF%99%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98-%E5%BD%93%E6%88%91%E4%BB%AC%E6%83%B3%E6%8A%8Arag%E5%BA%94%E7%94%A8%E5%88%B0mllm%E6%9D%A5%E8%BE%85%E5%8A%A9%E8%A7%A3%E5%86%B3hr-images-perception%E6%97%B6%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BA%86%E4%B8%8D%E6%8D%9F%E5%A4%B1%E4%BF%A1%E6%81%AF%E6%98%AF%E6%8A%8Aimages%E5%88%87%E6%88%90%E8%8B%A5%E5%B9%B2crop%E7%84%B6%E5%90%8E%E6%A3%80%E7%B4%A2top-k%E7%9A%84crop%E5%B8%AEmllm%E8%BF%9B%E8%A1%8C%E6%84%9F%E7%9F%A5%E9%82%A3%E4%B9%88%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E7%BB%84%E7%BB%87%E8%BF%99%E6%98%AF%E7%94%B1%E4%BA%8Eimages%E6%98%AF%E4%BA%8C%E7%BB%B4%E5%9B%BE%E5%83%8F%E8%80%8C%E6%96%87%E5%AD%97%E6%98%AF%E4%B8%80%E7%BB%B4%E5%9B%BE%E5%83%8F%E4%BA%8C%E8%80%85%E7%BB%B4%E5%BA%A6%E4%B8%8D%E5%90%8C%E4%BA%A7%E7%94%9F%E7%9A%84%E6%96%B0%E9%97%AE%E9%A2%98top-k%E7%9A%84k%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E5%86%B3%E5%AE%9A-%E8%A6%81%E6%8F%90%E5%87%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%BE%E7%84%B6%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E8%BF%99%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">这里论文率先研究了两个问题，为它后面提出自己的方法奠定基础（或者说，提出方法的时候必然会考虑到这几个问题）当我们想把RAG应用到mllm，来辅助解决HR
+perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pilot-study"><span class="nav-number">6.</span> <span class="nav-text">pilot study：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E8%AE%BA%E6%96%87%E7%8E%87%E5%85%88%E7%A0%94%E7%A9%B6%E4%BA%86%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98%E4%B8%BA%E5%AE%83%E5%90%8E%E9%9D%A2%E6%8F%90%E5%87%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%B9%E6%B3%95%E5%A5%A0%E5%AE%9A%E5%9F%BA%E7%A1%80%E6%88%96%E8%80%85%E8%AF%B4%E6%8F%90%E5%87%BA%E6%96%B9%E6%B3%95%E7%9A%84%E6%97%B6%E5%80%99%E5%BF%85%E7%84%B6%E4%BC%9A%E8%80%83%E8%99%91%E5%88%B0%E8%BF%99%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98-%E5%BD%93%E6%88%91%E4%BB%AC%E6%83%B3%E6%8A%8Arag%E5%BA%94%E7%94%A8%E5%88%B0mllm%E6%9D%A5%E8%BE%85%E5%8A%A9%E8%A7%A3%E5%86%B3hr-images-perception%E6%97%B6%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BA%86%E4%B8%8D%E6%8D%9F%E5%A4%B1%E4%BF%A1%E6%81%AF%E6%98%AF%E6%8A%8Aimages%E5%88%87%E6%88%90%E8%8B%A5%E5%B9%B2crop%E7%84%B6%E5%90%8E%E6%A3%80%E7%B4%A2top-k%E7%9A%84crop%E5%B8%AEmllm%E8%BF%9B%E8%A1%8C%E6%84%9F%E7%9F%A5%E9%82%A3%E4%B9%88%E6%A3%80%E7%B4%A2%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E7%BB%84%E7%BB%87%E8%BF%99%E6%98%AF%E7%94%B1%E4%BA%8Eimages%E6%98%AF%E4%BA%8C%E7%BB%B4%E5%9B%BE%E5%83%8F%E8%80%8C%E6%96%87%E5%AD%97%E6%98%AF%E4%B8%80%E7%BB%B4%E5%9B%BE%E5%83%8F%E4%BA%8C%E8%80%85%E7%BB%B4%E5%BA%A6%E4%B8%8D%E5%90%8C%E4%BA%A7%E7%94%9F%E7%9A%84%E6%96%B0%E9%97%AE%E9%A2%98-top-k%E7%9A%84k%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E5%86%B3%E5%AE%9A-%E8%A6%81%E6%8F%90%E5%87%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%BE%E7%84%B6%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E8%BF%99%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">这里论文率先研究了两个问题，为它后面提出自己的方法奠定基础（或者说，提出方法的时候必然会考虑到这几个问题）当我们想把RAG应用到mllm，来辅助解决HR
 images
 perception时，我们为了不损失信息，是把images切成若干crop，然后检索top-k的crop，帮mllm进行感知。那么检索回来的crops，应该如何组织？（这是由于images是二维图像，而文字是一维图像，二者维度不同，产生的新问题）top-k的k，应该如何决定？要提出自己的方法，显然需要考虑这几个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#impact-of-the-layout-of-retrieved-image-crops"><span class="nav-number">6.2.</span> <span class="nav-text">impact of the
 layout of retrieved image crops</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E5%9B%9E%E6%9D%A5%E7%9A%84crops%E7%9A%84%E5%B8%83%E5%B1%80%E5%8F%AF%E4%BB%A5%E6%9C%89%E5%87%A0%E7%A7%8D%E7%AD%96%E7%95%A5"><span class="nav-number">6.2.1.</span> <span class="nav-text">取回来的crops的布局，可以有几种策略：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%89%E7%85%A7%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%88%86%E6%95%B0%E5%8D%87%E5%BA%8F%E6%8E%92%E5%88%97%E5%8D%87%E5%BA%8F%E9%99%8D%E5%BA%8F%E6%84%9F%E8%A7%89%E4%B9%9F%E6%B2%A1%E9%82%A3%E4%B9%88%E9%87%8D%E8%A6%81%E8%BF%99%E4%B8%AA%E7%AD%96%E7%95%A5%E7%9A%84%E9%87%8D%E7%82%B9%E6%98%AF%E6%8C%89%E7%85%A7%E7%9B%B8%E4%BC%BC%E6%80%A7%E5%88%86%E6%95%B0%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">6.2.1.1.</span> <span class="nav-text">1.
@@ -409,14 +418,14 @@ perception），但也有其它cv的任务可以考虑吧？不过话说回来�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">200</span>
+          <span class="site-state-item-count">209</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

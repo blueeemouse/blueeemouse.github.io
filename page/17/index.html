@@ -150,6 +150,706 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-01-08 10:27:51 / Modified: 10:31:09" itemprop="dateCreated datePublished" datetime="2025-01-08T10:27:51+08:00">2025-01-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="这是一篇survey主要内容包括一下几个方面列出了常用的模型架构和训练流程对常见的mm-llms截至2024.2进行分类主要依据模型的specific-formulations回顾部分挑出的模型在主流benchmark上的性能并总结一下关键的训练语料配比探索一下mm-llms未来比较有前景的发展方向">这是一篇survey。主要内容包括一下几个方面：列出了常用的模型架构和训练流程；对常见的MM-LLMs（截至2024.2）进行分类（主要依据模型的specific
+formulations）；回顾部分挑出的模型在主流benchmark上的性能，并总结一下关键的训练语料配比；探索一下MM-LLMs未来比较有前景的发展方向</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-12-19 15:30:23" itemprop="dateCreated datePublished" datetime="2024-12-19T15:30:23+08:00">2024-12-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-01-10 03:53:53" itemprop="dateModified" datetime="2025-01-10T03:53:53+08:00">2025-01-10</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="不知道是不是apex库的0.1版本用的比较多啊反正前几天配idkl的环境的时候它是要求装这个版本的但是它也不给个详细的步骤只说要装这个库不纯折磨人嘛">不知道是不是apex库的0.1版本用的比较多啊，反正前几天配IDKL的环境的时候它是要求装这个版本的，但是它也不给个详细的步骤，只说要装这个库，不纯折磨人嘛</h1>
+<h1 id="说回来可以参考这个教程但是需要注意一下如果是apex0.1版本则clone库的时候要选择22.04-dev的branchclone那个别直接git-clone-网址了clone指定branch的库应该是有个特殊的命令的可以问问aiclone了对的库之后就可以按照教程里的做了从它的第2步开始然后关于它的第3步我安装的时候是没加-user的也成功了应该就是哪个指令能成功就用哪个">说回来，可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/piaoliangjinjin/article/details/137566614">教程</a>（但是需要注意一下，如果是apex0.1版本，则clone库的时候要选择22.04-dev的branch，clone那个，别直接git
+clone
++网址了。（clone指定branch的库应该是有个特殊的命令的，可以问问ai）。clone了对的库之后，就可以按照教程里的做了（从它的第2步开始）（然后关于它的第3步，我安装的时候是没加-user的，也成功了，应该就是哪个指令能成功就用哪个）</h1>
+<h1 id="如果要安装其它版本的apex就需要根据自己的torch版本和cuda版本进行选择了未必就是apex库的22.04-dev-branch的内容了或许可以参考这个教程但我没试过它这里提到可以一次多试几个版本感觉有点麻烦了不知道有没有对应的版本可以查询的">如果要安装其它版本的apex，就需要根据自己的torch版本和cuda版本进行选择了，未必就是apex库的22.04-dev
+branch的内容了。或许可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33440910/article/details/134812895?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-134812895-blog-137566614.235%5Ev43%5Epc_blog_bottom_relevance_base9&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">这个教程</a>（但我没试过）（它这里提到可以一次多试几个版本，感觉有点麻烦了，不知道有没有对应的版本可以查询的）</h1>
+<h1 id="另外有可能运行代码的时候会遇到这个报错-indexerror-tuple-index-out-of-range可以参考这个链接的解决方法反正我试过一次是可行的">另外，有可能运行代码的时候会遇到这个报错：
+‘IndexError: tuple index out of range‘，可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/starvapour/article/details/122275439">这个链接</a>的解决方法，反正我试过一次，是可行的</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-15 01:02:57 / Modified: 13:13:14" itemprop="dateCreated datePublished" datetime="2024-12-15T01:02:57+08:00">2024-12-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ijcv24实际是23年10月投的24年才中的">ijcv24（实际是23年10月投的，24年才中的）</h1>
+<h1 id="一点吐槽这个跨模态数据集里有一些红外数据本身的质量真的差到不行啊这样子人也没办法来重识别啊说到底数据已经决定了模型的上限了啊">一点吐槽：这个跨模态数据集里，有一些红外数据本身的质量真的差到不行啊，这样子，人也没办法来重识别啊，说到底，数据已经决定了模型的上限了啊</h1>
+<h1 id="等会得看看它所谓的自适应中间模态到底是怎样的如果还是把两种模态的数据投影到一个公共的模态那和之前的方法的本质就没区别啊真正有区别的应该是说把rgb模态的投影到一个中间模态1把ir模态的投影到一个中间模态2然后去拉近中间模态1和中间模态2-至少这样是看起来更为合理的如果原来rgb和ir模态差距太大了不好一口气直接投影到一个公共的空间那么就一步一步来有点像扩散模型那样扩散模型也是如果想直接从噪声里还原出一幅图像那可能太难了所以它才一步一步地往回逆向这样讲故事起码是更合理的事实上或许还可以尝试多套几个中间模态看看最终的中间模态会不会效果更好">等会得看看它所谓的自适应中间模态，到底是怎样的，如果还是把两种模态的数据投影到一个公共的模态，那和之前的方法的本质就没区别啊。。真正有区别的，应该是说，把rgb模态的投影到一个中间模态1，把ir模态的投影到一个中间模态2，然后去拉近中间模态1和中间模态2
+。至少这样是看起来更为合理的：如果原来rgb和ir模态差距太大了，不好一口气直接投影到一个公共的空间，那么就一步一步来。有点像扩散模型那样。扩散模型也是，如果想直接从噪声里还原出一幅图像，那可能太难了，所以它才一步一步地往回逆向。这样讲故事起码是更合理的。事实上，或许还可以尝试，多套几个中间模态，看看最终的中间模态会不会效果更好？</h1>
+<h1 id="method">method：</h1>
+<h2 id="提出adaptive-middle-modality-generator-amg-module它可以生成一种中间模态的图像后续会用到但它的输入是谁哪种模态的图像">1.提出Adaptive
+Middle-modality Generator (AMG)
+module，它可以生成一种中间模态的图像，后续会用到（但它的输入是谁？哪种模态的图像？）</h2>
+<h3 id="详细讲解">详细讲解：</h3>
+<h4 id="这个module有两个submodule一个是middle-modality-generator-mmg-sub-module一个是adaptive-middle-modality-mixup-amm-sub-module先从宏观上看这里两个submodule的作用是mmg根据输入的一对同id的rgb和ir图像各自生成一个中间模态数据也就是会用rgb的数据生成一个中间数据1再用ir数据生成一个中间数据2-而amm则会根据上面的两个中间数据进行一个mixup操作最终得到一个中间模态数据这个数据就是之后要用的">这个module有两个submodule，一个是Middle-modality
+Generator (MMG) Sub-module，一个是Adaptive Middle-modality Mixup (AMM)
+Sub-module。先从宏观上看，这里两个submodule的作用是，MMG根据输入的一对同id的rgb和ir图像，各自生成一个中间模态数据（也就是会用rgb的数据生成一个中间数据1，再用ir数据生成一个中间数据2
+。而AMM则会根据上面的两个中间数据，进行一个mixup操作，最终得到一个中间模态数据。这个数据就是之后要用的</h4>
+<h4 id="可以说它确实相比之前的方法有改进了吧它是用两个分支去处理输入的两种模态的数据主要是一些11的卷积层毕竟经常要进行channel数的变换另外一个比较合理的地方在于它并没有说用一个11的卷积层就完了而是还加上了一个relu这里我觉得是很有道理的如果单纯是卷积而卷积的本质就是加权求和只用卷积相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间这不太对吧rgb数据的通道信息明显丰富多了你要说同一id的rgb数据和ir数据之间的关系仅仅是一种线性关系感觉没道理的并且它也引用了论文说了这之中的关系是高度非线性的所以引入一个relu层看起来操作层面上是很简单的但这个解释明显是能自圆其说的">可以说，它确实相比之前的方法有改进了吧。它是用两个分支去处理输入的两种模态的数据，主要是一些1×1的卷积层（毕竟经常要进行channel数的变换）。另外一个比较合理的地方在于，它并没有说，用一个1×1的卷积层就完了，而是还加上了一个relu。这里我觉得是很有道理的。如果单纯是卷积，而卷积的本质就是加权求和，只用卷积，相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间。这不太对吧，rgb数据的通道信息明显丰富多了，你要说同一id的rgb数据和ir数据之间的关系，仅仅是一种线性关系，感觉没道理的。并且它也引用了论文，说了这之中的关系是高度非线性的，所以引入一个relu层。看起来操作层面上是很简单的，但这个解释明显是能自圆其说的</h4>
+<h4 id="mmg模块会根据rgb数据和ir数据各自生成单通道的中间数据和三通道的中间数据而amm会用单通道的中间数据来算mixup的时候两种模态的factor之后会把mmg生成的三通道的中间数据进行mixup得到最终的中间数据">MMG模块会根据rgb数据和ir数据，各自生成单通道的中间数据和三通道的中间数据。而AMM会用单通道的中间数据来算mixup的时候，两种模态的factor，之后会把MMG生成的三通道的中间数据进行mixup，得到最终的中间数据</h4>
+<h4 id="好繁琐啊">（好繁琐啊。。。）</h4>
+<h2 id="提出adaptive-distribution-alignment-ada-loss会拉近中间模态数据特征的分布和rgbir模态数据特征的分布的距离是一种从特征层面入手的措施这里的话术是拉近特征的分布嗯分布感觉有点玄乎有待商榷不过可以学习一下他们都是怎么去挖掘利用拉近分布信息的尤其注意这个分布它和下面的第三个method有些联系">2.提出Adaptive
+Distribution Alignment (ADA)
+loss，会拉近中间模态数据特征的分布和rgb，ir模态数据特征的分布的距离，是一种从特征层面入手的措施（这里的话术是，拉近特征的分布。。嗯，分布，感觉有点玄乎，有待商榷）（不过可以学习一下，他们都是怎么去挖掘、利用、拉近分布信息的）（尤其注意这个分布，它和下面的第三个method有些联系）</h2>
+<h2 id="提出center-based-diverse-distribution-learning-cddl-loss它会拉近rgb和ir模态与中间模态的特征之间的距离注意这里不是说分布了如果这里还是说分布那就和上面的2矛盾了也会去拉近rgb和ir模态数据特征之间的距离按他说的这样既可以学到多样的特征应该就是指通过拉远rgbir模态与中间模态的距离让中间模态学到一些不一样的知识这个操作和之前的deen那篇很像啊然后是经典的拉近rgb和ir模态特征之间的距离这个真不能少主要想一下如果只是拉远了rgbir模态特征与中间模态特征的距离两个东西都离同一个东西很远这未必就说明这两个东西本身就离得很近所以保底的措施还是要的但这也让人怀疑如果你有这种担忧了为什么要去做这个拉远rgbir模态与中间模态的特征之间的距离-这个操作呢说白了这个操作本身就不好说到底会不会影响我们的保底措施即直接拉近rgb和ir模态特征之间的距离的效果它自己单独也未必有用只能说加上这个操作是为了学到一些不一样的知识吧也就是中间模态里含有的知识当然也需要看看他是怎么利用这个中间模态的知识的别学完了不用那就纯浪费了而且就是纯为了创新而创新了">3.提出Center-based
+Diverse Distribution Learning (CDDL)
+loss，它会拉近rgb和ir模态与中间模态的特征之间的距离（注意，这里不是说分布了。如果这里还是说分布，那就和上面的2矛盾了），也会去拉近rgb和ir模态数据特征之间的距离。（按他说的，这样既可以学到多样的特征——应该就是指通过拉远rgb/ir模态与中间模态的距离，让中间模态学到一些不一样的知识。这个操作和之前的DEEN那篇很像啊。。。然后是经典的拉近rgb和ir模态特征之间的距离。这个真不能少。主要想一下，如果只是拉远了rgb/ir模态特征与中间模态特征的距离，两个东西都离同一个东西很远，这未必就说明这两个东西本身就离得很近。所以保底的措施还是要的。但这也让人怀疑，如果你有这种担忧了，为什么要去做这个拉远rgb/ir模态与中间模态的特征之间的距离
+这个操作呢？说白了，这个操作本身，就不好说到底会不会影响我们的保底措施（即直接拉近rgb和ir模态特征之间的距离）的效果，它自己单独也未必有用。只能说，加上这个操作，是为了学到一些不一样的知识吧，也就是中间模态里含有的知识。当然，也需要看看他是怎么利用这个中间模态的知识的，别学完了不用，那就纯浪费了，而且就是纯为了创新而创新了</h2>
+<h2 id="一些问题虽然说2操作的是分布3操作的是特征本身没有直接的矛盾但这样23一起用就相当于希望irrgb中间模态三者的特征的分布是一致的但是具体的特征上ir和rgb希望尽可能一致而希望中间模态对应的特征与它们不一样这合理吗如果中间模态的特征尽可能不一样那还能说它的特征分布和rgbir的特征分布比较接近吗说到底这种树立一个公共敌人朋友的方法到底有没有效果不是很好说啊">一些问题：虽然说，2操作的是分布，3操作的是特征，本身没有直接的矛盾，但这样2，3一起用，就相当于希望ir/rgb/中间模态三者的特征的分布是一致的，但是具体的特征上，ir和rgb希望尽可能一致，而希望中间模态对应的特征与它们不一样。这合理吗？如果中间模态的特征尽可能不一样，那还能说它的特征分布和rgb/ir的特征分布比较接近吗？说到底，这种树立一个公共敌人/朋友的方法，到底有没有效果，不是很好说啊</h2>
+<h2 id="总体来说这个方法的目标就是通过构造一个中间模态训练的时候同时用三种模态的数据以此来拉近rgbir模态的数据之间的距离这是最终目的">总体来说，这个方法的目标，就是通过构造一个中间模态，训练的时候同时用三种模态的数据，以此来拉近rgb/ir模态的数据之间的距离（这是最终目的）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-12 19:33:47 / Modified: 19:43:16" itemprop="dateCreated datePublished" datetime="2024-12-12T19:33:47+08:00">2024-12-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="服务器可能有时候会在配置环境下载库的时候说http之类的错误类似这样">服务器可能有时候会在配置环境，下载库的时候说http之类的错误，类似这样</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
+<h1 id="也不知道是不是源出了问题而如果想在创建环境装库的时候临时指定别的源一般都是现场查问ai它会说在后面加个-c指定一下源可是有时候还是会报错让人疑惑">也不知道是不是源出了问题。而如果想在创建环境/装库的时候临时指定别的源，一般都是现场查，问ai，它会说在后面加个-c，指定一下源，可是有时候还是会报错，让人疑惑：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
+<h1 id="然而如果仔细看一下它的问题好像是压根就没按我指定的源来啊虽然不太清楚这是为什么但显然此时更根本的方法是去condarc下删掉不想用的源比如这里的阿里源而此时又会现查问ai它一般会说用什么编辑器去打开那个condarc比如vim-.condarc进去编辑完再出来config-show一下检查却发现改动好像没生效此时我怀疑有个潜藏的问题就是ai的回答是假设了你在个人电脑上用或者说假设了你的conda是装在默认路径了然而我现在用的是服务器conda是装在我指定的非默认路径下那么上面修改的condarc其实就是没用的得去修改我安装路径里的conda的condarc才行事实上最后也确实是去我的个人路径下把condarc的源给改了然后再装就成功了">然而如果仔细看一下，它的问题好像是，压根就没按我指定的源来啊。虽然不太清楚这是为什么，但显然此时更根本的方法是，去condarc下删掉不想用的源，比如这里的阿里源。而此时又会现查，问ai，它一般会说用什么编辑器去打开那个condarc，比如<code>vim ~/.condarc</code>。进去编辑完，再出来，config
+show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏的问题，就是，ai的回答，是假设了你在个人电脑上用，或者说假设了你的conda是装在默认路径了。然而，我现在用的是服务器，conda是装在我指定的，非默认路径下。那么，上面修改的condarc其实就是没用的，得去修改我安装路径里的conda的condarc才行。事实上，最后也确实是，去我的个人路径下把condarc的源给改了，然后再装，就成功了</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-12-03 10:40:48 / Modified: 10:51:08" itemprop="dateCreated datePublished" datetime="2024-12-03T10:40:48+08:00">2024-12-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="问题就如上所述目前勉勉强强算解决了终端初始化速度阳间了很多但至于程序速度我不好说">问题就如上所述。目前勉勉强强算解决了？终端初始化速度阳间了很多，但至于程序速度，我不好说</h1>
+<h1 id="终端初始化变慢可能是一直以来的一些日志之类的没清理过堆积的太多了不过我怎么感觉这个变慢是突然的而不是渐渐的还是因为变慢得超过一个节点了所以一下就感受到了不好说反正慢的时候得初始化几分钟就有点离谱了">终端初始化变慢，可能是一直以来的一些日志之类的没清理过，堆积的太多了（不过我怎么感觉这个变慢是突然的，而不是渐渐的？还是因为变慢得超过一个节点了，所以一下就感受到了？不好说。反正慢的时候得初始化几分钟就有点离谱了）</h1>
+<h2 id="如果是想清理一下当前这个用户的日志之类的只清理当前用户的日志避免影响了服务器上其他用户以及避免影响自己的正常使用可以考虑在终端运行一下命令">如果是想清理一下当前这个用户的日志之类的（只清理<strong>当前用户</strong>的<strong>日志</strong>，避免影响了服务器上其他用户，以及避免影响自己的正常使用），可以考虑在终端运行一下命令：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf ~/.local/share/* </span><br><span class="line"><span class="built_in">rm</span> -rf ~/Library/Logs/* </span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/*</span><br></pre></td></tr></table></figure>
+<h2 id="感觉上好像清掉以后确实快一些了起码终端的初始化似乎是快了很多了">感觉上，好像清掉以后确实快一些了，起码终端的初始化似乎是快了很多了</h2>
+<h1 id="另外tmux别开太多开了一个以后可以用一段时间但建议还是用一段时间以后就kill掉别一直用这个可能也会造成影响虽然还没实际验证过">另外，tmux别开太多，开了一个以后，可以用一段时间，但建议还是用一段时间以后就kill掉，别一直用，这个可能也会造成影响（虽然还没实际验证过）</h1>
+<h1 id="最后一个可能的原因是其他人用cpu用的太猛了但感觉有点没道理以前他们又不是没有运行程序怎么就没见这么卡呢这个可能性似乎不太大">最后，一个可能的原因是，其他人用cpu用的太猛了？但感觉有点没道理。以前他们又不是没有运行程序，怎么就没见这么卡呢，这个可能性似乎不太大</h1>
+<h1 id="看网上的相关问题教程似乎很多人都是在.bashrc里找到一些问题然后从这里入手但我瞄了一眼似乎它也没有变得很臃肿吧应该没有什么东西一直在往.bashrc里写东西吧">看网上的相关问题教程，似乎很多人都是在.bashrc里找到一些问题，然后从这里入手。但我瞄了一眼，似乎它也没有变得很臃肿吧，应该没有什么东西一直在往.bashrc里写东西吧。。</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-11-29 10:11:34 / Modified: 10:16:09" itemprop="dateCreated datePublished" datetime="2024-11-29T10:11:34+08:00">2024-11-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一般这个东西就是用来把多个想遍历的东西放到一起，一次取出多个元素
+比如， <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> rgb_pid, ir_pid <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.rgb_pids, <span class="variable language_">self</span>.ir_pids):</span><br><span class="line">	xxx</span><br></pre></td></tr></table></figure>
+比较需要注意的是，如果被封装起来的东西的长度不一致，以上面的内容为例，如果self.rgb_pids和self.ir_pids长度不一致，它会自动按照较短的那个来取。就比如，如果这两个东西长度分别是3和5，那么这里的zip一共就会循环3次
+这个东西之所以单独说一下，主要是如果不注意，然后不小心把几个长度不一样的东西打包了，没问题，但需要注意后面会不会出问题（因为可能我们是以为这两个东西长度是一样的，才这样zip的，而如果二者长度不一致，也能正常执行，但后面可能就会出现某些问题。如果是想清楚的，就是要把长度不一致的东西打包到一起，那没问题）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="现在好像已经没问题了就正常上传就行">现在好像已经没问题了，就正常上传就行</h1>
+<h1 id="在windows系统中进入d_note这个目录下打开终端git-add-.-git-commit--m-xxx-git-push-origin-main即可">在windows系统中，进入D:_note这个目录下，打开终端，git
+add . git commit -m 'xxx' git push origin main即可</h1>
+<h1 id="在ubuntu系统也是类似的">在ubuntu系统也是类似的</h1>
+<h1 id="上面只是单方面的从一个系统中进行上传还有一个问题就是上传了之后怎么在另一个系统里pull下来">上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。</h1>
+<h1 id="在ubuntu系统pull-windows的东西还挺方便的好像就是正常的git-pull-origin-main即可前提是进去之后先别修改东西但好像也不是其实还是会因为那个workspace.json文件有一些问题下面是一个简单粗暴的方法后续或许可以改进一下">在ubuntu系统pull
+windows的东西，还挺方便的，好像就是正常的git pull origin
+main即可（前提是进去之后先别修改东西）（但好像也不是，其实还是会因为那个workspace.json文件有一些问题。下面是一个简单粗暴的方法。后续或许可以改进一下）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard origin/main</span><br><span class="line">git push origin main</span><br><span class="line">git fetch origin</span><br></pre></td></tr></table></figure>
+<h1 id="因为每次我在一个系统要同步远端仓库的时候远端一定是更加新的也就是即使远端仓库完全覆盖了我本地的仓库也没关系话虽如此也需也有极少数时候真的不能这样所以才有第一行的比较简单粗暴的命令">（因为每次我在一个系统要同步远端仓库的时候，远端一定是更加新的，也就是即使远端仓库完全覆盖了我本地的仓库，也没关系（话虽如此，也需也有极少数时候真的不能这样），所以才有第一行的比较简单粗暴的命令）</h1>
+<h1 id="在windows里pull-ubuntu系统的东西就比较麻烦了windows系统和ubuntu系统处理lf和crlf的方法好像不太一样大概就是换行之类的东西然而ubuntu似乎会自动处理我们感觉不到但windows就不行一定会报问题一个比较简单粗暴的方法是">在windows里pull
+ubuntu系统的东西就比较麻烦了，windows系统和ubuntu系统处理LF和CRLF的方法好像不太一样（大概就是换行之类的东西），然而ubuntu似乎会自动处理，我们感觉不到，但windows就不行，一定会报问题。一个比较简单粗暴的方法是：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout origin/main -- .obsidian/workspace.json</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h1 id="第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json这样这个文件就不会报错了因为之前报错主要就是这个文件的一些换行符之类的问题剩下就是正常pull了">第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json，这样这个文件就不会报错了（因为之前报错主要就是这个文件的一些换行符之类的问题）。剩下就是正常pull了</h1>
+<h1 id="另一种比较一劳永逸的方法就是在windows系统的终端里进行如下配置">另一种比较一劳永逸的方法，就是在windows系统的终端里进行如下配置：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h1 id="这个大概是因为下摘录自ai原文在windows上git默认会在检出文件时将lf转换为crlf而在提交文件时将crlf转换为lf这种行为是为了确保文件在windows上显示和编辑时能够正确处理换行符然而这种转换可能导致文件内容的更改从而引发冲突通过将-core.autocrlf-配置为-false你可以告诉git在检出文件时保留原始的换行符避免因换行符转换而导致的文件内容更改这对于需要在多个平台上协作开发的项目特别有用因为它可以确保文件在所有平台上都以相同的方式处理换行符-不过我目前还没试过">这个大概是因为：（下摘录自ai原文）在Windows上，Git默认会在检出文件时将LF转换为CRLF，而在提交文件时将CRLF转换为LF。这种行为是为了确保文件在Windows上显示和编辑时能够正确处理换行符。然而，这种转换可能导致文件内容的更改，从而引发冲突。通过将
+<code>core.autocrlf</code> 配置为
+<code>false</code>，你可以告诉Git在检出文件时保留原始的换行符，避免因换行符转换而导致的文件内容更改。这对于需要在多个平台上协作开发的项目特别有用，因为它可以确保文件在所有平台上都以相同的方式处理换行符。<br>不过我目前还没试过</h1>
+<h1 id="btw附带一个实战例子虽然是有点操作失误的例子">btw，附带一个实战例子，虽然是有点操作失误的例子</h1>
+<h1 id="我在windows系统里进行pull的时候没成功反而还在windows里修改了一些笔记并add和commit了导致此时windows中的笔记与远端不同步且还有更新之后我再次尝试正常pull失败了后面我就用上面提到的简单粗暴的方法先完成了从远端的pull此时我上github仓库发现远端还没有拿到我在windows本地进行的更新也是毕竟我还没push上去再进行push成功了并且检查远端仓库确实更新了-这里先强制pull下来了做到了和远端的同步之后再把已经暂存的也就是完成了commit的内容给push上去即可">我在windows系统里进行pull的时候，没成功，反而还在windows里修改了一些笔记，并add和commit了，导致此时windows中的笔记与远端不同步，且还有更新。之后我再次尝试正常pull，失败了。后面我就用上面提到的简单粗暴的方法，先完成了从远端的pull，（此时我上github仓库，发现远端还没有拿到我在windows本地进行的更新。也是，毕竟我还没push上去）再进行push，成功了，并且检查远端仓库，确实更新了。<br>这里先强制pull下来了，做到了和远端的同步，之后再把已经暂存的（也就是完成了commit的）内容给push上去，即可</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-11 10:36:00" itemprop="dateModified" datetime="2025-03-11T10:36:00+08:00">2025-03-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="motivation它先强调了lifelong-re-id的重要性这个是没错的然后提到有时候没有visible-images比如晚上但如果是这样的话那它实验的时候为什么只用四个跨模态数据集到时候看看它实验的具体设定是怎样的更恰当的实验设定不应该是考虑到ir检索rgbrgb检索irir检索irrgb检索rgb吗">motivation：它先强调了lifelong
+re-id的重要性（这个是没错的），然后提到有时候没有visible
+images（比如晚上）。但如果是这样的话，那它实验的时候为什么只用四个跨模态数据集？到时候看看它实验的具体设定是怎样的。更恰当的实验设定不应该是考虑到IR检索RGB，RGB检索IR，IR检索IR，RGB检索RGB吗？</h1>
+<h1 id="trick">trick：</h1>
+<h2 id="concatenate不同类型的token如果用的是注意力机制">1.concatenate不同类型的token（如果用的是注意力机制）</h2>
+<h2 id="训练一些特殊的token有点像prompt-engineering在基于transformer的架构中训练特殊token是很自然的事那如果对其它架构的网络也训练一个类似token的东西用来提点能不能做到用比较少的算力来提升性能这是否算一个小小的亮点">2.训练一些特殊的token，有点像prompt
+engineering。在基于transformer的架构中，训练特殊token是很自然的事。那如果对其它架构的网络，也训练一个类似token的东西，用来提点。能不能做到，用比较少的算力，来提升性能？这是否算一个小小的亮点？</h2>
+<h1 id="一些intuition">一些intuition：</h1>
+<h2 id="这个f_q有点意思它好像是为了提取domain-specific-feature这里domain指一个数据集所以这个f_q有点用来确定图像属于哪个数据集的意思关于它怎么训练这个特征它是把这个特征送到一个分类器里进行分类要么是当前这个数据集里的一个类别要么是之前见过的数据集里的类别也就是说这个特征所属的图像不属于这个数据集这里如果它能比较好地分类说明能比较好地区分当前数据集和之前的数据集的数据那侧面说明了它学到的domain-specific-feature就有点像对比学习的意思如果模型的特征能把同类的东西看成是比较相近的把不同类的东西看成是离得比较远的那某种程度上可以认为模型学到了这些类别的信息拿去做一些分类之类的下游任务也是合理的">这个<span class="math inline">\(f_q\)</span>有点意思。它好像是为了提取domain-specific
+feature（这里domain指一个数据集，所以这个<span class="math inline">\(f_q\)</span>有点用来确定图像属于哪个数据集的意思。关于它怎么训练这个特征，它是把这个特征送到一个分类器里进行分类，要么是当前这个数据集里的一个类别，要么是之前见过的数据集里的类别（也就是说这个特征所属的图像不属于这个数据集）。这里如果它能比较好地分类，说明能比较好地区分当前数据集和之前的数据集的数据，那侧面说明了它学到的domain-specific
+feature。就有点像对比学习的意思，如果模型的特征能把同类的东西看成是比较相近的，把不同类的东西看成是离得比较远的，那某种程度上可以认为，模型学到了这些类别的信息，拿去做一些分类之类的下游任务也是合理的）</h2>
+<h1 id="方法">方法</h1>
+<h2 id="baseline">1.Baseline</h2>
+<h3 id="这里也就是没做什么改进时候的方法比较常见骨干是vit有data-replay对replay的data和正在学的data都有一个分类损失还有一个l_rehearsal也就是用来巩固旧知识的就是用一个js散度来约束新模型和旧模型对当前batch-data的输出要尽可能一致以及一个l_kd它是用js散度约束新模型对不同模态下同一id的样本的输出要尽可能一致也就是拉近同id的可见光和红外数据也很朴素">这里也就是没做什么改进时候的方法。比较常见。骨干是vit，有data
+replay，对replay的data和正在学的data，都有一个分类损失；还有一个<span class="math inline">\(L_{rehearsal}\)</span>，也就是用来巩固旧知识的，就是用一个JS散度来约束新模型和旧模型对当前batch
+data的输出要尽可能一致；以及一个<span class="math inline">\(L_{kd}\)</span>，它是用JS散度约束新模型对不同模态下同一id的样本的输出要尽可能一致（也就是拉近同id的可见光和红外数据，也很朴素）</h3>
+<h2 id="generalspecific-token">2.General/Specific Token</h2>
+<h3 id="这里论文设计了两种token一个是general-token一个是specific-token它们的作用就是字面意义上的general-token用于提取通用的特征所以是一个token或者说prompt是所有数据集共用的而specific-token则是用于提取每个数据集特有的特征所以是一个数据集一个最终一个数据用来检索的特征就是它的general-feature和它对应的那个specific-feature融合得到的故最后还有一个fusion-module">这里论文设计了两种token，一个是general
+token，一个是specific token。它们的作用就是字面意义上的，general
+token用于提取通用的特征，所以是一个token（或者说prompt）是所有数据集共用的；而specific
+token则是用于提取每个数据集特有的特征，所以是一个数据集一个。最终一个数据用来检索的特征，就是它的general
+feature和它对应的那个specific feature融合得到的。故最后还有一个fusion
+module</h3>
+<h3 id="specific-token具体来说当目前已经见到t个数据集时就会有t个specific-token此时对一个数据经过vit之后我们得到token-embedding序列不妨记其形状为ltimes-d然后会把这个数据前拼上第i个specific-token送到第i个specific-attention-block记为sab一个specific-attention-block就是一个class-attention-block也就是query仅有前面拼上的token产生而query以及gallery都是由数据x产生它的输出是一个d维的向量也就是一个数据对应一个d维的向量但此时就有t个结果了可是我们主要关注当前数据集的学习也就是第t个结果所以这里会用一个divergence-classifier它会对当前数据集的数据和之前数据集的数据因为有replay都进行分类但是要求对当前数据集进行精确分类而对之前数据集上的数据只要求它能区分出来这些是不属于当前数据集的即可所以它会把当前数据集的所有数据的标签加一然后进行分类空出来的第0类就被统一归类为不属于当前数据集的类所有之前数据集上的数据都是这一类然后这个divergence-classifier用的特征就是拼上了第t个specific-token之后经过第t个sab输出的特征">1.specific
+token：具体来说，当目前已经见到t个数据集时，就会有t个specific
+token。此时，对一个数据，经过vit之后，我们得到token
+embedding序列，不妨记其形状为<span class="math inline">\((L\times
+d)\)</span>，然后会把这个数据前拼上第i个specific
+token，送到第i个specific attention block（记为SAB）。一个specific
+attention block就是一个class attention
+block（也就是query仅有前面拼上的token产生，而query以及gallery都是由数据x产生），它的输出是一个d维的向量（也就是一个数据对应一个d维的向量）。但此时就有t个结果了，可是我们主要关注当前数据集的学习，也就是第t个结果，所以这里会用一个divergence
+classifier，它会对当前数据集的数据和之前数据集的数据（因为有replay）都进行分类，但是要求对当前数据集进行精确分类，而对之前数据集上的数据，只要求它能区分出来这些是不属于当前数据集的即可。所以，它会把当前数据集的所有数据的标签加一，然后进行分类；空出来的第0类就被统一归类为”不属于当前数据集的类“，所有之前数据集上的数据都是这一类（然后这个divergence
+classifier用的特征就是拼上了第t个specific
+token之后经过第t个SAB输出的特征）</h3>
+<h3 id="general-tokenshareable-general-token则是所有数据集上的数据统一用一个token也是在数据前拼上这个token然后送到一个统一的general-attention-blockgab之后会送到一个分类器里进行分类但这里就要求分类器是对所有见过的身份都要精确分类所以不是像上面那样把之前数据集的所有数据都归到一个类了">2.general
+token：shareable general
+token则是所有数据集上的数据统一用一个token。也是在数据前拼上这个token，然后送到一个统一的general
+attention
+block（GAB），之后会送到一个分类器里进行分类，但这里就要求分类器是对所有见过的身份都要精确分类（所以不是像上面那样把之前数据集的所有数据都归到一个类了）</h3>
+<p>额，它设计、利用token的时候，确实没考虑到模态啊，比如specific
+token，它就是只针对一个数据集设计一个，并没有说一个数据集有两个模态，所以设计两个token。可以改进吗？这样有什么问题吗？不能直接说我觉得这里做的不好，所以要改；而是要说明为什么做的不好，然后我要针对做的不好的地方怎么改
+### 3.fusion module：其实很简单，一个数据，会产生一个general
+feature，也会产生t个specific
+feature。它属于哪个数据集，我们就挑出那个对应的specific
+feature，然后和general
+feature进行拼接，并通过一个线性层进行融合，就得到了最终的特征（然而一个问题是，测试的时候我们不知道一个数据到底属于哪个数据集，所以才有下面的query-key
+mechanism来解决这个问题） ## 3.Query-Key mechanism ###
+上面提到的内容中，有个关键点：训练的时候，我们是知道一个数据是属于哪个数据集的，所以我们能挑选出对应的那个specific
+feature来和general
+feature进行融合。但测试的时候，我们不知道数据属于哪个数据集，所以对于它产生的t个specific
+feature，我们就不知道要选哪个出来和general
+feature进行融合了。为了解决这个问题，论文想到要能通过图像特征，匹配到它属于哪个数据集。因此论文提出了所谓query-key
+mechanism。大体上说，它是给每个数据集都构造一个key（一个key是一个d维的向量），然后一个数据会对应产生一个query（也是一个d维向量），通过query和key之间的相似性匹配就可以推测数据属于哪个数据集：它的query和哪个key最接近，就是属于哪个数据集的。
+###
+具体训练上说，我们就需要让每个数据的query尽可能的靠近正确的key。所以会有一个<span class="math inline">\(L_{pull}\)</span>来做这件事（并且它还会对rehearsal
+data也进行这个操作。因为即使是旧数据，也要能识别出来是属于哪个数据集的）</p>
+<p>模态间模态内知识如果学的不平衡了，会怎么样？</p>
+<p>每隔若干epoch（比如20个epoch），就计算一下新旧模型之间的模态内模态间差异，决定一下模态内和模态间损失二者之间的权重；然后二者的平均代表了新旧模型整体之间的差异，它决定了模态内模态间整体损失的权重（差异越小，说明旧知识保留的越好，模态内模态间损失整体权重越小，可以更多地去学习新知识；）
+但这个的动机就不完全是出于改进TTQK了，而是：我们先基于TTQK没有保留跨模态知识，提出要用模态内模态间知识的平衡保留来改进抗遗忘效果；改进之后发现抗遗忘方面是有所提升的，但新数据的学习又太差了，所以想动态调整抗遗忘损失的权重</p>
+<h1 id="section">2025.3.11</h1>
+<h2 id="模态内模态间一旦权重增大抗遗忘效果就是会上去但总体效果可能会下跌因为新数据集上学的太差了到底有什么办法可以让模型抗遗忘效果提升同时学习新数据集的效果也不要太差">模态内模态间一旦权重增大，抗遗忘效果就是会上去，但总体效果可能会下跌，因为新数据集上学的太差了。到底有什么办法可以让模型抗遗忘效果提升，同时学习新数据集的效果也不要太差？</h2>
+<p>和lstkc太像，是因为使用动态权重，还是因为计算权重的输入和方法和lstkc很像？可是对于现在的问题，使用动态权重不是很容易想到的吗（因为我们调节权重之后，是能看到一些不同的。并且，当原KL0.3，模态内模态间0.7的时候，它的总体效果好于原来的；而如果换成了原KL0.7，模态内模态间0.3的时候，前两个阶段，它比KL0.3、模态内模态间0.7的效果要好，然而到了第三个阶段又差一些了。这样的话，假设到第三个阶段的时候，我们又用KL0.3、模态内模态间0.7的权重分配，不就有可能提升性能了吗？这个应该正好验证了动态调整权重的合理性啊）
+如果是因为后者，那目前用相似性矩阵来度量模态内模态间知识，也是比较合理的，能修改的只有计算权重的方法。如果想避免过于相同，应该是可以找到一些别的映射方法的。但这样就有种为了创新而创新的感觉，没有针对问题而提出解决方法的感觉</p>
+<p>哦哦，我好像知道为什么说和lstkc很像了。其实重点还真不在于计算（虽然计算也过于相似了），而是在于思路：我们是希望根据模型旧知识保留的情况来调整抗遗忘损失的权重：如果模型忘得多，就增加抗遗忘损失的权重；如果忘得少，就减小抗遗忘损失的权重。而lstkc里，是：如果模型忘得多，则模型融合的时候增加旧模型的权重；如果模型忘得少，模型融合的时候就减少旧模型的权重
+这么一看，确实太像了。。。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Implicit%20Discriminative%20Knowledge%20Learning%20for%20Visible-Infrared%20Person%20%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr24">cvpr24</h1>
+<h1 id="problem主流的方法是提取modality-shared-feature然后用它来进行重识别但这种方法忽略了modality-specific-feature而这些feature也并非毫无用处它们可能也含有一些关键的有利于判别的信息intro里有一段说的挺好的虽然我们想利用这些信息但也不能直接利用因为它们本来是modality-specific的差异会比较大需要用一些手段比如蒸馏消去这种差异的同时保留能帮助判别的信息">problem：主流的方法是提取modality-shared
+feature，然后用它来进行重识别。但这种方法忽略了modality-specific
+feature，而这些feature也并非毫无用处，它们可能也含有一些关键的有利于判别的信息（intro里有一段说的挺好的，虽然我们想利用这些信息，但也不能直接利用，因为它们本来是modality-specific的，差异会比较大。需要用一些手段，比如蒸馏，消去这种差异的同时，保留能帮助判别的信息）</h1>
+<h1 id="motivation希望也能用上modality-specific-feature">motivation：希望也能用上modality-specific
+feature</h1>
+<h1 id="一些想法intro里提到了单纯的想把两种模态的数据投影到一个公共特征空间里虽然想法很好但总归得到的特征会有些gap就是说不太能真正做到完美的投影到一个公共空间这种方法是有上限的换成其它方法结合其它方法">一些想法：intro里提到了，单纯的想把两种模态的数据投影到一个公共特征空间里，虽然想法很好，但总归得到的特征会有些gap？就是说不太能真正做到完美的投影到一个公共空间。这种方法是有上限的？换成其它方法/结合其它方法？</h1>
+<h1 id="method">method：</h1>
+<h2 id="modality-confuser-and-discriminator为了学习modality-specificshared-feature">1.Modality
+Confuser and Discriminator（为了学习modality-specific/shared
+feature）</h2>
+<h3 id="用两套网络分别提取modality-shared-feature和modality-specific-feature后具体进行训练就需要用到confuser和discriminatorconfuser的输入是modality-shared-feature它希望confuser尽可能分不出feature来自于哪个模态这样我们可以认为此时的输入feature是不区分模态的则我们认为学到的是modality-shared-featurediscriminator的输入则是modality-specific-feature我们希望它能尽可能正确分类feature来源的模态这样我们认为这些输入特征确实是modality-specific的">用两套网络分别提取modality-shared
+feature和modality-specific
+feature后，具体进行训练，就需要用到confuser和discriminator。confuser的输入是modality-shared
+feature，它希望confuser尽可能分不出feature来自于哪个模态。这样我们可以认为此时的输入feature是不区分模态的，则我们认为学到的是modality-shared
+feature。discriminator的输入则是modality-specific
+feature，我们希望它能尽可能正确分类feature来源的模态，这样我们认为这些输入特征确实是modality-specific的</h3>
+<h2 id="information-purifier">2.Information Purifier</h2>
+<h3 id="这一部分的目的是想尽可能消除modality-specific-feature之间的差异但又要尽可能保留它modality-specific的信息一是用了in二是引入两个可学习的mask一个是用来消除差异reduction-of-discrepancies另一个是用来保留modality-specific信息的enhancement-of-discriminative-characteristics">这一部分的目的是想尽可能消除modality-specific
+feature之间的差异，但又要尽可能保留它modality-specific的信息。一是用了IN，二是引入两个可学习的mask，一个是用来消除差异（reduction
+of discrepancies），另一个是用来保留modality-specific信息的（enhancement
+of discriminative characteristics）</h3>
+<h2 id="implicit-knowledge-distillation">3.Implicit Knowledge
+Distillation</h2>
+<h2 id="modality-discrepancy-reduction">4.Modality Discrepancy
+Reduction</h2>
+<h1 id="改进看流程图pasted-image-20241101142934.png">改进：看流程图![[Pasted
+image 20241101142934.png]]</h1>
+<h1 id="发现此时就没怎么利用到所谓浅层特征那么在特征进入confuser和discriminator之前是否可以先把浅层信息给结合进来其实主要修改的就是前面的主干网络了">发现，此时就没怎么利用到所谓浅层特征。那么，在特征进入confuser和discriminator之前，是否可以先把浅层信息给结合进来？其实主要修改的就是前面的主干网络了</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/torch.DataParallel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -204,702 +904,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%A9%BA%E4%BB%93%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AFgithub%E4%BB%93%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E6%9C%AC%E5%9C%B0%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%A9%BA%E4%BB%93%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AFgithub%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-14 14:26:22" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="以本机的ubuntu的旧的obsidian笔记仓库连接到远端的更加新的obsidian仓库并同步数据为例">以本机的ubuntu的旧的obsidian笔记仓库连接到远端的更加新的obsidian仓库并同步数据为例</h1>
-<h1 id="首先得在本地仓库初始化一个新的git仓库我这里是本地还没初始化过git仓库不知道如果是初始化过的连接过github仓库的应该怎么做先不管了到时候用到了再查吧切到那个本地仓库的目录下打开终端git-init">首先得在本地仓库初始化一个新的git仓库（我这里是本地还没初始化过git仓库。不知道如果是初始化过的/连接过github仓库的应该怎么做。先不管了，到时候用到了再查吧）。切到那个本地仓库的目录下，打开终端，<code>git init</code></h1>
-<h1 id="然后添加远端仓库bashgit-remote-add-origin-httpsgithub.comyour-usernameyour-repository.git注意这里本地分支名字要和将要上传到的远端仓库的分支名字一样如果不一样比如远端是main但本地初始化的时候默认成了master重命名一下即可这个挺简单的问问ai就行">然后，添加远端仓库，<code>bashgit remote add origin https://github.com/your-username/your-repository.git</code>（注意，这里本地分支名字要和将要上传到的远端仓库的分支名字一样。如果不一样，比如远端是main，但本地初始化的时候默认成了master，重命名一下即可。这个挺简单的，问问ai就行）</h1>
-<h1 id="接着是先和远端同步之后才能上传文件这里我的情况是本地的文件夹的内容是远端仓库的子集所以即使被远端的内容完全覆盖了也没啥问题这算是比较简单友好的情况了因为操作可以稍微无脑一点执行如下代码段即可">接着是先和远端同步，之后才能上传文件。这里我的情况是，本地的文件夹的内容是远端仓库的子集，所以即使被远端的内容完全覆盖了也没啥问题。这算是比较简单友好的情况了，因为操作可以稍微无脑一点。执行如下代码段即可</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git reset --hard origin/main</span><br></pre></td></tr></table></figure>
-<h1 id="它的主要作用是拉取远端仓库内容并覆盖本地内容当然保险起见还是可以先备份一下本地文件的以免真的有啥重要的文件不见了">它的主要作用是<strong>拉取远端仓库内容并覆盖本地内容</strong>（当然，保险起见，还是可以先备份一下本地文件的，以免真的有啥重要的文件不见了）</h1>
-<h1 id="上面可能会出现一个问题就是它需要一个认证的过程估计是因为这个远端仓库已经先和windows里的一个文件夹连接了那里我记得好像没有这个步骤的不过也可能是因为在那边创建的反正现在是需要一个认证的步骤它会让你输入github的用户名和密码如果只是单纯的输入它会报一些错最重要的可能是这条fatal-不支持-200https-协议大概意思好像是说这种用户名加密码的认证方式现在不认可了得换一种认证方式搜索一下这个报错信息能找到好一些解法这里放一下实操过的方法确实有效就是用token令牌认证大体流程是去github帐号的个人主页那边创建一个token或者如果已经有能用的话用那个应该也可以前提是得记得内容那个token的内容好像只会在创建的时候显示一次之后就看不到了得自己保存它就起到一个密码的作用可以看成是一个强度更高的密码不留神的话自己也忘了创建token的时候记得选上相应的权限这样通过token认证之后才能做相应的操作-这一通操作完了再回到认证那边用户名正常输入密码就输入token内容即可注意一般我们是会复制token内容粘贴到终端的此时是看不见粘贴进去的东西的这是没问题的正常的话到这里应该就认证成功了上面的git-fetch和git-reset的操作应该也都能正常执行了更详细的步骤可以参考这个网站">上面可能会出现一个问题，就是它需要一个认证的过程（估计是因为这个远端仓库已经先和windows里的一个文件夹连接了。那里我记得好像没有这个步骤的。不过也可能是因为在那边创建的。反正现在是需要一个认证的步骤。它会让你输入github的用户名和密码。如果只是单纯的输入，它会报一些错，最重要的可能是这条——fatal:
-不支持 '?200~https'
-协议。大概意思好像是说，这种用户名加密码的认证方式，现在不认可了。得换一种认证方式。搜索一下这个报错信息能找到好一些解法，这里放一下实操过的方法，确实有效，就是用token（令牌）认证。大体流程是去github帐号的个人主页那边，创建一个token（或者如果已经有能用的话，用那个应该也可以，前提是得记得内容，那个token的内容好像只会在创建的时候显示一次，之后就看不到了，得自己保存。它就起到一个密码的作用，可以看成是一个强度更高的密码，不留神的话自己也忘了。创建token的时候，记得选上相应的权限。这样通过token认证之后才能做相应的操作。<br>这一通操作完了，再回到认证那边，用户名正常输入，密码就输入token内容即可。注意，一般我们是会复制token内容，粘贴到终端的。此时是看不见粘贴进去的东西的，这是没问题的。正常的话，到这里应该就认证成功了，上面的git
-fetch和git reset的操作应该也都能正常执行了。更详细的步骤可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/leviopku/article/details/126727575">网站</a>）</h1>
-<h1 id="至此已经完成了本地仓库与远端仓库的连接和同步了之后如果要上传东西到github仓库应该就正常操作就行了还没实验过">至此，已经完成了本地仓库与远端仓库的连接和同步了。之后如果要上传东西到github仓库，应该就正常操作就行了（还没实验过）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%97%B6%E9%81%87%E5%88%B0%E5%81%87%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%97%B6%E9%81%87%E5%88%B0%E5%81%87%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-14 14:26:22" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-09 01:27:48" itemprop="dateModified" datetime="2025-02-09T01:27:48+08:00">2025-02-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="报错信息一般长这样oserror-errno-28-no-space-left-on-device-..marketpytorchtrain_all09670967_c6s2_115418_01.jpg">报错信息一般长这样：OSError:
-[Errno 28] No space left on device:
-'../Market/pytorch/train_all/0967/0967_c6s2_115418_01.jpg'</h1>
-<h1 id="主要是前面的oserror-errno-28-no-space-left-on-device-然而如果真的去看存储空间似乎还有很多为什么会报这个错">主要是前面的OSError:
-[Errno 28] No space left on device:
-<br>然而，如果真的去看存储空间，似乎还有很多，为什么会报这个错？</h1>
-<h1 id="好吧目前详细原因我也不太明白但大体上它可能和缓存空间有关再具体一点有可能是因为之前太多缓存文件没清理缓存空间空间不足了而不是我们的硬盘的存储空间不足了详细的原理我也不太懂那推测一下可能是程序运行的时候需要用到缓存空间但那里不够了">好吧，目前详细原因我也不太明白。但大体上，它可能和缓存空间有关。再具体一点，有可能是因为之前太多缓存文件没清理，“缓存空间“空间不足了，而不是我们的硬盘的存储空间不足了（详细的原理我也不太懂，那推测一下可能是程序运行的时候需要用到缓存空间，但那里不够了）</h1>
-<h1 id="另外目前我只在ubuntu上遇到过这个问题可能是因为windows上空间相对还是比较多的没清理缓存也没遇到这个问题而我的ubuntu上也就是从d盘割了200多g出来而已-好像执行一下这个就没问题了不过这个是在ubuntu上具体的命令可能在windows上是不一样的">另外，目前我只在ubuntu上遇到过这个问题。可能是因为windows上空间相对还是比较多的，没清理缓存也没遇到这个问题。而我的ubuntu上也就是从D盘割了200多G出来而已。<br>好像执行一下这个就没问题了（不过这个是在ubuntu上。具体的命令可能在windows上是不一样的）</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf ~/.cache/*</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ubuntu%E7%B3%BB%E7%BB%9F%E4%B8%8Bcuda%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:06" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="有可能突然某一天在终端里运行nvidia-smi的时候会报错failed-to-initialize-nvmldriverlibrary-version-mismatch">有可能突然某一天，在终端里运行nvidia-smi的时候，会报错：Failed
-to initialize NVML：Driver/Library version mismatch</h1>
-<h2 id="这个问题很可能是因为ubuntu会自己更新gpu驱动导致nvidia内核驱动版本与系统驱动不一致虽说我不是太懂这里的-gpu驱动nvidia驱动系统驱动-之间的关系到底是怎样的但操作上来讲如果cat-procdrivernvidiaversion这行命令的输出的版本和nvidia-smi输出的驱动版本是一致的那应该就没什么问题了">这个问题很可能是因为ubuntu会自己更新gpu驱动，导致nvidia内核驱动版本与系统驱动不一致（虽说我不是太懂这里的
-gpu驱动/nvidia驱动/系统驱动
-之间的关系到底是怎样的，但操作上来讲，如果cat
-/proc/driver/nvidia/version这行命令的输出的版本和nvidia-smi输出的驱动版本是一致的，那应该就没什么问题了）</h2>
-<h2 id="cat-procdrivernvidiaversion一般输出如下-nvrm-version-nvidia-unix-x86_64-kernel-module-535.183.01-sun-may-12-193915-utc-2024-gcc-version-gcc-version-12.3.0-ubuntu-12.3.0-1ubuntu122.04">cat
-/proc/driver/nvidia/version一般输出如下：<br>NVRM version: NVIDIA UNIX
-x86_64 Kernel Module 535.183.01 Sun May 12 19:39:15 UTC 2024<br>GCC
-version: gcc version 12.3.0 (Ubuntu 12.3.0-1ubuntu1~22.04)</h2>
-<h2 id="nvidia-smi输出这里我们只关注驱动相关的信息-thu-nov-7-174832-2024-----------------------------------------------------------------------------------------nvidia-smi-535.183.01-driver-version-535.183.01-cuda-version-12.2">nvidia-smi输出（这里我们只关注驱动相关的信息）：<br>Thu
-Nov 7 17:48:32 2024
-<br>+---------------------------------------------------------------------------------------+<br>|
-NVIDIA-SMI 535.183.01 Driver Version: 535.183.01 CUDA Version: 12.2
-|</h2>
-<h2 id="这里能观察到两条命令输出的驱动版本都是535.183.01一致了确实没问题了但话又说回来nvidia-smi能正常执行的话也应该不会有这个问题了难绷">这里能观察到，两条命令输出的驱动版本都是535.183.01，一致了，确实没问题了（但话又说回来，nvidia-smi能正常执行的话，也应该不会有这个问题了。。。难绷）</h2>
-<h2 id="解决方法的话可以尝试-1.重启反正我这次是重启就解决了-2.卸载驱动重新装感觉这个是最后的办法但它也很有道理毕竟你的问题不就是驱动版本不一致嘛我给你装个一致的理论上就没问题了但卸载我好像还没卸载过不知道会出什么幺蛾子得仔细查一下卸载干净了再重新装或许可以稍微参考一下这个网站虽然它这里也可能不全">解决方法的话，可以尝试：<br>1.重启（反正我这次是重启就解决了）<br>2.卸载驱动，重新装（感觉这个是最后的办法，但它也很有道理，毕竟你的问题不就是驱动版本不一致嘛，我给你装个一致的，理论上就没问题了。但卸载我好像还没卸载过，不知道会出什么幺蛾子，得仔细查一下，卸载干净了，再重新装）（或许可以稍微参考一下这个<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2066902">网站</a>，虽然它这里也可能不全）</h2>
-<h2 id="要防止这种问题的话一般是得把ubuntu的自动更新给关掉即执行一下这个命令-禁用内核更新-sudo-apt-mark-hold-linux-generic-linux-image-generic-linux-headers-generic-更多详细内容可以参考这个网站它写的貌似还可以">要防止这种问题的话，一般是得把ubuntu的自动更新给关掉，即执行一下这个命令：<br>
-# 禁用内核更新 <br>sudo apt-mark hold linux-generic linux-image-generic
-linux-headers-generic<br>更多详细内容可以参考这个<a target="_blank" rel="noopener" href="https://sysin.org/blog/disable-ubuntu-auto-update/">网站</a>，它写的貌似还可以</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84conda%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-11-14 14:26:22 / Modified: 14:33:08" itemprop="dateCreated datePublished" datetime="2024-11-14T14:26:22+08:00">2024-11-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="记录一下这次捣鼓服务器的conda安装过程虽然其实这个理论上挺简单的也安装过但因为这次是在大组的服务器上安装生怕把别人的啥环境给搞坏了所以提心吊胆而且经典的在网上找教程的时候五花八门不知道到底要用哪个现在给一个大杂烩版本综合了一些答案以及官网的操作">记录一下这次捣鼓服务器的conda安装过程。虽然其实这个理论上挺简单的，也安装过，但因为这次是在大组的服务器上安装，生怕把别人的啥环境给搞坏了，所以提心吊胆，而且经典的，在网上找教程的时候五花八门，不知道到底要用哪个。现在给一个大杂烩版本，综合了一些答案，以及官网的操作</h1>
-<h1 id="首先下载那个.sh文件不管是anaconda还是miniconda都是.sh这里因为我是安装的miniconda所以下面不再提conda都默认指minicondaanaconda安装方法应该是一样的吧可以参考一下官网的命令但其实这个命令哪里都可以搜到而且就算不用命令直接下载了然后上传到服务器也行当然版本不一定就是下面这个命令里的版本可以自行换掉">1.首先下载那个.sh文件，不管是anaconda还是miniconda，都是.sh（这里因为我是安装的miniconda，所以下面不再提，conda都默认指miniconda。anaconda安装方法应该是一样的，吧？）可以参考一下官网的命令（但其实这个命令哪里都可以搜到，而且就算不用命令，直接下载了然后上传到服务器也行）（当然，版本不一定就是下面这个命令里的版本，可以自行换掉）</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br></pre></td></tr></table></figure>
-<h1 id="安装如果是自己的电脑一般其实安装就一直回车yes就行因为安装过程中需要我们作出判断的就是安装路径的选择但这里只是linux服务器上一个非root用户的情况windows好像略有不同我这里主要遇到的一个问题是明明创建了一个叫miniconda3的文件夹想指定安装在这下面但如果只是正常bash-miniconda3.sh总是会报这个错">2.安装。如果是自己的电脑，一般其实安装就一直回车/yes就行，因为安装过程中需要我们作出判断的就是安装路径的选择（但这里只是linux服务器上，一个非root用户的情况，windows好像略有不同）。我这里主要遇到的一个问题是，明明创建了一个叫miniconda3的文件夹，想指定安装在这下面，但如果只是正常bash
-miniconda3.sh，总是会报这个错</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Miniconda3 will now be installed into this location:</span><br><span class="line">/home/lanhaozhi/miniconda3</span><br><span class="line"></span><br><span class="line">  - Press ENTER to confirm the location</span><br><span class="line">  - Press CTRL-C to abort the installation</span><br><span class="line">  - Or specify a different location below</span><br><span class="line"></span><br><span class="line">[/home/lanhaozhi/miniconda3] &gt;&gt;&gt; /data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">ERROR: File or directory already exists: <span class="string">&#x27;/data/ckpt/lanhaozhi/miniconda3&#x27;</span></span><br><span class="line">If you want to update an existing installation, use the -u option.</span><br></pre></td></tr></table></figure>
-<h1 id="不知道什么意思难道是说指定的路径还要先不存在然后等它来创建吗很奇怪但反正可以通过下面这个命令来解决">不知道什么意思。难道是说指定的路径还要先不存在，然后等它来创建吗？很奇怪。但反正可以通过下面这个命令来解决：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br></pre></td></tr></table></figure>
-<h1 id="比较关键的是这里的-b选项它表示创建一个全新的miniconda3环境而不是覆盖现有的安装-u选项表示更新现有的miniconda3环境而不是创建一个新的环境直观上看我感觉这两个选项是互相矛盾的但确实能执行不太清楚为什么有时间再研究吧最后的-p选项是指定安装路径这个时候把后面的路径改成指定路径就没问题了大概会有如下输出">比较关键的是这里的<code>-b</code>选项，它表示创建一个全新的Miniconda3环境，而不是覆盖现有的安装。<code>-u</code>选项表示更新现有的Miniconda3环境，而不是创建一个新的环境。（直观上看，我感觉这两个选项是互相矛盾的。。但确实能执行，不太清楚为什么。有时间再研究吧）最后的<code>-p</code>选项，是指定安装路径。这个时候把后面的路径改成指定路径，就没问题了。大概会有如下输出：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> bash miniconda.sh -b -u -p /data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">PREFIX=/data/ckpt/lanhaozhi/miniconda3</span><br><span class="line">Unpacking payload ...</span><br><span class="line"></span><br><span class="line">Installing base environment...</span><br><span class="line"></span><br><span class="line">Preparing transaction: ...working... <span class="keyword">done</span></span><br><span class="line">Executing transaction: ...working... <span class="keyword">done</span></span><br><span class="line">installation finished.</span><br></pre></td></tr></table></figure>
-<h1 id="至此安装部分应该是做完了下面就是一些激活加到环境变量里的一类操作了运行如下命令">3.至此，安装部分应该是做完了。下面就是一些激活、加到环境变量里的一类操作了。运行如下命令：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br></pre></td></tr></table></figure>
-<h1 id="激活之后应该就会有这样的效果">激活之后，应该就会有这样的效果：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$ <span class="built_in">source</span> /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br><span class="line">(base) lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$</span><br></pre></td></tr></table></figure>
-<h1 id="即发现base环境被激活了推测这个命令应该作用就是在当前终端激活conda而最后要做的就是把conda在各个终端都进行初始化也就是把conda的路径写入到各个终端的配置文件里但这里不需要真的一个个手动取自己打开相应配置文件取写入可以直接用一行命令">即发现base环境被激活了。（推测这个命令应该作用就是在当前终端激活conda）。而最后要做的就是把conda在各个终端都进行初始化，也就是把conda的路径写入到各个终端的配置文件里。但这里不需要真的一个个手动取自己打开相应配置文件取写入，可以直接用一行命令：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-<h1 id="它就会完成上述功能不出意外的话输出如下">它就会完成上述功能。不出意外的话，输出如下：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(base) lanhaozhi@ubuntu:/data/ckpt/lanhaozhi$ conda init --all</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/condabin/conda</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/conda</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/conda-env</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/activate</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/bin/deactivate</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/profile.d/conda.sh</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/fish/conf.d/conda.fish</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/shell/condabin/Conda.psm1</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/shell/condabin/conda-hook.ps1</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/lib/python3.12/site-packages/xontrib/conda.xsh</span><br><span class="line">no change     /data/ckpt/lanhaozhi/miniconda3/etc/profile.d/conda.csh</span><br><span class="line">modified      /home/lanhaozhi/.bashrc</span><br><span class="line">modified      /home/lanhaozhi/.zshrc</span><br><span class="line">modified      /home/lanhaozhi/.config/fish/config.fish</span><br><span class="line">modified      /home/lanhaozhi/.xonshrc</span><br><span class="line">modified      /home/lanhaozhi/.tcshrc</span><br><span class="line"></span><br><span class="line">==&gt; For changes to take effect, close and re-open your current shell. &lt;==</span><br></pre></td></tr></table></figure>
-<h1 id="重点关注一下那些modified的行发现它们都是xxxrc也就是各个终端的配置文件.bashrc应该就是bash终端的配置文件其它的类似只不过我们不一定用得到其它终端而已">重点关注一下那些modified的行，发现它们都是xxxrc，也就是各个终端的配置文件。.bashrc应该就是bash终端的配置文件，其它的类似。只不过我们不一定用得到其它终端而已</h1>
-<h1 id="整个安装过程应该就结束了如果后续还有啥问题再说吧">整个安装过程应该就结束了。如果后续还有啥问题，再说吧</h1>
-<h1 id="一些参考链接">一些<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43554951/article/details/115730146">参考链接</a></h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BAwindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BAwindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85cuda/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-05 17:59:57" itemprop="dateCreated datePublished" datetime="2024-11-05T17:59:57+08:00">2024-11-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-06 10:30:37" itemprop="dateModified" datetime="2024-11-06T10:30:37+08:00">2024-11-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>不知道为什么，好像我windows里的cuda莫名其妙的没了。。 得重装一下
-现在安装的文件夹路径是C:
-在环境变量里，找系统变量的Path，里面放了cuda的路径。之前的路径还在，然后也还有效，好像还没被删？但是在”设置“的”应用“里找的时候却找不到。重新下载之后才找到了
-新的cuda的路径也放进去了</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-04 20:49:43" itemprop="dateCreated datePublished" datetime="2024-11-04T20:49:43+08:00">2024-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-06 14:14:42" itemprop="dateModified" datetime="2024-11-06T14:14:42+08:00">2024-11-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="格式先说明任务设定然后是现有的lreid的benchmark附上图之后说明一下现在的任务的难点以及我们设计的benchmark是怎样的也要附上图并且要说明清楚infrared-image是怎么放进去的">格式：先说明任务设定，然后是现有的lreid的benchmark，附上图；之后说明一下现在的任务的难点，以及我们设计的benchmark是怎样的（也要附上图，并且要说明清楚infrared
-image是怎么放进去的）</h1>
-<h1 id="将通常的lreid中的若干数据集目前的lreid中用到的数据集都是visible模态的即单模态的换成visible-infrared双模态的数据集也就是说此时要么是只有visible模态数据要么是同时有双模态的数据不会出现只有infrared模态数据的情况可能就是最基本的情况">1.将通常的lreid中的若干数据集（目前的lreid中用到的数据集都是visible模态的，即单模态的）换成visible-infrared双模态的数据集（也就是说此时要么是只有visible模态数据，要么是同时有双模态的数据，不会出现只有infrared模态数据的情况，可能就是最基本的情况）</h1>
-<h1 id="数据流中的数据集有单独visible模态的单独infrared模态的从双模态的数据集中取出来以及两种模态的数据集的也就是此时既有infrared模态数据的缺失也有visible模态数据的缺失这个对应了现实中的什么情况是说有一些摄像头是有两种模态的拍摄功能然后有一些是只能拍visible模态数据的其中能拍两种模态的相机在一些时段能拍到两种模态的数据比如黄昏在一些时段只能拍到一种模态的数据比如大白天基本只能拍到visible模态的数据晚上基本只能拍到infrared模态的数据">2.数据流中的数据集有单独visible模态的，单独infrared模态的（从双模态的数据集中取出来），以及两种模态的数据集的（也就是此时既有infrared模态数据的缺失，也有visible模态数据的缺失）（这个对应了现实中的什么情况？是说有一些摄像头是有两种模态的拍摄功能，然后有一些是只能拍visible模态数据的？其中能拍两种模态的相机，在一些时段能拍到两种模态的数据（比如黄昏），在一些时段只能拍到一种模态的数据（比如大白天基本只能拍到visible模态的数据，晚上基本只能拍到infrared模态的数据）</h1>
-<h1 id="数据流中的数据集中有visible模态的也有infrared模态的每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分例如identity1-10的双模态的数据这个又对应了什么情况">3.数据流中的数据集中有visible模态的，也有infrared模态的。每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分（例如，identity1-10的双模态的数据）（这个又对应了什么情况？</h1>
-<h1 id="从现实应用的角度考虑在终身学习的基础上能做到给定visibleinfrared-image都能找到对应的visibleinfrared-image也就是能完成visibleinfrared到visibleinfrared两两一共四种检索方式就行了考虑最困难的情况即训练的时候只有一种模态然而测试的时候拿的却是另一种模态的数据benchmark能考虑到这种情况不就差不多了吗这样的话第三种到底还有没有必要它的意义在哪里">4.从现实应用的角度考虑，在终身学习的基础上，能做到：给定visible/infrared
-image，都能找到对应的visible/infrared
-image，也就是能完成visible/infrared到visible/infrared两两一共四种检索方式就行了。考虑最困难的情况，即：训练的时候只有一种模态，然而测试的时候拿的却是另一种模态的数据。benchmark能考虑到这种情况，不就差不多了吗？这样的话，第三种到底还有没有必要？它的意义在哪里？</h1>
-<h1 id="初步baseline设计针对visible和infrared两种模态的数据设计两个模型单独编码visible和infrared-image的特征以及单独进行知识保存和缓解灾难性遗忘做到类似于modality-aware即visible-image的特征单独保存和利用infrared-image也是考虑到visible-image的通道数更多特征更丰富多样因此猜测不同数据集间的domain-gap可能会比较大而相比之下infrared-image的特征可能更为简单因此不同数据集的infrared-image的domain-gap可能会小一点那么在lreid中有可能两种模态的特征遗忘的-程度快慢-都是不一样的例如visible-image的特征可能遗忘的更快而infrared-image的特征可能遗忘的慢一点如果用一个模型对两种模态的图像进行编码以及同时保存知识可能会产生相互干扰的情况例如可能为了保留infrared-image的特征反而影响了visible-image特征信息的保留-后续需要对比用一个模型和两个模型效果哪个效果比较好">初步baseline设计：针对visible和infrared两种模态的数据，设计两个模型，单独编码visible和infrared
-image的特征，以及单独进行知识保存和缓解灾难性遗忘，做到类似于modality-aware（即visible
-image的特征单独保存和利用，infrared image也是）（考虑到visible
-image的通道数更多，特征更丰富多样，因此猜测不同数据集间的domain
-gap可能会比较大；而相比之下，infrared
-image的特征可能更为简单，因此不同数据集的infrared image的domain
-gap可能会小一点。那么，在lreid中，有可能两种模态的特征遗忘的 程度/快慢
-都是不一样的。例如，visible image的特征可能遗忘的更快，而infrared
-image的特征可能遗忘的慢一点。如果用一个模型对两种模态的图像进行编码，以及同时保存知识，可能会产生相互干扰的情况（例如，可能为了保留infrared
-image的特征，反而影响了visible
-image特征信息的保留）<br>后续需要对比用一个模型和两个模型效果哪个效果比较好</h1>
-<h1 id="后续安排设计明确benchmark之后尝试跑通baseline">后续安排：设计、明确benchmark，之后尝试跑通baseline</h1>
-<h1 id="问题在第二个benchmark的设定中有没有考察模型-学rgb检索ir学ir检索rgb-的能力换句话说它测试的数据集是怎样的和现有的lreid是不是不一样">问题：在第二个benchmark的设定中，有没有考察模型
-学RGB检索IR/学IR检索RGB
-的能力？换句话说，它测试的数据集是怎样的？和现有的lreid是不是不一样？</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-02 18:17:21" itemprop="dateCreated datePublished" datetime="2024-11-02T18:17:21+08:00">2024-11-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-21 17:01:18" itemprop="dateModified" datetime="2025-05-21T17:01:18+08:00">2025-05-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="acm-mm24"># acm mm24</h2>
-<p>title: Mitigate Catastrophic Remembering via Continual Knowledge
-Purification for Noisy Lifelong Person Re-Identification date:
-2025-05-21 17:00 tags: [cv, lreid, noisy label] categories: [论文阅读,
-cv, object-reid, noisy lifelong reid] ---</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Learning%20Concordant%20Attention%20via%20Target-aware%20Alignment%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-10-31 22:27:12 / Modified: 22:35:06" itemprop="dateCreated datePublished" datetime="2024-10-31T22:27:12+08:00">2024-10-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="iccv23">iccv23</h1>
-<p>attention concordance是指什么？</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Towards%20Grand%20Unified%20Representation%20Learning%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Towards%20Grand%20Unified%20Representation%20Learning%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-10-31 22:08:25" itemprop="dateCreated datePublished" datetime="2024-10-31T22:08:25+08:00">2024-10-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-02-16 20:15:36" itemprop="dateModified" datetime="2025-02-16T20:15:36+08:00">2025-02-16</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="iccv23">iccv23</h1>
-<h1 id="无监督vi-reid的研究意义主要在于减少在跨模态数据的标注上的开销因为只要看过红外的图像就会发现真的很糊就算是人来有些图片也很难与可见光图像对应上除非本人来这个是比较通用的一个故事吧">无监督vi-reid的研究意义，主要在于减少在跨模态数据的标注上的开销。因为只要看过红外的图像，就会发现真的很糊，就算是人来，有些图片也很难与可见光图像对应上，除非本人来。这个是比较通用的一个故事吧</h1>
-<h1 id="一句话总结这篇论文提出gur模块用于提取鲁棒的特征提出clu模块用于平滑伪标签">一句话总结这篇论文：提出GUR模块，用于提取鲁棒的特征；提出CLU模块，用于平滑伪标签</h1>
-<h1 id="哪些可以为我所用也就clu模块比较有即插即用的潜力gur的话总感觉它过于复杂了">哪些可以为我所用：也就CLU模块比较有即插即用的潜力。GUR的话，总感觉它过于复杂了……</h1>
-<h1 id="insight">insight</h1>
-<h1 id="动机">动机</h1>
-<h2 id="这篇论文提出通常的做法注重于缓解跨模态的这种差异但忽略了camera-variation带来的影响以及二者一起会导致reid更加困难而它把camera-variation以及modality-discrepancy二者的相互作用叫做hierarchical-discrepancy所以简单来说论文认为以往的方法只解决了hierarchical-discrepancy中的一部分不仅没注意到另一部分也没注意到这两个部分会相互交织加大检索图像的难度-所以它提出一个层次的框架要解决这个hierarchical-discrepancy">这篇论文提出，通常的做法注重于缓解跨模态的这种差异，但忽略了camera
-variation带来的影响，以及二者一起会导致reid更加困难。而它把camera
-variation以及modality discrepancy二者的相互作用叫做hierarchical
-discrepancy（所以简单来说，论文认为，以往的方法只解决了hierarchical
-discrepancy中的一部分，不仅没注意到另一部分，也没注意到这两个部分会相互交织，加大检索图像的难度）<br>所以它提出一个层次的框架，要解决这个hierarchical
-discrepancy</h2>
-<h1 id="方法">方法</h1>
-<h2 id="bottom-up-domain-learning-strategy核心思想在于如果两个实例是同一个id的那么它们应该有相似之处然而这里它不是直接用特征相似度来度量而是间接度量给定一个memory它和这个memory里的各个簇的亲和度的分布应该很相似">1.bottom-up
-domain learning
-strategy，核心思想在于，如果两个实例是同一个ID的，那么它们应该有相似之处。然而这里它不是直接用特征相似度来度量，而是间接度量：给定一个memory，它和这个memory里的各个簇的亲和度的分布应该很相似。</h2>
-<h2 id="cross-modality-label-unificationclu做的是一个标签的平滑可以认为是为了让标签更加可靠鲁棒同时也提高跨模态对应的准确性而标签的平滑可以认为就是对若干的样例的标签进行加权求和">2.Cross-modality
-Label
-Unification（CLU），做的是一个标签的平滑。（可以认为是为了让标签更加可靠、鲁棒，同时也提高跨模态对应的准确性）。而标签的平滑，可以认为就是对若干的样例的标签进行加权求和。</h2>
-<h1 id="分析">分析：</h1>
-<h2 id="bottom-up-domain-learning-strategy包含三个训练阶段依次是intra-camerainter-camera和inter-modality-training">1.bottom-up
-domain learning
-strategy，包含三个训练阶段，依次是intra-camera，inter-camera和inter-modality
-training</h2>
-<h3 id="intra-camera是对多个相机拍到的照片独立处理具体来说对于一个摄像头拍到的所有照片交替进行聚类分配伪标签对比损失之经典clusternce也就是说它捕获的是一些intra-camera-similarity">intra-camera是对多个相机拍到的照片独立处理（具体来说，对于一个摄像头拍到的所有照片，交替进行：聚类分配伪标签，对比损失之经典ClusterNCE。也就是说它捕获的是一些intra-camera
-similarity）</h3>
-<h3 id="inter-camera则是会利用一个cross-memory-association-embeddingcae模块来计算一个图像与多个camera中的簇中心之间的关联性注意此处还是intra-modality的这里也正好呼应了论文提出的hierarchical-discrepancy它提出的方法也是一层一层来解决问题的-具体来说给定一个query比如它是可见光的我们会计算它与所有camera的数据中的可见光的簇之间的关联性每个相机的图片里都会有可见光的若干个簇它们都是在前面的intra-camera-stage中提取特征并聚类得到的我们可以先得到这个query和这些簇的相似性再softmax一下得到一个概率分布有n个相机的话我们就有n个概率分布拼接起来得到一个大的embedding我们认为这个embedding就是可以应对camera-variation的">inter-camera则是会利用一个cross-memory
-association
-embedding（CAE）模块，来计算一个图像与多个camera中的簇中心之间的关联性。（注意，此处还是intra-modality的，这里也正好呼应了论文提出的hierarchical
-discrepancy，它提出的方法也是一层一层来解决问题的）<br>具体来说，给定一个query，比如它是可见光的，我们会计算它与所有camera的数据中的可见光的簇之间的关联性。每个相机的图片里，都会有可见光的若干个簇（它们都是在前面的intra-camera
-stage中提取特征并聚类得到的），我们可以先得到这个query和这些簇的相似性，再softmax一下得到一个概率分布。有N个相机的话，我们就有N个概率分布，拼接起来，得到一个大的embedding。我们认为这个embedding就是可以应对camera-variation的</h3>
-<h3 id="最后的inter-modality-stage则是类似的此时是在一个跨模态跨相机的情况下进行的每个模态下的每个相机的照片中都会有一些簇这里的结果是上面inter-camera-stage得到的给定一个相机拍的所有照片我们还是可以得到query属于这些照片的簇的概率分布对所有的相机都求一个概率分布并拼接起来我们就认为这个embedding是可以应对modality-discrepancy的">最后的inter-modality
-stage，则是类似的。此时是在一个跨模态、跨相机的情况下进行的。每个模态下的每个相机的照片中，都会有一些簇（这里的结果是上面inter-camera
-stage得到的），给定一个相机拍的所有照片，我们还是可以得到query属于这些照片的簇的概率分布。对所有的相机都求一个概率分布，并拼接起来，我们就认为这个embedding是可以应对modality-discrepancy的</h3>
-<h2 id="cross-modality-label-unificationclu">2.Cross-modality Label
-Unification（CLU）</h2>
-<h3 id="这个模块主要做的就是进行一个加权求和以求让伪标签更加可靠真实而这个加权求和的过程主要是两步先是跨模态传播标签再是模态内标签平滑">这个模块主要做的就是进行一个加权求和，以求让伪标签更加可靠真实。而这个加权求和的过程，主要是两步，先是跨模态传播标签，再是模态内标签平滑</h3>
-<h3 id="我们可以认为之所以需要跨模态传播标签的一步是为了提高跨模态对应的准确性而之所以有模态内的平滑的一步是为了提高标签的准确性和鲁棒性不难想到如果我们对一个样例找出和它比较相似的若干样例并对这些样例的标签以相似性为权重对标签进行加权求和得到的标签应该是比较可靠的有种群策群力的感觉">我们可以认为，之所以需要跨模态传播标签的一步，是为了提高跨模态对应的准确性；而之所以有模态内的平滑的一步，是为了提高标签的准确性和鲁棒性（不难想到，如果我们对一个样例，找出和它比较相似的若干样例，并对这些样例的标签，以相似性为权重，对标签进行加权求和，得到的标签应该是比较可靠的，有种群策群力的感觉）</h3>
-<h3 id="具体来说跨模态传播标签就是我们聚类得到了红外模态内的簇因此红外数据有了伪标签然后我们想通过它传播得到可见光数据的标签我们的思想是对每个可见光数据我们找出离它前k近的红外数据然后这k个红外数据的标签加权求和一下就传播得到了这个可见光数据的伪标签这个过程可以用一个矩阵乘法来表示-而模态内的标签平滑也是类似的做法只不过这时我们找前k个近的数据的时候是在同一模态内来找的-先是由不同模态的图像来进行权重就是当前图像与其它所有不同模态的图像之间的相似性分数经过softmax得到的一个概率分布再是由相同模态的图像来进行之所以有相同模态的这一步是因为跨模态的时候那个相似性分数并不能说十分可靠而同模态下的相似性分数就比较可信了毕竟同模态下差异会比较小这一步就相当于加个保险平滑吧">具体来说，跨模态传播标签，就是，我们聚类得到了红外模态内的簇，因此红外数据有了伪标签；然后我们想通过它传播得到可见光数据的标签。我们的思想是，对每个可见光数据，我们找出离它前k近的红外数据，然后这k个红外数据的标签加权求和一下，就传播得到了这个可见光数据的伪标签。这个过程可以用一个矩阵乘法来表示。<br>而模态内的标签平滑，也是类似的做法，只不过这时我们找前k个近的数据的时候，是在同一模态内来找的<br>先是由不同模态的图像来进行（权重就是当前图像与其它所有不同模态的图像之间的相似性分数经过softmax得到的一个概率分布），再是由相同模态的图像来进行（之所以有相同模态的这一步，是因为跨模态的时候，那个相似性分数并不能说十分可靠，而同模态下的相似性分数就比较可信了，毕竟同模态下差异会比较小。这一步就相当于加个保险/平滑吧）</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -965,14 +973,14 @@ Unification（CLU）</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">200</span>
+          <span class="site-state-item-count">209</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
