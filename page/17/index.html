@@ -150,6 +150,319 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-16 00:07:08 / Modified: 15:04:15" itemprop="dateCreated datePublished" datetime="2025-02-16T00:07:08+08:00">2025-02-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="无监督vi-reid大多数的流程都是先通过某种聚类方法通常是dbscan得到一批伪标签然后开始构建跨模态的对应一般是对应簇而不是一个一个实例去对应因为对应完簇我们就认为这两个簇里的实例都是一个id的所以其实可以说一个常见的范式是在各个模态内进行聚类然后进行跨模态的簇的对应这么说来eccv24那篇有没有可能提出了一个新的范式就是在聚类的时候就已经考虑上跨模态的对应了">无监督vi-reid，大多数的流程都是，先通过某种聚类方法（通常是DBSCAN），得到一批伪标签，然后开始构建跨模态的对应（一般是对应簇，而不是一个一个实例去对应。因为对应完簇，我们就认为这两个簇里的实例都是一个ID的）。所以其实可以说，一个常见的范式是，在各个模态内进行聚类，然后进行跨模态的簇的对应（这么说来，ECCV24那篇，有没有可能提出了一个新的范式，就是在聚类的时候就已经考虑上跨模态的对应了？）</h1>
+<h1 id="通常的改进会聚焦在">通常的改进会聚焦在，</h1>
+<h2 id="如何更好的构建伪标签的跨模态对应pgmotpm">如何更好的构建伪标签的跨模态对应（PGM）（OTPM）</h2>
+<h3 id="毕竟没标签很难对应上最理想的情况当然是我们的聚类结果恰好就等于真实标签此时无监督vi-reid就会变成vi-reid实际还有个很重要的问题就是我们的对应很可能是有错的怎么在有错误对应即所谓噪声的情况下不断改进对应结果也是很重要的所以才会有很多progressive的方法">（毕竟没标签，很难对应上；最理想的情况当然是我们的聚类结果恰好就等于真实标签，此时无监督vi-reid就会变成vi-reid）（实际还有个很重要的问题，就是，我们的对应很可能是有错的，怎么在有错误对应（即所谓噪声）的情况下不断改进对应结果也是很重要的。所以才会有很多progressive的方法）；</h3>
+<h2 id="还有一部分可能会聚焦在伪标签的可靠性上multi-memorypgm">还有一部分可能会聚焦在伪标签的可靠性上？（Multi-memory，PGM）</h2>
+<h2 id="提取更加鲁棒的特征以改善聚类效果shallow-deepgur">提取更加鲁棒的特征，以改善聚类效果（Shallow-Deep，GUR）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94%20unsupervised%20vi-reid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94%20unsupervised%20vi-reid/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-02-14 09:55:45" itemprop="dateCreated datePublished" datetime="2025-02-14T09:55:45+08:00">2025-02-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-19 17:08:31" itemprop="dateModified" datetime="2025-02-19T17:08:31+08:00">2025-02-19</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="cvpr24">cvpr24</h1>
+<h2 id="shallow-deep-collaborative-learning-for-unsupervised-visible-infrared-person-re-identification">Shallow-Deep
+Collaborative Learning for Unsupervised Visible-Infrared Person
+Re-Identification</h2>
+<h1 id="nips24有一篇iclr和icml24没有">nips24有一篇，iclr和icml24没有</h1>
+<h1 id="eccv24">eccv24</h1>
+<h2 id="multi-memory-matching-for-unsupervised-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://eccv.ecva.net/virtual/2024/poster/1841">Multi-Memory
+Matching for Unsupervised Visible-Infrared Person
+Re-Identification</a></h2>
+<h1 id="aaai24ijcai24无">aaai24&amp;ijcai24无</h1>
+<h1 id="cvpr23">cvpr23</h1>
+<h2 id="unsupervised-visible-infrared-person-re-identification-via-progressive-graph-matching-and-alternate-learning"><a target="_blank" rel="noopener" href="https://github.com/zesenwu23/USL-VI-ReID">Unsupervised
+Visible-Infrared Person Re-Identification via Progressive Graph Matching
+and Alternate Learning</a></h2>
+<h1 id="iccv23">iccv23</h1>
+<h2 id="towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification无监督"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Yang_Towards_Grand_Unified_Representation_Learning_for_Unsupervised_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Towards
+Grand Unified Representation Learning for Unsupervised Visible-Infrared
+Person Re-Identification</a>（无监督）</h2>
+<h1 id="acm-mm24">acm mm24</h1>
+<h2 id="robust-pseudo-label-learning-with-neighbor-relation-for-unsupervised-visible-infrared-person-re-identification无监督的"><strong>Robust
+Pseudo-label Learning with Neighbor Relation for Unsupervised
+Visible-Infrared Person Re-Identification</strong>（无监督的）</h2>
+<h2 id="enhancing-unsupervised-visible-infrared-person-re-identification-with-bidirectional-consistency-gradual-matching无监督的"><strong>Enhancing
+Unsupervised Visible-Infrared Person Re-Identification with
+Bidirectional-Consistency Gradual Matching</strong>（无监督的）</h2>
+<h1 id="acm-mm23">acm mm23</h1>
+<h2 id="efficient-bilateral-cross-modality-cluster-matching-for-unsupervised-visible-infrared-person-reid无监督">Efficient
+Bilateral Cross-Modality Cluster Matching for Unsupervised
+Visible-Infrared Person ReID（无监督）</h2>
+<h2 id="unveiling-the-power-of-clip-in-unsupervised-visible-infrared-person-re-identification无监督">Unveiling
+the Power of CLIP in Unsupervised Visible-Infrared Person
+Re-Identification（无监督）</h2>
+<h2 id="unsupervised-visible-infrared-person-reid-by-collaborative-learning-with-neighbor-guided-label-refinement无监督">Unsupervised
+Visible-Infrared Person ReID by Collaborative Learning with
+Neighbor-Guided Label Refinement（无监督）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-09 01:27:48 / Modified: 01:36:25" itemprop="dateCreated datePublished" datetime="2025-02-09T01:27:48+08:00">2025-02-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的
+结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的
+参数定义（用torch.nn调用的话，它们都是继承了torch.nn.Module类，所以一旦初始化，就已经有参数了；而用torch.nn.functional调用，则需要自己定义参数，并且在调用的时候手动传入，相比之下复杂许多）
+参数管理（比如，用类的时候就可以结合优化器，自动更新参数；而如果是用torch.nn.functional来调用，不仅参数需要我们自己传入，还需要我们自己指定是否要求梯度，并且即使我们指定了要求梯度，优化器也不能实现自动更新参数，必须得我们手动更细，极其麻烦）
+设备控制（就是控制在cpu还是gpu/哪块gpu）
+模型参数保存（torch.nn类保存参数可以用torch.save(model.state_dict(),
+'model.pth')这种语句很快捷地保存，而torch.nn.functional的话，就需要手动保存和加载参数）
+等方面都要方便很多</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E5%BF%AB%E6%8E%92&%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F&%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E5%BF%AB%E6%8E%92&%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F&%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" class="post-title-link" itemprop="url">chap1.第一讲 快排&归并排序&二分查找</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-02-04 16:00:00" itemprop="dateCreated datePublished" datetime="2025-02-04T16:00:00+08:00">2025-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-15 10:15:49" itemprop="dateModified" datetime="2025-07-15T10:15:49+08:00">2025-07-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="快速排序">1.快速排序</h1>
+<h2 id="核心思想分治思想">1.1.核心思想：分治思想</h2>
+<h2 id="步骤">1.2.步骤：</h2>
+<h3 id="对于一个给定的数组选定一个中间值x理论上来说选哪个都行但后面的代码需要注意相应的搭配否则会陷入死循环后面具体讲常见的就是选数组的左边右边中间值随机选">1.2.1.对于一个给定的数组，选定一个中间值x（理论上来说，选哪个都行，但后面的代码需要注意相应的搭配，否则会陷入死循环。后面具体讲），常见的就是选数组的左边/右边/中间值/随机选</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%B8%80%E8%AE%B2%20%20%E5%BF%AB%E6%8E%92&%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F&%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/04/algo/%E5%9F%BA%E7%A1%80%E8%AF%BE/chap1.%E7%AC%AC%E4%BA%8C%E8%AE%B2%20%E9%AB%98%E7%B2%BE%E5%BA%A6&%E5%89%8D%E7%BC%80%E5%92%8C&%E5%B7%AE%E5%88%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -763,281 +1076,6 @@ branch的内容了。或许可以参考<a target="_blank" rel="noopener" href="h
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-12-15 01:02:57 / Modified: 13:13:14" itemprop="dateCreated datePublished" datetime="2024-12-15T01:02:57+08:00">2024-12-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ijcv24实际是23年10月投的24年才中的">ijcv24（实际是23年10月投的，24年才中的）</h1>
-<h1 id="一点吐槽这个跨模态数据集里有一些红外数据本身的质量真的差到不行啊这样子人也没办法来重识别啊说到底数据已经决定了模型的上限了啊">一点吐槽：这个跨模态数据集里，有一些红外数据本身的质量真的差到不行啊，这样子，人也没办法来重识别啊，说到底，数据已经决定了模型的上限了啊</h1>
-<h1 id="等会得看看它所谓的自适应中间模态到底是怎样的如果还是把两种模态的数据投影到一个公共的模态那和之前的方法的本质就没区别啊真正有区别的应该是说把rgb模态的投影到一个中间模态1把ir模态的投影到一个中间模态2然后去拉近中间模态1和中间模态2-至少这样是看起来更为合理的如果原来rgb和ir模态差距太大了不好一口气直接投影到一个公共的空间那么就一步一步来有点像扩散模型那样扩散模型也是如果想直接从噪声里还原出一幅图像那可能太难了所以它才一步一步地往回逆向这样讲故事起码是更合理的事实上或许还可以尝试多套几个中间模态看看最终的中间模态会不会效果更好">等会得看看它所谓的自适应中间模态，到底是怎样的，如果还是把两种模态的数据投影到一个公共的模态，那和之前的方法的本质就没区别啊。。真正有区别的，应该是说，把rgb模态的投影到一个中间模态1，把ir模态的投影到一个中间模态2，然后去拉近中间模态1和中间模态2
-。至少这样是看起来更为合理的：如果原来rgb和ir模态差距太大了，不好一口气直接投影到一个公共的空间，那么就一步一步来。有点像扩散模型那样。扩散模型也是，如果想直接从噪声里还原出一幅图像，那可能太难了，所以它才一步一步地往回逆向。这样讲故事起码是更合理的。事实上，或许还可以尝试，多套几个中间模态，看看最终的中间模态会不会效果更好？</h1>
-<h1 id="method">method：</h1>
-<h2 id="提出adaptive-middle-modality-generator-amg-module它可以生成一种中间模态的图像后续会用到但它的输入是谁哪种模态的图像">1.提出Adaptive
-Middle-modality Generator (AMG)
-module，它可以生成一种中间模态的图像，后续会用到（但它的输入是谁？哪种模态的图像？）</h2>
-<h3 id="详细讲解">详细讲解：</h3>
-<h4 id="这个module有两个submodule一个是middle-modality-generator-mmg-sub-module一个是adaptive-middle-modality-mixup-amm-sub-module先从宏观上看这里两个submodule的作用是mmg根据输入的一对同id的rgb和ir图像各自生成一个中间模态数据也就是会用rgb的数据生成一个中间数据1再用ir数据生成一个中间数据2-而amm则会根据上面的两个中间数据进行一个mixup操作最终得到一个中间模态数据这个数据就是之后要用的">这个module有两个submodule，一个是Middle-modality
-Generator (MMG) Sub-module，一个是Adaptive Middle-modality Mixup (AMM)
-Sub-module。先从宏观上看，这里两个submodule的作用是，MMG根据输入的一对同id的rgb和ir图像，各自生成一个中间模态数据（也就是会用rgb的数据生成一个中间数据1，再用ir数据生成一个中间数据2
-。而AMM则会根据上面的两个中间数据，进行一个mixup操作，最终得到一个中间模态数据。这个数据就是之后要用的</h4>
-<h4 id="可以说它确实相比之前的方法有改进了吧它是用两个分支去处理输入的两种模态的数据主要是一些11的卷积层毕竟经常要进行channel数的变换另外一个比较合理的地方在于它并没有说用一个11的卷积层就完了而是还加上了一个relu这里我觉得是很有道理的如果单纯是卷积而卷积的本质就是加权求和只用卷积相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间这不太对吧rgb数据的通道信息明显丰富多了你要说同一id的rgb数据和ir数据之间的关系仅仅是一种线性关系感觉没道理的并且它也引用了论文说了这之中的关系是高度非线性的所以引入一个relu层看起来操作层面上是很简单的但这个解释明显是能自圆其说的">可以说，它确实相比之前的方法有改进了吧。它是用两个分支去处理输入的两种模态的数据，主要是一些1×1的卷积层（毕竟经常要进行channel数的变换）。另外一个比较合理的地方在于，它并没有说，用一个1×1的卷积层就完了，而是还加上了一个relu。这里我觉得是很有道理的。如果单纯是卷积，而卷积的本质就是加权求和，只用卷积，相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间。这不太对吧，rgb数据的通道信息明显丰富多了，你要说同一id的rgb数据和ir数据之间的关系，仅仅是一种线性关系，感觉没道理的。并且它也引用了论文，说了这之中的关系是高度非线性的，所以引入一个relu层。看起来操作层面上是很简单的，但这个解释明显是能自圆其说的</h4>
-<h4 id="mmg模块会根据rgb数据和ir数据各自生成单通道的中间数据和三通道的中间数据而amm会用单通道的中间数据来算mixup的时候两种模态的factor之后会把mmg生成的三通道的中间数据进行mixup得到最终的中间数据">MMG模块会根据rgb数据和ir数据，各自生成单通道的中间数据和三通道的中间数据。而AMM会用单通道的中间数据来算mixup的时候，两种模态的factor，之后会把MMG生成的三通道的中间数据进行mixup，得到最终的中间数据</h4>
-<h4 id="好繁琐啊">（好繁琐啊。。。）</h4>
-<h2 id="提出adaptive-distribution-alignment-ada-loss会拉近中间模态数据特征的分布和rgbir模态数据特征的分布的距离是一种从特征层面入手的措施这里的话术是拉近特征的分布嗯分布感觉有点玄乎有待商榷不过可以学习一下他们都是怎么去挖掘利用拉近分布信息的尤其注意这个分布它和下面的第三个method有些联系">2.提出Adaptive
-Distribution Alignment (ADA)
-loss，会拉近中间模态数据特征的分布和rgb，ir模态数据特征的分布的距离，是一种从特征层面入手的措施（这里的话术是，拉近特征的分布。。嗯，分布，感觉有点玄乎，有待商榷）（不过可以学习一下，他们都是怎么去挖掘、利用、拉近分布信息的）（尤其注意这个分布，它和下面的第三个method有些联系）</h2>
-<h2 id="提出center-based-diverse-distribution-learning-cddl-loss它会拉近rgb和ir模态与中间模态的特征之间的距离注意这里不是说分布了如果这里还是说分布那就和上面的2矛盾了也会去拉近rgb和ir模态数据特征之间的距离按他说的这样既可以学到多样的特征应该就是指通过拉远rgbir模态与中间模态的距离让中间模态学到一些不一样的知识这个操作和之前的deen那篇很像啊然后是经典的拉近rgb和ir模态特征之间的距离这个真不能少主要想一下如果只是拉远了rgbir模态特征与中间模态特征的距离两个东西都离同一个东西很远这未必就说明这两个东西本身就离得很近所以保底的措施还是要的但这也让人怀疑如果你有这种担忧了为什么要去做这个拉远rgbir模态与中间模态的特征之间的距离-这个操作呢说白了这个操作本身就不好说到底会不会影响我们的保底措施即直接拉近rgb和ir模态特征之间的距离的效果它自己单独也未必有用只能说加上这个操作是为了学到一些不一样的知识吧也就是中间模态里含有的知识当然也需要看看他是怎么利用这个中间模态的知识的别学完了不用那就纯浪费了而且就是纯为了创新而创新了">3.提出Center-based
-Diverse Distribution Learning (CDDL)
-loss，它会拉近rgb和ir模态与中间模态的特征之间的距离（注意，这里不是说分布了。如果这里还是说分布，那就和上面的2矛盾了），也会去拉近rgb和ir模态数据特征之间的距离。（按他说的，这样既可以学到多样的特征——应该就是指通过拉远rgb/ir模态与中间模态的距离，让中间模态学到一些不一样的知识。这个操作和之前的DEEN那篇很像啊。。。然后是经典的拉近rgb和ir模态特征之间的距离。这个真不能少。主要想一下，如果只是拉远了rgb/ir模态特征与中间模态特征的距离，两个东西都离同一个东西很远，这未必就说明这两个东西本身就离得很近。所以保底的措施还是要的。但这也让人怀疑，如果你有这种担忧了，为什么要去做这个拉远rgb/ir模态与中间模态的特征之间的距离
-这个操作呢？说白了，这个操作本身，就不好说到底会不会影响我们的保底措施（即直接拉近rgb和ir模态特征之间的距离）的效果，它自己单独也未必有用。只能说，加上这个操作，是为了学到一些不一样的知识吧，也就是中间模态里含有的知识。当然，也需要看看他是怎么利用这个中间模态的知识的，别学完了不用，那就纯浪费了，而且就是纯为了创新而创新了</h2>
-<h2 id="一些问题虽然说2操作的是分布3操作的是特征本身没有直接的矛盾但这样23一起用就相当于希望irrgb中间模态三者的特征的分布是一致的但是具体的特征上ir和rgb希望尽可能一致而希望中间模态对应的特征与它们不一样这合理吗如果中间模态的特征尽可能不一样那还能说它的特征分布和rgbir的特征分布比较接近吗说到底这种树立一个公共敌人朋友的方法到底有没有效果不是很好说啊">一些问题：虽然说，2操作的是分布，3操作的是特征，本身没有直接的矛盾，但这样2，3一起用，就相当于希望ir/rgb/中间模态三者的特征的分布是一致的，但是具体的特征上，ir和rgb希望尽可能一致，而希望中间模态对应的特征与它们不一样。这合理吗？如果中间模态的特征尽可能不一样，那还能说它的特征分布和rgb/ir的特征分布比较接近吗？说到底，这种树立一个公共敌人/朋友的方法，到底有没有效果，不是很好说啊</h2>
-<h2 id="总体来说这个方法的目标就是通过构造一个中间模态训练的时候同时用三种模态的数据以此来拉近rgbir模态的数据之间的距离这是最终目的">总体来说，这个方法的目标，就是通过构造一个中间模态，训练的时候同时用三种模态的数据，以此来拉近rgb/ir模态的数据之间的距离（这是最终目的）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/12/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E7%99%AB%EF%BC%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-12-12 19:33:47 / Modified: 19:43:16" itemprop="dateCreated datePublished" datetime="2024-12-12T19:33:47+08:00">2024-12-12</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="服务器可能有时候会在配置环境下载库的时候说http之类的错误类似这样">服务器可能有时候会在配置环境，下载库的时候说http之类的错误，类似这样</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
-<h1 id="也不知道是不是源出了问题而如果想在创建环境装库的时候临时指定别的源一般都是现场查问ai它会说在后面加个-c指定一下源可是有时候还是会报错让人疑惑">也不知道是不是源出了问题。而如果想在创建环境/装库的时候临时指定别的源，一般都是现场查，问ai，它会说在后面加个-c，指定一下源，可是有时候还是会报错，让人疑惑：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">conda create -n ttqk python=3.7 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">Channels:</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line"> - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</span><br><span class="line"> - defaults</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/main</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/r</span><br><span class="line"> - http://mirrors.aliyun.com/anaconda/pkgs/msys2</span><br><span class="line">Platform: linux-64</span><br><span class="line">Collecting package metadata (repodata.json): failed</span><br><span class="line"></span><br><span class="line">UnavailableInvalidChannel: HTTP 404 NOT FOUND <span class="keyword">for</span> channel anaconda/pkgs/main &lt;http://mirrors.aliyun.com/anaconda/pkgs/main&gt;</span><br><span class="line"></span><br><span class="line">The channel is not accessible or is invalid.</span><br><span class="line"></span><br><span class="line">You will need to adjust your conda configuration to proceed.</span><br><span class="line">Use `conda config --show channels` to view your configuration<span class="string">&#x27;s current state,</span></span><br><span class="line"><span class="string">and use `conda config --show-sources` to view config file locations.</span></span><br></pre></td></tr></table></figure>
-<h1 id="然而如果仔细看一下它的问题好像是压根就没按我指定的源来啊虽然不太清楚这是为什么但显然此时更根本的方法是去condarc下删掉不想用的源比如这里的阿里源而此时又会现查问ai它一般会说用什么编辑器去打开那个condarc比如vim-.condarc进去编辑完再出来config-show一下检查却发现改动好像没生效此时我怀疑有个潜藏的问题就是ai的回答是假设了你在个人电脑上用或者说假设了你的conda是装在默认路径了然而我现在用的是服务器conda是装在我指定的非默认路径下那么上面修改的condarc其实就是没用的得去修改我安装路径里的conda的condarc才行事实上最后也确实是去我的个人路径下把condarc的源给改了然后再装就成功了">然而如果仔细看一下，它的问题好像是，压根就没按我指定的源来啊。虽然不太清楚这是为什么，但显然此时更根本的方法是，去condarc下删掉不想用的源，比如这里的阿里源。而此时又会现查，问ai，它一般会说用什么编辑器去打开那个condarc，比如<code>vim ~/.condarc</code>。进去编辑完，再出来，config
-show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏的问题，就是，ai的回答，是假设了你在个人电脑上用，或者说假设了你的conda是装在默认路径了。然而，我现在用的是服务器，conda是装在我指定的，非默认路径下。那么，上面修改的condarc其实就是没用的，得去修改我安装路径里的conda的condarc才行。事实上，最后也确实是，去我的个人路径下把condarc的源给改了，然后再装，就成功了</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%AA%81%E7%84%B6%E5%8F%98%E5%BE%97%E9%9D%9E%E5%B8%B8%E6%85%A2%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%84%9F%E8%A7%89%E4%B9%9F%E5%A4%A7%E5%B9%85%E9%99%8D%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-12-03 10:40:48 / Modified: 10:51:08" itemprop="dateCreated datePublished" datetime="2024-12-03T10:40:48+08:00">2024-12-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题就如上所述目前勉勉强强算解决了终端初始化速度阳间了很多但至于程序速度我不好说">问题就如上所述。目前勉勉强强算解决了？终端初始化速度阳间了很多，但至于程序速度，我不好说</h1>
-<h1 id="终端初始化变慢可能是一直以来的一些日志之类的没清理过堆积的太多了不过我怎么感觉这个变慢是突然的而不是渐渐的还是因为变慢得超过一个节点了所以一下就感受到了不好说反正慢的时候得初始化几分钟就有点离谱了">终端初始化变慢，可能是一直以来的一些日志之类的没清理过，堆积的太多了（不过我怎么感觉这个变慢是突然的，而不是渐渐的？还是因为变慢得超过一个节点了，所以一下就感受到了？不好说。反正慢的时候得初始化几分钟就有点离谱了）</h1>
-<h2 id="如果是想清理一下当前这个用户的日志之类的只清理当前用户的日志避免影响了服务器上其他用户以及避免影响自己的正常使用可以考虑在终端运行一下命令">如果是想清理一下当前这个用户的日志之类的（只清理<strong>当前用户</strong>的<strong>日志</strong>，避免影响了服务器上其他用户，以及避免影响自己的正常使用），可以考虑在终端运行一下命令：</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf ~/.local/share/* </span><br><span class="line"><span class="built_in">rm</span> -rf ~/Library/Logs/* </span><br><span class="line"><span class="built_in">rm</span> -rf ~/.cache/*</span><br></pre></td></tr></table></figure>
-<h2 id="感觉上好像清掉以后确实快一些了起码终端的初始化似乎是快了很多了">感觉上，好像清掉以后确实快一些了，起码终端的初始化似乎是快了很多了</h2>
-<h1 id="另外tmux别开太多开了一个以后可以用一段时间但建议还是用一段时间以后就kill掉别一直用这个可能也会造成影响虽然还没实际验证过">另外，tmux别开太多，开了一个以后，可以用一段时间，但建议还是用一段时间以后就kill掉，别一直用，这个可能也会造成影响（虽然还没实际验证过）</h1>
-<h1 id="最后一个可能的原因是其他人用cpu用的太猛了但感觉有点没道理以前他们又不是没有运行程序怎么就没见这么卡呢这个可能性似乎不太大">最后，一个可能的原因是，其他人用cpu用的太猛了？但感觉有点没道理。以前他们又不是没有运行程序，怎么就没见这么卡呢，这个可能性似乎不太大</h1>
-<h1 id="看网上的相关问题教程似乎很多人都是在.bashrc里找到一些问题然后从这里入手但我瞄了一眼似乎它也没有变得很臃肿吧应该没有什么东西一直在往.bashrc里写东西吧">看网上的相关问题教程，似乎很多人都是在.bashrc里找到一些问题，然后从这里入手。但我瞄了一眼，似乎它也没有变得很臃肿吧，应该没有什么东西一直在往.bashrc里写东西吧。。</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-11-29 10:11:34 / Modified: 10:16:09" itemprop="dateCreated datePublished" datetime="2024-11-29T10:11:34+08:00">2024-11-29</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一般这个东西就是用来把多个想遍历的东西放到一起，一次取出多个元素
-比如， <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> rgb_pid, ir_pid <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.rgb_pids, <span class="variable language_">self</span>.ir_pids):</span><br><span class="line">	xxx</span><br></pre></td></tr></table></figure>
-比较需要注意的是，如果被封装起来的东西的长度不一致，以上面的内容为例，如果self.rgb_pids和self.ir_pids长度不一致，它会自动按照较短的那个来取。就比如，如果这两个东西长度分别是3和5，那么这里的zip一共就会循环3次
-这个东西之所以单独说一下，主要是如果不注意，然后不小心把几个长度不一样的东西打包了，没问题，但需要注意后面会不会出问题（因为可能我们是以为这两个东西长度是一样的，才这样zip的，而如果二者长度不一致，也能正常执行，但后面可能就会出现某些问题。如果是想清楚的，就是要把长度不一致的东西打包到一起，那没问题）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1107,7 +1145,7 @@ show一下检查，却发现改动好像没生效。此时我怀疑有个潜藏�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">213</span>
+          <span class="site-state-item-count">217</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
