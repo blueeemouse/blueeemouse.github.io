@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ACL 25 VideoRAG: Retrieval-Augmented Generation over Video Corpus（多模态的，视频相关） ICLR 25 TempMe: Video Temporal Token Merging for Efficient Text-Video Retrieval（多模态的，video和efficiency结合的，看起来是在压缩vide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="ACL 25 VideoRAG: Retrieval-Augmented Generation over Video Corpus（多模态的，视频相关） ICLR 25 TempMe: Video Temporal Token Merging for Efficient Text-Video Retrieval（多模态的，video和efficiency结合的，看起来是在压缩vide">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-28T07:55:06.184Z">
+<meta property="article:modified_time" content="2025-09-28T09:00:02.755Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-28 15:55:06 / Modified: 17:00:02" itemprop="dateCreated datePublished" datetime="2025-09-28T15:55:06+08:00">2025-09-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="acl-25">ACL 25</h1>
+<h2 id="videorag-retrieval-augmented-generation-over-video-corpus多模态的视频相关"><strong>VideoRAG:
+Retrieval-Augmented Generation over Video
+Corpus</strong>（多模态的，视频相关）</h2>
+<h1 id="iclr-25">ICLR 25</h1>
+<h2 id="tempme-video-temporal-token-merging-for-efficient-text-video-retrieval多模态的video和efficiency结合的看起来是在压缩video输入的也算是video相关的">TempMe:
+Video Temporal Token Merging for Efficient Text-Video
+Retrieval（多模态的，video和efficiency结合的，看起来是在压缩video输入的。也算是video相关的）</h2>
+<h2 id="generalized-video-moment-retrieval多模态的video相关">Generalized
+Video Moment Retrieval（多模态的,video相关）</h2>
+<h1 id="nips-24">NIPS 24</h1>
+<h2 id="diffusion-inspired-truncated-sampler-for-text-video-retrievaltext-video-retrieval">Diffusion-Inspired
+Truncated Sampler for Text-Video Retrieval（text-video retrieval）</h2>
+<h1 id="cvpr-25">CVPR 25</h1>
+<h2 id="drvideo-document-retrieval-based-long-video-understanding真对口了长视频理解方面的"><strong>DrVideo:
+Document Retrieval Based Long Video
+Understanding</strong>（真对口了，长视频理解方面的）</h2>
+<h2 id="salova-segment-augmented-long-video-assistant-for-targeted-retrieval-and-routing-in-long-form-video-analysis这也是经典了也是长视频理解这一块的">SALOVA:
+Segment-Augmented Long Video Assistant for Targeted Retrieval and
+Routing in Long-Form Video
+Analysis（这也是经典了，也是长视频理解这一块的）</h2>
+<h2 id="vlog-video-language-models-by-generative-retrieval-of-narration-vocabulary似乎是video相关的但是理解方面的吗"><strong>VLog:
+Video-Language Models by Generative Retrieval of Narration
+Vocabulary</strong>（似乎是video相关的，但是理解方面的吗？）</h2>
+<h2 id="learning-audio-guided-video-representation-with-gated-attention-for-video-text-retrieval又是text-video-retrieval啊"><strong>Learning
+Audio-guided Video Representation with Gated Attention for Video-Text
+Retrieval</strong>（又是text-video retrieval啊）</h2>
+<h2 id="rethinking-noisy-video-text-retrieval-via-relation-aware-alignment还是text-video-retrieval"><strong>Rethinking
+Noisy Video-Text Retrieval via Relation-aware
+Alignment</strong>（还是text-video retrieval）</h2>
+<h2 id="video-colbert-contextualized-late-interaction-for-text-to-video-retrieval还是text-to-video-retrieval"><strong>Video-ColBERT:
+Contextualized Late Interaction for Text-to-Video
+Retrieval</strong>（还是text-to-video retrieval）</h2>
+<h2 id="multivent-2.0-a-massive-multilingual-benchmark-for-event-centric-video-retrievalbenchmark类不过是关于video-retrieval的"><strong>MultiVENT
+2.0: A Massive Multilingual Benchmark for Event-Centric Video
+Retrieval</strong>（benchmark类，不过是关于video retrieval的）</h2>
+<h2 id="the-devil-is-in-the-prompts-retrieval-augmented-prompt-optimization-for-text-to-video-generation不会是prompt-engineering吧关注text-to-video-generation文生视频吗"><strong>The
+Devil is in the Prompts: Retrieval-Augmented Prompt Optimization for
+Text-to-Video Generation</strong>（不会是prompt
+engineering吧……）（关注text-to-video generation？文生视频吗？）</h2>
+<h2 id="narrating-the-video-boosting-text-video-retrieval-via-comprehensive-utilization-of-frame-level-captionstext-to-video-retrieval"><a target="_blank" rel="noopener" href="https://multimodal-understanding-group.github.io/NarVid/">Narrating
+the Video: Boosting Text-Video Retrieval via Comprehensive Utilization
+of Frame-Level Captions</a>（text-to-video retrieval）</h2>
+<h2 id="discovla-discrepancy-reduction-in-vision-language-and-alignment-for-parameter-efficient-video-text-retrieval呃efficiency和video结合text-to-video-retrieval"><a target="_blank" rel="noopener" href="https://github.com/LunarShen/DsicoVLA">DiscoVLA: Discrepancy
+Reduction in Vision, Language, and Alignment for Parameter-Efficient
+Video-Text Retrieval</a>（呃，efficiency和video结合，text-to-video
+retrieval）</h2>
+<h1 id="iccv-25">ICCV 25</h1>
+<h2 id="hybrid-tower-fine-grained-pseudo-query-interaction-and-generation-for-text-to-video-retrievaltext-to-video-retrievalvideo相关"><strong>Hybrid-Tower:
+Fine-grained Pseudo-query Interaction and Generation for Text-to-Video
+Retrieval</strong>（text-to-video retrieval，video相关）</h2>
+<h2 id="beyond-simple-edits-composed-video-retrieval-with-dense-modificationscomposed-video-retrievalvideo相关的"><strong>Beyond
+Simple Edits: Composed Video Retrieval with Dense
+Modifications</strong>（Composed Video Retrieval，video相关的）</h2>
+<h2 id="borrowing-eyes-for-the-blind-spot-overcoming-data-scarcity-in-malicious-video-detection-via-cross-domain-retrieval-augmentation这是啥video-detection嗯也算是video相关的但应该是那种low-level的video相关工作"><a target="_blank" rel="noopener" href="https://github.com/ronpay/CRAVE">Borrowing Eyes for the Blind
+Spot: Overcoming Data Scarcity in Malicious Video Detection via
+Cross-Domain Retrieval Augmentation</a>（这是啥？video
+detection？嗯，也算是video相关的，但应该是那种low-level的video相关工作）</h2>
+<h2 id="enhancing-partially-relevant-video-retrieval-with-hyperbolic-learningvideo-retrieval"><strong>Enhancing
+Partially Relevant Video Retrieval with Hyperbolic
+Learning</strong>（video retrieval）</h2>
+<h2 id="ophclip-hierarchical-retrieval-augmented-learning-for-ophthalmic-surgical-video-language-pretraining这是不太懂不过看起来是video相关的"><strong>OphCLIP:
+Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical
+Video-Language
+Pretraining</strong>（这是？不太懂，不过看起来是video相关的）</h2>
+<h2 id="quantifying-and-narrowing-the-unknown-interactive-text-to-video-retrieval-via-uncertainty-minimizationtext-to-video-retrievalvideo相关"><strong>Quantifying
+and Narrowing the Unknown: Interactive Text-to-Video Retrieval via
+Uncertainty Minimization</strong>（text-to-video
+retrieval，video相关）</h2>
+<h2 id="prototypes-are-balanced-units-for-efficient-and-effective-partially-relevant-video-retrievalvideo-retrievalvideo相关"><strong>Prototypes
+are Balanced Units for Efficient and Effective Partially Relevant Video
+Retrieval</strong>（video retrieval，video相关）</h2>
+<h2 id="bidirectional-likelihood-estimation-with-multi-modal-large-language-models-for-text-video-retrievaltext-to-video-retrievalvideo相关"><strong>Bidirectional
+Likelihood Estimation with Multi-Modal Large Language Models for
+Text-Video Retrieval</strong>（text-to-video retrieval，video相关）</h2>
+<h1 id="eccv-24">ECCV 24</h1>
+<h2 id="rethinking-video-text-understanding-retrieval-from-counterfactually-augmented-datavideo-text-understanding具体是做啥是video理解方面的吗"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/2083_ECCV_2024_paper.php">Rethinking
+Video-Text Understanding: Retrieval from Counterfactually Augmented
+Data</a>（video-text
+understanding？具体是做啥？是video理解方面的吗？）</h2>
+<h2 id="rgnet-a-unified-clip-retrieval-and-grounding-network-for-long-videoslong-video相关的不知道是不是长视频理解这方面的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/3186_ECCV_2024_paper.php">RGNet:
+A Unified Clip Retrieval and Grounding Network for Long Videos</a>（long
+video相关的，不知道是不是长视频理解这方面的）</h2>
+<h2 id="kdpror-a-knowledge-decoupling-probabilistic-framework-for-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5033_ECCV_2024_paper.php">KDProR:
+A Knowledge-Decoupling Probabilistic Framework for Video-Text
+Retrieval</a>（text-to-video retrieval，video相关）</h2>
+<h2 id="egocvr-an-egocentric-benchmark-for-fine-grained-composed-video-retrieval细粒度composed-video-retrieval"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5363_ECCV_2024_paper.php">EgoCVR:
+An Egocentric Benchmark for Fine-Grained Composed Video
+Retrieval</a>（细粒度Composed Video Retrieval）</h2>
+<h2 id="uncertainty-aware-sign-language-video-retrieval-with-probability-distribution-modelingvideo-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6074_ECCV_2024_paper.php">Uncertainty-aware
+sign language video retrieval with probability distribution
+modeling</a>（video retrieval，video相关）</h2>
+<h2 id="ea-vtr-event-aware-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6845_ECCV_2024_paper.php">EA-VTR:
+Event-Aware Video-Text Retrieval</a>（text-to-video
+retrieval，video相关）</h2>
+<h2 id="rap-retrieval-augmented-planner-for-adaptive-procedure-planning-in-instructional-videosvideo相关的但是具体是做什么的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/9950_ECCV_2024_paper.php">RAP:
+Retrieval-Augmented Planner for Adaptive Procedure Planning in
+Instructional Videos</a>（video相关的，但是具体是做什么的？）</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/" rel="next" title="VideoRAG：Retrieval-Augmented Generation over Video Corpus">
+      VideoRAG：Retrieval-Augmented Generation over Video Corpus <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#acl-25"><span class="nav-number">1.</span> <span class="nav-text">ACL 25</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#videorag-retrieval-augmented-generation-over-video-corpus%E5%A4%9A%E6%A8%A1%E6%80%81%E7%9A%84%E8%A7%86%E9%A2%91%E7%9B%B8%E5%85%B3"><span class="nav-number">1.1.</span> <span class="nav-text">VideoRAG:
+Retrieval-Augmented Generation over Video
+Corpus（多模态的，视频相关）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iclr-25"><span class="nav-number">2.</span> <span class="nav-text">ICLR 25</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tempme-video-temporal-token-merging-for-efficient-text-video-retrieval%E5%A4%9A%E6%A8%A1%E6%80%81%E7%9A%84video%E5%92%8Cefficiency%E7%BB%93%E5%90%88%E7%9A%84%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%98%AF%E5%9C%A8%E5%8E%8B%E7%BC%A9video%E8%BE%93%E5%85%A5%E7%9A%84%E4%B9%9F%E7%AE%97%E6%98%AFvideo%E7%9B%B8%E5%85%B3%E7%9A%84"><span class="nav-number">2.1.</span> <span class="nav-text">TempMe:
+Video Temporal Token Merging for Efficient Text-Video
+Retrieval（多模态的，video和efficiency结合的，看起来是在压缩video输入的。也算是video相关的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#generalized-video-moment-retrieval%E5%A4%9A%E6%A8%A1%E6%80%81%E7%9A%84video%E7%9B%B8%E5%85%B3"><span class="nav-number">2.2.</span> <span class="nav-text">Generalized
+Video Moment Retrieval（多模态的,video相关）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nips-24"><span class="nav-number">3.</span> <span class="nav-text">NIPS 24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#diffusion-inspired-truncated-sampler-for-text-video-retrievaltext-video-retrieval"><span class="nav-number">3.1.</span> <span class="nav-text">Diffusion-Inspired
+Truncated Sampler for Text-Video Retrieval（text-video retrieval）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cvpr-25"><span class="nav-number">4.</span> <span class="nav-text">CVPR 25</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#drvideo-document-retrieval-based-long-video-understanding%E7%9C%9F%E5%AF%B9%E5%8F%A3%E4%BA%86%E9%95%BF%E8%A7%86%E9%A2%91%E7%90%86%E8%A7%A3%E6%96%B9%E9%9D%A2%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">DrVideo:
+Document Retrieval Based Long Video
+Understanding（真对口了，长视频理解方面的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#salova-segment-augmented-long-video-assistant-for-targeted-retrieval-and-routing-in-long-form-video-analysis%E8%BF%99%E4%B9%9F%E6%98%AF%E7%BB%8F%E5%85%B8%E4%BA%86%E4%B9%9F%E6%98%AF%E9%95%BF%E8%A7%86%E9%A2%91%E7%90%86%E8%A7%A3%E8%BF%99%E4%B8%80%E5%9D%97%E7%9A%84"><span class="nav-number">4.2.</span> <span class="nav-text">SALOVA:
+Segment-Augmented Long Video Assistant for Targeted Retrieval and
+Routing in Long-Form Video
+Analysis（这也是经典了，也是长视频理解这一块的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vlog-video-language-models-by-generative-retrieval-of-narration-vocabulary%E4%BC%BC%E4%B9%8E%E6%98%AFvideo%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BD%86%E6%98%AF%E7%90%86%E8%A7%A3%E6%96%B9%E9%9D%A2%E7%9A%84%E5%90%97"><span class="nav-number">4.3.</span> <span class="nav-text">VLog:
+Video-Language Models by Generative Retrieval of Narration
+Vocabulary（似乎是video相关的，但是理解方面的吗？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-audio-guided-video-representation-with-gated-attention-for-video-text-retrieval%E5%8F%88%E6%98%AFtext-video-retrieval%E5%95%8A"><span class="nav-number">4.4.</span> <span class="nav-text">Learning
+Audio-guided Video Representation with Gated Attention for Video-Text
+Retrieval（又是text-video retrieval啊）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rethinking-noisy-video-text-retrieval-via-relation-aware-alignment%E8%BF%98%E6%98%AFtext-video-retrieval"><span class="nav-number">4.5.</span> <span class="nav-text">Rethinking
+Noisy Video-Text Retrieval via Relation-aware
+Alignment（还是text-video retrieval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#video-colbert-contextualized-late-interaction-for-text-to-video-retrieval%E8%BF%98%E6%98%AFtext-to-video-retrieval"><span class="nav-number">4.6.</span> <span class="nav-text">Video-ColBERT:
+Contextualized Late Interaction for Text-to-Video
+Retrieval（还是text-to-video retrieval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multivent-2.0-a-massive-multilingual-benchmark-for-event-centric-video-retrievalbenchmark%E7%B1%BB%E4%B8%8D%E8%BF%87%E6%98%AF%E5%85%B3%E4%BA%8Evideo-retrieval%E7%9A%84"><span class="nav-number">4.7.</span> <span class="nav-text">MultiVENT
+2.0: A Massive Multilingual Benchmark for Event-Centric Video
+Retrieval（benchmark类，不过是关于video retrieval的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-devil-is-in-the-prompts-retrieval-augmented-prompt-optimization-for-text-to-video-generation%E4%B8%8D%E4%BC%9A%E6%98%AFprompt-engineering%E5%90%A7%E5%85%B3%E6%B3%A8text-to-video-generation%E6%96%87%E7%94%9F%E8%A7%86%E9%A2%91%E5%90%97"><span class="nav-number">4.8.</span> <span class="nav-text">The
+Devil is in the Prompts: Retrieval-Augmented Prompt Optimization for
+Text-to-Video Generation（不会是prompt
+engineering吧……）（关注text-to-video generation？文生视频吗？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#narrating-the-video-boosting-text-video-retrieval-via-comprehensive-utilization-of-frame-level-captionstext-to-video-retrieval"><span class="nav-number">4.9.</span> <span class="nav-text">Narrating
+the Video: Boosting Text-Video Retrieval via Comprehensive Utilization
+of Frame-Level Captions（text-to-video retrieval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#discovla-discrepancy-reduction-in-vision-language-and-alignment-for-parameter-efficient-video-text-retrieval%E5%91%83efficiency%E5%92%8Cvideo%E7%BB%93%E5%90%88text-to-video-retrieval"><span class="nav-number">4.10.</span> <span class="nav-text">DiscoVLA: Discrepancy
+Reduction in Vision, Language, and Alignment for Parameter-Efficient
+Video-Text Retrieval（呃，efficiency和video结合，text-to-video
+retrieval）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iccv-25"><span class="nav-number">5.</span> <span class="nav-text">ICCV 25</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#hybrid-tower-fine-grained-pseudo-query-interaction-and-generation-for-text-to-video-retrievaltext-to-video-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">5.1.</span> <span class="nav-text">Hybrid-Tower:
+Fine-grained Pseudo-query Interaction and Generation for Text-to-Video
+Retrieval（text-to-video retrieval，video相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beyond-simple-edits-composed-video-retrieval-with-dense-modificationscomposed-video-retrievalvideo%E7%9B%B8%E5%85%B3%E7%9A%84"><span class="nav-number">5.2.</span> <span class="nav-text">Beyond
+Simple Edits: Composed Video Retrieval with Dense
+Modifications（Composed Video Retrieval，video相关的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#borrowing-eyes-for-the-blind-spot-overcoming-data-scarcity-in-malicious-video-detection-via-cross-domain-retrieval-augmentation%E8%BF%99%E6%98%AF%E5%95%A5video-detection%E5%97%AF%E4%B9%9F%E7%AE%97%E6%98%AFvideo%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BD%86%E5%BA%94%E8%AF%A5%E6%98%AF%E9%82%A3%E7%A7%8Dlow-level%E7%9A%84video%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">5.3.</span> <span class="nav-text">Borrowing Eyes for the Blind
+Spot: Overcoming Data Scarcity in Malicious Video Detection via
+Cross-Domain Retrieval Augmentation（这是啥？video
+detection？嗯，也算是video相关的，但应该是那种low-level的video相关工作）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enhancing-partially-relevant-video-retrieval-with-hyperbolic-learningvideo-retrieval"><span class="nav-number">5.4.</span> <span class="nav-text">Enhancing
+Partially Relevant Video Retrieval with Hyperbolic
+Learning（video retrieval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ophclip-hierarchical-retrieval-augmented-learning-for-ophthalmic-surgical-video-language-pretraining%E8%BF%99%E6%98%AF%E4%B8%8D%E5%A4%AA%E6%87%82%E4%B8%8D%E8%BF%87%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%98%AFvideo%E7%9B%B8%E5%85%B3%E7%9A%84"><span class="nav-number">5.5.</span> <span class="nav-text">OphCLIP:
+Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical
+Video-Language
+Pretraining（这是？不太懂，不过看起来是video相关的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#quantifying-and-narrowing-the-unknown-interactive-text-to-video-retrieval-via-uncertainty-minimizationtext-to-video-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">5.6.</span> <span class="nav-text">Quantifying
+and Narrowing the Unknown: Interactive Text-to-Video Retrieval via
+Uncertainty Minimization（text-to-video
+retrieval，video相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prototypes-are-balanced-units-for-efficient-and-effective-partially-relevant-video-retrievalvideo-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">5.7.</span> <span class="nav-text">Prototypes
+are Balanced Units for Efficient and Effective Partially Relevant Video
+Retrieval（video retrieval，video相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bidirectional-likelihood-estimation-with-multi-modal-large-language-models-for-text-video-retrievaltext-to-video-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">5.8.</span> <span class="nav-text">Bidirectional
+Likelihood Estimation with Multi-Modal Large Language Models for
+Text-Video Retrieval（text-to-video retrieval，video相关）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#eccv-24"><span class="nav-number">6.</span> <span class="nav-text">ECCV 24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rethinking-video-text-understanding-retrieval-from-counterfactually-augmented-datavideo-text-understanding%E5%85%B7%E4%BD%93%E6%98%AF%E5%81%9A%E5%95%A5%E6%98%AFvideo%E7%90%86%E8%A7%A3%E6%96%B9%E9%9D%A2%E7%9A%84%E5%90%97"><span class="nav-number">6.1.</span> <span class="nav-text">Rethinking
+Video-Text Understanding: Retrieval from Counterfactually Augmented
+Data（video-text
+understanding？具体是做啥？是video理解方面的吗？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rgnet-a-unified-clip-retrieval-and-grounding-network-for-long-videoslong-video%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%8D%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%8D%E6%98%AF%E9%95%BF%E8%A7%86%E9%A2%91%E7%90%86%E8%A7%A3%E8%BF%99%E6%96%B9%E9%9D%A2%E7%9A%84"><span class="nav-number">6.2.</span> <span class="nav-text">RGNet:
+A Unified Clip Retrieval and Grounding Network for Long Videos（long
+video相关的，不知道是不是长视频理解这方面的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kdpror-a-knowledge-decoupling-probabilistic-framework-for-video-text-retrievaltext-to-video-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">6.3.</span> <span class="nav-text">KDProR:
+A Knowledge-Decoupling Probabilistic Framework for Video-Text
+Retrieval（text-to-video retrieval，video相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#egocvr-an-egocentric-benchmark-for-fine-grained-composed-video-retrieval%E7%BB%86%E7%B2%92%E5%BA%A6composed-video-retrieval"><span class="nav-number">6.4.</span> <span class="nav-text">EgoCVR:
+An Egocentric Benchmark for Fine-Grained Composed Video
+Retrieval（细粒度Composed Video Retrieval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uncertainty-aware-sign-language-video-retrieval-with-probability-distribution-modelingvideo-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">6.5.</span> <span class="nav-text">Uncertainty-aware
+sign language video retrieval with probability distribution
+modeling（video retrieval，video相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ea-vtr-event-aware-video-text-retrievaltext-to-video-retrievalvideo%E7%9B%B8%E5%85%B3"><span class="nav-number">6.6.</span> <span class="nav-text">EA-VTR:
+Event-Aware Video-Text Retrieval（text-to-video
+retrieval，video相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rap-retrieval-augmented-planner-for-adaptive-procedure-planning-in-instructional-videosvideo%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BD%86%E6%98%AF%E5%85%B7%E4%BD%93%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="nav-number">6.7.</span> <span class="nav-text">RAP:
+Retrieval-Augmented Planner for Adaptive Procedure Planning in
+Instructional Videos（video相关的，但是具体是做什么的？）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

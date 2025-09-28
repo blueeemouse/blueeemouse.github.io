@@ -150,6 +150,764 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Keep%20Me%20Updated!%20Memory%20Management%20in%20Long-term%20Conversations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Keep%20Me%20Updated!%20Memory%20Management%20in%20Long-term%20Conversations/" class="post-title-link" itemprop="url">Keep Me Updated! Memory Management in Long-term Conversations</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-05 11:32:00 / Modified: 17:10:45" itemprop="dateCreated datePublished" datetime="2025-09-05T11:32:00+08:00">2025-09-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/" itemprop="url" rel="index"><span itemprop="name">memory management</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueemnlp-22-findings">Venue：EMNLP 22 Findings</h1>
+<h1 id="date2022-10-17">date：2022-10-17</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="论文关注长期对话中的动态记忆管理问题具体来说我们与模型交流时随着内容的增多历史信息也不断增多而后续的谈话有可能需要再次利用历史信息且新的对话内容可能和历史信息发生冲突导致历史信息需要更新例如新的对话里表明已经不生病了则原来历史信息里保留的生病的信息就可以丢弃了-所以总结一下就是如何让对话系统在多轮对话中跟踪更新用户最新信息管理动态记忆实现更加自然连贯的长期对话">论文关注长期对话中的动态记忆管理问题。具体来说，我们与模型交流时，随着内容的增多，历史信息也不断增多。而后续的谈话有可能需要再次利用历史信息，且新的对话内容可能和历史信息发生冲突，导致历史信息需要更新（例如，新的对话里表明已经不生病了，则原来历史信息里保留的生病的信息就可以丢弃了）<br>所以总结一下，就是，如何让对话系统在多轮对话中跟踪、更新用户最新信息，管理动态记忆，实现更加自然连贯的长期对话</h2>
+<h1 id="简介">简介：</h1>
+<h2 id="论文针对问题首先明确定义了这种新的任务在多会话对话中每次给定上下文以及历史记忆需要先给出当前的合理的回答回答结束后需要根据这一次的对话更新历史记忆以用于下一轮对话">论文针对问题，首先明确定义了这种新的任务：在多会话对话中，每次给定上下文以及历史记忆，需要先给出当前的合理的回答；回答结束后，需要根据这一次的对话，更新历史记忆，以用于下一轮对话</h2>
+<h2 id="方法上论文专门构建了一套多会话数据集同时设计了一套系统包含三个主要部件">方法上，论文专门构建了一套多会话数据集，同时设计了一套系统，包含三个主要部件：</h2>
+<h3 id="memory-grounded-response-generation-response-generation利用记忆检索相关内容进行合理回复这一部分很类似naive-rag只不过此处的检索库是历史记忆而已我们还是检索top-k的词条用于辅助回答">Memory
+Grounded Response Generation Response
+Generation：利用记忆，检索相关内容，进行合理回复（这一部分很类似naive
+RAG，只不过此处的检索库是历史记忆而已。我们还是检索top-k的词条，用于辅助回答）</h3>
+<h3 id="dialogue-summarization将当前会话机型抽象总结提炼出关键信息用于更新历史记忆此处会专门训练一个summarizer模型同时会有手工标注的对话历史--总结句子集合这样的数据对用于训练summarizer">Dialogue
+Summarization：将当前会话机型抽象总结，提炼出关键信息，用于更新历史记忆（此处会专门训练一个summarizer模型，同时会有手工标注的“对话历史--总结句子集合”这样的数据对，用于训练summarizer</h3>
+<h3 id="memory-update事先定义了四种操作根据新内容和记忆之间可能发生的关系定义的结合旧记忆和当前对话的抽象信息进行更新此处因为实现定义了四种操作是根据历史记忆和当前对话摘要之间的关系得到的所以有一个四分类模型它的输入就是m_is_j其中m_i表示历史记忆中的第i条s_j表示当前对话摘要的第j条输出则是四种操作之一的类别遍历所有的记忆和对话摘要组合确定哪些是要保留的哪些是要剔除的完成历史记忆的动态更新">Memory
+Update：事先定义了四种操作（根据新内容和记忆之间可能发生的关系定义的），结合旧记忆和当前对话的抽象信息进行更新（此处因为实现定义了四种操作，是根据历史记忆和当前对话摘要之间的关系得到的，所以有一个四分类模型，它的输入就是<span class="math inline">\((m_{i},s_{j})\)</span>，其中<span class="math inline">\(m_{i}\)</span>表示历史记忆中的第i条，<span class="math inline">\(s_{j}\)</span>表示当前对话摘要的第j条，输出则是四种操作之一的类别。遍历所有的记忆和对话摘要组合，确定哪些是要保留的，哪些是要剔除的，完成历史记忆的动态更新）</h3>
+<h1 id="insight">insight：</h1>
+<h2 id="感觉看下来没有哪个地方说得上是特别令人惊艳的大概它切入点是比较新颖的长对话的历史记忆管理">感觉看下来，没有哪个地方说得上是特别令人惊艳的；大概它切入点是比较新颖的，长对话的历史记忆管理</h2>
+<h2 id="用非结构化文本来进行记忆管理这个点怎么说或许可以是一个在其它领域借鉴的创新点还是感觉有点强行了不应该这样硬凑创新点说到底如果在某个领域我们希望用非结构化文本方便人类理解那么这就是自然的也应该是我们的目标如果没有这个需求那不一定非要非结构化文本结构化和非结构化文本哪个效果好就用哪个吧">用非结构化文本来进行记忆管理，这个点，怎么说，或许可以是一个在其它领域借鉴的创新点？……还是感觉有点强行了，不应该这样硬凑创新点。说到底，如果在某个领域，我们希望用非结构化文本，方便人类理解，那么这就是自然的，也应该是我们的目标。如果没有这个需求，那不一定非要非结构化文本，结构化和非结构化文本，哪个效果好就用哪个吧</h2>
+<h2 id="update操作被涵盖成四种预先定义的操作然后具体的实现用一个单独训练的分类模型实现这一套算是一个比较常见的trick了针对这种比较灵活的问题如果暂时没有特别好的处理方法那么用这种相对机械工程的做法也不是不行吧权宜之计且一般有可能需要自己构造数据毕竟要训练这种模型就得有输入数据--对应操作这样的数据对然而你的操作一般是自己定义的所以基本找不到现成的数据集">update操作被涵盖成四种预先定义的操作，然后具体的实现用一个单独训练的分类模型实现，这一套算是一个比较常见的trick了。针对这种比较灵活的问题，如果暂时没有特别好的处理方法，那么用这种相对机械、工程的做法也不是不行吧（权宜之计）（且一般有可能需要自己构造数据。毕竟，要训练这种模型，就得有“输入数据--对应操作”这样的数据对，然而你的操作一般是自己定义的，所以基本找不到现成的数据集）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出一套记忆管理机制且是用非结构化文本利于人类理解">提出一套记忆管理机制，且是用非结构化文本，利于人类理解</h2>
+<h2 id="提出第一个韩语的长期这里指的是有多个会话会话之间有时间间隔这样的吧对话数据集可用于记忆管理方面的研究">提出第一个韩语的长期（这里指的是有多个会话，会话之间有时间间隔这样的吧）对话数据集，可用于记忆管理方面的研究</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Sufficient%20Context%EF%BC%9AA%20New%20Lens%20on%20Retrieval%20Augmented%20Generation%20Systems/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Sufficient%20Context%EF%BC%9AA%20New%20Lens%20on%20Retrieval%20Augmented%20Generation%20Systems/" class="post-title-link" itemprop="url">Sufficient Context：A New Lens on Retrieval Augmented Generation Systems</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-05 00:01:00 / Modified: 00:08:30" itemprop="dateCreated datePublished" datetime="2025-09-05T00:01:00+08:00">2025-09-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/" itemprop="url" rel="index"><span itemprop="name">RAG for long-context</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueiclr-25">Venue：ICLR 25</h1>
+<h1 id="date2025-04-23">date：2025-04-23</h1>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h1 id="contribution">contribution：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Sufficient%20Context%EF%BC%9AA%20New%20Lens%20on%20Retrieval%20Augmented%20Generation%20Systems/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/" class="post-title-link" itemprop="url">Inference Scaling for Long-Context Retrieval Augmented Generation</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-04 23:50:00" itemprop="dateCreated datePublished" datetime="2025-09-04T23:50:00+08:00">2025-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-05 10:20:34" itemprop="dateModified" datetime="2025-09-05T10:20:34+08:00">2025-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/" itemprop="url" rel="index"><span itemprop="name">RAG for long-context</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueiclr-25">Venue：ICLR 25</h1>
+<h1 id="date2025-03-02">date：2025-03-02</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="inference-scaling可以提高llm在测试应用时的表现而rag这项技术如果要scaling一般做法考虑的都是把它的检索库给scaling以期能检索到更加相关有用的文档但实验表明仅scale-up检索库效果提升并不大甚至有可能降低效果这样的inference-scaling就成了乱花算力了-因此论文研究rag技术进行inference-scaling除了增加待检索的文档数还可以在哪些维度上进行scaling-以及给定budget怎么分配这些budget才能取得最优的效果">inference
+scaling可以提高llm在测试应用时的表现。而RAG这项技术，如果要scaling，一般做法考虑的都是把它的检索库给scaling，以期能检索到更加相关、有用的文档。但实验表明，仅scale
+up检索库，效果提升并不大，甚至有可能降低效果。这样的inference
+scaling就成了乱花算力了<br>因此论文研究，RAG技术进行inference
+scaling，除了增加待检索的文档数，还可以在哪些维度上进行scaling？<br>以及，给定budget，怎么分配这些budget才能取得最优的效果？</h2>
+<h2 id="感觉研究的问题是相对有意义的但是方法上不好说现在一看到iterative和rag结合就有点犯恶心">（感觉研究的问题是相对有意义的，但是方法上不好说，现在一看到iterative和RAG结合就有点犯恶心……）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="切入的角度相对新鲜一点是从rag的inference-scaling出发的">切入的角度相对新鲜一点，是从RAG的inference
+scaling出发的。</h2>
+<h1 id="contribution">contribution：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/" class="post-title-link" itemprop="url">Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-04 16:34:00" itemprop="dateCreated datePublished" datetime="2025-09-04T16:34:00+08:00">2025-09-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-28 17:03:59" itemprop="dateModified" datetime="2025-09-28T17:03:59+08:00">2025-09-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueicml-25oral">Venue：ICML 25（oral）</h1>
+<h1 id="date2025-05-22">date：2025-05-22</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="high-resolution-image-perception对现在的mllm而言是一大难题可以理解高分辨率意味着原始的像素数很大如果不降采样就会造成token非常多计算量很大而且感知理解的时候也有困难这就类似于nlp里输入文本过长此时我们再要求模型去理解或者生成也有难度通常会进行降采样之类的操作以便减少token但这样一来会造成信息的丢失使得依赖细粒度信息的任务很难完成好ocr之类的都是对图像的细节要求很高的">high-resolution
+image
+perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进行降采样之类的操作，以便减少token。但这样一来，会造成信息的丢失，使得依赖细粒度信息的任务很难完成好（OCR之类的，都是对图像的细节要求很高的）</h2>
+<h2 id="这篇论文就是想解决这个问题它引入rag检索关键的image-crops拼成一个新的图像此时的图像比原来的图像在resolution上小很多因而减少了计算量同时因为检索到的都是关键的crops因此性能是有保证的">这篇论文就是想解决这个问题。它引入RAG，检索关键的image
+crops，拼成一个新的图像（此时的图像比原来的图像在resolution上小很多，因而减少了计算量；同时因为检索到的都是关键的crops，因此性能是有保证的）</h2>
+<h2 id="是的论文里的一句话说的很好by-enhancing-the-long-context-capability-of-mllms这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知">是的，论文里的一句话说的很好，by
+enhancing the long-context capability of
+MLLMs，这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="其实一句话概括一下论文做的事就是在hr-images-perception任务中通过rag技术检索出跟query相关的top-k的crop由此拼出一副小很多的图像从而降低resolution且尽可能确保perception质量">其实一句话概括一下论文做的事，就是，在HR
+images
+perception任务中，通过RAG技术，检索出跟query相关的top-k的crop，由此拼出一副小很多的图像，从而降低resolution且尽可能确保perception质量</h2>
+<h2 id="把rag技术应用到mllm上用于解决hr-images-perception任务很创新或者说更根本的视角在于论文注意到现有mllm处理hr-images之所以效果不够好可以归结为mllm的long-context能力不足因此想解决这一点从而借鉴了llm领域里的rag技术">把RAG技术应用到mllm上，用于解决HR
+images
+perception任务，很创新。或者说，更根本的视角在于，论文注意到现有mllm处理HR
+images之所以效果不够好，可以归结为mllm的long-context能力不足，因此想解决这一点，从而借鉴了llm领域里的RAG技术</h2>
+<h2 id="那么正如上所述观察问题并从不同的视角归纳有可能就会发现它和现有的某些问题是相通的从而可以考虑借鉴现有的技术进行解决这个过程里可能会遇到新的问题那么这也是所谓创新并且过程中或许能激发出新的研究成果">那么正如上所述，观察问题，并从不同的视角归纳，有可能就会发现它和现有的某些问题是相通的，从而可以考虑借鉴现有的技术进行解决。这个过程里可能会遇到新的问题，那么这也是所谓创新，并且过程中或许能激发出新的研究成果</h2>
+<h2 id="从这篇论文也可以学习到一个研究的一般范式和方法就是当我们发现其它领域的方法可能对解决当前领域的方法有用的时候最简单也是最理想的情况就是我们直接照搬过来也能很好的work但论文发现不行所以需要改进这就是论文的主要工作和创新点吧这本质上是因为图像和文本的天然的不同文本是一维的图像是二维的因此有位置关系类似的一个新的创新点可能在于我们如果想提升mllm感知高分辨率的长视频那么又会多一个时序的关系这可能也需要解决但考虑到现在把rag用到mllm上都没太多人做做这个感知长视频的应该更是难而且可能暂时没有人follow也疑似有点灌水了假如直接把rag技术应用到mllm想以此提高mllm的长文本能力从而提升其hr-images的感知能力那我们需要检索和当前图像问题-相关的token问题在于检索回来的token可能是top-k个我们需要确定它们的位置才能进一步决定用哪个因为有些问题可能是需要这个位置关系的这里不妨构造一个例子我们有一副人像图我们想检索说在某个人的右上方的戴帽子人有哪些因此我们需要感知检索出戴帽子的人对应的token然后再根据位置信息进行分析得是在某个人的右上方的人的token才行这个例子对吗">从这篇论文，也可以学习到一个研究的一般范式和方法。就是，当我们发现其它领域的方法可能对解决当前领域的方法有用的时候，最简单，也是最理想的情况就是，我们直接照搬过来，也能很好的work。但论文发现不行，所以需要改进（这就是论文的主要工作和创新点吧。这本质上是因为图像和文本的天然的不同。文本是一维的，图像是二维的，因此有位置关系。类似的，一个新的创新点，可能在于，我们如果想提升mllm感知高分辨率的长视频，那么又会多一个时序的关系，这可能也需要解决。但考虑到现在把RAG用到mllm上都没太多人做，做这个感知长视频的应该更是难，而且可能暂时没有人follow，也疑似有点灌水了。假如直接把RAG技术应用到mllm，想以此提高mllm的长文本能力，从而提升其HR
+images的感知能力，那我们需要检索和当前图像/问题
+相关的token。问题在于，检索回来的token可能是top-k个，我们需要确定它们的位置，才能进一步决定用哪个。因为有些问题可能是需要这个位置关系的。这里不妨构造一个例子：我们有一副人像图，我们想检索说，在某个人的右上方的戴帽子人有哪些。因此，我们需要感知、检索出戴帽子的人对应的token，然后再根据位置信息进行分析，得是在”某个人“的右上方的人的token才行（这个例子对吗？））</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="把rag技术迁移到mllm上用于解决high-resolution-images-perception问题首创做work了提出了一套免训练的方法顺带的提高了mllm的一般的多模态的能力">把RAG技术迁移到mllm上，用于解决High
+Resolution images
+perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/course_learning/self-learn-mathematical-analysis/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E5%AE%9E%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/03/course_learning/self-learn-mathematical-analysis/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E5%AE%9E%E6%95%B0/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-03 21:43:04 / Modified: 21:53:03" itemprop="dateCreated datePublished" datetime="2025-09-03T21:43:04+08:00">2025-09-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="实数的无尽小数表示与顺序">1. 实数的无尽小数表示与顺序</h1>
+<h2 id="给出无尽小数的定义用无尽小数表示实数并且基于无尽小数定义再规定两个等同关系类似于天然成立的等式但是我们自己定义的主要是0正等于0负以及9循环等于往前进一位">给出无尽小数的定义，用无尽小数表示实数。并且基于无尽小数定义，再规定两个等同关系（类似于天然成立的等式，但是我们自己定义的）（主要是0正等于0负，以及9循环等于往前进一位）</h2>
+<h2 id="之后再给出实数的定义相反数的定义绝对值的定义并规定了实数之间的顺序即定义了大小比较的操作满足三歧性和传递性">之后再给出实数的定义，相反数的定义，绝对值的定义，并规定了实数之间的顺序（即定义了大小比较的操作。满足三歧性和传递性）</h2>
+<h2 id="另一个重要定理是实数的稠密性表现在在任意两个不相等的实数之间一定可以再插入一个有尽小数之所以是有尽小数可以想想在证明过程中我们是如何构造中间这个有尽小数的">另一个重要定理是，实数的稠密性。表现在，在任意两个不相等的实数之间一定可以再插入一个有尽小数（之所以是有尽小数，可以想想在证明过程中，我们是如何构造中间这个有尽小数的）</h2>
+<h1 id="实数系的连续性">2. 实数系的连续性</h1>
+<h2 id="section"></h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/" class="post-title-link" itemprop="url">lec03&04-pruning</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-03 17:08:00" itemprop="dateCreated datePublished" datetime="2025-09-03T17:08:00+08:00">2025-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:59:33" itemprop="dateModified" datetime="2025-09-24T15:59:33+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="引入">0. 引入</h1>
+<h2 id="一般定义">一般定义：</h2>
+<h3 id="所谓剪枝可以转化成一个优化问题怎么使得网络参数尽可能稀疏同时网络的效果也要尽可能保留我们对稀疏性的要求体现在约束w_p_0le-n上而我们对性能保留的要求则体现在优化问题argmin_w_plxw_p">所谓剪枝，可以转化成一个优化问题：怎么使得网络参数尽可能“稀疏”，同时网络的效果也要尽可能保留<img src="images/efficientml/lec03&amp;04/intro-to-prune.png">我们对稀疏性的要求，体现在约束<span class="math inline">\(||W_{p}||_{0}\le
+N\)</span>上，而我们对性能保留的要求则体现在优化问题<span class="math inline">\(\arg\min_{W_{p}}L(x;W_{p})\)</span></h3>
+<h2 id="大体上剪枝需要考虑这么几个方面剪枝的粒度剪枝的标准什么是重要的什么是不重要的剪枝率剪枝多少能达到效率和效果的平衡剪枝后的对网络的微调恢复性能我们不希望剪枝完之后性能掉得一塌糊涂">大体上，剪枝需要考虑这么几个方面：剪枝的粒度，剪枝的标准（什么是重要的，什么是不重要的），剪枝率（剪枝多少能达到效率和效果的平衡），剪枝后的对网络的微调（恢复性能，我们不希望剪枝完之后性能掉得一塌糊涂）</h2>
+<h2 id="下面依次介绍">下面依次介绍</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/" class="post-title-link" itemprop="url">安装库需要防止影响其它现有库的版本</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-03 15:37:00 / Modified: 15:44:47" itemprop="dateCreated datePublished" datetime="2025-09-03T15:37:00+08:00">2025-09-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="如题在配置环境需要加装一些库的时候如果简单的pip-install可能会影响到我们现有的库最后可能出现新装的库没问题了但原来没问题的库反而报错了为此可以考虑pip-install的时候加上--no-deps这个是来告诉pip不要安装或升级这个包声明的依赖只装我点名的包的本体从而防止把已经配好的库的版本打乱了当然一些很复杂的情况下可能新的库和旧库的当前版本会出现冲突这就要视情况而定了">如题，在配置环境，需要加装一些库的时候，如果简单的pip
+install，可能会影响到我们现有的库，最后可能出现：新装的库没问题了，但原来没问题的库反而报错了。为此，可以考虑pip
+install的时候，加上<code>--no-deps</code>。这个是来告诉pip，“不要安装或升级这个包声明的依赖”，只装我点名的包的本体，从而防止把已经配好的库的版本打乱了（当然，一些很复杂的情况下，可能新的库和旧库的当前版本会出现冲突。这就要视情况而定了）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20the%20Theoretical%20Limitations%20of%20Embedding-Based%20Retrieval/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20the%20Theoretical%20Limitations%20of%20Embedding-Based%20Retrieval/" class="post-title-link" itemprop="url">On the Theoretical Limitations of Embedding-Based Retrieval</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-02 16:50:00 / Modified: 17:10:03" itemprop="dateCreated datePublished" datetime="2025-09-02T16:50:00+08:00">2025-09-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/" itemprop="url" rel="index"><span itemprop="name">theory</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-08-28">date：2025-08-28</h1>
+<h1 id="简介">简介：</h1>
+<h2 id="这篇论文在机器之心上又被吹爆了又给一大堆东西宣判了死刑读一下看看吧">这篇论文在机器之心上又被吹爆了……又给一大堆东西宣判了死刑……读一下看看吧</h2>
+<h2 id="然后大体上论文揭示了现有的embedding检索的局限性直观上就是当外部文档非常多的时候这个是比较有可能的但具体多少算多呢固定维度的embedding这个是事实因为现在的embedding大多维度都是定好的有可能就是检索不到某个query需要的top-k的文档组合-换句话说现有的检索方式对某些query是一定检索不到所有想要的文档的也即一定会有噪声这不是检索方式的局限或者说训练数据量不够之类的问题而是embedding这种dense-retrieval的根本上的局限所以才说这篇论文重要它从理论上指明了现有的dense-retrieval是有一些问题的亟待关注与更改">然后，大体上，论文揭示了现有的embedding检索的局限性。直观上就是：当外部文档非常多的时候（这个是比较有可能的。但具体多少算多呢？），固定维度的embedding（这个是事实，因为现在的embedding大多维度都是定好的）有可能就是检索不到某个query需要的top-k的文档组合<br>换句话说，现有的检索方式，对某些query，是一定检索不到所有想要的文档的，也即一定会有噪声。这不是检索方式的局限，或者说训练数据量不够之类的问题，而是embedding这种dense
+retrieval的根本上的局限。所以才说这篇论文重要。它从理论上指明了，现有的dense
+retrieval是有一些问题的，亟待关注与更改</h2>
+<h2 id="不过值得一提的是现有的基于dense-retrieval的成果显然不能忽视不能说因为它上限不是无穷高的就直接把它给抛弃了这显然不合适这一丢不是几乎什么都给抛弃了嘛论文只是指明了这套方案有一定的局限性也不是不可以考虑fix掉或者结合其它范式又或者用其它范式来替代总之没必要像推文那样吧">不过值得一提的是，现有的基于dense
+retrieval的成果显然不能忽视。不能说因为它上限不是无穷高的，就直接把它给抛弃了，这显然不合适。这一丢，不是几乎什么都给抛弃了嘛……论文只是指明了这套方案有一定的局限性，也不是不可以考虑fix掉。或者结合其它范式，又或者用其它范式来替代，总之没必要像推文那样吧……</h2>
+<h1 id="动机">动机：</h1>
+<h2 id="现有的研究大多是提出一些经验性的较难的benchmark来测试embedding-model的能力并希望由此推动其发展论文则想从理论上分析embedding-models的局限到底在哪里-因为embedding-models是用向量来表达input的数学上是有一些定理可以借鉴参考的再结合通信复杂度理论最终论文说明-粗略讲要检索出某个query以及与它相关的top-k文档的组合embedding的维度数不能太低即不能低于某个下界否则一定检索不到这个query对应的top-k文档组合这个下界论文中有给出反过来说我们现在常用的embedding-model的维度数是固定的因此对应的有一个能精确检索的外部文档数的上限当外部文档过多即超过这个上限的时候就无法检索到一些query的对应的top-k文档组合所以一定会有噪声">现有的研究大多是提出一些经验性的，较难的benchmark，来测试embedding
+model的能力，并希望由此推动其发展。论文则想从理论上分析embedding
+models的局限到底在哪里。<br>因为embedding
+models是用向量来表达input的，数学上是有一些定理可以借鉴参考的。再结合通信复杂度理论，最终论文说明，<br>（粗略讲，）要检索出某个query以及与它相关的top-k文档的组合，embedding的维度数不能太低（即不能低于某个下界，否则一定检索不到这个query对应的top-k文档组合。这个下界论文中有给出）。反过来说，我们现在常用的embedding
+model的维度数是固定的，因此，对应的有一个能精确检索的外部文档数的上限。当外部文档过多（即超过这个上限的时候），就无法检索到一些query的对应的top-k文档组合（所以一定会有噪声）</h2>
+<h1 id="insight">insight：</h1>
+<h1 id="contribution">contribution：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20the%20Theoretical%20Limitations%20of%20Embedding-Based%20Retrieval/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/theory/On%20Layer%20Normalization%20in%20the%20Transformer%20Architecture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -339,825 +1097,10 @@ in n，也就是多项式对数级，<span class="math inline">\(O((log\ n
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/The%20Distracting%20Effect%EF%BC%9AUnderstanding%20Irrelevant%20Passages%20in%20RAG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/The%20Distracting%20Effect%EF%BC%9AUnderstanding%20Irrelevant%20Passages%20in%20RAG/" class="post-title-link" itemprop="url">The Distracting Effect：Understanding Irrelevant Passages in RAG</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-30 17:49:00" itemprop="dateCreated datePublished" datetime="2025-08-30T17:49:00+08:00">2025-08-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-31 11:28:19" itemprop="dateModified" datetime="2025-08-31T11:28:19+08:00">2025-08-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueacl-25">Venue：ACL 25</h1>
-<h1 id="date2025-05-11">date：2025-05-11</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="论文研究的问题其实是相对常见的就是rag过程中我们可能检索到无关的内容以至于误导了llm让它作出错误回答这是要避免的">论文研究的问题其实是相对常见的，就是RAG过程中，我们可能检索到无关的内容，以至于误导了llm，让它作出错误回答。这是要避免的。</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="论文的一大核心贡献是提出了一个distracting-effect系数可以定量地描述检索内容与query的不相关程度基于此论文尝试了一些方法来挖掘出若干的不相关的上下文并用它们来对llm进行微调发现有效果提升这固然是好事提供了新的获取高质量微调数据的方法但这也意味着论文并没有从算法层面提出一些创新来解决上面提到的问题而是提出了构造数据的方法的确也缓解问题了就是感觉这个操作不太常见">论文的一大核心贡献是，提出了一个distracting
-effect系数，可以定量地描述检索内容与query的不相关程度。基于此，论文尝试了一些方法，来挖掘出若干的不相关的上下文，并用它们来对llm进行微调，发现有效果提升。这固然是好事，提供了新的获取高质量微调数据的方法。但这也意味着，论文并没有从算法层面提出一些创新，来解决上面提到的问题，而是提出了构造数据的方法。的确也缓解问题了。就是感觉这个操作不太常见……</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="为rag中的一个常见问题即distracting-passages提供了一个定量衡量的指标distracting-effect">为RAG中的一个常见问题（即distracting
-passages）提供了一个<strong>定量</strong>衡量的指标，distracting
-effect</h2>
-<h2 id="提出了新的构建rag训练数据集的方法利用到了论文提出的distracting-effect指标进一步表明其价值且实验表明这个构建出来的数据集质量还不错用它进行微调的效果也很好">提出了新的构建RAG训练数据集的方法（利用到了论文提出的distracting
-effect指标，进一步表明其价值），且实验表明这个构建出来的数据集质量还不错，用它进行微调的效果也很好</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/The%20Distracting%20Effect%EF%BC%9AUnderstanding%20Irrelevant%20Passages%20in%20RAG/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/" class="post-title-link" itemprop="url">Removal of Hallucination on Hallucination：Debate-Augmented RAG</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-27 22:49:00" itemprop="dateCreated datePublished" datetime="2025-08-27T22:49:00+08:00">2025-08-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-28 18:36:20" itemprop="dateModified" datetime="2025-08-28T18:36:20+08:00">2025-08-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Venue：ACL-25"><a href="#Venue：ACL-25" class="headerlink" title="Venue：ACL 25"></a>Venue：ACL 25</h1><h1 id="date：2025-05-24"><a href="#date：2025-05-24" class="headerlink" title="date：2025-05-24"></a>date：2025-05-24</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="论文讨论的问题是hallucination-on-hallucination，简单来说就是，llm被检索到的错误-无关信息给误导了RAG虽然很有用，但如果检索到的内容是无关的-错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）因此，论文引入了multi-agent-debate（MAD）的机制来缓解该问题"><a href="#论文讨论的问题是hallucination-on-hallucination，简单来说就是，llm被检索到的错误-无关信息给误导了RAG虽然很有用，但如果检索到的内容是无关的-错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）因此，论文引入了multi-agent-debate（MAD）的机制来缓解该问题" class="headerlink" title="论文讨论的问题是hallucination on hallucination，简单来说就是，llm被检索到的错误&#x2F;无关信息给误导了RAG虽然很有用，但如果检索到的内容是无关的&#x2F;错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）因此，论文引入了multi-agent debate（MAD）的机制来缓解该问题"></a>论文讨论的问题是hallucination on hallucination，简单来说就是，llm被检索到的错误&#x2F;无关信息给误导了<br>RAG虽然很有用，但如果检索到的内容是无关的&#x2F;错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）<br>因此，论文引入了multi-agent debate（MAD）的机制来缓解该问题</h2><h1 id="insight："><a href="#insight：" class="headerlink" title="insight："></a>insight：</h1><h2 id="引入MAD机制，对检索和生成步骤都进行细化"><a href="#引入MAD机制，对检索和生成步骤都进行细化" class="headerlink" title="引入MAD机制，对检索和生成步骤都进行细化"></a>引入MAD机制，对检索和生成步骤都进行细化</h2><h2 id="这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）"><a href="#这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）" class="headerlink" title="这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）"></a>这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）</h2><h1 id="contribution："><a href="#contribution：" class="headerlink" title="contribution："></a>contribution：</h1><h2 id="新定义了一个问题，hallucination-on-hallucination"><a href="#新定义了一个问题，hallucination-on-hallucination" class="headerlink" title="新定义了一个问题，hallucination on hallucination"></a>新定义了一个问题，hallucination on hallucination</h2><h2 id="提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）"><a href="#提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）" class="headerlink" title="提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）"></a>提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/model-merging/NAN%EF%BC%9AA%20Training-Free%20Solution%20to%20Coefficient%20Estimation%20in%20Model%20Merging/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/model-merging/NAN%EF%BC%9AA%20Training-Free%20Solution%20to%20Coefficient%20Estimation%20in%20Model%20Merging/" class="post-title-link" itemprop="url">NAN：A Training-Free Solution to Coefficient Estimation in Model Merging</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-08-27 16:53:00 / Modified: 17:09:00" itemprop="dateCreated datePublished" datetime="2025-08-27T16:53:00+08:00">2025-08-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/model-merging/" itemprop="url" rel="index"><span itemprop="name">model-merging</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuearxiv">Venue：arxiv</h1>
-<h1 id="date2025-05-22">date：2025-05-22</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="读这篇论文其实是看到作者的博客觉得讲得挺有意思的">读这篇论文，其实是看到作者的博客，觉得讲得挺有意思的</h2>
-<h2 id="首先model-merging这个领域乍一想觉得很小众虽然论文的abstract和intro部分都讲了一下model-merging的重要性与作用是一种简便的不需要训练的多任务学习的方法有助于减少大量模型权重存储带来的开销等等但总感觉这个领域还是有点雕花了不过仔细一想之前做行人重识别的时候也用到了模型融合这个操作又比如在打数据比赛的时候大家可能会在最后用model-ensemble来提一下点这样一想即使这是一个比较工程的trick可还是挺有用的">首先，model
-merging这个领域，乍一想，觉得很小众。虽然论文的abstract和intro部分都讲了一下model
-merging的重要性与作用（是一种简便的、不需要训练的多任务学习的方法，有助于减少大量模型权重存储带来的开销，等等），但总感觉这个领域还是有点雕花了……不过仔细一想，之前做行人重识别的时候也用到了模型融合这个操作，又比如在打数据比赛的时候，大家可能会在最后用model
-ensemble来提一下点，这样一想，即使这是一个比较工程的trick，可还是挺有用的</h2>
-<h2 id="说回来模型权重融合一般不太专门研究的话就是随便拍脑门指定一个系数比如经典的0.5或者是多做几组实验看看哪个系数效果好一点总而言之就是非常的依赖经验和实验且显然是不太泛化的为此有一些研究model-merging的文章但它们的问题又在于太复杂太麻烦走向了另一个极端且一般计算量都很大也只适用于特定领域还是不方便泛化因此论文是想做一个轻量的方便的且有理论依据的model-merging方法">说回来，模型权重融合，一般不太专门研究的话，就是随便拍脑门指定一个系数（比如经典的0.5），或者是多做几组实验，看看哪个系数效果好一点。总而言之就是非常的依赖经验和实验，且显然是不太泛化的。为此，有一些研究model
-merging的文章，但它们的问题又在于太复杂、太麻烦，走向了另一个极端。且一般计算量都很大，也只适用于特定领域，还是不方便泛化。因此，论文是想做一个轻量的、方便的且有理论依据的model
-merging方法</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="论文回到最小二乘法的视角来解决问题感觉真的很有意思之后一步一步解决问题以及作出适当的假设和化简看起来也是很舒服了值得学习感觉这文章写得浑然天成啊">论文回到最小二乘法的视角来解决问题，感觉真的很有意思。之后一步一步解决问题以及作出适当的假设和化简，看起来也是很舒服了，值得学习（感觉这文章写得浑然天成啊）</h2>
-<h2 id="值得一提的是论文最开始从最小二乘思考之后得到一个结论然后基于这个结论继续讨论在llm上如何更好融合但llm显然是复杂的最小二乘对应的其实就是一个线性回归的模型这显然是简单的从简单的东西上得到的结论为什么可以直接套到复杂的llm上当然可以这样想作者是从另一个层面上得到启发然后尝试把启发的结果套到llm上并进行后续推导实验也表明这个结论确实是在llm上也有效的但这样的话就变成了另一种启发式的推导了啊只不过理论多一点但不也是拍脑袋吗-所以有没有可能可以这样理解我们融合两个llm的权重的时候是一层一层这样融合的每一层两个llm的输入输出都是不太一样的但大抵每一层主要的运算都是线性的非线性一般是激活函数带来的我们可以把里面的东西一步一步拆开拆开到没有激活函数参与的程度此时的计算基本就都是线性的了这样其实可以认为两个llm的线性计算是在拟合不一样的东西llm-a的第i个线性层在拟合a的下一层输入llm-b的第i个线性层是在拟合b的下一层输入我们可以用上面的最小二乘得到的结论把这两个线性层比较好地融合那么对于其它的权重其实也是类似的这样就有点类似于每个部分都符合结论所以组合起来的整体也是符合规律的每个小的权重都可以用最小二乘那里得到的结论merging那整个llm的权重或许也都可以用最小二乘的结论来merging这可能可以大概解释一下不过感觉说的还是不够清楚啊">值得一提的是，论文最开始从最小二乘思考，之后得到一个结论。然后基于这个结论，继续讨论在llm上如何更好融合。但，llm显然是复杂的，最小二乘对应的其实就是一个线性回归的模型，这显然是简单的。从简单的东西上得到的结论，为什么可以直接套到复杂的llm上？当然，可以这样想：作者是从另一个层面上，得到启发，然后尝试把启发的结果套到llm上，并进行后续推导。实验也表明这个结论确实是在llm上也有效的。但这样的话，就变成了另一种启发式的推导了啊，只不过理论多一点，但不也是“拍脑袋”吗？<br>所以，有没有可能，可以这样理解：我们融合两个llm的权重的时候，是一层一层这样融合的。每一层，两个llm的输入输出都是不太一样的。但大抵，每一层主要的运算都是线性的（非线性一般是激活函数带来的。我们可以把里面的东西一步一步拆开，拆开到没有激活函数参与的程度，此时的计算基本就都是线性的了）。这样，其实可以认为两个llm的线性计算是在拟合不一样的东西（llm
-A的第i个线性层，在拟合A的下一层输入；llm
-B的第i个线性层，是在拟合B的下一层输入）。我们可以用上面的最小二乘得到的结论，把这两个线性层比较好地融合。那么对于其它的权重，其实也是类似的。这样，就有点类似于“每个部分都符合结论，所以组合起来的整体也是符合规律的”。每个小的权重都可以用最小二乘那里得到的结论merging，那整个llm的权重或许也都可以用最小二乘的结论来merging？这可能可以大概解释一下（不过感觉说的还是不够清楚啊）</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="提出了一个即插即用轻量化简便有效的model-merging方法">提出了一个即插即用、轻量化、简便、有效的model
-merging方法</h2>
-<h2 id="理论推导分析的视角以及中间分析的过程很有意思也有启发">理论推导分析的视角以及中间分析的过程很有意思，也有启发</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/model-merging/NAN%EF%BC%9AA%20Training-Free%20Solution%20to%20Coefficient%20Estimation%20in%20Model%20Merging/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/UniRAG%EF%BC%9AUnified%20Query%20Understanding%20Method%20for%20%20Retrieval%20Augmented%20Generation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/UniRAG%EF%BC%9AUnified%20Query%20Understanding%20Method%20for%20%20Retrieval%20Augmented%20Generation/" class="post-title-link" itemprop="url">UniRAG：Unified Query Understanding Method for Retrieval Augmented Generation</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-25 22:29:00" itemprop="dateCreated datePublished" datetime="2025-08-25T22:29:00+08:00">2025-08-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-27 22:40:03" itemprop="dateModified" datetime="2025-08-27T22:40:03+08:00">2025-08-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueacl-25">Venue：ACL 25</h1>
-<h1 id="date2025">date：2025</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="主要是为了解决现有方法的两个问题-一是查询增强和编码的分离-二是不能动态地选择查询增强的策略">主要是为了解决现有方法的两个问题：<br>一是查询增强和编码的分离；<br>二是不能动态地选择查询增强的策略</h2>
-<h2 id="解释一下何为查询增强rag中在用query检索之前我们为了让retriever更好地理解query可以考虑把query进行增强例如改写query给query里增加一点注释等方法让query更好懂从而得到一个更好质量更有效的embedding则之后的检索就有可能检索到更加有用的外部知识-基于此我们可以想到现有方法里查询增强和编码的分离是显而易见的而至于第二个问题就是字面意思很好理解现有方法它们大多都是固定一个增强的策略但显然对于不同的query理论上讲它们各自的最优增强策略是可能不同的固定策略无疑限制了上限">解释一下何为查询增强。RAG中，在用query检索之前，我们为了让retriever更好地理解query，可以考虑把query进行增强（例如改写query、给query里增加一点注释等方法），让query“更好懂”，从而得到一个更好质量、更有效的embedding，则之后的检索就有可能检索到更加有用的外部知识<br>基于此，我们可以想到，现有方法里，查询增强和编码的分离是显而易见的。而至于第二个问题，就是字面意思，很好理解：现有方法它们大多都是固定一个增强的策略。但显然，对于不同的query，理论上讲它们各自的最优增强策略是可能不同的。固定策略无疑限制了上限</h2>
-<h3 id="但这里个人感觉一来第一个问题就不那么明显或者说不那么有意义话说本来就没见到太多rag论文里由这个所谓查询增强的步骤啊这个步骤真的有用吗似乎得自己做一些消融实验才能对比出来吧">但这里个人感觉，一来，第一个问题就不那么明显，或者说不那么有意义。话说本来就没见到太多RAG论文里由这个所谓查询增强的步骤啊？这个步骤真的有用吗？似乎得自己做一些消融实验才能对比出来吧？</h3>
-<h3 id="还有固定策略当然是直观上就会觉得不好但有没有消融实验或者对比实验以及就算真的不好会差很多吗如果其实压根就没差多少那说实话也没必要改进这个东西啊">还有，固定策略当然是直观上就会觉得不好。但有没有消融实验或者对比实验？以及，就算真的不好，会差很多吗？如果其实压根就没差多少，那说实话也没必要改进这个东西啊</h3>
-<h3 id="以及整篇论文感觉都非常的工程">以及，整篇论文感觉都非常的工程……</h3>
-<h1 id="insight">insight：</h1>
-<h2 id="感觉不太行没看出有啥insight啊很普通想说学一些trick也行结果吧它动态选择查询策略的方法就是事先规定若干的策略然后预测时多一个action-token并映射到概率转化成一个分类问题很明显这是权宜之计不够动态limitations里也说了-至于说如何把原来分开的两个东西给结合起来做成端到端的那就更奇怪了看来看去明明说了很多遍问题是查询增强和编码的分离可它自己似乎也没做到把二者结合起来啊尤其是这一段-given-a-relevant-query-document-pair-q_inst-d-we-append-an-eostoken-to-both-the-query-and-the-document.-these-are-then-fed-into-the-model-to-extract-their-respective-embeddings-from-the-final-layer-eosvector-denoted-as-h_q-inst-and-h_d-.-真的不是明说论文也没有把二者分离开来吗">感觉不太行……没看出有啥insight啊，很普通……想说学一些trick也行，结果吧，它动态选择查询策略的方法就是事先规定若干的策略，然后预测时多一个action
-token，并映射到概率，转化成一个分类问题……很明显这是权宜之计，不够动态，limitations里也说了……<br>至于说如何把原来分开的两个东西给结合起来，做成端到端的，那就更奇怪了，看来看去，明明说了很多遍问题是查询增强和编码的分离，可它自己似乎也没做到把二者结合起来啊？？？尤其是这一段：<br>Given
-a relevant query-document pair (<span class="math inline">\(q^{+}_{inst}\)</span>, <span class="math inline">\(d^{+}\)</span>), we append an
-<code>&lt;EOS&gt;</code>token to both the query and the document. These
-are then fed into the model to extract their respective embeddings from
-the final layer <code>&lt;EOS&gt;</code>vector, denoted as <span class="math inline">\(h_{q^{+}}\)</span> inst and <span class="math inline">\(h_{d^{+}}\)</span>
-.<br>真的不是明说论文也没有把二者分离开来吗？</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/25/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/UniRAG%EF%BC%9AUnified%20Query%20Understanding%20Method%20for%20%20Retrieval%20Augmented%20Generation/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4RAG%20paper%E8%B0%83%E7%A0%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4RAG%20paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">近年RAG paper调研</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-24 23:35:00" itemprop="dateCreated datePublished" datetime="2025-08-24T23:35:00+08:00">2025-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-19 09:29:42" itemprop="dateModified" datetime="2025-09-19T09:29:42+08:00">2025-09-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="acl-25">ACL 25</h1>
-<h2 id="main">main</h2>
-<h3 id="hybgrag-hybrid-retrieval-augmented-generation-on-textual-and-relational-knowledge-bases"><strong>HybGRAG:
-Hybrid Retrieval-Augmented Generation on Textual and Relational
-Knowledge Bases</strong></h3>
-<h3 id="main-rag-multi-agent-filtering-retrieval-augmented-generation"><strong>MAIN-RAG:
-Multi-Agent Filtering Retrieval-Augmented Generation</strong></h3>
-<h3 id="rag-critic-leveraging-automated-critic-guided-agentic-workflow-for-retrieval-augmented-generation"><strong>RAG-Critic:
-Leveraging Automated Critic-Guided Agentic Workflow for Retrieval
-Augmented Generation</strong></h3>
-<h3 id="saferag-benchmarking-security-in-retrieval-augmented-generation-of-large-language-model"><strong>SafeRAG:
-Benchmarking Security in Retrieval-Augmented Generation of Large
-Language Model</strong></h3>
-<h3 id="on-the-robustness-of-rag-systems-in-educational-question-answering-under-knowledge-discrepancies"><strong>On
-the Robustness of RAG Systems in Educational Question Answering under
-Knowledge Discrepancies</strong></h3>
-<h3 id="pandoras-box-or-aladdins-lamp-a-comprehensive-analysis-revealing-the-role-of-rag-noise-in-large-language-models"><strong>Pandora’s
-Box or Aladdin’s Lamp: A Comprehensive Analysis Revealing the Role of
-RAG Noise in Large Language Models</strong></h3>
-<h3 id="neusym-rag-hybrid-neural-symbolic-retrieval-with-multiview-structuring-for-pdf-question-answering"><strong>NeuSym-RAG:
-Hybrid Neural Symbolic Retrieval with Multiview Structuring for PDF
-Question Answering</strong></h3>
-<h3 id="drag-distilling-rag-for-slms-from-llms-to-transfer-knowledge-and-mitigate-hallucination-via-evidence-and-graph-based-distillation"><strong>DRAG:
-Distilling RAG for SLMs from LLMs to Transfer Knowledge and Mitigate
-Hallucination via Evidence and Graph-based Distillation</strong></h3>
-<h3 id="rageval-scenario-specific-rag-evaluation-dataset-generation-framework"><strong>RAGEval:
-Scenario Specific RAG Evaluation Dataset Generation
-Framework</strong></h3>
-<h3 id="are-llms-effective-psychological-assessors-leveraging-adaptive-rag-for-interpretable-mental-health-screening-through-psychometric-practice"><strong>Are
-LLMs effective psychological assessors? Leveraging adaptive RAG for
-interpretable mental health screening through psychometric
-practice</strong></h3>
-<h3 id="s-rag-a-novel-audit-framework-for-detecting-unauthorized-use-of-personal-data-in-rag-systems"><strong>S-RAG:
-A Novel Audit Framework for Detecting Unauthorized Use of Personal Data
-in RAG Systems</strong></h3>
-<h3 id="gainrag-preference-alignment-in-retrieval-augmented-generation-through-gain-signal-synthesis"><strong>GainRAG:
-Preference Alignment in Retrieval-Augmented Generation through Gain
-Signal Synthesis</strong></h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4RAG%20paper%E8%B0%83%E7%A0%94/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/long-context/seminar%E8%AE%B0%E5%BD%95%EF%BC%9AFAI-Seminar%20%20MIT%20%E7%8E%8B%E4%B8%80%E9%A3%9E%20%20LLM%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E5%9B%B0%E5%A2%83%EF%BC%9ANTP%E4%BB%BB%E5%8A%A1%E4%B8%8ETransformer%E6%9E%B6%E6%9E%84%E7%9A%84%E5%86%85%E5%9C%A8%E5%81%8F%E5%B7%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/long-context/seminar%E8%AE%B0%E5%BD%95%EF%BC%9AFAI-Seminar%20%20MIT%20%E7%8E%8B%E4%B8%80%E9%A3%9E%20%20LLM%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E5%9B%B0%E5%A2%83%EF%BC%9ANTP%E4%BB%BB%E5%8A%A1%E4%B8%8ETransformer%E6%9E%B6%E6%9E%84%E7%9A%84%E5%86%85%E5%9C%A8%E5%81%8F%E5%B7%AE/" class="post-title-link" itemprop="url">seminar记录：FAI-Seminar MIT 王一飞 LLM的长文本困境：NTP任务与Transformer架构的内在偏差</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-22 17:36:00" itemprop="dateCreated datePublished" datetime="2025-08-22T17:36:00+08:00">2025-08-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-24 15:59:46" itemprop="dateModified" datetime="2025-09-24T15:59:46+08:00">2025-09-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="如今的llm，大体上就是两个构件：nest-token-prediction训练范式（NTP）和transformer架构（虽然有很多变体）。目前大概还是没有逃出这个范式，以及主流架构依然是transformer类型的。这个seminar主要探讨的就是这两个点：NTP的范式还能做得更好吗？（虽然一套训练范式也许是有它自己的上限的，现在的结果也有点表明了，因为scaling-law不再像最开始那样卓有成效了。但现在NTP范式就已经达到上限了吗？还能不能做得更好呢？）Transformer架构呢？它有什么自己的问题吗？"><a href="#如今的llm，大体上就是两个构件：nest-token-prediction训练范式（NTP）和transformer架构（虽然有很多变体）。目前大概还是没有逃出这个范式，以及主流架构依然是transformer类型的。这个seminar主要探讨的就是这两个点：NTP的范式还能做得更好吗？（虽然一套训练范式也许是有它自己的上限的，现在的结果也有点表明了，因为scaling-law不再像最开始那样卓有成效了。但现在NTP范式就已经达到上限了吗？还能不能做得更好呢？）Transformer架构呢？它有什么自己的问题吗？" class="headerlink" title="如今的llm，大体上就是两个构件：nest token prediction训练范式（NTP）和transformer架构（虽然有很多变体）。目前大概还是没有逃出这个范式，以及主流架构依然是transformer类型的。这个seminar主要探讨的就是这两个点：NTP的范式还能做得更好吗？（虽然一套训练范式也许是有它自己的上限的，现在的结果也有点表明了，因为scaling law不再像最开始那样卓有成效了。但现在NTP范式就已经达到上限了吗？还能不能做得更好呢？）Transformer架构呢？它有什么自己的问题吗？"></a>如今的llm，大体上就是两个构件：nest token prediction训练范式（NTP）和transformer架构（虽然有很多变体）。目前大概还是没有逃出这个范式，以及主流架构依然是transformer类型的。这个seminar主要探讨的就是这两个点：NTP的范式还能做得更好吗？（虽然一套训练范式也许是有它自己的上限的，现在的结果也有点表明了，因为scaling law不再像最开始那样卓有成效了。但现在NTP范式就已经达到上限了吗？还能不能做得更好呢？）<br>Transformer架构呢？它有什么自己的问题吗？</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/long-context/seminar%E8%AE%B0%E5%BD%95%EF%BC%9AFAI-Seminar%20%20MIT%20%E7%8E%8B%E4%B8%80%E9%A3%9E%20%20LLM%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E5%9B%B0%E5%A2%83%EF%BC%9ANTP%E4%BB%BB%E5%8A%A1%E4%B8%8ETransformer%E6%9E%B6%E6%9E%84%E7%9A%84%E5%86%85%E5%9C%A8%E5%81%8F%E5%B7%AE/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/" class="post-title-link" itemprop="url">Divide-Then-Align：Honest Alignment based on the Knowledge Boundary of RAG</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-22 13:52:00" itemprop="dateCreated datePublished" datetime="2025-08-22T13:52:00+08:00">2025-08-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-08-24 15:30:08" itemprop="dateModified" datetime="2025-08-24T15:30:08+08:00">2025-08-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueacl-25">Venue：ACL 25</h1>
-<h1 id="date2025-07">date：2025-07</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="llm有了rag支持后能回答的问题范围确实更大了但也依然存在一些问题即使有rag检索到的内容也回答不上来也就是这个问题超出了llm权重里的知识范围同时还超出了检索到的外部知识的范围这个时候llm理应回答不知道而不是强行回答一些幻觉内容这限制了llm在高风险对准确率要求极高的场景下的应用比如经典的医疗法律和金融-但是现有方法如retrieval-augmented-fine-tuning-raft它会强制模型作出回答因此就有可能出现上面提到的模型不懂装懂的问题">llm有了rag支持后，能回答的问题范围确实更大了。但也依然存在一些问题，即使有rag检索到的内容，也回答不上来（也就是这个问题超出了llm权重里的知识范围，同时还超出了检索到的外部知识的范围）。这个时候，llm理应回答“不知道”，而不是强行回答一些幻觉内容（这限制了llm在高风险、对准确率要求极高的场景下的应用，比如经典的医疗、法律和金融）<br>但是现有方法，如Retrieval-Augmented
-Fine-Tuning
-（RAFT），它会强制模型作出回答。因此就有可能出现上面提到的，模型不懂装懂的问题</h2>
-<h2 id="这篇论文就是想解决这个问题">这篇论文就是想解决这个问题</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="论文把它研究的问题llm不懂装懂处理成一个偏好问题或者说认为这是现有方法的一个特点因此考虑从后训练入手利用rl具体来说是dpo加上专门构造的数据集这个构造四象限的数据集还蛮有意思让llm懂得要在不懂的时候说出自己不懂">论文把它研究的问题（llm不懂装懂）处理成一个偏好问题，或者说认为这是现有方法的一个特点？因此考虑从后训练入手，利用rl（具体来说是DPO）加上专门构造的数据集（这个构造四象限的数据集，还蛮有意思），让llm懂得，要在不懂的时候说出自己不懂</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="发现了现有的raft类的方法的共性问题会让模型不懂装懂强行回答">发现了现有的RAFT类的方法的共性问题：会让模型不懂装懂，强行回答</h2>
-<h2 id="创新性地提出了把数据按照是否处在模型知识范围以及外部知识范围划分到四个象限算是提出了一个新的构建偏好数据集的方法">创新性地提出了把数据按照是否处在模型知识范围以及外部知识范围，划分到四个象限（算是提出了一个新的构建偏好数据集的方法）</h2>
-<h2 id="提出了一套后训练的方法合适地把rl引入通过dpo算法利用构造的偏好数据集让模型学会在正确的时机放弃回答减少了幻觉">提出了一套后训练的方法，合适地把rl引入，通过DPO算法，利用构造的偏好数据集，让模型学会在正确的时机放弃回答，减少了幻觉</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/" class="post-title-link" itemprop="url">和为目标值的最长子序列的长度</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-08-19 23:09:00 / Modified: 23:44:20" itemprop="dateCreated datePublished" datetime="2025-08-19T23:09:00+08:00">2025-08-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/length-of-the-longest-subsequence-that-sums-to-target/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1223,18 +1166,18 @@ Fine-Tuning
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">226</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">71</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

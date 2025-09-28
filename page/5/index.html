@@ -150,6 +150,844 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/" class="post-title-link" itemprop="url">Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-19 00:58:00" itemprop="dateCreated datePublished" datetime="2025-08-19T00:58:00+08:00">2025-08-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:55:08" itemprop="dateModified" datetime="2025-09-24T15:55:08+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Venue：arxiv-23"><a href="#Venue：arxiv-23" class="headerlink" title="Venue：arxiv 23"></a>Venue：arxiv 23</h1><h1 id="date：2023-10-23"><a href="#date：2023-10-23" class="headerlink" title="date：2023-10-23"></a>date：2023-10-23</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）"><a href="#连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）" class="headerlink" title="连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）"></a><del>连这个都暂时没太搞清楚……</del>大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）</h2><h2 id="也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）"><a href="#也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）" class="headerlink" title="也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）"></a>也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）<br>而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）</h2><h1 id="insight："><a href="#insight：" class="headerlink" title="insight："></a>insight：</h1><h2 id="虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）"><a href="#虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）" class="headerlink" title="虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）"></a>虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）</h2><h1 id="contribution："><a href="#contribution：" class="headerlink" title="contribution："></a>contribution：</h1><h2 id="提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）"><a href="#提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）" class="headerlink" title="提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）"></a>提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/12/course_learning/efficientml_mit/lec02-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/" class="post-title-link" itemprop="url">lec02-basics</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-12 18:13:00" itemprop="dateCreated datePublished" datetime="2025-08-12T18:13:00+08:00">2025-08-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-03 17:09:31" itemprop="dateModified" datetime="2025-09-03T17:09:31+08:00">2025-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="本章大纲">本章大纲：</h1>
+<h2 id="先讲了基本的pytorch概念权当复习了然后讲了衡量efficiency的基本指标">先讲了基本的pytorch概念（权当复习了），然后讲了衡量efficiency的基本指标</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/" class="post-title-link" itemprop="url">分割等和子集</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-11 15:39:00" itemprop="dateCreated datePublished" datetime="2025-08-11T15:39:00+08:00">2025-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-12 14:09:55" itemprop="dateModified" datetime="2025-08-12T14:09:55+08:00">2025-08-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/partition-equal-subset-sum/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/" class="post-title-link" itemprop="url">Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-08 23:36:00" itemprop="dateCreated datePublished" datetime="2025-08-08T23:36:00+08:00">2025-08-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-19 00:59:34" itemprop="dateModified" datetime="2025-08-19T00:59:34+08:00">2025-08-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuenips-20">Venue：NIPS 20</h1>
+<h1 id="date2021-04-12">date：2021-04-12</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="语言模型的幻觉问题是一直存在的同时语言模型它是通过把知识编码到它的参数里来进行记忆的因此知识的修改更新是很麻烦的需要微调故考虑引入外部知识库来进行辅助一来可以减少幻觉二来可以外部知识库的更新还是方便的如果有新的更改那么对外部知识库例如维基百科进行操作就行就不需要微调模型了这一通操作就是所谓retrieval-augmented检索增强">语言模型的幻觉问题是一直存在的；同时，语言模型它是通过把知识编码到它的参数里来进行记忆的，因此知识的修改/更新是很麻烦的，需要微调。故，考虑引入外部知识库，来进行辅助。一来可以减少幻觉，二来可以外部知识库的更新还是方便的，如果有新的更改，那么对外部知识库（例如维基百科）进行操作就行，就不需要微调模型了。这一通操作就是所谓retrieval
+augmented，检索增强</h2>
+<h2 id="但是此前的研究主要是聚焦于把检索增强操作应用到抽取型任务中而忽略了把它应用到生成型任务中论文主要就是填补这个空缺将检索增强操作应用到语言模型的一般生成上从而缓解幻觉">但是，此前的研究主要是聚焦于把检索增强操作应用到抽取型任务中，而忽略了把它应用到生成型任务中。论文主要就是填补这个空缺，将检索增强操作应用到语言模型的一般生成上，从而缓解幻觉</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="感觉主要是在当时能想到把检索增强应用到生成型任务上了算是弥补了当时的一个空缺吧有点开山之作的意思毕竟万引了但是现在有了llm以后所有的nlp任务几乎都被建模成了生成型的任务并且一个llm就能完成大部分所以现在一提起检索增强应该立马想到的都是检索增强生成也即rag吧但似乎retrieval-augmented这个概念并不是一经提出就是配套于generation的啊">感觉主要是在当时能想到把检索增强应用到生成型任务上了？算是弥补了当时的一个空缺吧（有点开山之作的意思？毕竟万引了）。但是现在有了llm以后，所有的nlp任务几乎都被建模成了生成型的任务，并且一个llm就能完成大部分，所以现在一提起检索增强，应该立马想到的都是检索增强生成，也即RAG吧……但似乎Retrieval
+Augmented这个概念并不是一经提出就是配套于Generation的啊</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一套框架可以端到端训练把检索增强操作应用到生成式任务上了并且训练好的retriever包含一个query-encoder以及一个passage-encoder是可以迁移的">提出了一套框架，可以端到端训练，把检索增强操作应用到生成式任务上了；并且训练好的retriever（包含一个query
+encoder以及一个passage encoder）是可以迁移的</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/06/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E5%BC%82%E6%88%96%E5%80%BC%E4%B8%BA%E7%BB%99%E5%AE%9A%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%E6%95%B0%E7%9B%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/06/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E5%BC%82%E6%88%96%E5%80%BC%E4%B8%BA%E7%BB%99%E5%AE%9A%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%E6%95%B0%E7%9B%AE/" class="post-title-link" itemprop="url">统计异或值为给定值的路径数目</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-06 00:45:00 / Modified: 01:32:05" itemprop="dateCreated datePublished" datetime="2025-08-06T00:45:00+08:00">2025-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/count-paths-with-the-given-xor-value/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/06/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E5%BC%82%E6%88%96%E5%80%BC%E4%B8%BA%E7%BB%99%E5%AE%9A%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%E6%95%B0%E7%9B%AE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/05/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/05/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/" class="post-title-link" itemprop="url">三角形最小路径和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-05 00:33:00 / Modified: 00:51:57" itemprop="dateCreated datePublished" datetime="2025-08-05T00:33:00+08:00">2025-08-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/triangle/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/05/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/" class="post-title-link" itemprop="url">不同路径 Ⅱ</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-04 23:35:00 / Modified: 23:41:17" itemprop="dateCreated datePublished" datetime="2025-08-04T23:35:00+08:00">2025-08-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths-ii/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">不同路径</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-04 23:23:00 / Modified: 23:40:36" itemprop="dateCreated datePublished" datetime="2025-08-04T23:23:00+08:00">2025-08-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/FRAG%EF%BC%9AA%20Flexible%20Modular%20Framework%20for%20Retrieval-Augmented%20Generation%20based%20on%20Knowledge%20Graphs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/FRAG%EF%BC%9AA%20Flexible%20Modular%20Framework%20for%20Retrieval-Augmented%20Generation%20based%20on%20Knowledge%20Graphs/" class="post-title-link" itemprop="url">FRAG：A Flexible Modular Framework for Retrieval-Augmented Generation based on Knowledge Graphs</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-03 11:21:00" itemprop="dateCreated datePublished" datetime="2025-08-03T11:21:00+08:00">2025-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-08 10:14:21" itemprop="dateModified" datetime="2025-09-08T10:14:21+08:00">2025-09-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/" itemprop="url" rel="index"><span itemprop="name">GraphRAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-01-22">date：2025-01-22</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="基于知识图谱的rag是一种常用的缓解llm幻觉和知识匮乏的问题的手段但是现有的kg-rag的方法有一个问题就是灵活性和检索质量之间通常需要进行权衡论文提出的frag就是想在这两个方面都做得比较好">基于知识图谱的RAG是一种常用的，缓解llm幻觉和知识匮乏的问题的手段。但是，现有的KG-RAG的方法有一个问题，就是灵活性和检索质量之间通常需要进行权衡。论文提出的FRAG就是想在这两个方面都做得比较好</h2>
+<h4 id="现有的kg-rag方法主要有两类一类是modular-methods它的主要特点是简单不会用kg对llm进行微调因此使用更加方便但通常是用固定的策略来检索所以检索的质量一般不高">现有的KG-RAG方法主要有两类，一类是modular
+methods，它的主要特点是简单，不会用KG对llm进行微调，因此使用更加方便。但通常是用固定的策略来检索，所以检索的质量一般不高</h4>
+<h4 id="另一类是coupled-methods也就是耦合的方法它需要用kg对llm进行微调从而让llm学到kg里的关系但因为需要微调所以很麻烦加上用一个kg微调完之后如果换了一个kg又需要重新微调就更加麻烦了">另一类是coupled
+methods，也就是耦合的方法，它需要用KG对llm进行微调，从而让llm学到KG里的关系。但因为需要微调，所以很麻烦；加上用一个KG微调完之后，如果换了一个KG，又需要重新微调，就更加麻烦了</h4>
+<h1 id="insight">insight：</h1>
+<h1 id="contribution">contribution：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/FRAG%EF%BC%9AA%20Flexible%20Modular%20Framework%20for%20Retrieval-Augmented%20Generation%20based%20on%20Knowledge%20Graphs/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/21/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -233,876 +1071,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">最长公共子序列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-20 22:05:00" itemprop="dateCreated datePublished" datetime="2025-07-20T22:05:00+08:00">2025-07-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-21 00:46:01" itemprop="dateModified" datetime="2025-07-21T00:46:01+08:00">2025-07-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a href>在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/19/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E5%86%B3%E7%AD%96%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/19/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E5%86%B3%E7%AD%96%E6%A0%91/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-19 22:49:23" itemprop="dateCreated datePublished" datetime="2025-07-19T22:49:23+08:00">2025-07-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-20 20:51:03" itemprop="dateModified" datetime="2025-07-20T20:51:03+08:00">2025-07-20</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>叶子节点越少，往往决策树的泛化能力越高，所以可以认为训练决策树的一个目标是减少决策树的叶子节点
-。 # 1. 简介 ##
-这里简要讲一下决策树是拿来干什么的，以及它大体的流程是怎样的 ##
-正如名字所示，它是一种用于决策的模型（具体来说，通常被用于分类）。直观的理解上，它是模仿人类决策的过程进行决策的。比如，买某个东西，我们要决策是否购买，会考虑商品的多个属性（如外观、价格、实用性等）来综合作出决策。决策树也是类似的（不过它的区别主要在于，决策树的决策过程是有次序的，我们一次只考虑一个属性；但实际人决策的时候，可以认为是会同时处理多个属性的）
-##
-其大体的流程是一个递归的过程。以最经典的对西瓜分类的问题，我们可能先考虑色泽属性，得到几个分支；在考虑根蒂属性，又得到几个分支……最后我们会得到一个树，它会有若干叶节点，每个叶节点对应了一个类别。一旦来了一个数据，我们要对它进行分类，就按照这个树，从根节点开始往下走一遍，走到底，最终到了哪个叶节点上，我们就认为这个数据的分类结果即为该叶节点的类别标签<br>把整个过程形式化描述一下，大概是：
-###
-首先，我们手头有一个数据集D，这些数据的属性组成了一个属性集A，里面有若干可能的属性（这个属性的个数应该就等于特征的维度数。此时我们仅考虑特征均为离散的情况，之后再考虑其它情况）。然后，我们有一个函数TreeGenerate(D,
-A)，其含义为根据给定的数据集D和属性集A，生成一个节点node（如果它是一个叶节点，则它会有一个对应的类别标签；如果它是一个分支节点，则它底下会有若干个子节点）
-###
-下面是调用TreeGenerate函数，把node给完整生成出来的过程，第一步会看看是不是几种特殊情况之一：
-####
-如果D中的样本全都是一个类别的，那其实相当于不用继续往下分了，我们把这个节点当成叶节点，且它的分类结果就是这个类别
-####
-如果A为空集，或者D里的样本在A上取值相同，则也把这个节点置为叶节点，其类别标签置为当前数据集里出现最多的那个类（A为空集，类似于我们把属性”用完了“。因为没有更多可用的划分依据了，就不进一步展开了，直接把类别标签置为出现最多的那个即可<br>而如果是D里的样本在A上取值相同，那也就是所有的数据的输入特征都一样了，也没有办法根据属性来划分了，故也是直接置为叶节点，标签用众数。只不过这里可能需要注意的是，即使所有样本在A上的取值相同了，按理说应该所有的标签都是一样的，但可能因为收集数据的时候有一些噪声，或者别的原因，也许会有不同的标签。但即使如此，我们还是把该叶节点的类别标记为当前数据里出现最多的类）
-#### 出现了上述情况中的任意一种，函数直接return ###
-如果不是这几种特殊情况，那么TreeGenerate就继续往下划分。先根据某种准则，从A里选择一个最优的划分属性（上面提到过了，决策树是按照一定的次序来考虑属性的。不同的次序，最终会对应到不同的决策树。那么每一步应该选哪个属性来决策呢？这个其实不是乱选的，而是有一定的选择标准的。之后会详细讲）
-#### 记当前选择的最优属性为<span class="math inline">\(a_{*}\)</span>，我们遍历这个属性里的所有值（每一次遍历的具体值记为<span class="math inline">\(a_{*}^{v}\)</span>） ####
-给之前生成的节点node底下划出一个子节点，对应了在当前数据集D里，在属性<span class="math inline">\(a_{*}\)</span>上取值为<span class="math inline">\(a_{*}^{v}\)</span>的那些数据（我们可以把这些数据对应的集合记为<span class="math inline">\(D_{v}\)</span>） ##### 如果<span class="math inline">\(D_{v}\)</span>为空，也就是说，当前的数据集D里，所有的数据在<span class="math inline">\(a_{*}\)</span>这个属性上，取值均不为<span class="math inline">\(a_{*}^{v}\)</span>。那我们就没有划分的依据了，但是我们上面又已经划出了一个子节点了，所以，这个子节点我们就把它置为叶节点，且它的类别标记为D中出现最多的类。之后我们return（也就是对这个子节点，不会再继续往下展开了）
-##### 如果<span class="math inline">\(D_{v}\)</span>非空，那就正常对这个子节点向下继续展开。我们对这个子节点，调用TreeGenerate(<span class="math inline">\(D_{v}\)</span>, <span class="math inline">\(A-\{a_{*}\}\)</span>) # 2. 划分属性选择 ##
-正如上所述，决策树生成的重要一步，就是选择当前最优的用于决策的属性。这里会介绍三个选择的准则：信息增益，信息增益率，基尼系数，各自有优缺点，以及相应的应用场景。不过它们都有同一个核心思想，就是：我们希望，采用一个属性对样本进行划分，划分出来的各个子节点，纯度尽可能高，也就是一个子节点里包含的样本尽可能属于同一个类别
-## 2.1. 信息增益 ###
-信息增益里，我们会首先计算用属性a划分数据前，数据集D的信息熵（其定义为：<span class="math inline">\(Ent(D)=-\sum_{k=1}^{|y|}p_{k}log_{2}p_{k}\)</span>）<br>事实上，我们知道，熵表示混乱程度，则熵越大，表明概率分布越“乱”，因此纯度也是越低的；熵越小，则概率分布越“整齐”，纯度则是越高。因此，我们希望，采用一个属性划分之后，数据集的新的信息熵越小。那么，当数据集给定，我们要挑出最好的属性的时候，其实只需要看信息增益即可。所谓信息增益，是指，采用了某个属性a进行划分之后，数据集信息熵的减小值。划分完成后，数据集的信息熵计算如下：<span class="math display">\[\sum_{v=1}^{V}\frac{|D^{v}|}{|D|}Ent(D^{v})\]</span>其中，<span class="math inline">\(V\)</span>表示属性a可取的值的数目<br>也就是，划分得到各个子集合，我们计算各个子集合自身的熵，然后用样本数量来加权求和。而信息增益的定义则如下：<span class="math display">\[Gain(D,a)=Ent(D)-\sum_{v=1}^{|V|}\frac{|D^{v}|}{|D|}Ent(D^{v})\]</span>根据我们上面的分析，属性a的信息增益越大，表明采用这个属性a进行划分之后，信息熵减小得越多，也就是纯度越高，故这个属性越好
-### ID3决策树算法就是用信息增益作为准则，来选取划分的属性的 ## 2.2.
-增益率 ###
-引入这个指标，主要是考虑到上面信息增益指标的一个缺点，就是它会倾向于那些可选值数目很多的指标，即使这些指标它的划分的效果没那么好。一个最极端的例子就是，当我们给每个数据一个编号的时候，如果我们把编号也当成数据的一个属性，并且用编号来划分数据，那一个一层的决策树桩就能完成分类，且在训练集上的分类准确率一定是百分百。但是，此时一旦来一个新的数据，它的编号一定是此前没出现过的，我们就完全处理不了了。也就是，此时没有半点泛化性
-### 为了改进，提出增益率。不妨先摆出公式，进行一个直观的理解：<span class="math display">\[Gain\_ratio(D,a)=\frac{Gain(D,a)}{IV(a)}\]</span>根据上面的分析，当一个属性它的可选值的数目很多的时候，通常Gain也会越大。但我们多加了一个分母，并且后续可以看到，可选值数目越多，分母也会越大，故整体有抵消的效果，从而增益率本身更不容易受到可选值数目的影响<br>IV(a)表示属性a的固有值（intrinsic
-value），其计算公式如下：<span class="math display">\[IV(a)=-\sum_{v=1}^{V}\frac{|D^{v}|}{|D|}log_{2}\frac{|D^{v}|}{|D|}\]</span>
-###
-不过，虽然增益率指标缓解了信息增益的问题，但它自身又有其它的问题，也就是它可能会倾向于可选值数目较少的属性。所以，对它的应用，其实不是说直接改成用增益率来决定用哪个属性，哪个属性的增益率最高就直接选用；而是，我们先用信息增益筛出一部分较好的指标（例如，筛出信息增益高于平均值的属性），然后再选择其中增益率最高的指标（二者的混搭，也可以降低二者自身的缺点的影响。这个应用的方法也是<span class="math inline">\(C4.5\)</span>算法的操作） ## 2.3. 基尼指数 ###
-基尼指数，本质上也是在衡量一个数据集的纯度，只不过它不是用熵来进行计算，而是换了一个做法。直观上，它反应了从数据集里随机抽两个样本出来，其类别标记不一样的概率。则基尼指数越大，纯度越低。因此，一个指标对应的基尼指数越小，则说明用这个指标划分以后的纯度越高，则这个指标应当是越好的。其定义如下：<span class="math display">\[Gini(D)=\sum_{k=1}^{|y|}\sum_{k&#39;\neq
-k}p_{k}p_{k&#39;}=1-\sum_{k=1}^{|y|}p_{k}^{2}\]</span>而对于一个属性，它的基尼指数定义为：<span class="math display">\[Gini\_index(D,a)=\sum_{v=1}^{V}\frac{|D^{v}|}{|D|}Gini(D^{v})\]</span>
-# 3. 剪枝处理 ##
-剪枝（pruning）主要是为了缓解决策树的过拟合。其主要策略有两种，“预剪枝”和“后剪枝”。顾名思义，前者是在划分节点的时候，每一步都考虑，是否要往下展开；后者则是，先构建出一颗决策树，完了再从下往上进行剪枝
-##
-剪枝本质是为了防止过拟合，而防止过拟合又是为了保证模型的泛化性。所以，剪枝的过程中，我们应该有一个评估标准，用于评估：这一步的剪枝是否提高了模型的泛化性。如果是，那么可以剪枝；如果不是，那我们就不剪枝<br>这个评估的标准，可以有很多。一个常用方法是，留出法。也就是我们对数据集进行划分，划分出一部分作为“验证集”，用它进行泛化性的评估（它不会被用于训练。如果在它上面表现不错，我们就认为泛化性好）
-## 3.1. 预剪枝 ###
-这个其实是融入到上面构建决策树的过程里的。在上面的过程里，当我们决定要对一个节点往下进行展开划分的时候，会先按照某种指标，选出一个当前最优划分属性。之后，我们考虑是否要进行划分：如果要，则正常往下走；如果不要，则这个节点就被当成叶节点了（相当于它本来下面会有的各个划分的子节点都被剪枝掉了），我们会把它的类别标记为它的训练样本里出现最多的那个类<br>下面是具体的判断过程。首先，我们把它当成叶节点，然后来计算一下，用当前决策树进行分类，在验证集上的分类准确率，不妨记为acc1。再把它当成正常的内部节点，进行划分，得到若干子节点（但注意，对这些子节点，正常来说是要继续往下走，看看如何划分的。然而如果这样做，开销会很大，所以实际操作是，我们把这些子节点都当成叶节点，它们各自的类别就是它们的数据里出现最多的标签），然后用现在这个决策树对验证集进行分类，得到分类准确率acc2。我们比较acc1和acc2，如果前者较高，则我们认为，把当前节点当成叶节点的泛化性更高，故我们剪枝（也即不往下展开）；如果后者较高，则我们认为，当前节点往下进行划分，泛化性才会更高，所以不剪枝
-####
-这里有一些值得说道的地方。首先是，如果acc1和acc2相等，那么按理说，我们会认为二者的泛化性一样，剪不剪枝都行。不过，根据奥卡姆剃刀原则，我们一般会更加倾向于简单点的那个模型。所以一般在这种情况下，我们更加倾向于还是要剪枝。但不剪枝也不算错就是了，毕竟西瓜书自己也是为了画图的简便，在这种情况下依然选择剪枝
-####
-泛化性的评估，很依赖我们对验证集的划分啊，如果有偏差，或者规模太小，都可能有问题
-####
-预剪枝因为是在构建决策树的过程中执行的，如果有剪枝，那么会省去很多训练开销和测试开销。但是，正是因为，我们评估的时候，假设一个节点它如果要往下展开时，我们只把它往下划分展开一层，也就是假设它的各个子节点全都是叶节点，这可能导致“短视”，也就是忽略了一些情况：可能某个节点，虽然当前基于它进行划分，是不利于泛化性的，但基于它的各个子节点，进一步进行划分，其实反而会提高泛化性<br>因此，预剪枝其实有“过度剪枝”的嫌疑，故它其实有“欠拟合”的风险
-## 3.2. 后剪枝 ###
-正如上所述，后剪枝发生在整个决策树构建完成之后。所以，构建的部分照常。而剪枝则是从下往上进行剪枝（也就是从最底下的内部节点开始，不断往上）<br>至于是否要剪枝，则判断标准类似上面，我们看一下对某个节点剪枝前后，决策树在验证集上的准确率，从而决定是否剪枝。
-###
-通常，后剪枝保留的分支会更多（我们或许可以这样理解。后剪枝是从下往上的，前面剪枝的部分其实比较小。而预剪枝是在构建过程中进行的，因此是从上往下的，故，前面剪枝的部分其实是比较大的，因为一剪枝就把后面可能有的部分也给剪掉了），因此相比于预剪枝，它的欠拟合的风险更小，一般泛化性也更好。但是，也正因为它是在决策树构建完成之后才进行的，且它的剪枝要自下而上遍历所有的内部节点，因此训练的时间开销其实是远比预剪枝决策树以及未剪枝决策树都要高的</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Multi-Agent%20Collaboration%20via%20Cross-Team%20Orchestration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Multi-Agent%20Collaboration%20via%20Cross-Team%20Orchestration/" class="post-title-link" itemprop="url">Multi-Agent Collaboration via Cross-Team Orchestration</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-17 16:45:00 / Modified: 16:46:00" itemprop="dateCreated datePublished" datetime="2025-07-17T16:45:00+08:00">2025-07-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueacl-25">Venue：ACL 25</h1>
-<h1 id="date">date：</h1>
-<h1 id="动机">动机：</h1>
-<h1 id="insight">insight：</h1>
-<h1 id="contribution">contribution：</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Multi-Agent%20Collaboration%20via%20Cross-Team%20Orchestration/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/%E9%80%89%E6%8B%A9%E4%B8%BB%E9%A2%98%EF%BC%9A%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93%E7%90%86%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/%E9%80%89%E6%8B%A9%E4%B8%BB%E9%A2%98%EF%BC%9A%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93%E7%90%86%E8%A7%A3/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-17 14:18:52 / Modified: 15:23:45" itemprop="dateCreated datePublished" datetime="2025-07-17T14:18:52+08:00">2025-07-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="首先选择这个主题主要是因为调研了一些文献之后发现现在的大多数论文都是在repo-level-task上做文章不管是repo-level-code-generationcode-completion或者是issue-fixing之类的因为llm在单文件上的能力确实很够用了但在多文件尤其是大到repo-level的时候就不太够了有提出multi-agents来分解任务的有提出新的benchmark来测量模型能力边界的也有提出rag框架来辅助理解的不过总而言之repo-level的task一定都要求模型能有一个对repo整体的理解这方面的研究其实相对有些缺失例如repo-level-code-generation上有很多设计了agent的方法的论文比如一篇比较早的pku的self-collaboration-code-generation-via-chatgpt它其实就是对同一个llm施加了不同的prompt让它扮演不同的角色至于扮演哪些角色它则是基于软件开发理论设计了三个角色analystcodingtesting然而具体到analyst上的时候也没有专门设计什么方法帮助llm进行理解类似的又比如codeagent这篇论文提出设计专用于repo-level-code-generation的agent的框架且是首次提出然而它也只是给llm加上了工具并没有专门设计让llm从整体上理解repo的方法-这一块现在有少部分在做吧比较多的会用到graph因为理解repo的关键在于理解repo里各个代码文件之间的复杂的关系这种关系就可以考虑用graph来构建比如比较新的一篇code-graph-modelscgm6月份以及参考论文里的repograph它们就都是把repo给构建成graph再拿去给llm进行处理本质上可以认为是graph的边的连接让文件代码之间的相互关系更加凸显了如果只是把repo给展平了一股脑拿给llm那可能repo比较小的时候还能把握到关系repo大了就不太行了">首先，选择这个主题，主要是因为，调研了一些文献之后，发现，现在的大多数论文，都是在repo-level
-task上做文章（不管是repo-level code generation，code
-completion或者是issue
-fixing之类的），因为llm在单文件上的能力确实很够用了，但在多文件，尤其是大到repo-level的时候，就不太够了。有提出multi-agents来分解任务的，有提出新的benchmark来测量模型能力边界的，也有提出RAG框架来辅助理解的。不过总而言之，repo-level的task，一定都要求模型能有一个对repo整体的理解。这方面的研究其实相对有些缺失。例如，repo-level
-code
-generation上，有很多设计了agent的方法的论文，比如一篇比较早的，pku的Self-Collaboration
-Code Generation via
-ChatGPT，它其实就是对同一个llm，施加了不同的prompt，让它扮演不同的角色；至于扮演哪些角色，它则是基于软件开发理论，设计了三个角色（analyst，coding，testing）。然而具体到analyst上的时候，也没有专门设计什么方法帮助llm进行理解；类似的，又比如CodeAgent，这篇论文提出设计专用于repo-level
-code
-generation的agent的框架，且是首次提出，然而它也只是给llm加上了工具，并没有专门设计让llm从整体上理解repo的方法<br>这一块现在有少部分在做吧，比较多的会用到graph。因为，理解repo的关键在于理解repo里各个代码、文件之间的复杂的关系，这种关系就可以考虑用graph来构建。比如比较新的一篇Code
-Graph
-Models（CGM）（6月份），以及参考论文里的RepoGraph，它们就都是把repo给构建成graph，再拿去给llm进行处理。本质上，可以认为是graph的边的连接，让文件/代码之间的相互关系更加凸显了。如果只是把repo给展平了，一股脑拿给llm，那可能repo比较小的时候，还能把握到关系；repo大了，就不太行了</h2>
-<h2 id="而既然用了graph的结果来表征repo是否考虑把gnn也拿过来应用因为gnn有可能处理graph会处理得更好现在大多还是只是把graph拿给transformer因此需要对graph做一些处理比如把各个节点先编码成text-embedding再投影到llm的embedding-space转成llm里的token和正常的文本输入一起处理-另外这套用graph理解repo的方法其实也可以和各种基于agent的方法结合吧如果能有更好的对repo的理解agent进行动作的时候也更加不容易出错因此积累的错误会更少同时agent更好地与repo进行交互得到更好的理解也有助于辅助改进对repo的整体理解且二者应该也没有太多矛盾的地方所以它们既有结合的价值也有结合的可能似乎是值得一试的">而既然用了graph的结果来表征repo，是否考虑把GNN也拿过来应用？因为GNN有可能处理graph会处理得更好。现在大多还是只是把graph拿给transformer，因此需要对graph做一些处理，比如把各个节点先编码成text
-embedding，再投影到llm的embedding
-space，转成llm里的token，和正常的文本输入一起处理<br>另外，这套用graph理解repo的方法，其实也可以和各种基于agent的方法结合吧。如果能有更好的对repo的理解，agent进行动作的时候也更加不容易出错，因此积累的错误会更少；同时agent更好地与repo进行交互，得到更好的理解，也有助于辅助改进对repo的整体理解。且二者应该也没有太多矛盾的地方。所以它们既有结合的价值，也有结合的可能，似乎是值得一试的</h2>
-<h2 id="英文版">英文版</h2>
-<h3 id="when-delving-into-the-understanding-and-application-of-large-language-models-llms-for-software-code-repositories-i-have-chosen-to-focus-on-the-topic-of-agent---based-code-repository-comprehension.">When
-delving into the understanding and application of Large Language Models
-(LLMs) for software code repositories, I have chosen to focus on the
-topic of "Agent - based Code Repository Comprehension".</h3>
-<h3 id="through-research-on-relevant-literature-ive-noticed-that-most-current-research-papers-concentrate-on-repository---level-repo---level-tasks.-given-that-llms-have-demonstrated-strong-capabilities-in-single---file-processing-they-fall-short-when-dealing-with-multi---file-scenarios-especially-large---scale-repo---level-tasks.-to-address-this-issue-the-academic-community-has-proposed-various-methods-including-using-multi---agents-to-decompose-tasks-constructing-new-benchmarks-to-evaluate-the-models-capabilities-and-introducing-the-retrieve-augmented-generation-rag-framework-to-assist-model-understanding.-however-regardless-of-the-approach-repo---level-tasks-all-impose-a-key-requirement-on-the-model-the-ability-to-deeply-understand-the-code-repository-as-a-whole.-currently-research-in-this-area-is-relatively-scarce.">Through
-research on relevant literature, I've noticed that most current research
-papers concentrate on repository - level (repo - level) tasks. Given
-that LLMs have demonstrated strong capabilities in single - file
-processing, they fall short when dealing with multi - file scenarios,
-especially large - scale repo - level tasks. To address this issue, the
-academic community has proposed various methods, including using multi -
-agents to decompose tasks, constructing new benchmarks to evaluate the
-model's capabilities, and introducing the Retrieve Augmented Generation
-(RAG) framework to assist model understanding. However, regardless of
-the approach, repo - level tasks all impose a key requirement on the
-model: the ability to deeply understand the code repository as a whole.
-Currently, research in this area is relatively scarce.</h3>
-<h3 id="take-repo---level-code-generation-as-an-example.-many-papers-have-proposed-agent---based-methods.-for-instance-an-early-study-by-peking-university-self---collaboration-code-generation-via-chatgpt-based-on-software-development-theory-sets-different-prompts-for-the-same-llm-enabling-it-to-play-three-roles-analyst-coder-and-tester.-however-in-the-analyst-role-there-is-no-dedicated-method-to-help-the-llm-understand-the-code-repository.-similarly-the-paper-codeagent-first-proposed-an-agent-framework-for-repo---level-code-generation.-nevertheless-it-merely-adds-tools-to-the-llm-and-lacks-a-method-for-the-llm-to-comprehensively-understand-the-code-repository.">Take
-repo - level code generation as an example. Many papers have proposed
-agent - based methods. For instance, an early study by Peking
-University, "Self - Collaboration Code Generation via ChatGPT", based on
-software development theory, sets different prompts for the same LLM,
-enabling it to play three roles: analyst, coder, and tester. However, in
-the analyst role, there is no dedicated method to help the LLM
-understand the code repository. Similarly, the paper "CodeAgent" first
-proposed an agent framework for repo - level code generation.
-Nevertheless, it merely adds tools to the LLM and lacks a method for the
-LLM to comprehensively understand the code repository.</h3>
-<h3 id="currently-a-small-number-of-studies-attempt-to-use-graphs-to-solve-this-problem.-since-the-core-of-understanding-a-code-repository-lies-in-grasping-the-complex-relationships-among-its-various-codes-and-files-and-graph-structures-can-effectively-model-these-relationships.-for-example-code-graph-models-cgm-published-in-june-this-year-and-the-reference-paper-repograph-both-construct-the-code-repository-as-a-graph-structure-and-then-feed-it-to-the-llm-for-processing.-essentially-the-edges-in-the-graph-make-the-relationships-between-files-and-codes-more-prominent.-in-contrast-if-the-code-repository-is-simply-flattened-and-directly-input-to-the-llm-when-the-repository-is-small-the-model-may-still-capture-some-relationships.-but-as-the-repository-size-increases-the-model-becomes-less-effective.">Currently,
-a small number of studies attempt to use graphs to solve this problem.
-Since the core of understanding a code repository lies in grasping the
-complex relationships among its various codes and files, and graph
-structures can effectively model these relationships. For example, "Code
-Graph Models (CGM)" published in June this year and the reference paper
-"RepoGraph" both construct the code repository as a graph structure and
-then feed it to the LLM for processing. Essentially, the edges in the
-graph make the relationships between files and codes more prominent. In
-contrast, if the code repository is simply flattened and directly input
-to the LLM, when the repository is small, the model may still capture
-some relationships. But as the repository size increases, the model
-becomes less effective.</h3>
-<h3 id="since-the-result-of-using-graphs-to-represent-the-code-repository-is-considered-could-introducing-graph-neural-networks-gnns-bring-better-results-because-gnns-have-inherent-advantages-in-processing-graph---structured-data.-currently-most-studies-only-provide-graph-data-to-transformers-which-requires-additional-processing-of-the-graph.-for-example-each-node-is-first-encoded-into-text-embeddings-then-projected-into-the-llms-embedding-space-and-converted-into-tokens-in-the-llm-to-be-processed-together-with-normal-text-input.">Since
-the result of using graphs to represent the code repository is
-considered, could introducing Graph Neural Networks (GNNs) bring better
-results? Because GNNs have inherent advantages in processing graph -
-structured data. Currently, most studies only provide graph data to
-Transformers, which requires additional processing of the graph. For
-example, each node is first encoded into text embeddings, then projected
-into the LLM's embedding space, and converted into tokens in the LLM to
-be processed together with normal text input.</h3>
-<h3 id="in-addition-this-graph---based-code-repository-understanding-method-has-the-potential-to-be-combined-with-various-agent---based-methods.-deeper-understanding-of-the-code-repository-can-reduce-errors-when-agents-perform-actions-and-decrease-error-accumulation.-at-the-same-time-the-effective-interaction-between-agents-and-the-code-repository-also-helps-to-further-improve-the-overall-understanding-of-the-code-repository.-moreover-these-two-methods-do-not-conflict-in-principle.-therefore-they-not-only-have-the-value-of-combination-but-also-the-feasibility-in-practice-which-is-worthy-of-in---depth-exploration.">In
-addition, this graph - based code repository understanding method has
-the potential to be combined with various agent - based methods. Deeper
-understanding of the code repository can reduce errors when agents
-perform actions and decrease error accumulation. At the same time, the
-effective interaction between agents and the code repository also helps
-to further improve the overall understanding of the code repository.
-Moreover, these two methods do not conflict in principle. Therefore,
-they not only have the value of combination but also the feasibility in
-practice, which is worthy of in - depth exploration.</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/" class="post-title-link" itemprop="url">CodeAgent：Enhancing Code Generation with Tool-Integrated Agent Systems for Real-World Repo-level Coding Challenges</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-17 13:25:00 / Modified: 14:50:52" itemprop="dateCreated datePublished" datetime="2025-07-17T13:25:00+08:00">2025-07-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueacl-24">Venue：ACL 24</h1>
-<h1 id="date">date：</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="现有方法无法处理真实世界仓库级代码生成而这类任务是实际软件开发的核心需求为此论文借鉴了人类处理这类问题的方法借助工具感觉这也是讲故事啥方法不能说是借鉴人类啊人类解决问题那方法可是多种多样的">现有方法无法处理真实世界仓库级代码生成，而这类任务是实际软件开发的核心需求。为此，论文借鉴了人类处理这类问题的方法：借助工具（感觉这也是讲故事……啥方法不能说是借鉴人类啊，人类解决问题，那方法可是多种多样的……）</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="这篇感觉纯粹是把agent搬到了repo-level-code-generation这个任务上因为之前没有人做过这方面的工作然后讲个故事说是借鉴人类的做法给llm装备上各种tools并相应地指定策略让llm能在合适的时机选择合适的tool">这篇感觉纯粹是把agent搬到了repo-level
-code
-generation这个任务上（因为之前没有人做过这方面的工作）。然后，讲个故事，说是借鉴人类的做法，给llm装备上各种tools，并相应地指定策略，让llm能在合适的时机选择合适的tool……</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="定义了repo-level-code-generation-task明确它和现有任务的区别">定义了repo-level
-code generation task，明确它和现有任务的区别</h2>
-<h2 id="提出一个codeagent框架增强了llm的repo-level-code-generation-ability">提出一个CodeAgent框架，增强了llm的repo-level
-code generation ability</h2>
-<h2 id="提出了一个codeagentbench用于repo-level-task的评估它和swe-bench的关系是">提出了一个CodeAgentBench，用于repo-level
-task的评估（它和SWE-Bench的关系是？）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/" class="post-title-link" itemprop="url">Self-collaboration Code Generation via ChatGPT</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-17 12:52:00 / Modified: 13:22:35" itemprop="dateCreated datePublished" datetime="2025-07-17T12:52:00+08:00">2025-07-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venue">Venue：</h1>
-<h1 id="date">date：</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="现有-llm-在复杂代码生成任务如多文件依赖长逻辑任务中表现不足而人类通过团队协作解决复杂任务的模式可被借鉴">现有
-LLM
-在复杂代码生成任务（如多文件依赖、长逻辑任务）中表现不足，而人类通过团队协作解决复杂任务的模式可被借鉴</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="通过简单的角色指令本质就是prompt-engineering就能让llm化作不同的角色从而实现用一个llm就完成多个角色的分工所以其实可以理解为我们用不同的prompt激发了llm的不同方面的能力从而实现了self-collaborationself-collaboration就是说我们完成一个任务可能它很复杂需要分工有多个角色要完成各自的任务我们可以用同一个llm然后依次让它扮演相应角色并给它相应的prompt">通过简单的“角色指令”（本质就是prompt
-engineering），就能让llm化作不同的角色，从而实现用一个llm就完成多个角色的分工（所以其实可以理解为，我们用不同的prompt激发了llm的不同方面的能力，从而实现了self-collaboration。self-collaboration就是说，我们完成一个任务，可能它很复杂，需要分工，有多个角色要完成各自的任务。我们可以用同一个llm，然后依次让它扮演相应角色，并给它相应的prompt）</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="提出了一套框架可以让llm扮演不同角色处理复杂任务感觉本质上就是一套提示词工程">提出了一套框架，可以让llm扮演不同角色，处理复杂任务（感觉本质上就是一套提示词工程）</h2>
-<h2 id="基于软件开发方法论设计了三个角色并组成一个虚拟团队明确了分工和协作的规则这里有点讲故事的嫌疑为它们设计的三个role找到背书">基于软件开发方法论，设计了三个角色，并组成一个虚拟团队，明确了分工和协作的规则（这里有点讲故事的嫌疑，为它们设计的三个role找到背书）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-17 05:02:32 / Modified: 05:06:51" itemprop="dateCreated datePublished" datetime="2025-07-17T05:02:32+08:00">2025-07-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="pca算法是一种基于特征值和特征向量的数据降维算法其核心是保留数据中最关键的信息去掉冗余信息而这个所谓的信息就是特征的协方差矩阵的特征向量信息的重要度则是由特征向量对应的特征值的大小来表征的">PCA算法，是一种基于特征值和特征向量的数据降维算法。其核心是，保留数据中最关键的信息，去掉冗余信息。而这个所谓的信息，就是特征的协方差矩阵的特征向量；信息的重要度，则是由特征向量对应的特征值的大小来表征的</h1>
-<h2 id="其具体步骤可以参考下面的代码及相应注释">其具体步骤，可以参考下面的代码及相应注释</h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤1：准备数据（加载并预处理图像）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 假设图像存放在&quot;faces&quot;文件夹，均为20×20灰度图</span></span><br><span class="line">img_dir = <span class="string">&quot;faces&quot;</span></span><br><span class="line">img_list = []</span><br><span class="line"><span class="keyword">for</span> img_name <span class="keyword">in</span> os.listdir(img_dir):</span><br><span class="line">    img_path = os.path.join(img_dir, img_name)</span><br><span class="line">    img = Image.<span class="built_in">open</span>(img_path).convert(<span class="string">&#x27;L&#x27;</span>)  <span class="comment"># 转为灰度图</span></span><br><span class="line">    img = img.resize((<span class="number">20</span>, <span class="number">20</span>))  <span class="comment"># 统一尺寸为20×20</span></span><br><span class="line">    img_array = np.array(img)  <span class="comment"># 转为数组（20×20）</span></span><br><span class="line">    img_flat = img_array.flatten()  <span class="comment"># 展平为1维向量（400维）</span></span><br><span class="line">    img_list.append(img_flat)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转为矩阵：shape=(样本数, 400)，每行是一张图像的向量</span></span><br><span class="line">X = np.array(img_list)</span><br><span class="line">n_samples, n_features = X.shape  <span class="comment"># n_samples=5, n_features=400</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤2：数据中心化（PCA核心步骤1）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 计算每个特征（像素）的均值</span></span><br><span class="line">mean_X = np.mean(X, axis=<span class="number">0</span>)  <span class="comment"># shape=(400,)，每个像素的平均亮度</span></span><br><span class="line"><span class="comment"># 中心化：每个样本减去均值（去除图像整体亮度偏移的影响）</span></span><br><span class="line">X_centered = X - mean_X  <span class="comment"># shape=(5, 400)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤3：计算协方差矩阵（PCA核心步骤2）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 协方差矩阵：反映像素之间的相关性（shape=(400, 400)）</span></span><br><span class="line"><span class="comment"># 公式：cov = (X_centered.T @ X_centered) / (n_samples - 1)（样本协方差）</span></span><br><span class="line">cov_matrix = np.cov(X_centered.T)  <span class="comment"># 等价于上述公式，直接用numpy的cov函数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤4：特征值分解（PCA核心步骤3）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 对协方差矩阵分解，得到特征值和特征向量</span></span><br><span class="line">eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)</span><br><span class="line"><span class="comment"># 特征向量：shape=(400, 400)，每列是一个主成分方向（&quot;特征脸&quot;）</span></span><br><span class="line"><span class="comment"># 特征值：shape=(400,)，表示对应主成分的&quot;信息量&quot;（值越大，信息越多）</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤5：选择主成分（PCA核心步骤4）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 按特征值从大到小排序，取前k个主成分（这里k=50）</span></span><br><span class="line">k = <span class="number">50</span></span><br><span class="line"><span class="comment"># 排序索引（从大到小）</span></span><br><span class="line">sorted_idx = np.argsort(eigenvalues)[::-<span class="number">1</span>]</span><br><span class="line"><span class="comment"># 取前k个特征向量（主成分）</span></span><br><span class="line">top_eigenvectors = eigenvectors[:, sorted_idx[:k]]  <span class="comment"># shape=(400, 50)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤6：降维映射（PCA核心步骤5）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 将中心化数据投影到主成分上，得到降维后的数据（shape=(5, 50)）</span></span><br><span class="line">X_pca = X_centered @ top_eigenvectors  <span class="comment"># 每个样本从400维→50维</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 额外：用降维数据重构图像（验证效果）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 重构公式：中心化数据≈降维数据×主成分 + 均值</span></span><br><span class="line">X_reconstructed = X_pca @ top_eigenvectors.T + mean_X  <span class="comment"># shape=(5, 400)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存重构图像（对比原图）</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_samples):</span><br><span class="line">    <span class="comment"># 转为0-255整数（图像像素范围）</span></span><br><span class="line">    recon_img = X_reconstructed[i].reshape(<span class="number">20</span>, <span class="number">20</span>).astype(np.uint8)</span><br><span class="line">    Image.fromarray(recon_img).save(<span class="string">f&quot;reconstructed_face_<span class="subst">&#123;i&#125;</span>.png&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/" class="post-title-link" itemprop="url">Code Graph Model (CGM)：A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-15 23:06:00" itemprop="dateCreated datePublished" datetime="2025-07-15T23:06:00+08:00">2025-07-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-16 15:44:00" itemprop="dateModified" datetime="2025-07-16T15:44:00+08:00">2025-07-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuearxiv">Venue：arxiv</h1>
-<h1 id="date2025-06-23">date：2025-06-23</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="感觉动机这一块其实挺常见的llm发展很快将其应用到单文件的各种代码任务都表现得很好但是到了更加真实复杂的se-task上例如repo-level的任务上它的表现就不够好了">感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE
-task上，例如repo-level的任务上，它的表现就不够好了</h2>
-<h2 id="而现有的方法表现更好的是利用闭源模型的基于agent的方法但这类方法因为依赖于闭源模型所以难以接触到模型权重因而难以进行改进同时基于agent的方法通常推理步骤会很长因此中间的错误可能会不断积累导致影响决策-所以为了避免这些问题我们会想用开源模型并且避免用agent的方法但现在基于开源模型的方法性能还是比上面提到的那类要差一截还不太能处理repo-level-task因此是有极大的改进空间的-而论文尝试做出的改进则是想让模型对repo的理解更上一层楼具体来说是让模型更加了解repo里的代码文件本身的含义以及相互之间的关系">而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于agent的方法，通常推理步骤会很长，因此中间的错误可能会不断积累导致影响决策<br>所以，为了避免这些问题，我们会想用开源模型，并且避免用agent的方法。但现在基于开源模型的方法，性能还是比上面提到的那类要差一截，还不太能处理repo-level
-task，因此是有极大的改进空间的<br>而论文尝试做出的改进，则是想让模型对repo的理解更上一层楼，具体来说是让模型更加了解repo里的代码文件本身的含义，以及相互之间的关系</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="怎么乍一看没什么新奇的呢也是想提高模型对repo的理解语义以及结构也是用graph结构也是让llm利用graph顶多是细节上不太一样框架没怎么变化吧和repograph对比一下吧">怎么乍一看，没什么新奇的呢……也是想提高模型对repo的理解（语义以及结构），也是用graph结构，也是让llm利用graph，顶多是细节上不太一样，框架没怎么变化吧（和RepoGraph对比一下吧……）</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="提出了一个新的架构大概是在开源的llm上加一些新的模块用来提高llm对repo的理解然后可以一起进行微调从而适应se-tasks且性能不错最优的结果还是加上了graph-rag但话说这个设计的graph-rag是真的出于锦上添花还是说本来仅仅用新架构无法work或者说性能不够好所以特意设计了一个graph-rag来make-it-work可能得看一下实验表格里有没有单独用新架构而没用graph-rag的结果了">提出了一个新的架构，大概是在开源的llm上加一些新的模块，用来提高llm对repo的理解，然后可以一起进行微调，从而适应SE
-tasks，且性能不错（最优的结果还是加上了Graph
-RAG。但话说，这个设计的Graph
-RAG是真的出于锦上添花，还是说，本来仅仅用新架构，无法work，或者说性能不够好，所以特意设计了一个Graph
-RAG来make it work？可能得看一下实验表格里有没有单独用新架构而没用Graph
-RAG的结果了……）</h2>
-<h2 id="配套的还设计了一个graph-rag的框架可以进行辅助">配套的，还设计了一个Graph
-RAG的框架，可以进行辅助</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" class="post-title-link" itemprop="url">在排序数组中查找元素的第一个和最后一个位置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-15 10:39:00 / Modified: 10:49:42" itemprop="dateCreated datePublished" datetime="2025-07-15T10:39:00+08:00">2025-07-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">二分算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" itemprop="url" rel="index"><span itemprop="name">二分查找</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1168,18 +1140,18 @@ RAG的框架，可以进行辅助</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">226</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">71</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

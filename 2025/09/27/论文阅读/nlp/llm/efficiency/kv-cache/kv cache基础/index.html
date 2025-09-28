@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在了解kv cache的过程中，读到了游凯超的一篇回答，感觉真的写的很详细，而且不仅局限于kv cache，包括为何这样设计，也讲清楚了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kv cache基础">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="在了解kv cache的过程中，读到了游凯超的一篇回答，感觉真的写的很详细，而且不仅局限于kv cache，包括为何这样设计，也讲清楚了">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-27T07:14:00.000Z">
+<meta property="article:modified_time" content="2025-09-27T07:15:55.851Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>kv cache基础 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kv cache基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-27 15:14:00 / Modified: 15:15:55" itemprop="dateCreated datePublished" datetime="2025-09-27T15:14:00+08:00">2025-09-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="在了解kv-cache的过程中读到了游凯超的一篇回答感觉真的写的很详细而且不仅局限于kv-cache包括为何这样设计也讲清楚了">在了解kv
+cache的过程中，读到了<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/596900067/answer/3424958454">游凯超的一篇回答</a>，感觉真的写的很详细，而且不仅局限于kv
+cache，包括为何这样设计，也讲清楚了</h1>
+<span id="more"></span>
+<h2 id="首先是关于为什么要有kv-cache以及为何只要kv-cache而不是其它的cache">首先是关于为什么要有kv
+cache（以及为何只要kv cache，而不是其它的cache）</h2>
+<h3 id="简单来讲就是在自回归生成token的过程中我们发现过往token的一些东西其实是可以复用的不妨考虑第l层我们已有n个token这是包括了prompt以及所有生成的token的总数且生成了第n1个token那之后就需要让这总共n1个token重新经过总计l层的模块得到最终的聚合后的第n1个token的embedding用于生成第n2个token">简单来讲，就是在自回归生成token的过程中，我们发现过往token的一些东西其实是可以复用的。不妨考虑第l层，我们已有n个token（这是包括了prompt以及所有生成的token的总数），且生成了第n+1个token。那之后就需要让这总共n+1个token重新经过总计L层的模块，得到最终的、聚合后的、第n+1个token的embedding，用于生成第n+2个token</h3>
+<h3 id="而且我们可以发现在经过l层的过程里其实前n个token的embedding在每一层都是和之前一样的也就是我们不需要重新算它们只需要算第n1个token在各个层的embedding因此一个朴素的想法是我们保留每一层前面的token的embedding只计算新的token的embedding即可这个想法可以被称为x-cache因为它存储的是token在各层的embedding">而且我们可以发现，在经过L层的过程里，其实前n个token的embedding，在每一层，都是和之前一样的。也就是，我们不需要重新算它们。只需要算第n+1个token在各个层的embedding。因此，一个朴素的想法是，我们保留每一层前面的token的embedding，只计算新的token的embedding即可。这个想法可以被称为x
+cache，因为它存储的是token在各层的embedding。</h3>
+<h3 id="那为什么现在流行的并不是x-cache而是kv-cache呢这就要结合到每一层具体的计算方法了在x-cache设定下每一层我们对第n1个token的embedding的计算其实就是一个single-query-attention因为这里我们是要用最后一个token的query与前n个token的key进行计算从而得到attn之后进行聚合就是对v进行加权求和得到最后一个token的embedding当然如果是多头注意力可能需要把各个头的输出进行一个拼接写出公式会更加明显看出复用在哪里-s_iw_qcdot-x_n1ltw_kcdot-x_il-i1dots-n1y_hsum_i1n1-fraces_isum_j1n1es_jw_vcdot-x_ilx_n1lconcat_h1hy_h因为是x-cache所以中间的-x_il1leq-i-leq-n-都是保存下来了的但即使这样我们依然要计算w_qcdot-x_n1l和w_kcdot-x_il以及w_vcdot-x_il-后两项都是比较多的要计算n个-既然这样为什么我们不把w_kcdot-x_il和w_vcdot-x_il直接保留下来呢这样就剩去了前面token的相关计算部分当然第n1个token相关的计算是免不了的毕竟它是刚刚生成的没有cache的机会而保留下来的这两项其实就是之前token的k和v所以出现了kv-cache">那为什么现在流行的并不是x
+cache，而是kv cache呢？这就要结合到每一层具体的计算方法了。在x
+cache设定下，每一层我们对第n+1个token的embedding的计算，其实就是一个single-query
+attention。因为这里我们是要用最后一个token的query，与前n个token的key进行计算，从而得到attn，之后进行聚合（就是对v进行加权求和），得到最后一个token的embedding（当然，如果是多头注意力，可能需要把各个头的输出进行一个拼接）写出公式会更加明显看出复用在哪里：<br><span class="math display">\[s_{i}=(W_{Q}\cdot x_{n+1}^{l})^{T}(W_{K}\cdot
+x_{i}^{l})\ \ \ i=1\dots n+1\]</span><span class="math display">\[y_{h}=\sum_{i=1}^{n+1}
+\frac{e^{s_{i}}}{\sum_{j=1}^{n+1}e^{s_{j}}}(W_{V}\cdot
+x_{i}^{l})\]</span><span class="math display">\[x_{n+1}^{l}=Concat_{h=1}^{H}(y_{h})\]</span>因为是x
+cache，所以中间的<span class="math inline">\(\{ x_{i}^{l}|1\leq i \leq n
+\}\)</span>都是保存下来了的。但即使这样，我们依然要计算<span class="math inline">\(W_{Q}\cdot x_{n+1}^{l}\)</span>和<span class="math inline">\(W_{K}\cdot x_{i}^{l}\)</span>，以及<span class="math inline">\(W_{V}\cdot x_{i}^{l}\)</span>
+后两项都是比较多的，要计算n个<br>既然这样，为什么我们不把<span class="math inline">\(W_{K}\cdot x_{i}^{l}\)</span>和<span class="math inline">\(W_{V}\cdot
+x_{i}^{l}\)</span>直接保留下来呢？这样就剩去了前面token的相关计算部分（当然，第n+1个token相关的计算是免不了的，毕竟它是刚刚生成的，没有cache的机会）。而保留下来的这两项，其实就是之前token的k和v。所以，出现了kv
+cache</h3>
+<h3 id="原回答里还有一个很有意思的点是它提出其实保存哪个都是看有多方便我们计算的x-cache也是有用的毕竟省去了一部分的计算但是还留有一部分计算而kv-cache则是改进了x-cache省去了更多的计算如果我们把s_iw_qcdot-x_n1ltw_kcdot-x_il-i1dots-n1这个计算过程给改写一下中间的qk计算attention-score的部分我们写为x_n1ltcdot-w_qtcdot-w_kcdot-x_il则把后面三项结合起来然后存储也是一种方案也即w_qtcdot-w_kcdot-x_il这部分存起来可以把这种存储方法叫做s-cache当然这种情况下我们还是需要把v-cache存起来的否则仅有s-cache的话后面聚合的那一步我们还是要计算w_vcdot-x_il的这还是很麻烦的所以严格说可能这种方法叫sv-cache更合适-总之其实cache就是为了复用所以存哪些东西就看我们的计算过程中哪些东西是可以复用的并且通过适当的改写有可能存的东西会变化">原回答里还有一个很有意思的点，是，它提出，其实保存哪个，都是看有多方便我们计算的。x
+cache也是有用的，毕竟省去了一部分的计算，但是还留有一部分计算。而kv
+cache则是改进了x cache，省去了更多的计算。如果我们把<span class="math inline">\(s_{i}=(W_{Q}\cdot x_{n+1}^{l})^{T}(W_{K}\cdot
+x_{i}^{l})\ \ \ i=1\dots
+n+1\)</span>这个计算过程给改写一下，中间的qk计算attention
+score的部分，我们写为：<span class="math inline">\((x_{n+1}^{l})^{T}\cdot W_{Q}^{T}\cdot W_{K}\cdot
+x_{i}^{l}\)</span>，则把后面三项结合起来，然后存储，也是一种方案（也即<span class="math inline">\(W_{Q}^{T}\cdot W_{K}\cdot
+x_{i}^{l}\)</span>这部分存起来）。可以把这种存储方法叫做s
+cache。当然，这种情况下，我们还是需要把v cache存起来的。否则仅有s
+cache的话，后面聚合的那一步我们还是要计算<span class="math inline">\(W_{V}\cdot
+x_{i}^{l}\)</span>的，这还是很麻烦的。所以严格说可能这种方法叫sv
+cache更合适<br>总之，其实cache就是为了复用。所以存哪些东西，就看我们的计算过程中哪些东西是可以复用的。并且通过适当的改写，有可能存的东西会变化</h3>
+<h3 id="当然原回答还对比了这三种cache方案的计算开销和存储开销结论是一般情况下这三个方案的计算开销其实都是一个量级的因此考虑选存储开销最小的那个也就是kv-cache了这也解释了为什么有kv-cache为什么是kv-cache而不是其它cache">当然，原回答还对比了这三种cache方案的计算开销和存储开销。结论是，一般情况下，这三个方案的计算开销其实都是一个量级的，因此考虑选存储开销最小的那个，也就是kv
+cache了。这也解释了为什么有kv cache，为什么是kv
+cache而不是其它cache</h3>
+<h2 id="然后是一些kv-cache的存储及实现细节">然后是一些kv
+cache的存储及实现细节</h2>
+<h3 id="这些东西似乎现在一般都囊括在框架里了有点细节以及麻烦可能得读一下vllm之类的框架的源码或者读一下相关论文了">这些东西，似乎现在一般都囊括在框架里了。有点细节以及麻烦，可能得读一下vllm之类的框架的源码，或者读一下相关论文了</h3>
+<h2 id="最后是kv-cache的成立条件">最后是kv cache的成立条件</h2>
+<h3 id="这里原回答讨论的是kv-cache这种加速技术能否用于所有的llm答案是不行">这里，原回答讨论的是，kv
+cache这种加速技术能否用于所有的llm。答案是不行</h3>
+<h3 id="可以抽象成一个数学问题来看前面我们提到了kv-cache的提出是因为发现计算过程中有东西可以复用可以复用的东西分别是之前token的k和v这个的意思是说即使我们要计算第n1n2个token前n个token的kv都是不变的也就是说如果我们把llm的每一层视为一个函数f它的输入是若干token且这个输入是会变长的以其中一个层的计算为例x_1l1cdotsx_il1cdotsx_nl1fx_1lcdotsx_ilcdotsx_nl如果后续有更多token来了假设是m个则计算过程就变成了hatx_1l1cdotshatx_il1cdotshatx_nl1hatx_n1l1cdotshatx_nml1fhatx_1lcdotshatx_ilcdotshatx_nlhatx_n1lcdotshatx_nml如果此时满足hatx_ilx_il-1leq-i-leq-n则kv-cache依然适用因为它表明新来了token也不影响我之前token的embedding当然也就不会影响之前token的kv了推理的时候权重是不变的因此kv是否变化只看token本身的embedding是否变化了-这个性质可以被称为因果性也就是每个天空嗯的输出只依赖于它自己以及它之前的token因此那些decoder-only的模型似乎都是满足这一点的因为它们都是生成模型采用自回归的形式且都会采用causal-mask而encoder-only的那些模型比如bert类它们就不满足这个性质因为它们是双向的注意力每个token的输出和它之后的token也有关系-现在的llm大多都是decoder-only的结构了那是否意味着kv-cache能适用于所有的llm呢-也不是这里我们忽略了对输入的预处理一般的预处理除了把token-idx映射到embedding还需要加上position-embedding而问题就出在这里有一些pe方法它们在输入增长之后会整体重新计算一下因此前面token的embedding也会发生变化所以此时前面的token的初始的输入就已经发生了变化那后面我们自然也不能保证embedding还是相同的这种情况下kv-cache还是不适用的">可以抽象成一个数学问题来看。前面我们提到了，kv
+cache的提出是因为发现计算过程中有东西可以复用，可以复用的东西分别是之前token的k和v。这个的意思是说，即使我们要计算第n+1，n+2，……个token，前n个token的kv都是不变的。也就是说，如果我们把llm的每一层视为一个函数f，它的输入是若干token，且这个输入是会变长的。以其中一个层的计算为例，<span class="math display">\[(x_{1}^{l+1},\cdots,x_{i}^{l+1},\cdots,x_{n}^{l+1})=f(x_{1}^{l},\cdots,x_{i}^{l},\cdots,x_{n}^{l})\]</span>如果后续有更多token来了，假设是m个，则计算过程就变成了<span class="math display">\[(\hat{x}_{1}^{l+1},\cdots,\hat{x}_{i}^{l+1},\cdots,\hat{x}_{n}^{l+1},\hat{x}_{n+1}^{l+1},\cdots,\hat{x}_{n+m}^{l+1})=f(\hat{x}_{1}^{l},\cdots,\hat{x}_{i}^{l},\cdots,\hat{x}_{n}^{l},\hat{x}_{n+1}^{l},\cdots,\hat{x}_{n+m}^{l})\]</span>如果此时满足<span class="math inline">\(\hat{x}_{i}^{l}=x_{i}^{l}\ ,\ \ \ 1\leq i \leq
+n\)</span>，则kv
+cache依然适用。因为它表明，新来了token也不影响我之前token的embedding，当然也就不会影响之前token的kv了（推理的时候权重是不变的，因此kv是否变化只看token本身的embedding是否变化了）<br>这个性质可以被称为因果性，也就是每个天空嗯的输出只依赖于它自己以及它之前的token。因此，那些decoder-only的模型似乎都是满足这一点的。因为它们都是生成模型，采用自回归的形式，且都会采用causal
+mask。而encoder-only的那些模型，比如BERT类，它们就不满足这个性质。因为它们是双向的注意力，每个token的输出和它之后的token也有关系<br>现在的llm大多都是decoder-only的结构了，那是否意味着kv
+cache能适用于所有的llm呢？<br>也不是。这里我们忽略了对输入的预处理。一般的预处理，除了把token
+idx映射到embedding，还需要加上position
+embedding。而问题就出在这里。有一些pe方法，它们在输入增长之后，会整体重新计算一下，因此前面token的embedding也会发生变化。所以，此时前面的token的初始的输入就已经发生了变化，那后面我们自然也不能保证embedding还是相同的。这种情况下，kv
+cache还是不适用的</h3>
+<h3 id="所以kv-cache要适用至少得满足以下条件">所以，kv
+cache要适用，至少得满足以下条件：</h3>
+<h4 id="模型结构得具有因果性">模型结构得具有因果性</h4>
+<h4 id="pe也具有类似的因果性">pe也具有类似的因果性</h4>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/" rel="prev" title="DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion">
+      <i class="fa fa-chevron-left"></i> DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/" rel="next" title="博客阅读 KV Cache压缩新阶段：走向问题指令无关下的压缩探索">
+      博客阅读 KV Cache压缩新阶段：走向问题指令无关下的压缩探索 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E4%BA%86%E8%A7%A3kv-cache%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%AF%BB%E5%88%B0%E4%BA%86%E6%B8%B8%E5%87%AF%E8%B6%85%E7%9A%84%E4%B8%80%E7%AF%87%E5%9B%9E%E7%AD%94%E6%84%9F%E8%A7%89%E7%9C%9F%E7%9A%84%E5%86%99%E7%9A%84%E5%BE%88%E8%AF%A6%E7%BB%86%E8%80%8C%E4%B8%94%E4%B8%8D%E4%BB%85%E5%B1%80%E9%99%90%E4%BA%8Ekv-cache%E5%8C%85%E6%8B%AC%E4%B8%BA%E4%BD%95%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1%E4%B9%9F%E8%AE%B2%E6%B8%85%E6%A5%9A%E4%BA%86"><span class="nav-number">1.</span> <span class="nav-text">在了解kv
+cache的过程中，读到了游凯超的一篇回答，感觉真的写的很详细，而且不仅局限于kv
+cache，包括为何这样设计，也讲清楚了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E6%98%AF%E5%85%B3%E4%BA%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89kv-cache%E4%BB%A5%E5%8F%8A%E4%B8%BA%E4%BD%95%E5%8F%AA%E8%A6%81kv-cache%E8%80%8C%E4%B8%8D%E6%98%AF%E5%85%B6%E5%AE%83%E7%9A%84cache"><span class="nav-number">1.1.</span> <span class="nav-text">首先是关于为什么要有kv
+cache（以及为何只要kv cache，而不是其它的cache）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%9D%A5%E8%AE%B2%E5%B0%B1%E6%98%AF%E5%9C%A8%E8%87%AA%E5%9B%9E%E5%BD%92%E7%94%9F%E6%88%90token%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%E8%BF%87%E5%BE%80token%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF%E5%85%B6%E5%AE%9E%E6%98%AF%E5%8F%AF%E4%BB%A5%E5%A4%8D%E7%94%A8%E7%9A%84%E4%B8%8D%E5%A6%A8%E8%80%83%E8%99%91%E7%AC%ACl%E5%B1%82%E6%88%91%E4%BB%AC%E5%B7%B2%E6%9C%89n%E4%B8%AAtoken%E8%BF%99%E6%98%AF%E5%8C%85%E6%8B%AC%E4%BA%86prompt%E4%BB%A5%E5%8F%8A%E6%89%80%E6%9C%89%E7%94%9F%E6%88%90%E7%9A%84token%E7%9A%84%E6%80%BB%E6%95%B0%E4%B8%94%E7%94%9F%E6%88%90%E4%BA%86%E7%AC%ACn1%E4%B8%AAtoken%E9%82%A3%E4%B9%8B%E5%90%8E%E5%B0%B1%E9%9C%80%E8%A6%81%E8%AE%A9%E8%BF%99%E6%80%BB%E5%85%B1n1%E4%B8%AAtoken%E9%87%8D%E6%96%B0%E7%BB%8F%E8%BF%87%E6%80%BB%E8%AE%A1l%E5%B1%82%E7%9A%84%E6%A8%A1%E5%9D%97%E5%BE%97%E5%88%B0%E6%9C%80%E7%BB%88%E7%9A%84%E8%81%9A%E5%90%88%E5%90%8E%E7%9A%84%E7%AC%ACn1%E4%B8%AAtoken%E7%9A%84embedding%E7%94%A8%E4%BA%8E%E7%94%9F%E6%88%90%E7%AC%ACn2%E4%B8%AAtoken"><span class="nav-number">1.1.1.</span> <span class="nav-text">简单来讲，就是在自回归生成token的过程中，我们发现过往token的一些东西其实是可以复用的。不妨考虑第l层，我们已有n个token（这是包括了prompt以及所有生成的token的总数），且生成了第n+1个token。那之后就需要让这总共n+1个token重新经过总计L层的模块，得到最终的、聚合后的、第n+1个token的embedding，用于生成第n+2个token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%8C%E4%B8%94%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E5%9C%A8%E7%BB%8F%E8%BF%87l%E5%B1%82%E7%9A%84%E8%BF%87%E7%A8%8B%E9%87%8C%E5%85%B6%E5%AE%9E%E5%89%8Dn%E4%B8%AAtoken%E7%9A%84embedding%E5%9C%A8%E6%AF%8F%E4%B8%80%E5%B1%82%E9%83%BD%E6%98%AF%E5%92%8C%E4%B9%8B%E5%89%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E4%B8%8D%E9%9C%80%E8%A6%81%E9%87%8D%E6%96%B0%E7%AE%97%E5%AE%83%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E7%AE%97%E7%AC%ACn1%E4%B8%AAtoken%E5%9C%A8%E5%90%84%E4%B8%AA%E5%B1%82%E7%9A%84embedding%E5%9B%A0%E6%AD%A4%E4%B8%80%E4%B8%AA%E6%9C%B4%E7%B4%A0%E7%9A%84%E6%83%B3%E6%B3%95%E6%98%AF%E6%88%91%E4%BB%AC%E4%BF%9D%E7%95%99%E6%AF%8F%E4%B8%80%E5%B1%82%E5%89%8D%E9%9D%A2%E7%9A%84token%E7%9A%84embedding%E5%8F%AA%E8%AE%A1%E7%AE%97%E6%96%B0%E7%9A%84token%E7%9A%84embedding%E5%8D%B3%E5%8F%AF%E8%BF%99%E4%B8%AA%E6%83%B3%E6%B3%95%E5%8F%AF%E4%BB%A5%E8%A2%AB%E7%A7%B0%E4%B8%BAx-cache%E5%9B%A0%E4%B8%BA%E5%AE%83%E5%AD%98%E5%82%A8%E7%9A%84%E6%98%AFtoken%E5%9C%A8%E5%90%84%E5%B1%82%E7%9A%84embedding"><span class="nav-number">1.1.2.</span> <span class="nav-text">而且我们可以发现，在经过L层的过程里，其实前n个token的embedding，在每一层，都是和之前一样的。也就是，我们不需要重新算它们。只需要算第n+1个token在各个层的embedding。因此，一个朴素的想法是，我们保留每一层前面的token的embedding，只计算新的token的embedding即可。这个想法可以被称为x
+cache，因为它存储的是token在各层的embedding。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E7%8E%B0%E5%9C%A8%E6%B5%81%E8%A1%8C%E7%9A%84%E5%B9%B6%E4%B8%8D%E6%98%AFx-cache%E8%80%8C%E6%98%AFkv-cache%E5%91%A2%E8%BF%99%E5%B0%B1%E8%A6%81%E7%BB%93%E5%90%88%E5%88%B0%E6%AF%8F%E4%B8%80%E5%B1%82%E5%85%B7%E4%BD%93%E7%9A%84%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E4%BA%86%E5%9C%A8x-cache%E8%AE%BE%E5%AE%9A%E4%B8%8B%E6%AF%8F%E4%B8%80%E5%B1%82%E6%88%91%E4%BB%AC%E5%AF%B9%E7%AC%ACn1%E4%B8%AAtoken%E7%9A%84embedding%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AAsingle-query-attention%E5%9B%A0%E4%B8%BA%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E6%98%AF%E8%A6%81%E7%94%A8%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AAtoken%E7%9A%84query%E4%B8%8E%E5%89%8Dn%E4%B8%AAtoken%E7%9A%84key%E8%BF%9B%E8%A1%8C%E8%AE%A1%E7%AE%97%E4%BB%8E%E8%80%8C%E5%BE%97%E5%88%B0attn%E4%B9%8B%E5%90%8E%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E5%B0%B1%E6%98%AF%E5%AF%B9v%E8%BF%9B%E8%A1%8C%E5%8A%A0%E6%9D%83%E6%B1%82%E5%92%8C%E5%BE%97%E5%88%B0%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AAtoken%E7%9A%84embedding%E5%BD%93%E7%84%B6%E5%A6%82%E6%9E%9C%E6%98%AF%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E6%8A%8A%E5%90%84%E4%B8%AA%E5%A4%B4%E7%9A%84%E8%BE%93%E5%87%BA%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%B8%AA%E6%8B%BC%E6%8E%A5%E5%86%99%E5%87%BA%E5%85%AC%E5%BC%8F%E4%BC%9A%E6%9B%B4%E5%8A%A0%E6%98%8E%E6%98%BE%E7%9C%8B%E5%87%BA%E5%A4%8D%E7%94%A8%E5%9C%A8%E5%93%AA%E9%87%8C-s_iw_qcdot-x_n1ltw_kcdot-x_il-i1dots-n1y_hsum_i1n1-fraces_isum_j1n1es_jw_vcdot-x_ilx_n1lconcat_h1hy_h%E5%9B%A0%E4%B8%BA%E6%98%AFx-cache%E6%89%80%E4%BB%A5%E4%B8%AD%E9%97%B4%E7%9A%84-x_il1leq-i-leq-n-%E9%83%BD%E6%98%AF%E4%BF%9D%E5%AD%98%E4%B8%8B%E6%9D%A5%E4%BA%86%E7%9A%84%E4%BD%86%E5%8D%B3%E4%BD%BF%E8%BF%99%E6%A0%B7%E6%88%91%E4%BB%AC%E4%BE%9D%E7%84%B6%E8%A6%81%E8%AE%A1%E7%AE%97w_qcdot-x_n1l%E5%92%8Cw_kcdot-x_il%E4%BB%A5%E5%8F%8Aw_vcdot-x_il-%E5%90%8E%E4%B8%A4%E9%A1%B9%E9%83%BD%E6%98%AF%E6%AF%94%E8%BE%83%E5%A4%9A%E7%9A%84%E8%A6%81%E8%AE%A1%E7%AE%97n%E4%B8%AA-%E6%97%A2%E7%84%B6%E8%BF%99%E6%A0%B7%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E4%B8%8D%E6%8A%8Aw_kcdot-x_il%E5%92%8Cw_vcdot-x_il%E7%9B%B4%E6%8E%A5%E4%BF%9D%E7%95%99%E4%B8%8B%E6%9D%A5%E5%91%A2%E8%BF%99%E6%A0%B7%E5%B0%B1%E5%89%A9%E5%8E%BB%E4%BA%86%E5%89%8D%E9%9D%A2token%E7%9A%84%E7%9B%B8%E5%85%B3%E8%AE%A1%E7%AE%97%E9%83%A8%E5%88%86%E5%BD%93%E7%84%B6%E7%AC%ACn1%E4%B8%AAtoken%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97%E6%98%AF%E5%85%8D%E4%B8%8D%E4%BA%86%E7%9A%84%E6%AF%95%E7%AB%9F%E5%AE%83%E6%98%AF%E5%88%9A%E5%88%9A%E7%94%9F%E6%88%90%E7%9A%84%E6%B2%A1%E6%9C%89cache%E7%9A%84%E6%9C%BA%E4%BC%9A%E8%80%8C%E4%BF%9D%E7%95%99%E4%B8%8B%E6%9D%A5%E7%9A%84%E8%BF%99%E4%B8%A4%E9%A1%B9%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E4%B9%8B%E5%89%8Dtoken%E7%9A%84k%E5%92%8Cv%E6%89%80%E4%BB%A5%E5%87%BA%E7%8E%B0%E4%BA%86kv-cache"><span class="nav-number">1.1.3.</span> <span class="nav-text">那为什么现在流行的并不是x
+cache，而是kv cache呢？这就要结合到每一层具体的计算方法了。在x
+cache设定下，每一层我们对第n+1个token的embedding的计算，其实就是一个single-query
+attention。因为这里我们是要用最后一个token的query，与前n个token的key进行计算，从而得到attn，之后进行聚合（就是对v进行加权求和），得到最后一个token的embedding（当然，如果是多头注意力，可能需要把各个头的输出进行一个拼接）写出公式会更加明显看出复用在哪里：\[s_{i}&#x3D;(W_{Q}\cdot x_{n+1}^{l})^{T}(W_{K}\cdot
+x_{i}^{l})\ \ \ i&#x3D;1\dots n+1\]\[y_{h}&#x3D;\sum_{i&#x3D;1}^{n+1}
+\frac{e^{s_{i}}}{\sum_{j&#x3D;1}^{n+1}e^{s_{j}}}(W_{V}\cdot
+x_{i}^{l})\]\[x_{n+1}^{l}&#x3D;Concat_{h&#x3D;1}^{H}(y_{h})\]因为是x
+cache，所以中间的\(\{ x_{i}^{l}|1\leq i \leq n
+\}\)都是保存下来了的。但即使这样，我们依然要计算\(W_{Q}\cdot x_{n+1}^{l}\)和\(W_{K}\cdot x_{i}^{l}\)，以及\(W_{V}\cdot x_{i}^{l}\)
+后两项都是比较多的，要计算n个既然这样，为什么我们不把\(W_{K}\cdot x_{i}^{l}\)和\(W_{V}\cdot
+x_{i}^{l}\)直接保留下来呢？这样就剩去了前面token的相关计算部分（当然，第n+1个token相关的计算是免不了的，毕竟它是刚刚生成的，没有cache的机会）。而保留下来的这两项，其实就是之前token的k和v。所以，出现了kv
+cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9B%9E%E7%AD%94%E9%87%8C%E8%BF%98%E6%9C%89%E4%B8%80%E4%B8%AA%E5%BE%88%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E7%82%B9%E6%98%AF%E5%AE%83%E6%8F%90%E5%87%BA%E5%85%B6%E5%AE%9E%E4%BF%9D%E5%AD%98%E5%93%AA%E4%B8%AA%E9%83%BD%E6%98%AF%E7%9C%8B%E6%9C%89%E5%A4%9A%E6%96%B9%E4%BE%BF%E6%88%91%E4%BB%AC%E8%AE%A1%E7%AE%97%E7%9A%84x-cache%E4%B9%9F%E6%98%AF%E6%9C%89%E7%94%A8%E7%9A%84%E6%AF%95%E7%AB%9F%E7%9C%81%E5%8E%BB%E4%BA%86%E4%B8%80%E9%83%A8%E5%88%86%E7%9A%84%E8%AE%A1%E7%AE%97%E4%BD%86%E6%98%AF%E8%BF%98%E7%95%99%E6%9C%89%E4%B8%80%E9%83%A8%E5%88%86%E8%AE%A1%E7%AE%97%E8%80%8Ckv-cache%E5%88%99%E6%98%AF%E6%94%B9%E8%BF%9B%E4%BA%86x-cache%E7%9C%81%E5%8E%BB%E4%BA%86%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%AE%A1%E7%AE%97%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%8A%8As_iw_qcdot-x_n1ltw_kcdot-x_il-i1dots-n1%E8%BF%99%E4%B8%AA%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E7%BB%99%E6%94%B9%E5%86%99%E4%B8%80%E4%B8%8B%E4%B8%AD%E9%97%B4%E7%9A%84qk%E8%AE%A1%E7%AE%97attention-score%E7%9A%84%E9%83%A8%E5%88%86%E6%88%91%E4%BB%AC%E5%86%99%E4%B8%BAx_n1ltcdot-w_qtcdot-w_kcdot-x_il%E5%88%99%E6%8A%8A%E5%90%8E%E9%9D%A2%E4%B8%89%E9%A1%B9%E7%BB%93%E5%90%88%E8%B5%B7%E6%9D%A5%E7%84%B6%E5%90%8E%E5%AD%98%E5%82%A8%E4%B9%9F%E6%98%AF%E4%B8%80%E7%A7%8D%E6%96%B9%E6%A1%88%E4%B9%9F%E5%8D%B3w_qtcdot-w_kcdot-x_il%E8%BF%99%E9%83%A8%E5%88%86%E5%AD%98%E8%B5%B7%E6%9D%A5%E5%8F%AF%E4%BB%A5%E6%8A%8A%E8%BF%99%E7%A7%8D%E5%AD%98%E5%82%A8%E6%96%B9%E6%B3%95%E5%8F%AB%E5%81%9As-cache%E5%BD%93%E7%84%B6%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8B%E6%88%91%E4%BB%AC%E8%BF%98%E6%98%AF%E9%9C%80%E8%A6%81%E6%8A%8Av-cache%E5%AD%98%E8%B5%B7%E6%9D%A5%E7%9A%84%E5%90%A6%E5%88%99%E4%BB%85%E6%9C%89s-cache%E7%9A%84%E8%AF%9D%E5%90%8E%E9%9D%A2%E8%81%9A%E5%90%88%E7%9A%84%E9%82%A3%E4%B8%80%E6%AD%A5%E6%88%91%E4%BB%AC%E8%BF%98%E6%98%AF%E8%A6%81%E8%AE%A1%E7%AE%97w_vcdot-x_il%E7%9A%84%E8%BF%99%E8%BF%98%E6%98%AF%E5%BE%88%E9%BA%BB%E7%83%A6%E7%9A%84%E6%89%80%E4%BB%A5%E4%B8%A5%E6%A0%BC%E8%AF%B4%E5%8F%AF%E8%83%BD%E8%BF%99%E7%A7%8D%E6%96%B9%E6%B3%95%E5%8F%ABsv-cache%E6%9B%B4%E5%90%88%E9%80%82-%E6%80%BB%E4%B9%8B%E5%85%B6%E5%AE%9Ecache%E5%B0%B1%E6%98%AF%E4%B8%BA%E4%BA%86%E5%A4%8D%E7%94%A8%E6%89%80%E4%BB%A5%E5%AD%98%E5%93%AA%E4%BA%9B%E4%B8%9C%E8%A5%BF%E5%B0%B1%E7%9C%8B%E6%88%91%E4%BB%AC%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%93%AA%E4%BA%9B%E4%B8%9C%E8%A5%BF%E6%98%AF%E5%8F%AF%E4%BB%A5%E5%A4%8D%E7%94%A8%E7%9A%84%E5%B9%B6%E4%B8%94%E9%80%9A%E8%BF%87%E9%80%82%E5%BD%93%E7%9A%84%E6%94%B9%E5%86%99%E6%9C%89%E5%8F%AF%E8%83%BD%E5%AD%98%E7%9A%84%E4%B8%9C%E8%A5%BF%E4%BC%9A%E5%8F%98%E5%8C%96"><span class="nav-number">1.1.4.</span> <span class="nav-text">原回答里还有一个很有意思的点，是，它提出，其实保存哪个，都是看有多方便我们计算的。x
+cache也是有用的，毕竟省去了一部分的计算，但是还留有一部分计算。而kv
+cache则是改进了x cache，省去了更多的计算。如果我们把\(s_{i}&#x3D;(W_{Q}\cdot x_{n+1}^{l})^{T}(W_{K}\cdot
+x_{i}^{l})\ \ \ i&#x3D;1\dots
+n+1\)这个计算过程给改写一下，中间的qk计算attention
+score的部分，我们写为：\((x_{n+1}^{l})^{T}\cdot W_{Q}^{T}\cdot W_{K}\cdot
+x_{i}^{l}\)，则把后面三项结合起来，然后存储，也是一种方案（也即\(W_{Q}^{T}\cdot W_{K}\cdot
+x_{i}^{l}\)这部分存起来）。可以把这种存储方法叫做s
+cache。当然，这种情况下，我们还是需要把v cache存起来的。否则仅有s
+cache的话，后面聚合的那一步我们还是要计算\(W_{V}\cdot
+x_{i}^{l}\)的，这还是很麻烦的。所以严格说可能这种方法叫sv
+cache更合适总之，其实cache就是为了复用。所以存哪些东西，就看我们的计算过程中哪些东西是可以复用的。并且通过适当的改写，有可能存的东西会变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%93%E7%84%B6%E5%8E%9F%E5%9B%9E%E7%AD%94%E8%BF%98%E5%AF%B9%E6%AF%94%E4%BA%86%E8%BF%99%E4%B8%89%E7%A7%8Dcache%E6%96%B9%E6%A1%88%E7%9A%84%E8%AE%A1%E7%AE%97%E5%BC%80%E9%94%80%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%80%E9%94%80%E7%BB%93%E8%AE%BA%E6%98%AF%E4%B8%80%E8%88%AC%E6%83%85%E5%86%B5%E4%B8%8B%E8%BF%99%E4%B8%89%E4%B8%AA%E6%96%B9%E6%A1%88%E7%9A%84%E8%AE%A1%E7%AE%97%E5%BC%80%E9%94%80%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E4%B8%80%E4%B8%AA%E9%87%8F%E7%BA%A7%E7%9A%84%E5%9B%A0%E6%AD%A4%E8%80%83%E8%99%91%E9%80%89%E5%AD%98%E5%82%A8%E5%BC%80%E9%94%80%E6%9C%80%E5%B0%8F%E7%9A%84%E9%82%A3%E4%B8%AA%E4%B9%9F%E5%B0%B1%E6%98%AFkv-cache%E4%BA%86%E8%BF%99%E4%B9%9F%E8%A7%A3%E9%87%8A%E4%BA%86%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89kv-cache%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AFkv-cache%E8%80%8C%E4%B8%8D%E6%98%AF%E5%85%B6%E5%AE%83cache"><span class="nav-number">1.1.5.</span> <span class="nav-text">当然，原回答还对比了这三种cache方案的计算开销和存储开销。结论是，一般情况下，这三个方案的计算开销其实都是一个量级的，因此考虑选存储开销最小的那个，也就是kv
+cache了。这也解释了为什么有kv cache，为什么是kv
+cache而不是其它cache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%E6%98%AF%E4%B8%80%E4%BA%9Bkv-cache%E7%9A%84%E5%AD%98%E5%82%A8%E5%8F%8A%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">1.2.</span> <span class="nav-text">然后是一些kv
+cache的存储及实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%BA%9B%E4%B8%9C%E8%A5%BF%E4%BC%BC%E4%B9%8E%E7%8E%B0%E5%9C%A8%E4%B8%80%E8%88%AC%E9%83%BD%E5%9B%8A%E6%8B%AC%E5%9C%A8%E6%A1%86%E6%9E%B6%E9%87%8C%E4%BA%86%E6%9C%89%E7%82%B9%E7%BB%86%E8%8A%82%E4%BB%A5%E5%8F%8A%E9%BA%BB%E7%83%A6%E5%8F%AF%E8%83%BD%E5%BE%97%E8%AF%BB%E4%B8%80%E4%B8%8Bvllm%E4%B9%8B%E7%B1%BB%E7%9A%84%E6%A1%86%E6%9E%B6%E7%9A%84%E6%BA%90%E7%A0%81%E6%88%96%E8%80%85%E8%AF%BB%E4%B8%80%E4%B8%8B%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87%E4%BA%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">这些东西，似乎现在一般都囊括在框架里了。有点细节以及麻烦，可能得读一下vllm之类的框架的源码，或者读一下相关论文了</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E6%98%AFkv-cache%E7%9A%84%E6%88%90%E7%AB%8B%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">最后是kv cache的成立条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E5%8E%9F%E5%9B%9E%E7%AD%94%E8%AE%A8%E8%AE%BA%E7%9A%84%E6%98%AFkv-cache%E8%BF%99%E7%A7%8D%E5%8A%A0%E9%80%9F%E6%8A%80%E6%9C%AF%E8%83%BD%E5%90%A6%E7%94%A8%E4%BA%8E%E6%89%80%E6%9C%89%E7%9A%84llm%E7%AD%94%E6%A1%88%E6%98%AF%E4%B8%8D%E8%A1%8C"><span class="nav-number">1.3.1.</span> <span class="nav-text">这里，原回答讨论的是，kv
+cache这种加速技术能否用于所有的llm。答案是不行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E6%8A%BD%E8%B1%A1%E6%88%90%E4%B8%80%E4%B8%AA%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98%E6%9D%A5%E7%9C%8B%E5%89%8D%E9%9D%A2%E6%88%91%E4%BB%AC%E6%8F%90%E5%88%B0%E4%BA%86kv-cache%E7%9A%84%E6%8F%90%E5%87%BA%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%8F%91%E7%8E%B0%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%9C%89%E4%B8%9C%E8%A5%BF%E5%8F%AF%E4%BB%A5%E5%A4%8D%E7%94%A8%E5%8F%AF%E4%BB%A5%E5%A4%8D%E7%94%A8%E7%9A%84%E4%B8%9C%E8%A5%BF%E5%88%86%E5%88%AB%E6%98%AF%E4%B9%8B%E5%89%8Dtoken%E7%9A%84k%E5%92%8Cv%E8%BF%99%E4%B8%AA%E7%9A%84%E6%84%8F%E6%80%9D%E6%98%AF%E8%AF%B4%E5%8D%B3%E4%BD%BF%E6%88%91%E4%BB%AC%E8%A6%81%E8%AE%A1%E7%AE%97%E7%AC%ACn1n2%E4%B8%AAtoken%E5%89%8Dn%E4%B8%AAtoken%E7%9A%84kv%E9%83%BD%E6%98%AF%E4%B8%8D%E5%8F%98%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%8A%8Allm%E7%9A%84%E6%AF%8F%E4%B8%80%E5%B1%82%E8%A7%86%E4%B8%BA%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0f%E5%AE%83%E7%9A%84%E8%BE%93%E5%85%A5%E6%98%AF%E8%8B%A5%E5%B9%B2token%E4%B8%94%E8%BF%99%E4%B8%AA%E8%BE%93%E5%85%A5%E6%98%AF%E4%BC%9A%E5%8F%98%E9%95%BF%E7%9A%84%E4%BB%A5%E5%85%B6%E4%B8%AD%E4%B8%80%E4%B8%AA%E5%B1%82%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%BA%E4%BE%8Bx_1l1cdotsx_il1cdotsx_nl1fx_1lcdotsx_ilcdotsx_nl%E5%A6%82%E6%9E%9C%E5%90%8E%E7%BB%AD%E6%9C%89%E6%9B%B4%E5%A4%9Atoken%E6%9D%A5%E4%BA%86%E5%81%87%E8%AE%BE%E6%98%AFm%E4%B8%AA%E5%88%99%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E5%B0%B1%E5%8F%98%E6%88%90%E4%BA%86hatx_1l1cdotshatx_il1cdotshatx_nl1hatx_n1l1cdotshatx_nml1fhatx_1lcdotshatx_ilcdotshatx_nlhatx_n1lcdotshatx_nml%E5%A6%82%E6%9E%9C%E6%AD%A4%E6%97%B6%E6%BB%A1%E8%B6%B3hatx_ilx_il-1leq-i-leq-n%E5%88%99kv-cache%E4%BE%9D%E7%84%B6%E9%80%82%E7%94%A8%E5%9B%A0%E4%B8%BA%E5%AE%83%E8%A1%A8%E6%98%8E%E6%96%B0%E6%9D%A5%E4%BA%86token%E4%B9%9F%E4%B8%8D%E5%BD%B1%E5%93%8D%E6%88%91%E4%B9%8B%E5%89%8Dtoken%E7%9A%84embedding%E5%BD%93%E7%84%B6%E4%B9%9F%E5%B0%B1%E4%B8%8D%E4%BC%9A%E5%BD%B1%E5%93%8D%E4%B9%8B%E5%89%8Dtoken%E7%9A%84kv%E4%BA%86%E6%8E%A8%E7%90%86%E7%9A%84%E6%97%B6%E5%80%99%E6%9D%83%E9%87%8D%E6%98%AF%E4%B8%8D%E5%8F%98%E7%9A%84%E5%9B%A0%E6%AD%A4kv%E6%98%AF%E5%90%A6%E5%8F%98%E5%8C%96%E5%8F%AA%E7%9C%8Btoken%E6%9C%AC%E8%BA%AB%E7%9A%84embedding%E6%98%AF%E5%90%A6%E5%8F%98%E5%8C%96%E4%BA%86-%E8%BF%99%E4%B8%AA%E6%80%A7%E8%B4%A8%E5%8F%AF%E4%BB%A5%E8%A2%AB%E7%A7%B0%E4%B8%BA%E5%9B%A0%E6%9E%9C%E6%80%A7%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%AF%8F%E4%B8%AA%E5%A4%A9%E7%A9%BA%E5%97%AF%E7%9A%84%E8%BE%93%E5%87%BA%E5%8F%AA%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%AE%83%E8%87%AA%E5%B7%B1%E4%BB%A5%E5%8F%8A%E5%AE%83%E4%B9%8B%E5%89%8D%E7%9A%84token%E5%9B%A0%E6%AD%A4%E9%82%A3%E4%BA%9Bdecoder-only%E7%9A%84%E6%A8%A1%E5%9E%8B%E4%BC%BC%E4%B9%8E%E9%83%BD%E6%98%AF%E6%BB%A1%E8%B6%B3%E8%BF%99%E4%B8%80%E7%82%B9%E7%9A%84%E5%9B%A0%E4%B8%BA%E5%AE%83%E4%BB%AC%E9%83%BD%E6%98%AF%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E9%87%87%E7%94%A8%E8%87%AA%E5%9B%9E%E5%BD%92%E7%9A%84%E5%BD%A2%E5%BC%8F%E4%B8%94%E9%83%BD%E4%BC%9A%E9%87%87%E7%94%A8causal-mask%E8%80%8Cencoder-only%E7%9A%84%E9%82%A3%E4%BA%9B%E6%A8%A1%E5%9E%8B%E6%AF%94%E5%A6%82bert%E7%B1%BB%E5%AE%83%E4%BB%AC%E5%B0%B1%E4%B8%8D%E6%BB%A1%E8%B6%B3%E8%BF%99%E4%B8%AA%E6%80%A7%E8%B4%A8%E5%9B%A0%E4%B8%BA%E5%AE%83%E4%BB%AC%E6%98%AF%E5%8F%8C%E5%90%91%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%AF%8F%E4%B8%AAtoken%E7%9A%84%E8%BE%93%E5%87%BA%E5%92%8C%E5%AE%83%E4%B9%8B%E5%90%8E%E7%9A%84token%E4%B9%9F%E6%9C%89%E5%85%B3%E7%B3%BB-%E7%8E%B0%E5%9C%A8%E7%9A%84llm%E5%A4%A7%E5%A4%9A%E9%83%BD%E6%98%AFdecoder-only%E7%9A%84%E7%BB%93%E6%9E%84%E4%BA%86%E9%82%A3%E6%98%AF%E5%90%A6%E6%84%8F%E5%91%B3%E7%9D%80kv-cache%E8%83%BD%E9%80%82%E7%94%A8%E4%BA%8E%E6%89%80%E6%9C%89%E7%9A%84llm%E5%91%A2-%E4%B9%9F%E4%B8%8D%E6%98%AF%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%BF%BD%E7%95%A5%E4%BA%86%E5%AF%B9%E8%BE%93%E5%85%A5%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86%E4%B8%80%E8%88%AC%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86%E9%99%A4%E4%BA%86%E6%8A%8Atoken-idx%E6%98%A0%E5%B0%84%E5%88%B0embedding%E8%BF%98%E9%9C%80%E8%A6%81%E5%8A%A0%E4%B8%8Aposition-embedding%E8%80%8C%E9%97%AE%E9%A2%98%E5%B0%B1%E5%87%BA%E5%9C%A8%E8%BF%99%E9%87%8C%E6%9C%89%E4%B8%80%E4%BA%9Bpe%E6%96%B9%E6%B3%95%E5%AE%83%E4%BB%AC%E5%9C%A8%E8%BE%93%E5%85%A5%E5%A2%9E%E9%95%BF%E4%B9%8B%E5%90%8E%E4%BC%9A%E6%95%B4%E4%BD%93%E9%87%8D%E6%96%B0%E8%AE%A1%E7%AE%97%E4%B8%80%E4%B8%8B%E5%9B%A0%E6%AD%A4%E5%89%8D%E9%9D%A2token%E7%9A%84embedding%E4%B9%9F%E4%BC%9A%E5%8F%91%E7%94%9F%E5%8F%98%E5%8C%96%E6%89%80%E4%BB%A5%E6%AD%A4%E6%97%B6%E5%89%8D%E9%9D%A2%E7%9A%84token%E7%9A%84%E5%88%9D%E5%A7%8B%E7%9A%84%E8%BE%93%E5%85%A5%E5%B0%B1%E5%B7%B2%E7%BB%8F%E5%8F%91%E7%94%9F%E4%BA%86%E5%8F%98%E5%8C%96%E9%82%A3%E5%90%8E%E9%9D%A2%E6%88%91%E4%BB%AC%E8%87%AA%E7%84%B6%E4%B9%9F%E4%B8%8D%E8%83%BD%E4%BF%9D%E8%AF%81embedding%E8%BF%98%E6%98%AF%E7%9B%B8%E5%90%8C%E7%9A%84%E8%BF%99%E7%A7%8D%E6%83%85%E5%86%B5%E4%B8%8Bkv-cache%E8%BF%98%E6%98%AF%E4%B8%8D%E9%80%82%E7%94%A8%E7%9A%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">可以抽象成一个数学问题来看。前面我们提到了，kv
+cache的提出是因为发现计算过程中有东西可以复用，可以复用的东西分别是之前token的k和v。这个的意思是说，即使我们要计算第n+1，n+2，……个token，前n个token的kv都是不变的。也就是说，如果我们把llm的每一层视为一个函数f，它的输入是若干token，且这个输入是会变长的。以其中一个层的计算为例，\[(x_{1}^{l+1},\cdots,x_{i}^{l+1},\cdots,x_{n}^{l+1})&#x3D;f(x_{1}^{l},\cdots,x_{i}^{l},\cdots,x_{n}^{l})\]如果后续有更多token来了，假设是m个，则计算过程就变成了\[(\hat{x}_{1}^{l+1},\cdots,\hat{x}_{i}^{l+1},\cdots,\hat{x}_{n}^{l+1},\hat{x}_{n+1}^{l+1},\cdots,\hat{x}_{n+m}^{l+1})&#x3D;f(\hat{x}_{1}^{l},\cdots,\hat{x}_{i}^{l},\cdots,\hat{x}_{n}^{l},\hat{x}_{n+1}^{l},\cdots,\hat{x}_{n+m}^{l})\]如果此时满足\(\hat{x}_{i}^{l}&#x3D;x_{i}^{l}\ ,\ \ \ 1\leq i \leq
+n\)，则kv
+cache依然适用。因为它表明，新来了token也不影响我之前token的embedding，当然也就不会影响之前token的kv了（推理的时候权重是不变的，因此kv是否变化只看token本身的embedding是否变化了）这个性质可以被称为因果性，也就是每个天空嗯的输出只依赖于它自己以及它之前的token。因此，那些decoder-only的模型似乎都是满足这一点的。因为它们都是生成模型，采用自回归的形式，且都会采用causal
+mask。而encoder-only的那些模型，比如BERT类，它们就不满足这个性质。因为它们是双向的注意力，每个token的输出和它之后的token也有关系现在的llm大多都是decoder-only的结构了，那是否意味着kv
+cache能适用于所有的llm呢？也不是。这里我们忽略了对输入的预处理。一般的预处理，除了把token
+idx映射到embedding，还需要加上position
+embedding。而问题就出在这里。有一些pe方法，它们在输入增长之后，会整体重新计算一下，因此前面token的embedding也会发生变化。所以，此时前面的token的初始的输入就已经发生了变化，那后面我们自然也不能保证embedding还是相同的。这种情况下，kv
+cache还是不适用的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E4%BB%A5kv-cache%E8%A6%81%E9%80%82%E7%94%A8%E8%87%B3%E5%B0%91%E5%BE%97%E6%BB%A1%E8%B6%B3%E4%BB%A5%E4%B8%8B%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.3.3.</span> <span class="nav-text">所以，kv
+cache要适用，至少得满足以下条件：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%BE%97%E5%85%B7%E6%9C%89%E5%9B%A0%E6%9E%9C%E6%80%A7"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">模型结构得具有因果性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pe%E4%B9%9F%E5%85%B7%E6%9C%89%E7%B1%BB%E4%BC%BC%E7%9A%84%E5%9B%A0%E6%9E%9C%E6%80%A7"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">pe也具有类似的因果性</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

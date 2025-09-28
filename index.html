@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,618 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/" class="post-title-link" itemprop="url">Ada-KV：Optimizing KV Cache Eviction by Adaptive Budget Allocation for Efficient LLM Inference</a>
+            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/" class="post-title-link" itemprop="url">VideoRAG：Retrieval-Augmented Generation over Video Corpus</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-28 17:05:00 / Modified: 17:58:50" itemprop="dateCreated datePublished" datetime="2025-09-28T17:05:00+08:00">2025-09-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueacl-25-findings">Venue：ACL 25 findings</h1>
+<h1 id="date2025-05-28">date：2025-05-28</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有rag方法通常忽视了视频模态但视频里其实也包含了很丰富的信息-尽管最近有一些研究在尝试利用视频来辅助回答但它们要么不够动态即人工预先定义好query的几个相关视频或者按照固定规则来定义相关视频要么损失了视频中丰富的信息把视频转成文字描述-因此论文提出videorag来直接检索回query相关的视频能同时利用文字和视觉信息">现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息<br>尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）<br>因此论文提出VideoRAG，来直接检索回query相关的视频，能同时利用文字和视觉信息</h2>
+<h3 id="关于现有方法不够动态的问题可以举几个例子来理解比如人工预先定义的话可能针对打领带这个query人为的找出两三个教学视频它们的确是打领带的教学视频之后如果有query是关于这个的则它们的参考视频就只会是这两三个而不会从海量的视频候选库里检索">关于现有方法不够动态的问题，可以举几个例子来理解。比如人工预先定义的话，可能针对“打领带”这个query，人为的找出两三个教学视频，它们的确是打领带的教学视频。之后如果有query是关于这个的，则它们的参考视频就只会是这两三个，而不会从海量的视频候选库里检索。</h3>
+<h2 id="虽然现在有很多image-text-rag但视频终究是有一些独特的性质导致它不能被图像完全取代吧">虽然现在有很多image-text
+RAG，但视频终究是有一些独特的性质，导致它不能被图像完全取代吧</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="判断视频是否和query相关其实也很重要千万不能忽视这一点否则检索的空间太大了">判断视频是否和query相关，其实也很重要。千万不能忽视这一点，否则检索的空间太大了</h2>
+<h2 id="视频模态的特点感觉体现在包括但不限于以下的几方面">视频模态的特点，感觉体现在（包括但不限于以下的几方面）：</h2>
+<h3 id="多帧之间的时序关系">多帧之间的时序关系</h3>
+<h3 id="画面图像和文本语音之间的对应关系">画面（图像）和文本/语音之间的对应关系</h3>
+<h1 id="contribution">contribution：</h1>
+<h2 id="支持了动态视频的检索包括能动态判断哪些视频是相关的并从中提取信息用于辅助生成">支持了动态视频的检索，包括能动态判断哪些视频是相关的，并从中提取信息用于辅助生成</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-28 15:55:06 / Modified: 17:00:02" itemprop="dateCreated datePublished" datetime="2025-09-28T15:55:06+08:00">2025-09-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="acl-25">ACL 25</h1>
+<h2 id="videorag-retrieval-augmented-generation-over-video-corpus多模态的视频相关"><strong>VideoRAG:
+Retrieval-Augmented Generation over Video
+Corpus</strong>（多模态的，视频相关）</h2>
+<h1 id="iclr-25">ICLR 25</h1>
+<h2 id="tempme-video-temporal-token-merging-for-efficient-text-video-retrieval多模态的video和efficiency结合的看起来是在压缩video输入的也算是video相关的">TempMe:
+Video Temporal Token Merging for Efficient Text-Video
+Retrieval（多模态的，video和efficiency结合的，看起来是在压缩video输入的。也算是video相关的）</h2>
+<h2 id="generalized-video-moment-retrieval多模态的video相关">Generalized
+Video Moment Retrieval（多模态的,video相关）</h2>
+<h1 id="nips-24">NIPS 24</h1>
+<h2 id="diffusion-inspired-truncated-sampler-for-text-video-retrievaltext-video-retrieval">Diffusion-Inspired
+Truncated Sampler for Text-Video Retrieval（text-video retrieval）</h2>
+<h1 id="cvpr-25">CVPR 25</h1>
+<h2 id="drvideo-document-retrieval-based-long-video-understanding真对口了长视频理解方面的"><strong>DrVideo:
+Document Retrieval Based Long Video
+Understanding</strong>（真对口了，长视频理解方面的）</h2>
+<h2 id="salova-segment-augmented-long-video-assistant-for-targeted-retrieval-and-routing-in-long-form-video-analysis这也是经典了也是长视频理解这一块的">SALOVA:
+Segment-Augmented Long Video Assistant for Targeted Retrieval and
+Routing in Long-Form Video
+Analysis（这也是经典了，也是长视频理解这一块的）</h2>
+<h2 id="vlog-video-language-models-by-generative-retrieval-of-narration-vocabulary似乎是video相关的但是理解方面的吗"><strong>VLog:
+Video-Language Models by Generative Retrieval of Narration
+Vocabulary</strong>（似乎是video相关的，但是理解方面的吗？）</h2>
+<h2 id="learning-audio-guided-video-representation-with-gated-attention-for-video-text-retrieval又是text-video-retrieval啊"><strong>Learning
+Audio-guided Video Representation with Gated Attention for Video-Text
+Retrieval</strong>（又是text-video retrieval啊）</h2>
+<h2 id="rethinking-noisy-video-text-retrieval-via-relation-aware-alignment还是text-video-retrieval"><strong>Rethinking
+Noisy Video-Text Retrieval via Relation-aware
+Alignment</strong>（还是text-video retrieval）</h2>
+<h2 id="video-colbert-contextualized-late-interaction-for-text-to-video-retrieval还是text-to-video-retrieval"><strong>Video-ColBERT:
+Contextualized Late Interaction for Text-to-Video
+Retrieval</strong>（还是text-to-video retrieval）</h2>
+<h2 id="multivent-2.0-a-massive-multilingual-benchmark-for-event-centric-video-retrievalbenchmark类不过是关于video-retrieval的"><strong>MultiVENT
+2.0: A Massive Multilingual Benchmark for Event-Centric Video
+Retrieval</strong>（benchmark类，不过是关于video retrieval的）</h2>
+<h2 id="the-devil-is-in-the-prompts-retrieval-augmented-prompt-optimization-for-text-to-video-generation不会是prompt-engineering吧关注text-to-video-generation文生视频吗"><strong>The
+Devil is in the Prompts: Retrieval-Augmented Prompt Optimization for
+Text-to-Video Generation</strong>（不会是prompt
+engineering吧……）（关注text-to-video generation？文生视频吗？）</h2>
+<h2 id="narrating-the-video-boosting-text-video-retrieval-via-comprehensive-utilization-of-frame-level-captionstext-to-video-retrieval"><a target="_blank" rel="noopener" href="https://multimodal-understanding-group.github.io/NarVid/">Narrating
+the Video: Boosting Text-Video Retrieval via Comprehensive Utilization
+of Frame-Level Captions</a>（text-to-video retrieval）</h2>
+<h2 id="discovla-discrepancy-reduction-in-vision-language-and-alignment-for-parameter-efficient-video-text-retrieval呃efficiency和video结合text-to-video-retrieval"><a target="_blank" rel="noopener" href="https://github.com/LunarShen/DsicoVLA">DiscoVLA: Discrepancy
+Reduction in Vision, Language, and Alignment for Parameter-Efficient
+Video-Text Retrieval</a>（呃，efficiency和video结合，text-to-video
+retrieval）</h2>
+<h1 id="iccv-25">ICCV 25</h1>
+<h2 id="hybrid-tower-fine-grained-pseudo-query-interaction-and-generation-for-text-to-video-retrievaltext-to-video-retrievalvideo相关"><strong>Hybrid-Tower:
+Fine-grained Pseudo-query Interaction and Generation for Text-to-Video
+Retrieval</strong>（text-to-video retrieval，video相关）</h2>
+<h2 id="beyond-simple-edits-composed-video-retrieval-with-dense-modificationscomposed-video-retrievalvideo相关的"><strong>Beyond
+Simple Edits: Composed Video Retrieval with Dense
+Modifications</strong>（Composed Video Retrieval，video相关的）</h2>
+<h2 id="borrowing-eyes-for-the-blind-spot-overcoming-data-scarcity-in-malicious-video-detection-via-cross-domain-retrieval-augmentation这是啥video-detection嗯也算是video相关的但应该是那种low-level的video相关工作"><a target="_blank" rel="noopener" href="https://github.com/ronpay/CRAVE">Borrowing Eyes for the Blind
+Spot: Overcoming Data Scarcity in Malicious Video Detection via
+Cross-Domain Retrieval Augmentation</a>（这是啥？video
+detection？嗯，也算是video相关的，但应该是那种low-level的video相关工作）</h2>
+<h2 id="enhancing-partially-relevant-video-retrieval-with-hyperbolic-learningvideo-retrieval"><strong>Enhancing
+Partially Relevant Video Retrieval with Hyperbolic
+Learning</strong>（video retrieval）</h2>
+<h2 id="ophclip-hierarchical-retrieval-augmented-learning-for-ophthalmic-surgical-video-language-pretraining这是不太懂不过看起来是video相关的"><strong>OphCLIP:
+Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical
+Video-Language
+Pretraining</strong>（这是？不太懂，不过看起来是video相关的）</h2>
+<h2 id="quantifying-and-narrowing-the-unknown-interactive-text-to-video-retrieval-via-uncertainty-minimizationtext-to-video-retrievalvideo相关"><strong>Quantifying
+and Narrowing the Unknown: Interactive Text-to-Video Retrieval via
+Uncertainty Minimization</strong>（text-to-video
+retrieval，video相关）</h2>
+<h2 id="prototypes-are-balanced-units-for-efficient-and-effective-partially-relevant-video-retrievalvideo-retrievalvideo相关"><strong>Prototypes
+are Balanced Units for Efficient and Effective Partially Relevant Video
+Retrieval</strong>（video retrieval，video相关）</h2>
+<h2 id="bidirectional-likelihood-estimation-with-multi-modal-large-language-models-for-text-video-retrievaltext-to-video-retrievalvideo相关"><strong>Bidirectional
+Likelihood Estimation with Multi-Modal Large Language Models for
+Text-Video Retrieval</strong>（text-to-video retrieval，video相关）</h2>
+<h1 id="eccv-24">ECCV 24</h1>
+<h2 id="rethinking-video-text-understanding-retrieval-from-counterfactually-augmented-datavideo-text-understanding具体是做啥是video理解方面的吗"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/2083_ECCV_2024_paper.php">Rethinking
+Video-Text Understanding: Retrieval from Counterfactually Augmented
+Data</a>（video-text
+understanding？具体是做啥？是video理解方面的吗？）</h2>
+<h2 id="rgnet-a-unified-clip-retrieval-and-grounding-network-for-long-videoslong-video相关的不知道是不是长视频理解这方面的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/3186_ECCV_2024_paper.php">RGNet:
+A Unified Clip Retrieval and Grounding Network for Long Videos</a>（long
+video相关的，不知道是不是长视频理解这方面的）</h2>
+<h2 id="kdpror-a-knowledge-decoupling-probabilistic-framework-for-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5033_ECCV_2024_paper.php">KDProR:
+A Knowledge-Decoupling Probabilistic Framework for Video-Text
+Retrieval</a>（text-to-video retrieval，video相关）</h2>
+<h2 id="egocvr-an-egocentric-benchmark-for-fine-grained-composed-video-retrieval细粒度composed-video-retrieval"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5363_ECCV_2024_paper.php">EgoCVR:
+An Egocentric Benchmark for Fine-Grained Composed Video
+Retrieval</a>（细粒度Composed Video Retrieval）</h2>
+<h2 id="uncertainty-aware-sign-language-video-retrieval-with-probability-distribution-modelingvideo-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6074_ECCV_2024_paper.php">Uncertainty-aware
+sign language video retrieval with probability distribution
+modeling</a>（video retrieval，video相关）</h2>
+<h2 id="ea-vtr-event-aware-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6845_ECCV_2024_paper.php">EA-VTR:
+Event-Aware Video-Text Retrieval</a>（text-to-video
+retrieval，video相关）</h2>
+<h2 id="rap-retrieval-augmented-planner-for-adaptive-procedure-planning-in-instructional-videosvideo相关的但是具体是做什么的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/9950_ECCV_2024_paper.php">RAP:
+Retrieval-Augmented Planner for Adaptive Procedure Planning in
+Instructional Videos</a>（video相关的，但是具体是做什么的？）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-28 15:49:03 / Modified: 15:49:51" itemprop="dateCreated datePublished" datetime="2025-09-28T15:49:03+08:00">2025-09-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="或许得思考一下为什么rag一直被人诟病它的问题到底在哪里graphrag解决了rag的哪些问题还有哪些本质问题没有解决">或许得思考一下为什么RAG一直被人诟病？它的问题到底在哪里？GraphRAG，解决了RAG的哪些问题？还有哪些本质问题没有解决？</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/" class="post-title-link" itemprop="url">博客阅读 KV Cache压缩新阶段：走向问题指令无关下的压缩探索</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-27 15:16:00 / Modified: 15:32:04" itemprop="dateCreated datePublished" datetime="2025-09-27T15:16:00+08:00">2025-09-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="核心观点">核心观点：</h1>
+<h2 id="简单来讲现在的kv-cache的一大问题是一旦没有特定的问题压缩效果就会大幅下降如果有特定的问题那压缩比例可以特别大且性能不降低太多然而如果没有特定的问题则稍微压缩一点都很容易损失精度">简单来讲，现在的kv
+cache的一大问题是，一旦没有特定的问题，压缩效果就会大幅下降。（如果有特定的问题，那压缩比例可以特别大，且性能不降低太多。然而如果没有特定的问题，则稍微压缩一点都很容易损失精度）</h2>
+<h2 id="因此博客提出在没有特定问题情况下的kv-cache-compression其实是值得研究的因为现有方法做不好有很大的提升空间基于此可以考虑">因此，博客提出，在没有特定问题情况下的kv
+cache
+compression其实是值得研究的（因为现有方法做不好，有很大的提升空间）。基于此，可以考虑：</h2>
+<h3 id="提出更好的指标来衡量token的重要性">提出更好的指标来衡量token的重要性</h3>
+<h3 id="提出更好的kv-cache-budget-allocation策略">提出更好的kv cache
+budget allocation策略</h3>
+<h1 id="关于博客里的一些术语的介绍">关于博客里的一些术语的介绍：</h1>
+<h2 id="chunked-prefill博客里的chunked-prefill应该是指对输入的超长序列prompt进行分块然后在各自的块内进行prefill操作这主要是因为prefill的时候需要计算注意力它是会利用prompt产生的所有token进行计算的而注意力机制是平方级的计算复杂度输入序列又是超长的那一起计算的话显存开销就无法承受了所以需要chunk再prefill另一套的chunked-prefill好像和通信什么的有关来着-另需要注意chunked-prefill虽然说会先chunk然后各自在块内进行prefill但块内的prefill并不会像一般的prefill那样生成第一个token那样就会很奇怪相当于基于截断的信息生成了一个token而且有很多个chunk最后就会是基于很多个阶段的信息各自生成一个token这些token可以认为其实没什么用的所以实际上是chunk完在各自块内计算kv然后进行压缩最后把压缩完的各个块的kv拼到一起来生成真正意义上的第一个token">chunked
+prefill：博客里的chunked
+prefill，应该是指，对输入的超长序列（prompt），进行分块，然后在各自的块内进行prefill操作。这主要是因为，prefill的时候需要计算注意力，它是会利用prompt产生的所有token进行计算的。而注意力机制是平方级的计算复杂度，输入序列又是超长的，那一起计算的话显存开销就无法承受了。所以需要chunk再prefill（另一套的chunked
+prefill好像和通信什么的有关来着）<br>（另，需要注意，chunked
+prefill虽然说会先chunk，然后各自在块内进行prefill，但块内的prefill并不会像一般的prefill那样生成第一个token。那样就会很奇怪，相当于基于截断的信息生成了一个token。而且有很多个chunk，最后就会是：基于很多个阶段的信息各自生成一个token。这些token可以认为其实没什么用的。所以实际上是chunk完，在各自块内计算kv，然后进行压缩，最后把压缩完的各个块的kv拼到一起，来生成真正意义上的第一个token）</h2>
+<h2 id="前缀上下文指用户在多轮对话中在具体提出问题前给出的背景性引导性信息本质上就是context模型的回答需要基于这些内容">前缀上下文：指用户在多轮对话中，在具体提出问题前，给出的背景性、引导性信息。本质上就是context，模型的回答需要基于这些内容</h2>
+<h1 id="我的问题">我的问题：</h1>
+<h2 id="带问题指令的kv-cache-compression是怎么工作的有哪些方法">带问题（指令）的kv
+cache compression，是怎么工作的？有哪些方法？</h2>
+<h2 id="多轮对话场景为什么是不带指令的kv-cache压缩场景">多轮对话场景为什么是不带指令的kv
+cache压缩场景？</h2>
+<h3 id="因为多轮对话里必然会有多个问题如果要带着问题指令进行压缩那就需要挑出一个问题来对kv-cache进行挑选但是这样就会有偏颇有可能一些内容对于这个问题而言是不重要的但是对于另外一个问题而言其实很重要我们不能保证用户之后不会问这个问题">因为多轮对话里必然会有多个问题。如果要带着问题（指令）进行压缩，那就需要挑出一个问题来对kv
+cache进行挑选。但是这样就会有偏颇，有可能一些内容对于这个问题而言是不重要的，但是对于另外一个问题而言其实很重要。我们不能保证用户之后不会问这个问题</h3>
+<h2 id="kv-cache-compression是针对哪些token而言的是针对prompt还是针对模型生成的token">kv
+cache
+compression是针对哪些token而言的？是针对prompt，还是针对模型生成的token？</h2>
+<h3 id="其实都可以prefill完是否对prompt-token的kv-cache进行压缩是一个可选的操作比如chunked-prefill里一般就会边chunk-prefill边压缩也就是一种流式的操作因为不然的话显存开销太大了把超长序列的所有token的kv-cache都存下来都叫超长序列了肯定是很多token的比如输入了一个很长的文档之类的">其实都可以。prefill完是否对prompt
+token的kv cache进行压缩，是一个可选的操作。比如chunked
+prefill里，一般就会边chunk
+prefill，边压缩（也就是一种流式的操作）。因为不然的话，显存开销太大了（把超长序列的所有token的kv
+cache都存下来。都叫超长序列了，肯定是很多token的。比如输入了一个很长的文档之类的）</h3>
+<h2 id="为什么观察窗口都采用近期的若干token这样不是会有点局限吗能不能通过采样把之前的一些token也采样进观察窗口这样会不会全面一点">为什么观察窗口都采用近期的若干token？这样不是会有点局限吗？能不能通过“采样”，把之前的一些token也采样进观察窗口？这样会不会全面一点？</h2>
+<h2 id="生成的token是如何压缩的看起来似乎是生成一定数量之后对所有的历史kv进行全量重新压缩有什么论文佐证吗可能得读一下snapkv了">生成的token是如何压缩的？看起来似乎是“生成一定数量之后，对所有的历史kv进行全量重新压缩”？有什么论文佐证吗？可能得读一下SnapKV了</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">kv cache基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-27 15:14:00 / Modified: 15:15:55" itemprop="dateCreated datePublished" datetime="2025-09-27T15:14:00+08:00">2025-09-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="在了解kv-cache的过程中读到了游凯超的一篇回答感觉真的写的很详细而且不仅局限于kv-cache包括为何这样设计也讲清楚了">在了解kv
+cache的过程中，读到了<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/596900067/answer/3424958454">游凯超的一篇回答</a>，感觉真的写的很详细，而且不仅局限于kv
+cache，包括为何这样设计，也讲清楚了</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/" class="post-title-link" itemprop="url">DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-24 17:15:00 / Modified: 17:28:18" itemprop="dateCreated datePublished" datetime="2025-09-24T17:15:00+08:00">2025-09-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/" itemprop="url" rel="index"><span itemprop="name">knowledge graph</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuenips-25">Venue：NIPS 25</h1>
+<h1 id="date2025-07-15">date：2025-07-15</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有的kg推理方法通常会遇到score-oversmoothing的问题有点类似gnn里的oversmoothing也就是推理后正确答案和错误答案的分数极为接近导致无法很好的分辨论文认为现有方法一味堆叠message-passing-layer和attn-layer导致score-oversmoothing问题进一步加剧同时现有方法大多是one-shot-reasoning因此判别能力有所不足">现有的KG推理方法通常会遇到score
+oversmoothing的问题（有点类似gnn里的oversmoothing）。也就是推理后，正确答案和错误答案的分数极为接近，导致无法很好的分辨。论文认为，现有方法一味堆叠message
+passing layer和attn layer，导致score
+oversmoothing问题进一步加剧；同时现有方法大多是one-shot
+reasoning，因此判别能力有所不足</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/" class="post-title-link" itemprop="url">Ada-KV：Optimizing KV Cache Eviction by Adaptive Budget Allocation for Efficient LLM Inference</a>
         </h2>
 
         <div class="post-meta">
@@ -181,7 +792,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-24 11:18:36" itemprop="dateModified" datetime="2025-09-24T11:18:36+08:00">2025-09-24</time>
+                <time title="Modified: 2025-09-26 22:52:39" itemprop="dateModified" datetime="2025-09-26T22:52:39+08:00">2025-09-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -225,32 +836,9 @@
 <h1 id="背景">背景：</h1>
 <h2 id="得先简单介绍一下kv-cache自回归模型生成下一个token的时候需要利用当前的最后一个token所聚合到的信息变换得到一个概率分布从中采样得到下一个token而聚合信息会用到注意力机制注意力机制就会要求token之间的q和k进行交互计算从而得到token之间的关系attention最后和v一起进行加权求和-假设现有的prompt对应k个token的序列我们要生成token那么聚合之后根据第k个token的信息因为它和前面的所有token都有进行聚合所以是前面信息的总体的表征得到第k1个token也就是回答里的第一个token的概率分布之后要继续生成直到生成了eos为止那生成第k2个token的时候需要让第k1个token计算出qkv然后和前k个token的k进行交互得到attn完了利用前k个token加上第k1个token自己的v进行加权求和得到聚合后的信息此时我们发现生成第k1个token的时候用到了前k个token的k和v生成第k2个token的时候用到了前k1个token的k和v依次类推可以发现我们生成第i1个token的时候应该是要用到前i个token的k和v的因此如果我们把中间生成的token的k和v存下来后续就能一直复用不需要每一次都算显然速度上会更快但因为要存k和v所以这是一种用空间换时间的操作而且还有一个问题是随着我们生成的序列不断变长要存的k和v也越来越多甚至于这可能反而会成为显存开销里的大头因此有必要对存储的kv进行一些压缩剔除之类的操作否则开销无法承担">得先简单介绍一下kv
 cache。自回归模型，生成下一个token的时候，需要利用当前的最后一个token所聚合到的信息，变换得到一个概率分布，从中采样得到下一个token。而聚合信息会用到注意力机制。注意力机制就会要求token之间的q和k进行交互计算，从而得到token之间的关系（attention），最后和v一起进行加权求和<br>假设现有的prompt对应k个token的序列。我们要生成token。那么，聚合之后，根据第k个token的信息（因为它和前面的所有token都有进行聚合，所以是前面信息的总体的表征），得到第k+1个token（也就是回答里的第一个token）的概率分布。之后要继续生成，直到生成了<code>&lt;eos&gt;</code>为止。那生成第k+2个token的时候，需要让第k+1个token计算出q，k，v，然后和前k个token的k进行交互，得到attn，完了利用前k个token加上第k+1个token自己的v，进行加权求和，得到聚合后的信息。此时，我们发现，生成第k+1个token的时候，用到了前k个token的k和v；生成第k+2个token的时候，用到了前k+1个token的k和v。依次类推，可以发现，我们生成第i+1个token的时候，应该是要用到前i个token的k和v的。因此，如果我们把中间生成的token的k和v存下来，后续就能一直复用，不需要每一次都算。显然，速度上会更快，但因为要存k和v，所以这是一种用空间换时间的操作。而且还有一个问题是，随着我们生成的序列不断变长，要存的k和v也越来越多。甚至于，这可能反而会成为显存开销里的大头。因此，有必要对存储的kv进行一些压缩、剔除之类的操作，否则开销无法承担</h2>
-<h3 id="另由上面的描述我们可以发现之所以没有所谓q-cache是因为往后生成的时候我们用不到前面的token的q没有复用的必要所以不需要存">（另，由上面的描述，我们可以发现，之所以没有所谓q-cache，是因为往后生成的时候，我们用不到前面的token的q，没有复用的必要，所以不需要存）</h3>
-<h2 id="关于prefill和decode">关于prefill和decode：</h2>
-<h3 id="这是自回归模型推理的时候需要先后经历的两个阶段-首先是prefill阶段它相当于是处理好输入的prompt具体来说是计算并存储prompt-token中的kv便于后续生成回答-第二步是decode阶段它就是基于prefill处理好的prompt-kv-cache进行自回归式的生成">这是自回归模型推理的时候需要先后经历的两个阶段<br>首先是prefill阶段。它相当于是处理好输入的prompt（具体来说是计算并存储prompt
-token中的kv），便于后续生成回答；<br>第二步是decode阶段，它就是基于prefill处理好的prompt
-kv cache，进行自回归式的生成</h3>
-<h3 id="prefill已经讲清楚了而对于decode阶段稍微详细一点就是它是先用prefill阶段的kv生成第一个token然后把这生成的第一个token拼接到token序列里并存储其kv也就是追加到已有的kv-cache中再生成第二个token以此类推当然这里讲的是最朴素的做法所有token的kv都直接存没有什么kv-cache-compression的操作">prefill已经讲清楚了。而对于decode阶段，稍微详细一点，就是，它是先用prefill阶段的kv，生成第一个token；然后把这生成的第一个token拼接到token序列里，并存储其kv（也就是追加到已有的kv
-cache中），再生成第二个token，以此类推（当然，这里讲的是最朴素的做法，所有token的kv都直接存，没有什么kv
-cache compression的操作）</h3>
-<h3 id="如果分析一下两个阶段的一些性质可以发现一些不同这也是后续的一些研究的出发点prefill阶段会一次性处理所有的输入prompt-token所以它的计算量是om2假设输入prompt-token个数为m-而decode阶段它的计算量则是on这表示一次decode的计算复杂度也就是生成一个token的计算复杂度其中我们记当前时刻的历史序列长度为n可以想见decode需要进行多次因为我们一般都要生成多个token每次生成token之后下一次的计算量就会更大因为历史序列更长了此处我们仅考虑最朴素的情况没有什么token-eviction的操作那么假设prompt-token数量为m一共我们要生成n个token则总的decode计算量应该是ontimes-mfracnn-12当生成的token数量很多的时候主导项就应该是ofracnn-12也就是此时的计算量是平方级的了如果prompt很长则总的计算量近似为onm">如果分析一下两个阶段的一些性质，可以发现一些不同。这也是后续的一些研究的出发点：prefill阶段会一次性处理所有的输入prompt
-token，所以它的计算量是<span class="math inline">\(O(m^{2})\)</span>（假设输入prompt
-token个数为m）；<br>而decode阶段，它的计算量则是<span class="math inline">\(O(n)\)</span>（这表示一次decode的计算复杂度。也就是生成一个token的计算复杂度。其中，我们记当前时刻的历史序列长度为n）。可以想见，decode需要进行多次（因为我们一般都要生成多个token）。每次生成token之后，下一次的计算量就会更大（因为历史序列更长了。此处我们仅考虑最朴素的情况，没有什么token
-eviction的操作）。那么，假设prompt
-token数量为m，一共我们要生成n个token，则总的decode计算量应该是<span class="math inline">\(O(n\times
-m+\frac{n(n-1)}{2})\)</span>。当生成的token数量很多的时候，主导项就应该是<span class="math inline">\(O(\frac{n(n-1)}{2})\)</span>，也就是此时的计算量是平方级的了；如果prompt很长，则总的计算量近似为<span class="math inline">\(O(nm)\)</span></h3>
-<h2 id="关于论文中提到的识别key-token的window-size">关于论文中提到的，识别key
-token的window size：</h2>
-<h3 id="现有方法大部分都是top-k-eviction类的方法它们的思想是保留历史序列里的top-k重要的token而怎么挑选呢最朴素的方法是说我们看看当前的最后一个token它和之前的各个token之间的注意力大小挑出前k大的这些就是关键token它们的kv就是要cache起来的-但这样的问题在于我们仅依赖于一个token来观察可能有偶然性为此如果我们能看多个token比如看最后32个token和前面的token之间的注意力然后通过一些方式汇总到一起例如池化均值等再来看看哪些token是重要的这样的方式就会更加稳定一些而我们用多少个token来观察这个token的数量就是所谓window-size">现有方法大部分都是top-k
-eviction类的方法。它们的思想是，保留历史序列里的top-k重要的token。而怎么挑选呢？最朴素的方法是说，我们看看当前的最后一个token，它和之前的各个token之间的注意力大小，挑出前k大的。这些就是关键token，它们的kv就是要cache起来的<br>但这样的问题在于，我们仅依赖于一个token来观察，可能有偶然性。为此，如果我们能看多个token，比如看最后32个token和前面的token之间的注意力，然后通过一些方式汇总到一起（例如池化、均值等），再来看看哪些token是重要的，这样的方式就会更加稳定一些。而我们用多少个token来观察，这个token的数量就是所谓window
-size</h3>
-<h1 id="动机">动机：</h1>
-<h2 id="section"></h2>
-<h1 id="insight">insight：</h1>
-<h1 id="contribution">contribution：</h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/#more" rel="contents">
+              <a class="btn" href="/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -708,584 +1296,10 @@ Video-Text Retrieval</a>（text-video retrieval）</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RealRAG%EF%BC%9ARetrieval-augmented%20Realistic%20Image%20Generation%20via%20%20Self-reflective%20Contrastive%20Learning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RealRAG%EF%BC%9ARetrieval-augmented%20Realistic%20Image%20Generation%20via%20%20Self-reflective%20Contrastive%20Learning/" class="post-title-link" itemprop="url">RealRAG：Retrieval-augmented Realistic Image Generation via  Self-reflective Contrastive Learning</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-07 16:33:00" itemprop="dateCreated datePublished" datetime="2025-09-07T16:33:00+08:00">2025-09-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-20 11:29:08" itemprop="dateModified" datetime="2025-09-20T11:29:08+08:00">2025-09-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueicml-25">Venue：ICML 25</h1>
-<h1 id="date2025-05-12">date：2025-05-12</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="扩散模型等文生图模型在生成一些训练时没见过的物体要求非常细的物体时可能会出现类似幻觉的现象生成出的图像非常失真因为参数知识里不包含这些内容我们也不能要求训练数据集里包含所有的知识因此论文引入rag希望检索相关图像来给模型提供知识从而让生成结果更准确">扩散模型等文生图模型，在生成一些训练时没见过的物体/要求非常细的物体时，可能会出现类似幻觉的现象/生成出的图像非常失真（因为参数知识里不包含这些内容。我们也不能要求训练数据集里包含所有的知识）。因此，论文引入RAG，希望检索相关图像来给模型提供知识，从而让生成结果更准确</h2>
-<h1 id="简介">简介：</h1>
-<h2 id="感觉是一篇好文啊需要说明的是尽管现有研究也有一些在做rag和diffusion结合的但是它们在检索方面依然是检索和query语义相关的内容却忽略了去检索真正需要的图像即模型参数里缺少相关知识的图像也就是检索和要求相关的图像有可能检索到一些不需要的图像比如我们想生成一个特定型号的车驾驶在草原的图像假定知识库里没有这个东西这个型号的车是模型没见过的但我们用这个prompt检索图像可能检索出一大堆其它车在草原上行驶的图像就是没检索出这个新型号的车的相关图像那这些结果对于模型而言都没有用因为它还是不知道新型号的车长什么样甚至说有可能被这些检索结果进一步带偏生成完全不是新型号的车的在草原行驶的结果">感觉是一篇好文啊……需要说明的是，尽管现有研究也有一些在做RAG和diffusion结合的，但是它们在检索方面依然是检索和query语义相关的内容，却忽略了去检索“真正需要”的图像，即模型参数里缺少相关知识的图像（也就是检索和要求相关的图像。有可能检索到一些不需要的图像。比如，我们想生成一个特定型号的车驾驶在草原的图像（假定知识库里没有这个东西），这个型号的车是模型没见过的。但我们用这个prompt检索图像，可能检索出一大堆其它车在草原上行驶的图像，就是没检索出这个新型号的车的相关图像。那这些结果对于模型而言都没有用，因为它还是不知道新型号的车长什么样。甚至说，有可能被这些检索结果进一步带偏，生成完全不是新型号的车的在草原行驶的结果）</h2>
-<h2 id="因此论文提出了一个自反思对比学习专门用于训练一个类似于biased的retriever当然这个bias是我们主动造成的所以定义上和一般的bias不太一样简单来说训练后的效果就是这个检索器不会单单按照相似度的高低进行检索而是会检索那些模型缺失的也是模型真正需要的并且相关的图像仍以上面的例子来说明就是单看相似度的话应该是那些各种行驶在草原上的车的图像的相似度更高但训练后的检索器不会就这样结束而是会注意到新型号的车才是模型需要的并且也是相关的由此检索回新型号的车的图像给模型用以参考因此实现了知识的弥补具有针对性">因此论文提出了一个“自反思对比学习”，专门用于训练一个类似于biased的retriever（当然，这个bias是我们主动造成的，所以定义上和一般的bias不太一样）。简单来说，训练后的效果就是，这个检索器不会单单按照相似度的高低进行检索，而是会检索那些模型缺失的（也是模型真正需要的）、并且相关的图像（仍以上面的例子来说明，就是，单看相似度的话，应该是那些各种行驶在草原上的车的图像的相似度更高；但训练后的检索器不会就这样结束，而是会注意到新型号的车才是模型需要的，并且也是相关的，由此检索回新型号的车的图像，给模型用以参考）。因此实现了知识的弥补（具有针对性）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RealRAG%EF%BC%9ARetrieval-augmented%20Realistic%20Image%20Generation%20via%20%20Self-reflective%20Contrastive%20Learning/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Video&Multimodal-Retrieval/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Video&Multimodal-Retrieval/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/" class="post-title-link" itemprop="url">SALOVA：Segment-Augmented Long Video Assistant for Targeted Retrieval and Routing in Long-Form Video Analysis</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-07 11:46:00 / Modified: 12:32:57" itemprop="dateCreated datePublished" datetime="2025-09-07T11:46:00+08:00">2025-09-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuecvpr-25">Venue：CVPR 25</h1>
-<h1 id="date2025">date：2025</h1>
-<h1 id="基础背景">基础背景：</h1>
-<h2 id="fps是指frames-per-second也就是每秒多少帧">FPS，是指Frames Per
-Second，也就是每秒多少帧</h2>
-<h2 id="内存增强技术是一个与rag有点类似的技术其核心思路是在模型之外额外引入一个内存缓冲区memory-buffer用于存储长视频中超出模型固有上下文长度的帧特征语义信息它是按时间存储的且不支持语义检索也就是说现在用户给了一个query我们不能根据query的含义来检索要用buffer里的哪些特征而是只能根据定位的大概时间点把这个时间点附近的特征都拿来使用因此论文的方法的更加优秀的地方在于支持基于语义的检索">内存增强技术，是一个与RAG有点类似的技术。其核心思路是，在模型之外，额外引入一个”内存缓冲区“（Memory
-Buffer），用于存储长视频中超出模型固有上下文长度的帧特征/语义信息。它是按时间存储的，且不支持语义检索（也就是说，现在用户给了一个query，我们不能根据query的含义来检索要用buffer里的哪些特征，而是只能根据定位的大概时间点，把这个时间点附近的特征都拿来使用（因此，论文的方法的更加优秀的地方在于支持基于语义的检索）</h2>
-<h1 id="动机">动机：</h1>
-<h2 id="论文研究的是长视频的理解这个问题重要无需多言但很难因为视频所需的上下文范围太大了现有的模型完全满足不了此外还有场景的一致性问题需要关注而现有方法在这两点上做得都不够好-基于稀疏帧采样和token压缩的显然这些方法会丢失很多信息因此对于细节的问题基本不太答得上来-基于内存增强和上下文扩展的它们不太能优化片段间的语义关系且上下文扩展带来的提升还是远远不够">论文研究的是长视频的理解。这个问题重要，无需多言；但很难，因为视频所需的上下文范围太大了，现有的模型完全满足不了；此外还有场景的一致性问题需要关注。而现有方法在这两点上做得都不够好：<br>基于稀疏帧采样和token压缩的，显然这些方法会丢失很多信息，因此对于细节的问题基本不太答得上来；<br>基于内存增强和上下文扩展的，它们不太能优化片段间的语义关系；且上下文扩展带来的提升还是远远不够</h2>
-<h2 id="此外现有的视频数据集质量也不够高一个是描述粒度粗另一个是视频大多短无法支撑长视频模型的训练">此外，现有的视频数据集质量也不够高。一个是描述粒度粗，另一个是视频大多短，无法支撑长视频模型的训练</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Video&Multimodal-Retrieval/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/" class="post-title-link" itemprop="url">RAP：Retrieval-Augmented Personalization for Multimodal Large Language Models</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-07 10:23:00 / Modified: 17:25:05" itemprop="dateCreated datePublished" datetime="2025-09-07T10:23:00+08:00">2025-09-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Venue：CVPR-25"><a href="#Venue：CVPR-25" class="headerlink" title="Venue：CVPR 25"></a>Venue：CVPR 25</h1><h1 id="date：2025"><a href="#date：2025" class="headerlink" title="date：2025"></a>date：2025</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）"><a href="#论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）" class="headerlink" title="论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）"></a>论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；<br>进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）</h2><h1 id="简介："><a href="#简介：" class="headerlink" title="简介："></a>简介：</h1><h2 id="针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）"><a href="#针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）" class="headerlink" title="针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）"></a>针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）</h2><h2 id="话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）"><a href="#话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）" class="headerlink" title="话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）"></a>话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）</h2><h2 id="上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆-检索-生成记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用-VDocRAG：Retrieval-augmented-generation-over-visually-rich-documents-里面提到的方法，训练一个图像-文字双模态的embedding-model，那可能处理起来更方便）生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）"><a href="#上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆-检索-生成记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用-VDocRAG：Retrieval-augmented-generation-over-visually-rich-documents-里面提到的方法，训练一个图像-文字双模态的embedding-model，那可能处理起来更方便）生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）" class="headerlink" title="上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆 - 检索 - 生成记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用[[VDocRAG：Retrieval-augmented generation over visually-rich documents]]里面提到的方法，训练一个图像-文字双模态的embedding model，那可能处理起来更方便）生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）"></a>上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆 - 检索 - 生成<br>记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；<br>检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用[[VDocRAG：Retrieval-augmented generation over visually-rich documents]]里面提到的方法，训练一个图像-文字双模态的embedding model，那可能处理起来更方便）<br>生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/VDocRAG%EF%BC%9ARetrieval-augmented%20generation%20over%20visually-rich%20documents/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/VDocRAG%EF%BC%9ARetrieval-augmented%20generation%20over%20visually-rich%20documents/" class="post-title-link" itemprop="url">VDocRAG：Retrieval-augmented generation over visually-rich documents</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-06 21:41:00 / Modified: 22:38:54" itemprop="dateCreated datePublished" datetime="2025-09-06T21:41:00+08:00">2025-09-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuecvpr-25">Venue：CVPR 25</h1>
-<h1 id="date2025">date：2025</h1>
-<h1 id="基础背景">基础背景：</h1>
-<h2 id="封闭域设定closed-setting是指模型仅需要基于单个给定的文档图像回答问题不需要从外部的文档库中检索相关信息对应的开放域设定open-domain-setting是指模型需要从外部文档库中检索相关文档">封闭域设定（closed
-setting）是指，模型仅需要基于单个给定的文档图像回答问题，不需要从外部的文档库中检索相关信息。对应的，开放域设定（open
-domain setting）是指模型需要从外部文档库中检索相关文档</h2>
-<h1 id="动机">动机：</h1>
-<h2 id="现有rag框架主要是针对纯文本不太能处理视觉丰富文档即含有很多图表表格之类的信息的文档这类视觉信息如果提取成文字会丢失信息且现有的rag方法不太能统一处理pdfpptx等格式不同的格式解析的逻辑差别很大容易解析错误">现有RAG框架主要是针对纯文本，不太能处理视觉丰富文档（即含有很多图表、表格之类的信息的文档）。这类视觉信息，如果提取成文字，会丢失信息；且现有的RAG方法不太能统一处理PDF、PPTX等格式（不同的格式解析的逻辑差别很大，容易解析错误）</h2>
-<h1 id="简介">简介：</h1>
-<h2 id="论文提出vdocrag框架实现了开放域内的qa且支持视觉丰富文档">论文提出VDocRAG框架，实现了开放域内的QA，且支持视觉丰富文档。</h2>
-<h2 id="针对多种不同输入格式的视觉丰富文档论文采取的处理方法是全都处理成图像连文本带图像一起都切成固定尺寸的crops这样不管是哪个格式来了都可以直接处理成图像">针对多种不同输入格式的视觉丰富文档，论文采取的处理方法是，全都处理成图像（连文本带图像一起。都切成固定尺寸的crops）。这样不管是哪个格式来了，都可以直接处理成图像</h2>
-<h2 id="之后的qa可能需要检索再生成而检索就需要把文档图像即上面切出来的crops的embedding以及query的embedding进行相似度计算那就需要把二者投影到同一个空间也就是说我们需要一个能把文本和图像投影到同一个embedding空间的模型现有的lvlms虽然确实可以同时处理图像和文本但它的向量是用于生成的和用于压缩表征信息的embedding是不太一样的所以论文提出了新的预训练的任务可以提高lvlms的embedding的表征能力最后就是用现有的lvlms的权重进行初始化然后用论文提出的任务进行训练得到一个文本-图像双模态的embedding-model它就被用来对文档图像和query进行编码实验也表明如果仅用原生的lvlms的权重得到的向量来检索效果是不如用它们继续训练后的模型提取得到的embedding向量检索的">之后的QA可能需要检索再生成，而检索就需要把文档图像（即上面切出来的crops）的embedding以及query的embedding进行相似度计算。那就需要把二者投影到同一个空间。也就是说，我们需要一个能把文本和图像投影到同一个embedding空间的模型。现有的LVLMs虽然确实可以同时处理图像和文本，但它的向量是用于生成的，和用于压缩表征信息的embedding是不太一样的。所以，论文提出了新的预训练的任务，可以提高LVLMs的embedding的表征能力（最后就是用现有的LVLMs的权重进行初始化，然后用论文提出的任务进行训练，得到一个文本-图像双模态的embedding
-model。它就被用来对文档图像和query进行编码）（实验也表明，如果仅用原生的LVLMs的权重得到的向量来检索，效果是不如用它们继续训练后的模型提取得到的embedding向量检索的）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/VDocRAG%EF%BC%9ARetrieval-augmented%20generation%20over%20visually-rich%20documents/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Recursively%20Summarizing%20Enables%20Long-Term%20Dialogue%20%20Memory%20in%20Large%20Language%20Models/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Recursively%20Summarizing%20Enables%20Long-Term%20Dialogue%20%20Memory%20in%20Large%20Language%20Models/" class="post-title-link" itemprop="url">Recursively Summarizing Enables Long-Term Dialogue  Memory in Large Language Models</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-06 12:02:00 / Modified: 12:06:14" itemprop="dateCreated datePublished" datetime="2025-09-06T12:02:00+08:00">2025-09-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venue">Venue：</h1>
-<h1 id="date">date：</h1>
-<h1 id="动机">动机：</h1>
-<h1 id="insight">insight：</h1>
-<h2 id="这篇论文对于记忆管理的核心创新是它是迭代地调用当前llm不断根据之前的记忆和当前的会话整理出新的记忆不需要别的专门的模型">这篇论文对于记忆管理的核心创新是，它是迭代地调用当前llm，不断根据之前的记忆和当前的会话，整理出新的记忆，不需要别的专门的模型</h2>
-<h1 id="contribution">contribution：</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Recursively%20Summarizing%20Enables%20Long-Term%20Dialogue%20%20Memory%20in%20Large%20Language%20Models/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Crafting%20Personalized%20Agents%20through%20Retrieval-Augmented%20Generation%20on%20Editable%20Memory%20Graphs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Crafting%20Personalized%20Agents%20through%20Retrieval-Augmented%20Generation%20on%20Editable%20Memory%20Graphs/" class="post-title-link" itemprop="url">Crafting Personalized Agents through Retrieval-Augmented Generation on Editable Memory Graphs</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-06 10:07:00" itemprop="dateCreated datePublished" datetime="2025-09-06T10:07:00+08:00">2025-09-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-07 17:25:42" itemprop="dateModified" datetime="2025-09-07T17:25:42+08:00">2025-09-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/" itemprop="url" rel="index"><span itemprop="name">memory management</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Venue：EMNLP-24"><a href="#Venue：EMNLP-24" class="headerlink" title="Venue：EMNLP 24"></a>Venue：EMNLP 24</h1><h1 id="date：2024-09-28"><a href="#date：2024-09-28" class="headerlink" title="date：2024-09-28"></a>date：2024-09-28</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="论文主要研究，如何利用llm和用户手机上的记忆数据，打造个性化agent。主要的问题有三个：数据收集困难；没有一个特别适合编辑的记忆数据结构；检索记忆有困难（检索不够精准，而且有些场景需要组合多个记忆进行回答）"><a href="#论文主要研究，如何利用llm和用户手机上的记忆数据，打造个性化agent。主要的问题有三个：数据收集困难；没有一个特别适合编辑的记忆数据结构；检索记忆有困难（检索不够精准，而且有些场景需要组合多个记忆进行回答）" class="headerlink" title="论文主要研究，如何利用llm和用户手机上的记忆数据，打造个性化agent。主要的问题有三个：数据收集困难；没有一个特别适合编辑的记忆数据结构；检索记忆有困难（检索不够精准，而且有些场景需要组合多个记忆进行回答）"></a>论文主要研究，如何利用llm和用户手机上的记忆数据，打造个性化agent。主要的问题有三个：<br>数据收集困难；没有一个特别适合编辑的记忆数据结构；检索记忆有困难（检索不够精准，而且有些场景需要组合多个记忆进行回答）</h2><h1 id="简介："><a href="#简介：" class="headerlink" title="简介："></a>简介：</h1><h2 id="针对第一个问题，论文提出，从真实的ai助手产品上收集数据，并利用llm生成问答对，用于训练"><a href="#针对第一个问题，论文提出，从真实的ai助手产品上收集数据，并利用llm生成问答对，用于训练" class="headerlink" title="针对第一个问题，论文提出，从真实的ai助手产品上收集数据，并利用llm生成问答对，用于训练"></a>针对第一个问题，论文提出，从真实的ai助手产品上收集数据，并利用llm生成问答对，用于训练</h2><h2 id="针对第二个问题（其实也是同时考虑了第三个问题），论文设计了三层结构的可编辑记忆图（EMG）。一来，图结构可以相对方便地支持编辑（插入、删除和替换）；二来，用图构建记忆的话，检索记忆就可以变成在graph上遍历、游走。加上论文引入了RL，用RL来指导在graph上的游走。因此，相当于检索回来的片段不局限于top-k，而是更加灵活，按需检索（有点类似自适应的决定k）"><a href="#针对第二个问题（其实也是同时考虑了第三个问题），论文设计了三层结构的可编辑记忆图（EMG）。一来，图结构可以相对方便地支持编辑（插入、删除和替换）；二来，用图构建记忆的话，检索记忆就可以变成在graph上遍历、游走。加上论文引入了RL，用RL来指导在graph上的游走。因此，相当于检索回来的片段不局限于top-k，而是更加灵活，按需检索（有点类似自适应的决定k）" class="headerlink" title="针对第二个问题（其实也是同时考虑了第三个问题），论文设计了三层结构的可编辑记忆图（EMG）。一来，图结构可以相对方便地支持编辑（插入、删除和替换）；二来，用图构建记忆的话，检索记忆就可以变成在graph上遍历、游走。加上论文引入了RL，用RL来指导在graph上的游走。因此，相当于检索回来的片段不局限于top-k，而是更加灵活，按需检索（有点类似自适应的决定k）"></a>针对第二个问题（其实也是同时考虑了第三个问题），论文设计了三层结构的可编辑记忆图（EMG）。一来，图结构可以相对方便地支持编辑（插入、删除和替换）；二来，用图构建记忆的话，检索记忆就可以变成在graph上遍历、游走。加上论文引入了RL，用RL来指导在graph上的游走。因此，相当于检索回来的片段不局限于top-k，而是更加灵活，按需检索（有点类似自适应的决定k）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Crafting%20Personalized%20Agents%20through%20Retrieval-Augmented%20Generation%20on%20Editable%20Memory%20Graphs/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1351,18 +1365,18 @@ model。它就被用来对文档图像和query进行编码）（实验也表明�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">226</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-count">71</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="0. 引入 一般定义： 所谓剪枝，可以转化成一个优化问题：怎么使得网络参数尽可能“稀疏”，同时网络的效果也要尽可能保留我们对稀疏性的要求，体现在约束\(||W_{p}||_{0}\le N\)上，而我们对性能保留的要求则体现在优化问题\(\arg\min_{W_{p}}L(x;W_{p})\) 大体上，剪枝需要考虑这么几个方面：剪枝的粒度，剪枝的标准（什么是重要的，什么是不重要的），剪枝率">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lec03&amp;04-pruning">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="0. 引入 一般定义： 所谓剪枝，可以转化成一个优化问题：怎么使得网络参数尽可能“稀疏”，同时网络的效果也要尽可能保留我们对稀疏性的要求，体现在约束\(||W_{p}||_{0}\le N\)上，而我们对性能保留的要求则体现在优化问题\(\arg\min_{W_{p}}L(x;W_{p})\) 大体上，剪枝需要考虑这么几个方面：剪枝的粒度，剪枝的标准（什么是重要的，什么是不重要的），剪枝率">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/images/efficientml/lec03&amp;04/intro-to-prune.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/efficientml/lec03&amp;04/prune-granularities.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/efficientml/lec03&amp;04/fine-grained-pruning.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/efficientml/lec03&amp;04/2-to-4-sparsity.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/efficientml/lec03&amp;04/pattern-based-pruning-acc.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/efficientml/lec03&amp;04/l2-norm-pruning.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/efficientml/lec03&amp;04/scaling-based-pruning.png">
+<meta property="article:published_time" content="2025-09-03T09:08:00.000Z">
+<meta property="article:modified_time" content="2025-09-24T07:59:33.540Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/images/efficientml/lec03&amp;04/intro-to-prune.png">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>lec03&04-pruning | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          lec03&04-pruning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-03 17:08:00" itemprop="dateCreated datePublished" datetime="2025-09-03T17:08:00+08:00">2025-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:59:33" itemprop="dateModified" datetime="2025-09-24T15:59:33+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="引入">0. 引入</h1>
+<h2 id="一般定义">一般定义：</h2>
+<h3 id="所谓剪枝可以转化成一个优化问题怎么使得网络参数尽可能稀疏同时网络的效果也要尽可能保留我们对稀疏性的要求体现在约束w_p_0le-n上而我们对性能保留的要求则体现在优化问题argmin_w_plxw_p">所谓剪枝，可以转化成一个优化问题：怎么使得网络参数尽可能“稀疏”，同时网络的效果也要尽可能保留<img src="images/efficientml/lec03&amp;04/intro-to-prune.png">我们对稀疏性的要求，体现在约束<span class="math inline">\(||W_{p}||_{0}\le
+N\)</span>上，而我们对性能保留的要求则体现在优化问题<span class="math inline">\(\arg\min_{W_{p}}L(x;W_{p})\)</span></h3>
+<h2 id="大体上剪枝需要考虑这么几个方面剪枝的粒度剪枝的标准什么是重要的什么是不重要的剪枝率剪枝多少能达到效率和效果的平衡剪枝后的对网络的微调恢复性能我们不希望剪枝完之后性能掉得一塌糊涂">大体上，剪枝需要考虑这么几个方面：剪枝的粒度，剪枝的标准（什么是重要的，什么是不重要的），剪枝率（剪枝多少能达到效率和效果的平衡），剪枝后的对网络的微调（恢复性能，我们不希望剪枝完之后性能掉得一塌糊涂）</h2>
+<h2 id="下面依次介绍">下面依次介绍</h2>
+<span id="more"></span>
+<h1 id="determine-the-pruning-granularity">1. determine the pruning
+granularity</h1>
+<h2 id="下图展示了一般剪枝都有哪些粒度大致上剪枝粒度越细那么权重剪枝后显得越不规律因此使用部署会越困难相应的剪枝粒度越粗则剪枝后权重显得月规律使用和部署越简单但加速的效果就没那么好了">下图展示了一般剪枝都有哪些粒度<img src="/images/efficientml/lec03&amp;04/prune-granularities.png">大致上，剪枝粒度越细，那么权重剪枝后显得越不规律，因此使用、部署会越困难；相应的，剪枝粒度越粗，则剪枝后权重显得月规律，使用和部署越简单（但加速的效果就没那么好了）</h2>
+<h2 id="此处具体介绍三种fine-grainedpattern-basedchannel-level大概就能明白是什么回事了">此处具体介绍三种（fine-grained，pattern-based，channel-level），大概就能明白是什么回事了</h2>
+<h3 id="fine-grained-pruning">1.1. fine-grained pruning</h3>
+<h4 id="这是细粒度的剪枝的示意图剪枝的时候可以剪掉synapses也可以剪掉neurons只不过后者可以类比为一种相对粗粒度的剪枝"><img src="/images/efficientml/lec03&amp;04/fine-grained-pruning.png">这是细粒度的剪枝的示意图。剪枝的时候可以剪掉synapses，也可以剪掉neurons，只不过后者可以类比为一种相对粗粒度的剪枝</h4>
+<h4 id="这种粒度的剪枝是很灵活的因为我们对每个权重值都会进行考察看它是否重要不重要我们就剪掉了也因此它一般压缩率compression-ratio会更大但它的部署也比较难一般得在定制的硬件custom-hardware上做gpu上就比较难了">这种粒度的剪枝，是很灵活的（因为我们对每个权重值都会进行考察，看它是否“重要”，不重要我们就剪掉了）。也因此，它一般压缩率（compression
+ratio）会更大。但它的部署也比较难，一般得在定制的硬件（custom
+hardware）上做，GPU上就比较难了</h4>
+<h3 id="pattern-based-pruning">1.2. pattern-based pruning</h3>
+<h4 id="既然是pattern-based那它应该是有一定规律的不过这个规律一般是由我们自己定的这里介绍一种比较常用并且有对应gpu支持的pattern即nm-sparsity它的意思是in-each-contiguous-m-elements-n-of-them-is-pruned也就是每m个元素里有n个被剪枝掉所以我们很容易可以算出稀疏度fracnm一个典型的例子是24-sparsity这个pattern有nvidias-ampere-gpu架构专门的支持更重要的是这种模式的剪枝通常能比较好的保留性能且能做到2x-speed-up">既然是pattern-based，那它应该是有一定规律的。不过这个规律一般是由我们自己定的。这里介绍一种比较常用，并且有对应gpu支持的pattern，即N:M
+sparsity。它的意思是，in each contiguous M elements, N of them is
+pruned，也就是每M个元素里，有N个被剪枝掉。所以我们很容易可以算出稀疏度：<span class="math inline">\(\frac{N}{M}\)</span>。一个典型的例子是2:4
+sparsity<img src="/images/efficientml/lec03&amp;04/2-to-4-sparsity.png">这个pattern有NVIDIA's
+Ampere
+GPU架构专门的支持。更重要的是，这种模式的剪枝，通常能比较好的保留性能，且能做到~2x
+speed up<img src="/images/efficientml/lec03&amp;04/pattern-based-pruning-acc.png"></h4>
+<h3 id="channel-pruning">1.3. channel pruning</h3>
+<h4 id="这种剪枝加速比较直接部署也比较容易可以照常在gpucpu上使用只是压缩率相对会较小相比其它粒度的pruning而言一种比较聪明的做法是单独研究每一层网络的sparsity进行自适应的剪枝而非强行对每一层都剪枝到相同的稀疏度一般而言这种做法既能减少latency也能尽量保留网络效果">这种剪枝，加速比较直接，部署也比较容易（可以照常在gpu/cpu上使用），只是压缩率相对会较小（相比其它粒度的pruning而言）。一种比较聪明的做法是，单独研究每一层网络的sparsity，进行自适应的剪枝，而非强行对每一层都剪枝到相同的稀疏度。一般而言，这种做法既能减少latency，也能尽量保留网络效果</h4>
+<h1 id="determine-the-pruning-criterion">2. determine the pruning
+criterion</h1>
+<h2 id="虽然之前就接触过一点剪枝方面的知识那个时候只介绍了做法一般是把权重比较小的地方置为0但为什么是只关注小的大的就不剪枝呢也就是说大的权重值比较重要吗这个该如何理解-我们可以举一个比较极端的例子来看清趋势-神经网络的层忽略激活函数之类的大多是矩阵张量之间的乘法加法而这其实和加权求和是类似的因此来假设一个简单情况假设现在有三个权重它对应了三个输入这个neuron的输出是加权求和且不妨假设现在的效果已经足够好如果我们需要进行剪枝那么考虑把哪个权重置为0能尽量减小对效果的影响似乎应该是最小具体来说是绝对值最小的那个假设三个权重值依次是10-80.001那很显然0.001这个权重小很多它乘以输入以后对结果的影响很可能是很小的即使把它置为0输出结果也差不多那么最终的效果应该也是差不多的所以把小的权重值置为0是相对合理的它能在一定程度上减小对输出结果的损害说到底我们这里的pruning是把值置为0当然原来的值越接近0prune掉它之后的影响就越小">虽然之前就接触过一点剪枝方面的知识，那个时候，只介绍了做法，一般是把权重比较小的地方置为0。但为什么是只关注小的，大的就不剪枝呢？也就是说大的权重值比较重要吗？这个该如何理解？<br>我们可以举一个比较极端的例子，来看清趋势<br>神经网络的层（忽略激活函数之类的），大多是矩阵、张量之间的乘法、加法。而这其实和加权求和是类似的。因此，来假设一个简单情况。假设现在有三个权重，它对应了三个输入。这个neuron的输出是加权求和。且不妨假设现在的效果已经足够好。如果我们需要进行剪枝，那么考虑把哪个权重置为0，能尽量减小对效果的影响？似乎应该是最小（具体来说是绝对值最小的）那个。假设三个权重值依次是10，-8，0.001，那很显然，0.001这个权重小很多，它乘以输入以后，对结果的影响很可能是很小的。即使把它置为0，输出结果也差不多，那么最终的效果应该也是差不多的。所以，把小的权重值置为0，是相对合理的，它能在一定程度上减小对输出结果的损害（说到底，我们这里的pruning是把值置为0，当然，原来的值越接近0，prune掉它之后的影响就越小）</h2>
+<h2 id="下面具体介绍几种剪枝的准则也就是如何判断什么是重要的">下面具体介绍几种剪枝的准则（也就是如何判断什么是“重要的”）</h2>
+<h2 id="magnitude-based-pruning">2.1. Magnitude-based Pruning</h2>
+<h3 id="这是一种启发式算法启发的思想类似于上面我们提到的在加权求和里绝对值大的权重一般而言对结果的影响更大所以要剪枝的话优先考虑剪枝掉绝对值小的权重-但可以发现所谓绝对值其实就是1范数那到底哪一种范数效果会更好呢这个不好说但是使用不同的范数作为重要性度量就引出了不同的剪枝算法这里给一个用l2范数作为度量的示意图">这是一种启发式算法。启发的思想类似于上面我们提到的，在加权求和里，绝对值大的权重，一般而言对结果的影响更大。所以要剪枝的话，优先考虑剪枝掉绝对值小的权重<br>但可以发现，所谓绝对值，其实就是1范数。那到底哪一种范数效果会更好呢？这个不好说。但是使用不同的范数作为重要性度量，就引出了不同的剪枝算法。这里给一个用l2范数作为度量的示意图：<img src="/images/efficientml/lec03&amp;04/l2-norm-pruning.png"></h3>
+<h2 id="scaling-based-pruning">2.2. Scaling-based Pruning</h2>
+<h3 id="这个的剪枝它着眼于norm层里学到的scaling-factor-gamma同样的如果一个channel对应的scaling-factor很小绝对值上那么优先考虑剪枝这个channel效果上类似于下图且可以发现我们剪枝完之后保留的channel沿用了之前它对应的scaling-factor">这个的剪枝，它着眼于norm层里学到的scaling
+factor <span class="math inline">\(\gamma\)</span>。同样的，如果一个channel对应的scaling
+factor很小（绝对值上），那么优先考虑剪枝这个channel。效果上类似于下图：<img src="/images/efficientml/lec03&amp;04/scaling-based-pruning.png">且可以发现，我们剪枝完之后，保留的channel，沿用了之前它对应的scaling
+factor</h3>
+<h2 id="second-order-based-pruning">2.3. Second-Order-based Pruning</h2>
+<h3 id="这种剪枝算法起源于对误差的泰勒展开">这种剪枝算法，起源于对误差的泰勒展开</h3>
+<h2 id="selection-of-neurons-to-prune">2.4. Selection of Neurons to
+Prune</h2>
+<h3 id="这里是一种稍微不同的剪枝角度之前我们都是从权重出发对权重直接进行剪枝而回顾神经网络的仿生学起源它是为了模仿人脑里的许多神经元组成的神经网络所以权重其实是神经元之间连接的权重我们上面讨论的就是对这个连接权重的剪枝这里则是考虑直接把某个神经元给剪枝掉而把一个神经元剪掉后连接它的所有权重显然也会被剪枝掉所以从这个角度看剪枝神经元是相对粗粒度的">这里是一种稍微不同的剪枝角度。之前我们都是从权重出发，对权重直接进行剪枝。而回顾神经网络的仿生学起源，它是为了模仿人脑里的许多神经元组成的神经网络，所以权重其实是神经元之间连接的权重。我们上面讨论的就是对这个连接权重的剪枝。这里则是考虑直接把某个神经元给剪枝掉。而把一个神经元剪掉后，连接它的所有权重显然也会被剪枝掉。所以从这个角度看，剪枝神经元是相对粗粒度的</h3>
+<h3 id="另外这里介绍了一种判断neuron重要性的方法是所谓percentage-of-zero值得注意的是这是一种非静态的方法因为它需要对输出的activations进行统计所以要剪枝就必须得运行一定的样例而上面直接剪枝权重的时候大多用的是静态的方法只需要对着权重进行一些计算就行不需要运行样例">另外，这里介绍了一种判断neuron重要性的方法，是所谓percentage-of-zero。值得注意的是，这是一种非静态的方法，因为它需要对输出的activations进行统计，所以要剪枝就必须得运行一定的样例。而上面直接剪枝权重的时候，大多用的是静态的方法，只需要对着权重进行一些计算就行，不需要运行样例</h3>
+<h2 id="regression-based-pruning">2.5. Regression-based Pruning</h2>
+<h3 id="这个剪枝的方法出发点可以认为是为了避免再跑端到端的fine-tune具体的传统的剪枝我们剪枝完之后显然需要fine-tune一下以免性能掉太多但如果模型很大很复杂例如现在的llm我们fine-tune的成本是比较高的而regression-based-pruning它则考虑剪枝之后我们去拟合原来的输出从而间接达到恢复性能的效果却避开了跑端到端的fine-tune">这个剪枝的方法，出发点可以认为是为了避免再跑端到端的fine-tune。具体的，传统的剪枝，我们剪枝完之后显然需要fine-tune一下，以免性能掉太多。但如果模型很大、很复杂（例如现在的llm），我们fine-tune的成本是比较高的。而regression-based
+pruning，它则考虑，剪枝之后，我们去拟合原来的输出，从而间接达到恢复性能的效果，却避开了跑端到端的fine-tune</h3>
+<h4 id="section"></h4>
+<h3 id="而具体到如何操作上这里是一套迭代的思路先跑一次决定剪枝哪些部分这里是相对粗粒度的猜测是为了方便操作和部署吧然后对权重矩阵进行微调通过最小化reconstruction-error如此迭代上若干次">而具体到如何操作上，这里是一套迭代的思路：先跑一次，决定剪枝哪些部分（这里是相对粗粒度的，猜测是为了方便操作和部署吧）；然后对权重矩阵进行微调（通过最小化reconstruction
+error）。如此迭代上若干次</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/" rel="prev" title="安装库需要防止影响其它现有库的版本">
+      <i class="fa fa-chevron-left"></i> 安装库需要防止影响其它现有库的版本
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/03/course_learning/self-learn-mathematical-analysis/%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E5%AE%9E%E6%95%B0/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">0. 引入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">一般定义：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E8%B0%93%E5%89%AA%E6%9E%9D%E5%8F%AF%E4%BB%A5%E8%BD%AC%E5%8C%96%E6%88%90%E4%B8%80%E4%B8%AA%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%E6%80%8E%E4%B9%88%E4%BD%BF%E5%BE%97%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%A8%80%E7%96%8F%E5%90%8C%E6%97%B6%E7%BD%91%E7%BB%9C%E7%9A%84%E6%95%88%E6%9E%9C%E4%B9%9F%E8%A6%81%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BF%9D%E7%95%99%E6%88%91%E4%BB%AC%E5%AF%B9%E7%A8%80%E7%96%8F%E6%80%A7%E7%9A%84%E8%A6%81%E6%B1%82%E4%BD%93%E7%8E%B0%E5%9C%A8%E7%BA%A6%E6%9D%9Fw_p_0le-n%E4%B8%8A%E8%80%8C%E6%88%91%E4%BB%AC%E5%AF%B9%E6%80%A7%E8%83%BD%E4%BF%9D%E7%95%99%E7%9A%84%E8%A6%81%E6%B1%82%E5%88%99%E4%BD%93%E7%8E%B0%E5%9C%A8%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98argmin_w_plxw_p"><span class="nav-number">1.1.1.</span> <span class="nav-text">所谓剪枝，可以转化成一个优化问题：怎么使得网络参数尽可能“稀疏”，同时网络的效果也要尽可能保留我们对稀疏性的要求，体现在约束\(||W_{p}||_{0}\le
+N\)上，而我们对性能保留的要求则体现在优化问题\(\arg\min_{W_{p}}L(x;W_{p})\)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E4%BD%93%E4%B8%8A%E5%89%AA%E6%9E%9D%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E8%BF%99%E4%B9%88%E5%87%A0%E4%B8%AA%E6%96%B9%E9%9D%A2%E5%89%AA%E6%9E%9D%E7%9A%84%E7%B2%92%E5%BA%A6%E5%89%AA%E6%9E%9D%E7%9A%84%E6%A0%87%E5%87%86%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E8%A6%81%E7%9A%84%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%8D%E9%87%8D%E8%A6%81%E7%9A%84%E5%89%AA%E6%9E%9D%E7%8E%87%E5%89%AA%E6%9E%9D%E5%A4%9A%E5%B0%91%E8%83%BD%E8%BE%BE%E5%88%B0%E6%95%88%E7%8E%87%E5%92%8C%E6%95%88%E6%9E%9C%E7%9A%84%E5%B9%B3%E8%A1%A1%E5%89%AA%E6%9E%9D%E5%90%8E%E7%9A%84%E5%AF%B9%E7%BD%91%E7%BB%9C%E7%9A%84%E5%BE%AE%E8%B0%83%E6%81%A2%E5%A4%8D%E6%80%A7%E8%83%BD%E6%88%91%E4%BB%AC%E4%B8%8D%E5%B8%8C%E6%9C%9B%E5%89%AA%E6%9E%9D%E5%AE%8C%E4%B9%8B%E5%90%8E%E6%80%A7%E8%83%BD%E6%8E%89%E5%BE%97%E4%B8%80%E5%A1%8C%E7%B3%8A%E6%B6%82"><span class="nav-number">1.2.</span> <span class="nav-text">大体上，剪枝需要考虑这么几个方面：剪枝的粒度，剪枝的标准（什么是重要的，什么是不重要的），剪枝率（剪枝多少能达到效率和效果的平衡），剪枝后的对网络的微调（恢复性能，我们不希望剪枝完之后性能掉得一塌糊涂）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E4%BE%9D%E6%AC%A1%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">下面依次介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#determine-the-pruning-granularity"><span class="nav-number">2.</span> <span class="nav-text">1. determine the pruning
+granularity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E5%9B%BE%E5%B1%95%E7%A4%BA%E4%BA%86%E4%B8%80%E8%88%AC%E5%89%AA%E6%9E%9D%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B2%92%E5%BA%A6%E5%A4%A7%E8%87%B4%E4%B8%8A%E5%89%AA%E6%9E%9D%E7%B2%92%E5%BA%A6%E8%B6%8A%E7%BB%86%E9%82%A3%E4%B9%88%E6%9D%83%E9%87%8D%E5%89%AA%E6%9E%9D%E5%90%8E%E6%98%BE%E5%BE%97%E8%B6%8A%E4%B8%8D%E8%A7%84%E5%BE%8B%E5%9B%A0%E6%AD%A4%E4%BD%BF%E7%94%A8%E9%83%A8%E7%BD%B2%E4%BC%9A%E8%B6%8A%E5%9B%B0%E9%9A%BE%E7%9B%B8%E5%BA%94%E7%9A%84%E5%89%AA%E6%9E%9D%E7%B2%92%E5%BA%A6%E8%B6%8A%E7%B2%97%E5%88%99%E5%89%AA%E6%9E%9D%E5%90%8E%E6%9D%83%E9%87%8D%E6%98%BE%E5%BE%97%E6%9C%88%E8%A7%84%E5%BE%8B%E4%BD%BF%E7%94%A8%E5%92%8C%E9%83%A8%E7%BD%B2%E8%B6%8A%E7%AE%80%E5%8D%95%E4%BD%86%E5%8A%A0%E9%80%9F%E7%9A%84%E6%95%88%E6%9E%9C%E5%B0%B1%E6%B2%A1%E9%82%A3%E4%B9%88%E5%A5%BD%E4%BA%86"><span class="nav-number">2.1.</span> <span class="nav-text">下图展示了一般剪枝都有哪些粒度大致上，剪枝粒度越细，那么权重剪枝后显得越不规律，因此使用、部署会越困难；相应的，剪枝粒度越粗，则剪枝后权重显得月规律，使用和部署越简单（但加速的效果就没那么好了）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A4%E5%A4%84%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D%E4%B8%89%E7%A7%8Dfine-grainedpattern-basedchannel-level%E5%A4%A7%E6%A6%82%E5%B0%B1%E8%83%BD%E6%98%8E%E7%99%BD%E6%98%AF%E4%BB%80%E4%B9%88%E5%9B%9E%E4%BA%8B%E4%BA%86"><span class="nav-number">2.2.</span> <span class="nav-text">此处具体介绍三种（fine-grained，pattern-based，channel-level），大概就能明白是什么回事了</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fine-grained-pruning"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.1. fine-grained pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%99%E6%98%AF%E7%BB%86%E7%B2%92%E5%BA%A6%E7%9A%84%E5%89%AA%E6%9E%9D%E7%9A%84%E7%A4%BA%E6%84%8F%E5%9B%BE%E5%89%AA%E6%9E%9D%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%AF%E4%BB%A5%E5%89%AA%E6%8E%89synapses%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%89%AA%E6%8E%89neurons%E5%8F%AA%E4%B8%8D%E8%BF%87%E5%90%8E%E8%80%85%E5%8F%AF%E4%BB%A5%E7%B1%BB%E6%AF%94%E4%B8%BA%E4%B8%80%E7%A7%8D%E7%9B%B8%E5%AF%B9%E7%B2%97%E7%B2%92%E5%BA%A6%E7%9A%84%E5%89%AA%E6%9E%9D"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">这是细粒度的剪枝的示意图。剪枝的时候可以剪掉synapses，也可以剪掉neurons，只不过后者可以类比为一种相对粗粒度的剪枝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%99%E7%A7%8D%E7%B2%92%E5%BA%A6%E7%9A%84%E5%89%AA%E6%9E%9D%E6%98%AF%E5%BE%88%E7%81%B5%E6%B4%BB%E7%9A%84%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E5%AF%B9%E6%AF%8F%E4%B8%AA%E6%9D%83%E9%87%8D%E5%80%BC%E9%83%BD%E4%BC%9A%E8%BF%9B%E8%A1%8C%E8%80%83%E5%AF%9F%E7%9C%8B%E5%AE%83%E6%98%AF%E5%90%A6%E9%87%8D%E8%A6%81%E4%B8%8D%E9%87%8D%E8%A6%81%E6%88%91%E4%BB%AC%E5%B0%B1%E5%89%AA%E6%8E%89%E4%BA%86%E4%B9%9F%E5%9B%A0%E6%AD%A4%E5%AE%83%E4%B8%80%E8%88%AC%E5%8E%8B%E7%BC%A9%E7%8E%87compression-ratio%E4%BC%9A%E6%9B%B4%E5%A4%A7%E4%BD%86%E5%AE%83%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B9%9F%E6%AF%94%E8%BE%83%E9%9A%BE%E4%B8%80%E8%88%AC%E5%BE%97%E5%9C%A8%E5%AE%9A%E5%88%B6%E7%9A%84%E7%A1%AC%E4%BB%B6custom-hardware%E4%B8%8A%E5%81%9Agpu%E4%B8%8A%E5%B0%B1%E6%AF%94%E8%BE%83%E9%9A%BE%E4%BA%86"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">这种粒度的剪枝，是很灵活的（因为我们对每个权重值都会进行考察，看它是否“重要”，不重要我们就剪掉了）。也因此，它一般压缩率（compression
+ratio）会更大。但它的部署也比较难，一般得在定制的硬件（custom
+hardware）上做，GPU上就比较难了</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pattern-based-pruning"><span class="nav-number">2.2.2.</span> <span class="nav-text">1.2. pattern-based pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A2%E7%84%B6%E6%98%AFpattern-based%E9%82%A3%E5%AE%83%E5%BA%94%E8%AF%A5%E6%98%AF%E6%9C%89%E4%B8%80%E5%AE%9A%E8%A7%84%E5%BE%8B%E7%9A%84%E4%B8%8D%E8%BF%87%E8%BF%99%E4%B8%AA%E8%A7%84%E5%BE%8B%E4%B8%80%E8%88%AC%E6%98%AF%E7%94%B1%E6%88%91%E4%BB%AC%E8%87%AA%E5%B7%B1%E5%AE%9A%E7%9A%84%E8%BF%99%E9%87%8C%E4%BB%8B%E7%BB%8D%E4%B8%80%E7%A7%8D%E6%AF%94%E8%BE%83%E5%B8%B8%E7%94%A8%E5%B9%B6%E4%B8%94%E6%9C%89%E5%AF%B9%E5%BA%94gpu%E6%94%AF%E6%8C%81%E7%9A%84pattern%E5%8D%B3nm-sparsity%E5%AE%83%E7%9A%84%E6%84%8F%E6%80%9D%E6%98%AFin-each-contiguous-m-elements-n-of-them-is-pruned%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%AF%8Fm%E4%B8%AA%E5%85%83%E7%B4%A0%E9%87%8C%E6%9C%89n%E4%B8%AA%E8%A2%AB%E5%89%AA%E6%9E%9D%E6%8E%89%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%BE%88%E5%AE%B9%E6%98%93%E5%8F%AF%E4%BB%A5%E7%AE%97%E5%87%BA%E7%A8%80%E7%96%8F%E5%BA%A6fracnm%E4%B8%80%E4%B8%AA%E5%85%B8%E5%9E%8B%E7%9A%84%E4%BE%8B%E5%AD%90%E6%98%AF24-sparsity%E8%BF%99%E4%B8%AApattern%E6%9C%89nvidias-ampere-gpu%E6%9E%B6%E6%9E%84%E4%B8%93%E9%97%A8%E7%9A%84%E6%94%AF%E6%8C%81%E6%9B%B4%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E8%BF%99%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%89%AA%E6%9E%9D%E9%80%9A%E5%B8%B8%E8%83%BD%E6%AF%94%E8%BE%83%E5%A5%BD%E7%9A%84%E4%BF%9D%E7%95%99%E6%80%A7%E8%83%BD%E4%B8%94%E8%83%BD%E5%81%9A%E5%88%B02x-speed-up"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">既然是pattern-based，那它应该是有一定规律的。不过这个规律一般是由我们自己定的。这里介绍一种比较常用，并且有对应gpu支持的pattern，即N:M
+sparsity。它的意思是，in each contiguous M elements, N of them is
+pruned，也就是每M个元素里，有N个被剪枝掉。所以我们很容易可以算出稀疏度：\(\frac{N}{M}\)。一个典型的例子是2:4
+sparsity这个pattern有NVIDIA&#39;s
+Ampere
+GPU架构专门的支持。更重要的是，这种模式的剪枝，通常能比较好的保留性能，且能做到~2x
+speed up</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#channel-pruning"><span class="nav-number">2.2.3.</span> <span class="nav-text">1.3. channel pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%99%E7%A7%8D%E5%89%AA%E6%9E%9D%E5%8A%A0%E9%80%9F%E6%AF%94%E8%BE%83%E7%9B%B4%E6%8E%A5%E9%83%A8%E7%BD%B2%E4%B9%9F%E6%AF%94%E8%BE%83%E5%AE%B9%E6%98%93%E5%8F%AF%E4%BB%A5%E7%85%A7%E5%B8%B8%E5%9C%A8gpucpu%E4%B8%8A%E4%BD%BF%E7%94%A8%E5%8F%AA%E6%98%AF%E5%8E%8B%E7%BC%A9%E7%8E%87%E7%9B%B8%E5%AF%B9%E4%BC%9A%E8%BE%83%E5%B0%8F%E7%9B%B8%E6%AF%94%E5%85%B6%E5%AE%83%E7%B2%92%E5%BA%A6%E7%9A%84pruning%E8%80%8C%E8%A8%80%E4%B8%80%E7%A7%8D%E6%AF%94%E8%BE%83%E8%81%AA%E6%98%8E%E7%9A%84%E5%81%9A%E6%B3%95%E6%98%AF%E5%8D%95%E7%8B%AC%E7%A0%94%E7%A9%B6%E6%AF%8F%E4%B8%80%E5%B1%82%E7%BD%91%E7%BB%9C%E7%9A%84sparsity%E8%BF%9B%E8%A1%8C%E8%87%AA%E9%80%82%E5%BA%94%E7%9A%84%E5%89%AA%E6%9E%9D%E8%80%8C%E9%9D%9E%E5%BC%BA%E8%A1%8C%E5%AF%B9%E6%AF%8F%E4%B8%80%E5%B1%82%E9%83%BD%E5%89%AA%E6%9E%9D%E5%88%B0%E7%9B%B8%E5%90%8C%E7%9A%84%E7%A8%80%E7%96%8F%E5%BA%A6%E4%B8%80%E8%88%AC%E8%80%8C%E8%A8%80%E8%BF%99%E7%A7%8D%E5%81%9A%E6%B3%95%E6%97%A2%E8%83%BD%E5%87%8F%E5%B0%91latency%E4%B9%9F%E8%83%BD%E5%B0%BD%E9%87%8F%E4%BF%9D%E7%95%99%E7%BD%91%E7%BB%9C%E6%95%88%E6%9E%9C"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">这种剪枝，加速比较直接，部署也比较容易（可以照常在gpu&#x2F;cpu上使用），只是压缩率相对会较小（相比其它粒度的pruning而言）。一种比较聪明的做法是，单独研究每一层网络的sparsity，进行自适应的剪枝，而非强行对每一层都剪枝到相同的稀疏度。一般而言，这种做法既能减少latency，也能尽量保留网络效果</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#determine-the-pruning-criterion"><span class="nav-number">3.</span> <span class="nav-text">2. determine the pruning
+criterion</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%BD%E7%84%B6%E4%B9%8B%E5%89%8D%E5%B0%B1%E6%8E%A5%E8%A7%A6%E8%BF%87%E4%B8%80%E7%82%B9%E5%89%AA%E6%9E%9D%E6%96%B9%E9%9D%A2%E7%9A%84%E7%9F%A5%E8%AF%86%E9%82%A3%E4%B8%AA%E6%97%B6%E5%80%99%E5%8F%AA%E4%BB%8B%E7%BB%8D%E4%BA%86%E5%81%9A%E6%B3%95%E4%B8%80%E8%88%AC%E6%98%AF%E6%8A%8A%E6%9D%83%E9%87%8D%E6%AF%94%E8%BE%83%E5%B0%8F%E7%9A%84%E5%9C%B0%E6%96%B9%E7%BD%AE%E4%B8%BA0%E4%BD%86%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%AA%E5%85%B3%E6%B3%A8%E5%B0%8F%E7%9A%84%E5%A4%A7%E7%9A%84%E5%B0%B1%E4%B8%8D%E5%89%AA%E6%9E%9D%E5%91%A2%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%A4%A7%E7%9A%84%E6%9D%83%E9%87%8D%E5%80%BC%E6%AF%94%E8%BE%83%E9%87%8D%E8%A6%81%E5%90%97%E8%BF%99%E4%B8%AA%E8%AF%A5%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3-%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E4%B8%BE%E4%B8%80%E4%B8%AA%E6%AF%94%E8%BE%83%E6%9E%81%E7%AB%AF%E7%9A%84%E4%BE%8B%E5%AD%90%E6%9D%A5%E7%9C%8B%E6%B8%85%E8%B6%8B%E5%8A%BF-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%B1%82%E5%BF%BD%E7%95%A5%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%A4%A7%E5%A4%9A%E6%98%AF%E7%9F%A9%E9%98%B5%E5%BC%A0%E9%87%8F%E4%B9%8B%E9%97%B4%E7%9A%84%E4%B9%98%E6%B3%95%E5%8A%A0%E6%B3%95%E8%80%8C%E8%BF%99%E5%85%B6%E5%AE%9E%E5%92%8C%E5%8A%A0%E6%9D%83%E6%B1%82%E5%92%8C%E6%98%AF%E7%B1%BB%E4%BC%BC%E7%9A%84%E5%9B%A0%E6%AD%A4%E6%9D%A5%E5%81%87%E8%AE%BE%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E6%83%85%E5%86%B5%E5%81%87%E8%AE%BE%E7%8E%B0%E5%9C%A8%E6%9C%89%E4%B8%89%E4%B8%AA%E6%9D%83%E9%87%8D%E5%AE%83%E5%AF%B9%E5%BA%94%E4%BA%86%E4%B8%89%E4%B8%AA%E8%BE%93%E5%85%A5%E8%BF%99%E4%B8%AAneuron%E7%9A%84%E8%BE%93%E5%87%BA%E6%98%AF%E5%8A%A0%E6%9D%83%E6%B1%82%E5%92%8C%E4%B8%94%E4%B8%8D%E5%A6%A8%E5%81%87%E8%AE%BE%E7%8E%B0%E5%9C%A8%E7%9A%84%E6%95%88%E6%9E%9C%E5%B7%B2%E7%BB%8F%E8%B6%B3%E5%A4%9F%E5%A5%BD%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%89%AA%E6%9E%9D%E9%82%A3%E4%B9%88%E8%80%83%E8%99%91%E6%8A%8A%E5%93%AA%E4%B8%AA%E6%9D%83%E9%87%8D%E7%BD%AE%E4%B8%BA0%E8%83%BD%E5%B0%BD%E9%87%8F%E5%87%8F%E5%B0%8F%E5%AF%B9%E6%95%88%E6%9E%9C%E7%9A%84%E5%BD%B1%E5%93%8D%E4%BC%BC%E4%B9%8E%E5%BA%94%E8%AF%A5%E6%98%AF%E6%9C%80%E5%B0%8F%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%98%AF%E7%BB%9D%E5%AF%B9%E5%80%BC%E6%9C%80%E5%B0%8F%E7%9A%84%E9%82%A3%E4%B8%AA%E5%81%87%E8%AE%BE%E4%B8%89%E4%B8%AA%E6%9D%83%E9%87%8D%E5%80%BC%E4%BE%9D%E6%AC%A1%E6%98%AF10-80.001%E9%82%A3%E5%BE%88%E6%98%BE%E7%84%B60.001%E8%BF%99%E4%B8%AA%E6%9D%83%E9%87%8D%E5%B0%8F%E5%BE%88%E5%A4%9A%E5%AE%83%E4%B9%98%E4%BB%A5%E8%BE%93%E5%85%A5%E4%BB%A5%E5%90%8E%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E5%BD%B1%E5%93%8D%E5%BE%88%E5%8F%AF%E8%83%BD%E6%98%AF%E5%BE%88%E5%B0%8F%E7%9A%84%E5%8D%B3%E4%BD%BF%E6%8A%8A%E5%AE%83%E7%BD%AE%E4%B8%BA0%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E4%B9%9F%E5%B7%AE%E4%B8%8D%E5%A4%9A%E9%82%A3%E4%B9%88%E6%9C%80%E7%BB%88%E7%9A%84%E6%95%88%E6%9E%9C%E5%BA%94%E8%AF%A5%E4%B9%9F%E6%98%AF%E5%B7%AE%E4%B8%8D%E5%A4%9A%E7%9A%84%E6%89%80%E4%BB%A5%E6%8A%8A%E5%B0%8F%E7%9A%84%E6%9D%83%E9%87%8D%E5%80%BC%E7%BD%AE%E4%B8%BA0%E6%98%AF%E7%9B%B8%E5%AF%B9%E5%90%88%E7%90%86%E7%9A%84%E5%AE%83%E8%83%BD%E5%9C%A8%E4%B8%80%E5%AE%9A%E7%A8%8B%E5%BA%A6%E4%B8%8A%E5%87%8F%E5%B0%8F%E5%AF%B9%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E7%9A%84%E6%8D%9F%E5%AE%B3%E8%AF%B4%E5%88%B0%E5%BA%95%E6%88%91%E4%BB%AC%E8%BF%99%E9%87%8C%E7%9A%84pruning%E6%98%AF%E6%8A%8A%E5%80%BC%E7%BD%AE%E4%B8%BA0%E5%BD%93%E7%84%B6%E5%8E%9F%E6%9D%A5%E7%9A%84%E5%80%BC%E8%B6%8A%E6%8E%A5%E8%BF%910prune%E6%8E%89%E5%AE%83%E4%B9%8B%E5%90%8E%E7%9A%84%E5%BD%B1%E5%93%8D%E5%B0%B1%E8%B6%8A%E5%B0%8F"><span class="nav-number">3.1.</span> <span class="nav-text">虽然之前就接触过一点剪枝方面的知识，那个时候，只介绍了做法，一般是把权重比较小的地方置为0。但为什么是只关注小的，大的就不剪枝呢？也就是说大的权重值比较重要吗？这个该如何理解？我们可以举一个比较极端的例子，来看清趋势神经网络的层（忽略激活函数之类的），大多是矩阵、张量之间的乘法、加法。而这其实和加权求和是类似的。因此，来假设一个简单情况。假设现在有三个权重，它对应了三个输入。这个neuron的输出是加权求和。且不妨假设现在的效果已经足够好。如果我们需要进行剪枝，那么考虑把哪个权重置为0，能尽量减小对效果的影响？似乎应该是最小（具体来说是绝对值最小的）那个。假设三个权重值依次是10，-8，0.001，那很显然，0.001这个权重小很多，它乘以输入以后，对结果的影响很可能是很小的。即使把它置为0，输出结果也差不多，那么最终的效果应该也是差不多的。所以，把小的权重值置为0，是相对合理的，它能在一定程度上减小对输出结果的损害（说到底，我们这里的pruning是把值置为0，当然，原来的值越接近0，prune掉它之后的影响就越小）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E5%85%B7%E4%BD%93%E4%BB%8B%E7%BB%8D%E5%87%A0%E7%A7%8D%E5%89%AA%E6%9E%9D%E7%9A%84%E5%87%86%E5%88%99%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E8%A6%81%E7%9A%84"><span class="nav-number">3.2.</span> <span class="nav-text">下面具体介绍几种剪枝的准则（也就是如何判断什么是“重要的”）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#magnitude-based-pruning"><span class="nav-number">3.3.</span> <span class="nav-text">2.1. Magnitude-based Pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E6%98%AF%E4%B8%80%E7%A7%8D%E5%90%AF%E5%8F%91%E5%BC%8F%E7%AE%97%E6%B3%95%E5%90%AF%E5%8F%91%E7%9A%84%E6%80%9D%E6%83%B3%E7%B1%BB%E4%BC%BC%E4%BA%8E%E4%B8%8A%E9%9D%A2%E6%88%91%E4%BB%AC%E6%8F%90%E5%88%B0%E7%9A%84%E5%9C%A8%E5%8A%A0%E6%9D%83%E6%B1%82%E5%92%8C%E9%87%8C%E7%BB%9D%E5%AF%B9%E5%80%BC%E5%A4%A7%E7%9A%84%E6%9D%83%E9%87%8D%E4%B8%80%E8%88%AC%E8%80%8C%E8%A8%80%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E5%BD%B1%E5%93%8D%E6%9B%B4%E5%A4%A7%E6%89%80%E4%BB%A5%E8%A6%81%E5%89%AA%E6%9E%9D%E7%9A%84%E8%AF%9D%E4%BC%98%E5%85%88%E8%80%83%E8%99%91%E5%89%AA%E6%9E%9D%E6%8E%89%E7%BB%9D%E5%AF%B9%E5%80%BC%E5%B0%8F%E7%9A%84%E6%9D%83%E9%87%8D-%E4%BD%86%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E6%89%80%E8%B0%93%E7%BB%9D%E5%AF%B9%E5%80%BC%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF1%E8%8C%83%E6%95%B0%E9%82%A3%E5%88%B0%E5%BA%95%E5%93%AA%E4%B8%80%E7%A7%8D%E8%8C%83%E6%95%B0%E6%95%88%E6%9E%9C%E4%BC%9A%E6%9B%B4%E5%A5%BD%E5%91%A2%E8%BF%99%E4%B8%AA%E4%B8%8D%E5%A5%BD%E8%AF%B4%E4%BD%86%E6%98%AF%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E8%8C%83%E6%95%B0%E4%BD%9C%E4%B8%BA%E9%87%8D%E8%A6%81%E6%80%A7%E5%BA%A6%E9%87%8F%E5%B0%B1%E5%BC%95%E5%87%BA%E4%BA%86%E4%B8%8D%E5%90%8C%E7%9A%84%E5%89%AA%E6%9E%9D%E7%AE%97%E6%B3%95%E8%BF%99%E9%87%8C%E7%BB%99%E4%B8%80%E4%B8%AA%E7%94%A8l2%E8%8C%83%E6%95%B0%E4%BD%9C%E4%B8%BA%E5%BA%A6%E9%87%8F%E7%9A%84%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="nav-number">3.3.1.</span> <span class="nav-text">这是一种启发式算法。启发的思想类似于上面我们提到的，在加权求和里，绝对值大的权重，一般而言对结果的影响更大。所以要剪枝的话，优先考虑剪枝掉绝对值小的权重但可以发现，所谓绝对值，其实就是1范数。那到底哪一种范数效果会更好呢？这个不好说。但是使用不同的范数作为重要性度量，就引出了不同的剪枝算法。这里给一个用l2范数作为度量的示意图：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scaling-based-pruning"><span class="nav-number">3.4.</span> <span class="nav-text">2.2. Scaling-based Pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E7%9A%84%E5%89%AA%E6%9E%9D%E5%AE%83%E7%9D%80%E7%9C%BC%E4%BA%8Enorm%E5%B1%82%E9%87%8C%E5%AD%A6%E5%88%B0%E7%9A%84scaling-factor-gamma%E5%90%8C%E6%A0%B7%E7%9A%84%E5%A6%82%E6%9E%9C%E4%B8%80%E4%B8%AAchannel%E5%AF%B9%E5%BA%94%E7%9A%84scaling-factor%E5%BE%88%E5%B0%8F%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8A%E9%82%A3%E4%B9%88%E4%BC%98%E5%85%88%E8%80%83%E8%99%91%E5%89%AA%E6%9E%9D%E8%BF%99%E4%B8%AAchannel%E6%95%88%E6%9E%9C%E4%B8%8A%E7%B1%BB%E4%BC%BC%E4%BA%8E%E4%B8%8B%E5%9B%BE%E4%B8%94%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E6%88%91%E4%BB%AC%E5%89%AA%E6%9E%9D%E5%AE%8C%E4%B9%8B%E5%90%8E%E4%BF%9D%E7%95%99%E7%9A%84channel%E6%B2%BF%E7%94%A8%E4%BA%86%E4%B9%8B%E5%89%8D%E5%AE%83%E5%AF%B9%E5%BA%94%E7%9A%84scaling-factor"><span class="nav-number">3.4.1.</span> <span class="nav-text">这个的剪枝，它着眼于norm层里学到的scaling
+factor \(\gamma\)。同样的，如果一个channel对应的scaling
+factor很小（绝对值上），那么优先考虑剪枝这个channel。效果上类似于下图：且可以发现，我们剪枝完之后，保留的channel，沿用了之前它对应的scaling
+factor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#second-order-based-pruning"><span class="nav-number">3.5.</span> <span class="nav-text">2.3. Second-Order-based Pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E7%A7%8D%E5%89%AA%E6%9E%9D%E7%AE%97%E6%B3%95%E8%B5%B7%E6%BA%90%E4%BA%8E%E5%AF%B9%E8%AF%AF%E5%B7%AE%E7%9A%84%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80"><span class="nav-number">3.5.1.</span> <span class="nav-text">这种剪枝算法，起源于对误差的泰勒展开</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selection-of-neurons-to-prune"><span class="nav-number">3.6.</span> <span class="nav-text">2.4. Selection of Neurons to
+Prune</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E6%98%AF%E4%B8%80%E7%A7%8D%E7%A8%8D%E5%BE%AE%E4%B8%8D%E5%90%8C%E7%9A%84%E5%89%AA%E6%9E%9D%E8%A7%92%E5%BA%A6%E4%B9%8B%E5%89%8D%E6%88%91%E4%BB%AC%E9%83%BD%E6%98%AF%E4%BB%8E%E6%9D%83%E9%87%8D%E5%87%BA%E5%8F%91%E5%AF%B9%E6%9D%83%E9%87%8D%E7%9B%B4%E6%8E%A5%E8%BF%9B%E8%A1%8C%E5%89%AA%E6%9E%9D%E8%80%8C%E5%9B%9E%E9%A1%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BB%BF%E7%94%9F%E5%AD%A6%E8%B5%B7%E6%BA%90%E5%AE%83%E6%98%AF%E4%B8%BA%E4%BA%86%E6%A8%A1%E4%BB%BF%E4%BA%BA%E8%84%91%E9%87%8C%E7%9A%84%E8%AE%B8%E5%A4%9A%E7%A5%9E%E7%BB%8F%E5%85%83%E7%BB%84%E6%88%90%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%89%80%E4%BB%A5%E6%9D%83%E9%87%8D%E5%85%B6%E5%AE%9E%E6%98%AF%E7%A5%9E%E7%BB%8F%E5%85%83%E4%B9%8B%E9%97%B4%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%9D%83%E9%87%8D%E6%88%91%E4%BB%AC%E4%B8%8A%E9%9D%A2%E8%AE%A8%E8%AE%BA%E7%9A%84%E5%B0%B1%E6%98%AF%E5%AF%B9%E8%BF%99%E4%B8%AA%E8%BF%9E%E6%8E%A5%E6%9D%83%E9%87%8D%E7%9A%84%E5%89%AA%E6%9E%9D%E8%BF%99%E9%87%8C%E5%88%99%E6%98%AF%E8%80%83%E8%99%91%E7%9B%B4%E6%8E%A5%E6%8A%8A%E6%9F%90%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83%E7%BB%99%E5%89%AA%E6%9E%9D%E6%8E%89%E8%80%8C%E6%8A%8A%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83%E5%89%AA%E6%8E%89%E5%90%8E%E8%BF%9E%E6%8E%A5%E5%AE%83%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83%E9%87%8D%E6%98%BE%E7%84%B6%E4%B9%9F%E4%BC%9A%E8%A2%AB%E5%89%AA%E6%9E%9D%E6%8E%89%E6%89%80%E4%BB%A5%E4%BB%8E%E8%BF%99%E4%B8%AA%E8%A7%92%E5%BA%A6%E7%9C%8B%E5%89%AA%E6%9E%9D%E7%A5%9E%E7%BB%8F%E5%85%83%E6%98%AF%E7%9B%B8%E5%AF%B9%E7%B2%97%E7%B2%92%E5%BA%A6%E7%9A%84"><span class="nav-number">3.6.1.</span> <span class="nav-text">这里是一种稍微不同的剪枝角度。之前我们都是从权重出发，对权重直接进行剪枝。而回顾神经网络的仿生学起源，它是为了模仿人脑里的许多神经元组成的神经网络，所以权重其实是神经元之间连接的权重。我们上面讨论的就是对这个连接权重的剪枝。这里则是考虑直接把某个神经元给剪枝掉。而把一个神经元剪掉后，连接它的所有权重显然也会被剪枝掉。所以从这个角度看，剪枝神经元是相对粗粒度的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E8%BF%99%E9%87%8C%E4%BB%8B%E7%BB%8D%E4%BA%86%E4%B8%80%E7%A7%8D%E5%88%A4%E6%96%ADneuron%E9%87%8D%E8%A6%81%E6%80%A7%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E6%89%80%E8%B0%93percentage-of-zero%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF%E8%BF%99%E6%98%AF%E4%B8%80%E7%A7%8D%E9%9D%9E%E9%9D%99%E6%80%81%E7%9A%84%E6%96%B9%E6%B3%95%E5%9B%A0%E4%B8%BA%E5%AE%83%E9%9C%80%E8%A6%81%E5%AF%B9%E8%BE%93%E5%87%BA%E7%9A%84activations%E8%BF%9B%E8%A1%8C%E7%BB%9F%E8%AE%A1%E6%89%80%E4%BB%A5%E8%A6%81%E5%89%AA%E6%9E%9D%E5%B0%B1%E5%BF%85%E9%A1%BB%E5%BE%97%E8%BF%90%E8%A1%8C%E4%B8%80%E5%AE%9A%E7%9A%84%E6%A0%B7%E4%BE%8B%E8%80%8C%E4%B8%8A%E9%9D%A2%E7%9B%B4%E6%8E%A5%E5%89%AA%E6%9E%9D%E6%9D%83%E9%87%8D%E7%9A%84%E6%97%B6%E5%80%99%E5%A4%A7%E5%A4%9A%E7%94%A8%E7%9A%84%E6%98%AF%E9%9D%99%E6%80%81%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%AA%E9%9C%80%E8%A6%81%E5%AF%B9%E7%9D%80%E6%9D%83%E9%87%8D%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E5%B0%B1%E8%A1%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E8%BF%90%E8%A1%8C%E6%A0%B7%E4%BE%8B"><span class="nav-number">3.6.2.</span> <span class="nav-text">另外，这里介绍了一种判断neuron重要性的方法，是所谓percentage-of-zero。值得注意的是，这是一种非静态的方法，因为它需要对输出的activations进行统计，所以要剪枝就必须得运行一定的样例。而上面直接剪枝权重的时候，大多用的是静态的方法，只需要对着权重进行一些计算就行，不需要运行样例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regression-based-pruning"><span class="nav-number">3.7.</span> <span class="nav-text">2.5. Regression-based Pruning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E5%89%AA%E6%9E%9D%E7%9A%84%E6%96%B9%E6%B3%95%E5%87%BA%E5%8F%91%E7%82%B9%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E6%98%AF%E4%B8%BA%E4%BA%86%E9%81%BF%E5%85%8D%E5%86%8D%E8%B7%91%E7%AB%AF%E5%88%B0%E7%AB%AF%E7%9A%84fine-tune%E5%85%B7%E4%BD%93%E7%9A%84%E4%BC%A0%E7%BB%9F%E7%9A%84%E5%89%AA%E6%9E%9D%E6%88%91%E4%BB%AC%E5%89%AA%E6%9E%9D%E5%AE%8C%E4%B9%8B%E5%90%8E%E6%98%BE%E7%84%B6%E9%9C%80%E8%A6%81fine-tune%E4%B8%80%E4%B8%8B%E4%BB%A5%E5%85%8D%E6%80%A7%E8%83%BD%E6%8E%89%E5%A4%AA%E5%A4%9A%E4%BD%86%E5%A6%82%E6%9E%9C%E6%A8%A1%E5%9E%8B%E5%BE%88%E5%A4%A7%E5%BE%88%E5%A4%8D%E6%9D%82%E4%BE%8B%E5%A6%82%E7%8E%B0%E5%9C%A8%E7%9A%84llm%E6%88%91%E4%BB%ACfine-tune%E7%9A%84%E6%88%90%E6%9C%AC%E6%98%AF%E6%AF%94%E8%BE%83%E9%AB%98%E7%9A%84%E8%80%8Cregression-based-pruning%E5%AE%83%E5%88%99%E8%80%83%E8%99%91%E5%89%AA%E6%9E%9D%E4%B9%8B%E5%90%8E%E6%88%91%E4%BB%AC%E5%8E%BB%E6%8B%9F%E5%90%88%E5%8E%9F%E6%9D%A5%E7%9A%84%E8%BE%93%E5%87%BA%E4%BB%8E%E8%80%8C%E9%97%B4%E6%8E%A5%E8%BE%BE%E5%88%B0%E6%81%A2%E5%A4%8D%E6%80%A7%E8%83%BD%E7%9A%84%E6%95%88%E6%9E%9C%E5%8D%B4%E9%81%BF%E5%BC%80%E4%BA%86%E8%B7%91%E7%AB%AF%E5%88%B0%E7%AB%AF%E7%9A%84fine-tune"><span class="nav-number">3.7.1.</span> <span class="nav-text">这个剪枝的方法，出发点可以认为是为了避免再跑端到端的fine-tune。具体的，传统的剪枝，我们剪枝完之后显然需要fine-tune一下，以免性能掉太多。但如果模型很大、很复杂（例如现在的llm），我们fine-tune的成本是比较高的。而regression-based
+pruning，它则考虑，剪枝之后，我们去拟合原来的输出，从而间接达到恢复性能的效果，却避开了跑端到端的fine-tune</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#section"><span class="nav-number">3.7.1.1.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%8C%E5%85%B7%E4%BD%93%E5%88%B0%E5%A6%82%E4%BD%95%E6%93%8D%E4%BD%9C%E4%B8%8A%E8%BF%99%E9%87%8C%E6%98%AF%E4%B8%80%E5%A5%97%E8%BF%AD%E4%BB%A3%E7%9A%84%E6%80%9D%E8%B7%AF%E5%85%88%E8%B7%91%E4%B8%80%E6%AC%A1%E5%86%B3%E5%AE%9A%E5%89%AA%E6%9E%9D%E5%93%AA%E4%BA%9B%E9%83%A8%E5%88%86%E8%BF%99%E9%87%8C%E6%98%AF%E7%9B%B8%E5%AF%B9%E7%B2%97%E7%B2%92%E5%BA%A6%E7%9A%84%E7%8C%9C%E6%B5%8B%E6%98%AF%E4%B8%BA%E4%BA%86%E6%96%B9%E4%BE%BF%E6%93%8D%E4%BD%9C%E5%92%8C%E9%83%A8%E7%BD%B2%E5%90%A7%E7%84%B6%E5%90%8E%E5%AF%B9%E6%9D%83%E9%87%8D%E7%9F%A9%E9%98%B5%E8%BF%9B%E8%A1%8C%E5%BE%AE%E8%B0%83%E9%80%9A%E8%BF%87%E6%9C%80%E5%B0%8F%E5%8C%96reconstruction-error%E5%A6%82%E6%AD%A4%E8%BF%AD%E4%BB%A3%E4%B8%8A%E8%8B%A5%E5%B9%B2%E6%AC%A1"><span class="nav-number">3.7.2.</span> <span class="nav-text">而具体到如何操作上，这里是一套迭代的思路：先跑一次，决定剪枝哪些部分（这里是相对粗粒度的，猜测是为了方便操作和部署吧）；然后对权重矩阵进行微调（通过最小化reconstruction
+error）。如此迭代上若干次</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
