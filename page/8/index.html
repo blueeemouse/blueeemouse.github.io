@@ -150,6 +150,337 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/windows%E7%9A%84power%20shell%E7%BB%88%E7%AB%AF%E7%AA%81%E7%84%B6%E6%97%A0%E6%B3%95conda%20activate%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">windows的power shell终端突然无法conda activate环境</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-07 23:25:00 / Modified: 23:26:16" itemprop="dateCreated datePublished" datetime="2025-07-07T23:25:00+08:00">2025-07-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h2 id="先上结论首先检查一下环境变量里有没有中文的路径也就是看看用户变量以及系统变量里的path里有没有中文的有的话试试把它去掉可能就解决问题了不行的话可以再试试conda-clean--a之后再执行conda-activate">先上结论，首先检查一下环境变量里有没有中文的路径（也就是看看用户变量以及系统变量里的PATH里有没有中文的，有的话试试把它去掉，可能就解决问题了）；不行的话可以再试试<code>conda clean -a</code>，之后再执行conda
+activate</h2>
+<h2 id="问题就如标题所述这个其实有点久了但一直没管它此外似乎在桌面之类的其它地方打开power-shell再激活环境好像是可以的且在vscode里打开的话如果用cmd终端则也是可以正常conda激活环境的-而在power-shell里就会报错具体来说在vscode里打开终端然后选用power-shell的话一初始化就会报错大概就是会爆出一大堆环境变量里的路径类似">问题就如标题所述。这个其实有点久了，但一直没管它。此外，似乎在桌面之类的其它地方打开power
+shell，再激活环境，好像是可以的；且在vscode里打开的话，如果用cmd终端，则也是可以正常conda激活环境的<br>而在power
+shell里就会报错。具体来说，在vscode里打开终端，然后选用power
+shell的话，一初始化就会报错，大概就是会爆出一大堆环境变量里的路径，类似：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Develop\EasyEdit2_program\EasyEdit&gt; conda activate base C:\Users\lanhz\miniconda3\Lib\site-packages\conda\base\context.py:211: FutureWarning: Adding <span class="string">&#x27;defaults&#x27;</span> to channel list implicitly is deprecated and will be removed <span class="keyword">in</span> 25.9. To remove this warning, please choose a default channel explicitly with conda<span class="string">&#x27;s regular configuration system, e.g. by adding &#x27;</span>defaults<span class="string">&#x27; to the list of channels: conda config --add channels defaults For more information see [https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/use-condarc.html](https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/use-condarc.html) deprecated.topic( # &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ERROR REPORT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; Traceback (most recent call last): File &quot;C:\Users\lanhz\miniconda3\Lib\site-packages\conda\exception_handler.py&quot;, line 28, in __call__ return func(*args, **kwargs) ^^^^^^^^^^^^^^^^^^^^^ File &quot;C:\Users\lanhz\miniconda3\Lib\site-packages\conda\cli\main.py&quot;, line 87, in main_sourced print(activator.execute(), end=&quot;&quot;) UnicodeEncodeError: &#x27;</span>gbk<span class="string">&#x27; codec can&#x27;</span>t encode character <span class="string">&#x27;\ue189&#x27;</span> <span class="keyword">in</span> position 1582: illegal multibyte sequence `$ C:\Users\lanhz\miniconda3\Scripts\conda-script.py shell.powershell activate base` environment variables: CIO_TEST=&lt;not <span class="built_in">set</span>&gt; CLASSPATH=C:\LINGO12\Lingo12.jar CONDA_EXE=C:\Users\lanhz\miniconda3\Scripts\conda.exe CONDA_ROOT=C:\Users\lanhz\miniconda3 CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1 CURL_CA_BUNDLE=&lt;not <span class="built_in">set</span>&gt; FNM_MULTISHELL_PATH=C:\Users\lanhz\AppData\Local\fnm_multishells\50724_1751901324170 HOMEPATH=\Users\lanhz LD_PRELOAD=&lt;not <span class="built_in">set</span>&gt; MUJOCO_PY_MJKEY_PATH=C:\Users\lanhz\.mujoco\mjpro150\bin\mjkey.txt MUJOCO_PY_MJPRO_PATH=C:\Users\lanhz\.mujoco\mjpro150 PATH=C:\Users\lanhz\AppData\Local\fnm_multishells\50724_1751901324170;D:\VM ware\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\C UDA\v12.1\libnvvp;C:\Windows\system32;C:\Windows;C:\Windows\System32\W bem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\Op enSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA Nv DLISR;D:\spm_standalone_25.01.02_Windows\runtime_installer\R2024b\runt ime\win64;C:\Program Files\MATLAB\R2022b\bin;C:\Program Files\dotnet\; C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\Sys tem32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\LINGO12\ ;C:\Program Files\Git\cmd;D:\msys64\ucrt64\bin;D:\msys64\ucrt64\bin\gc c.exe;D:\bin;D:\cmake\bin;C:\Program Files (x86)\ZeroTier\One\;C:\Users\lanhz\miniconda3;C:\Program Files\NVIDIA Corporation\Nsight Compute 2023.1.0\;;C:\Users\lanhz\AppData\Local\Te mp\cuda\bin;D:\tex_live\texlive\2024\bin\windows;d:\cursor\cursor\reso urces\app\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem; C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSS H\;C:\Users\lanhz\.mujoco\mjpro150\bin;C:\Users\lanhz\.mujoco\mjpro150 ;C:\Users\lanhz\.mujoco;D:\璇剧▼璧勬枡涓庤搴EEG-exp\瀹為獙鍏璡label2surface\IsoSu rface;D:\ffmpeg-2025-06-26-git-09cd38e9d5-full_build\bin;;C:\Program F iles\Docker\Docker\resources\bin;D:\putty\;C:\Users\lanhz\AppData\Loca l\Programs\Python\Python311\Scripts\;C:\Users\lanhz\AppData\Local\Prog rams\Python\Python311\;C:\Users\lanhz\AppData\Local\Microsoft\WindowsA pps;C:\Users\lanhz\.dotnet\tools;C:\Program Files\JetBrains\PyCharm Community Edition 2023.1\bin;C:\Program Files\JetBrains\PyCharm 2023.2\bin;D:\Develop\vscode\Microsoft VS Code\bin;C:\Users\lanhz\Desk top\modelsim\win32;C:\Users\lanhz\AppData\Local\Programs\Ollama;D:\tex _live\texlive\2024\bin\windows;C:\Users\lanhz\AppData\Local\Microsoft\ WinGet\Packages\Schniz.fnm_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\Us ers\lanhz\AppData\Local\Pandoc\;D:\cursor\cursor\resources\app\bin;C:\ Users\lanhz\.mujoco\mjpro150\bin;C:\Users\lanhz\.mujoco\mjpro150;C:\Us ers\lanhz\.mujoco;C:\Users\lanhz\AppData\Roaming\Python\Scripts;D:\璇剧▼ 璧勬枡涓庤搴EEG-exp\瀹為獙鍏璡label2surface\IsoSurface;D:\ffmpeg-2025-06-26- git-09cd38e9d5-full_build\bin; PSMODULEPATH=C:\Users\lanhz\Documents\WindowsPowerShell\Modules;C:\Program Files\Wi ndowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Mod ules REQUESTS_CA_BUNDLE=&lt;not <span class="built_in">set</span>&gt; SSL_CERT_FILE=&lt;not <span class="built_in">set</span>&gt; active environment : None user config file : C:\Users\lanhz\.condarc populated config files : C:\Users\lanhz\.condarc conda version : 25.5.1 conda-build version : not installed python version : 3.11.4.final.0 solver : libmamba (default) virtual packages : __archspec=1=skylake __conda=25.5.1=0 __cuda=12.7=0 __win=10.0.26100=0 base environment : C:\Users\lanhz\miniconda3 (writable) conda av data <span class="built_in">dir</span> : C:\Users\lanhz\miniconda3\etc\conda conda av metadata url : None channel URLs : [https://repo.anaconda.com/pkgs/main/win-64](https://repo.anaconda.com/pkgs/main/win-64) [https://repo.anaconda.com/pkgs/main/noarch](https://repo.anaconda.com/pkgs/main/noarch) [https://repo.anaconda.com/pkgs/r/win-64](https://repo.anaconda.com/pkgs/r/win-64) [https://repo.anaconda.com/pkgs/r/noarch](https://repo.anaconda.com/pkgs/r/noarch) [https://repo.anaconda.com/pkgs/msys2/win-64](https://repo.anaconda.com/pkgs/msys2/win-64) [https://repo.anaconda.com/pkgs/msys2/noarch](https://repo.anaconda.com/pkgs/msys2/noarch) package cache : C:\Users\lanhz\miniconda3\pkgs C:\Users\lanhz\.conda\pkgs C:\Users\lanhz\AppData\Local\conda\conda\pkgs envs directories : C:\Users\lanhz\miniconda3\envs C:\Users\lanhz\.conda\envs C:\Users\lanhz\AppData\Local\conda\conda\envs platform : win-64 user-agent : conda/25.5.1 requests/2.32.3 CPython/3.11.4 Windows/10 Windows/10.0.26100 solver/libmamba conda-libmamba-solver/25.4.0 libmambapy/2.0.5 administrator : False netrc file : None offline mode : False An unexpected error has occurred. Conda has prepared the above report. If you suspect this error is being caused by a malfunctioning plugin, consider using the --no-plugins option to turn off plugins. Example: conda --no-plugins install &lt;package&gt; Alternatively, you can <span class="built_in">set</span> the CONDA_NO_PLUGINS environment variable on the <span class="built_in">command</span> line to run the <span class="built_in">command</span> without plugins enabled. Example: CONDA_NO_PLUGINS=<span class="literal">true</span> conda install &lt;package&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="最后是">最后是</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. No report sent. To permanently opt-out, use $ conda config --<span class="built_in">set</span> report_errors <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2 id="这一段如果看一下它上面爆出的路径会发现里面有几个中文的路径还有类似乱码的路径我之前确实有添加过中文的环境变量本来以为是这个问题尝试在环境变量里把这些中文的都去掉正好也是不用了结果还是不行而且设置完环境变量关掉终端再打开还是会报一样的错且路径里还是有中文的这个很奇怪但不知道是不是因为环境变量设置以后需要重启才能生效">这一段。如果看一下它上面爆出的路径，会发现里面有几个中文的路径，还有类似乱码的路径（我之前确实有添加过中文的环境变量），本来以为是这个问题，尝试在环境变量里把这些中文的都去掉（正好也是不用了），结果还是不行。而且设置完环境变量，关掉终端再打开，还是会报一样的错，且路径里还是有中文的。这个很奇怪，但不知道是不是因为环境变量设置以后需要重启才能生效）</h2>
+<h2 id="问ai之后尝试了conda-init-powershell也尝试了">问ai，之后尝试了conda
+init powershell，也尝试了</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除Conda的缓存目录 </span></span><br><span class="line">Remove-Item -Path <span class="variable">$env</span>:CONDA_ROOT\pkgs -Recurse -Force </span><br><span class="line">Remove-Item -Path <span class="variable">$env</span>:LOCALAPPDATA\conda -Recurse -Force</span><br></pre></td></tr></table></figure>
+<h2 id="依然无效">依然无效</h2>
+<h2 id="尝试查看终端的配置文件即执行notepad-profile打开来看这个文件里也挺正常的啊">尝试查看终端的配置文件，即执行<code>notepad $PROFILE</code>，打开来看，这个文件里也挺正常的啊</h2>
+<h2 id="之后想起来之前是vscode里power-shell终端不能用conda激活环境cmd终端是可以的而在cmd终端打印一下它里面的环境变量发现是有中文的路径的这样看中文路径不应该是报错的原因啊">之后想起来，之前是vscode里power
+shell终端不能用conda激活环境，cmd终端是可以的；而在cmd终端打印一下它里面的环境变量，发现是有中文的路径的。这样看，中文路径不应该是报错的原因啊？</h2>
+<h2 id="考虑到可能是乱码相关的因为爆出的路径里是有中文乱码的不知道是不是编码方式需要改但尝试了改成用utf-8执行chcp-65001在power-shell里临时设置编码方式也还是报之前的错">考虑到可能是乱码相关的（因为爆出的路径里是有中文乱码的），不知道是不是编码方式需要改，但尝试了改成用utf-8，执行<code>#chcp 65001</code>，在power
+shell里临时设置编码方式，也还是报之前的错</h2>
+<h2 id="上网查了一下似乎github上有人挂出过类似的issue其中评论区里有人说可能是conda版本太低之类的故尝试了conda-update-conda完了再尝试激活conda环境依然报错不过报的错变了前面依然是爆一大堆路径最后的则变成了">上网查了一下，似乎GitHub上有人挂出过类似的issue，其中评论区里有人说可能是conda版本太低之类的。故尝试了conda
+update
+conda，完了再尝试激活conda环境，依然报错，不过报的错变了。前面依然是爆一大堆路径，最后的则变成了：</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">An unexpected error has occurred. Conda has prepared the above report. If you suspect this error is being caused by a malfunctioning plugin, consider using the --no-plugins option to turn off plugins. Example: conda --no-plugins install &lt;package&gt; Alternatively, you can <span class="built_in">set</span> the CONDA_NO_PLUGINS environment variable on the <span class="built_in">command</span> line to run the <span class="built_in">command</span> without plugins enabled. Example: CONDA_NO_PLUGINS=<span class="literal">true</span> conda install &lt;package&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="报错变了头很大本来之前的就没搞明白试着搜了一下这个报错发现github上还是有人给出issue且最后close掉了注意到评论区里有个人提出执行conda-clean--a就解决了不抱希望地尝试了一下竟然好了有点莫名其妙啊">报错变了，头很大……本来之前的就没搞明白……试着搜了一下这个报错，发现GitHub上还是有人给出issue，且最后close掉了；注意到评论区里有个人提出执行<code>conda clean -a</code>就解决了，不抱希望地尝试了一下，竟然好了…………有点莫名其妙啊？</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/" class="post-title-link" itemprop="url">用FlashAttn的时候遇到RuntimeError：cutlassF：no kernel found to launch</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-07 00:21:00" itemprop="dateCreated datePublished" datetime="2025-07-07T00:21:00+08:00">2025-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-08 10:00:12" itemprop="dateModified" datetime="2025-07-08T10:00:12+08:00">2025-07-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/dl/" itemprop="url" rel="index"><span itemprop="name">dl</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="如题但这里有个问题是我现在遇到这个问题只是因为项目里用到了flashattn但我目前的需求仅仅是跑通代码而非追求性能所以可以考虑在代码里加入以下两行">如题。但这里有个问题是，我现在遇到这个问题，只是因为项目里用到了FlashAttn，但我目前的需求仅仅是跑通代码，而非追求性能。所以可以考虑在代码里加入以下两行：</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.backends.cuda.enable_mem_efficient_sdp(<span class="literal">False</span>) torch.backends.cuda.enable_flash_sdp(<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="经过实操确实可以解决问题但这样应该也把flashattn给取消掉了有点治标不治本查了一下似乎可能和torch版本有关系但按理来说应该不会有这个问题的因为是按照项目的requirements来配置环境的">经过实操，确实可以解决问题。但这样应该也把FlashAttn给取消掉了，有点治标不治本。查了一下似乎可能和torch版本有关系，但按理来说应该不会有这个问题的，因为是按照项目的requirements来配置环境的……</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%94%A8FlashAttn%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0RuntimeError%EF%BC%9AcutlassF%EF%BC%9Ano%20kernel%20found%20to%20launch/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/" class="post-title-link" itemprop="url">服务器上运行jupyter notebook</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-06 09:45:00 / Modified: 09:59:48" itemprop="dateCreated datePublished" datetime="2025-07-06T09:45:00+08:00">2025-07-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="需求就是标题之所以要用jupyter-notebook来跑主要是它好调试但可能本地卡不行所以需要用服务器来跑-正常来说服务器上应该跑不了jupyter-notebook因为上面没有相关插件尤其是如果还是租的服务器那更不方便装插件所以只能想象其它方法如果是组里的服务器可能稍微好一点说不定已经有人配置好了">需求就是标题。之所以要用jupyter
+notebook来跑，主要是它好调试。但可能本地卡不行，所以需要用服务器来跑<br>正常来说，服务器上应该跑不了jupyter
+notebook，因为上面没有相关插件。尤其是，如果还是租的服务器，那更不方便装插件，所以只能想象其它方法（如果是组里的服务器，可能稍微好一点，说不定已经有人配置好了）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/06/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E8%BF%90%E8%A1%8Cjupyter%20notebook/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/venv%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/venv%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">venv简介</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-03 00:56:00 / Modified: 00:58:09" itemprop="dateCreated datePublished" datetime="2025-07-03T00:56:00+08:00">2025-07-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="简单介绍一下这个venv实习期间的项目用到了之前python的虚拟环境都是用的conda来管理的这次因为懒得装conda就用了venv使用下来感觉venv其实很适合仅用于一个项目环境的配置主要它直接是一个文件夹里面放了所有的库给人很直观很简单的感觉">简单介绍一下这个venv。实习期间的项目用到了。之前python的虚拟环境都是用的conda来管理的。这次因为懒得装conda，就用了venv。使用下来，感觉venv其实很适合仅用于一个项目环境的配置，主要它直接是一个文件夹，里面放了所有的库，给人很直观很简单的感觉</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/venv%E7%AE%80%E4%BB%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/01/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%85%8D%E7%8E%AF%E5%A2%83%E7%9A%84%E4%B8%80%E4%BA%9Btips&%E5%9D%91%EF%BC%88%E9%95%BF%E6%9C%9F%E7%BB%B4%E6%8A%A4%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -686,360 +1017,6 @@ prediction（left-to-right/right-to-left）（虽然现在这俩任务好像已�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/28/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E6%94%BE%E7%BD%AE%E6%88%BF%E5%AD%90%E7%9A%84%E6%96%B9%E5%BC%8F%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/06/28/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E6%94%BE%E7%BD%AE%E6%88%BF%E5%AD%90%E7%9A%84%E6%96%B9%E5%BC%8F%E6%95%B0/" class="post-title-link" itemprop="url">统计放置房子的方式数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-06-28 10:42:00 / Modified: 11:21:04" itemprop="dateCreated datePublished" datetime="2025-06-28T10:42:00+08:00">2025-06-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">打家劫舍类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/count-number-of-ways-to-place-houses/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/06/28/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E6%94%BE%E7%BD%AE%E6%88%BF%E5%AD%90%E7%9A%84%E6%96%B9%E5%BC%8F%E6%95%B0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E2%85%A1/" class="post-title-link" itemprop="url">打家劫舍Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-06-27 17:57:00" itemprop="dateCreated datePublished" datetime="2025-06-27T17:57:00+08:00">2025-06-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-28 09:47:29" itemprop="dateModified" datetime="2025-06-28T09:47:29+08:00">2025-06-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">打家劫舍类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber-ii/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E2%85%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/" class="post-title-link" itemprop="url">打家劫舍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-06-27 12:01:00 / Modified: 17:01:52" itemprop="dateCreated datePublished" datetime="2025-06-27T12:01:00+08:00">2025-06-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">打家劫舍类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/06/27/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D%E7%B1%BB/%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/06/24/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E7%88%AC%E6%A5%BC%E6%A2%AF%E7%B1%BB/%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/06/24/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E7%88%AC%E6%A5%BC%E6%A2%AF%E7%B1%BB/%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/" class="post-title-link" itemprop="url">使用最小花费爬楼梯</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-06-24 13:18:00 / Modified: 13:37:13" itemprop="dateCreated datePublished" datetime="2025-06-24T13:18:00+08:00">2025-06-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E7%88%AC%E6%A5%BC%E6%A2%AF%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">爬楼梯类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/min-cost-climbing-stairs/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/06/24/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E7%88%AC%E6%A5%BC%E6%A2%AF%E7%B1%BB/%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1109,14 +1086,14 @@ prediction（left-to-right/right-to-left）（虽然现在这俩任务好像已�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-count">230</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">73</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

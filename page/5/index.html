@@ -150,6 +150,382 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/" class="post-title-link" itemprop="url">Divide-Then-Align：Honest Alignment based on the Knowledge Boundary of RAG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-22 13:52:00" itemprop="dateCreated datePublished" datetime="2025-08-22T13:52:00+08:00">2025-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-24 15:30:08" itemprop="dateModified" datetime="2025-08-24T15:30:08+08:00">2025-08-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueacl-25">Venue：ACL 25</h1>
+<h1 id="date2025-07">date：2025-07</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="llm有了rag支持后能回答的问题范围确实更大了但也依然存在一些问题即使有rag检索到的内容也回答不上来也就是这个问题超出了llm权重里的知识范围同时还超出了检索到的外部知识的范围这个时候llm理应回答不知道而不是强行回答一些幻觉内容这限制了llm在高风险对准确率要求极高的场景下的应用比如经典的医疗法律和金融-但是现有方法如retrieval-augmented-fine-tuning-raft它会强制模型作出回答因此就有可能出现上面提到的模型不懂装懂的问题">llm有了rag支持后，能回答的问题范围确实更大了。但也依然存在一些问题，即使有rag检索到的内容，也回答不上来（也就是这个问题超出了llm权重里的知识范围，同时还超出了检索到的外部知识的范围）。这个时候，llm理应回答“不知道”，而不是强行回答一些幻觉内容（这限制了llm在高风险、对准确率要求极高的场景下的应用，比如经典的医疗、法律和金融）<br>但是现有方法，如Retrieval-Augmented
+Fine-Tuning
+（RAFT），它会强制模型作出回答。因此就有可能出现上面提到的，模型不懂装懂的问题</h2>
+<h2 id="这篇论文就是想解决这个问题">这篇论文就是想解决这个问题</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="论文把它研究的问题llm不懂装懂处理成一个偏好问题或者说认为这是现有方法的一个特点因此考虑从后训练入手利用rl具体来说是dpo加上专门构造的数据集这个构造四象限的数据集还蛮有意思让llm懂得要在不懂的时候说出自己不懂">论文把它研究的问题（llm不懂装懂）处理成一个偏好问题，或者说认为这是现有方法的一个特点？因此考虑从后训练入手，利用rl（具体来说是DPO）加上专门构造的数据集（这个构造四象限的数据集，还蛮有意思），让llm懂得，要在不懂的时候说出自己不懂</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="发现了现有的raft类的方法的共性问题会让模型不懂装懂强行回答">发现了现有的RAFT类的方法的共性问题：会让模型不懂装懂，强行回答</h2>
+<h2 id="创新性地提出了把数据按照是否处在模型知识范围以及外部知识范围划分到四个象限算是提出了一个新的构建偏好数据集的方法">创新性地提出了把数据按照是否处在模型知识范围以及外部知识范围，划分到四个象限（算是提出了一个新的构建偏好数据集的方法）</h2>
+<h2 id="提出了一套后训练的方法合适地把rl引入通过dpo算法利用构造的偏好数据集让模型学会在正确的时机放弃回答减少了幻觉">提出了一套后训练的方法，合适地把rl引入，通过DPO算法，利用构造的偏好数据集，让模型学会在正确的时机放弃回答，减少了幻觉</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/22/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/" class="post-title-link" itemprop="url">和为目标值的最长子序列的长度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-19 23:09:00 / Modified: 23:44:20" itemprop="dateCreated datePublished" datetime="2025-08-19T23:09:00+08:00">2025-08-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/length-of-the-longest-subsequence-that-sums-to-target/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/" class="post-title-link" itemprop="url">目标和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-19 18:02:00 / Modified: 18:10:29" itemprop="dateCreated datePublished" datetime="2025-08-19T18:02:00+08:00">2025-08-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/target-sum/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Interleaving%20Retrieval%20with%20Chain-of-Thought%20Reasoning%20for%20Knowledge-Intensive%20Multi-Step%20Questions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Interleaving%20Retrieval%20with%20Chain-of-Thought%20Reasoning%20for%20Knowledge-Intensive%20Multi-Step%20Questions/" class="post-title-link" itemprop="url">Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-19 01:21:00" itemprop="dateCreated datePublished" datetime="2025-08-19T01:21:00+08:00">2025-08-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:55:14" itemprop="dateModified" datetime="2025-09-24T15:55:14+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Venue：ACL-23"><a href="#Venue：ACL-23" class="headerlink" title="Venue：ACL 23"></a>Venue：ACL 23</h1><h1 id="date：2023-06-23"><a href="#date：2023-06-23" class="headerlink" title="date：2023-06-23"></a>date：2023-06-23</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h1 id="insight："><a href="#insight：" class="headerlink" title="insight："></a>insight：</h1><h1 id="contribution："><a href="#contribution：" class="headerlink" title="contribution："></a>contribution：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Interleaving%20Retrieval%20with%20Chain-of-Thought%20Reasoning%20for%20Knowledge-Intensive%20Multi-Step%20Questions/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -704,373 +1080,6 @@ encoder以及一个passage encoder）是可以迁移的</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/" class="post-title-link" itemprop="url">不同路径 Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-08-04 23:35:00 / Modified: 23:41:17" itemprop="dateCreated datePublished" datetime="2025-08-04T23:35:00+08:00">2025-08-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths-ii/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">不同路径</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-08-04 23:23:00 / Modified: 23:40:36" itemprop="dateCreated datePublished" datetime="2025-08-04T23:23:00+08:00">2025-08-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/FRAG%EF%BC%9AA%20Flexible%20Modular%20Framework%20for%20Retrieval-Augmented%20Generation%20based%20on%20Knowledge%20Graphs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/FRAG%EF%BC%9AA%20Flexible%20Modular%20Framework%20for%20Retrieval-Augmented%20Generation%20based%20on%20Knowledge%20Graphs/" class="post-title-link" itemprop="url">FRAG：A Flexible Modular Framework for Retrieval-Augmented Generation based on Knowledge Graphs</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-03 11:21:00" itemprop="dateCreated datePublished" datetime="2025-08-03T11:21:00+08:00">2025-08-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-08 10:14:21" itemprop="dateModified" datetime="2025-09-08T10:14:21+08:00">2025-09-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/" itemprop="url" rel="index"><span itemprop="name">GraphRAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuearxiv">Venue：arxiv</h1>
-<h1 id="date2025-01-22">date：2025-01-22</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="基于知识图谱的rag是一种常用的缓解llm幻觉和知识匮乏的问题的手段但是现有的kg-rag的方法有一个问题就是灵活性和检索质量之间通常需要进行权衡论文提出的frag就是想在这两个方面都做得比较好">基于知识图谱的RAG是一种常用的，缓解llm幻觉和知识匮乏的问题的手段。但是，现有的KG-RAG的方法有一个问题，就是灵活性和检索质量之间通常需要进行权衡。论文提出的FRAG就是想在这两个方面都做得比较好</h2>
-<h4 id="现有的kg-rag方法主要有两类一类是modular-methods它的主要特点是简单不会用kg对llm进行微调因此使用更加方便但通常是用固定的策略来检索所以检索的质量一般不高">现有的KG-RAG方法主要有两类，一类是modular
-methods，它的主要特点是简单，不会用KG对llm进行微调，因此使用更加方便。但通常是用固定的策略来检索，所以检索的质量一般不高</h4>
-<h4 id="另一类是coupled-methods也就是耦合的方法它需要用kg对llm进行微调从而让llm学到kg里的关系但因为需要微调所以很麻烦加上用一个kg微调完之后如果换了一个kg又需要重新微调就更加麻烦了">另一类是coupled
-methods，也就是耦合的方法，它需要用KG对llm进行微调，从而让llm学到KG里的关系。但因为需要微调，所以很麻烦；加上用一个KG微调完之后，如果换了一个KG，又需要重新微调，就更加麻烦了</h4>
-<h1 id="insight">insight：</h1>
-<h1 id="contribution">contribution：</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/GraphRAG/FRAG%EF%BC%9AA%20Flexible%20Modular%20Framework%20for%20Retrieval-Augmented%20Generation%20based%20on%20Knowledge%20Graphs/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/21/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/21/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">最长递增子序列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-21 22:34:00 / Modified: 22:52:02" itemprop="dateCreated datePublished" datetime="2025-07-21T22:34:00+08:00">2025-07-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/" itemprop="url" rel="index"><span itemprop="name">经典线性DP</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">最长递增子序列类</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-increasing-subsequence/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/21/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1140,14 +1149,14 @@ methods，也就是耦合的方法，它需要用KG对llm进行微调，从而�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-count">230</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">73</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

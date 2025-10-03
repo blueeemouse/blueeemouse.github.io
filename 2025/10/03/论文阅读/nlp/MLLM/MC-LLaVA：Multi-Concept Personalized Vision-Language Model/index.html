@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：arxiv date：2025-03-26 动机： 论文关注的任务是multi-concept personalization，是要让模型理解并记忆用户自定义的特定概念，由此作出回答的任务。（例如，给两幅图片，一幅是关于某个任务的简介，可能包括了这个人的名字；另一幅图里就包含了这个人，用户可能就会问到另一幅图里这个人在干什么。我们希望模型回答的时候能回答名字，而不是说“那个人”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MC-LLaVA：Multi-Concept Personalized Vision-Language Model">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/10/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MC-LLaVA%EF%BC%9AMulti-Concept%20Personalized%20Vision-Language%20Model/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：arxiv date：2025-03-26 动机： 论文关注的任务是multi-concept personalization，是要让模型理解并记忆用户自定义的特定概念，由此作出回答的任务。（例如，给两幅图片，一幅是关于某个任务的简介，可能包括了这个人的名字；另一幅图里就包含了这个人，用户可能就会问到另一幅图里这个人在干什么。我们希望模型回答的时候能回答名字，而不是说“那个人”">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-03T13:22:00.000Z">
+<meta property="article:modified_time" content="2025-10-03T15:59:29.804Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/10/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MC-LLaVA%EF%BC%9AMulti-Concept%20Personalized%20Vision-Language%20Model/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>MC-LLaVA：Multi-Concept Personalized Vision-Language Model | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MC-LLaVA%EF%BC%9AMulti-Concept%20Personalized%20Vision-Language%20Model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MC-LLaVA：Multi-Concept Personalized Vision-Language Model
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-10-03 21:22:00 / Modified: 23:59:29" itemprop="dateCreated datePublished" datetime="2025-10-03T21:22:00+08:00">2025-10-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/MLLM/" itemprop="url" rel="index"><span itemprop="name">MLLM</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/MLLM/personalized-VLMs/" itemprop="url" rel="index"><span itemprop="name">personalized VLMs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-03-26">date：2025-03-26</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="论文关注的任务是multi-concept-personalization是要让模型理解并记忆用户自定义的特定概念由此作出回答的任务例如给两幅图片一幅是关于某个任务的简介可能包括了这个人的名字另一幅图里就包含了这个人用户可能就会问到另一幅图里这个人在干什么我们希望模型回答的时候能回答名字而不是说那个人">论文关注的任务是multi-concept
+personalization，是要让模型理解并记忆用户自定义的特定概念，由此作出回答的任务。（例如，给两幅图片，一幅是关于某个任务的简介，可能包括了这个人的名字；另一幅图里就包含了这个人，用户可能就会问到另一幅图里这个人在干什么。我们希望模型回答的时候能回答名字，而不是说“那个人”）</h2>
+<h2 id="论文创新的点也是现有研究缺乏的点就是大多研究聚焦于single-concept-personalization但是忽略了multi-concept-personalization一次让模型学习多个概念">论文创新的点，也是现有研究缺乏的点，就是：大多研究聚焦于single-concept
+personalization，但是忽略了multi-concept
+personalization（一次让模型学习多个概念）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="指令微调真的很强大感觉论文最主要的部分应该就是收集数据进行指令微调我估计光是这样下来就已经效果不错了至于后面的personalized-textual-prompt以及visual-prompt有点复杂而且有点像在找补提高性能有可能收集数据才是最麻烦的">指令微调，真的很强大……感觉论文最主要的部分应该就是收集数据，进行指令微调。我估计光是这样下来就已经效果不错了。至于后面的personalized
+textual prompt以及visual
+prompt，有点复杂，而且有点像在找补，提高性能（有可能收集数据才是最麻烦的）</h2>
+<h2 id="另外不同领域的指令微调可能区别以及贡献都在于设计相应的合适的微调任务以及指令微调感觉上还是比较能scaling的">另外，不同领域的指令微调，可能区别（以及贡献）都在于设计相应的合适的微调任务。以及，指令微调，感觉上还是比较能scaling的</h2>
+<h2 id="不过personalized-vlms这个领域到底有没有意义呢它并不是在扩展模型的能力边界好像不够exciting可是未来如果vlm这些模型继续发展能做到人手一个模型的话是不是需要落实到个性化这个方面呢">不过，personalized
+VLMs，这个领域到底有没有意义呢……它并不是在扩展模型的能力边界，好像不够exciting；可是未来如果vlm这些模型继续发展，能做到人手一个模型的话，是不是需要落实到个性化这个方面呢？</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出一套训练策略用于提高模型的multi-concept-personalization能力">提出一套训练策略，用于提高模型的multi-concept
+personalization能力</h2>
+<h2 id="提出一套关于multi-concept-personalization的数据集">提出一套关于multi-concept
+personalization的数据集</h2>
+<span id="more"></span>
+<h1 id="简介">简介：</h1>
+<h2 id="论文方法主要是三部分第一部分是一个multi-concept-instruction-tuning个人理解是一个基础让模型拥有了初步的multi-concept-personalization的能力后面是一个personalized-textual-prompt以及personalized-visual-prompt它们应该是为了提高模型对new-concept的感知和特征提取吧">论文方法主要是三部分。第一部分是一个multi-concept
+instruction tuning（个人理解是一个基础，让模型拥有了初步的multi-concept
+personalization的能力）。后面是一个personalized textual
+prompt以及personalized visual prompt（它们应该是为了提高模型对new
+concept的感知和特征提取吧）</h2>
+<h2 id="关于论文的multi-concept-instruction-tuning策略得先讲讲论文里的数据输入形式针对-m-个待学习的概念如abc每个概念提供-n-张代表性图像如-10-张a的不同场景照片构建-图像---问题---答案i-xq-xa形式的训练样本-这里主要设计了几个任务positive-recognitionconversation-tasks以及新提出的joint-recognition-task第一个是说给定一个图像包含concept-a提问a是否在里面第二个是说给定一个图像里面包含了多个concept然后提问各个concept之间的交互第三个则是给定一个关于concept-a的图像提问concept-b是否在里面通过着三种任务让模型能掌握正向识别反向识别以及concept之间的交互">关于论文的multi-concept
+instruction tuning策略，得先讲讲论文里的数据输入形式：针对 m
+个待学习的概念（如⟨A⟩、⟨B⟩、⟨C⟩），每个概念提供 n 张代表性图像（如 10
+张⟨A⟩的不同场景照片），构建 “图像 - 问题 - 答案”（I, Xq,
+Xa）形式的训练样本<br>这里主要设计了几个任务：positive
+recognition，conversation tasks，以及新提出的joint recognition
+task。第一个是说，给定一个图像包含concept
+A，提问A是否在里面；第二个是说给定一个图像，里面包含了多个concept，然后提问各个concept之间的交互；第三个则是，给定一个关于concept
+A的图像，提问concept
+B是否在里面。通过着三种任务，让模型能掌握正向识别、反向识别以及concept之间的交互</h2>
+<h2 id="personalized-textual-prompt它是事先规定了一套模板然后我们要得到对每个concept的k1个token的描述包括一个身份标识的token以及k个特征描述token并把这些token放到模板里得到一个sys-prompt也即这里的personalized-textual-prompt这套prompt最终会拼到用户问题的前面相当于模型从concept及其图像中提取出了一些信息-prompt里的textual-token都是需要学习的但如果都是随机初始化经实验发现这样收敛会很慢所以论文提出了一个新的初始化的策略具体是利用输入的concept的图像提取特征作为这些token的初始值">personalized
+textual
+prompt，它是事先规定了一套模板，然后我们要得到对每个concept的k+1个token的描述（包括一个身份标识的token，以及k个特征描述token），并把这些token放到模板里，得到一个sys
+prompt，也即这里的personalized textual
+prompt。（这套prompt最终会拼到用户问题的前面，相当于模型从concept及其图像中提取出了一些信息）<br>prompt里的textual
+token都是需要学习的。但如果都是随机初始化，经实验发现，这样收敛会很慢，所以论文提出了一个新的初始化的策略。具体是利用输入的concept的图像，提取特征，作为这些token的初始值</h2>
+<h3 id="大致上先对这些图像切patch提取特征向量然后为了消除背景的noise考虑利用grounded-sam获取主要人物物体的掩码并由此筛选出重要patch的向量最后利用经过筛选的这些向量它们表征了主要对象的特征进行k-means聚类得到的k个聚类中心就当作是k个特征描述token的初始值而那个身份标识的token则初始化为那k个token的均值直觉上是有点道理的或者说这是一个非常朴素的思路不过实验上应该证明了是有效的">大致上，先对这些图像，切patch提取特征向量；然后为了消除背景的noise，考虑利用Grounded-SAM获取主要人物/物体的掩码，并由此筛选出重要patch的向量。最后，利用经过筛选的这些向量（它们表征了主要对象的特征），进行k-means聚类，得到的k个聚类中心就当作是k个特征描述token的初始值，而那个身份标识的token，则初始化为那k个token的均值（直觉上是有点道理的。或者说这是一个非常朴素的思路。不过实验上应该证明了是有效的）</h3>
+<h2 id="最后的personalized-visual-prompt也是为了帮助模型更好理解新概念仅依靠前面的textual-prompt主要包含了语义信息可能丢失了一些视觉信息所以这里打算提取一些视觉特征作为visual-prompt主要是指空间信息至于如何得到这里的大体逻辑和上面是类似的也是通过一些方法提取特征最后放到指定的模板里得到visual-prompt">最后的personalized
+visual prompt，也是为了帮助模型更好理解新概念。仅依靠前面的textual
+prompt（主要包含了语义信息），可能丢失了一些视觉信息。所以这里打算提取一些视觉特征作为visual
+prompt（主要是指空间信息）。至于如何得到，这里的大体逻辑和上面是类似的，也是通过一些方法提取特征，最后放到指定的模板里，得到visual
+prompt</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%A4%9A%E6%A8%A1%E6%80%81GraphRAG%E7%9B%B8%E5%85%B3paper%E8%B0%83%E7%A0%94/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venuearxiv"><span class="nav-number">1.</span> <span class="nav-text">Venue：arxiv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2025-03-26"><span class="nav-number">2.</span> <span class="nav-text">date：2025-03-26</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E5%85%B3%E6%B3%A8%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%98%AFmulti-concept-personalization%E6%98%AF%E8%A6%81%E8%AE%A9%E6%A8%A1%E5%9E%8B%E7%90%86%E8%A7%A3%E5%B9%B6%E8%AE%B0%E5%BF%86%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E7%89%B9%E5%AE%9A%E6%A6%82%E5%BF%B5%E7%94%B1%E6%AD%A4%E4%BD%9C%E5%87%BA%E5%9B%9E%E7%AD%94%E7%9A%84%E4%BB%BB%E5%8A%A1%E4%BE%8B%E5%A6%82%E7%BB%99%E4%B8%A4%E5%B9%85%E5%9B%BE%E7%89%87%E4%B8%80%E5%B9%85%E6%98%AF%E5%85%B3%E4%BA%8E%E6%9F%90%E4%B8%AA%E4%BB%BB%E5%8A%A1%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%AF%E8%83%BD%E5%8C%85%E6%8B%AC%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BA%BA%E7%9A%84%E5%90%8D%E5%AD%97%E5%8F%A6%E4%B8%80%E5%B9%85%E5%9B%BE%E9%87%8C%E5%B0%B1%E5%8C%85%E5%90%AB%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BA%BA%E7%94%A8%E6%88%B7%E5%8F%AF%E8%83%BD%E5%B0%B1%E4%BC%9A%E9%97%AE%E5%88%B0%E5%8F%A6%E4%B8%80%E5%B9%85%E5%9B%BE%E9%87%8C%E8%BF%99%E4%B8%AA%E4%BA%BA%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E6%A8%A1%E5%9E%8B%E5%9B%9E%E7%AD%94%E7%9A%84%E6%97%B6%E5%80%99%E8%83%BD%E5%9B%9E%E7%AD%94%E5%90%8D%E5%AD%97%E8%80%8C%E4%B8%8D%E6%98%AF%E8%AF%B4%E9%82%A3%E4%B8%AA%E4%BA%BA"><span class="nav-number">3.1.</span> <span class="nav-text">论文关注的任务是multi-concept
+personalization，是要让模型理解并记忆用户自定义的特定概念，由此作出回答的任务。（例如，给两幅图片，一幅是关于某个任务的简介，可能包括了这个人的名字；另一幅图里就包含了这个人，用户可能就会问到另一幅图里这个人在干什么。我们希望模型回答的时候能回答名字，而不是说“那个人”）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E5%88%9B%E6%96%B0%E7%9A%84%E7%82%B9%E4%B9%9F%E6%98%AF%E7%8E%B0%E6%9C%89%E7%A0%94%E7%A9%B6%E7%BC%BA%E4%B9%8F%E7%9A%84%E7%82%B9%E5%B0%B1%E6%98%AF%E5%A4%A7%E5%A4%9A%E7%A0%94%E7%A9%B6%E8%81%9A%E7%84%A6%E4%BA%8Esingle-concept-personalization%E4%BD%86%E6%98%AF%E5%BF%BD%E7%95%A5%E4%BA%86multi-concept-personalization%E4%B8%80%E6%AC%A1%E8%AE%A9%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0%E5%A4%9A%E4%B8%AA%E6%A6%82%E5%BF%B5"><span class="nav-number">3.2.</span> <span class="nav-text">论文创新的点，也是现有研究缺乏的点，就是：大多研究聚焦于single-concept
+personalization，但是忽略了multi-concept
+personalization（一次让模型学习多个概念）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83%E7%9C%9F%E7%9A%84%E5%BE%88%E5%BC%BA%E5%A4%A7%E6%84%9F%E8%A7%89%E8%AE%BA%E6%96%87%E6%9C%80%E4%B8%BB%E8%A6%81%E7%9A%84%E9%83%A8%E5%88%86%E5%BA%94%E8%AF%A5%E5%B0%B1%E6%98%AF%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83%E6%88%91%E4%BC%B0%E8%AE%A1%E5%85%89%E6%98%AF%E8%BF%99%E6%A0%B7%E4%B8%8B%E6%9D%A5%E5%B0%B1%E5%B7%B2%E7%BB%8F%E6%95%88%E6%9E%9C%E4%B8%8D%E9%94%99%E4%BA%86%E8%87%B3%E4%BA%8E%E5%90%8E%E9%9D%A2%E7%9A%84personalized-textual-prompt%E4%BB%A5%E5%8F%8Avisual-prompt%E6%9C%89%E7%82%B9%E5%A4%8D%E6%9D%82%E8%80%8C%E4%B8%94%E6%9C%89%E7%82%B9%E5%83%8F%E5%9C%A8%E6%89%BE%E8%A1%A5%E6%8F%90%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%89%E5%8F%AF%E8%83%BD%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E6%89%8D%E6%98%AF%E6%9C%80%E9%BA%BB%E7%83%A6%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">指令微调，真的很强大……感觉论文最主要的部分应该就是收集数据，进行指令微调。我估计光是这样下来就已经效果不错了。至于后面的personalized
+textual prompt以及visual
+prompt，有点复杂，而且有点像在找补，提高性能（有可能收集数据才是最麻烦的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E4%B8%8D%E5%90%8C%E9%A2%86%E5%9F%9F%E7%9A%84%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83%E5%8F%AF%E8%83%BD%E5%8C%BA%E5%88%AB%E4%BB%A5%E5%8F%8A%E8%B4%A1%E7%8C%AE%E9%83%BD%E5%9C%A8%E4%BA%8E%E8%AE%BE%E8%AE%A1%E7%9B%B8%E5%BA%94%E7%9A%84%E5%90%88%E9%80%82%E7%9A%84%E5%BE%AE%E8%B0%83%E4%BB%BB%E5%8A%A1%E4%BB%A5%E5%8F%8A%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83%E6%84%9F%E8%A7%89%E4%B8%8A%E8%BF%98%E6%98%AF%E6%AF%94%E8%BE%83%E8%83%BDscaling%E7%9A%84"><span class="nav-number">4.2.</span> <span class="nav-text">另外，不同领域的指令微调，可能区别（以及贡献）都在于设计相应的合适的微调任务。以及，指令微调，感觉上还是比较能scaling的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%BF%87personalized-vlms%E8%BF%99%E4%B8%AA%E9%A2%86%E5%9F%9F%E5%88%B0%E5%BA%95%E6%9C%89%E6%B2%A1%E6%9C%89%E6%84%8F%E4%B9%89%E5%91%A2%E5%AE%83%E5%B9%B6%E4%B8%8D%E6%98%AF%E5%9C%A8%E6%89%A9%E5%B1%95%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%83%BD%E5%8A%9B%E8%BE%B9%E7%95%8C%E5%A5%BD%E5%83%8F%E4%B8%8D%E5%A4%9Fexciting%E5%8F%AF%E6%98%AF%E6%9C%AA%E6%9D%A5%E5%A6%82%E6%9E%9Cvlm%E8%BF%99%E4%BA%9B%E6%A8%A1%E5%9E%8B%E7%BB%A7%E7%BB%AD%E5%8F%91%E5%B1%95%E8%83%BD%E5%81%9A%E5%88%B0%E4%BA%BA%E6%89%8B%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%9D%E6%98%AF%E4%B8%8D%E6%98%AF%E9%9C%80%E8%A6%81%E8%90%BD%E5%AE%9E%E5%88%B0%E4%B8%AA%E6%80%A7%E5%8C%96%E8%BF%99%E4%B8%AA%E6%96%B9%E9%9D%A2%E5%91%A2"><span class="nav-number">4.3.</span> <span class="nav-text">不过，personalized
+VLMs，这个领域到底有没有意义呢……它并不是在扩展模型的能力边界，好像不够exciting；可是未来如果vlm这些模型继续发展，能做到人手一个模型的话，是不是需要落实到个性化这个方面呢？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%B8%80%E5%A5%97%E8%AE%AD%E7%BB%83%E7%AD%96%E7%95%A5%E7%94%A8%E4%BA%8E%E6%8F%90%E9%AB%98%E6%A8%A1%E5%9E%8B%E7%9A%84multi-concept-personalization%E8%83%BD%E5%8A%9B"><span class="nav-number">5.1.</span> <span class="nav-text">提出一套训练策略，用于提高模型的multi-concept
+personalization能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%B8%80%E5%A5%97%E5%85%B3%E4%BA%8Emulti-concept-personalization%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">5.2.</span> <span class="nav-text">提出一套关于multi-concept
+personalization的数据集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">6.</span> <span class="nav-text">简介：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E6%96%B9%E6%B3%95%E4%B8%BB%E8%A6%81%E6%98%AF%E4%B8%89%E9%83%A8%E5%88%86%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E6%98%AF%E4%B8%80%E4%B8%AAmulti-concept-instruction-tuning%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3%E6%98%AF%E4%B8%80%E4%B8%AA%E5%9F%BA%E7%A1%80%E8%AE%A9%E6%A8%A1%E5%9E%8B%E6%8B%A5%E6%9C%89%E4%BA%86%E5%88%9D%E6%AD%A5%E7%9A%84multi-concept-personalization%E7%9A%84%E8%83%BD%E5%8A%9B%E5%90%8E%E9%9D%A2%E6%98%AF%E4%B8%80%E4%B8%AApersonalized-textual-prompt%E4%BB%A5%E5%8F%8Apersonalized-visual-prompt%E5%AE%83%E4%BB%AC%E5%BA%94%E8%AF%A5%E6%98%AF%E4%B8%BA%E4%BA%86%E6%8F%90%E9%AB%98%E6%A8%A1%E5%9E%8B%E5%AF%B9new-concept%E7%9A%84%E6%84%9F%E7%9F%A5%E5%92%8C%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E5%90%A7"><span class="nav-number">6.1.</span> <span class="nav-text">论文方法主要是三部分。第一部分是一个multi-concept
+instruction tuning（个人理解是一个基础，让模型拥有了初步的multi-concept
+personalization的能力）。后面是一个personalized textual
+prompt以及personalized visual prompt（它们应该是为了提高模型对new
+concept的感知和特征提取吧）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%AE%BA%E6%96%87%E7%9A%84multi-concept-instruction-tuning%E7%AD%96%E7%95%A5%E5%BE%97%E5%85%88%E8%AE%B2%E8%AE%B2%E8%AE%BA%E6%96%87%E9%87%8C%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BE%93%E5%85%A5%E5%BD%A2%E5%BC%8F%E9%92%88%E5%AF%B9-m-%E4%B8%AA%E5%BE%85%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A6%82%E5%BF%B5%E5%A6%82abc%E6%AF%8F%E4%B8%AA%E6%A6%82%E5%BF%B5%E6%8F%90%E4%BE%9B-n-%E5%BC%A0%E4%BB%A3%E8%A1%A8%E6%80%A7%E5%9B%BE%E5%83%8F%E5%A6%82-10-%E5%BC%A0a%E7%9A%84%E4%B8%8D%E5%90%8C%E5%9C%BA%E6%99%AF%E7%85%A7%E7%89%87%E6%9E%84%E5%BB%BA-%E5%9B%BE%E5%83%8F---%E9%97%AE%E9%A2%98---%E7%AD%94%E6%A1%88i-xq-xa%E5%BD%A2%E5%BC%8F%E7%9A%84%E8%AE%AD%E7%BB%83%E6%A0%B7%E6%9C%AC-%E8%BF%99%E9%87%8C%E4%B8%BB%E8%A6%81%E8%AE%BE%E8%AE%A1%E4%BA%86%E5%87%A0%E4%B8%AA%E4%BB%BB%E5%8A%A1positive-recognitionconversation-tasks%E4%BB%A5%E5%8F%8A%E6%96%B0%E6%8F%90%E5%87%BA%E7%9A%84joint-recognition-task%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%98%AF%E8%AF%B4%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%9B%BE%E5%83%8F%E5%8C%85%E5%90%ABconcept-a%E6%8F%90%E9%97%AEa%E6%98%AF%E5%90%A6%E5%9C%A8%E9%87%8C%E9%9D%A2%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%98%AF%E8%AF%B4%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%9B%BE%E5%83%8F%E9%87%8C%E9%9D%A2%E5%8C%85%E5%90%AB%E4%BA%86%E5%A4%9A%E4%B8%AAconcept%E7%84%B6%E5%90%8E%E6%8F%90%E9%97%AE%E5%90%84%E4%B8%AAconcept%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E4%BA%92%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%88%99%E6%98%AF%E7%BB%99%E5%AE%9A%E4%B8%80%E4%B8%AA%E5%85%B3%E4%BA%8Econcept-a%E7%9A%84%E5%9B%BE%E5%83%8F%E6%8F%90%E9%97%AEconcept-b%E6%98%AF%E5%90%A6%E5%9C%A8%E9%87%8C%E9%9D%A2%E9%80%9A%E8%BF%87%E7%9D%80%E4%B8%89%E7%A7%8D%E4%BB%BB%E5%8A%A1%E8%AE%A9%E6%A8%A1%E5%9E%8B%E8%83%BD%E6%8E%8C%E6%8F%A1%E6%AD%A3%E5%90%91%E8%AF%86%E5%88%AB%E5%8F%8D%E5%90%91%E8%AF%86%E5%88%AB%E4%BB%A5%E5%8F%8Aconcept%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="nav-number">6.2.</span> <span class="nav-text">关于论文的multi-concept
+instruction tuning策略，得先讲讲论文里的数据输入形式：针对 m
+个待学习的概念（如⟨A⟩、⟨B⟩、⟨C⟩），每个概念提供 n 张代表性图像（如 10
+张⟨A⟩的不同场景照片），构建 “图像 - 问题 - 答案”（I, Xq,
+Xa）形式的训练样本这里主要设计了几个任务：positive
+recognition，conversation tasks，以及新提出的joint recognition
+task。第一个是说，给定一个图像包含concept
+A，提问A是否在里面；第二个是说给定一个图像，里面包含了多个concept，然后提问各个concept之间的交互；第三个则是，给定一个关于concept
+A的图像，提问concept
+B是否在里面。通过着三种任务，让模型能掌握正向识别、反向识别以及concept之间的交互</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#personalized-textual-prompt%E5%AE%83%E6%98%AF%E4%BA%8B%E5%85%88%E8%A7%84%E5%AE%9A%E4%BA%86%E4%B8%80%E5%A5%97%E6%A8%A1%E6%9D%BF%E7%84%B6%E5%90%8E%E6%88%91%E4%BB%AC%E8%A6%81%E5%BE%97%E5%88%B0%E5%AF%B9%E6%AF%8F%E4%B8%AAconcept%E7%9A%84k1%E4%B8%AAtoken%E7%9A%84%E6%8F%8F%E8%BF%B0%E5%8C%85%E6%8B%AC%E4%B8%80%E4%B8%AA%E8%BA%AB%E4%BB%BD%E6%A0%87%E8%AF%86%E7%9A%84token%E4%BB%A5%E5%8F%8Ak%E4%B8%AA%E7%89%B9%E5%BE%81%E6%8F%8F%E8%BF%B0token%E5%B9%B6%E6%8A%8A%E8%BF%99%E4%BA%9Btoken%E6%94%BE%E5%88%B0%E6%A8%A1%E6%9D%BF%E9%87%8C%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AAsys-prompt%E4%B9%9F%E5%8D%B3%E8%BF%99%E9%87%8C%E7%9A%84personalized-textual-prompt%E8%BF%99%E5%A5%97prompt%E6%9C%80%E7%BB%88%E4%BC%9A%E6%8B%BC%E5%88%B0%E7%94%A8%E6%88%B7%E9%97%AE%E9%A2%98%E7%9A%84%E5%89%8D%E9%9D%A2%E7%9B%B8%E5%BD%93%E4%BA%8E%E6%A8%A1%E5%9E%8B%E4%BB%8Econcept%E5%8F%8A%E5%85%B6%E5%9B%BE%E5%83%8F%E4%B8%AD%E6%8F%90%E5%8F%96%E5%87%BA%E4%BA%86%E4%B8%80%E4%BA%9B%E4%BF%A1%E6%81%AF-prompt%E9%87%8C%E7%9A%84textual-token%E9%83%BD%E6%98%AF%E9%9C%80%E8%A6%81%E5%AD%A6%E4%B9%A0%E7%9A%84%E4%BD%86%E5%A6%82%E6%9E%9C%E9%83%BD%E6%98%AF%E9%9A%8F%E6%9C%BA%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BB%8F%E5%AE%9E%E9%AA%8C%E5%8F%91%E7%8E%B0%E8%BF%99%E6%A0%B7%E6%94%B6%E6%95%9B%E4%BC%9A%E5%BE%88%E6%85%A2%E6%89%80%E4%BB%A5%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E7%AD%96%E7%95%A5%E5%85%B7%E4%BD%93%E6%98%AF%E5%88%A9%E7%94%A8%E8%BE%93%E5%85%A5%E7%9A%84concept%E7%9A%84%E5%9B%BE%E5%83%8F%E6%8F%90%E5%8F%96%E7%89%B9%E5%BE%81%E4%BD%9C%E4%B8%BA%E8%BF%99%E4%BA%9Btoken%E7%9A%84%E5%88%9D%E5%A7%8B%E5%80%BC"><span class="nav-number">6.3.</span> <span class="nav-text">personalized
+textual
+prompt，它是事先规定了一套模板，然后我们要得到对每个concept的k+1个token的描述（包括一个身份标识的token，以及k个特征描述token），并把这些token放到模板里，得到一个sys
+prompt，也即这里的personalized textual
+prompt。（这套prompt最终会拼到用户问题的前面，相当于模型从concept及其图像中提取出了一些信息）prompt里的textual
+token都是需要学习的。但如果都是随机初始化，经实验发现，这样收敛会很慢，所以论文提出了一个新的初始化的策略。具体是利用输入的concept的图像，提取特征，作为这些token的初始值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%87%B4%E4%B8%8A%E5%85%88%E5%AF%B9%E8%BF%99%E4%BA%9B%E5%9B%BE%E5%83%8F%E5%88%87patch%E6%8F%90%E5%8F%96%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E7%84%B6%E5%90%8E%E4%B8%BA%E4%BA%86%E6%B6%88%E9%99%A4%E8%83%8C%E6%99%AF%E7%9A%84noise%E8%80%83%E8%99%91%E5%88%A9%E7%94%A8grounded-sam%E8%8E%B7%E5%8F%96%E4%B8%BB%E8%A6%81%E4%BA%BA%E7%89%A9%E7%89%A9%E4%BD%93%E7%9A%84%E6%8E%A9%E7%A0%81%E5%B9%B6%E7%94%B1%E6%AD%A4%E7%AD%9B%E9%80%89%E5%87%BA%E9%87%8D%E8%A6%81patch%E7%9A%84%E5%90%91%E9%87%8F%E6%9C%80%E5%90%8E%E5%88%A9%E7%94%A8%E7%BB%8F%E8%BF%87%E7%AD%9B%E9%80%89%E7%9A%84%E8%BF%99%E4%BA%9B%E5%90%91%E9%87%8F%E5%AE%83%E4%BB%AC%E8%A1%A8%E5%BE%81%E4%BA%86%E4%B8%BB%E8%A6%81%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%89%B9%E5%BE%81%E8%BF%9B%E8%A1%8Ck-means%E8%81%9A%E7%B1%BB%E5%BE%97%E5%88%B0%E7%9A%84k%E4%B8%AA%E8%81%9A%E7%B1%BB%E4%B8%AD%E5%BF%83%E5%B0%B1%E5%BD%93%E4%BD%9C%E6%98%AFk%E4%B8%AA%E7%89%B9%E5%BE%81%E6%8F%8F%E8%BF%B0token%E7%9A%84%E5%88%9D%E5%A7%8B%E5%80%BC%E8%80%8C%E9%82%A3%E4%B8%AA%E8%BA%AB%E4%BB%BD%E6%A0%87%E8%AF%86%E7%9A%84token%E5%88%99%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BA%E9%82%A3k%E4%B8%AAtoken%E7%9A%84%E5%9D%87%E5%80%BC%E7%9B%B4%E8%A7%89%E4%B8%8A%E6%98%AF%E6%9C%89%E7%82%B9%E9%81%93%E7%90%86%E7%9A%84%E6%88%96%E8%80%85%E8%AF%B4%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E6%9C%B4%E7%B4%A0%E7%9A%84%E6%80%9D%E8%B7%AF%E4%B8%8D%E8%BF%87%E5%AE%9E%E9%AA%8C%E4%B8%8A%E5%BA%94%E8%AF%A5%E8%AF%81%E6%98%8E%E4%BA%86%E6%98%AF%E6%9C%89%E6%95%88%E7%9A%84"><span class="nav-number">6.3.1.</span> <span class="nav-text">大致上，先对这些图像，切patch提取特征向量；然后为了消除背景的noise，考虑利用Grounded-SAM获取主要人物&#x2F;物体的掩码，并由此筛选出重要patch的向量。最后，利用经过筛选的这些向量（它们表征了主要对象的特征），进行k-means聚类，得到的k个聚类中心就当作是k个特征描述token的初始值，而那个身份标识的token，则初始化为那k个token的均值（直觉上是有点道理的。或者说这是一个非常朴素的思路。不过实验上应该证明了是有效的）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E7%9A%84personalized-visual-prompt%E4%B9%9F%E6%98%AF%E4%B8%BA%E4%BA%86%E5%B8%AE%E5%8A%A9%E6%A8%A1%E5%9E%8B%E6%9B%B4%E5%A5%BD%E7%90%86%E8%A7%A3%E6%96%B0%E6%A6%82%E5%BF%B5%E4%BB%85%E4%BE%9D%E9%9D%A0%E5%89%8D%E9%9D%A2%E7%9A%84textual-prompt%E4%B8%BB%E8%A6%81%E5%8C%85%E5%90%AB%E4%BA%86%E8%AF%AD%E4%B9%89%E4%BF%A1%E6%81%AF%E5%8F%AF%E8%83%BD%E4%B8%A2%E5%A4%B1%E4%BA%86%E4%B8%80%E4%BA%9B%E8%A7%86%E8%A7%89%E4%BF%A1%E6%81%AF%E6%89%80%E4%BB%A5%E8%BF%99%E9%87%8C%E6%89%93%E7%AE%97%E6%8F%90%E5%8F%96%E4%B8%80%E4%BA%9B%E8%A7%86%E8%A7%89%E7%89%B9%E5%BE%81%E4%BD%9C%E4%B8%BAvisual-prompt%E4%B8%BB%E8%A6%81%E6%98%AF%E6%8C%87%E7%A9%BA%E9%97%B4%E4%BF%A1%E6%81%AF%E8%87%B3%E4%BA%8E%E5%A6%82%E4%BD%95%E5%BE%97%E5%88%B0%E8%BF%99%E9%87%8C%E7%9A%84%E5%A4%A7%E4%BD%93%E9%80%BB%E8%BE%91%E5%92%8C%E4%B8%8A%E9%9D%A2%E6%98%AF%E7%B1%BB%E4%BC%BC%E7%9A%84%E4%B9%9F%E6%98%AF%E9%80%9A%E8%BF%87%E4%B8%80%E4%BA%9B%E6%96%B9%E6%B3%95%E6%8F%90%E5%8F%96%E7%89%B9%E5%BE%81%E6%9C%80%E5%90%8E%E6%94%BE%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E6%A8%A1%E6%9D%BF%E9%87%8C%E5%BE%97%E5%88%B0visual-prompt"><span class="nav-number">6.4.</span> <span class="nav-text">最后的personalized
+visual prompt，也是为了帮助模型更好理解新概念。仅依靠前面的textual
+prompt（主要包含了语义信息），可能丢失了一些视觉信息。所以这里打算提取一些视觉特征作为visual
+prompt（主要是指空间信息）。至于如何得到，这里的大体逻辑和上面是类似的，也是通过一些方法提取特征，最后放到指定的模板里，得到visual
+prompt</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">230</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue： date： 动机： 多数方法忽视 prompt 的 KV 缓存压缩，仅关注generated token的KV cache compression。但其实prompt有可能远比generated token要长（比如输入文档的情况下，进行文档QA） insight： 论文通过实验发现，对于input seq tokens，是存在一个consistent attent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SnapKV：LLM Knows What You Are Looking for before Generation">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/SnapKV%EF%BC%9ALLM%20Knows%20What%20You%20Are%20Looking%20for%20before%20Generation/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue： date： 动机： 多数方法忽视 prompt 的 KV 缓存压缩，仅关注generated token的KV cache compression。但其实prompt有可能远比generated token要长（比如输入文档的情况下，进行文档QA） insight： 论文通过实验发现，对于input seq tokens，是存在一个consistent attent">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-29T06:31:00.000Z">
+<meta property="article:modified_time" content="2025-09-29T10:42:47.799Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/SnapKV%EF%BC%9ALLM%20Knows%20What%20You%20Are%20Looking%20for%20before%20Generation/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>SnapKV：LLM Knows What You Are Looking for before Generation | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/SnapKV%EF%BC%9ALLM%20Knows%20What%20You%20Are%20Looking%20for%20before%20Generation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SnapKV：LLM Knows What You Are Looking for before Generation
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-29 14:31:00 / Modified: 18:42:47" itemprop="dateCreated datePublished" datetime="2025-09-29T14:31:00+08:00">2025-09-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv-cache</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venue">Venue：</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="多数方法忽视-prompt-的-kv-缓存压缩仅关注generated-token的kv-cache-compression但其实prompt有可能远比generated-token要长比如输入文档的情况下进行文档qa">多数方法<strong>忽视
+prompt 的 KV 缓存压缩</strong>，仅关注generated token的KV cache
+compression。但其实prompt有可能远比generated
+token要长（比如输入文档的情况下，进行文档QA）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="论文通过实验发现对于input-seq-tokens是存在一个consistent-attention-allocation-pattern的这为kv-cache-compression提供了可能因为consistent确保了保留下来的kv-cache会尽可能的有用不会说关键token一直在变化那样的话可能我们生成每个token都需要依赖不同的关键token那某个token的kv-cache一旦被剔除后面生成可能又要用到了">论文通过实验发现，对于input
+seq tokens，是存在一个consistent attention allocation pattern的。这为kv
+cache compression提供了可能。因为，consistent确保了保留下来的kv
+cache会尽可能的有用；不会说关键token一直在变化（那样的话，可能我们生成每个token都需要依赖不同的关键token，那某个token的kv
+cache一旦被剔除，后面生成可能又要用到了）</h2>
+<h2 id="另外在生成之前事先知道这个attention-allocation-pattern是可行的这也很重要因为这个性质我们才能在生成前知道要保留哪些prompt-token的kv-cache">另外，在生成之前，事先知道这个attention
+allocation
+pattern，是可行的。这也很重要，因为这个性质，我们才能在生成前知道要保留哪些prompt
+token的kv cache</h2>
+<h1 id="contribution">contribution：</h1>
+<span id="more"></span>
+<h1 id="需要注意我们说head-wise-adaptive-allocation是指每个head的kv-cache-budget不一样而一般的kv-cache-compression它们是每个head的budget都是一样的但是每个head保留哪个token的kv-cache这是不一定的">需要注意，我们说head-wise
+adaptive allocation，是指每个head的kv cache budget不一样。而一般的kv
+cache
+compression，它们是每个head的budget都是一样的，但是每个head保留哪个token的kv
+cache，这是不一定的</h1>
+<h2 id="一研究的问题">一、研究的问题</h2>
+<p>大语言模型（LLMs）在处理长上下文时，面临<strong>KV
+缓存效率低下</strong>的关键问题，具体表现为两方面：</p>
+<ol type="1">
+<li><strong>时间效率低</strong>：推理阶段，随着输入 prompt
+长度增加，注意力计算需遍历所有历史 KV 对，导致每步解码延迟随 prompt
+长度线性增长。</li>
+<li><strong>内存开销大</strong>：长上下文对应的 KV
+缓存占用大量内存，提升硬件需求，限制模型在长序列场景（如多轮对话、长文档分析、代码库理解）的可扩展性。</li>
+</ol>
+<p>在实际应用中，prompt（如多轮对话、长文章）往往远长于生成的响应（如摘要、代码片段），KV
+缓存的低效问题更为突出，且需在压缩 prompt 的 KV
+缓存时避免丢失关键信息，以保证生成准确性。</p>
+<h2 id="二现有方法的不足">二、现有方法的不足</h2>
+<p>现有 KV 缓存压缩方法（如
+StreamLLM、H2O、FastGen、ScissorHands）未能有效解决长上下文场景的核心痛点，具体不足如下：</p>
+<ol type="1">
+<li><strong>忽视 prompt 的 KV
+缓存压缩</strong>：多数方法仅关注解码阶段新增 KV 的压缩，而忽略了 prompt
+的 KV 缓存压缩 —— 这是实际场景中内存效率的主要瓶颈（prompt
+通常远长于生成内容）。</li>
+<li><strong>长上下文场景评估缺失</strong>：现有方法缺乏在长上下文设置下的详细评估，难以验证其在超长序列（如
+10K+ tokens）中的有效性。</li>
+<li><strong>静态压缩策略局限</strong>：依赖固定权重或静态策略（如
+StreamLLM 保留最近 token 和 “注意力
+sink”），无法适应不同指令下动态变化的重要注意力特征，易丢失中间关键
+token 信息，导致生成质量下降（如 ScissorHands 仅关注生成阶段的关键
+token，忽略 prompt 中的核心信息）。</li>
+<li><strong>信息完整性受损</strong>：部分方法仅筛选高注意力权重的孤立
+token，破坏上下文完整性（如仅保留电话号码的国家码，导致模型 “幻觉”
+出剩余数字）。</li>
+</ol>
+<h2 id="三论文提出的方法snapkv如何解决问题">三、论文提出的方法（SnapKV）如何解决问题</h2>
+<p>SnapKV
+基于两大核心观察（“生成前可识别注意力模式”“生成中注意力模式一致”），通过<strong>无微调、上下文感知的
+KV 缓存压缩策略</strong>解决问题，核心流程如下：</p>
+<h3 id="关键术语定义">1. 关键术语定义</h3>
+<ul>
+<li><strong>Prompt 长度（(<span class="math inline">\(L_{prompt}\)</span>)）</strong>：用户输入总长度，分为前缀（(<span class="math inline">\(L_{prefix}\)</span>)，prompt
+主体）和观察窗口（<span class="math inline">\((L_{obs}\)</span>)，prompt
+末尾片段），满足(<span class="math inline">\(L_{prompt}=L_{prefix}+L_{obs}\)</span>)。</li>
+<li><strong>观察窗口（(<span class="math inline">\(L_{obs}\)</span>)）</strong>：prompt
+末尾的固定长度片段，用于捕捉对生成至关重要的注意力模式（实验验证其与生成阶段的注意力模式高度一致）。</li>
+</ul>
+<h3 id="两阶段压缩流程">2. 两阶段压缩流程</h3>
+<h4 id="投票筛选关键前缀特征">（1）投票筛选关键前缀特征</h4>
+<p>通过观察窗口的查询（Query）与前缀的键（Key）计算注意力权重，按以下步骤筛选关键
+KV 位置：</p>
+<ol type="1">
+<li>计算观察窗口内所有查询对前缀键的注意力权重（(W_{obs} ^{N × L_{obs} ×
+L_{prefix}})，N 为注意力头数量）；</li>
+<li>对权重沿查询维度求和（(C=<em>{i=0}^{L</em>{obs }} W_{obs }[:,
+i,:])），得到前缀各位置的重要性得分；</li>
+<li>按压缩率 p 选择前 k 个关键位置（(k=(1-p) ×
+L_{prefix})），即(I=Top_{k}(C,k))。</li>
+</ol>
+<h4 id="聚类保留上下文完整性">（2）聚类保留上下文完整性</h4>
+<p>通过 1D
+池化（如最大池化、平均池化）对筛选出的关键位置进行聚类，保留关键位置周围的关联
+token，避免孤立筛选导致的信息断裂（如池化核大小设为 5，确保关键 token
+的上下文完整性）。</p>
+<h4 id="构建压缩-kv-缓存">（3）构建压缩 KV 缓存</h4>
+<p>将 “聚类后的前缀关键 KV” 与 “完整观察窗口 KV” 拼接，形成最终的压缩 KV
+缓存，用于后续生成阶段 —— 该缓存大小固定（与 prompt
+长度无关），从根本上解决 “解码延迟随 prompt 长度线性增长” 和
+“内存开销大” 的问题。</p>
+<h3 id="核心优化效果">3. 核心优化效果</h3>
+<ul>
+<li><strong>时间效率</strong>：压缩 KV 缓存大小固定，解码速度不随 prompt
+长度增加而下降，16K tokens 输入时生成速度提升 3.6 倍；</li>
+<li><strong>内存效率</strong>：16K tokens 输入时内存效率提升 8.2
+倍，单张 A100-80GB GPU 可处理 380K tokens 上下文（基线模型仅支持 33K
+tokens）；</li>
+<li><strong>准确性保障</strong>：通过 “观察窗口动态捕捉注意力模式” 和
+“池化保留上下文”，在 16
+个长序列数据集上与基线模型精度相当，Needle-in-a-Haystack
+测试中仅出现可忽略的精度下降。</li>
+</ul>
+<h2 id="四snapkv-的创新性">四、SnapKV 的创新性</h2>
+<ol type="1">
+<li><strong>生成前注意力模式的可识别性</strong>：首次验证 “LLM
+在生成前即可通过 prompt 末尾的观察窗口识别关键注意力特征”，突破现有方法
+“生成中动态筛选” 的局限，实现生成前的高效压缩。</li>
+<li><strong>上下文感知的动态压缩</strong>：通过观察窗口自适应捕捉不同指令下的关键注意力特征（实验显示不同指令对应不同重要特征），解决静态策略无法适应动态需求的问题，优于
+H2O 等静态方法。</li>
+<li><strong>无微调兼容性</strong>：无需修改模型参数或微调，仅通过少量代码调整即可集成到
+HuggingFace 等框架，支持 Mistral-7B、Mixtral-8x7B 等主流
+LLM，适配性强。</li>
+<li><strong>聚类保障信息完整性</strong>：引入 1D 池化聚类策略，保留关键
+token 的上下文关联，避免孤立筛选导致的 “信息断裂” 和 “模型幻觉”，在
+LongEval-Lines
+测试中（需识别格式一致的键值对），精度显著优于无池化方法。</li>
+<li><strong>长上下文扩展性</strong>：支持 380K tokens
+超长上下文处理，且与并行解码（如 Medusa）兼容，10K tokens 输入时比
+Medusa 快 1.3 倍，比原生解码快 2.2 倍，拓展了 LLM
+在超长序列场景的应用边界。</li>
+</ol>
+<h2 id="零碎的问题">零碎的问题：</h2>
+<p>“induction heads”（归纳头）是 LLM
+注意力头的一种特殊类型，最早在论文《In-context learning and induction
+heads》（论文参考文献
+[16]）中被定义，其核心功能是识别并复制上下文中标注的序列模式或关联信息，支撑模型的
+“序列复制” 能力。 在 SnapKV 的研究场景中，induction heads
+的作用具体表现为：当模型关注某个高注意力权重的关键 token（如 “2023 年 Q4
+研发费用”）时，induction heads 会自动复制该 token 周围的关联 token（如
+“研发费用具体数值”“数据来源”），确保生成内容包含完整的上下文信息，而非仅孤立的关键
+token。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/29/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/" rel="prev" title="DrVideo：Document Retrieval Based Long Video Understanding">
+      <i class="fa fa-chevron-left"></i> DrVideo：Document Retrieval Based Long Video Understanding
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%A4%9A%E6%A8%A1%E6%80%81GraphRAG%E7%9B%B8%E5%85%B3paper%E8%B0%83%E7%A0%94/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venue"><span class="nav-number">1.</span> <span class="nav-text">Venue：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date"><span class="nav-number">2.</span> <span class="nav-text">date：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%95%B0%E6%96%B9%E6%B3%95%E5%BF%BD%E8%A7%86-prompt-%E7%9A%84-kv-%E7%BC%93%E5%AD%98%E5%8E%8B%E7%BC%A9%E4%BB%85%E5%85%B3%E6%B3%A8generated-token%E7%9A%84kv-cache-compression%E4%BD%86%E5%85%B6%E5%AE%9Eprompt%E6%9C%89%E5%8F%AF%E8%83%BD%E8%BF%9C%E6%AF%94generated-token%E8%A6%81%E9%95%BF%E6%AF%94%E5%A6%82%E8%BE%93%E5%85%A5%E6%96%87%E6%A1%A3%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E8%BF%9B%E8%A1%8C%E6%96%87%E6%A1%A3qa"><span class="nav-number">3.1.</span> <span class="nav-text">多数方法忽视
+prompt 的 KV 缓存压缩，仅关注generated token的KV cache
+compression。但其实prompt有可能远比generated
+token要长（比如输入文档的情况下，进行文档QA）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E9%80%9A%E8%BF%87%E5%AE%9E%E9%AA%8C%E5%8F%91%E7%8E%B0%E5%AF%B9%E4%BA%8Einput-seq-tokens%E6%98%AF%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AAconsistent-attention-allocation-pattern%E7%9A%84%E8%BF%99%E4%B8%BAkv-cache-compression%E6%8F%90%E4%BE%9B%E4%BA%86%E5%8F%AF%E8%83%BD%E5%9B%A0%E4%B8%BAconsistent%E7%A1%AE%E4%BF%9D%E4%BA%86%E4%BF%9D%E7%95%99%E4%B8%8B%E6%9D%A5%E7%9A%84kv-cache%E4%BC%9A%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%9A%84%E6%9C%89%E7%94%A8%E4%B8%8D%E4%BC%9A%E8%AF%B4%E5%85%B3%E9%94%AEtoken%E4%B8%80%E7%9B%B4%E5%9C%A8%E5%8F%98%E5%8C%96%E9%82%A3%E6%A0%B7%E7%9A%84%E8%AF%9D%E5%8F%AF%E8%83%BD%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E6%AF%8F%E4%B8%AAtoken%E9%83%BD%E9%9C%80%E8%A6%81%E4%BE%9D%E8%B5%96%E4%B8%8D%E5%90%8C%E7%9A%84%E5%85%B3%E9%94%AEtoken%E9%82%A3%E6%9F%90%E4%B8%AAtoken%E7%9A%84kv-cache%E4%B8%80%E6%97%A6%E8%A2%AB%E5%89%94%E9%99%A4%E5%90%8E%E9%9D%A2%E7%94%9F%E6%88%90%E5%8F%AF%E8%83%BD%E5%8F%88%E8%A6%81%E7%94%A8%E5%88%B0%E4%BA%86"><span class="nav-number">4.1.</span> <span class="nav-text">论文通过实验发现，对于input
+seq tokens，是存在一个consistent attention allocation pattern的。这为kv
+cache compression提供了可能。因为，consistent确保了保留下来的kv
+cache会尽可能的有用；不会说关键token一直在变化（那样的话，可能我们生成每个token都需要依赖不同的关键token，那某个token的kv
+cache一旦被剔除，后面生成可能又要用到了）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E5%9C%A8%E7%94%9F%E6%88%90%E4%B9%8B%E5%89%8D%E4%BA%8B%E5%85%88%E7%9F%A5%E9%81%93%E8%BF%99%E4%B8%AAattention-allocation-pattern%E6%98%AF%E5%8F%AF%E8%A1%8C%E7%9A%84%E8%BF%99%E4%B9%9F%E5%BE%88%E9%87%8D%E8%A6%81%E5%9B%A0%E4%B8%BA%E8%BF%99%E4%B8%AA%E6%80%A7%E8%B4%A8%E6%88%91%E4%BB%AC%E6%89%8D%E8%83%BD%E5%9C%A8%E7%94%9F%E6%88%90%E5%89%8D%E7%9F%A5%E9%81%93%E8%A6%81%E4%BF%9D%E7%95%99%E5%93%AA%E4%BA%9Bprompt-token%E7%9A%84kv-cache"><span class="nav-number">4.2.</span> <span class="nav-text">另外，在生成之前，事先知道这个attention
+allocation
+pattern，是可行的。这也很重要，因为这个性质，我们才能在生成前知道要保留哪些prompt
+token的kv cache</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E6%88%91%E4%BB%AC%E8%AF%B4head-wise-adaptive-allocation%E6%98%AF%E6%8C%87%E6%AF%8F%E4%B8%AAhead%E7%9A%84kv-cache-budget%E4%B8%8D%E4%B8%80%E6%A0%B7%E8%80%8C%E4%B8%80%E8%88%AC%E7%9A%84kv-cache-compression%E5%AE%83%E4%BB%AC%E6%98%AF%E6%AF%8F%E4%B8%AAhead%E7%9A%84budget%E9%83%BD%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%86%E6%98%AF%E6%AF%8F%E4%B8%AAhead%E4%BF%9D%E7%95%99%E5%93%AA%E4%B8%AAtoken%E7%9A%84kv-cache%E8%BF%99%E6%98%AF%E4%B8%8D%E4%B8%80%E5%AE%9A%E7%9A%84"><span class="nav-number">6.</span> <span class="nav-text">需要注意，我们说head-wise
+adaptive allocation，是指每个head的kv cache budget不一样。而一般的kv
+cache
+compression，它们是每个head的budget都是一样的，但是每个head保留哪个token的kv
+cache，这是不一定的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">一、研究的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="nav-number">6.2.</span> <span class="nav-text">二、现有方法的不足</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BA%E7%9A%84%E6%96%B9%E6%B3%95snapkv%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98"><span class="nav-number">6.3.</span> <span class="nav-text">三、论文提出的方法（SnapKV）如何解决问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E5%AE%9A%E4%B9%89"><span class="nav-number">6.3.1.</span> <span class="nav-text">1. 关键术语定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E9%98%B6%E6%AE%B5%E5%8E%8B%E7%BC%A9%E6%B5%81%E7%A8%8B"><span class="nav-number">6.3.2.</span> <span class="nav-text">2. 两阶段压缩流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%95%E7%A5%A8%E7%AD%9B%E9%80%89%E5%85%B3%E9%94%AE%E5%89%8D%E7%BC%80%E7%89%B9%E5%BE%81"><span class="nav-number">6.3.2.1.</span> <span class="nav-text">（1）投票筛选关键前缀特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E7%B1%BB%E4%BF%9D%E7%95%99%E4%B8%8A%E4%B8%8B%E6%96%87%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-number">6.3.2.2.</span> <span class="nav-text">（2）聚类保留上下文完整性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%8E%8B%E7%BC%A9-kv-%E7%BC%93%E5%AD%98"><span class="nav-number">6.3.2.3.</span> <span class="nav-text">（3）构建压缩 KV 缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8C%96%E6%95%88%E6%9E%9C"><span class="nav-number">6.3.3.</span> <span class="nav-text">3. 核心优化效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9Bsnapkv-%E7%9A%84%E5%88%9B%E6%96%B0%E6%80%A7"><span class="nav-number">6.4.</span> <span class="nav-text">四、SnapKV 的创新性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E7%A2%8E%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">6.5.</span> <span class="nav-text">零碎的问题：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">230</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

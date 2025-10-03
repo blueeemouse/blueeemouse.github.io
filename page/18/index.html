@@ -150,6 +150,321 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-ReID/Unsupervised%20Lifelong%20Person%20Re-identification%20%20via%20Contrastive%20Rehearsal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-ReID/Unsupervised%20Lifelong%20Person%20Re-identification%20%20via%20Contrastive%20Rehearsal/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-17 22:22:45 / Modified: 23:22:13" itemprop="dateCreated datePublished" datetime="2025-02-17T22:22:45+08:00">2025-02-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="arxiv-22">arxiv 22</h1>
+<h1 id="这篇论文提出的设定倒是在现实生活里有意义不过它的动机好像也是提的比较模糊都是针对几个设定加起来的时候产生的问题">这篇论文提出的设定倒是在现实生活里有意义，不过它的动机好像也是提的比较模糊，都是针对几个设定加起来的时候产生的问题</h1>
+<h1 id="它讲的故事however-a-real-world-video-monitoring-system-can-record-new-data-every-day-and-from-new-locations-when-new-cameras-are-added-into-an-existing-system.when-new-data-is-recorded-every-day-people-have-to-annotate-new-data-manually-before-deployment-which-is-cumbersome-and-time-consuming.这里在说明无监督方法研究的必要性-towards-a-generalizable-reid-model-lifelong-person-reid-has-been-recently-proposed这里在说明lifelong-learning研究的必要性">它讲的故事：However,
+a real-world video monitoring system can record new data every day and
+from new locations, when new cameras are added into an existing
+system.；When new data is recorded every day, people have to annotate
+new data manually before deployment, which is cumbersome and
+time-consuming.（这里在说明，无监督方法研究的必要性）<br>Towards a
+generalizable ReID model, lifelong person ReID has been recently
+proposed（这里在说明，lifelong learning研究的必要性）</h1>
+<h1 id="它的方法设计的倒也算简单就是分别针对灾难性遗忘学习新数据的问题">它的方法，设计的倒也算简单，就是分别针对灾难性遗忘、学习新数据的问题</h1>
+<h1 id="方法">方法</h1>
+<h2 id="current-domain-contrastive-baseline">1.Current domain
+contrastive baseline</h2>
+<h3 id="它主要是进行经典的拉近样本和簇中心的距离如今已经是一个非常常见的操作了还有一个l_cam就是对同一个簇里属于同一个相机的数据也求一个prototype就是这些数据的均值并要拉近样本与这个prototype的距离还是对比损失的形式">它主要是进行经典的拉近样本和簇中心的距离（如今已经是一个非常常见的操作了），还有一个<span class="math inline">\(L_{cam}\)</span>，就是对同一个簇里，属于同一个相机的数据，也求一个prototype（就是这些数据的均值），并要拉近样本与这个prototype的距离（还是对比损失的形式）</h3>
+<h4 id="不过论文里还提到l_cam过于依赖相机标签局限在了reid任务里了如果想更加泛化其实也有其它的损失可以用比如在一个batch里与batch里的hardest-positives进行对比">不过，论文里还提到，<span class="math inline">\(L_{cam}\)</span>过于依赖相机标签，局限在了ReID任务里了；如果想更加泛化，其实也有其它的损失可以用，比如在一个batch里，与batch里的hardest
+positives进行对比</h4>
+<h4 id="另注意这个方法会有online-encoder和momentum-encoder在这一步里聚类用的特征是momentum-encoder得到的而不是online-encoder">（另，注意，这个方法会有online
+encoder和momentum encoder；在这一步里，聚类用的特征是momentum
+encoder得到的，而不是online encoder）</h4>
+<h2 id="old-domain-contrastive-rehearsal">2.Old domain contrastive
+rehearsal</h2>
+<h3 id="这个方法里会存储一些旧数据集的prototype也就是我们得到的簇中心的特征以及各个簇的若干个可靠样本就是比较接近簇中心的这一步的核心思想是给定一个已知伪标签的旧数据样本我们希望当前的online-encoder对其编码后得到的特征应该还是尽可能接近原来它所属的那个簇由此我们认为online-encoder对旧数据集知识的保存做的比较好">这个方法里会存储一些旧数据集的prototype（也就是我们得到的簇中心的特征），以及各个簇的若干个可靠样本（就是比较接近簇中心的）。这一步的核心思想是，给定一个已知伪标签的旧数据样本，我们希望当前的online
+encoder对其编码后，得到的特征应该还是尽可能接近原来它所属的那个簇（由此我们认为online
+encoder对旧数据集知识的保存做的比较好）</h3>
+<h2 id="image-to-image-similarity-constraint">3.Image-to-Image
+Similarity Constraint</h2>
+<h3 id="这一步的作用是抗遗忘然后它的核心思想是给定一个batch我们用encoder得到特征后可以得到一个样本之间的相似性矩阵如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近对于同一个batch而言那么我们就认为这个新模型保留旧知识时保留得比较好论文里新模型就对应online-encoder旧模型就对应momentum-encoder它保留了比较多的旧知识衡量两个相似性矩阵的距离时用的是kl散度">这一步的作用是抗遗忘，然后它的核心思想是，给定一个batch，我们用encoder得到特征后，可以得到一个样本之间的相似性矩阵。如果新模型得到的相似性矩阵与旧模型得到的相似性矩阵很接近（对于同一个batch而言），那么我们就认为这个新模型保留旧知识时，保留得比较好。论文里，新模型就对应online
+encoder，旧模型就对应momentum
+encoder（它保留了比较多的旧知识）。衡量两个相似性矩阵的距离时，用的是KL散度</h3>
+<h3 id="但此处有个小改进就是它的目标矩阵确实是用旧模型得到的但它的新的相似性矩阵计算的时候求行特征用的是新模型求列特征用的是旧模型论文里说这样的效果比单纯用新模型会好确实有一些道理吧因为求列特征用的是旧模型那么要迫使两个相似性矩阵尽可能接近就要求新模型的输出要尽可能接近旧模型的输出无形中其实就进行了蒸馏了吧">但此处有个小改进，就是，它的目标矩阵确实是用旧模型得到的，但它的新的相似性矩阵，计算的时候，求行特征用的是新模型，求列特征用的是旧模型。论文里说这样的效果比单纯用新模型会好。确实有一些道理吧，因为求列特征用的是旧模型，那么，要迫使两个相似性矩阵尽可能接近，就要求新模型的输出要尽可能接近旧模型的输出（无形中其实就进行了蒸馏了吧）</h3>
+<h1 id="trick总结">trick总结</h1>
+<h2 id="在进行对比的时候既可以和所有的prototype来对比也可以挑出若干个hard-sample保证效果的同时减少一些计算量">1.在进行对比的时候，既可以和所有的prototype来对比，也可以挑出若干个hard
+sample，保证效果的同时减少一些计算量</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Robust%20Pseudo-label%20Learning%20with%20Neighbor%20Relation%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Robust%20Pseudo-label%20Learning%20with%20Neighbor%20Relation%20for%20Unsupervised%20Visible-Infrared%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-16 11:51:35 / Modified: 21:47:48" itemprop="dateCreated datePublished" datetime="2025-02-16T11:51:35+08:00">2025-02-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="acm-mm24">acm mm24</h1>
+<h1 id="它也是要解决伪标签带噪的问题提出一个noisy-pseudo-label-calibration-module来校正伪标签提出一个nieghbor-relation-learning-module来获取模态内更加一致的特征提出一个optimal-transport-prototype-matching-module来进行跨模态的匹配建立跨模态对应关系提出一个memory-hybrid-leraning-module来更好提取出modality-invariant和modality-specific-feature">它也是要解决伪标签带噪的问题。提出一个Noisy
+Pseudo-label Calibration
+module来<strong><em>校正伪标签</em></strong>；提出一个Nieghbor Relation
+Learning module来获取模态内更加一致的特征；提出一个Optimal Transport
+Prototype Matching
+module来进行跨模态的匹配，建立跨模态对应关系；提出一个Memory Hybrid
+Leraning module来更好提取出modality-invariant和modality-specific
+feature</h1>
+<h1 id="insight">insight</h1>
+<h1 id="动机无监督vi-reid中伪标签带噪声是很常见的问题而论文提出一般的方法聚焦于减少带噪标签的影响但忽略了去校正带噪标签其实这么说好像也不是很严谨那些标签平滑的操作我觉得某种程度上也是在校正标签的">动机：无监督vi-reid中，伪标签带噪声是很常见的问题。而论文提出，一般的方法聚焦于减少带噪标签的影响，但忽略了去校正带噪标签（其实这么说好像也不是很严谨，那些标签平滑的操作，我觉得某种程度上也是在校正标签的）</h1>
+<h1 id="方法">方法</h1>
+<h2 id="noisy-pseudo-label-calibrationnpc这个模块就是很显然的回应了动机里它想要校正标签的想法它评价两个样本相似度的方法是用邻居的相似度或者说重合度而不是用样本特征本身这种间接衡量相似性的方法和gur论文towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification里的操作思想上是比较相近的只不过那里用的是概率分布要尽可能相似-而它校正标签的方法则是先提取出每个簇内的可靠的样本可靠的判断方法中核心思想是一个簇内如果有很多样本和当前样本非常相似那么当前样本应该就是比较可靠的然后簇中心就初始化为这些可靠样本的均值之后每个样本再和这些新的簇中心进行比较分配到最相似的那个簇中心那里">1.Noisy
+Pseudo-label
+Calibration（NPC），这个模块就是很显然的，回应了动机里它想要校正标签的想法。它评价两个样本相似度的方法是用邻居的相似度（或者说重合度），而不是用样本特征本身（这种间接衡量相似性的方法，和(GUR论文[[Towards
+Grand Unified Representation Learning for Unsupervised Visible-Infrared
+Person
+Re-Identification]])里的操作，思想上是比较相近的，只不过那里用的是概率分布要尽可能相似）<br>而它校正标签的方法，则是，先提取出每个簇内的“可靠”的样本（“可靠”的判断方法中，核心思想是，一个簇内，如果有很多样本和当前样本非常相似，那么当前样本应该就是比较”可靠“的），然后簇中心就初始化为这些“可靠”样本的均值；之后，每个样本再和这些新的簇中心进行比较，分配到最相似的那个簇中心那里</h2>
+<h2 id="neighbor-relation-learningnrl原文里说是为了reduce-high-intra-class-variations我们可以认为是为了提取更好的特征以便更好地进行模态内的聚类所以它应该主要聚焦在挖掘模态内的信息但它的损失没太搞懂">2.Neighbor
+Relation Learning（NRL），原文里说是为了reduce high intra-class
+variations，我们可以认为，是为了提取更好的特征，以便更好地进行模态内的聚类。所以它应该主要聚焦在挖掘模态内的信息。但它的损失，没太搞懂。。</h2>
+<h2 id="optimal-transport-prototype-matchingotpa聚焦于挖掘跨模态对应的信息">Optimal
+Transport Prototype Matching（OTPA），聚焦于挖掘跨模态对应的信息</h2>
+<h2 id="memory-hybrid-learning聚焦于学习modality-invariant-feature具体来说它在经典的模态内的clusternce-loss的基础上还构建了一个modality-hybrid-memory这个memory的特征是由红外cluster和对应的可见光cluster加权求和得到然后交替地拉近红外实例可见光实例与这个混合memory中的对应cluster之间的距离">Memory
+Hybrid Learning，聚焦于学习modality-invariant
+feature。具体来说，它在经典的模态内的ClusterNCE
+loss的基础上，还构建了一个modality-hybrid
+memory（这个memory的特征是由红外cluster和对应的可见光cluster加权求和得到），然后交替地拉近红外实例、可见光实例与这个混合memory中的对应cluster之间的距离</h2>
+<h1 id="分析">分析</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-Lifelong-VI-ReID/%E9%9A%BE%E7%82%B9/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-02-16 10:28:47" itemprop="dateCreated datePublished" datetime="2025-02-16T10:28:47+08:00">2025-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-02-18 15:34:16" itemprop="dateModified" datetime="2025-02-18T15:34:16+08:00">2025-02-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>首先，无监督条件下的跨模态对应依然是难点。而加入了lifelong条件之后，显然会有lifelong的常见问题，就是灾难性遗忘。并且，
+在新数据集上，因为分布不同，所以之前学到的跨模态对应知识，以及单模态内的知识可能都不适用，而这会导致在学习新数据集的时候，初期的特征不够好，进而会导致聚类得到的伪标签也不够好，后续对应也很难对好，故训练完得到的模型性能可能也不够好/在新数据集上，反而是有一些先验知识会比较好，有利于度过初期训练？（如果是会产生负面影响，那么标签校正应该是非常有必要的了）</p>
+<p>解决方法上，提出一种比较有效的标签置信度求解方法，来帮助过度前期训练，或许是一个解决方法（比如，对每个实例，都找出和它距离前k近的实例，把这些邻居的标签加权求和，看看求和得到的标签和它的簇标签之间的距离远近？）
+或许修正标签是更加直接的方法（修正，而不是直接把带噪声的标签给去除掉）</p>
+<p>尝试：一个momentum encoder，一个online
+encoder，然后在新数据集上，用online
+encoder先学一下并聚类（可以适当加载一些momentum
+encoder，以及采取warmup），之后再慢慢地过渡到正常训练</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/16/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-02-16 00:07:08 / Modified: 15:04:15" itemprop="dateCreated datePublished" datetime="2025-02-16T00:07:08+08:00">2025-02-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="无监督vi-reid大多数的流程都是先通过某种聚类方法通常是dbscan得到一批伪标签然后开始构建跨模态的对应一般是对应簇而不是一个一个实例去对应因为对应完簇我们就认为这两个簇里的实例都是一个id的所以其实可以说一个常见的范式是在各个模态内进行聚类然后进行跨模态的簇的对应这么说来eccv24那篇有没有可能提出了一个新的范式就是在聚类的时候就已经考虑上跨模态的对应了">无监督vi-reid，大多数的流程都是，先通过某种聚类方法（通常是DBSCAN），得到一批伪标签，然后开始构建跨模态的对应（一般是对应簇，而不是一个一个实例去对应。因为对应完簇，我们就认为这两个簇里的实例都是一个ID的）。所以其实可以说，一个常见的范式是，在各个模态内进行聚类，然后进行跨模态的簇的对应（这么说来，ECCV24那篇，有没有可能提出了一个新的范式，就是在聚类的时候就已经考虑上跨模态的对应了？）</h1>
+<h1 id="通常的改进会聚焦在">通常的改进会聚焦在，</h1>
+<h2 id="如何更好的构建伪标签的跨模态对应pgmotpm">如何更好的构建伪标签的跨模态对应（PGM）（OTPM）</h2>
+<h3 id="毕竟没标签很难对应上最理想的情况当然是我们的聚类结果恰好就等于真实标签此时无监督vi-reid就会变成vi-reid实际还有个很重要的问题就是我们的对应很可能是有错的怎么在有错误对应即所谓噪声的情况下不断改进对应结果也是很重要的所以才会有很多progressive的方法">（毕竟没标签，很难对应上；最理想的情况当然是我们的聚类结果恰好就等于真实标签，此时无监督vi-reid就会变成vi-reid）（实际还有个很重要的问题，就是，我们的对应很可能是有错的，怎么在有错误对应（即所谓噪声）的情况下不断改进对应结果也是很重要的。所以才会有很多progressive的方法）；</h3>
+<h2 id="还有一部分可能会聚焦在伪标签的可靠性上multi-memorypgm">还有一部分可能会聚焦在伪标签的可靠性上？（Multi-memory，PGM）</h2>
+<h2 id="提取更加鲁棒的特征以改善聚类效果shallow-deepgur">提取更加鲁棒的特征，以改善聚类效果（Shallow-Deep，GUR）</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/14/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94%20unsupervised%20vi-reid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -765,336 +1080,6 @@ Re-Identification）的出发点有点类似</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Retrieval-Augmented%20Generation%20for%20%20AI-Generated%20Content%20%20A%20Survey/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/01/18/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Retrieval-Augmented%20Generation%20for%20%20AI-Generated%20Content%20%20A%20Survey/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-01-18 21:48:08" itemprop="dateCreated datePublished" datetime="2025-01-18T21:48:08+08:00">2025-01-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-01-19 10:49:54" itemprop="dateModified" datetime="2025-01-19T10:49:54+08:00">2025-01-19</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="结构可以从下面几个部分来阅读总结论文">1.结构：可以从下面几个部分来阅读、总结论文</h1>
-<h2 id="介绍一下rag中的基本概念">1.0.介绍一下RAG中的基本概念</h2>
-<h2 id="根据retriever是如何辅助生成内容的对rag技术进行分类这个在文章中被称为underlinefoundational-paradigms简称underlinefoundations">1.1.根据retriever是如何辅助生成内容的，对RAG技术进行分类（这个在文章中被称为<span class="math inline">\(\underline{foundational \
-paradigms}\)</span>，简称<span class="math inline">\(\underline{foundations}\)</span></h2>
-<h2 id="总结一下其它的提高rag的手段">1.2.总结一下其它的提高RAG的手段</h2>
-<h2 id="调研rag在不同模态数据和不同任务下的应用场景文本的搜索和rag应该是目前最常见也是研究最多的但-不同模态数据的检索其实也可能为文本rag带来一些启发而一些常见的不同模态的检索包括但不限于识图听歌识曲">1.3.调研RAG在不同模态数据和不同任务下的应用场景（文本的搜索和RAG应该是目前最常见、也是研究最多的。但
-不同模态数据的检索，其实也可能为文本RAG带来一些启发。而一些常见的不同模态的检索，包括但不限于识图、听歌识曲）</h2>
-<h2 id="介绍一下rag的benchmark并讨论现有rag系统的一些问题局限性也讨论了一下未来的发展方向">1.4.介绍一下RAG的benchmark，并讨论现有RAG系统的一些问题/局限性，也讨论了一下未来的发展方向</h2>
-<h1 id="preliminary-of-rag">2.preliminary of RAG</h1>
-<h2 id="overview">2.1.overview</h2>
-<h3 id="rag系统一般就是包含两个核心模块retriever和generatorretriever用于根据用户的请求进行检索把找到的一些相关信息和输入一起给generator让它进行生成这就是一个大致的流程-我们可以分为三步">RAG系统一般就是包含两个核心模块：retriever和generator。retriever用于根据用户的请求进行检索，把找到的一些相关信息和输入一起给generator，让它进行生成。这就是一个大致的流程。
-我们可以分为三步：</h3>
-<h4 id="retriever根据输入请求检索相关信息">1.retriever根据输入请求检索相关信息</h4>
-<h4 id="原来的请求比如生成图像的时候我们的指令就是原来的请求和检索的结果一起给到generator这里如何把检索的结果和原来的请求进行结合是非常关键的一步也是对rag进行分类的一个判据可能是结合的方式不同可能是结合的位置不同">2.原来的请求（比如，生成图像的时候，我们的指令就是“原来的请求”）和检索的结果一起给到generator（这里如何把检索的结果和原来的请求进行结合，是非常关键的一步，也是对RAG进行分类的一个判据。可能是结合的方式不同，可能是结合的位置不同）</h4>
-<h4 id="generator生成结果">3.generator生成结果</h4>
-<h3 id="rag中generator主要包括transformer-modellstmdiffusion-modelgan">RAG中，generator主要包括transformer
-model，LSTM，diffusion model，GAN</h3>
-<h3 id="retriever主要分三类sparse-retrieverdense-retrieverothers-sparse-retriever感觉主要是传统的方法通常用于文档索引就是nlp课上讲的那些比较古老的方法-dense-retriever核心思想是用一些embedding来对query和key进行表征之后通过衡量query和key之间的相似性找出和query相似性高的那些key对应的结果就是检索结果这里有两个关键点一个是embedding一般是用一些预训练好的大模型对数据进行编码这种方法和sparse-retriever中用词袋模型等简单的统计模型进行的表征不同那些简单统计模型我的理解是考虑的信息更加简单局部以及通常会比较稀疏而相比之下深度学习进行编码得到的embedding则更加复杂但也包含更多信息也不会非常稀疏这应该也是为什么这种方法叫dense-retriever另一个关键点就是检索哪些key和query相似性高当数据量很大的时候想根据一个query计算它和所有key之间的相似性再来排序筛选计算量就太大了更别说多个query的情况了所以需要用到最近邻近似approximate-nearest-neighborann方法它的目的就是实现高效的最近邻搜索-others主要是在衡量相似性或者检索上有一些不同也是依据使用场景而定的如对文本我们可以直接用类似于最小编辑距离的指标进行相似度衡量而不是用embedding表示再衡量key和query之间的相似度对于代码我们也可以考虑用抽象语法树abstract-syntax-treesast来衡量代码片段相似度在知识图谱中我们进行检索其实就可以根据节点之间的关系进行索引比如对知识图谱的某个节点进行k-hop邻居搜索这些方法其实都算不上通用吧只是在一些特定领域里可能是可以用的但效果也不好说一定就比上面的dense-retriever要好">retriever主要分三类，sparse
-retriever，dense retriever，others<br>sparse
-retriever感觉主要是传统的方法，通常用于文档索引（就是nlp课上讲的那些比较古老的方法）<br>dense
-retriever核心思想是，用一些embedding来对query和key进行表征，之后通过衡量query和key之间的相似性，找出和query相似性高的那些key，对应的结果就是检索结果。这里有两个关键点，一个是embedding，一般是用一些预训练好的大模型对数据进行编码。这种方法和sparse
-retriever中用词袋模型等简单的统计模型进行的表征不同（那些简单统计模型，我的理解是，考虑的信息更加简单、局部，以及通常会比较稀疏；而相比之下，深度学习进行编码得到的embedding，则更加复杂、但也包含更多信息，也不会非常稀疏。这应该也是为什么这种方法叫dense
-retriever）。另一个关键点就是检索哪些key和query相似性高。当数据量很大的时候，想根据一个query，计算它和所有key之间的相似性，再来排序、筛选，计算量就太大了，更别说多个query的情况了。所以需要用到最近邻近似（Approximate
-Nearest
-Neighbor，ANN）方法。它的目的就是实现高效的最近邻搜索<br>others主要是在衡量相似性或者检索上有一些不同，也是依据使用场景而定的。如，对文本，我们可以直接用类似于最小编辑距离的指标进行相似度衡量，而不是用embedding表示再衡量key和query之间的相似度；对于代码，我们也可以考虑用抽象语法树（Abstract
-Syntax
-Trees，AST）来衡量代码片段相似度；在知识图谱中，我们进行检索，其实就可以根据节点之间的关系进行索引，比如对知识图谱的某个节点进行k-hop邻居搜索。（这些方法其实都算不上通用吧，只是在一些特定领域里可能是可以用的，但效果也不好说一定就比上面的dense
-retriever要好）</h3>
-<h1 id="rag-foundations">3.RAG Foundations</h1>
-<h2 id="query-based-rag">3.1.Query-based RAG</h2>
-<h3 id="其实就是在把输入送到generator之前把retriever获得的信息一起融合得到一个新的输入再把新的输入送到generator也即feed-the-retrieved-information-directly-into-the-initial-stage-of-the-generators-input这里的directly和initial-stage很重要和后面的方法不同">其实就是在把输入送到generator之前，把retriever获得的信息一起融合，得到一个新的输入，再把新的输入送到generator。也即，feed
-the retrieved information directly into the initial stage of the
-generator's input（这里的directly和initial
-stage很重要，和后面的方法不同）</h3>
-<h2 id="latent-representation-based-rag">3.2.Latent Representation-based
-RAG</h2>
-<h3 id="这里的核心思想是把检索到的信息进行编码同时把原本的query也进行编码再将编码后的二者进行一个结合此处结合的手段也很多有大家魔改出来的模块也有经典模块如cross-attention">这里的核心思想是，把检索到的信息进行编码，同时把原本的query也进行编码，再将编码后的二者进行一个结合。此处结合的手段也很多，有大家魔改出来的模块，也有经典模块，如Cross
-Attention</h3>
-<h3 id="经典方法如fid">经典方法如FiD</h3>
-<h2 id="logit-based-rag">3.3.Logit-based RAG</h2>
-<h3 id="这种方法主要适用于序列生成的情形generator正常会在生成下一个token的时候有一个候选token概率分布而检索到的信息也可以用于获取一个概率分布可视为一种先验概率分布再把两种概率分布进行结合就得到最终的概率分布因为是从概率分布的角度上讲所以是logit-based">这种方法主要适用于序列生成的情形。generator正常会在生成下一个token的时候，有一个候选token概率分布；而检索到的信息，也可以用于获取一个概率分布（可视为一种先验概率分布），再把两种概率分布进行结合，就得到最终的概率分布。因为是从概率分布的角度上讲，所以是“Logit-based”</h3>
-<h3 id="经典方法有knn-lm">经典方法有kNN-LM</h3>
-<h2 id="speculative-rag">3.4.Speculative RAG</h2>
-<h3 id="这个看着有点像是用rag代替了generator">这个看着有点像是用RAG代替了generator</h3>
-<h1 id="rag-enhancements">4.RAG Enhancements</h1>
-<h2 id="根据enhance的目标对象不同进行分类分五类input-enhancementretriever-enhancementgenerator-enhancementresult-enhancementrag-pipeline-enhancement">根据enhance的目标对象不同，进行分类。分五类：Input
-Enhancement，Retriever Enhancement，Generator Enhancement，Result
-Enhancement，RAG Pipeline Enhancement</h2>
-<h2 id="input-enhancement">4.1.Input Enhancement</h2>
-<h3 id="这类方法从输入上入手可以对query进行变换即query-transformation也可以对检索结果进行增强data-augmentation">这类方法从输入上入手。可以对query进行变换（即Query
-Transformation），也可以对检索结果进行增强（Data Augmentation）</h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/01/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MM-LLMs--Recent%20Advances%20in%20MultiModal%20Large%20Language%20Models/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-01-08 10:27:51 / Modified: 10:31:09" itemprop="dateCreated datePublished" datetime="2025-01-08T10:27:51+08:00">2025-01-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="这是一篇survey主要内容包括一下几个方面列出了常用的模型架构和训练流程对常见的mm-llms截至2024.2进行分类主要依据模型的specific-formulations回顾部分挑出的模型在主流benchmark上的性能并总结一下关键的训练语料配比探索一下mm-llms未来比较有前景的发展方向">这是一篇survey。主要内容包括一下几个方面：列出了常用的模型架构和训练流程；对常见的MM-LLMs（截至2024.2）进行分类（主要依据模型的specific
-formulations）；回顾部分挑出的模型在主流benchmark上的性能，并总结一下关键的训练语料配比；探索一下MM-LLMs未来比较有前景的发展方向</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85apex==0.1%E5%8F%8A%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-12-19 15:30:23" itemprop="dateCreated datePublished" datetime="2024-12-19T15:30:23+08:00">2024-12-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-01-10 03:53:53" itemprop="dateModified" datetime="2025-01-10T03:53:53+08:00">2025-01-10</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="不知道是不是apex库的0.1版本用的比较多啊反正前几天配idkl的环境的时候它是要求装这个版本的但是它也不给个详细的步骤只说要装这个库不纯折磨人嘛">不知道是不是apex库的0.1版本用的比较多啊，反正前几天配IDKL的环境的时候它是要求装这个版本的，但是它也不给个详细的步骤，只说要装这个库，不纯折磨人嘛</h1>
-<h1 id="说回来可以参考这个教程但是需要注意一下如果是apex0.1版本则clone库的时候要选择22.04-dev的branchclone那个别直接git-clone-网址了clone指定branch的库应该是有个特殊的命令的可以问问aiclone了对的库之后就可以按照教程里的做了从它的第2步开始然后关于它的第3步我安装的时候是没加-user的也成功了应该就是哪个指令能成功就用哪个">说回来，可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/piaoliangjinjin/article/details/137566614">教程</a>（但是需要注意一下，如果是apex0.1版本，则clone库的时候要选择22.04-dev的branch，clone那个，别直接git
-clone
-+网址了。（clone指定branch的库应该是有个特殊的命令的，可以问问ai）。clone了对的库之后，就可以按照教程里的做了（从它的第2步开始）（然后关于它的第3步，我安装的时候是没加-user的，也成功了，应该就是哪个指令能成功就用哪个）</h1>
-<h1 id="如果要安装其它版本的apex就需要根据自己的torch版本和cuda版本进行选择了未必就是apex库的22.04-dev-branch的内容了或许可以参考这个教程但我没试过它这里提到可以一次多试几个版本感觉有点麻烦了不知道有没有对应的版本可以查询的">如果要安装其它版本的apex，就需要根据自己的torch版本和cuda版本进行选择了，未必就是apex库的22.04-dev
-branch的内容了。或许可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33440910/article/details/134812895?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-134812895-blog-137566614.235%5Ev43%5Epc_blog_bottom_relevance_base9&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">这个教程</a>（但我没试过）（它这里提到可以一次多试几个版本，感觉有点麻烦了，不知道有没有对应的版本可以查询的）</h1>
-<h1 id="另外有可能运行代码的时候会遇到这个报错-indexerror-tuple-index-out-of-range可以参考这个链接的解决方法反正我试过一次是可行的">另外，有可能运行代码的时候会遇到这个报错：
-‘IndexError: tuple index out of range‘，可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/starvapour/article/details/122275439">这个链接</a>的解决方法，反正我试过一次，是可行的</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/12/15/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Adaptive%20Middle%20Modality%20Alignment%20Learning%20for%20Visible-Infrared%20Person%20Re-identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-12-15 01:02:57 / Modified: 13:13:14" itemprop="dateCreated datePublished" datetime="2024-12-15T01:02:57+08:00">2024-12-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="ijcv24实际是23年10月投的24年才中的">ijcv24（实际是23年10月投的，24年才中的）</h1>
-<h1 id="一点吐槽这个跨模态数据集里有一些红外数据本身的质量真的差到不行啊这样子人也没办法来重识别啊说到底数据已经决定了模型的上限了啊">一点吐槽：这个跨模态数据集里，有一些红外数据本身的质量真的差到不行啊，这样子，人也没办法来重识别啊，说到底，数据已经决定了模型的上限了啊</h1>
-<h1 id="等会得看看它所谓的自适应中间模态到底是怎样的如果还是把两种模态的数据投影到一个公共的模态那和之前的方法的本质就没区别啊真正有区别的应该是说把rgb模态的投影到一个中间模态1把ir模态的投影到一个中间模态2然后去拉近中间模态1和中间模态2-至少这样是看起来更为合理的如果原来rgb和ir模态差距太大了不好一口气直接投影到一个公共的空间那么就一步一步来有点像扩散模型那样扩散模型也是如果想直接从噪声里还原出一幅图像那可能太难了所以它才一步一步地往回逆向这样讲故事起码是更合理的事实上或许还可以尝试多套几个中间模态看看最终的中间模态会不会效果更好">等会得看看它所谓的自适应中间模态，到底是怎样的，如果还是把两种模态的数据投影到一个公共的模态，那和之前的方法的本质就没区别啊。。真正有区别的，应该是说，把rgb模态的投影到一个中间模态1，把ir模态的投影到一个中间模态2，然后去拉近中间模态1和中间模态2
-。至少这样是看起来更为合理的：如果原来rgb和ir模态差距太大了，不好一口气直接投影到一个公共的空间，那么就一步一步来。有点像扩散模型那样。扩散模型也是，如果想直接从噪声里还原出一幅图像，那可能太难了，所以它才一步一步地往回逆向。这样讲故事起码是更合理的。事实上，或许还可以尝试，多套几个中间模态，看看最终的中间模态会不会效果更好？</h1>
-<h1 id="method">method：</h1>
-<h2 id="提出adaptive-middle-modality-generator-amg-module它可以生成一种中间模态的图像后续会用到但它的输入是谁哪种模态的图像">1.提出Adaptive
-Middle-modality Generator (AMG)
-module，它可以生成一种中间模态的图像，后续会用到（但它的输入是谁？哪种模态的图像？）</h2>
-<h3 id="详细讲解">详细讲解：</h3>
-<h4 id="这个module有两个submodule一个是middle-modality-generator-mmg-sub-module一个是adaptive-middle-modality-mixup-amm-sub-module先从宏观上看这里两个submodule的作用是mmg根据输入的一对同id的rgb和ir图像各自生成一个中间模态数据也就是会用rgb的数据生成一个中间数据1再用ir数据生成一个中间数据2-而amm则会根据上面的两个中间数据进行一个mixup操作最终得到一个中间模态数据这个数据就是之后要用的">这个module有两个submodule，一个是Middle-modality
-Generator (MMG) Sub-module，一个是Adaptive Middle-modality Mixup (AMM)
-Sub-module。先从宏观上看，这里两个submodule的作用是，MMG根据输入的一对同id的rgb和ir图像，各自生成一个中间模态数据（也就是会用rgb的数据生成一个中间数据1，再用ir数据生成一个中间数据2
-。而AMM则会根据上面的两个中间数据，进行一个mixup操作，最终得到一个中间模态数据。这个数据就是之后要用的</h4>
-<h4 id="可以说它确实相比之前的方法有改进了吧它是用两个分支去处理输入的两种模态的数据主要是一些11的卷积层毕竟经常要进行channel数的变换另外一个比较合理的地方在于它并没有说用一个11的卷积层就完了而是还加上了一个relu这里我觉得是很有道理的如果单纯是卷积而卷积的本质就是加权求和只用卷积相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间这不太对吧rgb数据的通道信息明显丰富多了你要说同一id的rgb数据和ir数据之间的关系仅仅是一种线性关系感觉没道理的并且它也引用了论文说了这之中的关系是高度非线性的所以引入一个relu层看起来操作层面上是很简单的但这个解释明显是能自圆其说的">可以说，它确实相比之前的方法有改进了吧。它是用两个分支去处理输入的两种模态的数据，主要是一些1×1的卷积层（毕竟经常要进行channel数的变换）。另外一个比较合理的地方在于，它并没有说，用一个1×1的卷积层就完了，而是还加上了一个relu。这里我觉得是很有道理的。如果单纯是卷积，而卷积的本质就是加权求和，只用卷积，相当于说你认为仅靠加权求和就能把rgb数据和ir数据的通道信息给投影到一个统一空间。这不太对吧，rgb数据的通道信息明显丰富多了，你要说同一id的rgb数据和ir数据之间的关系，仅仅是一种线性关系，感觉没道理的。并且它也引用了论文，说了这之中的关系是高度非线性的，所以引入一个relu层。看起来操作层面上是很简单的，但这个解释明显是能自圆其说的</h4>
-<h4 id="mmg模块会根据rgb数据和ir数据各自生成单通道的中间数据和三通道的中间数据而amm会用单通道的中间数据来算mixup的时候两种模态的factor之后会把mmg生成的三通道的中间数据进行mixup得到最终的中间数据">MMG模块会根据rgb数据和ir数据，各自生成单通道的中间数据和三通道的中间数据。而AMM会用单通道的中间数据来算mixup的时候，两种模态的factor，之后会把MMG生成的三通道的中间数据进行mixup，得到最终的中间数据</h4>
-<h4 id="好繁琐啊">（好繁琐啊。。。）</h4>
-<h2 id="提出adaptive-distribution-alignment-ada-loss会拉近中间模态数据特征的分布和rgbir模态数据特征的分布的距离是一种从特征层面入手的措施这里的话术是拉近特征的分布嗯分布感觉有点玄乎有待商榷不过可以学习一下他们都是怎么去挖掘利用拉近分布信息的尤其注意这个分布它和下面的第三个method有些联系">2.提出Adaptive
-Distribution Alignment (ADA)
-loss，会拉近中间模态数据特征的分布和rgb，ir模态数据特征的分布的距离，是一种从特征层面入手的措施（这里的话术是，拉近特征的分布。。嗯，分布，感觉有点玄乎，有待商榷）（不过可以学习一下，他们都是怎么去挖掘、利用、拉近分布信息的）（尤其注意这个分布，它和下面的第三个method有些联系）</h2>
-<h2 id="提出center-based-diverse-distribution-learning-cddl-loss它会拉近rgb和ir模态与中间模态的特征之间的距离注意这里不是说分布了如果这里还是说分布那就和上面的2矛盾了也会去拉近rgb和ir模态数据特征之间的距离按他说的这样既可以学到多样的特征应该就是指通过拉远rgbir模态与中间模态的距离让中间模态学到一些不一样的知识这个操作和之前的deen那篇很像啊然后是经典的拉近rgb和ir模态特征之间的距离这个真不能少主要想一下如果只是拉远了rgbir模态特征与中间模态特征的距离两个东西都离同一个东西很远这未必就说明这两个东西本身就离得很近所以保底的措施还是要的但这也让人怀疑如果你有这种担忧了为什么要去做这个拉远rgbir模态与中间模态的特征之间的距离-这个操作呢说白了这个操作本身就不好说到底会不会影响我们的保底措施即直接拉近rgb和ir模态特征之间的距离的效果它自己单独也未必有用只能说加上这个操作是为了学到一些不一样的知识吧也就是中间模态里含有的知识当然也需要看看他是怎么利用这个中间模态的知识的别学完了不用那就纯浪费了而且就是纯为了创新而创新了">3.提出Center-based
-Diverse Distribution Learning (CDDL)
-loss，它会拉近rgb和ir模态与中间模态的特征之间的距离（注意，这里不是说分布了。如果这里还是说分布，那就和上面的2矛盾了），也会去拉近rgb和ir模态数据特征之间的距离。（按他说的，这样既可以学到多样的特征——应该就是指通过拉远rgb/ir模态与中间模态的距离，让中间模态学到一些不一样的知识。这个操作和之前的DEEN那篇很像啊。。。然后是经典的拉近rgb和ir模态特征之间的距离。这个真不能少。主要想一下，如果只是拉远了rgb/ir模态特征与中间模态特征的距离，两个东西都离同一个东西很远，这未必就说明这两个东西本身就离得很近。所以保底的措施还是要的。但这也让人怀疑，如果你有这种担忧了，为什么要去做这个拉远rgb/ir模态与中间模态的特征之间的距离
-这个操作呢？说白了，这个操作本身，就不好说到底会不会影响我们的保底措施（即直接拉近rgb和ir模态特征之间的距离）的效果，它自己单独也未必有用。只能说，加上这个操作，是为了学到一些不一样的知识吧，也就是中间模态里含有的知识。当然，也需要看看他是怎么利用这个中间模态的知识的，别学完了不用，那就纯浪费了，而且就是纯为了创新而创新了</h2>
-<h2 id="一些问题虽然说2操作的是分布3操作的是特征本身没有直接的矛盾但这样23一起用就相当于希望irrgb中间模态三者的特征的分布是一致的但是具体的特征上ir和rgb希望尽可能一致而希望中间模态对应的特征与它们不一样这合理吗如果中间模态的特征尽可能不一样那还能说它的特征分布和rgbir的特征分布比较接近吗说到底这种树立一个公共敌人朋友的方法到底有没有效果不是很好说啊">一些问题：虽然说，2操作的是分布，3操作的是特征，本身没有直接的矛盾，但这样2，3一起用，就相当于希望ir/rgb/中间模态三者的特征的分布是一致的，但是具体的特征上，ir和rgb希望尽可能一致，而希望中间模态对应的特征与它们不一样。这合理吗？如果中间模态的特征尽可能不一样，那还能说它的特征分布和rgb/ir的特征分布比较接近吗？说到底，这种树立一个公共敌人/朋友的方法，到底有没有效果，不是很好说啊</h2>
-<h2 id="总体来说这个方法的目标就是通过构造一个中间模态训练的时候同时用三种模态的数据以此来拉近rgbir模态的数据之间的距离这是最终目的">总体来说，这个方法的目标，就是通过构造一个中间模态，训练的时候同时用三种模态的数据，以此来拉近rgb/ir模态的数据之间的距离（这是最终目的）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1164,14 +1149,14 @@ loss，它会拉近rgb和ir模态与中间模态的特征之间的距离（注�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-count">230</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">73</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

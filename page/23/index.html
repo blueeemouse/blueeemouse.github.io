@@ -150,6 +150,274 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/15/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Eimg%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A2%9E%E5%BC%BA%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-15 11:06:57 / Modified: 11:58:02" itemprop="dateCreated datePublished" datetime="2024-10-15T11:06:57+08:00">2024-10-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="cutmix-是一种数据增强方法它将两张图片进行随机部分的组合同时将两张图片的标签按比例加权例如">-
+<strong>CutMix</strong>
+是一种数据增强方法，它将两张图片进行随机部分的组合，同时将两张图片的标签按比例加权。例如：</h2>
+<h3 id="一部分图片-a-和一部分图片-b-被切割组合输出图像的标签是-a-标签和-b-标签按图像的组合比例加权">-
+一部分图片 A 和一部分图片 B 被切割组合，输出图像的标签是 A 标签和 B
+标签按图像的组合比例加权。</h3>
+<h2 id="rcpasterandom-cut-paste是一种随机增强方法通常涉及在图像中随机剪切部分图像并粘贴到其他区域增加图像的多样性">-
+<strong>rcpaste</strong>（Random Cut
+Paste）是一种随机增强方法，通常涉及在图像中随机剪切部分图像并粘贴到其他区域，增加图像的多样性。</h2>
+<h2 id="mixup-也是一种数据增强技术涉及将两张图片的像素和标签按某个随机比例进行线性混合它通过图像的加权平均生成新的训练样本其对应标签也按相同比例混合例如图像-a-和-b-混合后新图像的标签为-λ-标签-a-1-λ-标签-b其中-λ-是随机生成的混合比例">-
+<strong>MixUp</strong>
+也是一种数据增强技术，涉及将两张图片的像素和标签按某个随机比例进行线性混合。它通过图像的加权平均生成新的训练样本，其对应标签也按相同比例混合。例如，图像
+A 和 B 混合后新图像的标签为
+<code>λ * 标签 A + (1-λ) * 标签 B</code>，其中 <code>λ</code>
+是随机生成的混合比例。</h2>
+<h2 id="这几个操作实在是有点太像了主要区别可能在于random-cut-paste是用自己的图像完成操作而cutmix和mixup都是用到两幅图像cutmix是部分的完全组合mixup是整体的部分组合">-
+这几个操作实在是有点太像了。主要区别可能在于，random cut
+paste是用自己的图像完成操作，而cutmix和mixup都是用到两幅图像。cutmix是部分的完全组合，mixup是整体的部分组合</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">class CutMix(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, size, beta):</span><br><span class="line"></span><br><span class="line">    self.size = size</span><br><span class="line"></span><br><span class="line">    self.beta = beta</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = self._shuffle_minibatch(batch) # rand_img, rand_label</span><br><span class="line"></span><br><span class="line">    # 不是说真的随机生成的img和label，只是把一个batch里的数据给打乱顺序了</span><br><span class="line"></span><br><span class="line">    lambda_ = np.random.beta(self.beta,self.beta) # 根据beta分布生成一个lambda</span><br><span class="line"></span><br><span class="line">    r_x = np.random.uniform(0, self.size) # r_x, r_y是随机裁剪框的中心点</span><br><span class="line"></span><br><span class="line">    r_y = np.random.uniform(0, self.size)</span><br><span class="line"></span><br><span class="line">    r_w = self.size * np.sqrt(1-lambda_)  # r_w, r_h是随机裁剪框的宽和高</span><br><span class="line"></span><br><span class="line">    r_h = self.size * np.sqrt(1-lambda_)</span><br><span class="line"></span><br><span class="line">    x1 = int(np.clip(r_x - r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    x2 = int(np.clip(r_x + r_w // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y1 = int(np.clip(r_y - r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    y2 = int(np.clip(r_y + r_h // 2, a_min=0, a_max=self.size))</span><br><span class="line"></span><br><span class="line">    # (x1, y1), (x2, y2)分别是随机裁剪框的左上角和右下角坐标</span><br><span class="line"></span><br><span class="line">    # clip防止左上角/右下角坐标超出图像范围</span><br><span class="line"></span><br><span class="line">    img[:, :, x1:x2, y1:y2] = rand_img[:, :, x1:x2, y1:y2]  # 这一步完成混合</span><br><span class="line"></span><br><span class="line">    lambda_ = 1 - (x2-x1)*(y2-y1)/(self.size*self.size) # 重新计算lambda，因为前面</span><br><span class="line"></span><br><span class="line">    # 可能裁剪框超出了图像范围，所以需要重新计算</span><br><span class="line"></span><br><span class="line">    return img, label, rand_label, lambda_</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def _shuffle_minibatch(self, batch):</span><br><span class="line"></span><br><span class="line">    img, label = batch</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = img.clone(), label.clone()</span><br><span class="line"></span><br><span class="line">    rand_idx = torch.randperm(img.size(0))</span><br><span class="line"></span><br><span class="line">    rand_img, rand_label = rand_img[rand_idx], rand_label[rand_idx]</span><br><span class="line"></span><br><span class="line">    return rand_img, rand_label</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class MixUp(object):</span><br><span class="line"></span><br><span class="line">  def __init__(self, alpha=0.1):</span><br><span class="line"></span><br><span class="line">    self.alpha = alpha</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  def __call__(self, batch):</span><br><span class="line"></span><br><span class="line">    &#x27;&#x27;&#x27;Returns mixed inputs, pairs of targets, and lambda&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    x, y = batch</span><br><span class="line"></span><br><span class="line">    lam = np.random.beta(self.alpha, self.alpha)</span><br><span class="line"></span><br><span class="line">    batch_size = x.size(0)</span><br><span class="line"></span><br><span class="line">    index = torch.randperm(batch_size)</span><br><span class="line"></span><br><span class="line">    mixed_x = lam * x + (1 - lam) * x[index, :]</span><br><span class="line"></span><br><span class="line">    y_a, y_b = y, y[index]</span><br><span class="line"></span><br><span class="line">    return mixed_x, y_a, y_b, lam</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E9%97%AE%E9%A2%98%EF%BC%9Agit%20bash%E4%B8%8B%E8%99%BD%E7%84%B6%E5%8F%AF%E4%BB%A5%E6%89%A7%E8%A1%8C%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84conda%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%97%A0%E6%B3%95%E6%89%A7%E8%A1%8Cconda%20activate/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-14 18:38:09 / Modified: 18:38:57" itemprop="dateCreated datePublished" datetime="2024-10-14T18:38:09+08:00">2024-10-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>还没解决，之后有时间再说吧。感觉这个问题也不是那么紧急，毕竟几乎不会在git
+bash下</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%85%B3%E4%BA%8Ewindows%E4%B8%8Bgit%20bash%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8conda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%85%B3%E4%BA%8Ewindows%E4%B8%8Bgit%20bash%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8conda/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-14 18:18:52 / Modified: 18:41:18" itemprop="dateCreated datePublished" datetime="2024-10-14T18:18:52+08:00">2024-10-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>好像就windows有这个问题，mac和linux的系统似乎是自带了，反正没这个问题
+问ai和网上搜的不大一样 这里放一个目前应该已经奏效的方法</p>
+<p>临时：就打开git bash终端，然后输入 .
+C:\Users\lanhz\miniconda3\etc\profile.d\conda.sh
+！！！注意，这里因为obsidian好像把两个斜杠当成转义字符了，其实这里就是要双斜杠' '或者是一个正斜杠/的（正斜杠没试，但双反斜杠是可以的，并且单反斜杠是不行的）
+注意上面的.后面有个空格。然后后面跟着的路径是conda/miniconda下的一个sh文件（应该是要一个可执行文件的路径）
+至于怎么找到miniconda/conda的路径，可以这样：打开随便一个终端，然后输入conda
+info
+--base（这个命令实际的含义应该是找到conda环境下base环境的路径。但base环境好像是安装完就自带的，所以它的路径也差不多就是conda的路径了。找到这个路径以后就好办了，因为后半部分的etc\profile.d\conda.sh这个路径应该都是一样的（只要装完conda之后没搞什么奇怪的操作就行），所以相当于只需要找到conda的安装目录的路径</p>
+<p>永久配置：在git
+bash终端里，把上面那串路径（连前面的.和空格都要带上）（再次强调，那串路径里是双反斜杠，不是单反斜杠！！！）输入到.bashrc里即可。然后不知道是不是windows本身是不带这个.bashrc的，所以可能还需要自己创建。但创建这个的话，ai还是能讲明白的（我也是问它问出来的），这里就不写了。反正创建完之后，用nano/vim之类的编辑一下这个文件，把东西写进去，保存退出（这一串操作应该都是可以问ai问出来的），最后再执行source
+~/.bashrc，正常的话应该看到没啥输出（就是有一行空行），那就试试能不能用conda相关的命令了；试完之后关掉git
+bash，再重新开，然后再试试conda命令，看看是不是永久配置好了。不出问题的话，应该是还可以正常用conda命令的，也就是配置好了
+（目前是只把C:\Users\lanhz\miniconda3这串路径加到环境变量了，其它还没加，当然自己到时候再看看也行。就是高级系统设置里找环境变量，然后在下面的环境变量里找叫做PATH的，看看里面有哪些路径）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/13/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib.pyplot%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%93%E9%94%99%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/13/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/matplotlib.pyplot%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%93%E9%94%99%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-13 11:58:01" itemprop="dateCreated datePublished" datetime="2024-10-13T11:58:01+08:00">2024-10-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/12/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/ViT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -647,14 +915,14 @@ d)的节点特征矩阵x中通过边的索引提取出来的</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">226</span>
+          <span class="site-state-item-count">230</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">71</span>
+        <span class="site-state-item-count">73</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
