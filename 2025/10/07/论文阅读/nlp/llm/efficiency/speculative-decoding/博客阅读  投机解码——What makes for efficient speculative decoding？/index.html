@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="原博客链接 通过这篇博客，也算稍微了解了一点点投机解码。权当扩展知识面了 首先，给一句话简单概括speculative decoding在干什么：它在利用generate next token过程中，冗余的算力，预测未来若干个token只要有几个预测对了，一般都是赚的 挨个说明几个问题：为什么生成下一个token过程中，会有算力冗余？用什么方法预测未来的若干个token的？怎么判断是否赚">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客阅读 投机解码——What makes for efficient speculative decoding？">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="原博客链接 通过这篇博客，也算稍微了解了一点点投机解码。权当扩展知识面了 首先，给一句话简单概括speculative decoding在干什么：它在利用generate next token过程中，冗余的算力，预测未来若干个token只要有几个预测对了，一般都是赚的 挨个说明几个问题：为什么生成下一个token过程中，会有算力冗余？用什么方法预测未来的若干个token的？怎么判断是否赚">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-07T03:02:00.000Z">
+<meta property="article:modified_time" content="2025-10-08T04:23:40.690Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>博客阅读 投机解码——What makes for efficient speculative decoding？ | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          博客阅读 投机解码——What makes for efficient speculative decoding？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-10-07 11:02:00" itemprop="dateCreated datePublished" datetime="2025-10-07T11:02:00+08:00">2025-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-08 12:23:40" itemprop="dateModified" datetime="2025-10-08T12:23:40+08:00">2025-10-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/" itemprop="url" rel="index"><span itemprop="name">speculative decoding</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="原博客链接">原博客<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27272034867">链接</a></h1>
+<h1 id="通过这篇博客也算稍微了解了一点点投机解码权当扩展知识面了">通过这篇博客，也算稍微了解了一点点投机解码。权当扩展知识面了</h1>
+<h2 id="首先给一句话简单概括speculative-decoding在干什么它在利用generate-next-token过程中冗余的算力预测未来若干个token-只要有几个预测对了一般都是赚的">首先，给一句话简单概括speculative
+decoding在干什么：它在利用generate next
+token过程中，冗余的算力，预测未来若干个token<br>只要有几个预测对了，一般都是赚的</h2>
+<h2 id="挨个说明几个问题-为什么生成下一个token过程中会有算力冗余-用什么方法预测未来的若干个token的-怎么判断是否赚了">挨个说明几个问题：<br>为什么生成下一个token过程中，会有算力冗余？<br>用什么方法预测未来的若干个token的？<br>怎么判断是否赚了？</h2>
+<h2 id="算力冗余问题">算力冗余问题：</h2>
+<h3 id="生成下一个token的过程其实就是用最新生成的token的query和之前所有token包括这个token它自己的key进行attn来聚合value最后送到分类头那里预测下一个token的类别这个过程里我们只需要对最新的token计算qkv因为前面的token的key和value有kv-cache保留不需要重新算在此论文其实是作出了一些假设的即假设使用场景不是long-context因此可以暂且忽略掉除了计算qkv以外的地方所消耗的算力比如attn部分norm部分softmax部分激活函数部分等">生成下一个token的过程，其实就是用最新生成的token的query，和之前所有token（包括这个token它自己）的key进行attn，来聚合value，最后送到分类头那里预测下一个token的类别。这个过程里，我们只需要对最新的token计算qkv（因为前面的token的key和value，有kv
+cache保留，不需要重新算）。在此，论文其实是作出了一些假设的，即假设使用场景不是long
+context。因此可以暂且忽略掉除了计算qkv以外的地方所消耗的算力（比如attn部分，norm部分，softmax部分，激活函数部分，等）</h3>
+<h3 id="因此在这个场景下我们假设了计算部分只考虑矩阵乘法因为qkv就是矩阵乘法访存部分也就只考虑矩阵乘法中要用到的参数矩阵的访存开销假设输入为seq_len-embed_dim关于输入形状的假设也比较重要这里是原博客里的假设也即假设batch-size为1了后面会针对这一点进行细讲为什么假设成了1却不会影响结果矩阵形状为embed_dim-hidden_dim记seq_len为sembed_dim为ehidden_dim为h则我们得到此时的计算密度computation-intensityci为其定义为计算量除以访存量ci_gemmfrac2scdot-ecdot-hscdot-e-ecdot-hfrac2scdot-hshfrac2cdot-s1fracsh-approx-2cdot-s-关于这个计算过程首先需要说明分子是计算量然后之所以分子有个2是因为这里把加法和乘法都考虑进去且分开算了而分母的scdot-eecdot-h则是在把权重和计算输入都进行搬移所需要的访存量之后一步就是一个约分而再往后一步是同除一个h之所以进行这个操作是因为我们假设当前不是long-context场景也就是s会比较小相对而言有s-ll-h因此同除h后我们可以看得更清楚倒数第二步的分母里的fracsh就可以近似为0了因此得到了最后的近似结果两倍的seq_len就是说在近似之后short-context情况下计算密度其实就是两倍的seq_len而且需要说明的是上面的计算其实是指计算kv的过程所以我们的seq_len实质是指需要计算kv的token的个数而生成过程中我们也提到了每次只需要计算新生成的那个token的qkv因此seq_len可以当成1因而计算密度也就是2这显然是会比显卡的计算密度要小的故我们说生成过程是memory-bound的一个过程有算力冗余">因此，在这个场景下，我们假设了，计算部分只考虑矩阵乘法（因为qkv就是矩阵乘法），访存部分也就只考虑矩阵乘法中要用到的参数矩阵的访存开销。假设输入为(seq_len,
+embed_dim)（关于输入形状的假设，也比较重要。这里是原博客里的假设，也即假设batch
+size为1了。后面会针对这一点进行细讲，为什么假设成了1却不会影响结果），矩阵形状为(embed_dim,
+hidden_dim)。记seq_len为s，embed_dim为e，hidden_dim为h，则我们得到此时的计算密度（Computation
+Intensity，CI）为（其定义为计算量除以访存量）<span class="math inline">\(CI_{GEMM}=\frac{2s\cdot e\cdot h}{s\cdot e +
+e\cdot h}=\frac{2s\cdot h}{s+h}=\frac{2\cdot s}{1+\frac{s}{h}} \approx
+2\cdot
+s\)</span><br>关于这个计算过程，首先需要说明，分子是计算量。然后之所以分子有个2，是因为这里把加法和乘法都考虑进去，且分开算了。而分母的<span class="math inline">\(s\cdot e+e\cdot
+h\)</span>，则是在把权重和计算输入都进行搬移所需要的访存量。之后一步就是一个约分，而再往后一步是同除一个h。之所以进行这个操作，是因为我们假设当前不是long
+context场景，也就是s会比较小。相对而言，有<span class="math inline">\(s
+\ll
+h\)</span>。因此同除h后，我们可以看得更清楚：倒数第二步的分母里的<span class="math inline">\(\frac{s}{h}\)</span>就可以近似为0了，因此得到了最后的近似结果，两倍的seq_len。就是说，在近似之后，short
+context情况下，计算密度其实就是两倍的seq_len。而且需要说明的是，上面的计算其实是指计算kv的过程，所以我们的seq_len实质是指需要计算kv的token的个数。而生成过程中，我们也提到了，每次只需要计算新生成的那个token的qkv。因此seq_len可以当成1，因而计算密度也就是2。这显然是会比显卡的计算密度要小的。故，我们说，生成过程是memory
+bound的一个过程，有算力冗余。</h3>
+<h3 id="大体是这么个分析过程不过有一些细节应该还要考虑">大体是这么个分析过程。不过有一些细节应该还要考虑</h3>
+<h4 id="其一batch-size为什么没考虑进去因为直观上这应该会对计算密度的结果有影响考虑了batch-size显然计算量上是要乘以batch-size的但是访存量则未必参数矩阵还是只用取一次只不过输入确实也是乘了batch-size的这样的话记batch-size为b则表达式应该是ci_gemmfrac2cdot-bcdot-scdot-ecdot-hbcdot-scdot-e-ecdot-hfrac2cdot-bcdot-scdot-hbcdot-shfrac2cdot-bcdot-sbfracsh到这我们应该就能发现其实不影响结果了因为还是short-context场景所以fracsh那一项可以近似为0则此时分子分母的b就可以消掉了结论还是不变的不知道作者是不是知道这一点所以出于计算的方便省掉了batch-size维度">其一，batch
+size为什么没考虑进去？因为直观上，这应该会对计算密度的结果有影响。考虑了batch
+size，显然计算量上是要乘以batch
+size的，但是访存量则未必。参数矩阵还是只用取一次，只不过输入确实也是乘了batch
+size的。这样的话，记batch size为b，则表达式应该是<span class="math inline">\(CI_{GEMM}=\frac{2\cdot b\cdot s\cdot e\cdot
+h}{b\cdot s\cdot e + e\cdot h}=\frac{2\cdot b\cdot s\cdot h}{b\cdot
+s+h}=\frac{2\cdot b\cdot
+s}{b+\frac{s}{h}}\)</span>到这我们应该就能发现，其实不影响结果了。因为还是short
+context场景，所以<span class="math inline">\(\frac{s}{h}\)</span>那一项可以近似为0，则此时分子分母的b就可以消掉了。结论还是不变的（不知道作者是不是知道这一点，所以出于计算的方便，省掉了batch
+size维度……）</h4>
+<h4 id="其二如何用计算密度判断是memory-bound还是compute-bound它的本质是什么-这个其实就是一个理解上的问题而已计算密度本质上是说每取出1字节的数据能完成的flops计算那么当我们的操作ci大于显卡的ci时表明我们用这个显卡的时候取出1字节的数据量后完成的计算量不够因此这个操作是compute-bound而当我们的操作的ci小于显卡的ci的时候这说明我们用这个显卡取出1字节的数据量还没用完全部的计算量这个操作就完成了此时有一些算力的冗余但是没有数据了所以是memory-bound">其二，如何用计算密度判断是memory
+bound还是compute
+bound？它的本质是什么？<br>这个其实就是一个理解上的问题而已。计算密度，本质上是说，每取出1字节的数据，能完成的FLOPs计算。那么，当我们的操作CI大于显卡的CI时，表明，我们用这个显卡的时候，取出1字节的数据量后，完成的计算量不够。因此这个操作是compute
+bound。而当我们的操作的CI小于显卡的CI的时候，这说明我们用这个显卡取出1字节的数据量，还没用完全部的计算量，这个操作就完成了。此时有一些算力的冗余，但是没有数据了。所以是memory
+bound</h4>
+<h2 id="如何预测未来的若干个token的">如何预测未来的若干个token的：</h2>
+<h3 id="这里就涉及到投机解码的一个基本的思路drafting-verification大体上是说用某种方法预测未来的若干个token然后让llm来验证这些token里对了多少个我们会采用直到第一个错误token之前的所有猜测结果因为llm进行预测虽然是对多个token进行预测但是根据前面的分析生成阶段是memory-bound因此一般情况下检验多个token是否正确其时间依然和生成一个token的时间差不多主要还是访存卡时间此时我们的某种猜测方法虽然它肯定也要消耗一些时间和算力但一般它的开销都会小很多因此只要不是全都猜错了通常都是赚的">这里就涉及到投机解码的一个基本的思路：drafting-verification。大体上是说，用某种方法预测未来的若干个token，然后让llm来验证这些token里对了多少个。我们会采用直到第一个错误token之前的所有猜测结果。因为llm进行预测，虽然是对多个token进行预测，但是根据前面的分析，生成阶段是memory
+bound，因此一般情况下，检验多个token是否正确，其时间依然和生成一个token的时间差不多。主要还是访存卡时间。此时，我们的某种猜测方法，虽然它肯定也要消耗一些时间和算力，但一般它的开销都会小很多。因此只要不是全都猜错了，通常都是赚的</h3>
+<h3 id="至于说猜测的方法一般是用一个小模型当然也有用大模型乃至model-free的对于这个猜测的模型一般称作draft-modelllm本身则被称为target-model">至于说猜测的方法，一般是用一个小模型。当然也有用大模型，乃至model-free的。对于这个猜测的模型，一般称作draft
+model。llm本身则被称为target model</h3>
+<h3 id="另外这里需要详细说说具体的llm的verify的过程这里我们考虑用model的猜测方法那么draft-model给出了后续的gamma个时间步的token这里采用和原博客一样的记号此时我们可以得到这gamma个token的hidden-state怎么verify呢就是把这个gamma个token的hidden-state拿去给llm让它计算预测这些token应该是什么类别看看和draft-model的预测结果是否一致我们认为一个token只有当llm和draft-model的预测结果一致的时候才算通过否则我们就认为有可能出错了我们采用结果也是只采用到第一个错误token前的结果举个例子draft-model一共预测未来8个token验证发现前三个是对的第四个是错的即使说第五个到第八个都是对的我们也不会用只会用前三个正确的猜测结果这里之所以能有加速的效果就是因为llm-verify的过程是真的可以并行的只需要把这gamma个token的hidden-state拿去进行一些计算最后给分类头进行分类即可并不是一个自回归式的过程因为已经有了这些token的特征了否则如果verify也要自回归式的生成那完全失去意义了为什么不老老实实让llm生成呢-这里很容易产生一个问题直接用draft-model它很可能是一个小模型产生的hidden-state拿去给llm预测这样真的合理吗verify的结果真的准吗事实上这就是很多工作聚集和改进的点一些工作里它们为了确保verify能尽可能准会约束draft-model产生的hidden-state尽量和llm产生的hidden-state尽量一致虽然也有后面的工作发现这其实并非必要的另外我们verify的时候llm的权重不会动也就是会用到llm本身的知识此外verify的标准是llm和小模型预测token结果一致才算这个token预测正确了这类似一个双重保险只要二者不一致就视为不正确这在某种程度上也确保了verify的准确性">另外，这里需要详细说说具体的llm的verify的过程。这里我们考虑用model的猜测方法。那么，draft
+model给出了后续的<span class="math inline">\(\gamma\)</span>个时间步的token（这里采用和原博客一样的记号）。此时我们可以得到这<span class="math inline">\(\gamma\)</span>个token的hidden
+state。怎么verify呢？就是把这个<span class="math inline">\(\gamma\)</span>个token的hidden
+state，拿去给llm，让它计算、预测这些token应该是什么类别，看看和draft
+model的预测结果是否一致。我们认为，一个token只有当llm和draft
+model的预测结果一致的时候，才算通过；否则我们就认为有可能出错了。我们采用结果，也是只采用到第一个错误token前的结果（举个例子，draft
+model一共预测未来8个token。验证发现前三个是对的，第四个是错的。即使说第五个到第八个都是对的，我们也不会用。只会用前三个正确的猜测结果）。这里之所以能有加速的效果，就是因为，llm
+verify的过程是真的可以并行的。只需要把这<span class="math inline">\(\gamma\)</span>个token的hidden
+state拿去进行一些计算，最后给分类头进行分类即可，并不是一个自回归式的过程。因为已经有了这些token的特征了（否则，如果verify也要自回归式的生成，那完全失去意义了，为什么不老老实实让llm生成呢）<br>这里很容易产生一个问题：直接用draft
+model（它很可能是一个小模型）产生的hidden
+state，拿去给llm预测，这样真的合理吗？verify的结果真的准吗？事实上，这就是很多工作聚集和改进的点。一些工作里，它们为了确保verify能尽可能准，会约束draft
+model产生的hidden state尽量和llm产生的hidden
+state尽量一致（虽然也有后面的工作发现，这其实并非必要的）；另外，我们verify的时候，llm的权重不会动，也就是会用到llm本身的知识；此外，verify的标准是，llm和小模型预测token结果一致，才算这个token预测正确了。这类似一个双重保险。只要二者不一致，就视为不正确。这在某种程度上也确保了verify的准确性</h3>
+<h2 id="怎么判断是否赚了">怎么判断是否赚了：</h2>
+<h3 id="判断是否赚了其实主要是看是否有加速加速比有多高毕竟投机解码是一个加速推理的技术直观上当我们的一次draft-verification过程里接收的token越多也就是经过verify的token越多draft-model一次预测的时间开销越小llm并行verify未来gamma个token的耗时越小加速的程度应该越大如果要说加速比那显然就是llm正常生成一个token的时间相对于我们预测验证生成token的时间越长加速比越大由此可以得到一个公式speedupapprox-tau-times-fracl_tgamma-times-l_dl_t其中整体上分子表示llm正常生成一个token的耗时其余项大体表示我们用投机解码平均生成一个token的耗时可以看成是frac1fracgamma-times-l_dl_ttautau表示平均接受距离也就是平均一次draft-verification-cycle中有多少个正确token会被输出gamma表示我们要往后预测的token的个数l_d表示draft-model预测一次的耗时l_t表示llm并行verify-gamma个token的耗时l_t则表示llm正常生成一个token的耗时虽说我们是在利用llm的冗余算力并行地去验证gamma个token是否正确但毕竟它和正常生成一个token的耗时还是略有不同不过我们看待这个式子的时候也可以把l_t姑且看成和l_t一样这样后面的分式项就是小于1的但我们的tau通常不会是1这也太倒霉了就是说draft-model全错只要draft-model不太差一般加速比还是能大于1的">判断是否赚了，其实主要是看是否有加速，加速比有多高（毕竟投机解码是一个加速推理的技术）。直观上，当我们的一次draft-verification过程里，接收的token越多（也就是经过verify的token越多），draft
+model一次预测的时间开销越小，llm并行verify未来<span class="math inline">\(\gamma\)</span>个token的耗时越小，加速的程度应该越大。如果要说加速比，那显然就是，llm正常生成一个token的时间相对于我们预测+验证生成token的时间越长，加速比越大。由此可以得到一个公式：<span class="math display">\[Speedup\approx \tau \times
+\frac{L_{t}^{&#39;}}{\gamma \times
+L_{d}+L_{t}}\]</span>其中，整体上，分子表示llm正常生成一个token的耗时；其余项大体表示我们用投机解码平均生成一个token的耗时（可以看成是<span class="math inline">\(\frac{1}{\frac{\gamma \times
+L_{d}+L_{t}}{\tau}}\)</span>）。<span class="math inline">\(\tau\)</span>表示平均接受距离。也就是平均一次draft-verification
+cycle中，有多少个正确token会被输出<span class="math inline">\(\gamma\)</span>表示我们要往后预测的token的个数，<span class="math inline">\(L_{d}\)</span>表示draft model预测一次的耗时，<span class="math inline">\(L_{t}\)</span>表示llm并行verify <span class="math inline">\(\gamma\)</span>个token的耗时，<span class="math inline">\(L_{t}^{&#39;}\)</span>则表示llm正常生成一个token的耗时（虽说，我们是在利用llm的冗余算力，并行地去验证<span class="math inline">\(\gamma\)</span>个token是否正确，但毕竟它和正常生成一个token的耗时还是略有不同）。不过，我们看待这个式子的时候，也可以把<span class="math inline">\(L_{t}^{&#39;}\)</span>姑且看成和<span class="math inline">\(L_{t}\)</span>一样。这样，后面的分式项就是小于1的，但我们的<span class="math inline">\(\tau\)</span>通常不会是1（这也太倒霉了，就是说draft
+model全错）。只要draft model不太差，一般加速比还是能大于1的</h3>
+<h3 id="总结一下的话我们可以认为投机解码加速的地方在于我们用gamma次小模型的计算一次大模型的计算验证换了tau次大模型的计算">总结一下的话，我们可以认为，投机解码加速的地方在于，我们用<span class="math inline">\(\gamma\)</span>次小模型的计算+一次大模型的计算（验证）换了<span class="math inline">\(\tau\)</span>次大模型的计算</h3>
+<h1 id="上述其实就是一些基础的投机解码相关的概念和内容博客的后续内容就是在阐述经典sota方法以及他们的工作是如何改进的整体的思路其实都是围绕上面的加速比公式展开的通过观察哪些因子可以改进分析应当怎么改进设计方法剩下就暂时不细讲了挑一些有疑问的地方进行解释">上述其实就是一些基础的投机解码相关的概念和内容。博客的后续内容就是在阐述经典sota方法以及他们的工作是如何改进的。整体的思路其实都是围绕上面的加速比公式展开的，通过观察哪些因子可以改进，分析应当怎么改进，设计方法。剩下就暂时不细讲了，挑一些有疑问的地方进行解释：</h1>
+<h2 id="eagle为什么要对齐feature">EAGLE为什么要对齐feature？</h2>
+<h3 id="博客里说是为了让小模型在推理阶段自回归的输入能更加稳定但我个人感觉其实是为了让llm-verify的时候准确率能高一点毕竟只有当小模型得到的特征和大模型尽可能接近的时候大模型verify的准确率才会更高">博客里说是为了让小模型在推理阶段自回归的输入能更加稳定。但我个人感觉其实是为了让llm
+verify的时候准确率能高一点。毕竟，只有当小模型得到的特征和大模型尽可能接近的时候，大模型verify的准确率才会更高</h3>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h1 id="contribution">contribution：</h1>
+<span id="more"></span>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MC-LLaVA%EF%BC%9AMulti-Concept%20Personalized%20Vision-Language%20Model/" rel="prev" title="MC-LLaVA：Multi-Concept Personalized Vision-Language Model">
+      <i class="fa fa-chevron-left"></i> MC-LLaVA：Multi-Concept Personalized Vision-Language Model
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/" rel="next" title="Packing Input Frame Context in Next-Frame Prediction Models for Video Generation">
+      Packing Input Frame Context in Next-Frame Prediction Models for Video Generation <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%8D%9A%E5%AE%A2%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">原博客链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E8%BF%99%E7%AF%87%E5%8D%9A%E5%AE%A2%E4%B9%9F%E7%AE%97%E7%A8%8D%E5%BE%AE%E4%BA%86%E8%A7%A3%E4%BA%86%E4%B8%80%E7%82%B9%E7%82%B9%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E6%9D%83%E5%BD%93%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E9%9D%A2%E4%BA%86"><span class="nav-number">2.</span> <span class="nav-text">通过这篇博客，也算稍微了解了一点点投机解码。权当扩展知识面了</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E7%BB%99%E4%B8%80%E5%8F%A5%E8%AF%9D%E7%AE%80%E5%8D%95%E6%A6%82%E6%8B%ACspeculative-decoding%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%E5%AE%83%E5%9C%A8%E5%88%A9%E7%94%A8generate-next-token%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%86%97%E4%BD%99%E7%9A%84%E7%AE%97%E5%8A%9B%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A5%E8%8B%A5%E5%B9%B2%E4%B8%AAtoken-%E5%8F%AA%E8%A6%81%E6%9C%89%E5%87%A0%E4%B8%AA%E9%A2%84%E6%B5%8B%E5%AF%B9%E4%BA%86%E4%B8%80%E8%88%AC%E9%83%BD%E6%98%AF%E8%B5%9A%E7%9A%84"><span class="nav-number">2.1.</span> <span class="nav-text">首先，给一句话简单概括speculative
+decoding在干什么：它在利用generate next
+token过程中，冗余的算力，预测未来若干个token只要有几个预测对了，一般都是赚的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%A8%E4%B8%AA%E8%AF%B4%E6%98%8E%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%9F%E6%88%90%E4%B8%8B%E4%B8%80%E4%B8%AAtoken%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BC%9A%E6%9C%89%E7%AE%97%E5%8A%9B%E5%86%97%E4%BD%99-%E7%94%A8%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%8B%A5%E5%B9%B2%E4%B8%AAtoken%E7%9A%84-%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E8%B5%9A%E4%BA%86"><span class="nav-number">2.2.</span> <span class="nav-text">挨个说明几个问题：为什么生成下一个token过程中，会有算力冗余？用什么方法预测未来的若干个token的？怎么判断是否赚了？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E5%8A%9B%E5%86%97%E4%BD%99%E9%97%AE%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text">算力冗余问题：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%B8%8B%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E8%BF%87%E7%A8%8B%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E7%94%A8%E6%9C%80%E6%96%B0%E7%94%9F%E6%88%90%E7%9A%84token%E7%9A%84query%E5%92%8C%E4%B9%8B%E5%89%8D%E6%89%80%E6%9C%89token%E5%8C%85%E6%8B%AC%E8%BF%99%E4%B8%AAtoken%E5%AE%83%E8%87%AA%E5%B7%B1%E7%9A%84key%E8%BF%9B%E8%A1%8Cattn%E6%9D%A5%E8%81%9A%E5%90%88value%E6%9C%80%E5%90%8E%E9%80%81%E5%88%B0%E5%88%86%E7%B1%BB%E5%A4%B4%E9%82%A3%E9%87%8C%E9%A2%84%E6%B5%8B%E4%B8%8B%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E7%B1%BB%E5%88%AB%E8%BF%99%E4%B8%AA%E8%BF%87%E7%A8%8B%E9%87%8C%E6%88%91%E4%BB%AC%E5%8F%AA%E9%9C%80%E8%A6%81%E5%AF%B9%E6%9C%80%E6%96%B0%E7%9A%84token%E8%AE%A1%E7%AE%97qkv%E5%9B%A0%E4%B8%BA%E5%89%8D%E9%9D%A2%E7%9A%84token%E7%9A%84key%E5%92%8Cvalue%E6%9C%89kv-cache%E4%BF%9D%E7%95%99%E4%B8%8D%E9%9C%80%E8%A6%81%E9%87%8D%E6%96%B0%E7%AE%97%E5%9C%A8%E6%AD%A4%E8%AE%BA%E6%96%87%E5%85%B6%E5%AE%9E%E6%98%AF%E4%BD%9C%E5%87%BA%E4%BA%86%E4%B8%80%E4%BA%9B%E5%81%87%E8%AE%BE%E7%9A%84%E5%8D%B3%E5%81%87%E8%AE%BE%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E4%B8%8D%E6%98%AFlong-context%E5%9B%A0%E6%AD%A4%E5%8F%AF%E4%BB%A5%E6%9A%82%E4%B8%94%E5%BF%BD%E7%95%A5%E6%8E%89%E9%99%A4%E4%BA%86%E8%AE%A1%E7%AE%97qkv%E4%BB%A5%E5%A4%96%E7%9A%84%E5%9C%B0%E6%96%B9%E6%89%80%E6%B6%88%E8%80%97%E7%9A%84%E7%AE%97%E5%8A%9B%E6%AF%94%E5%A6%82attn%E9%83%A8%E5%88%86norm%E9%83%A8%E5%88%86softmax%E9%83%A8%E5%88%86%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E9%83%A8%E5%88%86%E7%AD%89"><span class="nav-number">2.3.1.</span> <span class="nav-text">生成下一个token的过程，其实就是用最新生成的token的query，和之前所有token（包括这个token它自己）的key进行attn，来聚合value，最后送到分类头那里预测下一个token的类别。这个过程里，我们只需要对最新的token计算qkv（因为前面的token的key和value，有kv
+cache保留，不需要重新算）。在此，论文其实是作出了一些假设的，即假设使用场景不是long
+context。因此可以暂且忽略掉除了计算qkv以外的地方所消耗的算力（比如attn部分，norm部分，softmax部分，激活函数部分，等）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%AD%A4%E5%9C%A8%E8%BF%99%E4%B8%AA%E5%9C%BA%E6%99%AF%E4%B8%8B%E6%88%91%E4%BB%AC%E5%81%87%E8%AE%BE%E4%BA%86%E8%AE%A1%E7%AE%97%E9%83%A8%E5%88%86%E5%8F%AA%E8%80%83%E8%99%91%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E5%9B%A0%E4%B8%BAqkv%E5%B0%B1%E6%98%AF%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E8%AE%BF%E5%AD%98%E9%83%A8%E5%88%86%E4%B9%9F%E5%B0%B1%E5%8F%AA%E8%80%83%E8%99%91%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E4%B8%AD%E8%A6%81%E7%94%A8%E5%88%B0%E7%9A%84%E5%8F%82%E6%95%B0%E7%9F%A9%E9%98%B5%E7%9A%84%E8%AE%BF%E5%AD%98%E5%BC%80%E9%94%80%E5%81%87%E8%AE%BE%E8%BE%93%E5%85%A5%E4%B8%BAseq_len-embed_dim%E5%85%B3%E4%BA%8E%E8%BE%93%E5%85%A5%E5%BD%A2%E7%8A%B6%E7%9A%84%E5%81%87%E8%AE%BE%E4%B9%9F%E6%AF%94%E8%BE%83%E9%87%8D%E8%A6%81%E8%BF%99%E9%87%8C%E6%98%AF%E5%8E%9F%E5%8D%9A%E5%AE%A2%E9%87%8C%E7%9A%84%E5%81%87%E8%AE%BE%E4%B9%9F%E5%8D%B3%E5%81%87%E8%AE%BEbatch-size%E4%B8%BA1%E4%BA%86%E5%90%8E%E9%9D%A2%E4%BC%9A%E9%92%88%E5%AF%B9%E8%BF%99%E4%B8%80%E7%82%B9%E8%BF%9B%E8%A1%8C%E7%BB%86%E8%AE%B2%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%87%E8%AE%BE%E6%88%90%E4%BA%861%E5%8D%B4%E4%B8%8D%E4%BC%9A%E5%BD%B1%E5%93%8D%E7%BB%93%E6%9E%9C%E7%9F%A9%E9%98%B5%E5%BD%A2%E7%8A%B6%E4%B8%BAembed_dim-hidden_dim%E8%AE%B0seq_len%E4%B8%BAsembed_dim%E4%B8%BAehidden_dim%E4%B8%BAh%E5%88%99%E6%88%91%E4%BB%AC%E5%BE%97%E5%88%B0%E6%AD%A4%E6%97%B6%E7%9A%84%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6computation-intensityci%E4%B8%BA%E5%85%B6%E5%AE%9A%E4%B9%89%E4%B8%BA%E8%AE%A1%E7%AE%97%E9%87%8F%E9%99%A4%E4%BB%A5%E8%AE%BF%E5%AD%98%E9%87%8Fci_gemmfrac2scdot-ecdot-hscdot-e-ecdot-hfrac2scdot-hshfrac2cdot-s1fracsh-approx-2cdot-s-%E5%85%B3%E4%BA%8E%E8%BF%99%E4%B8%AA%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B%E9%A6%96%E5%85%88%E9%9C%80%E8%A6%81%E8%AF%B4%E6%98%8E%E5%88%86%E5%AD%90%E6%98%AF%E8%AE%A1%E7%AE%97%E9%87%8F%E7%84%B6%E5%90%8E%E4%B9%8B%E6%89%80%E4%BB%A5%E5%88%86%E5%AD%90%E6%9C%89%E4%B8%AA2%E6%98%AF%E5%9B%A0%E4%B8%BA%E8%BF%99%E9%87%8C%E6%8A%8A%E5%8A%A0%E6%B3%95%E5%92%8C%E4%B9%98%E6%B3%95%E9%83%BD%E8%80%83%E8%99%91%E8%BF%9B%E5%8E%BB%E4%B8%94%E5%88%86%E5%BC%80%E7%AE%97%E4%BA%86%E8%80%8C%E5%88%86%E6%AF%8D%E7%9A%84scdot-eecdot-h%E5%88%99%E6%98%AF%E5%9C%A8%E6%8A%8A%E6%9D%83%E9%87%8D%E5%92%8C%E8%AE%A1%E7%AE%97%E8%BE%93%E5%85%A5%E9%83%BD%E8%BF%9B%E8%A1%8C%E6%90%AC%E7%A7%BB%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E8%AE%BF%E5%AD%98%E9%87%8F%E4%B9%8B%E5%90%8E%E4%B8%80%E6%AD%A5%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E7%BA%A6%E5%88%86%E8%80%8C%E5%86%8D%E5%BE%80%E5%90%8E%E4%B8%80%E6%AD%A5%E6%98%AF%E5%90%8C%E9%99%A4%E4%B8%80%E4%B8%AAh%E4%B9%8B%E6%89%80%E4%BB%A5%E8%BF%9B%E8%A1%8C%E8%BF%99%E4%B8%AA%E6%93%8D%E4%BD%9C%E6%98%AF%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E5%81%87%E8%AE%BE%E5%BD%93%E5%89%8D%E4%B8%8D%E6%98%AFlong-context%E5%9C%BA%E6%99%AF%E4%B9%9F%E5%B0%B1%E6%98%AFs%E4%BC%9A%E6%AF%94%E8%BE%83%E5%B0%8F%E7%9B%B8%E5%AF%B9%E8%80%8C%E8%A8%80%E6%9C%89s-ll-h%E5%9B%A0%E6%AD%A4%E5%90%8C%E9%99%A4h%E5%90%8E%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%BE%97%E6%9B%B4%E6%B8%85%E6%A5%9A%E5%80%92%E6%95%B0%E7%AC%AC%E4%BA%8C%E6%AD%A5%E7%9A%84%E5%88%86%E6%AF%8D%E9%87%8C%E7%9A%84fracsh%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%BF%91%E4%BC%BC%E4%B8%BA0%E4%BA%86%E5%9B%A0%E6%AD%A4%E5%BE%97%E5%88%B0%E4%BA%86%E6%9C%80%E5%90%8E%E7%9A%84%E8%BF%91%E4%BC%BC%E7%BB%93%E6%9E%9C%E4%B8%A4%E5%80%8D%E7%9A%84seq_len%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%9C%A8%E8%BF%91%E4%BC%BC%E4%B9%8B%E5%90%8Eshort-context%E6%83%85%E5%86%B5%E4%B8%8B%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E4%B8%A4%E5%80%8D%E7%9A%84seq_len%E8%80%8C%E4%B8%94%E9%9C%80%E8%A6%81%E8%AF%B4%E6%98%8E%E7%9A%84%E6%98%AF%E4%B8%8A%E9%9D%A2%E7%9A%84%E8%AE%A1%E7%AE%97%E5%85%B6%E5%AE%9E%E6%98%AF%E6%8C%87%E8%AE%A1%E7%AE%97kv%E7%9A%84%E8%BF%87%E7%A8%8B%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E7%9A%84seq_len%E5%AE%9E%E8%B4%A8%E6%98%AF%E6%8C%87%E9%9C%80%E8%A6%81%E8%AE%A1%E7%AE%97kv%E7%9A%84token%E7%9A%84%E4%B8%AA%E6%95%B0%E8%80%8C%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%88%91%E4%BB%AC%E4%B9%9F%E6%8F%90%E5%88%B0%E4%BA%86%E6%AF%8F%E6%AC%A1%E5%8F%AA%E9%9C%80%E8%A6%81%E8%AE%A1%E7%AE%97%E6%96%B0%E7%94%9F%E6%88%90%E7%9A%84%E9%82%A3%E4%B8%AAtoken%E7%9A%84qkv%E5%9B%A0%E6%AD%A4seq_len%E5%8F%AF%E4%BB%A5%E5%BD%93%E6%88%901%E5%9B%A0%E8%80%8C%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6%E4%B9%9F%E5%B0%B1%E6%98%AF2%E8%BF%99%E6%98%BE%E7%84%B6%E6%98%AF%E4%BC%9A%E6%AF%94%E6%98%BE%E5%8D%A1%E7%9A%84%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6%E8%A6%81%E5%B0%8F%E7%9A%84%E6%95%85%E6%88%91%E4%BB%AC%E8%AF%B4%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B%E6%98%AFmemory-bound%E7%9A%84%E4%B8%80%E4%B8%AA%E8%BF%87%E7%A8%8B%E6%9C%89%E7%AE%97%E5%8A%9B%E5%86%97%E4%BD%99"><span class="nav-number">2.3.2.</span> <span class="nav-text">因此，在这个场景下，我们假设了，计算部分只考虑矩阵乘法（因为qkv就是矩阵乘法），访存部分也就只考虑矩阵乘法中要用到的参数矩阵的访存开销。假设输入为(seq_len,
+embed_dim)（关于输入形状的假设，也比较重要。这里是原博客里的假设，也即假设batch
+size为1了。后面会针对这一点进行细讲，为什么假设成了1却不会影响结果），矩阵形状为(embed_dim,
+hidden_dim)。记seq_len为s，embed_dim为e，hidden_dim为h，则我们得到此时的计算密度（Computation
+Intensity，CI）为（其定义为计算量除以访存量）\(CI_{GEMM}&#x3D;\frac{2s\cdot e\cdot h}{s\cdot e +
+e\cdot h}&#x3D;\frac{2s\cdot h}{s+h}&#x3D;\frac{2\cdot s}{1+\frac{s}{h}} \approx
+2\cdot
+s\)关于这个计算过程，首先需要说明，分子是计算量。然后之所以分子有个2，是因为这里把加法和乘法都考虑进去，且分开算了。而分母的\(s\cdot e+e\cdot
+h\)，则是在把权重和计算输入都进行搬移所需要的访存量。之后一步就是一个约分，而再往后一步是同除一个h。之所以进行这个操作，是因为我们假设当前不是long
+context场景，也就是s会比较小。相对而言，有\(s
+\ll
+h\)。因此同除h后，我们可以看得更清楚：倒数第二步的分母里的\(\frac{s}{h}\)就可以近似为0了，因此得到了最后的近似结果，两倍的seq_len。就是说，在近似之后，short
+context情况下，计算密度其实就是两倍的seq_len。而且需要说明的是，上面的计算其实是指计算kv的过程，所以我们的seq_len实质是指需要计算kv的token的个数。而生成过程中，我们也提到了，每次只需要计算新生成的那个token的qkv。因此seq_len可以当成1，因而计算密度也就是2。这显然是会比显卡的计算密度要小的。故，我们说，生成过程是memory
+bound的一个过程，有算力冗余。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E4%BD%93%E6%98%AF%E8%BF%99%E4%B9%88%E4%B8%AA%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B%E4%B8%8D%E8%BF%87%E6%9C%89%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82%E5%BA%94%E8%AF%A5%E8%BF%98%E8%A6%81%E8%80%83%E8%99%91"><span class="nav-number">2.3.3.</span> <span class="nav-text">大体是这么个分析过程。不过有一些细节应该还要考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%B8%80batch-size%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E8%80%83%E8%99%91%E8%BF%9B%E5%8E%BB%E5%9B%A0%E4%B8%BA%E7%9B%B4%E8%A7%82%E4%B8%8A%E8%BF%99%E5%BA%94%E8%AF%A5%E4%BC%9A%E5%AF%B9%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6%E7%9A%84%E7%BB%93%E6%9E%9C%E6%9C%89%E5%BD%B1%E5%93%8D%E8%80%83%E8%99%91%E4%BA%86batch-size%E6%98%BE%E7%84%B6%E8%AE%A1%E7%AE%97%E9%87%8F%E4%B8%8A%E6%98%AF%E8%A6%81%E4%B9%98%E4%BB%A5batch-size%E7%9A%84%E4%BD%86%E6%98%AF%E8%AE%BF%E5%AD%98%E9%87%8F%E5%88%99%E6%9C%AA%E5%BF%85%E5%8F%82%E6%95%B0%E7%9F%A9%E9%98%B5%E8%BF%98%E6%98%AF%E5%8F%AA%E7%94%A8%E5%8F%96%E4%B8%80%E6%AC%A1%E5%8F%AA%E4%B8%8D%E8%BF%87%E8%BE%93%E5%85%A5%E7%A1%AE%E5%AE%9E%E4%B9%9F%E6%98%AF%E4%B9%98%E4%BA%86batch-size%E7%9A%84%E8%BF%99%E6%A0%B7%E7%9A%84%E8%AF%9D%E8%AE%B0batch-size%E4%B8%BAb%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BA%94%E8%AF%A5%E6%98%AFci_gemmfrac2cdot-bcdot-scdot-ecdot-hbcdot-scdot-e-ecdot-hfrac2cdot-bcdot-scdot-hbcdot-shfrac2cdot-bcdot-sbfracsh%E5%88%B0%E8%BF%99%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E5%B0%B1%E8%83%BD%E5%8F%91%E7%8E%B0%E5%85%B6%E5%AE%9E%E4%B8%8D%E5%BD%B1%E5%93%8D%E7%BB%93%E6%9E%9C%E4%BA%86%E5%9B%A0%E4%B8%BA%E8%BF%98%E6%98%AFshort-context%E5%9C%BA%E6%99%AF%E6%89%80%E4%BB%A5fracsh%E9%82%A3%E4%B8%80%E9%A1%B9%E5%8F%AF%E4%BB%A5%E8%BF%91%E4%BC%BC%E4%B8%BA0%E5%88%99%E6%AD%A4%E6%97%B6%E5%88%86%E5%AD%90%E5%88%86%E6%AF%8D%E7%9A%84b%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%B6%88%E6%8E%89%E4%BA%86%E7%BB%93%E8%AE%BA%E8%BF%98%E6%98%AF%E4%B8%8D%E5%8F%98%E7%9A%84%E4%B8%8D%E7%9F%A5%E9%81%93%E4%BD%9C%E8%80%85%E6%98%AF%E4%B8%8D%E6%98%AF%E7%9F%A5%E9%81%93%E8%BF%99%E4%B8%80%E7%82%B9%E6%89%80%E4%BB%A5%E5%87%BA%E4%BA%8E%E8%AE%A1%E7%AE%97%E7%9A%84%E6%96%B9%E4%BE%BF%E7%9C%81%E6%8E%89%E4%BA%86batch-size%E7%BB%B4%E5%BA%A6"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">其一，batch
+size为什么没考虑进去？因为直观上，这应该会对计算密度的结果有影响。考虑了batch
+size，显然计算量上是要乘以batch
+size的，但是访存量则未必。参数矩阵还是只用取一次，只不过输入确实也是乘了batch
+size的。这样的话，记batch size为b，则表达式应该是\(CI_{GEMM}&#x3D;\frac{2\cdot b\cdot s\cdot e\cdot
+h}{b\cdot s\cdot e + e\cdot h}&#x3D;\frac{2\cdot b\cdot s\cdot h}{b\cdot
+s+h}&#x3D;\frac{2\cdot b\cdot
+s}{b+\frac{s}{h}}\)到这我们应该就能发现，其实不影响结果了。因为还是short
+context场景，所以\(\frac{s}{h}\)那一项可以近似为0，则此时分子分母的b就可以消掉了。结论还是不变的（不知道作者是不是知道这一点，所以出于计算的方便，省掉了batch
+size维度……）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BA%8C%E5%A6%82%E4%BD%95%E7%94%A8%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6%E5%88%A4%E6%96%AD%E6%98%AFmemory-bound%E8%BF%98%E6%98%AFcompute-bound%E5%AE%83%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%98%AF%E4%BB%80%E4%B9%88-%E8%BF%99%E4%B8%AA%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E7%90%86%E8%A7%A3%E4%B8%8A%E7%9A%84%E9%97%AE%E9%A2%98%E8%80%8C%E5%B7%B2%E8%AE%A1%E7%AE%97%E5%AF%86%E5%BA%A6%E6%9C%AC%E8%B4%A8%E4%B8%8A%E6%98%AF%E8%AF%B4%E6%AF%8F%E5%8F%96%E5%87%BA1%E5%AD%97%E8%8A%82%E7%9A%84%E6%95%B0%E6%8D%AE%E8%83%BD%E5%AE%8C%E6%88%90%E7%9A%84flops%E8%AE%A1%E7%AE%97%E9%82%A3%E4%B9%88%E5%BD%93%E6%88%91%E4%BB%AC%E7%9A%84%E6%93%8D%E4%BD%9Cci%E5%A4%A7%E4%BA%8E%E6%98%BE%E5%8D%A1%E7%9A%84ci%E6%97%B6%E8%A1%A8%E6%98%8E%E6%88%91%E4%BB%AC%E7%94%A8%E8%BF%99%E4%B8%AA%E6%98%BE%E5%8D%A1%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%96%E5%87%BA1%E5%AD%97%E8%8A%82%E7%9A%84%E6%95%B0%E6%8D%AE%E9%87%8F%E5%90%8E%E5%AE%8C%E6%88%90%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E4%B8%8D%E5%A4%9F%E5%9B%A0%E6%AD%A4%E8%BF%99%E4%B8%AA%E6%93%8D%E4%BD%9C%E6%98%AFcompute-bound%E8%80%8C%E5%BD%93%E6%88%91%E4%BB%AC%E7%9A%84%E6%93%8D%E4%BD%9C%E7%9A%84ci%E5%B0%8F%E4%BA%8E%E6%98%BE%E5%8D%A1%E7%9A%84ci%E7%9A%84%E6%97%B6%E5%80%99%E8%BF%99%E8%AF%B4%E6%98%8E%E6%88%91%E4%BB%AC%E7%94%A8%E8%BF%99%E4%B8%AA%E6%98%BE%E5%8D%A1%E5%8F%96%E5%87%BA1%E5%AD%97%E8%8A%82%E7%9A%84%E6%95%B0%E6%8D%AE%E9%87%8F%E8%BF%98%E6%B2%A1%E7%94%A8%E5%AE%8C%E5%85%A8%E9%83%A8%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E8%BF%99%E4%B8%AA%E6%93%8D%E4%BD%9C%E5%B0%B1%E5%AE%8C%E6%88%90%E4%BA%86%E6%AD%A4%E6%97%B6%E6%9C%89%E4%B8%80%E4%BA%9B%E7%AE%97%E5%8A%9B%E7%9A%84%E5%86%97%E4%BD%99%E4%BD%86%E6%98%AF%E6%B2%A1%E6%9C%89%E6%95%B0%E6%8D%AE%E4%BA%86%E6%89%80%E4%BB%A5%E6%98%AFmemory-bound"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">其二，如何用计算密度判断是memory
+bound还是compute
+bound？它的本质是什么？这个其实就是一个理解上的问题而已。计算密度，本质上是说，每取出1字节的数据，能完成的FLOPs计算。那么，当我们的操作CI大于显卡的CI时，表明，我们用这个显卡的时候，取出1字节的数据量后，完成的计算量不够。因此这个操作是compute
+bound。而当我们的操作的CI小于显卡的CI的时候，这说明我们用这个显卡取出1字节的数据量，还没用完全部的计算量，这个操作就完成了。此时有一些算力的冗余，但是没有数据了。所以是memory
+bound</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%8B%A5%E5%B9%B2%E4%B8%AAtoken%E7%9A%84"><span class="nav-number">2.4.</span> <span class="nav-text">如何预测未来的若干个token的：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E5%B0%B1%E6%B6%89%E5%8F%8A%E5%88%B0%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%80%9D%E8%B7%AFdrafting-verification%E5%A4%A7%E4%BD%93%E4%B8%8A%E6%98%AF%E8%AF%B4%E7%94%A8%E6%9F%90%E7%A7%8D%E6%96%B9%E6%B3%95%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A5%E7%9A%84%E8%8B%A5%E5%B9%B2%E4%B8%AAtoken%E7%84%B6%E5%90%8E%E8%AE%A9llm%E6%9D%A5%E9%AA%8C%E8%AF%81%E8%BF%99%E4%BA%9Btoken%E9%87%8C%E5%AF%B9%E4%BA%86%E5%A4%9A%E5%B0%91%E4%B8%AA%E6%88%91%E4%BB%AC%E4%BC%9A%E9%87%87%E7%94%A8%E7%9B%B4%E5%88%B0%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%94%99%E8%AF%AFtoken%E4%B9%8B%E5%89%8D%E7%9A%84%E6%89%80%E6%9C%89%E7%8C%9C%E6%B5%8B%E7%BB%93%E6%9E%9C%E5%9B%A0%E4%B8%BAllm%E8%BF%9B%E8%A1%8C%E9%A2%84%E6%B5%8B%E8%99%BD%E7%84%B6%E6%98%AF%E5%AF%B9%E5%A4%9A%E4%B8%AAtoken%E8%BF%9B%E8%A1%8C%E9%A2%84%E6%B5%8B%E4%BD%86%E6%98%AF%E6%A0%B9%E6%8D%AE%E5%89%8D%E9%9D%A2%E7%9A%84%E5%88%86%E6%9E%90%E7%94%9F%E6%88%90%E9%98%B6%E6%AE%B5%E6%98%AFmemory-bound%E5%9B%A0%E6%AD%A4%E4%B8%80%E8%88%AC%E6%83%85%E5%86%B5%E4%B8%8B%E6%A3%80%E9%AA%8C%E5%A4%9A%E4%B8%AAtoken%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE%E5%85%B6%E6%97%B6%E9%97%B4%E4%BE%9D%E7%84%B6%E5%92%8C%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E9%97%B4%E5%B7%AE%E4%B8%8D%E5%A4%9A%E4%B8%BB%E8%A6%81%E8%BF%98%E6%98%AF%E8%AE%BF%E5%AD%98%E5%8D%A1%E6%97%B6%E9%97%B4%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E7%9A%84%E6%9F%90%E7%A7%8D%E7%8C%9C%E6%B5%8B%E6%96%B9%E6%B3%95%E8%99%BD%E7%84%B6%E5%AE%83%E8%82%AF%E5%AE%9A%E4%B9%9F%E8%A6%81%E6%B6%88%E8%80%97%E4%B8%80%E4%BA%9B%E6%97%B6%E9%97%B4%E5%92%8C%E7%AE%97%E5%8A%9B%E4%BD%86%E4%B8%80%E8%88%AC%E5%AE%83%E7%9A%84%E5%BC%80%E9%94%80%E9%83%BD%E4%BC%9A%E5%B0%8F%E5%BE%88%E5%A4%9A%E5%9B%A0%E6%AD%A4%E5%8F%AA%E8%A6%81%E4%B8%8D%E6%98%AF%E5%85%A8%E9%83%BD%E7%8C%9C%E9%94%99%E4%BA%86%E9%80%9A%E5%B8%B8%E9%83%BD%E6%98%AF%E8%B5%9A%E7%9A%84"><span class="nav-number">2.4.1.</span> <span class="nav-text">这里就涉及到投机解码的一个基本的思路：drafting-verification。大体上是说，用某种方法预测未来的若干个token，然后让llm来验证这些token里对了多少个。我们会采用直到第一个错误token之前的所有猜测结果。因为llm进行预测，虽然是对多个token进行预测，但是根据前面的分析，生成阶段是memory
+bound，因此一般情况下，检验多个token是否正确，其时间依然和生成一个token的时间差不多。主要还是访存卡时间。此时，我们的某种猜测方法，虽然它肯定也要消耗一些时间和算力，但一般它的开销都会小很多。因此只要不是全都猜错了，通常都是赚的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%B3%E4%BA%8E%E8%AF%B4%E7%8C%9C%E6%B5%8B%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%80%E8%88%AC%E6%98%AF%E7%94%A8%E4%B8%80%E4%B8%AA%E5%B0%8F%E6%A8%A1%E5%9E%8B%E5%BD%93%E7%84%B6%E4%B9%9F%E6%9C%89%E7%94%A8%E5%A4%A7%E6%A8%A1%E5%9E%8B%E4%B9%83%E8%87%B3model-free%E7%9A%84%E5%AF%B9%E4%BA%8E%E8%BF%99%E4%B8%AA%E7%8C%9C%E6%B5%8B%E7%9A%84%E6%A8%A1%E5%9E%8B%E4%B8%80%E8%88%AC%E7%A7%B0%E4%BD%9Cdraft-modelllm%E6%9C%AC%E8%BA%AB%E5%88%99%E8%A2%AB%E7%A7%B0%E4%B8%BAtarget-model"><span class="nav-number">2.4.2.</span> <span class="nav-text">至于说猜测的方法，一般是用一个小模型。当然也有用大模型，乃至model-free的。对于这个猜测的模型，一般称作draft
+model。llm本身则被称为target model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E8%BF%99%E9%87%8C%E9%9C%80%E8%A6%81%E8%AF%A6%E7%BB%86%E8%AF%B4%E8%AF%B4%E5%85%B7%E4%BD%93%E7%9A%84llm%E7%9A%84verify%E7%9A%84%E8%BF%87%E7%A8%8B%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E8%80%83%E8%99%91%E7%94%A8model%E7%9A%84%E7%8C%9C%E6%B5%8B%E6%96%B9%E6%B3%95%E9%82%A3%E4%B9%88draft-model%E7%BB%99%E5%87%BA%E4%BA%86%E5%90%8E%E7%BB%AD%E7%9A%84gamma%E4%B8%AA%E6%97%B6%E9%97%B4%E6%AD%A5%E7%9A%84token%E8%BF%99%E9%87%8C%E9%87%87%E7%94%A8%E5%92%8C%E5%8E%9F%E5%8D%9A%E5%AE%A2%E4%B8%80%E6%A0%B7%E7%9A%84%E8%AE%B0%E5%8F%B7%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%BE%97%E5%88%B0%E8%BF%99gamma%E4%B8%AAtoken%E7%9A%84hidden-state%E6%80%8E%E4%B9%88verify%E5%91%A2%E5%B0%B1%E6%98%AF%E6%8A%8A%E8%BF%99%E4%B8%AAgamma%E4%B8%AAtoken%E7%9A%84hidden-state%E6%8B%BF%E5%8E%BB%E7%BB%99llm%E8%AE%A9%E5%AE%83%E8%AE%A1%E7%AE%97%E9%A2%84%E6%B5%8B%E8%BF%99%E4%BA%9Btoken%E5%BA%94%E8%AF%A5%E6%98%AF%E4%BB%80%E4%B9%88%E7%B1%BB%E5%88%AB%E7%9C%8B%E7%9C%8B%E5%92%8Cdraft-model%E7%9A%84%E9%A2%84%E6%B5%8B%E7%BB%93%E6%9E%9C%E6%98%AF%E5%90%A6%E4%B8%80%E8%87%B4%E6%88%91%E4%BB%AC%E8%AE%A4%E4%B8%BA%E4%B8%80%E4%B8%AAtoken%E5%8F%AA%E6%9C%89%E5%BD%93llm%E5%92%8Cdraft-model%E7%9A%84%E9%A2%84%E6%B5%8B%E7%BB%93%E6%9E%9C%E4%B8%80%E8%87%B4%E7%9A%84%E6%97%B6%E5%80%99%E6%89%8D%E7%AE%97%E9%80%9A%E8%BF%87%E5%90%A6%E5%88%99%E6%88%91%E4%BB%AC%E5%B0%B1%E8%AE%A4%E4%B8%BA%E6%9C%89%E5%8F%AF%E8%83%BD%E5%87%BA%E9%94%99%E4%BA%86%E6%88%91%E4%BB%AC%E9%87%87%E7%94%A8%E7%BB%93%E6%9E%9C%E4%B9%9F%E6%98%AF%E5%8F%AA%E9%87%87%E7%94%A8%E5%88%B0%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%94%99%E8%AF%AFtoken%E5%89%8D%E7%9A%84%E7%BB%93%E6%9E%9C%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90draft-model%E4%B8%80%E5%85%B1%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A58%E4%B8%AAtoken%E9%AA%8C%E8%AF%81%E5%8F%91%E7%8E%B0%E5%89%8D%E4%B8%89%E4%B8%AA%E6%98%AF%E5%AF%B9%E7%9A%84%E7%AC%AC%E5%9B%9B%E4%B8%AA%E6%98%AF%E9%94%99%E7%9A%84%E5%8D%B3%E4%BD%BF%E8%AF%B4%E7%AC%AC%E4%BA%94%E4%B8%AA%E5%88%B0%E7%AC%AC%E5%85%AB%E4%B8%AA%E9%83%BD%E6%98%AF%E5%AF%B9%E7%9A%84%E6%88%91%E4%BB%AC%E4%B9%9F%E4%B8%8D%E4%BC%9A%E7%94%A8%E5%8F%AA%E4%BC%9A%E7%94%A8%E5%89%8D%E4%B8%89%E4%B8%AA%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%8C%9C%E6%B5%8B%E7%BB%93%E6%9E%9C%E8%BF%99%E9%87%8C%E4%B9%8B%E6%89%80%E4%BB%A5%E8%83%BD%E6%9C%89%E5%8A%A0%E9%80%9F%E7%9A%84%E6%95%88%E6%9E%9C%E5%B0%B1%E6%98%AF%E5%9B%A0%E4%B8%BAllm-verify%E7%9A%84%E8%BF%87%E7%A8%8B%E6%98%AF%E7%9C%9F%E7%9A%84%E5%8F%AF%E4%BB%A5%E5%B9%B6%E8%A1%8C%E7%9A%84%E5%8F%AA%E9%9C%80%E8%A6%81%E6%8A%8A%E8%BF%99gamma%E4%B8%AAtoken%E7%9A%84hidden-state%E6%8B%BF%E5%8E%BB%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%9C%80%E5%90%8E%E7%BB%99%E5%88%86%E7%B1%BB%E5%A4%B4%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB%E5%8D%B3%E5%8F%AF%E5%B9%B6%E4%B8%8D%E6%98%AF%E4%B8%80%E4%B8%AA%E8%87%AA%E5%9B%9E%E5%BD%92%E5%BC%8F%E7%9A%84%E8%BF%87%E7%A8%8B%E5%9B%A0%E4%B8%BA%E5%B7%B2%E7%BB%8F%E6%9C%89%E4%BA%86%E8%BF%99%E4%BA%9Btoken%E7%9A%84%E7%89%B9%E5%BE%81%E4%BA%86%E5%90%A6%E5%88%99%E5%A6%82%E6%9E%9Cverify%E4%B9%9F%E8%A6%81%E8%87%AA%E5%9B%9E%E5%BD%92%E5%BC%8F%E7%9A%84%E7%94%9F%E6%88%90%E9%82%A3%E5%AE%8C%E5%85%A8%E5%A4%B1%E5%8E%BB%E6%84%8F%E4%B9%89%E4%BA%86%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%80%81%E8%80%81%E5%AE%9E%E5%AE%9E%E8%AE%A9llm%E7%94%9F%E6%88%90%E5%91%A2-%E8%BF%99%E9%87%8C%E5%BE%88%E5%AE%B9%E6%98%93%E4%BA%A7%E7%94%9F%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E7%9B%B4%E6%8E%A5%E7%94%A8draft-model%E5%AE%83%E5%BE%88%E5%8F%AF%E8%83%BD%E6%98%AF%E4%B8%80%E4%B8%AA%E5%B0%8F%E6%A8%A1%E5%9E%8B%E4%BA%A7%E7%94%9F%E7%9A%84hidden-state%E6%8B%BF%E5%8E%BB%E7%BB%99llm%E9%A2%84%E6%B5%8B%E8%BF%99%E6%A0%B7%E7%9C%9F%E7%9A%84%E5%90%88%E7%90%86%E5%90%97verify%E7%9A%84%E7%BB%93%E6%9E%9C%E7%9C%9F%E7%9A%84%E5%87%86%E5%90%97%E4%BA%8B%E5%AE%9E%E4%B8%8A%E8%BF%99%E5%B0%B1%E6%98%AF%E5%BE%88%E5%A4%9A%E5%B7%A5%E4%BD%9C%E8%81%9A%E9%9B%86%E5%92%8C%E6%94%B9%E8%BF%9B%E7%9A%84%E7%82%B9%E4%B8%80%E4%BA%9B%E5%B7%A5%E4%BD%9C%E9%87%8C%E5%AE%83%E4%BB%AC%E4%B8%BA%E4%BA%86%E7%A1%AE%E4%BF%9Dverify%E8%83%BD%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%87%86%E4%BC%9A%E7%BA%A6%E6%9D%9Fdraft-model%E4%BA%A7%E7%94%9F%E7%9A%84hidden-state%E5%B0%BD%E9%87%8F%E5%92%8Cllm%E4%BA%A7%E7%94%9F%E7%9A%84hidden-state%E5%B0%BD%E9%87%8F%E4%B8%80%E8%87%B4%E8%99%BD%E7%84%B6%E4%B9%9F%E6%9C%89%E5%90%8E%E9%9D%A2%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8F%91%E7%8E%B0%E8%BF%99%E5%85%B6%E5%AE%9E%E5%B9%B6%E9%9D%9E%E5%BF%85%E8%A6%81%E7%9A%84%E5%8F%A6%E5%A4%96%E6%88%91%E4%BB%ACverify%E7%9A%84%E6%97%B6%E5%80%99llm%E7%9A%84%E6%9D%83%E9%87%8D%E4%B8%8D%E4%BC%9A%E5%8A%A8%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%BC%9A%E7%94%A8%E5%88%B0llm%E6%9C%AC%E8%BA%AB%E7%9A%84%E7%9F%A5%E8%AF%86%E6%AD%A4%E5%A4%96verify%E7%9A%84%E6%A0%87%E5%87%86%E6%98%AFllm%E5%92%8C%E5%B0%8F%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8Btoken%E7%BB%93%E6%9E%9C%E4%B8%80%E8%87%B4%E6%89%8D%E7%AE%97%E8%BF%99%E4%B8%AAtoken%E9%A2%84%E6%B5%8B%E6%AD%A3%E7%A1%AE%E4%BA%86%E8%BF%99%E7%B1%BB%E4%BC%BC%E4%B8%80%E4%B8%AA%E5%8F%8C%E9%87%8D%E4%BF%9D%E9%99%A9%E5%8F%AA%E8%A6%81%E4%BA%8C%E8%80%85%E4%B8%8D%E4%B8%80%E8%87%B4%E5%B0%B1%E8%A7%86%E4%B8%BA%E4%B8%8D%E6%AD%A3%E7%A1%AE%E8%BF%99%E5%9C%A8%E6%9F%90%E7%A7%8D%E7%A8%8B%E5%BA%A6%E4%B8%8A%E4%B9%9F%E7%A1%AE%E4%BF%9D%E4%BA%86verify%E7%9A%84%E5%87%86%E7%A1%AE%E6%80%A7"><span class="nav-number">2.4.3.</span> <span class="nav-text">另外，这里需要详细说说具体的llm的verify的过程。这里我们考虑用model的猜测方法。那么，draft
+model给出了后续的\(\gamma\)个时间步的token（这里采用和原博客一样的记号）。此时我们可以得到这\(\gamma\)个token的hidden
+state。怎么verify呢？就是把这个\(\gamma\)个token的hidden
+state，拿去给llm，让它计算、预测这些token应该是什么类别，看看和draft
+model的预测结果是否一致。我们认为，一个token只有当llm和draft
+model的预测结果一致的时候，才算通过；否则我们就认为有可能出错了。我们采用结果，也是只采用到第一个错误token前的结果（举个例子，draft
+model一共预测未来8个token。验证发现前三个是对的，第四个是错的。即使说第五个到第八个都是对的，我们也不会用。只会用前三个正确的猜测结果）。这里之所以能有加速的效果，就是因为，llm
+verify的过程是真的可以并行的。只需要把这\(\gamma\)个token的hidden
+state拿去进行一些计算，最后给分类头进行分类即可，并不是一个自回归式的过程。因为已经有了这些token的特征了（否则，如果verify也要自回归式的生成，那完全失去意义了，为什么不老老实实让llm生成呢）这里很容易产生一个问题：直接用draft
+model（它很可能是一个小模型）产生的hidden
+state，拿去给llm预测，这样真的合理吗？verify的结果真的准吗？事实上，这就是很多工作聚集和改进的点。一些工作里，它们为了确保verify能尽可能准，会约束draft
+model产生的hidden state尽量和llm产生的hidden
+state尽量一致（虽然也有后面的工作发现，这其实并非必要的）；另外，我们verify的时候，llm的权重不会动，也就是会用到llm本身的知识；此外，verify的标准是，llm和小模型预测token结果一致，才算这个token预测正确了。这类似一个双重保险。只要二者不一致，就视为不正确。这在某种程度上也确保了verify的准确性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E8%B5%9A%E4%BA%86"><span class="nav-number">2.5.</span> <span class="nav-text">怎么判断是否赚了：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E8%B5%9A%E4%BA%86%E5%85%B6%E5%AE%9E%E4%B8%BB%E8%A6%81%E6%98%AF%E7%9C%8B%E6%98%AF%E5%90%A6%E6%9C%89%E5%8A%A0%E9%80%9F%E5%8A%A0%E9%80%9F%E6%AF%94%E6%9C%89%E5%A4%9A%E9%AB%98%E6%AF%95%E7%AB%9F%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8A%A0%E9%80%9F%E6%8E%A8%E7%90%86%E7%9A%84%E6%8A%80%E6%9C%AF%E7%9B%B4%E8%A7%82%E4%B8%8A%E5%BD%93%E6%88%91%E4%BB%AC%E7%9A%84%E4%B8%80%E6%AC%A1draft-verification%E8%BF%87%E7%A8%8B%E9%87%8C%E6%8E%A5%E6%94%B6%E7%9A%84token%E8%B6%8A%E5%A4%9A%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%BB%8F%E8%BF%87verify%E7%9A%84token%E8%B6%8A%E5%A4%9Adraft-model%E4%B8%80%E6%AC%A1%E9%A2%84%E6%B5%8B%E7%9A%84%E6%97%B6%E9%97%B4%E5%BC%80%E9%94%80%E8%B6%8A%E5%B0%8Fllm%E5%B9%B6%E8%A1%8Cverify%E6%9C%AA%E6%9D%A5gamma%E4%B8%AAtoken%E7%9A%84%E8%80%97%E6%97%B6%E8%B6%8A%E5%B0%8F%E5%8A%A0%E9%80%9F%E7%9A%84%E7%A8%8B%E5%BA%A6%E5%BA%94%E8%AF%A5%E8%B6%8A%E5%A4%A7%E5%A6%82%E6%9E%9C%E8%A6%81%E8%AF%B4%E5%8A%A0%E9%80%9F%E6%AF%94%E9%82%A3%E6%98%BE%E7%84%B6%E5%B0%B1%E6%98%AFllm%E6%AD%A3%E5%B8%B8%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E9%97%B4%E7%9B%B8%E5%AF%B9%E4%BA%8E%E6%88%91%E4%BB%AC%E9%A2%84%E6%B5%8B%E9%AA%8C%E8%AF%81%E7%94%9F%E6%88%90token%E7%9A%84%E6%97%B6%E9%97%B4%E8%B6%8A%E9%95%BF%E5%8A%A0%E9%80%9F%E6%AF%94%E8%B6%8A%E5%A4%A7%E7%94%B1%E6%AD%A4%E5%8F%AF%E4%BB%A5%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AA%E5%85%AC%E5%BC%8Fspeedupapprox-tau-times-fracl_tgamma-times-l_dl_t%E5%85%B6%E4%B8%AD%E6%95%B4%E4%BD%93%E4%B8%8A%E5%88%86%E5%AD%90%E8%A1%A8%E7%A4%BAllm%E6%AD%A3%E5%B8%B8%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E8%80%97%E6%97%B6%E5%85%B6%E4%BD%99%E9%A1%B9%E5%A4%A7%E4%BD%93%E8%A1%A8%E7%A4%BA%E6%88%91%E4%BB%AC%E7%94%A8%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E5%B9%B3%E5%9D%87%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E8%80%97%E6%97%B6%E5%8F%AF%E4%BB%A5%E7%9C%8B%E6%88%90%E6%98%AFfrac1fracgamma-times-l_dl_ttautau%E8%A1%A8%E7%A4%BA%E5%B9%B3%E5%9D%87%E6%8E%A5%E5%8F%97%E8%B7%9D%E7%A6%BB%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%B9%B3%E5%9D%87%E4%B8%80%E6%AC%A1draft-verification-cycle%E4%B8%AD%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%E6%AD%A3%E7%A1%AEtoken%E4%BC%9A%E8%A2%AB%E8%BE%93%E5%87%BAgamma%E8%A1%A8%E7%A4%BA%E6%88%91%E4%BB%AC%E8%A6%81%E5%BE%80%E5%90%8E%E9%A2%84%E6%B5%8B%E7%9A%84token%E7%9A%84%E4%B8%AA%E6%95%B0l_d%E8%A1%A8%E7%A4%BAdraft-model%E9%A2%84%E6%B5%8B%E4%B8%80%E6%AC%A1%E7%9A%84%E8%80%97%E6%97%B6l_t%E8%A1%A8%E7%A4%BAllm%E5%B9%B6%E8%A1%8Cverify-gamma%E4%B8%AAtoken%E7%9A%84%E8%80%97%E6%97%B6l_t%E5%88%99%E8%A1%A8%E7%A4%BAllm%E6%AD%A3%E5%B8%B8%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E8%80%97%E6%97%B6%E8%99%BD%E8%AF%B4%E6%88%91%E4%BB%AC%E6%98%AF%E5%9C%A8%E5%88%A9%E7%94%A8llm%E7%9A%84%E5%86%97%E4%BD%99%E7%AE%97%E5%8A%9B%E5%B9%B6%E8%A1%8C%E5%9C%B0%E5%8E%BB%E9%AA%8C%E8%AF%81gamma%E4%B8%AAtoken%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE%E4%BD%86%E6%AF%95%E7%AB%9F%E5%AE%83%E5%92%8C%E6%AD%A3%E5%B8%B8%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E8%80%97%E6%97%B6%E8%BF%98%E6%98%AF%E7%95%A5%E6%9C%89%E4%B8%8D%E5%90%8C%E4%B8%8D%E8%BF%87%E6%88%91%E4%BB%AC%E7%9C%8B%E5%BE%85%E8%BF%99%E4%B8%AA%E5%BC%8F%E5%AD%90%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%8A%8Al_t%E5%A7%91%E4%B8%94%E7%9C%8B%E6%88%90%E5%92%8Cl_t%E4%B8%80%E6%A0%B7%E8%BF%99%E6%A0%B7%E5%90%8E%E9%9D%A2%E7%9A%84%E5%88%86%E5%BC%8F%E9%A1%B9%E5%B0%B1%E6%98%AF%E5%B0%8F%E4%BA%8E1%E7%9A%84%E4%BD%86%E6%88%91%E4%BB%AC%E7%9A%84tau%E9%80%9A%E5%B8%B8%E4%B8%8D%E4%BC%9A%E6%98%AF1%E8%BF%99%E4%B9%9F%E5%A4%AA%E5%80%92%E9%9C%89%E4%BA%86%E5%B0%B1%E6%98%AF%E8%AF%B4draft-model%E5%85%A8%E9%94%99%E5%8F%AA%E8%A6%81draft-model%E4%B8%8D%E5%A4%AA%E5%B7%AE%E4%B8%80%E8%88%AC%E5%8A%A0%E9%80%9F%E6%AF%94%E8%BF%98%E6%98%AF%E8%83%BD%E5%A4%A7%E4%BA%8E1%E7%9A%84"><span class="nav-number">2.5.1.</span> <span class="nav-text">判断是否赚了，其实主要是看是否有加速，加速比有多高（毕竟投机解码是一个加速推理的技术）。直观上，当我们的一次draft-verification过程里，接收的token越多（也就是经过verify的token越多），draft
+model一次预测的时间开销越小，llm并行verify未来\(\gamma\)个token的耗时越小，加速的程度应该越大。如果要说加速比，那显然就是，llm正常生成一个token的时间相对于我们预测+验证生成token的时间越长，加速比越大。由此可以得到一个公式：\[Speedup\approx \tau \times
+\frac{L_{t}^{&#39;}}{\gamma \times
+L_{d}+L_{t}}\]其中，整体上，分子表示llm正常生成一个token的耗时；其余项大体表示我们用投机解码平均生成一个token的耗时（可以看成是\(\frac{1}{\frac{\gamma \times
+L_{d}+L_{t}}{\tau}}\)）。\(\tau\)表示平均接受距离。也就是平均一次draft-verification
+cycle中，有多少个正确token会被输出\(\gamma\)表示我们要往后预测的token的个数，\(L_{d}\)表示draft model预测一次的耗时，\(L_{t}\)表示llm并行verify \(\gamma\)个token的耗时，\(L_{t}^{&#39;}\)则表示llm正常生成一个token的耗时（虽说，我们是在利用llm的冗余算力，并行地去验证\(\gamma\)个token是否正确，但毕竟它和正常生成一个token的耗时还是略有不同）。不过，我们看待这个式子的时候，也可以把\(L_{t}^{&#39;}\)姑且看成和\(L_{t}\)一样。这样，后面的分式项就是小于1的，但我们的\(\tau\)通常不会是1（这也太倒霉了，就是说draft
+model全错）。只要draft model不太差，一般加速比还是能大于1的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B%E7%9A%84%E8%AF%9D%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F%E7%9A%84%E5%9C%B0%E6%96%B9%E5%9C%A8%E4%BA%8E%E6%88%91%E4%BB%AC%E7%94%A8gamma%E6%AC%A1%E5%B0%8F%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%80%E6%AC%A1%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%A1%E7%AE%97%E9%AA%8C%E8%AF%81%E6%8D%A2%E4%BA%86tau%E6%AC%A1%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">2.5.2.</span> <span class="nav-text">总结一下的话，我们可以认为，投机解码加速的地方在于，我们用\(\gamma\)次小模型的计算+一次大模型的计算（验证）换了\(\tau\)次大模型的计算</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E8%BF%B0%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9A%84%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E7%9B%B8%E5%85%B3%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%86%85%E5%AE%B9%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%90%8E%E7%BB%AD%E5%86%85%E5%AE%B9%E5%B0%B1%E6%98%AF%E5%9C%A8%E9%98%90%E8%BF%B0%E7%BB%8F%E5%85%B8sota%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E4%BB%96%E4%BB%AC%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%98%AF%E5%A6%82%E4%BD%95%E6%94%B9%E8%BF%9B%E7%9A%84%E6%95%B4%E4%BD%93%E7%9A%84%E6%80%9D%E8%B7%AF%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E5%9B%B4%E7%BB%95%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%8A%A0%E9%80%9F%E6%AF%94%E5%85%AC%E5%BC%8F%E5%B1%95%E5%BC%80%E7%9A%84%E9%80%9A%E8%BF%87%E8%A7%82%E5%AF%9F%E5%93%AA%E4%BA%9B%E5%9B%A0%E5%AD%90%E5%8F%AF%E4%BB%A5%E6%94%B9%E8%BF%9B%E5%88%86%E6%9E%90%E5%BA%94%E5%BD%93%E6%80%8E%E4%B9%88%E6%94%B9%E8%BF%9B%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E5%89%A9%E4%B8%8B%E5%B0%B1%E6%9A%82%E6%97%B6%E4%B8%8D%E7%BB%86%E8%AE%B2%E4%BA%86%E6%8C%91%E4%B8%80%E4%BA%9B%E6%9C%89%E7%96%91%E9%97%AE%E7%9A%84%E5%9C%B0%E6%96%B9%E8%BF%9B%E8%A1%8C%E8%A7%A3%E9%87%8A"><span class="nav-number">3.</span> <span class="nav-text">上述其实就是一些基础的投机解码相关的概念和内容。博客的后续内容就是在阐述经典sota方法以及他们的工作是如何改进的。整体的思路其实都是围绕上面的加速比公式展开的，通过观察哪些因子可以改进，分析应当怎么改进，设计方法。剩下就暂时不细讲了，挑一些有疑问的地方进行解释：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#eagle%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AF%B9%E9%BD%90feature"><span class="nav-number">3.1.</span> <span class="nav-text">EAGLE为什么要对齐feature？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%9A%E5%AE%A2%E9%87%8C%E8%AF%B4%E6%98%AF%E4%B8%BA%E4%BA%86%E8%AE%A9%E5%B0%8F%E6%A8%A1%E5%9E%8B%E5%9C%A8%E6%8E%A8%E7%90%86%E9%98%B6%E6%AE%B5%E8%87%AA%E5%9B%9E%E5%BD%92%E7%9A%84%E8%BE%93%E5%85%A5%E8%83%BD%E6%9B%B4%E5%8A%A0%E7%A8%B3%E5%AE%9A%E4%BD%86%E6%88%91%E4%B8%AA%E4%BA%BA%E6%84%9F%E8%A7%89%E5%85%B6%E5%AE%9E%E6%98%AF%E4%B8%BA%E4%BA%86%E8%AE%A9llm-verify%E7%9A%84%E6%97%B6%E5%80%99%E5%87%86%E7%A1%AE%E7%8E%87%E8%83%BD%E9%AB%98%E4%B8%80%E7%82%B9%E6%AF%95%E7%AB%9F%E5%8F%AA%E6%9C%89%E5%BD%93%E5%B0%8F%E6%A8%A1%E5%9E%8B%E5%BE%97%E5%88%B0%E7%9A%84%E7%89%B9%E5%BE%81%E5%92%8C%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B0%BD%E5%8F%AF%E8%83%BD%E6%8E%A5%E8%BF%91%E7%9A%84%E6%97%B6%E5%80%99%E5%A4%A7%E6%A8%A1%E5%9E%8Bverify%E7%9A%84%E5%87%86%E7%A1%AE%E7%8E%87%E6%89%8D%E4%BC%9A%E6%9B%B4%E9%AB%98"><span class="nav-number">3.1.1.</span> <span class="nav-text">博客里说是为了让小模型在推理阶段自回归的输入能更加稳定。但我个人感觉其实是为了让llm
+verify的时候准确率能高一点。毕竟，只有当小模型得到的特征和大模型尽可能接近的时候，大模型verify的准确率才会更高</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">4.</span> <span class="nav-text">动机：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">5.</span> <span class="nav-text">insight：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">6.</span> <span class="nav-text">contribution：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">232</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

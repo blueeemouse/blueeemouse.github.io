@@ -150,6 +150,205 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/" class="post-title-link" itemprop="url">CodeAgent：Enhancing Code Generation with Tool-Integrated Agent Systems for Real-World Repo-level Coding Challenges</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-17 13:25:00 / Modified: 14:50:52" itemprop="dateCreated datePublished" datetime="2025-07-17T13:25:00+08:00">2025-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueacl-24">Venue：ACL 24</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有方法无法处理真实世界仓库级代码生成而这类任务是实际软件开发的核心需求为此论文借鉴了人类处理这类问题的方法借助工具感觉这也是讲故事啥方法不能说是借鉴人类啊人类解决问题那方法可是多种多样的">现有方法无法处理真实世界仓库级代码生成，而这类任务是实际软件开发的核心需求。为此，论文借鉴了人类处理这类问题的方法：借助工具（感觉这也是讲故事……啥方法不能说是借鉴人类啊，人类解决问题，那方法可是多种多样的……）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="这篇感觉纯粹是把agent搬到了repo-level-code-generation这个任务上因为之前没有人做过这方面的工作然后讲个故事说是借鉴人类的做法给llm装备上各种tools并相应地指定策略让llm能在合适的时机选择合适的tool">这篇感觉纯粹是把agent搬到了repo-level
+code
+generation这个任务上（因为之前没有人做过这方面的工作）。然后，讲个故事，说是借鉴人类的做法，给llm装备上各种tools，并相应地指定策略，让llm能在合适的时机选择合适的tool……</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="定义了repo-level-code-generation-task明确它和现有任务的区别">定义了repo-level
+code generation task，明确它和现有任务的区别</h2>
+<h2 id="提出一个codeagent框架增强了llm的repo-level-code-generation-ability">提出一个CodeAgent框架，增强了llm的repo-level
+code generation ability</h2>
+<h2 id="提出了一个codeagentbench用于repo-level-task的评估它和swe-bench的关系是">提出了一个CodeAgentBench，用于repo-level
+task的评估（它和SWE-Bench的关系是？）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/" class="post-title-link" itemprop="url">Self-collaboration Code Generation via ChatGPT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-17 12:52:00 / Modified: 13:22:35" itemprop="dateCreated datePublished" datetime="2025-07-17T12:52:00+08:00">2025-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venue">Venue：</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有-llm-在复杂代码生成任务如多文件依赖长逻辑任务中表现不足而人类通过团队协作解决复杂任务的模式可被借鉴">现有
+LLM
+在复杂代码生成任务（如多文件依赖、长逻辑任务）中表现不足，而人类通过团队协作解决复杂任务的模式可被借鉴</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="通过简单的角色指令本质就是prompt-engineering就能让llm化作不同的角色从而实现用一个llm就完成多个角色的分工所以其实可以理解为我们用不同的prompt激发了llm的不同方面的能力从而实现了self-collaborationself-collaboration就是说我们完成一个任务可能它很复杂需要分工有多个角色要完成各自的任务我们可以用同一个llm然后依次让它扮演相应角色并给它相应的prompt">通过简单的“角色指令”（本质就是prompt
+engineering），就能让llm化作不同的角色，从而实现用一个llm就完成多个角色的分工（所以其实可以理解为，我们用不同的prompt激发了llm的不同方面的能力，从而实现了self-collaboration。self-collaboration就是说，我们完成一个任务，可能它很复杂，需要分工，有多个角色要完成各自的任务。我们可以用同一个llm，然后依次让它扮演相应角色，并给它相应的prompt）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一套框架可以让llm扮演不同角色处理复杂任务感觉本质上就是一套提示词工程">提出了一套框架，可以让llm扮演不同角色，处理复杂任务（感觉本质上就是一套提示词工程）</h2>
+<h2 id="基于软件开发方法论设计了三个角色并组成一个虚拟团队明确了分工和协作的规则这里有点讲故事的嫌疑为它们设计的三个role找到背书">基于软件开发方法论，设计了三个角色，并组成一个虚拟团队，明确了分工和协作的规则（这里有点讲故事的嫌疑，为它们设计的三个role找到背书）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -899,173 +1098,10 @@ module，可以适配现有的方法，能增进对代码仓库的整体理解�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/knowledge-edit/EasyEdit2%EF%BC%9AAn%20Easy-to-use%20Steering%20Framework%20for%20Editing%20Large%20Language%20Models/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/knowledge-edit/EasyEdit2%EF%BC%9AAn%20Easy-to-use%20Steering%20Framework%20for%20Editing%20Large%20Language%20Models/" class="post-title-link" itemprop="url">EasyEdit2：An Easy-to-use Steering Framework for Editing Large Language Models</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-08 21:29:00 / Modified: 21:30:55" itemprop="dateCreated datePublished" datetime="2025-07-08T21:29:00+08:00">2025-07-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/llm/knowledge-edit/" itemprop="url" rel="index"><span itemprop="name">knowledge-edit</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="date">date：</h1>
-<h1 id="动机">动机：</h1>
-<h1 id="insight">insight：</h1>
-<h1 id="contribution">contribution：</h1>
-<h2 id="主要是提出了一个即插即用的框架吧这个框架可以比较简便地影响llm的输出即test-time-interventions好处就是很方便只要给几个我们期望的例子就能引导模型向着我们想要的方向走">主要是提出了一个即插即用的框架吧。这个框架可以比较简便地影响llm的输出，即test-time
-interventions。好处就是很方便，只要给几个我们期望的例子，就能引导模型向着我们想要的方向走</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/08/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/knowledge-edit/EasyEdit2%EF%BC%9AAn%20Easy-to-use%20Steering%20Framework%20for%20Editing%20Large%20Language%20Models/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/" class="post-title-link" itemprop="url">SafetensorError：HeaderTooLarge错误</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-07-08 20:58:00 / Modified: 21:00:43" itemprop="dateCreated datePublished" datetime="2025-07-08T20:58:00+08:00">2025-07-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="简单说遇到这个错比较有可能的是模型没下载全不妨看一下safetensor的大小和官网的模型大小是否一致如果明显小很多基本可以确定是没下载全那此时问题基本可以转化成如何把很大的模型下载下来这就有比较多的方法了">简单说，遇到这个错，比较有可能的是模型没下载全。不妨看一下safetensor的大小和官网的模型大小是否一致。如果明显小很多，基本可以确定是没下载全。那此时问题基本可以转化成：如何把很大的模型下载下来。这就有比较多的方法了</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/08/%E5%A5%87%E6%80%AA%E7%9A%84bugs/SafetensorError%EF%BC%9AHeaderTooLarge%E9%94%99%E8%AF%AF/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1131,14 +1167,14 @@ interventions。好处就是很方便，只要给几个我们期望的例子，�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">230</span>
+          <span class="site-state-item-count">232</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">76</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：arxiv date：2025-04-21 动机： insight： （初版）论文里提到的drifting problem，感觉上是比较自然地会出现的：因为是自回归式的生成，如果当前帧生成效果不好（比如动作生成失误了），那基于当前帧生成的下一帧的效果可能也不会好。论文里似乎提到了，这表明，drifting其实仅发生在因果采样里——即模型只能访问“过去”的帧。为了打破这一点，从">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Packing Input Frame Context in Next-Frame Prediction Models for Video Generation">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：arxiv date：2025-04-21 动机： insight： （初版）论文里提到的drifting problem，感觉上是比较自然地会出现的：因为是自回归式的生成，如果当前帧生成效果不好（比如动作生成失误了），那基于当前帧生成的下一帧的效果可能也不会好。论文里似乎提到了，这表明，drifting其实仅发生在因果采样里——即模型只能访问“过去”的帧。为了打破这一点，从">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-08T16:18:00.000Z">
+<meta property="article:modified_time" content="2025-10-09T16:02:18.725Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Packing Input Frame Context in Next-Frame Prediction Models for Video Generation | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Packing Input Frame Context in Next-Frame Prediction Models for Video Generation
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-10-09 00:18:00" itemprop="dateCreated datePublished" datetime="2025-10-09T00:18:00+08:00">2025-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-10 00:02:18" itemprop="dateModified" datetime="2025-10-10T00:02:18+08:00">2025-10-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/" itemprop="url" rel="index"><span itemprop="name">video</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/video-generation/" itemprop="url" rel="index"><span itemprop="name">video generation</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-04-21">date：2025-04-21</h1>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h2 id="初版论文里提到的drifting-problem感觉上是比较自然地会出现的因为是自回归式的生成如果当前帧生成效果不好比如动作生成失误了那基于当前帧生成的下一帧的效果可能也不会好论文里似乎提到了这表明drifting其实仅发生在因果采样里即模型只能访问过去的帧为了打破这一点从而减缓drifting-problem论文考虑引入未来帧作为双向的上下文先不说别的光是这个动机的考量就很充足比起莫名其妙地引入双向上下文要合理多了">（初版）论文里提到的drifting
+problem，感觉上是比较自然地会出现的：因为是自回归式的生成，如果当前帧生成效果不好（比如动作生成失误了），那基于当前帧生成的下一帧的效果可能也不会好。论文里似乎提到了，这表明，drifting其实仅发生在因果采样里——即模型只能访问“过去”的帧。为了打破这一点，从而减缓drifting
+problem，论文考虑引入“未来”帧作为双向的上下文。先不说别的，光是这个动机的考量，就很充足，比起莫名其妙地引入双向上下文要合理多了</h2>
+<h2 id="论文明确之处了drifting和forgetting-problem二者是相互矛盾的为此需要对二者进行一个balance而论文的做法是分别设计一个部件专门负责解决一个问题这个思路到底是不是终极思路先不说起码明确指出二者需要balance这一点也是很重要的提供了一个明确的认知">论文明确之处了drifting和forgetting
+problem二者是相互矛盾的。为此，需要对二者进行一个balance。而论文的做法是，分别设计一个部件，专门负责解决一个问题。这个思路到底是不是终极思路先不说，起码明确指出二者需要balance这一点，也是很重要的。提供了一个明确的认知</h2>
+<h2 id="论文里压缩到定长的方法是采用了几何级数的压缩率这个虽然是人为规定的压缩率但感觉上特别漂亮并且的确是确保了context-length有一个上限不会过大">论文里压缩到定长的方法，是采用了几何级数的压缩率。这个虽然是人为规定的压缩率，但感觉上特别漂亮，并且的确是确保了context
+length有一个上限，不会过大</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一种基于几何级数的压缩方法可以确保把无限长的输入都压缩到一个context-upper-bound下并且相对会保留重要的信息">提出了一种基于几何级数的压缩方法，可以确保把无限长的输入都压缩到一个context
+upper bound下，并且相对会保留重要的信息</h2>
+<h2 id="引入bi-directional-context从而减缓drifting-problem进而辅助生成更长的视频但是本身计算量上并没有增加太多">引入bi-directional
+context，从而减缓drifting
+problem，进而辅助生成更长的视频，但是本身计算量上并没有增加太多</h2>
+<span id="more"></span>
+<h1 id="method">method：</h1>
+<h2 id="论文解决forgetting-problem的部件是framepack而解决drifting-problem的部件是anti-drifting-sampling-前者是通过基于几何级数的压缩方式将任意长度的输入帧压缩到固定的context-length里后者则是通过提前确立终点帧以及反时序生成引入双向上下文从而缓解causal-sampling带来的drifting-problem">论文解决forgetting
+problem的部件是，FramePack；而解决drifting
+problem的部件是，Anti-drifting
+Sampling。<br>前者是通过基于几何级数的压缩方式，将任意长度的输入帧压缩到固定的context
+length里；后者则是通过提前确立“终点帧”以及反时序生成，引入双向上下文，从而缓解causal
+sampling带来的drifting problem</h2>
+<h2 id="framepack">1. FramePack</h2>
+<h3 id="section"></h3>
+<h2 id="anti-drifting-sampling">2. Anti-drifting Sampling</h2>
+<h3 id="相比于朴素的采样方法即从头到尾顺序生成帧anti-drifting-sampling是在第一个iter里先生成头尾帧之后再去逐步生成中间帧填补空缺另外还提出了一个inverted-anti-drifting-sampling这个就是说把user-input当成第一帧并且在第一个iter里生成头尾帧之后去生成中间内容只不过是倒着来的即从后往前生成因为这个sampling方法能始终参考user-input类似于一直受到user-input的约束所以指令遵循做得比较好因此论文提到这个sampling方法是比较适合image-to-video-generation的毕竟这个任务就是要求视频里的人物等都要尽量遵循image里的">相比于朴素的采样方法（即从头到尾顺序生成帧），anti-drifting
+sampling是在第一个iter里先生成头尾帧，之后再去逐步生成中间帧，填补空缺。另外还提出了一个inverted
+anti-drifting sampling，这个就是说，把user
+input当成第一帧，并且在第一个iter里生成头尾帧，之后去生成中间内容。只不过是倒着来的，即从后往前生成。因为这个sampling方法能始终参考user
+input，类似于一直受到user
+input的约束，所以指令遵循做得比较好，因此论文提到，这个sampling方法是比较适合image-to-video
+generation的。毕竟这个任务就是要求视频里的人、物等都要尽量遵循image里的</h3>
+<h4 id="但这里就有点让人奇怪anti-drifting不也可以做到这一点吗二者本质区别在哪">但这里就有点让人奇怪，anti-drifting不也可以做到这一点吗？二者本质区别在哪？</h4>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/" rel="prev" title="博客阅读 投机解码——What makes for efficient speculative decoding？">
+      <i class="fa fa-chevron-left"></i> 博客阅读 投机解码——What makes for efficient speculative decoding？
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venuearxiv"><span class="nav-number">1.</span> <span class="nav-text">Venue：arxiv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2025-04-21"><span class="nav-number">2.</span> <span class="nav-text">date：2025-04-21</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E7%89%88%E8%AE%BA%E6%96%87%E9%87%8C%E6%8F%90%E5%88%B0%E7%9A%84drifting-problem%E6%84%9F%E8%A7%89%E4%B8%8A%E6%98%AF%E6%AF%94%E8%BE%83%E8%87%AA%E7%84%B6%E5%9C%B0%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E5%9B%A0%E4%B8%BA%E6%98%AF%E8%87%AA%E5%9B%9E%E5%BD%92%E5%BC%8F%E7%9A%84%E7%94%9F%E6%88%90%E5%A6%82%E6%9E%9C%E5%BD%93%E5%89%8D%E5%B8%A7%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C%E4%B8%8D%E5%A5%BD%E6%AF%94%E5%A6%82%E5%8A%A8%E4%BD%9C%E7%94%9F%E6%88%90%E5%A4%B1%E8%AF%AF%E4%BA%86%E9%82%A3%E5%9F%BA%E4%BA%8E%E5%BD%93%E5%89%8D%E5%B8%A7%E7%94%9F%E6%88%90%E7%9A%84%E4%B8%8B%E4%B8%80%E5%B8%A7%E7%9A%84%E6%95%88%E6%9E%9C%E5%8F%AF%E8%83%BD%E4%B9%9F%E4%B8%8D%E4%BC%9A%E5%A5%BD%E8%AE%BA%E6%96%87%E9%87%8C%E4%BC%BC%E4%B9%8E%E6%8F%90%E5%88%B0%E4%BA%86%E8%BF%99%E8%A1%A8%E6%98%8Edrifting%E5%85%B6%E5%AE%9E%E4%BB%85%E5%8F%91%E7%94%9F%E5%9C%A8%E5%9B%A0%E6%9E%9C%E9%87%87%E6%A0%B7%E9%87%8C%E5%8D%B3%E6%A8%A1%E5%9E%8B%E5%8F%AA%E8%83%BD%E8%AE%BF%E9%97%AE%E8%BF%87%E5%8E%BB%E7%9A%84%E5%B8%A7%E4%B8%BA%E4%BA%86%E6%89%93%E7%A0%B4%E8%BF%99%E4%B8%80%E7%82%B9%E4%BB%8E%E8%80%8C%E5%87%8F%E7%BC%93drifting-problem%E8%AE%BA%E6%96%87%E8%80%83%E8%99%91%E5%BC%95%E5%85%A5%E6%9C%AA%E6%9D%A5%E5%B8%A7%E4%BD%9C%E4%B8%BA%E5%8F%8C%E5%90%91%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%85%88%E4%B8%8D%E8%AF%B4%E5%88%AB%E7%9A%84%E5%85%89%E6%98%AF%E8%BF%99%E4%B8%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E8%80%83%E9%87%8F%E5%B0%B1%E5%BE%88%E5%85%85%E8%B6%B3%E6%AF%94%E8%B5%B7%E8%8E%AB%E5%90%8D%E5%85%B6%E5%A6%99%E5%9C%B0%E5%BC%95%E5%85%A5%E5%8F%8C%E5%90%91%E4%B8%8A%E4%B8%8B%E6%96%87%E8%A6%81%E5%90%88%E7%90%86%E5%A4%9A%E4%BA%86"><span class="nav-number">4.1.</span> <span class="nav-text">（初版）论文里提到的drifting
+problem，感觉上是比较自然地会出现的：因为是自回归式的生成，如果当前帧生成效果不好（比如动作生成失误了），那基于当前帧生成的下一帧的效果可能也不会好。论文里似乎提到了，这表明，drifting其实仅发生在因果采样里——即模型只能访问“过去”的帧。为了打破这一点，从而减缓drifting
+problem，论文考虑引入“未来”帧作为双向的上下文。先不说别的，光是这个动机的考量，就很充足，比起莫名其妙地引入双向上下文要合理多了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E6%98%8E%E7%A1%AE%E4%B9%8B%E5%A4%84%E4%BA%86drifting%E5%92%8Cforgetting-problem%E4%BA%8C%E8%80%85%E6%98%AF%E7%9B%B8%E4%BA%92%E7%9F%9B%E7%9B%BE%E7%9A%84%E4%B8%BA%E6%AD%A4%E9%9C%80%E8%A6%81%E5%AF%B9%E4%BA%8C%E8%80%85%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%B8%AAbalance%E8%80%8C%E8%AE%BA%E6%96%87%E7%9A%84%E5%81%9A%E6%B3%95%E6%98%AF%E5%88%86%E5%88%AB%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E9%83%A8%E4%BB%B6%E4%B8%93%E9%97%A8%E8%B4%9F%E8%B4%A3%E8%A7%A3%E5%86%B3%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E8%BF%99%E4%B8%AA%E6%80%9D%E8%B7%AF%E5%88%B0%E5%BA%95%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BB%88%E6%9E%81%E6%80%9D%E8%B7%AF%E5%85%88%E4%B8%8D%E8%AF%B4%E8%B5%B7%E7%A0%81%E6%98%8E%E7%A1%AE%E6%8C%87%E5%87%BA%E4%BA%8C%E8%80%85%E9%9C%80%E8%A6%81balance%E8%BF%99%E4%B8%80%E7%82%B9%E4%B9%9F%E6%98%AF%E5%BE%88%E9%87%8D%E8%A6%81%E7%9A%84%E6%8F%90%E4%BE%9B%E4%BA%86%E4%B8%80%E4%B8%AA%E6%98%8E%E7%A1%AE%E7%9A%84%E8%AE%A4%E7%9F%A5"><span class="nav-number">4.2.</span> <span class="nav-text">论文明确之处了drifting和forgetting
+problem二者是相互矛盾的。为此，需要对二者进行一个balance。而论文的做法是，分别设计一个部件，专门负责解决一个问题。这个思路到底是不是终极思路先不说，起码明确指出二者需要balance这一点，也是很重要的。提供了一个明确的认知</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E9%87%8C%E5%8E%8B%E7%BC%A9%E5%88%B0%E5%AE%9A%E9%95%BF%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E9%87%87%E7%94%A8%E4%BA%86%E5%87%A0%E4%BD%95%E7%BA%A7%E6%95%B0%E7%9A%84%E5%8E%8B%E7%BC%A9%E7%8E%87%E8%BF%99%E4%B8%AA%E8%99%BD%E7%84%B6%E6%98%AF%E4%BA%BA%E4%B8%BA%E8%A7%84%E5%AE%9A%E7%9A%84%E5%8E%8B%E7%BC%A9%E7%8E%87%E4%BD%86%E6%84%9F%E8%A7%89%E4%B8%8A%E7%89%B9%E5%88%AB%E6%BC%82%E4%BA%AE%E5%B9%B6%E4%B8%94%E7%9A%84%E7%A1%AE%E6%98%AF%E7%A1%AE%E4%BF%9D%E4%BA%86context-length%E6%9C%89%E4%B8%80%E4%B8%AA%E4%B8%8A%E9%99%90%E4%B8%8D%E4%BC%9A%E8%BF%87%E5%A4%A7"><span class="nav-number">4.3.</span> <span class="nav-text">论文里压缩到定长的方法，是采用了几何级数的压缩率。这个虽然是人为规定的压缩率，但感觉上特别漂亮，并且的确是确保了context
+length有一个上限，不会过大</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E7%A7%8D%E5%9F%BA%E4%BA%8E%E5%87%A0%E4%BD%95%E7%BA%A7%E6%95%B0%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%96%B9%E6%B3%95%E5%8F%AF%E4%BB%A5%E7%A1%AE%E4%BF%9D%E6%8A%8A%E6%97%A0%E9%99%90%E9%95%BF%E7%9A%84%E8%BE%93%E5%85%A5%E9%83%BD%E5%8E%8B%E7%BC%A9%E5%88%B0%E4%B8%80%E4%B8%AAcontext-upper-bound%E4%B8%8B%E5%B9%B6%E4%B8%94%E7%9B%B8%E5%AF%B9%E4%BC%9A%E4%BF%9D%E7%95%99%E9%87%8D%E8%A6%81%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="nav-number">5.1.</span> <span class="nav-text">提出了一种基于几何级数的压缩方法，可以确保把无限长的输入都压缩到一个context
+upper bound下，并且相对会保留重要的信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5bi-directional-context%E4%BB%8E%E8%80%8C%E5%87%8F%E7%BC%93drifting-problem%E8%BF%9B%E8%80%8C%E8%BE%85%E5%8A%A9%E7%94%9F%E6%88%90%E6%9B%B4%E9%95%BF%E7%9A%84%E8%A7%86%E9%A2%91%E4%BD%86%E6%98%AF%E6%9C%AC%E8%BA%AB%E8%AE%A1%E7%AE%97%E9%87%8F%E4%B8%8A%E5%B9%B6%E6%B2%A1%E6%9C%89%E5%A2%9E%E5%8A%A0%E5%A4%AA%E5%A4%9A"><span class="nav-number">5.2.</span> <span class="nav-text">引入bi-directional
+context，从而减缓drifting
+problem，进而辅助生成更长的视频，但是本身计算量上并没有增加太多</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#method"><span class="nav-number">6.</span> <span class="nav-text">method：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%A7%A3%E5%86%B3forgetting-problem%E7%9A%84%E9%83%A8%E4%BB%B6%E6%98%AFframepack%E8%80%8C%E8%A7%A3%E5%86%B3drifting-problem%E7%9A%84%E9%83%A8%E4%BB%B6%E6%98%AFanti-drifting-sampling-%E5%89%8D%E8%80%85%E6%98%AF%E9%80%9A%E8%BF%87%E5%9F%BA%E4%BA%8E%E5%87%A0%E4%BD%95%E7%BA%A7%E6%95%B0%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%96%B9%E5%BC%8F%E5%B0%86%E4%BB%BB%E6%84%8F%E9%95%BF%E5%BA%A6%E7%9A%84%E8%BE%93%E5%85%A5%E5%B8%A7%E5%8E%8B%E7%BC%A9%E5%88%B0%E5%9B%BA%E5%AE%9A%E7%9A%84context-length%E9%87%8C%E5%90%8E%E8%80%85%E5%88%99%E6%98%AF%E9%80%9A%E8%BF%87%E6%8F%90%E5%89%8D%E7%A1%AE%E7%AB%8B%E7%BB%88%E7%82%B9%E5%B8%A7%E4%BB%A5%E5%8F%8A%E5%8F%8D%E6%97%B6%E5%BA%8F%E7%94%9F%E6%88%90%E5%BC%95%E5%85%A5%E5%8F%8C%E5%90%91%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BB%8E%E8%80%8C%E7%BC%93%E8%A7%A3causal-sampling%E5%B8%A6%E6%9D%A5%E7%9A%84drifting-problem"><span class="nav-number">6.1.</span> <span class="nav-text">论文解决forgetting
+problem的部件是，FramePack；而解决drifting
+problem的部件是，Anti-drifting
+Sampling。前者是通过基于几何级数的压缩方式，将任意长度的输入帧压缩到固定的context
+length里；后者则是通过提前确立“终点帧”以及反时序生成，引入双向上下文，从而缓解causal
+sampling带来的drifting problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#framepack"><span class="nav-number">6.2.</span> <span class="nav-text">1. FramePack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#section"><span class="nav-number">6.2.1.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anti-drifting-sampling"><span class="nav-number">6.3.</span> <span class="nav-text">2. Anti-drifting Sampling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E6%AF%94%E4%BA%8E%E6%9C%B4%E7%B4%A0%E7%9A%84%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95%E5%8D%B3%E4%BB%8E%E5%A4%B4%E5%88%B0%E5%B0%BE%E9%A1%BA%E5%BA%8F%E7%94%9F%E6%88%90%E5%B8%A7anti-drifting-sampling%E6%98%AF%E5%9C%A8%E7%AC%AC%E4%B8%80%E4%B8%AAiter%E9%87%8C%E5%85%88%E7%94%9F%E6%88%90%E5%A4%B4%E5%B0%BE%E5%B8%A7%E4%B9%8B%E5%90%8E%E5%86%8D%E5%8E%BB%E9%80%90%E6%AD%A5%E7%94%9F%E6%88%90%E4%B8%AD%E9%97%B4%E5%B8%A7%E5%A1%AB%E8%A1%A5%E7%A9%BA%E7%BC%BA%E5%8F%A6%E5%A4%96%E8%BF%98%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AAinverted-anti-drifting-sampling%E8%BF%99%E4%B8%AA%E5%B0%B1%E6%98%AF%E8%AF%B4%E6%8A%8Auser-input%E5%BD%93%E6%88%90%E7%AC%AC%E4%B8%80%E5%B8%A7%E5%B9%B6%E4%B8%94%E5%9C%A8%E7%AC%AC%E4%B8%80%E4%B8%AAiter%E9%87%8C%E7%94%9F%E6%88%90%E5%A4%B4%E5%B0%BE%E5%B8%A7%E4%B9%8B%E5%90%8E%E5%8E%BB%E7%94%9F%E6%88%90%E4%B8%AD%E9%97%B4%E5%86%85%E5%AE%B9%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%98%AF%E5%80%92%E7%9D%80%E6%9D%A5%E7%9A%84%E5%8D%B3%E4%BB%8E%E5%90%8E%E5%BE%80%E5%89%8D%E7%94%9F%E6%88%90%E5%9B%A0%E4%B8%BA%E8%BF%99%E4%B8%AAsampling%E6%96%B9%E6%B3%95%E8%83%BD%E5%A7%8B%E7%BB%88%E5%8F%82%E8%80%83user-input%E7%B1%BB%E4%BC%BC%E4%BA%8E%E4%B8%80%E7%9B%B4%E5%8F%97%E5%88%B0user-input%E7%9A%84%E7%BA%A6%E6%9D%9F%E6%89%80%E4%BB%A5%E6%8C%87%E4%BB%A4%E9%81%B5%E5%BE%AA%E5%81%9A%E5%BE%97%E6%AF%94%E8%BE%83%E5%A5%BD%E5%9B%A0%E6%AD%A4%E8%AE%BA%E6%96%87%E6%8F%90%E5%88%B0%E8%BF%99%E4%B8%AAsampling%E6%96%B9%E6%B3%95%E6%98%AF%E6%AF%94%E8%BE%83%E9%80%82%E5%90%88image-to-video-generation%E7%9A%84%E6%AF%95%E7%AB%9F%E8%BF%99%E4%B8%AA%E4%BB%BB%E5%8A%A1%E5%B0%B1%E6%98%AF%E8%A6%81%E6%B1%82%E8%A7%86%E9%A2%91%E9%87%8C%E7%9A%84%E4%BA%BA%E7%89%A9%E7%AD%89%E9%83%BD%E8%A6%81%E5%B0%BD%E9%87%8F%E9%81%B5%E5%BE%AAimage%E9%87%8C%E7%9A%84"><span class="nav-number">6.3.1.</span> <span class="nav-text">相比于朴素的采样方法（即从头到尾顺序生成帧），anti-drifting
+sampling是在第一个iter里先生成头尾帧，之后再去逐步生成中间帧，填补空缺。另外还提出了一个inverted
+anti-drifting sampling，这个就是说，把user
+input当成第一帧，并且在第一个iter里生成头尾帧，之后去生成中间内容。只不过是倒着来的，即从后往前生成。因为这个sampling方法能始终参考user
+input，类似于一直受到user
+input的约束，所以指令遵循做得比较好，因此论文提到，这个sampling方法是比较适合image-to-video
+generation的。毕竟这个任务就是要求视频里的人、物等都要尽量遵循image里的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%86%E8%BF%99%E9%87%8C%E5%B0%B1%E6%9C%89%E7%82%B9%E8%AE%A9%E4%BA%BA%E5%A5%87%E6%80%AAanti-drifting%E4%B8%8D%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%81%9A%E5%88%B0%E8%BF%99%E4%B8%80%E7%82%B9%E5%90%97%E4%BA%8C%E8%80%85%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%E5%9C%A8%E5%93%AA"><span class="nav-number">6.3.1.1.</span> <span class="nav-text">但这里就有点让人奇怪，anti-drifting不也可以做到这一点吗？二者本质区别在哪？</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">232</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -150,6 +150,285 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/" class="post-title-link" itemprop="url">Packing Input Frame Context in Next-Frame Prediction Models for Video Generation</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-10-09 00:18:00" itemprop="dateCreated datePublished" datetime="2025-10-09T00:18:00+08:00">2025-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-10 00:02:18" itemprop="dateModified" datetime="2025-10-10T00:02:18+08:00">2025-10-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/" itemprop="url" rel="index"><span itemprop="name">video</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/video-generation/" itemprop="url" rel="index"><span itemprop="name">video generation</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-04-21">date：2025-04-21</h1>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h2 id="初版论文里提到的drifting-problem感觉上是比较自然地会出现的因为是自回归式的生成如果当前帧生成效果不好比如动作生成失误了那基于当前帧生成的下一帧的效果可能也不会好论文里似乎提到了这表明drifting其实仅发生在因果采样里即模型只能访问过去的帧为了打破这一点从而减缓drifting-problem论文考虑引入未来帧作为双向的上下文先不说别的光是这个动机的考量就很充足比起莫名其妙地引入双向上下文要合理多了">（初版）论文里提到的drifting
+problem，感觉上是比较自然地会出现的：因为是自回归式的生成，如果当前帧生成效果不好（比如动作生成失误了），那基于当前帧生成的下一帧的效果可能也不会好。论文里似乎提到了，这表明，drifting其实仅发生在因果采样里——即模型只能访问“过去”的帧。为了打破这一点，从而减缓drifting
+problem，论文考虑引入“未来”帧作为双向的上下文。先不说别的，光是这个动机的考量，就很充足，比起莫名其妙地引入双向上下文要合理多了</h2>
+<h2 id="论文明确之处了drifting和forgetting-problem二者是相互矛盾的为此需要对二者进行一个balance而论文的做法是分别设计一个部件专门负责解决一个问题这个思路到底是不是终极思路先不说起码明确指出二者需要balance这一点也是很重要的提供了一个明确的认知">论文明确之处了drifting和forgetting
+problem二者是相互矛盾的。为此，需要对二者进行一个balance。而论文的做法是，分别设计一个部件，专门负责解决一个问题。这个思路到底是不是终极思路先不说，起码明确指出二者需要balance这一点，也是很重要的。提供了一个明确的认知</h2>
+<h2 id="论文里压缩到定长的方法是采用了几何级数的压缩率这个虽然是人为规定的压缩率但感觉上特别漂亮并且的确是确保了context-length有一个上限不会过大">论文里压缩到定长的方法，是采用了几何级数的压缩率。这个虽然是人为规定的压缩率，但感觉上特别漂亮，并且的确是确保了context
+length有一个上限，不会过大</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一种基于几何级数的压缩方法可以确保把无限长的输入都压缩到一个context-upper-bound下并且相对会保留重要的信息">提出了一种基于几何级数的压缩方法，可以确保把无限长的输入都压缩到一个context
+upper bound下，并且相对会保留重要的信息</h2>
+<h2 id="引入bi-directional-context从而减缓drifting-problem进而辅助生成更长的视频但是本身计算量上并没有增加太多">引入bi-directional
+context，从而减缓drifting
+problem，进而辅助生成更长的视频，但是本身计算量上并没有增加太多</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/" class="post-title-link" itemprop="url">博客阅读 投机解码——What makes for efficient speculative decoding？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-10-07 11:02:00" itemprop="dateCreated datePublished" datetime="2025-10-07T11:02:00+08:00">2025-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-08 12:23:40" itemprop="dateModified" datetime="2025-10-08T12:23:40+08:00">2025-10-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/" itemprop="url" rel="index"><span itemprop="name">speculative decoding</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原博客链接">原博客<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27272034867">链接</a></h1>
+<h1 id="通过这篇博客也算稍微了解了一点点投机解码权当扩展知识面了">通过这篇博客，也算稍微了解了一点点投机解码。权当扩展知识面了</h1>
+<h2 id="首先给一句话简单概括speculative-decoding在干什么它在利用generate-next-token过程中冗余的算力预测未来若干个token-只要有几个预测对了一般都是赚的">首先，给一句话简单概括speculative
+decoding在干什么：它在利用generate next
+token过程中，冗余的算力，预测未来若干个token<br>只要有几个预测对了，一般都是赚的</h2>
+<h2 id="挨个说明几个问题-为什么生成下一个token过程中会有算力冗余-用什么方法预测未来的若干个token的-怎么判断是否赚了">挨个说明几个问题：<br>为什么生成下一个token过程中，会有算力冗余？<br>用什么方法预测未来的若干个token的？<br>怎么判断是否赚了？</h2>
+<h2 id="算力冗余问题">算力冗余问题：</h2>
+<h3 id="生成下一个token的过程其实就是用最新生成的token的query和之前所有token包括这个token它自己的key进行attn来聚合value最后送到分类头那里预测下一个token的类别这个过程里我们只需要对最新的token计算qkv因为前面的token的key和value有kv-cache保留不需要重新算在此论文其实是作出了一些假设的即假设使用场景不是long-context因此可以暂且忽略掉除了计算qkv以外的地方所消耗的算力比如attn部分norm部分softmax部分激活函数部分等">生成下一个token的过程，其实就是用最新生成的token的query，和之前所有token（包括这个token它自己）的key进行attn，来聚合value，最后送到分类头那里预测下一个token的类别。这个过程里，我们只需要对最新的token计算qkv（因为前面的token的key和value，有kv
+cache保留，不需要重新算）。在此，论文其实是作出了一些假设的，即假设使用场景不是long
+context。因此可以暂且忽略掉除了计算qkv以外的地方所消耗的算力（比如attn部分，norm部分，softmax部分，激活函数部分，等）</h3>
+<h3 id="因此在这个场景下我们假设了计算部分只考虑矩阵乘法因为qkv就是矩阵乘法访存部分也就只考虑矩阵乘法中要用到的参数矩阵的访存开销假设输入为seq_len-embed_dim关于输入形状的假设也比较重要这里是原博客里的假设也即假设batch-size为1了后面会针对这一点进行细讲为什么假设成了1却不会影响结果矩阵形状为embed_dim-hidden_dim记seq_len为sembed_dim为ehidden_dim为h则我们得到此时的计算密度computation-intensityci为其定义为计算量除以访存量ci_gemmfrac2scdot-ecdot-hscdot-e-ecdot-hfrac2scdot-hshfrac2cdot-s1fracsh-approx-2cdot-s-关于这个计算过程首先需要说明分子是计算量然后之所以分子有个2是因为这里把加法和乘法都考虑进去且分开算了而分母的scdot-eecdot-h则是在把权重和计算输入都进行搬移所需要的访存量之后一步就是一个约分而再往后一步是同除一个h之所以进行这个操作是因为我们假设当前不是long-context场景也就是s会比较小相对而言有s-ll-h因此同除h后我们可以看得更清楚倒数第二步的分母里的fracsh就可以近似为0了因此得到了最后的近似结果两倍的seq_len就是说在近似之后short-context情况下计算密度其实就是两倍的seq_len而且需要说明的是上面的计算其实是指计算kv的过程所以我们的seq_len实质是指需要计算kv的token的个数而生成过程中我们也提到了每次只需要计算新生成的那个token的qkv因此seq_len可以当成1因而计算密度也就是2这显然是会比显卡的计算密度要小的故我们说生成过程是memory-bound的一个过程有算力冗余">因此，在这个场景下，我们假设了，计算部分只考虑矩阵乘法（因为qkv就是矩阵乘法），访存部分也就只考虑矩阵乘法中要用到的参数矩阵的访存开销。假设输入为(seq_len,
+embed_dim)（关于输入形状的假设，也比较重要。这里是原博客里的假设，也即假设batch
+size为1了。后面会针对这一点进行细讲，为什么假设成了1却不会影响结果），矩阵形状为(embed_dim,
+hidden_dim)。记seq_len为s，embed_dim为e，hidden_dim为h，则我们得到此时的计算密度（Computation
+Intensity，CI）为（其定义为计算量除以访存量）<span class="math inline">\(CI_{GEMM}=\frac{2s\cdot e\cdot h}{s\cdot e +
+e\cdot h}=\frac{2s\cdot h}{s+h}=\frac{2\cdot s}{1+\frac{s}{h}} \approx
+2\cdot
+s\)</span><br>关于这个计算过程，首先需要说明，分子是计算量。然后之所以分子有个2，是因为这里把加法和乘法都考虑进去，且分开算了。而分母的<span class="math inline">\(s\cdot e+e\cdot
+h\)</span>，则是在把权重和计算输入都进行搬移所需要的访存量。之后一步就是一个约分，而再往后一步是同除一个h。之所以进行这个操作，是因为我们假设当前不是long
+context场景，也就是s会比较小。相对而言，有<span class="math inline">\(s
+\ll
+h\)</span>。因此同除h后，我们可以看得更清楚：倒数第二步的分母里的<span class="math inline">\(\frac{s}{h}\)</span>就可以近似为0了，因此得到了最后的近似结果，两倍的seq_len。就是说，在近似之后，short
+context情况下，计算密度其实就是两倍的seq_len。而且需要说明的是，上面的计算其实是指计算kv的过程，所以我们的seq_len实质是指需要计算kv的token的个数。而生成过程中，我们也提到了，每次只需要计算新生成的那个token的qkv。因此seq_len可以当成1，因而计算密度也就是2。这显然是会比显卡的计算密度要小的。故，我们说，生成过程是memory
+bound的一个过程，有算力冗余。</h3>
+<h3 id="大体是这么个分析过程不过有一些细节应该还要考虑">大体是这么个分析过程。不过有一些细节应该还要考虑</h3>
+<h4 id="其一batch-size为什么没考虑进去因为直观上这应该会对计算密度的结果有影响考虑了batch-size显然计算量上是要乘以batch-size的但是访存量则未必参数矩阵还是只用取一次只不过输入确实也是乘了batch-size的这样的话记batch-size为b则表达式应该是ci_gemmfrac2cdot-bcdot-scdot-ecdot-hbcdot-scdot-e-ecdot-hfrac2cdot-bcdot-scdot-hbcdot-shfrac2cdot-bcdot-sbfracsh到这我们应该就能发现其实不影响结果了因为还是short-context场景所以fracsh那一项可以近似为0则此时分子分母的b就可以消掉了结论还是不变的不知道作者是不是知道这一点所以出于计算的方便省掉了batch-size维度">其一，batch
+size为什么没考虑进去？因为直观上，这应该会对计算密度的结果有影响。考虑了batch
+size，显然计算量上是要乘以batch
+size的，但是访存量则未必。参数矩阵还是只用取一次，只不过输入确实也是乘了batch
+size的。这样的话，记batch size为b，则表达式应该是<span class="math inline">\(CI_{GEMM}=\frac{2\cdot b\cdot s\cdot e\cdot
+h}{b\cdot s\cdot e + e\cdot h}=\frac{2\cdot b\cdot s\cdot h}{b\cdot
+s+h}=\frac{2\cdot b\cdot
+s}{b+\frac{s}{h}}\)</span>到这我们应该就能发现，其实不影响结果了。因为还是short
+context场景，所以<span class="math inline">\(\frac{s}{h}\)</span>那一项可以近似为0，则此时分子分母的b就可以消掉了。结论还是不变的（不知道作者是不是知道这一点，所以出于计算的方便，省掉了batch
+size维度……）</h4>
+<h4 id="其二如何用计算密度判断是memory-bound还是compute-bound它的本质是什么-这个其实就是一个理解上的问题而已计算密度本质上是说每取出1字节的数据能完成的flops计算那么当我们的操作ci大于显卡的ci时表明我们用这个显卡的时候取出1字节的数据量后完成的计算量不够因此这个操作是compute-bound而当我们的操作的ci小于显卡的ci的时候这说明我们用这个显卡取出1字节的数据量还没用完全部的计算量这个操作就完成了此时有一些算力的冗余但是没有数据了所以是memory-bound">其二，如何用计算密度判断是memory
+bound还是compute
+bound？它的本质是什么？<br>这个其实就是一个理解上的问题而已。计算密度，本质上是说，每取出1字节的数据，能完成的FLOPs计算。那么，当我们的操作CI大于显卡的CI时，表明，我们用这个显卡的时候，取出1字节的数据量后，完成的计算量不够。因此这个操作是compute
+bound。而当我们的操作的CI小于显卡的CI的时候，这说明我们用这个显卡取出1字节的数据量，还没用完全部的计算量，这个操作就完成了。此时有一些算力的冗余，但是没有数据了。所以是memory
+bound</h4>
+<h2 id="如何预测未来的若干个token的">如何预测未来的若干个token的：</h2>
+<h3 id="这里就涉及到投机解码的一个基本的思路drafting-verification大体上是说用某种方法预测未来的若干个token然后让llm来验证这些token里对了多少个我们会采用直到第一个错误token之前的所有猜测结果因为llm进行预测虽然是对多个token进行预测但是根据前面的分析生成阶段是memory-bound因此一般情况下检验多个token是否正确其时间依然和生成一个token的时间差不多主要还是访存卡时间此时我们的某种猜测方法虽然它肯定也要消耗一些时间和算力但一般它的开销都会小很多因此只要不是全都猜错了通常都是赚的">这里就涉及到投机解码的一个基本的思路：drafting-verification。大体上是说，用某种方法预测未来的若干个token，然后让llm来验证这些token里对了多少个。我们会采用直到第一个错误token之前的所有猜测结果。因为llm进行预测，虽然是对多个token进行预测，但是根据前面的分析，生成阶段是memory
+bound，因此一般情况下，检验多个token是否正确，其时间依然和生成一个token的时间差不多。主要还是访存卡时间。此时，我们的某种猜测方法，虽然它肯定也要消耗一些时间和算力，但一般它的开销都会小很多。因此只要不是全都猜错了，通常都是赚的</h3>
+<h3 id="至于说猜测的方法一般是用一个小模型当然也有用大模型乃至model-free的对于这个猜测的模型一般称作draft-modelllm本身则被称为target-model">至于说猜测的方法，一般是用一个小模型。当然也有用大模型，乃至model-free的。对于这个猜测的模型，一般称作draft
+model。llm本身则被称为target model</h3>
+<h3 id="另外这里需要详细说说具体的llm的verify的过程这里我们考虑用model的猜测方法那么draft-model给出了后续的gamma个时间步的token这里采用和原博客一样的记号此时我们可以得到这gamma个token的hidden-state怎么verify呢就是把这个gamma个token的hidden-state拿去给llm让它计算预测这些token应该是什么类别看看和draft-model的预测结果是否一致我们认为一个token只有当llm和draft-model的预测结果一致的时候才算通过否则我们就认为有可能出错了我们采用结果也是只采用到第一个错误token前的结果举个例子draft-model一共预测未来8个token验证发现前三个是对的第四个是错的即使说第五个到第八个都是对的我们也不会用只会用前三个正确的猜测结果这里之所以能有加速的效果就是因为llm-verify的过程是真的可以并行的只需要把这gamma个token的hidden-state拿去进行一些计算最后给分类头进行分类即可并不是一个自回归式的过程因为已经有了这些token的特征了否则如果verify也要自回归式的生成那完全失去意义了为什么不老老实实让llm生成呢-这里很容易产生一个问题直接用draft-model它很可能是一个小模型产生的hidden-state拿去给llm预测这样真的合理吗verify的结果真的准吗事实上这就是很多工作聚集和改进的点一些工作里它们为了确保verify能尽可能准会约束draft-model产生的hidden-state尽量和llm产生的hidden-state尽量一致虽然也有后面的工作发现这其实并非必要的另外我们verify的时候llm的权重不会动也就是会用到llm本身的知识此外verify的标准是llm和小模型预测token结果一致才算这个token预测正确了这类似一个双重保险只要二者不一致就视为不正确这在某种程度上也确保了verify的准确性">另外，这里需要详细说说具体的llm的verify的过程。这里我们考虑用model的猜测方法。那么，draft
+model给出了后续的<span class="math inline">\(\gamma\)</span>个时间步的token（这里采用和原博客一样的记号）。此时我们可以得到这<span class="math inline">\(\gamma\)</span>个token的hidden
+state。怎么verify呢？就是把这个<span class="math inline">\(\gamma\)</span>个token的hidden
+state，拿去给llm，让它计算、预测这些token应该是什么类别，看看和draft
+model的预测结果是否一致。我们认为，一个token只有当llm和draft
+model的预测结果一致的时候，才算通过；否则我们就认为有可能出错了。我们采用结果，也是只采用到第一个错误token前的结果（举个例子，draft
+model一共预测未来8个token。验证发现前三个是对的，第四个是错的。即使说第五个到第八个都是对的，我们也不会用。只会用前三个正确的猜测结果）。这里之所以能有加速的效果，就是因为，llm
+verify的过程是真的可以并行的。只需要把这<span class="math inline">\(\gamma\)</span>个token的hidden
+state拿去进行一些计算，最后给分类头进行分类即可，并不是一个自回归式的过程。因为已经有了这些token的特征了（否则，如果verify也要自回归式的生成，那完全失去意义了，为什么不老老实实让llm生成呢）<br>这里很容易产生一个问题：直接用draft
+model（它很可能是一个小模型）产生的hidden
+state，拿去给llm预测，这样真的合理吗？verify的结果真的准吗？事实上，这就是很多工作聚集和改进的点。一些工作里，它们为了确保verify能尽可能准，会约束draft
+model产生的hidden state尽量和llm产生的hidden
+state尽量一致（虽然也有后面的工作发现，这其实并非必要的）；另外，我们verify的时候，llm的权重不会动，也就是会用到llm本身的知识；此外，verify的标准是，llm和小模型预测token结果一致，才算这个token预测正确了。这类似一个双重保险。只要二者不一致，就视为不正确。这在某种程度上也确保了verify的准确性</h3>
+<h2 id="怎么判断是否赚了">怎么判断是否赚了：</h2>
+<h3 id="判断是否赚了其实主要是看是否有加速加速比有多高毕竟投机解码是一个加速推理的技术直观上当我们的一次draft-verification过程里接收的token越多也就是经过verify的token越多draft-model一次预测的时间开销越小llm并行verify未来gamma个token的耗时越小加速的程度应该越大如果要说加速比那显然就是llm正常生成一个token的时间相对于我们预测验证生成token的时间越长加速比越大由此可以得到一个公式speedupapprox-tau-times-fracl_tgamma-times-l_dl_t其中整体上分子表示llm正常生成一个token的耗时其余项大体表示我们用投机解码平均生成一个token的耗时可以看成是frac1fracgamma-times-l_dl_ttautau表示平均接受距离也就是平均一次draft-verification-cycle中有多少个正确token会被输出gamma表示我们要往后预测的token的个数l_d表示draft-model预测一次的耗时l_t表示llm并行verify-gamma个token的耗时l_t则表示llm正常生成一个token的耗时虽说我们是在利用llm的冗余算力并行地去验证gamma个token是否正确但毕竟它和正常生成一个token的耗时还是略有不同不过我们看待这个式子的时候也可以把l_t姑且看成和l_t一样这样后面的分式项就是小于1的但我们的tau通常不会是1这也太倒霉了就是说draft-model全错只要draft-model不太差一般加速比还是能大于1的">判断是否赚了，其实主要是看是否有加速，加速比有多高（毕竟投机解码是一个加速推理的技术）。直观上，当我们的一次draft-verification过程里，接收的token越多（也就是经过verify的token越多），draft
+model一次预测的时间开销越小，llm并行verify未来<span class="math inline">\(\gamma\)</span>个token的耗时越小，加速的程度应该越大。如果要说加速比，那显然就是，llm正常生成一个token的时间相对于我们预测+验证生成token的时间越长，加速比越大。由此可以得到一个公式：<span class="math display">\[Speedup\approx \tau \times
+\frac{L_{t}^{&#39;}}{\gamma \times
+L_{d}+L_{t}}\]</span>其中，整体上，分子表示llm正常生成一个token的耗时；其余项大体表示我们用投机解码平均生成一个token的耗时（可以看成是<span class="math inline">\(\frac{1}{\frac{\gamma \times
+L_{d}+L_{t}}{\tau}}\)</span>）。<span class="math inline">\(\tau\)</span>表示平均接受距离。也就是平均一次draft-verification
+cycle中，有多少个正确token会被输出<span class="math inline">\(\gamma\)</span>表示我们要往后预测的token的个数，<span class="math inline">\(L_{d}\)</span>表示draft model预测一次的耗时，<span class="math inline">\(L_{t}\)</span>表示llm并行verify <span class="math inline">\(\gamma\)</span>个token的耗时，<span class="math inline">\(L_{t}^{&#39;}\)</span>则表示llm正常生成一个token的耗时（虽说，我们是在利用llm的冗余算力，并行地去验证<span class="math inline">\(\gamma\)</span>个token是否正确，但毕竟它和正常生成一个token的耗时还是略有不同）。不过，我们看待这个式子的时候，也可以把<span class="math inline">\(L_{t}^{&#39;}\)</span>姑且看成和<span class="math inline">\(L_{t}\)</span>一样。这样，后面的分式项就是小于1的，但我们的<span class="math inline">\(\tau\)</span>通常不会是1（这也太倒霉了，就是说draft
+model全错）。只要draft model不太差，一般加速比还是能大于1的</h3>
+<h3 id="总结一下的话我们可以认为投机解码加速的地方在于我们用gamma次小模型的计算一次大模型的计算验证换了tau次大模型的计算">总结一下的话，我们可以认为，投机解码加速的地方在于，我们用<span class="math inline">\(\gamma\)</span>次小模型的计算+一次大模型的计算（验证）换了<span class="math inline">\(\tau\)</span>次大模型的计算</h3>
+<h1 id="上述其实就是一些基础的投机解码相关的概念和内容博客的后续内容就是在阐述经典sota方法以及他们的工作是如何改进的整体的思路其实都是围绕上面的加速比公式展开的通过观察哪些因子可以改进分析应当怎么改进设计方法剩下就暂时不细讲了挑一些有疑问的地方进行解释">上述其实就是一些基础的投机解码相关的概念和内容。博客的后续内容就是在阐述经典sota方法以及他们的工作是如何改进的。整体的思路其实都是围绕上面的加速比公式展开的，通过观察哪些因子可以改进，分析应当怎么改进，设计方法。剩下就暂时不细讲了，挑一些有疑问的地方进行解释：</h1>
+<h2 id="eagle为什么要对齐feature">EAGLE为什么要对齐feature？</h2>
+<h3 id="博客里说是为了让小模型在推理阶段自回归的输入能更加稳定但我个人感觉其实是为了让llm-verify的时候准确率能高一点毕竟只有当小模型得到的特征和大模型尽可能接近的时候大模型verify的准确率才会更高">博客里说是为了让小模型在推理阶段自回归的输入能更加稳定。但我个人感觉其实是为了让llm
+verify的时候准确率能高一点。毕竟，只有当小模型得到的特征和大模型尽可能接近的时候，大模型verify的准确率才会更高</h3>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h1 id="contribution">contribution：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/speculative-decoding/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81%E2%80%94%E2%80%94What%20makes%20for%20efficient%20speculative%20decoding%EF%BC%9F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/03/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/MLLM/MC-LLaVA%EF%BC%9AMulti-Concept%20Personalized%20Vision-Language%20Model/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -283,7 +562,7 @@ personalization的数据集</h2>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-10-03 17:33:32" itemprop="dateModified" datetime="2025-10-03T17:33:32+08:00">2025-10-03</time>
+                <time title="Modified: 2025-10-04 16:26:10" itemprop="dateModified" datetime="2025-10-04T16:26:10+08:00">2025-10-04</time>
               </span>
 
           
@@ -303,9 +582,9 @@ Multimodal GraphRAG: Dynamic Local Knowledge Graph Construction for
 Online Reasoning</strong>（多模态的，多模态GraphRAG，但是用于online
 reasoning）</h2>
 <h1 id="naacl-25">NAACL 25</h1>
-<h2 id="mes-rag-bringing-multi-modal-entity-storage-and-secure-enhancements-to-rag多模态的疑似多模态graphrag"><strong>MES-RAG:
+<h2 id="mes-rag-bringing-multi-modal-entity-storage-and-secure-enhancements-to-rag多模态的疑似多模态graphrag并非它的数据组织形式不是graph所以不算是mmgraphrag不过这个感觉关注的点也还好既有回答的精确性也有安全性方面的但重点可能在于它支持多模态的输出"><strong>MES-RAG:
 Bringing Multi-modal, Entity-Storage, and Secure Enhancements to
-RAG</strong>（多模态的）（疑似多模态GraphRAG）</h2>
+RAG</strong>（多模态的）（疑似多模态GraphRAG）（并非，它的数据组织形式不是Graph，所以不算是MMGraphRAG。不过这个感觉关注的点也还好，既有回答的精确性，也有安全性方面的，但重点可能在于它支持多模态的输出？）</h2>
 <h1 id="icml-25">ICML 25</h1>
 <h2 id="scenir-visual-semantic-clarity-through-unsupervised-scene-graph-retrieval多模态的但是是scene-graph相关的这个可以算到graphrag吗不过是scene-graph相关的可能有点关系好吧其实这篇是做image-to-image-retrieval的只不过用到了scene-graph这个技术手段而已"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/43841">SCENIR: Visual Semantic
 Clarity through Unsupervised Scene Graph
@@ -981,189 +1260,10 @@ cache都存下来。都叫超长序列了，肯定是很多token的。比如输�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">kv cache基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-27 15:14:00 / Modified: 15:15:55" itemprop="dateCreated datePublished" datetime="2025-09-27T15:14:00+08:00">2025-09-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="在了解kv-cache的过程中读到了游凯超的一篇回答感觉真的写的很详细而且不仅局限于kv-cache包括为何这样设计也讲清楚了">在了解kv
-cache的过程中，读到了<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/596900067/answer/3424958454">游凯超的一篇回答</a>，感觉真的写的很详细，而且不仅局限于kv
-cache，包括为何这样设计，也讲清楚了</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/" class="post-title-link" itemprop="url">DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-24 17:15:00 / Modified: 17:28:18" itemprop="dateCreated datePublished" datetime="2025-09-24T17:15:00+08:00">2025-09-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/" itemprop="url" rel="index"><span itemprop="name">knowledge graph</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuenips-25">Venue：NIPS 25</h1>
-<h1 id="date2025-07-15">date：2025-07-15</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="现有的kg推理方法通常会遇到score-oversmoothing的问题有点类似gnn里的oversmoothing也就是推理后正确答案和错误答案的分数极为接近导致无法很好的分辨论文认为现有方法一味堆叠message-passing-layer和attn-layer导致score-oversmoothing问题进一步加剧同时现有方法大多是one-shot-reasoning因此判别能力有所不足">现有的KG推理方法通常会遇到score
-oversmoothing的问题（有点类似gnn里的oversmoothing）。也就是推理后，正确答案和错误答案的分数极为接近，导致无法很好的分辨。论文认为，现有方法一味堆叠message
-passing layer和attn layer，导致score
-oversmoothing问题进一步加剧；同时现有方法大多是one-shot
-reasoning，因此判别能力有所不足</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1229,14 +1329,14 @@ reasoning，因此判别能力有所不足</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">230</span>
+          <span class="site-state-item-count">232</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">76</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
