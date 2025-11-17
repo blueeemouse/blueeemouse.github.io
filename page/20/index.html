@@ -150,6 +150,146 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-11-29 10:11:34 / Modified: 10:16:09" itemprop="dateCreated datePublished" datetime="2024-11-29T10:11:34+08:00">2024-11-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一般这个东西就是用来把多个想遍历的东西放到一起，一次取出多个元素
+比如， <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> rgb_pid, ir_pid <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.rgb_pids, <span class="variable language_">self</span>.ir_pids):</span><br><span class="line">	xxx</span><br></pre></td></tr></table></figure>
+比较需要注意的是，如果被封装起来的东西的长度不一致，以上面的内容为例，如果self.rgb_pids和self.ir_pids长度不一致，它会自动按照较短的那个来取。就比如，如果这两个东西长度分别是3和5，那么这里的zip一共就会循环3次
+这个东西之所以单独说一下，主要是如果不注意，然后不小心把几个长度不一样的东西打包了，没问题，但需要注意后面会不会出问题（因为可能我们是以为这两个东西长度是一样的，才这样zip的，而如果二者长度不一致，也能正常执行，但后面可能就会出现某些问题。如果是想清楚的，就是要把长度不一致的东西打包到一起，那没问题）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E6%9C%BA%EF%BC%88%E5%8C%85%E6%8B%ACwindows%E7%B3%BB%E7%BB%9F%E5%92%8Cubuntu%E7%B3%BB%E7%BB%9F%EF%BC%89%E5%B0%86obsidian%E7%AC%94%E8%AE%B0%E5%90%8C%E6%AD%A5%E5%88%B0github%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-11-20 10:59:10" itemprop="dateCreated datePublished" datetime="2024-11-20T10:59:10+08:00">2024-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="现在好像已经没问题了就正常上传就行">现在好像已经没问题了，就正常上传就行</h1>
+<h1 id="在windows系统中进入d_note这个目录下打开终端git-add-.-git-commit--m-xxx-git-push-origin-main即可">在windows系统中，进入D:_note这个目录下，打开终端，git
+add . git commit -m 'xxx' git push origin main即可</h1>
+<h1 id="在ubuntu系统也是类似的">在ubuntu系统也是类似的</h1>
+<h1 id="上面只是单方面的从一个系统中进行上传还有一个问题就是上传了之后怎么在另一个系统里pull下来">上面只是单方面的从一个系统中进行上传。还有一个问题就是上传了之后怎么在另一个系统里pull下来。</h1>
+<h1 id="在ubuntu系统pull-windows的东西还挺方便的好像就是正常的git-pull-origin-main即可前提是进去之后先别修改东西但好像也不是其实还是会因为那个workspace.json文件有一些问题下面是一个简单粗暴的方法后续或许可以改进一下">在ubuntu系统pull
+windows的东西，还挺方便的，好像就是正常的git pull origin
+main即可（前提是进去之后先别修改东西）（但好像也不是，其实还是会因为那个workspace.json文件有一些问题。下面是一个简单粗暴的方法。后续或许可以改进一下）</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard origin/main</span><br><span class="line">git push origin main</span><br><span class="line">git fetch origin</span><br></pre></td></tr></table></figure>
+<h1 id="因为每次我在一个系统要同步远端仓库的时候远端一定是更加新的也就是即使远端仓库完全覆盖了我本地的仓库也没关系话虽如此也需也有极少数时候真的不能这样所以才有第一行的比较简单粗暴的命令">（因为每次我在一个系统要同步远端仓库的时候，远端一定是更加新的，也就是即使远端仓库完全覆盖了我本地的仓库，也没关系（话虽如此，也需也有极少数时候真的不能这样），所以才有第一行的比较简单粗暴的命令）</h1>
+<h1 id="在windows里pull-ubuntu系统的东西就比较麻烦了windows系统和ubuntu系统处理lf和crlf的方法好像不太一样大概就是换行之类的东西然而ubuntu似乎会自动处理我们感觉不到但windows就不行一定会报问题一个比较简单粗暴的方法是">在windows里pull
+ubuntu系统的东西就比较麻烦了，windows系统和ubuntu系统处理LF和CRLF的方法好像不太一样（大概就是换行之类的东西），然而ubuntu似乎会自动处理，我们感觉不到，但windows就不行，一定会报问题。一个比较简单粗暴的方法是：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout origin/main -- .obsidian/workspace.json</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h1 id="第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json这样这个文件就不会报错了因为之前报错主要就是这个文件的一些换行符之类的问题剩下就是正常pull了">第一行主要是让git强制把远端的workspace.json文件拉下来覆盖本地的workspace.json，这样这个文件就不会报错了（因为之前报错主要就是这个文件的一些换行符之类的问题）。剩下就是正常pull了</h1>
+<h1 id="另一种比较一劳永逸的方法就是在windows系统的终端里进行如下配置">另一种比较一劳永逸的方法，就是在windows系统的终端里进行如下配置：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h1 id="这个大概是因为下摘录自ai原文在windows上git默认会在检出文件时将lf转换为crlf而在提交文件时将crlf转换为lf这种行为是为了确保文件在windows上显示和编辑时能够正确处理换行符然而这种转换可能导致文件内容的更改从而引发冲突通过将-core.autocrlf-配置为-false你可以告诉git在检出文件时保留原始的换行符避免因换行符转换而导致的文件内容更改这对于需要在多个平台上协作开发的项目特别有用因为它可以确保文件在所有平台上都以相同的方式处理换行符-不过我目前还没试过">这个大概是因为：（下摘录自ai原文）在Windows上，Git默认会在检出文件时将LF转换为CRLF，而在提交文件时将CRLF转换为LF。这种行为是为了确保文件在Windows上显示和编辑时能够正确处理换行符。然而，这种转换可能导致文件内容的更改，从而引发冲突。通过将
+<code>core.autocrlf</code> 配置为
+<code>false</code>，你可以告诉Git在检出文件时保留原始的换行符，避免因换行符转换而导致的文件内容更改。这对于需要在多个平台上协作开发的项目特别有用，因为它可以确保文件在所有平台上都以相同的方式处理换行符。<br>不过我目前还没试过</h1>
+<h1 id="btw附带一个实战例子虽然是有点操作失误的例子">btw，附带一个实战例子，虽然是有点操作失误的例子</h1>
+<h1 id="我在windows系统里进行pull的时候没成功反而还在windows里修改了一些笔记并add和commit了导致此时windows中的笔记与远端不同步且还有更新之后我再次尝试正常pull失败了后面我就用上面提到的简单粗暴的方法先完成了从远端的pull此时我上github仓库发现远端还没有拿到我在windows本地进行的更新也是毕竟我还没push上去再进行push成功了并且检查远端仓库确实更新了-这里先强制pull下来了做到了和远端的同步之后再把已经暂存的也就是完成了commit的内容给push上去即可">我在windows系统里进行pull的时候，没成功，反而还在windows里修改了一些笔记，并add和commit了，导致此时windows中的笔记与远端不同步，且还有更新。之后我再次尝试正常pull，失败了。后面我就用上面提到的简单粗暴的方法，先完成了从远端的pull，（此时我上github仓库，发现远端还没有拿到我在windows本地进行的更新。也是，毕竟我还没push上去）再进行push，成功了，并且检查远端仓库，确实更新了。<br>这里先强制pull下来了，做到了和远端的同步，之后再把已经暂存的（也就是完成了commit的）内容给push上去，即可</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-VI-ReID/Lifelong%20Visible-Infrared%20Person%20Re-Identification%20via%20a%20Tri-Token%20Transformer%20with%20a%20Query-Key%20Mechanism/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -785,169 +925,6 @@ miniconda3.sh，总是会报这个错</h1>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/benchmark&baseline/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-04 20:49:43" itemprop="dateCreated datePublished" datetime="2024-11-04T20:49:43+08:00">2024-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-11-06 14:14:42" itemprop="dateModified" datetime="2024-11-06T14:14:42+08:00">2024-11-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="格式先说明任务设定然后是现有的lreid的benchmark附上图之后说明一下现在的任务的难点以及我们设计的benchmark是怎样的也要附上图并且要说明清楚infrared-image是怎么放进去的">格式：先说明任务设定，然后是现有的lreid的benchmark，附上图；之后说明一下现在的任务的难点，以及我们设计的benchmark是怎样的（也要附上图，并且要说明清楚infrared
-image是怎么放进去的）</h1>
-<h1 id="将通常的lreid中的若干数据集目前的lreid中用到的数据集都是visible模态的即单模态的换成visible-infrared双模态的数据集也就是说此时要么是只有visible模态数据要么是同时有双模态的数据不会出现只有infrared模态数据的情况可能就是最基本的情况">1.将通常的lreid中的若干数据集（目前的lreid中用到的数据集都是visible模态的，即单模态的）换成visible-infrared双模态的数据集（也就是说此时要么是只有visible模态数据，要么是同时有双模态的数据，不会出现只有infrared模态数据的情况，可能就是最基本的情况）</h1>
-<h1 id="数据流中的数据集有单独visible模态的单独infrared模态的从双模态的数据集中取出来以及两种模态的数据集的也就是此时既有infrared模态数据的缺失也有visible模态数据的缺失这个对应了现实中的什么情况是说有一些摄像头是有两种模态的拍摄功能然后有一些是只能拍visible模态数据的其中能拍两种模态的相机在一些时段能拍到两种模态的数据比如黄昏在一些时段只能拍到一种模态的数据比如大白天基本只能拍到visible模态的数据晚上基本只能拍到infrared模态的数据">2.数据流中的数据集有单独visible模态的，单独infrared模态的（从双模态的数据集中取出来），以及两种模态的数据集的（也就是此时既有infrared模态数据的缺失，也有visible模态数据的缺失）（这个对应了现实中的什么情况？是说有一些摄像头是有两种模态的拍摄功能，然后有一些是只能拍visible模态数据的？其中能拍两种模态的相机，在一些时段能拍到两种模态的数据（比如黄昏），在一些时段只能拍到一种模态的数据（比如大白天基本只能拍到visible模态的数据，晚上基本只能拍到infrared模态的数据）</h1>
-<h1 id="数据流中的数据集中有visible模态的也有infrared模态的每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分例如identity1-10的双模态的数据这个又对应了什么情况">3.数据流中的数据集中有visible模态的，也有infrared模态的。每个时间步的数据集均为部分visible模态的数据加上双模态的数据集中的一部分（例如，identity1-10的双模态的数据）（这个又对应了什么情况？</h1>
-<h1 id="从现实应用的角度考虑在终身学习的基础上能做到给定visibleinfrared-image都能找到对应的visibleinfrared-image也就是能完成visibleinfrared到visibleinfrared两两一共四种检索方式就行了考虑最困难的情况即训练的时候只有一种模态然而测试的时候拿的却是另一种模态的数据benchmark能考虑到这种情况不就差不多了吗这样的话第三种到底还有没有必要它的意义在哪里">4.从现实应用的角度考虑，在终身学习的基础上，能做到：给定visible/infrared
-image，都能找到对应的visible/infrared
-image，也就是能完成visible/infrared到visible/infrared两两一共四种检索方式就行了。考虑最困难的情况，即：训练的时候只有一种模态，然而测试的时候拿的却是另一种模态的数据。benchmark能考虑到这种情况，不就差不多了吗？这样的话，第三种到底还有没有必要？它的意义在哪里？</h1>
-<h1 id="初步baseline设计针对visible和infrared两种模态的数据设计两个模型单独编码visible和infrared-image的特征以及单独进行知识保存和缓解灾难性遗忘做到类似于modality-aware即visible-image的特征单独保存和利用infrared-image也是考虑到visible-image的通道数更多特征更丰富多样因此猜测不同数据集间的domain-gap可能会比较大而相比之下infrared-image的特征可能更为简单因此不同数据集的infrared-image的domain-gap可能会小一点那么在lreid中有可能两种模态的特征遗忘的-程度快慢-都是不一样的例如visible-image的特征可能遗忘的更快而infrared-image的特征可能遗忘的慢一点如果用一个模型对两种模态的图像进行编码以及同时保存知识可能会产生相互干扰的情况例如可能为了保留infrared-image的特征反而影响了visible-image特征信息的保留-后续需要对比用一个模型和两个模型效果哪个效果比较好">初步baseline设计：针对visible和infrared两种模态的数据，设计两个模型，单独编码visible和infrared
-image的特征，以及单独进行知识保存和缓解灾难性遗忘，做到类似于modality-aware（即visible
-image的特征单独保存和利用，infrared image也是）（考虑到visible
-image的通道数更多，特征更丰富多样，因此猜测不同数据集间的domain
-gap可能会比较大；而相比之下，infrared
-image的特征可能更为简单，因此不同数据集的infrared image的domain
-gap可能会小一点。那么，在lreid中，有可能两种模态的特征遗忘的 程度/快慢
-都是不一样的。例如，visible image的特征可能遗忘的更快，而infrared
-image的特征可能遗忘的慢一点。如果用一个模型对两种模态的图像进行编码，以及同时保存知识，可能会产生相互干扰的情况（例如，可能为了保留infrared
-image的特征，反而影响了visible
-image特征信息的保留）<br>后续需要对比用一个模型和两个模型效果哪个效果比较好</h1>
-<h1 id="后续安排设计明确benchmark之后尝试跑通baseline">后续安排：设计、明确benchmark，之后尝试跑通baseline</h1>
-<h1 id="问题在第二个benchmark的设定中有没有考察模型-学rgb检索ir学ir检索rgb-的能力换句话说它测试的数据集是怎样的和现有的lreid是不是不一样">问题：在第二个benchmark的设定中，有没有考察模型
-学RGB检索IR/学IR检索RGB
-的能力？换句话说，它测试的数据集是怎样的？和现有的lreid是不是不一样？</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-11-02 18:17:21" itemprop="dateCreated datePublished" datetime="2024-11-02T18:17:21+08:00">2024-11-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-21 17:01:18" itemprop="dateModified" datetime="2025-05-21T17:01:18+08:00">2025-05-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="acm-mm24"># acm mm24</h2>
-<p>title: Mitigate Catastrophic Remembering via Continual Knowledge
-Purification for Noisy Lifelong Person Re-Identification date:
-2025-05-21 17:00 tags: [cv, lreid, noisy label] categories: [论文阅读,
-cv, object-reid, noisy lifelong reid] ---</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/11/02/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Lifelong-ReID/Mitigate%20Catastrophic%20Remembering%20via%20Continual%20Knowledge%20Purification%20for%20Noisy%20Lifelong%20Person%20Re-Identification/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1017,14 +994,14 @@ cv, object-reid, noisy lifelong reid] ---</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">232</span>
+          <span class="site-state-item-count">234</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

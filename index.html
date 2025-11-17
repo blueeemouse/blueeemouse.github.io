@@ -150,6 +150,177 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/" class="post-title-link" itemprop="url">TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-11-10 17:19:00 / Modified: 23:27:26" itemprop="dateCreated datePublished" datetime="2025-11-10T17:19:00+08:00">2025-11-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/" itemprop="url" rel="index"><span itemprop="name">efficientRAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueemnlp-25">Venue：EMNLP 25</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="这篇文章是从cache的角度来提高rag的efficiency的但这么说可能也不太对应该说是论文观察到一个现象阻碍了rag的efficiency而一个可以考虑的解决方法正是类似kv-cache的技术">这篇文章是从cache的角度来提高rag的efficiency的。但这么说可能也不太对，应该说是论文观察到一个现象阻碍了rag的efficiency，而一个可以考虑的解决方法正是类似kv
+cache的技术</h2>
+<h2 id="rag需要检索很多外部的信息然后结合prompt进行回答问题就在于检索到的文档会产生比较多的token这就导致注意力机制进行计算的时候会花比较多的时间从而产生第一个token的时间会比较久也就是time-to-first-tokenttft会比较长这降低了rag的efficiency时间上而且每次检索到的文档都需要计算对应的kv这是一种重复性的工作让我们想到能否可以通过复用减少时间开销论文想解决这一问题从而提高efficiency">rag需要检索很多外部的信息，然后结合prompt进行回答。问题就在于检索到的文档会产生比较多的token，这就导致注意力机制进行计算的时候会花比较多的时间，从而产生第一个token的时间会比较久。也就是time-to-first-token（TTFT）会比较长。这降低了rag的efficiency（时间上）（而且每次检索到的文档都需要计算对应的kv，这是一种重复性的工作，让我们想到能否可以通过复用减少时间开销）。论文想解决这一问题，从而提高efficiency</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/" class="post-title-link" itemprop="url">neo4j安装（Ubuntu）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-11-07 11:20:00 / Modified: 21:42:21" itemprop="dateCreated datePublished" datetime="2025-11-07T11:20:00+08:00">2025-11-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="因为复现代码要用到neo4j捣鼓了好久">因为复现代码，要用到neo4j。捣鼓了好久……</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -181,7 +352,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-10-10 00:02:18" itemprop="dateModified" datetime="2025-10-10T00:02:18+08:00">2025-10-10</time>
+                <time title="Modified: 2025-11-15 22:39:29" itemprop="dateModified" datetime="2025-11-15T22:39:29+08:00">2025-11-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -223,7 +394,7 @@
 <h2 id="初版论文里提到的drifting-problem感觉上是比较自然地会出现的因为是自回归式的生成如果当前帧生成效果不好比如动作生成失误了那基于当前帧生成的下一帧的效果可能也不会好论文里似乎提到了这表明drifting其实仅发生在因果采样里即模型只能访问过去的帧为了打破这一点从而减缓drifting-problem论文考虑引入未来帧作为双向的上下文先不说别的光是这个动机的考量就很充足比起莫名其妙地引入双向上下文要合理多了">（初版）论文里提到的drifting
 problem，感觉上是比较自然地会出现的：因为是自回归式的生成，如果当前帧生成效果不好（比如动作生成失误了），那基于当前帧生成的下一帧的效果可能也不会好。论文里似乎提到了，这表明，drifting其实仅发生在因果采样里——即模型只能访问“过去”的帧。为了打破这一点，从而减缓drifting
 problem，论文考虑引入“未来”帧作为双向的上下文。先不说别的，光是这个动机的考量，就很充足，比起莫名其妙地引入双向上下文要合理多了</h2>
-<h2 id="论文明确之处了drifting和forgetting-problem二者是相互矛盾的为此需要对二者进行一个balance而论文的做法是分别设计一个部件专门负责解决一个问题这个思路到底是不是终极思路先不说起码明确指出二者需要balance这一点也是很重要的提供了一个明确的认知">论文明确之处了drifting和forgetting
+<h2 id="论文明确指出了drifting和forgetting-problem二者是相互矛盾的为此需要对二者进行一个balance而论文的做法是分别设计一个部件专门负责解决一个问题这个思路到底是不是终极思路先不说起码明确指出二者需要balance这一点也是很重要的提供了一个明确的认知">论文明确指出了drifting和forgetting
 problem二者是相互矛盾的。为此，需要对二者进行一个balance。而论文的做法是，分别设计一个部件，专门负责解决一个问题。这个思路到底是不是终极思路先不说，起码明确指出二者需要balance这一点，也是很重要的。提供了一个明确的认知</h2>
 <h2 id="论文里压缩到定长的方法是采用了几何级数的压缩率这个虽然是人为规定的压缩率但感觉上特别漂亮并且的确是确保了context-length有一个上限不会过大">论文里压缩到定长的方法，是采用了几何级数的压缩率。这个虽然是人为规定的压缩率，但感觉上特别漂亮，并且的确是确保了context
 length有一个上限，不会过大</h2>
@@ -1088,178 +1259,6 @@ Instructional Videos</a>（video相关的，但是具体是做什么的？）</h
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-28 15:49:03 / Modified: 15:49:51" itemprop="dateCreated datePublished" datetime="2025-09-28T15:49:03+08:00">2025-09-28</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="或许得思考一下为什么rag一直被人诟病它的问题到底在哪里graphrag解决了rag的哪些问题还有哪些本质问题没有解决">或许得思考一下为什么RAG一直被人诟病？它的问题到底在哪里？GraphRAG，解决了RAG的哪些问题？还有哪些本质问题没有解决？</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/" class="post-title-link" itemprop="url">博客阅读 KV Cache压缩新阶段：走向问题指令无关下的压缩探索</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-27 15:16:00 / Modified: 15:32:04" itemprop="dateCreated datePublished" datetime="2025-09-27T15:16:00+08:00">2025-09-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="核心观点">核心观点：</h1>
-<h2 id="简单来讲现在的kv-cache的一大问题是一旦没有特定的问题压缩效果就会大幅下降如果有特定的问题那压缩比例可以特别大且性能不降低太多然而如果没有特定的问题则稍微压缩一点都很容易损失精度">简单来讲，现在的kv
-cache的一大问题是，一旦没有特定的问题，压缩效果就会大幅下降。（如果有特定的问题，那压缩比例可以特别大，且性能不降低太多。然而如果没有特定的问题，则稍微压缩一点都很容易损失精度）</h2>
-<h2 id="因此博客提出在没有特定问题情况下的kv-cache-compression其实是值得研究的因为现有方法做不好有很大的提升空间基于此可以考虑">因此，博客提出，在没有特定问题情况下的kv
-cache
-compression其实是值得研究的（因为现有方法做不好，有很大的提升空间）。基于此，可以考虑：</h2>
-<h3 id="提出更好的指标来衡量token的重要性">提出更好的指标来衡量token的重要性</h3>
-<h3 id="提出更好的kv-cache-budget-allocation策略">提出更好的kv cache
-budget allocation策略</h3>
-<h1 id="关于博客里的一些术语的介绍">关于博客里的一些术语的介绍：</h1>
-<h2 id="chunked-prefill博客里的chunked-prefill应该是指对输入的超长序列prompt进行分块然后在各自的块内进行prefill操作这主要是因为prefill的时候需要计算注意力它是会利用prompt产生的所有token进行计算的而注意力机制是平方级的计算复杂度输入序列又是超长的那一起计算的话显存开销就无法承受了所以需要chunk再prefill另一套的chunked-prefill好像和通信什么的有关来着-另需要注意chunked-prefill虽然说会先chunk然后各自在块内进行prefill但块内的prefill并不会像一般的prefill那样生成第一个token那样就会很奇怪相当于基于截断的信息生成了一个token而且有很多个chunk最后就会是基于很多个阶段的信息各自生成一个token这些token可以认为其实没什么用的所以实际上是chunk完在各自块内计算kv然后进行压缩最后把压缩完的各个块的kv拼到一起来生成真正意义上的第一个token">chunked
-prefill：博客里的chunked
-prefill，应该是指，对输入的超长序列（prompt），进行分块，然后在各自的块内进行prefill操作。这主要是因为，prefill的时候需要计算注意力，它是会利用prompt产生的所有token进行计算的。而注意力机制是平方级的计算复杂度，输入序列又是超长的，那一起计算的话显存开销就无法承受了。所以需要chunk再prefill（另一套的chunked
-prefill好像和通信什么的有关来着）<br>（另，需要注意，chunked
-prefill虽然说会先chunk，然后各自在块内进行prefill，但块内的prefill并不会像一般的prefill那样生成第一个token。那样就会很奇怪，相当于基于截断的信息生成了一个token。而且有很多个chunk，最后就会是：基于很多个阶段的信息各自生成一个token。这些token可以认为其实没什么用的。所以实际上是chunk完，在各自块内计算kv，然后进行压缩，最后把压缩完的各个块的kv拼到一起，来生成真正意义上的第一个token）</h2>
-<h2 id="前缀上下文指用户在多轮对话中在具体提出问题前给出的背景性引导性信息本质上就是context模型的回答需要基于这些内容">前缀上下文：指用户在多轮对话中，在具体提出问题前，给出的背景性、引导性信息。本质上就是context，模型的回答需要基于这些内容</h2>
-<h1 id="我的问题">我的问题：</h1>
-<h2 id="带问题指令的kv-cache-compression是怎么工作的有哪些方法">带问题（指令）的kv
-cache compression，是怎么工作的？有哪些方法？</h2>
-<h2 id="多轮对话场景为什么是不带指令的kv-cache压缩场景">多轮对话场景为什么是不带指令的kv
-cache压缩场景？</h2>
-<h3 id="因为多轮对话里必然会有多个问题如果要带着问题指令进行压缩那就需要挑出一个问题来对kv-cache进行挑选但是这样就会有偏颇有可能一些内容对于这个问题而言是不重要的但是对于另外一个问题而言其实很重要我们不能保证用户之后不会问这个问题">因为多轮对话里必然会有多个问题。如果要带着问题（指令）进行压缩，那就需要挑出一个问题来对kv
-cache进行挑选。但是这样就会有偏颇，有可能一些内容对于这个问题而言是不重要的，但是对于另外一个问题而言其实很重要。我们不能保证用户之后不会问这个问题</h3>
-<h2 id="kv-cache-compression是针对哪些token而言的是针对prompt还是针对模型生成的token">kv
-cache
-compression是针对哪些token而言的？是针对prompt，还是针对模型生成的token？</h2>
-<h3 id="其实都可以prefill完是否对prompt-token的kv-cache进行压缩是一个可选的操作比如chunked-prefill里一般就会边chunk-prefill边压缩也就是一种流式的操作因为不然的话显存开销太大了把超长序列的所有token的kv-cache都存下来都叫超长序列了肯定是很多token的比如输入了一个很长的文档之类的">其实都可以。prefill完是否对prompt
-token的kv cache进行压缩，是一个可选的操作。比如chunked
-prefill里，一般就会边chunk
-prefill，边压缩（也就是一种流式的操作）。因为不然的话，显存开销太大了（把超长序列的所有token的kv
-cache都存下来。都叫超长序列了，肯定是很多token的。比如输入了一个很长的文档之类的）</h3>
-<h2 id="为什么观察窗口都采用近期的若干token这样不是会有点局限吗能不能通过采样把之前的一些token也采样进观察窗口这样会不会全面一点">为什么观察窗口都采用近期的若干token？这样不是会有点局限吗？能不能通过“采样”，把之前的一些token也采样进观察窗口？这样会不会全面一点？</h2>
-<h2 id="生成的token是如何压缩的看起来似乎是生成一定数量之后对所有的历史kv进行全量重新压缩有什么论文佐证吗可能得读一下snapkv了">生成的token是如何压缩的？看起来似乎是“生成一定数量之后，对所有的历史kv进行全量重新压缩”？有什么论文佐证吗？可能得读一下SnapKV了</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1329,14 +1328,14 @@ cache都存下来。都叫超长序列了，肯定是很多token的。比如输�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">232</span>
+          <span class="site-state-item-count">234</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

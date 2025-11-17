@@ -150,6 +150,207 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/" class="post-title-link" itemprop="url">RAP：Retrieval-Augmented Personalization for Multimodal Large Language Models</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-07 10:23:00 / Modified: 17:25:05" itemprop="dateCreated datePublished" datetime="2025-09-07T10:23:00+08:00">2025-09-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Venue：CVPR-25"><a href="#Venue：CVPR-25" class="headerlink" title="Venue：CVPR 25"></a>Venue：CVPR 25</h1><h1 id="date：2025"><a href="#date：2025" class="headerlink" title="date：2025"></a>date：2025</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）"><a href="#论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）" class="headerlink" title="论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）"></a>论文讨论了两个问题：因为长期记忆做得不够好，导致无法记忆与理解用户专属的概念；<br>进行用户个性化适配的难度很高（需要大量数据，难以收集，且微调也很麻烦，用户基本不太能在本地直接进行微调）</h2><h1 id="简介："><a href="#简介：" class="headerlink" title="简介："></a>简介：</h1><h2 id="针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）"><a href="#针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）" class="headerlink" title="针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）"></a>针对不方便进行个性化适配的问题，论文选择通过把用户相关个性知识存储到外部知识库，而不是让用户收集一批数据自行微调，来轻便地让模型学到用户相关的知识（这样，如果用户需要进行一些个性化操作，需要调整模型的知识，只需要对知识库进行编辑（例如增删改）即可）</h2><h2 id="话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）"><a href="#话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）" class="headerlink" title="话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）"></a>话虽如此，即使把数据外挂到知识库，模型其实暂时还不会根据知识库检索到的知识，回答相应的内容。简单说，它还没有意识掉，从知识库里检索到的内容是用户相关的知识，所以此时它的回答可能还是一般化的回答。为此，论文收集了一批数据，并对模型进行lora微调，之后发现微调后的权重，泛化性比较好（因此微调这一步其实是不需要用户做的。事先由公司等对象提前做好了）</h2><h2 id="上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆-检索-生成记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用-VDocRAG：Retrieval-augmented-generation-over-visually-rich-documents-里面提到的方法，训练一个图像-文字双模态的embedding-model，那可能处理起来更方便）生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）"><a href="#上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆-检索-生成记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用-VDocRAG：Retrieval-augmented-generation-over-visually-rich-documents-里面提到的方法，训练一个图像-文字双模态的embedding-model，那可能处理起来更方便）生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）" class="headerlink" title="上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆 - 检索 - 生成记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用[[VDocRAG：Retrieval-augmented generation over visually-rich documents]]里面提到的方法，训练一个图像-文字双模态的embedding model，那可能处理起来更方便）生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）"></a>上面是大体的思路。说回到论文的RAP框架，大致是散步：记忆 - 检索 - 生成<br>记忆阶段，支持对知识库的更改。其中知识库采用key-value的形式存储，key为图像的视觉特征，value为概念的文本属性；<br>检索阶段，模型会根据query进行相应搜索：如果query里含有图像，则去检索key；如果query纯文字，则去检索value；（但这一步，把图像和文字分开处理了。如果用[[VDocRAG：Retrieval-augmented generation over visually-rich documents]]里面提到的方法，训练一个图像-文字双模态的embedding model，那可能处理起来更方便）<br>生成阶段，则是把检索到的内容，都投影到同一个空间（即语言token空间），然后拼到一起给模型让它生成（此处的模型用的是经过lora微调的。因此这里的模型它是学会了个性化回答的）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/VDocRAG%EF%BC%9ARetrieval-augmented%20generation%20over%20visually-rich%20documents/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/VDocRAG%EF%BC%9ARetrieval-augmented%20generation%20over%20visually-rich%20documents/" class="post-title-link" itemprop="url">VDocRAG：Retrieval-augmented generation over visually-rich documents</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-06 21:41:00" itemprop="dateCreated datePublished" datetime="2025-09-06T21:41:00+08:00">2025-09-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-22 23:38:23" itemprop="dateModified" datetime="2025-10-22T23:38:23+08:00">2025-10-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuecvpr-25">Venue：CVPR 25</h1>
+<h1 id="date2025">date：2025</h1>
+<h1 id="基础背景">基础背景：</h1>
+<h2 id="封闭域设定closed-setting是指模型仅需要基于单个给定的文档图像回答问题不需要从外部的文档库中检索相关信息对应的开放域设定open-domain-setting是指模型需要从外部文档库中检索相关文档">封闭域设定（closed
+setting）是指，模型仅需要基于单个给定的文档图像回答问题，不需要从外部的文档库中检索相关信息。对应的，开放域设定（open
+domain setting）是指模型需要从外部文档库中检索相关文档</h2>
+<h1 id="动机">动机：</h1>
+<h2 id="现有rag框架主要是针对纯文本不太能处理视觉丰富文档即含有很多图表表格之类的信息的文档这类视觉信息如果提取成文字会丢失信息且现有的rag方法不太能统一处理pdfpptx等格式不同的格式解析的逻辑差别很大容易解析错误">现有RAG框架主要是针对纯文本，不太能处理视觉丰富文档（即含有很多图表、表格之类的信息的文档）。这类视觉信息，如果提取成文字，会丢失信息；且现有的RAG方法不太能统一处理PDF、PPTX等格式（不同的格式解析的逻辑差别很大，容易解析错误）</h2>
+<h1 id="简介">简介：</h1>
+<h2 id="论文提出vdocrag框架实现了开放域内的qa且支持视觉丰富文档">论文提出VDocRAG框架，实现了开放域内的QA，且支持视觉丰富文档。</h2>
+<h2 id="针对多种不同输入格式的视觉丰富文档论文采取的处理方法是全都处理成图像连文本带图像一起都切成固定尺寸的crops这样不管是哪个格式来了都可以直接处理成图像">针对多种不同输入格式的视觉丰富文档，论文采取的处理方法是，全都处理成图像（连文本带图像一起。都切成固定尺寸的crops）。这样不管是哪个格式来了，都可以直接处理成图像</h2>
+<h2 id="之后的qa可能需要检索再生成而检索就需要把文档图像即上面切出来的crops的embedding以及query的embedding进行相似度计算那就需要把二者投影到同一个空间也就是说我们需要一个能把文本和图像投影到同一个embedding空间的模型现有的lvlms虽然确实可以同时处理图像和文本但它的向量是用于生成的和用于压缩表征信息的embedding是不太一样的所以论文提出了新的预训练的任务可以提高lvlms的embedding的表征能力最后就是用现有的lvlms的权重进行初始化然后用论文提出的任务进行训练得到一个文本-图像双模态的embedding-model它就被用来对文档图像和query进行编码实验也表明如果仅用原生的lvlms的权重得到的向量来检索效果是不如用它们继续训练后的模型提取得到的embedding向量检索的但为什么不用clip这种模型呢是觉得效果不好-吗">之后的QA可能需要检索再生成，而检索就需要把文档图像（即上面切出来的crops）的embedding以及query的embedding进行相似度计算。那就需要把二者投影到同一个空间。也就是说，我们需要一个能把文本和图像投影到同一个embedding空间的模型。现有的LVLMs虽然确实可以同时处理图像和文本，但它的向量是用于生成的，和用于压缩表征信息的embedding是不太一样的。所以，论文提出了新的预训练的任务，可以提高LVLMs的embedding的表征能力（最后就是用现有的LVLMs的权重进行初始化，然后用论文提出的任务进行训练，得到一个文本-图像双模态的embedding
+model。它就被用来对文档图像和query进行编码）（实验也表明，如果仅用原生的LVLMs的权重得到的向量来检索，效果是不如用它们继续训练后的模型提取得到的embedding向量检索的）（但为什么不用CLIP这种模型呢？是觉得效果不好
+吗？）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/VDocRAG%EF%BC%9ARetrieval-augmented%20generation%20over%20visually-rich%20documents/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/06/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Recursively%20Summarizing%20Enables%20Long-Term%20Dialogue%20%20Memory%20in%20Large%20Language%20Models/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -919,238 +1120,6 @@ Update：事先定义了四种操作（根据新内容和记忆之间可能发�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/" class="post-title-link" itemprop="url">Inference Scaling for Long-Context Retrieval Augmented Generation</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-04 23:50:00" itemprop="dateCreated datePublished" datetime="2025-09-04T23:50:00+08:00">2025-09-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-05 10:20:34" itemprop="dateModified" datetime="2025-09-05T10:20:34+08:00">2025-09-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/" itemprop="url" rel="index"><span itemprop="name">RAG for long-context</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueiclr-25">Venue：ICLR 25</h1>
-<h1 id="date2025-03-02">date：2025-03-02</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="inference-scaling可以提高llm在测试应用时的表现而rag这项技术如果要scaling一般做法考虑的都是把它的检索库给scaling以期能检索到更加相关有用的文档但实验表明仅scale-up检索库效果提升并不大甚至有可能降低效果这样的inference-scaling就成了乱花算力了-因此论文研究rag技术进行inference-scaling除了增加待检索的文档数还可以在哪些维度上进行scaling-以及给定budget怎么分配这些budget才能取得最优的效果">inference
-scaling可以提高llm在测试应用时的表现。而RAG这项技术，如果要scaling，一般做法考虑的都是把它的检索库给scaling，以期能检索到更加相关、有用的文档。但实验表明，仅scale
-up检索库，效果提升并不大，甚至有可能降低效果。这样的inference
-scaling就成了乱花算力了<br>因此论文研究，RAG技术进行inference
-scaling，除了增加待检索的文档数，还可以在哪些维度上进行scaling？<br>以及，给定budget，怎么分配这些budget才能取得最优的效果？</h2>
-<h2 id="感觉研究的问题是相对有意义的但是方法上不好说现在一看到iterative和rag结合就有点犯恶心">（感觉研究的问题是相对有意义的，但是方法上不好说，现在一看到iterative和RAG结合就有点犯恶心……）</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="切入的角度相对新鲜一点是从rag的inference-scaling出发的">切入的角度相对新鲜一点，是从RAG的inference
-scaling出发的。</h2>
-<h1 id="contribution">contribution：</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Inference%20Scaling%20for%20Long-Context%20Retrieval%20Augmented%20Generation/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/" class="post-title-link" itemprop="url">Retrieval-Augmented Perception：High-resolution Image Perception Meets Visual RAG</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-04 16:34:00" itemprop="dateCreated datePublished" datetime="2025-09-04T16:34:00+08:00">2025-09-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-28 17:03:59" itemprop="dateModified" datetime="2025-09-28T17:03:59+08:00">2025-09-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueicml-25oral">Venue：ICML 25（oral）</h1>
-<h1 id="date2025-05-22">date：2025-05-22</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="high-resolution-image-perception对现在的mllm而言是一大难题可以理解高分辨率意味着原始的像素数很大如果不降采样就会造成token非常多计算量很大而且感知理解的时候也有困难这就类似于nlp里输入文本过长此时我们再要求模型去理解或者生成也有难度通常会进行降采样之类的操作以便减少token但这样一来会造成信息的丢失使得依赖细粒度信息的任务很难完成好ocr之类的都是对图像的细节要求很高的">high-resolution
-image
-perception对现在的mllm而言，是一大难题（可以理解。高分辨率，意味着原始的像素数很大，如果不降采样，就会造成token非常多，计算量很大，而且感知理解的时候也有困难。这就类似于nlp里，输入文本过长，此时我们再要求模型去理解或者生成，也有难度）。通常会进行降采样之类的操作，以便减少token。但这样一来，会造成信息的丢失，使得依赖细粒度信息的任务很难完成好（OCR之类的，都是对图像的细节要求很高的）</h2>
-<h2 id="这篇论文就是想解决这个问题它引入rag检索关键的image-crops拼成一个新的图像此时的图像比原来的图像在resolution上小很多因而减少了计算量同时因为检索到的都是关键的crops因此性能是有保证的">这篇论文就是想解决这个问题。它引入RAG，检索关键的image
-crops，拼成一个新的图像（此时的图像比原来的图像在resolution上小很多，因而减少了计算量；同时因为检索到的都是关键的crops，因此性能是有保证的）</h2>
-<h2 id="是的论文里的一句话说的很好by-enhancing-the-long-context-capability-of-mllms这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知">是的，论文里的一句话说的很好，by
-enhancing the long-context capability of
-MLLMs，这个改进或许能比较本质的提高mllm对高分辨率图像的理解感知</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="其实一句话概括一下论文做的事就是在hr-images-perception任务中通过rag技术检索出跟query相关的top-k的crop由此拼出一副小很多的图像从而降低resolution且尽可能确保perception质量">其实一句话概括一下论文做的事，就是，在HR
-images
-perception任务中，通过RAG技术，检索出跟query相关的top-k的crop，由此拼出一副小很多的图像，从而降低resolution且尽可能确保perception质量</h2>
-<h2 id="把rag技术应用到mllm上用于解决hr-images-perception任务很创新或者说更根本的视角在于论文注意到现有mllm处理hr-images之所以效果不够好可以归结为mllm的long-context能力不足因此想解决这一点从而借鉴了llm领域里的rag技术">把RAG技术应用到mllm上，用于解决HR
-images
-perception任务，很创新。或者说，更根本的视角在于，论文注意到现有mllm处理HR
-images之所以效果不够好，可以归结为mllm的long-context能力不足，因此想解决这一点，从而借鉴了llm领域里的RAG技术</h2>
-<h2 id="那么正如上所述观察问题并从不同的视角归纳有可能就会发现它和现有的某些问题是相通的从而可以考虑借鉴现有的技术进行解决这个过程里可能会遇到新的问题那么这也是所谓创新并且过程中或许能激发出新的研究成果">那么正如上所述，观察问题，并从不同的视角归纳，有可能就会发现它和现有的某些问题是相通的，从而可以考虑借鉴现有的技术进行解决。这个过程里可能会遇到新的问题，那么这也是所谓创新，并且过程中或许能激发出新的研究成果</h2>
-<h2 id="从这篇论文也可以学习到一个研究的一般范式和方法就是当我们发现其它领域的方法可能对解决当前领域的方法有用的时候最简单也是最理想的情况就是我们直接照搬过来也能很好的work但论文发现不行所以需要改进这就是论文的主要工作和创新点吧这本质上是因为图像和文本的天然的不同文本是一维的图像是二维的因此有位置关系类似的一个新的创新点可能在于我们如果想提升mllm感知高分辨率的长视频那么又会多一个时序的关系这可能也需要解决但考虑到现在把rag用到mllm上都没太多人做做这个感知长视频的应该更是难而且可能暂时没有人follow也疑似有点灌水了假如直接把rag技术应用到mllm想以此提高mllm的长文本能力从而提升其hr-images的感知能力那我们需要检索和当前图像问题-相关的token问题在于检索回来的token可能是top-k个我们需要确定它们的位置才能进一步决定用哪个因为有些问题可能是需要这个位置关系的这里不妨构造一个例子我们有一副人像图我们想检索说在某个人的右上方的戴帽子人有哪些因此我们需要感知检索出戴帽子的人对应的token然后再根据位置信息进行分析得是在某个人的右上方的人的token才行这个例子对吗">从这篇论文，也可以学习到一个研究的一般范式和方法。就是，当我们发现其它领域的方法可能对解决当前领域的方法有用的时候，最简单，也是最理想的情况就是，我们直接照搬过来，也能很好的work。但论文发现不行，所以需要改进（这就是论文的主要工作和创新点吧。这本质上是因为图像和文本的天然的不同。文本是一维的，图像是二维的，因此有位置关系。类似的，一个新的创新点，可能在于，我们如果想提升mllm感知高分辨率的长视频，那么又会多一个时序的关系，这可能也需要解决。但考虑到现在把RAG用到mllm上都没太多人做，做这个感知长视频的应该更是难，而且可能暂时没有人follow，也疑似有点灌水了。假如直接把RAG技术应用到mllm，想以此提高mllm的长文本能力，从而提升其HR
-images的感知能力，那我们需要检索和当前图像/问题
-相关的token。问题在于，检索回来的token可能是top-k个，我们需要确定它们的位置，才能进一步决定用哪个。因为有些问题可能是需要这个位置关系的。这里不妨构造一个例子：我们有一副人像图，我们想检索说，在某个人的右上方的戴帽子人有哪些。因此，我们需要感知、检索出戴帽子的人对应的token，然后再根据位置信息进行分析，得是在”某个人“的右上方的人的token才行（这个例子对吗？））</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="把rag技术迁移到mllm上用于解决high-resolution-images-perception问题首创做work了提出了一套免训练的方法顺带的提高了mllm的一般的多模态的能力">把RAG技术迁移到mllm上，用于解决High
-Resolution images
-perception问题（首创），做work了，提出了一套免训练的方法（顺带的提高了mllm的一般的多模态的能力）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/04/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/Retrieval-Augmented%20Perception%EF%BC%9AHigh-resolution%20Image%20Perception%20Meets%20Visual%20RAG/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1220,14 +1189,14 @@ perception问题（首创），做work了，提出了一套免训练的方法（
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">232</span>
+          <span class="site-state-item-count">234</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

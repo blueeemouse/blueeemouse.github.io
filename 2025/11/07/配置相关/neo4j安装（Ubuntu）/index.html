@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="因为复现代码，要用到neo4j。捣鼓了好久……">
+<meta property="og:type" content="article">
+<meta property="og:title" content="neo4j安装（Ubuntu）">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="因为复现代码，要用到neo4j。捣鼓了好久……">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-11-07T03:20:00.000Z">
+<meta property="article:modified_time" content="2025-11-07T13:42:21.172Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>neo4j安装（Ubuntu） | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          neo4j安装（Ubuntu）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-11-07 11:20:00 / Modified: 21:42:21" itemprop="dateCreated datePublished" datetime="2025-11-07T11:20:00+08:00">2025-11-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="因为复现代码要用到neo4j捣鼓了好久">因为复现代码，要用到neo4j。捣鼓了好久……</h1>
+<span id="more"></span>
+<h1 id="首先得安装jdk这个就类似于java的运行环境因为neo4j是要用到java的参考廖雪峰的jdk安装教程里面的一步我们到oracle官网进行安装找到对应的版本下载压缩包就好ubuntu的话就是选了这个x64-debian-package的deb包之后放到服务器上sudo-dpkg--i-deb路径即可此时应该能装上jdk可能会遇到一个报错说符号链接创建错误update-alternatives-error-error-creating-symbolic-link-usrsharebinfmtsjar.dpkg-tmp-no-such-file-or-directory但无关紧要起码在neo4j的使用上是不影响的实在要解决好像问ai很快就可以解决似乎只是一个小问题最后可以用java---version来验证是否正常安装上了正常是应该输出版本信息的">首先得安装jdk，这个就类似于java的运行环境，因为neo4j是要用到java的。参考<a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/quick-start/dev-env/install-jdk/index.html">廖雪峰的jdk安装教程</a>里面的一步，我们到<a target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/downloads/">oracle官网</a>进行安装。找到对应的版本，下载压缩包就好。Ubuntu的话，就是选了这个“x64
+Debian
+Package”的deb包。之后放到服务器上，<code>sudo dpkg -i &lt;deb路径&gt;</code>即可。此时应该能装上jdk（可能会遇到一个报错说符号链接创建错误，<code>update-alternatives: error: error creating symbolic link '/usr/share/binfmts/jar.dpkg-tmp': No such file or directory</code>，但无关紧要，起码在neo4j的使用上是不影响的。实在要解决好像问ai很快就可以解决，似乎只是一个小问题）。最后可以用<code>java --version</code>来验证是否正常安装上了，正常是应该输出版本信息的</h1>
+<h1 id="其次是安装neo4j找了一些博客看到一个这个csdn的博客试了一下发现可以它里面安装jdk的部分我们可以跳过上面已经完成安装neo4j的第一步就是下载一个压缩包我们可以把它的下载的链接拿过来只需要把中间的版本改成想要的版本即可不过注意它的链接里出现了community也就是安装社区版猜测要安装企业版的话应该也是改改就好不过目前没这个需求就先不看了后面的步骤就照它的来就好">其次是，安装neo4j。找了一些博客，看到一个这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/renhengzhi2019/article/details/137455244">csdn的博客</a>，试了一下发现可以。它里面安装jdk的部分我们可以跳过，上面已经完成。安装neo4j的第一步，就是下载一个压缩包。我们可以把它的下载的链接拿过来，只需要把中间的版本改成想要的版本即可（不过注意它的链接里出现了community，也就是安装社区版。猜测要安装企业版的话，应该也是改改就好，不过目前没这个需求，就先不看了）。后面的步骤就照它的来就好</h1>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/09/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/video/Packing%20Input%20Frame%20Context%20in%20Next-Frame%20Prediction%20Models%20for%20Video%20Generation/" rel="prev" title="Packing Input Frame Context in Next-Frame Prediction Models for Video Generation">
+      <i class="fa fa-chevron-left"></i> Packing Input Frame Context in Next-Frame Prediction Models for Video Generation
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/11/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/" rel="next" title="TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text">
+      TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E5%A4%8D%E7%8E%B0%E4%BB%A3%E7%A0%81%E8%A6%81%E7%94%A8%E5%88%B0neo4j%E6%8D%A3%E9%BC%93%E4%BA%86%E5%A5%BD%E4%B9%85"><span class="nav-number">1.</span> <span class="nav-text">因为复现代码，要用到neo4j。捣鼓了好久……</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E5%BE%97%E5%AE%89%E8%A3%85jdk%E8%BF%99%E4%B8%AA%E5%B0%B1%E7%B1%BB%E4%BC%BC%E4%BA%8Ejava%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%9B%A0%E4%B8%BAneo4j%E6%98%AF%E8%A6%81%E7%94%A8%E5%88%B0java%E7%9A%84%E5%8F%82%E8%80%83%E5%BB%96%E9%9B%AA%E5%B3%B0%E7%9A%84jdk%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%E9%87%8C%E9%9D%A2%E7%9A%84%E4%B8%80%E6%AD%A5%E6%88%91%E4%BB%AC%E5%88%B0oracle%E5%AE%98%E7%BD%91%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85%E6%89%BE%E5%88%B0%E5%AF%B9%E5%BA%94%E7%9A%84%E7%89%88%E6%9C%AC%E4%B8%8B%E8%BD%BD%E5%8E%8B%E7%BC%A9%E5%8C%85%E5%B0%B1%E5%A5%BDubuntu%E7%9A%84%E8%AF%9D%E5%B0%B1%E6%98%AF%E9%80%89%E4%BA%86%E8%BF%99%E4%B8%AAx64-debian-package%E7%9A%84deb%E5%8C%85%E4%B9%8B%E5%90%8E%E6%94%BE%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8Asudo-dpkg--i-deb%E8%B7%AF%E5%BE%84%E5%8D%B3%E5%8F%AF%E6%AD%A4%E6%97%B6%E5%BA%94%E8%AF%A5%E8%83%BD%E8%A3%85%E4%B8%8Ajdk%E5%8F%AF%E8%83%BD%E4%BC%9A%E9%81%87%E5%88%B0%E4%B8%80%E4%B8%AA%E6%8A%A5%E9%94%99%E8%AF%B4%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5%E5%88%9B%E5%BB%BA%E9%94%99%E8%AF%AFupdate-alternatives-error-error-creating-symbolic-link-usrsharebinfmtsjar.dpkg-tmp-no-such-file-or-directory%E4%BD%86%E6%97%A0%E5%85%B3%E7%B4%A7%E8%A6%81%E8%B5%B7%E7%A0%81%E5%9C%A8neo4j%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8A%E6%98%AF%E4%B8%8D%E5%BD%B1%E5%93%8D%E7%9A%84%E5%AE%9E%E5%9C%A8%E8%A6%81%E8%A7%A3%E5%86%B3%E5%A5%BD%E5%83%8F%E9%97%AEai%E5%BE%88%E5%BF%AB%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%A7%A3%E5%86%B3%E4%BC%BC%E4%B9%8E%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%E5%B0%8F%E9%97%AE%E9%A2%98%E6%9C%80%E5%90%8E%E5%8F%AF%E4%BB%A5%E7%94%A8java---version%E6%9D%A5%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8%E5%AE%89%E8%A3%85%E4%B8%8A%E4%BA%86%E6%AD%A3%E5%B8%B8%E6%98%AF%E5%BA%94%E8%AF%A5%E8%BE%93%E5%87%BA%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">首先得安装jdk，这个就类似于java的运行环境，因为neo4j是要用到java的。参考廖雪峰的jdk安装教程里面的一步，我们到oracle官网进行安装。找到对应的版本，下载压缩包就好。Ubuntu的话，就是选了这个“x64
+Debian
+Package”的deb包。之后放到服务器上，sudo dpkg -i &lt;deb路径&gt;即可。此时应该能装上jdk（可能会遇到一个报错说符号链接创建错误，update-alternatives: error: error creating symbolic link &#39;&#x2F;usr&#x2F;share&#x2F;binfmts&#x2F;jar.dpkg-tmp&#39;: No such file or directory，但无关紧要，起码在neo4j的使用上是不影响的。实在要解决好像问ai很快就可以解决，似乎只是一个小问题）。最后可以用java --version来验证是否正常安装上了，正常是应该输出版本信息的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E6%AC%A1%E6%98%AF%E5%AE%89%E8%A3%85neo4j%E6%89%BE%E4%BA%86%E4%B8%80%E4%BA%9B%E5%8D%9A%E5%AE%A2%E7%9C%8B%E5%88%B0%E4%B8%80%E4%B8%AA%E8%BF%99%E4%B8%AAcsdn%E7%9A%84%E5%8D%9A%E5%AE%A2%E8%AF%95%E4%BA%86%E4%B8%80%E4%B8%8B%E5%8F%91%E7%8E%B0%E5%8F%AF%E4%BB%A5%E5%AE%83%E9%87%8C%E9%9D%A2%E5%AE%89%E8%A3%85jdk%E7%9A%84%E9%83%A8%E5%88%86%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%B7%B3%E8%BF%87%E4%B8%8A%E9%9D%A2%E5%B7%B2%E7%BB%8F%E5%AE%8C%E6%88%90%E5%AE%89%E8%A3%85neo4j%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%B0%B1%E6%98%AF%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AA%E5%8E%8B%E7%BC%A9%E5%8C%85%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E6%8A%8A%E5%AE%83%E7%9A%84%E4%B8%8B%E8%BD%BD%E7%9A%84%E9%93%BE%E6%8E%A5%E6%8B%BF%E8%BF%87%E6%9D%A5%E5%8F%AA%E9%9C%80%E8%A6%81%E6%8A%8A%E4%B8%AD%E9%97%B4%E7%9A%84%E7%89%88%E6%9C%AC%E6%94%B9%E6%88%90%E6%83%B3%E8%A6%81%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%B3%E5%8F%AF%E4%B8%8D%E8%BF%87%E6%B3%A8%E6%84%8F%E5%AE%83%E7%9A%84%E9%93%BE%E6%8E%A5%E9%87%8C%E5%87%BA%E7%8E%B0%E4%BA%86community%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%AE%89%E8%A3%85%E7%A4%BE%E5%8C%BA%E7%89%88%E7%8C%9C%E6%B5%8B%E8%A6%81%E5%AE%89%E8%A3%85%E4%BC%81%E4%B8%9A%E7%89%88%E7%9A%84%E8%AF%9D%E5%BA%94%E8%AF%A5%E4%B9%9F%E6%98%AF%E6%94%B9%E6%94%B9%E5%B0%B1%E5%A5%BD%E4%B8%8D%E8%BF%87%E7%9B%AE%E5%89%8D%E6%B2%A1%E8%BF%99%E4%B8%AA%E9%9C%80%E6%B1%82%E5%B0%B1%E5%85%88%E4%B8%8D%E7%9C%8B%E4%BA%86%E5%90%8E%E9%9D%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%E5%B0%B1%E7%85%A7%E5%AE%83%E7%9A%84%E6%9D%A5%E5%B0%B1%E5%A5%BD"><span class="nav-number">3.</span> <span class="nav-text">其次是，安装neo4j。找了一些博客，看到一个这个csdn的博客，试了一下发现可以。它里面安装jdk的部分我们可以跳过，上面已经完成。安装neo4j的第一步，就是下载一个压缩包。我们可以把它的下载的链接拿过来，只需要把中间的版本改成想要的版本即可（不过注意它的链接里出现了community，也就是安装社区版。猜测要安装企业版的话，应该也是改改就好，不过目前没这个需求，就先不看了）。后面的步骤就照它的来就好</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">234</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
