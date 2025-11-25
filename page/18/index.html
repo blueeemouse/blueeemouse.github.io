@@ -150,6 +150,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/Learning%20Transferable%20Visual%20Models%20From%20Natural%20Language%20Supervision/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/foundation/Learning%20Transferable%20Visual%20Models%20From%20Natural%20Language%20Supervision/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-11 16:48:45 / Modified: 23:54:15" itemprop="dateCreated datePublished" datetime="2025-03-11T16:48:45+08:00">2025-03-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="insight">insight：</h1>
+<h1 id="motivation">motivation：</h1>
+<h2 id="在此之前视觉预训练的模型通常是用大量数据针对某一个任务进行训练比如分类任务这样得到的预训练模型局限性比较大因为它只能局限在一个特定类型的任务不方便迁移到其它任务迁移到其它下游任务都需要对应的数据进行微调而我们希望的一个好的预训练模型应该能做到比较方便地迁移到各种下游任务">在此之前，视觉预训练的模型通常是用大量数据，针对某一个任务进行训练（比如分类任务）。这样得到的预训练模型局限性比较大，因为它只能局限在一个特定类型的任务，不方便迁移到其它任务。迁移到其它下游任务，都需要对应的数据进行微调。而我们希望的一个好的预训练模型，应该能做到：比较方便地迁移到各种下游任务</h2>
+<h2 id="另外一部分愿意也是当时nlp领域里用自监督预训练得到的模型效果特别好迁移到各种不同的下游任务效果都不错zero-shot能力很强相比之下当时cv领域就还是用大量有标签数据进行预训练下游微调的范式而大量标注数据是极其费时费力的所以自然cv领域里也有人想模仿nlp领域也用自监督来预训练但效果不尽如人意一个重要的点就在于规模之前cv领域里想尝试自监督它们用到的模型和数据量都远比nlp领域里的小clip做的一个改进就是设计了一个便于scale-up的架构从而模型大起来了数据量也大起来了效果也上来了">另外一部分愿意，也是当时nlp领域里用自监督预训练得到的模型效果特别好，迁移到各种不同的下游任务效果都不错，zero-shot能力很强。相比之下，当时cv领域就还是用大量有标签数据进行预训练+下游微调的范式。而大量标注数据是极其费时费力的。所以自然cv领域里也有人想模仿nlp领域，也用自监督来预训练。但效果不尽如人意。一个重要的点就在于规模。之前cv领域里想尝试自监督，它们用到的模型和数据量都远比nlp领域里的小。clip做的一个改进就是设计了一个便于scale
+up的架构，从而模型大起来了，数据量也大起来了，效果也上来了</h2>
+<h1 id="方法">方法</h1>
+<h2 id="构建数据集">1.构建数据集</h2>
+<h3 id="这里的第一步是构建一个足够大的图像-文本数据对因为预训练的任务就是用到图像-文本数据对的之前常用的几个数据集比如ms-cocovisual-genome质量虽然够高但太小了大约100000而另一个比较大的数据集yfcc100m有大约100-million张图像量级确实够了但它是质量又不够高筛完之后大约只有15-million了一千五百万这和扩展之后的imagenet是差不多量级的imagenet-21k有大约21k个类别约1400万张图像所以确实得自己构造">这里的第一步是构建一个足够大的图像-文本数据对（因为预训练的任务就是用到图像-文本数据对的）。之前常用的几个数据集，比如MS-COCO，Visual
+Genome质量虽然够高，但太小了（大约100000）。而另一个比较大的数据集，YFCC100M，有大约100
+million张图像，量级确实够了，但它是质量又不够高。筛完之后，大约只有15
+million了（一千五百万），这和扩展之后的ImageNet是差不多量级的（ImageNet-21k，有大约21k个类别，约1400万张图像）。所以确实得自己构造</h3>
+<h3 id="它构造的大致流程是根据一定方法筛选出高频的有意义的query500000个query然后用这些query在网上进行搜索并获取数据同时为了防止数据的不平衡限制了每个query的结果最多不超过20000个图像-文本对最终得到的数据集是400-million个数据对这和gpt-2的预训练语料差不多大了那边的叫webtext-dataset这里构造出来的就叫做webimagetextwit">它构造的大致流程是，根据一定方法，筛选出高频的，有意义的query（500000个query），然后用这些query在网上进行搜索并获取数据（同时为了防止数据的不平衡，限制了每个query的结果最多不超过20000个图像-文本对）。最终得到的数据集是400
+million个数据对，这和GPT-2的预训练语料差不多大了。那边的叫WebText
+dataset，这里构造出来的就叫做WebImageText（WIT）</h3>
+<h2 id="selecting-an-efficient-pre-training-method">2.Selecting an
+Efficient Pre-Training Method</h2>
+<h3 id="之前的用文本-图像对来训练的方法是训练一个cnn来提取图像特征还有一个text-transformer接受图像特征之后要预测生成图像的caption还有一个baseline就是仍然训练一个cnn文字部分则是用词袋模型来编码之后会把提取出来的图像特征进行投影希望能得到对应的文本的词袋向量这两个方法进行比较会发现用transformer那个特别慢具体来说就是它得用很多的数据才能做到和baseline差不多的效果论文里给出结果大概是3倍的数据的关系">之前的用文本-图像对来训练的方法，是训练一个CNN来提取图像特征，还有一个text
+transformer，接受图像特征之后，要预测生成图像的caption。还有一个baseline，就是，仍然训练一个CNN，文字部分则是用词袋模型来编码，之后会把提取出来的图像特征进行投影，希望能得到对应的文本的词袋向量。这两个方法进行比较，会发现：用transformer那个，特别”慢“。具体来说，就是它得用很多的数据才能做到和baseline差不多的效果。论文里给出结果，大概是3倍的数据的关系</h3>
+<h3 id="另一方面近期的工作表明对比式的目标函数比预测式的目标函数效果要好所以论文也进行了一个替换把任务从根据图像特征预测对应文本变成根据图像特征匹配相应的文本这个任务更加简单训练的时候给定n个文本-图像对我们的训练目标就是把匹配的文本和图像特征之间尽可能拉近把不匹配的文本和图像特征之间尽可能拉远且实验上表明它的效果非常好模型学习起来的时候很快只需要用大概baseline的四分之一的数据量就能达到同一个效果当然是指定了一个精度的前提下具体可以看论文的图">另一方面，近期的工作表明对比式的目标函数比预测式的目标函数效果要好，所以论文也进行了一个替换，把任务从根据图像特征预测对应文本，变成根据图像特征，匹配相应的文本。这个任务更加简单（训练的时候，给定N个文本-图像对，我们的训练目标就是把匹配的文本和图像特征之间尽可能拉近，把不匹配的文本和图像特征之间尽可能拉远），且实验上表明它的效果非常好，模型学习起来的时候很快，只需要用大概baseline的四分之一的数据量就能达到同一个效果（当然是指定了一个精度的前提下。具体可以看论文的图）</h3>
+<h2 id="choosing-and-scaling-a-model">3.Choosing and Scaling a
+Model</h2>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unified-ReID/Instruct-ReID++%EF%BC%9ATowards%20Universal%20Purpose%20%20Instruction-Guided%20Person%20Re-identification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -832,72 +911,6 @@ Neighbor-Guided Label Refinement（无监督）</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/02/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/torch.nn%E4%B8%8Etorch.nn.functional%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-02-09 01:27:48 / Modified: 01:36:25" itemprop="dateCreated datePublished" datetime="2025-02-09T01:27:48+08:00">2025-02-09</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>有些东西是既可以用torch.nn.functional来调用，也可以用torch.nn来调用，不禁让人疑惑：这不是多此一举吗？其实它们都是有必要的
-结论上来说，写神经网络的时候，一般都是统一用torch.nn来调用（即使像relu这种没有参数的激活函数，用torch.nn.functional调用，虽然效果差不太多，但是为了统一，用torch.nn调用也许是更好的），因为此时调用的是类，它的
-参数定义（用torch.nn调用的话，它们都是继承了torch.nn.Module类，所以一旦初始化，就已经有参数了；而用torch.nn.functional调用，则需要自己定义参数，并且在调用的时候手动传入，相比之下复杂许多）
-参数管理（比如，用类的时候就可以结合优化器，自动更新参数；而如果是用torch.nn.functional来调用，不仅参数需要我们自己传入，还需要我们自己指定是否要求梯度，并且即使我们指定了要求梯度，优化器也不能实现自动更新参数，必须得我们手动更细，极其麻烦）
-设备控制（就是控制在cpu还是gpu/哪块gpu）
-模型参数保存（torch.nn类保存参数可以用torch.save(model.state_dict(),
-'model.pth')这种语句很快捷地保存，而torch.nn.functional的话，就需要手动保存和加载参数）
-等方面都要方便很多</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -967,14 +980,14 @@ Neighbor-Guided Label Refinement（无监督）</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">234</span>
+          <span class="site-state-item-count">235</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

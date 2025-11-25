@@ -150,6 +150,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/" class="post-title-link" itemprop="url">Removal of Hallucination on Hallucination：Debate-Augmented RAG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-27 22:49:00" itemprop="dateCreated datePublished" datetime="2025-08-27T22:49:00+08:00">2025-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-28 18:36:20" itemprop="dateModified" datetime="2025-08-28T18:36:20+08:00">2025-08-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Venue：ACL-25"><a href="#Venue：ACL-25" class="headerlink" title="Venue：ACL 25"></a>Venue：ACL 25</h1><h1 id="date：2025-05-24"><a href="#date：2025-05-24" class="headerlink" title="date：2025-05-24"></a>date：2025-05-24</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="论文讨论的问题是hallucination-on-hallucination，简单来说就是，llm被检索到的错误-无关信息给误导了RAG虽然很有用，但如果检索到的内容是无关的-错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）因此，论文引入了multi-agent-debate（MAD）的机制来缓解该问题"><a href="#论文讨论的问题是hallucination-on-hallucination，简单来说就是，llm被检索到的错误-无关信息给误导了RAG虽然很有用，但如果检索到的内容是无关的-错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）因此，论文引入了multi-agent-debate（MAD）的机制来缓解该问题" class="headerlink" title="论文讨论的问题是hallucination on hallucination，简单来说就是，llm被检索到的错误&#x2F;无关信息给误导了RAG虽然很有用，但如果检索到的内容是无关的&#x2F;错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）因此，论文引入了multi-agent debate（MAD）的机制来缓解该问题"></a>论文讨论的问题是hallucination on hallucination，简单来说就是，llm被检索到的错误&#x2F;无关信息给误导了<br>RAG虽然很有用，但如果检索到的内容是无关的&#x2F;错误的，llm很可能会盲从，从而导致回答错误（相比之下，人在这方面的辨别能力可能是更强的）<br>因此，论文引入了multi-agent debate（MAD）的机制来缓解该问题</h2><h1 id="insight："><a href="#insight：" class="headerlink" title="insight："></a>insight：</h1><h2 id="引入MAD机制，对检索和生成步骤都进行细化"><a href="#引入MAD机制，对检索和生成步骤都进行细化" class="headerlink" title="引入MAD机制，对检索和生成步骤都进行细化"></a>引入MAD机制，对检索和生成步骤都进行细化</h2><h2 id="这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）"><a href="#这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）" class="headerlink" title="这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）"></a>这种多次迭代以进行优化的方法，其实还挺常见。不过这里的MAD，它更多一点的主要是有了“对抗”（类似GAN那样），这也是一种可以迁移到其它场景的方法（如果有需要）</h2><h1 id="contribution："><a href="#contribution：" class="headerlink" title="contribution："></a>contribution：</h1><h2 id="新定义了一个问题，hallucination-on-hallucination"><a href="#新定义了一个问题，hallucination-on-hallucination" class="headerlink" title="新定义了一个问题，hallucination on hallucination"></a>新定义了一个问题，hallucination on hallucination</h2><h2 id="提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）"><a href="#提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）" class="headerlink" title="提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）"></a>提出了基于MAD的training-free的方法，改善了RAG的效果（更鲁棒，更不容易被外部知识带偏）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/model-merging/NAN%EF%BC%9AA%20Training-Free%20Solution%20to%20Coefficient%20Estimation%20in%20Model%20Merging/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1045,92 +1138,6 @@ Fine-Tuning
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/12/course_learning/efficientml_mit/lec02-basics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/" class="post-title-link" itemprop="url">lec02-basics</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-12 18:13:00" itemprop="dateCreated datePublished" datetime="2025-08-12T18:13:00+08:00">2025-08-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-03 17:09:31" itemprop="dateModified" datetime="2025-09-03T17:09:31+08:00">2025-09-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="本章大纲">本章大纲：</h1>
-<h2 id="先讲了基本的pytorch概念权当复习了然后讲了衡量efficiency的基本指标">先讲了基本的pytorch概念（权当复习了），然后讲了衡量efficiency的基本指标</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1200,14 +1207,14 @@ Fine-Tuning
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">234</span>
+          <span class="site-state-item-count">235</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

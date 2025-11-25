@@ -150,6 +150,112 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/" class="post-title-link" itemprop="url">SALOVA：Segment-Augmented Long Video Assistant for Targeted Retrieval and Routing in Long-Form Video Analysis</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-07 11:46:00" itemprop="dateCreated datePublished" datetime="2025-09-07T11:46:00+08:00">2025-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-29 11:30:41" itemprop="dateModified" datetime="2025-09-29T11:30:41+08:00">2025-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuecvpr-25">Venue：CVPR 25</h1>
+<h1 id="date2025">date：2025</h1>
+<h1 id="基础背景">基础背景：</h1>
+<h2 id="fps是指frames-per-second也就是每秒多少帧">FPS，是指Frames Per
+Second，也就是每秒多少帧</h2>
+<h2 id="内存增强技术是一个与rag有点类似的技术其核心思路是在模型之外额外引入一个内存缓冲区memory-buffer用于存储长视频中超出模型固有上下文长度的帧特征语义信息它是按时间存储的且不支持语义检索也就是说现在用户给了一个query我们不能根据query的含义来检索要用buffer里的哪些特征而是只能根据定位的大概时间点把这个时间点附近的特征都拿来使用因此论文的方法的更加优秀的地方在于支持基于语义的检索">内存增强技术，是一个与RAG有点类似的技术。其核心思路是，在模型之外，额外引入一个”内存缓冲区“（Memory
+Buffer），用于存储长视频中超出模型固有上下文长度的帧特征/语义信息。它是按时间存储的，且不支持语义检索（也就是说，现在用户给了一个query，我们不能根据query的含义来检索要用buffer里的哪些特征，而是只能根据定位的大概时间点，把这个时间点附近的特征都拿来使用（因此，论文的方法的更加优秀的地方在于支持基于语义的检索）</h2>
+<h1 id="动机">动机：</h1>
+<h2 id="论文研究的是长视频的理解这个问题重要无需多言但很难因为视频所需的上下文范围太大了现有的模型完全满足不了此外还有场景的一致性问题需要关注而现有方法在这两点上做得都不够好-基于稀疏帧采样和token压缩的显然这些方法会丢失很多信息因此对于细节的问题基本不太答得上来-基于内存增强和上下文扩展的它们不太能优化片段间的语义关系且上下文扩展带来的提升还是远远不够">论文研究的是长视频的理解。这个问题重要，无需多言；但很难，因为视频所需的上下文范围太大了，现有的模型完全满足不了；此外还有场景的一致性问题需要关注。而现有方法在这两点上做得都不够好：<br>基于稀疏帧采样和token压缩的，显然这些方法会丢失很多信息，因此对于细节的问题基本不太答得上来；<br>基于内存增强和上下文扩展的，它们不太能优化片段间的语义关系；且上下文扩展带来的提升还是远远不够</h2>
+<h2 id="此外现有的视频数据集质量也不够高一个是描述粒度粗另一个是视频大多短无法支撑长视频模型的训练">此外，现有的视频数据集质量也不够高。一个是描述粒度粗，另一个是视频大多短，无法支撑长视频模型的训练</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RAP%EF%BC%9ARetrieval-Augmented%20Personalization%20for%20Multimodal%20Large%20Language%20Models/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1025,101 +1131,6 @@ Update：事先定义了四种操作（根据新内容和记忆之间可能发�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Sufficient%20Context%EF%BC%9AA%20New%20Lens%20on%20Retrieval%20Augmented%20Generation%20Systems/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Sufficient%20Context%EF%BC%9AA%20New%20Lens%20on%20Retrieval%20Augmented%20Generation%20Systems/" class="post-title-link" itemprop="url">Sufficient Context：A New Lens on Retrieval Augmented Generation Systems</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-05 00:01:00 / Modified: 00:08:30" itemprop="dateCreated datePublished" datetime="2025-09-05T00:01:00+08:00">2025-09-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/" itemprop="url" rel="index"><span itemprop="name">RAG for long-context</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueiclr-25">Venue：ICLR 25</h1>
-<h1 id="date2025-04-23">date：2025-04-23</h1>
-<h1 id="动机">动机：</h1>
-<h1 id="insight">insight：</h1>
-<h1 id="contribution">contribution：</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/RAG-for-long-context/Sufficient%20Context%EF%BC%9AA%20New%20Lens%20on%20Retrieval%20Augmented%20Generation%20Systems/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1189,14 +1200,14 @@ Update：事先定义了四种操作（根据新内容和记忆之间可能发�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">234</span>
+          <span class="site-state-item-count">235</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
