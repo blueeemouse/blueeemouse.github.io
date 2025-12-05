@@ -27,12 +27,12 @@
 <meta property="og:site_name" content="bluemouse&#39;s blog">
 <meta property="og:description" content="在部署一个定时爬取arxiv论文的小项目的时候，又一次遇到这个经典的问题了。所以尝试彻底解决一下">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueeemouse.github.io/2025/11/25/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99%EF%BC%88%E4%BB%A5%E5%8F%8A%E6%89%93%E5%BC%80%E8%B7%AF%E5%BE%84%E7%9A%84%E6%8A%A5%E9%94%99%EF%BC%89/images/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99/working_dir_illustration.png">
+<meta property="og:image" content="https://blueeemouse.github.io/images/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99/working_dir_illustration.png">
 <meta property="article:published_time" content="2025-11-25T15:39:00.000Z">
-<meta property="article:modified_time" content="2025-12-01T09:00:38.678Z">
+<meta property="article:modified_time" content="2025-12-05T14:39:05.811Z">
 <meta property="article:author" content="bluemouse">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueeemouse.github.io/2025/11/25/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99%EF%BC%88%E4%BB%A5%E5%8F%8A%E6%89%93%E5%BC%80%E8%B7%AF%E5%BE%84%E7%9A%84%E6%8A%A5%E9%94%99%EF%BC%89/images/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99/working_dir_illustration.png">
+<meta name="twitter:image" content="https://blueeemouse.github.io/images/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99/working_dir_illustration.png">
 
 <link rel="canonical" href="https://blueeemouse.github.io/2025/11/25/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/python%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%AF%BC%E5%85%A5%E8%B7%AF%E5%BE%84%E7%9A%84%E7%BB%8F%E5%85%B8%E6%8A%A5%E9%94%99%EF%BC%88%E4%BB%A5%E5%8F%8A%E6%89%93%E5%BC%80%E8%B7%AF%E5%BE%84%E7%9A%84%E6%8A%A5%E9%94%99%EF%BC%89/">
 
@@ -187,7 +187,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-12-01 17:00:38" itemprop="dateModified" datetime="2025-12-01T17:00:38+08:00">2025-12-01</time>
+                <time title="Modified: 2025-12-05 22:39:05" itemprop="dateModified" datetime="2025-12-05T22:39:05+08:00">2025-12-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -223,7 +223,7 @@ No module named 'xxx'。例如，</h2>
 <h2 id="在于工作路径python导入模块会按照顺序搜索相对路径的起点---当前脚本所在目录---pythonpath-环境变量指定的目录---python-安装的标准库目录---.pth-文件指定的目录-其它的对于那种我们自己写的库显然是没啥用的因为是我们自己写的不是安装的那种第三方库所以除了前两种路径后面的路径基本不影响这种情况-搜索到相对路径的起点之后再拼接上导入的路径作为最终完整的路径可以参考这个图其中搜索路径列表就是我们上面提到的那几个按顺序搜索的路径而拼接路径后面跟着的模块名对应我们上面提到的在文件里具体的怎么导入的或者说是文件里的导入形式如果进行了多个搜索那只要其中一个搜索的路径确实存在就可以">在于工作路径。python导入模块，会按照顺序搜索相对路径的起点：<br>-
 当前脚本所在目录<br>- <code>PYTHONPATH</code> 环境变量指定的目录<br>-
 Python 安装的标准库目录<br>-
-<code>.pth</code> 文件指定的目录<br>（其它的，对于那种我们自己写的库，显然是没啥用的，因为是我们自己写的，不是安装的那种第三方库，所以除了前两种路径，后面的路径基本不影响这种情况）<br>搜索到相对路径的起点之后，再拼接上导入的路径，作为最终完整的路径。可以参考这个图：<img src="images/python项目中导入路径的经典报错/working_dir_illustration.png">其中搜索路径列表就是我们上面提到的那几个按顺序搜索的路径，而拼接路径后面跟着的模块名，对应我们上面提到的，在文件里具体的怎么导入的，或者说是文件里的导入形式（如果进行了多个搜索，那只要其中一个搜索的路径确实存在，就可以）</h2>
+<code>.pth</code> 文件指定的目录<br>（其它的，对于那种我们自己写的库，显然是没啥用的，因为是我们自己写的，不是安装的那种第三方库，所以除了前两种路径，后面的路径基本不影响这种情况）<br>搜索到相对路径的起点之后，再拼接上导入的路径，作为最终完整的路径。可以参考这个图：<img src="/images/python项目中导入路径的经典报错/working_dir_illustration.png">其中搜索路径列表就是我们上面提到的那几个按顺序搜索的路径，而拼接路径后面跟着的模块名，对应我们上面提到的，在文件里具体的怎么导入的，或者说是文件里的导入形式（如果进行了多个搜索，那只要其中一个搜索的路径确实存在，就可以）</h2>
 <h2 id="如果发现这个完整的路径是不存在的就会报上面的错那回到上面的例子当我们在test路径下时工作路径是当时所处的test路径也即ddaily-arxivtest然后导入的路径是src.utils那拼接得到的路径就是ddaily-arxivtestsrcutils然而这个路径确实不存在所以会报错-当我们在arxiv-daily路径下运行python-testtest_fetecher.py的时候工作路径是ddaily-arxiv则拼接后的路径是ddaily-arxivsrcutils那这个路径是正确的所以能导入是不是这篇帖子的方法和我们说的就是一回事啊">如果发现这个完整的路径是不存在的，就会报上面的错。那回到上面的例子，当我们在test路径下时，工作路径是当时所处的test路径，也即<code>d:\daily-arxiv\test</code>，然后导入的路径是<code>src.utils</code>，那拼接得到的路径就是<code>d:\daily-arxiv\test\src\utils</code>，然而这个路径确实不存在。所以会报错<br>当我们在arxiv-daily路径下，运行<code>python test/test_fetecher.py</code>的时候，工作路径是<code>d:\daily-arxiv</code>，则拼接后的路径是<code>d:\daily-arxiv\src\utils</code>，那这个路径是正确的，所以能导入（是不是<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/58084072/python-module-not-found-but-exists-in-folder">这篇帖子</a>的方法和我们说的就是一回事啊？）</h2>
 <h1 id="另一个实例tips">另一个实例&amp;tips</h1>
 <h2 id="同理需要注意的是我们导入的文件它可能需要导入其它地方的路径此时的工作路径依然是和我们现在使用的路径是一样的而不是看那个文件所处的路径也就是如果我们在文件a下导入了其它地方的文件b文件b里面又导入了其它地方的文件c则b在导入这个c的时候依靠的还是运行a的时候所处的工作路径a而不是依靠文件b所处的路径b">同理，需要注意的是，我们导入的文件，它可能需要导入其它地方的路径。此时的工作路径依然是和我们现在使用的路径是一样的，而不是看那个文件所处的路径（也就是，如果我们在文件a下，导入了其它地方的文件b，文件b里面又导入了其它地方的文件c，则b在导入这个c的时候，依靠的还是运行a的时候所处的工作路径A，而不是依靠文件b所处的路径B）</h2>
@@ -259,7 +259,10 @@ Python 安装的标准库目录<br>-
     <a href="/2025/11/10/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/" rel="prev" title="TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text">
       <i class="fa fa-chevron-left"></i> TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2025/12/03/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/python%E7%8E%AF%E5%A2%83%E5%AE%9A%E6%9C%9F%E6%B8%85%E7%90%86/" rel="next" title="python环境定期清理">
+      python环境定期清理 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -340,7 +343,7 @@ Python 安装的标准库目录-
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">235</span>
+          <span class="site-state-item-count">236</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

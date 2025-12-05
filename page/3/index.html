@@ -150,6 +150,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RealRAG%EF%BC%9ARetrieval-augmented%20Realistic%20Image%20Generation%20via%20%20Self-reflective%20Contrastive%20Learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RealRAG%EF%BC%9ARetrieval-augmented%20Realistic%20Image%20Generation%20via%20%20Self-reflective%20Contrastive%20Learning/" class="post-title-link" itemprop="url">RealRAG：Retrieval-augmented Realistic Image Generation via  Self-reflective Contrastive Learning</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-07 16:33:00" itemprop="dateCreated datePublished" datetime="2025-09-07T16:33:00+08:00">2025-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-08 18:43:08" itemprop="dateModified" datetime="2025-10-08T18:43:08+08:00">2025-10-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueicml-25">Venue：ICML 25</h1>
+<h1 id="date2025-05-12">date：2025-05-12</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="扩散模型等文生图模型在生成一些训练时没见过的物体要求非常细的物体时可能会出现类似幻觉的现象生成出的图像非常失真因为参数知识里不包含这些内容我们也不能要求训练数据集里包含所有的知识因此论文引入rag希望检索相关图像来给模型提供知识从而让生成结果更准确">扩散模型等文生图模型，在生成一些训练时没见过的物体/要求非常细的物体时，可能会出现类似幻觉的现象/生成出的图像非常失真（因为参数知识里不包含这些内容。我们也不能要求训练数据集里包含所有的知识）。因此，论文引入RAG，希望检索相关图像来给模型提供知识，从而让生成结果更准确</h2>
+<h1 id="简介">简介：</h1>
+<h2 id="感觉是一篇好文啊需要说明的是尽管现有研究也有一些在做rag和diffusion结合的但是它们在检索方面依然是检索和query语义相关的内容却忽略了去检索真正需要的图像即模型参数里缺少相关知识的图像也就是检索和要求相关的图像有可能检索到一些不需要的图像比如我们想生成一个特定型号的车驾驶在草原的图像假定知识库里没有这个东西这个型号的车是模型没见过的但我们用这个prompt检索图像可能检索出一大堆其它车在草原上行驶的图像就是没检索出这个新型号的车的相关图像那这些结果对于模型而言都没有用因为它还是不知道新型号的车长什么样甚至于说有可能被这些检索结果进一步带偏生成完全不是新型号的车的在草原行驶的结果">感觉是一篇好文啊……需要说明的是，尽管现有研究也有一些在做RAG和diffusion结合的，但是它们在检索方面依然是检索和query语义相关的内容，却忽略了去检索“真正需要”的图像，即模型参数里缺少相关知识的图像（也就是检索和要求相关的图像。有可能检索到一些不需要的图像。比如，我们想生成一个特定型号的车驾驶在草原的图像（假定知识库里没有这个东西），这个型号的车是模型没见过的。但我们用这个prompt检索图像，可能检索出一大堆其它车在草原上行驶的图像，就是没检索出这个新型号的车的相关图像。那这些结果对于模型而言都没有用，因为它还是不知道新型号的车长什么样。甚至于说，有可能被这些检索结果进一步带偏，生成完全不是新型号的车的在草原行驶的结果）</h2>
+<h2 id="因此论文提出了一个自反思对比学习专门用于训练一个类似于biased的retriever当然这个bias是我们主动造成的所以定义上和一般的bias不太一样简单来说训练后的效果就是这个检索器不会单单按照相似度的高低进行检索而是会检索那些模型缺失的也是模型真正需要的并且相关的图像仍以上面的例子来说明就是单看相似度的话应该是那些各种行驶在草原上的车的图像的相似度更高但训练后的检索器不会就这样结束而是会注意到新型号的车才是模型需要的并且也是相关的由此检索回新型号的车的图像给模型用以参考因此实现了知识的弥补具有针对性">因此论文提出了一个“自反思对比学习”，专门用于训练一个类似于biased的retriever（当然，这个bias是我们主动造成的，所以定义上和一般的bias不太一样）。简单来说，训练后的效果就是，这个检索器不会单单按照相似度的高低进行检索，而是会检索那些模型缺失的（也是模型真正需要的）、并且相关的图像（仍以上面的例子来说明，就是，单看相似度的话，应该是那些各种行驶在草原上的车的图像的相似度更高；但训练后的检索器不会就这样结束，而是会注意到新型号的车才是模型需要的，并且也是相关的，由此检索回新型号的车的图像，给模型用以参考）。因此实现了知识的弥补（具有针对性）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/RAG-transfer/RealRAG%EF%BC%9ARetrieval-augmented%20Realistic%20Image%20Generation%20via%20%20Self-reflective%20Contrastive%20Learning/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/SALOVA%EF%BC%9ASegment-Augmented%20Long%20Video%20Assistant%20%20for%20Targeted%20Retrieval%20and%20Routing%20in%20Long-Form%20Video%20Analysis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1026,111 +1129,6 @@ Conversations]]似乎也没太多差别，主要的注意力还是放在如何�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Keep%20Me%20Updated!%20Memory%20Management%20in%20Long-term%20Conversations/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/05/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/Keep%20Me%20Updated!%20Memory%20Management%20in%20Long-term%20Conversations/" class="post-title-link" itemprop="url">Keep Me Updated! Memory Management in Long-term Conversations</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-05 11:32:00 / Modified: 17:10:45" itemprop="dateCreated datePublished" datetime="2025-09-05T11:32:00+08:00">2025-09-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/memory-management/" itemprop="url" rel="index"><span itemprop="name">memory management</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueemnlp-22-findings">Venue：EMNLP 22 Findings</h1>
-<h1 id="date2022-10-17">date：2022-10-17</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="论文关注长期对话中的动态记忆管理问题具体来说我们与模型交流时随着内容的增多历史信息也不断增多而后续的谈话有可能需要再次利用历史信息且新的对话内容可能和历史信息发生冲突导致历史信息需要更新例如新的对话里表明已经不生病了则原来历史信息里保留的生病的信息就可以丢弃了-所以总结一下就是如何让对话系统在多轮对话中跟踪更新用户最新信息管理动态记忆实现更加自然连贯的长期对话">论文关注长期对话中的动态记忆管理问题。具体来说，我们与模型交流时，随着内容的增多，历史信息也不断增多。而后续的谈话有可能需要再次利用历史信息，且新的对话内容可能和历史信息发生冲突，导致历史信息需要更新（例如，新的对话里表明已经不生病了，则原来历史信息里保留的生病的信息就可以丢弃了）<br>所以总结一下，就是，如何让对话系统在多轮对话中跟踪、更新用户最新信息，管理动态记忆，实现更加自然连贯的长期对话</h2>
-<h1 id="简介">简介：</h1>
-<h2 id="论文针对问题首先明确定义了这种新的任务在多会话对话中每次给定上下文以及历史记忆需要先给出当前的合理的回答回答结束后需要根据这一次的对话更新历史记忆以用于下一轮对话">论文针对问题，首先明确定义了这种新的任务：在多会话对话中，每次给定上下文以及历史记忆，需要先给出当前的合理的回答；回答结束后，需要根据这一次的对话，更新历史记忆，以用于下一轮对话</h2>
-<h2 id="方法上论文专门构建了一套多会话数据集同时设计了一套系统包含三个主要部件">方法上，论文专门构建了一套多会话数据集，同时设计了一套系统，包含三个主要部件：</h2>
-<h3 id="memory-grounded-response-generation-response-generation利用记忆检索相关内容进行合理回复这一部分很类似naive-rag只不过此处的检索库是历史记忆而已我们还是检索top-k的词条用于辅助回答">Memory
-Grounded Response Generation Response
-Generation：利用记忆，检索相关内容，进行合理回复（这一部分很类似naive
-RAG，只不过此处的检索库是历史记忆而已。我们还是检索top-k的词条，用于辅助回答）</h3>
-<h3 id="dialogue-summarization将当前会话机型抽象总结提炼出关键信息用于更新历史记忆此处会专门训练一个summarizer模型同时会有手工标注的对话历史--总结句子集合这样的数据对用于训练summarizer">Dialogue
-Summarization：将当前会话机型抽象总结，提炼出关键信息，用于更新历史记忆（此处会专门训练一个summarizer模型，同时会有手工标注的“对话历史--总结句子集合”这样的数据对，用于训练summarizer</h3>
-<h3 id="memory-update事先定义了四种操作根据新内容和记忆之间可能发生的关系定义的结合旧记忆和当前对话的抽象信息进行更新此处因为实现定义了四种操作是根据历史记忆和当前对话摘要之间的关系得到的所以有一个四分类模型它的输入就是m_is_j其中m_i表示历史记忆中的第i条s_j表示当前对话摘要的第j条输出则是四种操作之一的类别遍历所有的记忆和对话摘要组合确定哪些是要保留的哪些是要剔除的完成历史记忆的动态更新">Memory
-Update：事先定义了四种操作（根据新内容和记忆之间可能发生的关系定义的），结合旧记忆和当前对话的抽象信息进行更新（此处因为实现定义了四种操作，是根据历史记忆和当前对话摘要之间的关系得到的，所以有一个四分类模型，它的输入就是<span class="math inline">\((m_{i},s_{j})\)</span>，其中<span class="math inline">\(m_{i}\)</span>表示历史记忆中的第i条，<span class="math inline">\(s_{j}\)</span>表示当前对话摘要的第j条，输出则是四种操作之一的类别。遍历所有的记忆和对话摘要组合，确定哪些是要保留的，哪些是要剔除的，完成历史记忆的动态更新）</h3>
-<h1 id="insight">insight：</h1>
-<h2 id="感觉看下来没有哪个地方说得上是特别令人惊艳的大概它切入点是比较新颖的长对话的历史记忆管理">感觉看下来，没有哪个地方说得上是特别令人惊艳的；大概它切入点是比较新颖的，长对话的历史记忆管理</h2>
-<h2 id="用非结构化文本来进行记忆管理这个点怎么说或许可以是一个在其它领域借鉴的创新点还是感觉有点强行了不应该这样硬凑创新点说到底如果在某个领域我们希望用非结构化文本方便人类理解那么这就是自然的也应该是我们的目标如果没有这个需求那不一定非要非结构化文本结构化和非结构化文本哪个效果好就用哪个吧">用非结构化文本来进行记忆管理，这个点，怎么说，或许可以是一个在其它领域借鉴的创新点？……还是感觉有点强行了，不应该这样硬凑创新点。说到底，如果在某个领域，我们希望用非结构化文本，方便人类理解，那么这就是自然的，也应该是我们的目标。如果没有这个需求，那不一定非要非结构化文本，结构化和非结构化文本，哪个效果好就用哪个吧</h2>
-<h2 id="update操作被涵盖成四种预先定义的操作然后具体的实现用一个单独训练的分类模型实现这一套算是一个比较常见的trick了针对这种比较灵活的问题如果暂时没有特别好的处理方法那么用这种相对机械工程的做法也不是不行吧权宜之计且一般有可能需要自己构造数据毕竟要训练这种模型就得有输入数据--对应操作这样的数据对然而你的操作一般是自己定义的所以基本找不到现成的数据集">update操作被涵盖成四种预先定义的操作，然后具体的实现用一个单独训练的分类模型实现，这一套算是一个比较常见的trick了。针对这种比较灵活的问题，如果暂时没有特别好的处理方法，那么用这种相对机械、工程的做法也不是不行吧（权宜之计）（且一般有可能需要自己构造数据。毕竟，要训练这种模型，就得有“输入数据--对应操作”这样的数据对，然而你的操作一般是自己定义的，所以基本找不到现成的数据集）</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="提出一套记忆管理机制且是用非结构化文本利于人类理解">提出一套记忆管理机制，且是用非结构化文本，利于人类理解</h2>
-<h2 id="提出第一个韩语的长期这里指的是有多个会话会话之间有时间间隔这样的吧对话数据集可用于记忆管理方面的研究">提出第一个韩语的长期（这里指的是有多个会话，会话之间有时间间隔这样的吧）对话数据集，可用于记忆管理方面的研究</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1200,7 +1198,7 @@ Update：事先定义了四种操作（根据新内容和记忆之间可能发�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">235</span>
+          <span class="site-state-item-count">236</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -150,6 +150,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/" class="post-title-link" itemprop="url">Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-19 00:58:00" itemprop="dateCreated datePublished" datetime="2025-08-19T00:58:00+08:00">2025-08-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:55:08" itemprop="dateModified" datetime="2025-09-24T15:55:08+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Venue：arxiv-23"><a href="#Venue：arxiv-23" class="headerlink" title="Venue：arxiv 23"></a>Venue：arxiv 23</h1><h1 id="date：2023-10-23"><a href="#date：2023-10-23" class="headerlink" title="date：2023-10-23"></a>date：2023-10-23</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）"><a href="#连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）" class="headerlink" title="连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）"></a><del>连这个都暂时没太搞清楚……</del>大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）</h2><h2 id="也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）"><a href="#也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）" class="headerlink" title="也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）"></a>也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）<br>而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）</h2><h1 id="insight："><a href="#insight：" class="headerlink" title="insight："></a>insight：</h1><h2 id="虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）"><a href="#虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）" class="headerlink" title="虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）"></a>虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）</h2><h1 id="contribution："><a href="#contribution：" class="headerlink" title="contribution："></a>contribution：</h1><h2 id="提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）"><a href="#提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）" class="headerlink" title="提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）"></a>提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/12/course_learning/efficientml_mit/lec02-basics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -974,78 +1071,6 @@ methods，也就是耦合的方法，它需要用KG对llm进行微调，从而�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">最长公共子序列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-07-20 22:05:00" itemprop="dateCreated datePublished" datetime="2025-07-20T22:05:00+08:00">2025-07-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-07-21 00:46:01" itemprop="dateModified" datetime="2025-07-21T00:46:01+08:00">2025-07-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a href>在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/07/20/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BB%8F%E5%85%B8%E7%BA%BF%E6%80%A7DP/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E7%B1%BB/%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1115,7 +1140,7 @@ methods，也就是耦合的方法，它需要用KG对llm进行微调，从而�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">235</span>
+          <span class="site-state-item-count">236</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

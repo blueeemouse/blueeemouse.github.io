@@ -150,6 +150,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/The%20Distracting%20Effect%EF%BC%9AUnderstanding%20Irrelevant%20Passages%20in%20RAG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/The%20Distracting%20Effect%EF%BC%9AUnderstanding%20Irrelevant%20Passages%20in%20RAG/" class="post-title-link" itemprop="url">The Distracting Effect：Understanding Irrelevant Passages in RAG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-30 17:49:00" itemprop="dateCreated datePublished" datetime="2025-08-30T17:49:00+08:00">2025-08-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-31 11:28:19" itemprop="dateModified" datetime="2025-08-31T11:28:19+08:00">2025-08-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueacl-25">Venue：ACL 25</h1>
+<h1 id="date2025-05-11">date：2025-05-11</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="论文研究的问题其实是相对常见的就是rag过程中我们可能检索到无关的内容以至于误导了llm让它作出错误回答这是要避免的">论文研究的问题其实是相对常见的，就是RAG过程中，我们可能检索到无关的内容，以至于误导了llm，让它作出错误回答。这是要避免的。</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="论文的一大核心贡献是提出了一个distracting-effect系数可以定量地描述检索内容与query的不相关程度基于此论文尝试了一些方法来挖掘出若干的不相关的上下文并用它们来对llm进行微调发现有效果提升这固然是好事提供了新的获取高质量微调数据的方法但这也意味着论文并没有从算法层面提出一些创新来解决上面提到的问题而是提出了构造数据的方法的确也缓解问题了就是感觉这个操作不太常见">论文的一大核心贡献是，提出了一个distracting
+effect系数，可以定量地描述检索内容与query的不相关程度。基于此，论文尝试了一些方法，来挖掘出若干的不相关的上下文，并用它们来对llm进行微调，发现有效果提升。这固然是好事，提供了新的获取高质量微调数据的方法。但这也意味着，论文并没有从算法层面提出一些创新，来解决上面提到的问题，而是提出了构造数据的方法。的确也缓解问题了。就是感觉这个操作不太常见……</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="为rag中的一个常见问题即distracting-passages提供了一个定量衡量的指标distracting-effect">为RAG中的一个常见问题（即distracting
+passages）提供了一个<strong>定量</strong>衡量的指标，distracting
+effect</h2>
+<h2 id="提出了新的构建rag训练数据集的方法利用到了论文提出的distracting-effect指标进一步表明其价值且实验表明这个构建出来的数据集质量还不错用它进行微调的效果也很好">提出了新的构建RAG训练数据集的方法（利用到了论文提出的distracting
+effect指标，进一步表明其价值），且实验表明这个构建出来的数据集质量还不错，用它进行微调的效果也很好</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/The%20Distracting%20Effect%EF%BC%9AUnderstanding%20Irrelevant%20Passages%20in%20RAG/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Removal%20of%20Hallucination%20on%20Hallucination%EF%BC%9ADebate-Augmented%20RAG/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1041,103 +1146,6 @@ Fine-Tuning
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/" class="post-title-link" itemprop="url">Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-08-19 00:58:00" itemprop="dateCreated datePublished" datetime="2025-08-19T00:58:00+08:00">2025-08-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-24 15:55:08" itemprop="dateModified" datetime="2025-09-24T15:55:08+08:00">2025-09-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Venue：arxiv-23"><a href="#Venue：arxiv-23" class="headerlink" title="Venue：arxiv 23"></a>Venue：arxiv 23</h1><h1 id="date：2023-10-23"><a href="#date：2023-10-23" class="headerlink" title="date：2023-10-23"></a>date：2023-10-23</h1><h1 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h1><h2 id="连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）"><a href="#连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）" class="headerlink" title="连这个都暂时没太搞清楚……大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）"></a><del>连这个都暂时没太搞清楚……</del>大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）</h2><h2 id="也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）"><a href="#也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）" class="headerlink" title="也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）"></a>也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）<br>而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）</h2><h1 id="insight："><a href="#insight：" class="headerlink" title="insight："></a>insight：</h1><h2 id="虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）"><a href="#虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）" class="headerlink" title="虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）"></a>虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）</h2><h1 id="contribution："><a href="#contribution：" class="headerlink" title="contribution："></a>contribution：</h1><h2 id="提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）"><a href="#提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）" class="headerlink" title="提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）"></a>提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/08/19/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1207,7 +1215,7 @@ Fine-Tuning
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">235</span>
+          <span class="site-state-item-count">236</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
