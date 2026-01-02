@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="如题，因为需要进行本科毕设，在写开题报告的时候需要在word上写报告，然后要写一些参考文献。这就不像本地latex或者overleaf那样，引用特别方便；感觉上word插入参考文献一直很麻烦。因为懒得用word自带的功能，加上文献整理在zotero，检索之下发现了可以用zotero的插件实现文献插入（不过目前只是解决了一部分而已）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows上word快捷插入参考文献">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/12/29/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8Aword%E5%BF%AB%E6%8D%B7%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="如题，因为需要进行本科毕设，在写开题报告的时候需要在word上写报告，然后要写一些参考文献。这就不像本地latex或者overleaf那样，引用特别方便；感觉上word插入参考文献一直很麻烦。因为懒得用word自带的功能，加上文献整理在zotero，检索之下发现了可以用zotero的插件实现文献插入（不过目前只是解决了一部分而已）">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-12-29T15:02:00.000Z">
+<meta property="article:modified_time" content="2025-12-29T15:18:13.772Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/12/29/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8Aword%E5%BF%AB%E6%8D%B7%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Windows上word快捷插入参考文献 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/12/29/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8Aword%E5%BF%AB%E6%8D%B7%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Windows上word快捷插入参考文献
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-12-29 23:02:00 / Modified: 23:18:13" itemprop="dateCreated datePublished" datetime="2025-12-29T23:02:00+08:00">2025-12-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="如题因为需要进行本科毕设在写开题报告的时候需要在word上写报告然后要写一些参考文献这就不像本地latex或者overleaf那样引用特别方便感觉上word插入参考文献一直很麻烦因为懒得用word自带的功能加上文献整理在zotero检索之下发现了可以用zotero的插件实现文献插入不过目前只是解决了一部分而已">如题，因为需要进行本科毕设，在写开题报告的时候需要在word上写报告，然后要写一些参考文献。这就不像本地latex或者overleaf那样，引用特别方便；感觉上word插入参考文献一直很麻烦。因为懒得用word自带的功能，加上文献整理在zotero，检索之下发现了可以用zotero的插件实现文献插入（不过目前只是解决了一部分而已）</h1>
+<span id="more"></span>
+<h1 id="大体上流程是先安装wordwps里的zotero插件然后就能导入本地的zotero里的文献的信息了这一步应该还是比较好弄的我是之前就弄好了都不记得具体是怎么做的了">大体上，流程是先安装word/wps里的zotero插件，然后就能导入本地的zotero里的文献的信息了（这一步应该还是比较好弄的，我是之前就弄好了，都不记得具体是怎么做的了……）</h1>
+<h1 id="之后就是具体插入文献了在想插入文献的地方点击让光标到那个地方再点击上面的zotero栏接着点击里面的addedit-citation选项此时可以把想加载进来的文献选中再之后就是选引用格式了最后一路ok下来应该就能正常引用了可能需要单独在后面开一页来放参考文献">之后就是具体插入文献了：在想插入文献的地方，点击让光标到那个地方，再点击上面的“Zotero”栏，接着点击里面的“Add/Edit
+Citation”选项，此时可以把想加载进来的文献选中，再之后就是选引用格式了，最后一路ok下来，应该就能正常引用了（可能需要单独在后面开一页来放参考文献）</h1>
+<h2 id="不过这里就开始会有一些问题了一个是格式虽然有很多的格式可以选但在本科毕设这个场景下很可能会有一些稀奇古怪的格式要求它并不支持现在的话暂时不知道这个插件支不支持自定义引用格式所以其实也挺麻烦一个笨办法就是先用插件在正文里插入后面也会有引用文献然后自己再手动去后面一个一个改文献格式">不过这里就开始会有一些问题了。一个是格式，虽然有很多的格式可以选，但在本科毕设这个场景下，很可能会有一些稀奇古怪的格式要求，它并不支持。现在的话，暂时不知道这个插件支不支持自定义引用格式。所以其实也挺麻烦……一个笨办法就是，先用插件在正文里插入，后面也会有引用文献，然后自己再手动去后面一个一个改文献格式……</h2>
+<h2 id="另一个问题在于可能我们再把文献下载到zotero里的时候是从arxiv之类的地方下载的因此文献的metadata里可能显示只是arxiv之类的预印本然而实际这篇文章可能后面发表到了某个期刊会议上但这在引用的时候是体现不出来的它只会读取zotero里这个文献的metadata因此造成的一个可能的现象是明明找的都是一些顶会的论文用插件引用完却发现都显示是arxiv的预印本这其实就是文献metadata没更新的问题">另一个问题在于，可能我们再把文献下载到zotero里的时候，是从arxiv之类的地方下载的。因此文献的metadata里可能显示只是arxiv之类的预印本，然而实际这篇文章可能后面发表到了某个期刊/会议上。但这在引用的时候是体现不出来的，它只会读取zotero里这个文献的metadata。因此，造成的一个可能的现象是，明明找的都是一些顶会的论文，用插件引用完，却发现都显示是arxiv的预印本。这其实就是文献metadata没更新的问题</h2>
+<h3 id="关于这个问题搜索了一下似乎有人是用一个quicker的东西进行快速实现的最终的目标应该是可以批量把zotero里的文献的metadata给更新可以姑且参考一下这个知乎回答不过实操还是挺难的它那个东西有点难配置特别是zotero升级到7.0版本以后反正目前暂时还没配好">关于这个问题，搜索了一下，似乎有人是用一个Quicker的东西进行快速实现的，最终的目标应该是可以批量把zotero里的文献的metadata给更新。可以姑且参考一下这个<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/438264273/answer/2723495052">知乎回答</a>（不过实操还是挺难的，它那个东西有点难配置，特别是zotero升级到7.0版本以后……反正目前暂时还没配好……）</h3>
+<h3 id="搜到的另一个方法是在一个csdn博客上看到的它是用到一个zotero的插件叫arxiv-workflow-for-zoterogithub下载链接这个东西可以更新zotero里的文献的metadata只不过缺点是需要手动一个一个对想更新metadata的文献来操作而且实操的时候发现有些文献它能正确更新有些则不能">搜到的另一个方法是在一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34342853/article/details/120090087">csdn博客</a>上看到的。它是用到一个zotero的插件，叫arXiv
+Workflow for Zotero（<a target="_blank" rel="noopener" href="https://github.com/AllanChain/zotero-arxiv-workflow/">GitHub下载链接</a>）。这个东西可以更新zotero里的文献的metadata（只不过缺点是需要手动一个一个对想更新metadata的文献来操作，而且实操的时候发现有些文献它能正确更新，有些则不能……）</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/12/19/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/docker/Windows%E6%9C%AC%E5%9C%B0docker/Windows%E6%9C%AC%E5%9C%B0docker%E5%8F%82%E8%80%83%E6%95%99%E7%A8%8B/" rel="prev" title="Windows本地docker参考教程">
+      <i class="fa fa-chevron-left"></i> Windows本地docker参考教程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E9%A2%98%E5%9B%A0%E4%B8%BA%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E6%9C%AC%E7%A7%91%E6%AF%95%E8%AE%BE%E5%9C%A8%E5%86%99%E5%BC%80%E9%A2%98%E6%8A%A5%E5%91%8A%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%9C%A8word%E4%B8%8A%E5%86%99%E6%8A%A5%E5%91%8A%E7%84%B6%E5%90%8E%E8%A6%81%E5%86%99%E4%B8%80%E4%BA%9B%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E8%BF%99%E5%B0%B1%E4%B8%8D%E5%83%8F%E6%9C%AC%E5%9C%B0latex%E6%88%96%E8%80%85overleaf%E9%82%A3%E6%A0%B7%E5%BC%95%E7%94%A8%E7%89%B9%E5%88%AB%E6%96%B9%E4%BE%BF%E6%84%9F%E8%A7%89%E4%B8%8Aword%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E4%B8%80%E7%9B%B4%E5%BE%88%E9%BA%BB%E7%83%A6%E5%9B%A0%E4%B8%BA%E6%87%92%E5%BE%97%E7%94%A8word%E8%87%AA%E5%B8%A6%E7%9A%84%E5%8A%9F%E8%83%BD%E5%8A%A0%E4%B8%8A%E6%96%87%E7%8C%AE%E6%95%B4%E7%90%86%E5%9C%A8zotero%E6%A3%80%E7%B4%A2%E4%B9%8B%E4%B8%8B%E5%8F%91%E7%8E%B0%E4%BA%86%E5%8F%AF%E4%BB%A5%E7%94%A8zotero%E7%9A%84%E6%8F%92%E4%BB%B6%E5%AE%9E%E7%8E%B0%E6%96%87%E7%8C%AE%E6%8F%92%E5%85%A5%E4%B8%8D%E8%BF%87%E7%9B%AE%E5%89%8D%E5%8F%AA%E6%98%AF%E8%A7%A3%E5%86%B3%E4%BA%86%E4%B8%80%E9%83%A8%E5%88%86%E8%80%8C%E5%B7%B2"><span class="nav-number">1.</span> <span class="nav-text">如题，因为需要进行本科毕设，在写开题报告的时候需要在word上写报告，然后要写一些参考文献。这就不像本地latex或者overleaf那样，引用特别方便；感觉上word插入参考文献一直很麻烦。因为懒得用word自带的功能，加上文献整理在zotero，检索之下发现了可以用zotero的插件实现文献插入（不过目前只是解决了一部分而已）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E4%BD%93%E4%B8%8A%E6%B5%81%E7%A8%8B%E6%98%AF%E5%85%88%E5%AE%89%E8%A3%85wordwps%E9%87%8C%E7%9A%84zotero%E6%8F%92%E4%BB%B6%E7%84%B6%E5%90%8E%E5%B0%B1%E8%83%BD%E5%AF%BC%E5%85%A5%E6%9C%AC%E5%9C%B0%E7%9A%84zotero%E9%87%8C%E7%9A%84%E6%96%87%E7%8C%AE%E7%9A%84%E4%BF%A1%E6%81%AF%E4%BA%86%E8%BF%99%E4%B8%80%E6%AD%A5%E5%BA%94%E8%AF%A5%E8%BF%98%E6%98%AF%E6%AF%94%E8%BE%83%E5%A5%BD%E5%BC%84%E7%9A%84%E6%88%91%E6%98%AF%E4%B9%8B%E5%89%8D%E5%B0%B1%E5%BC%84%E5%A5%BD%E4%BA%86%E9%83%BD%E4%B8%8D%E8%AE%B0%E5%BE%97%E5%85%B7%E4%BD%93%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E7%9A%84%E4%BA%86"><span class="nav-number">2.</span> <span class="nav-text">大体上，流程是先安装word&#x2F;wps里的zotero插件，然后就能导入本地的zotero里的文献的信息了（这一步应该还是比较好弄的，我是之前就弄好了，都不记得具体是怎么做的了……）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%8B%E5%90%8E%E5%B0%B1%E6%98%AF%E5%85%B7%E4%BD%93%E6%8F%92%E5%85%A5%E6%96%87%E7%8C%AE%E4%BA%86%E5%9C%A8%E6%83%B3%E6%8F%92%E5%85%A5%E6%96%87%E7%8C%AE%E7%9A%84%E5%9C%B0%E6%96%B9%E7%82%B9%E5%87%BB%E8%AE%A9%E5%85%89%E6%A0%87%E5%88%B0%E9%82%A3%E4%B8%AA%E5%9C%B0%E6%96%B9%E5%86%8D%E7%82%B9%E5%87%BB%E4%B8%8A%E9%9D%A2%E7%9A%84zotero%E6%A0%8F%E6%8E%A5%E7%9D%80%E7%82%B9%E5%87%BB%E9%87%8C%E9%9D%A2%E7%9A%84addedit-citation%E9%80%89%E9%A1%B9%E6%AD%A4%E6%97%B6%E5%8F%AF%E4%BB%A5%E6%8A%8A%E6%83%B3%E5%8A%A0%E8%BD%BD%E8%BF%9B%E6%9D%A5%E7%9A%84%E6%96%87%E7%8C%AE%E9%80%89%E4%B8%AD%E5%86%8D%E4%B9%8B%E5%90%8E%E5%B0%B1%E6%98%AF%E9%80%89%E5%BC%95%E7%94%A8%E6%A0%BC%E5%BC%8F%E4%BA%86%E6%9C%80%E5%90%8E%E4%B8%80%E8%B7%AFok%E4%B8%8B%E6%9D%A5%E5%BA%94%E8%AF%A5%E5%B0%B1%E8%83%BD%E6%AD%A3%E5%B8%B8%E5%BC%95%E7%94%A8%E4%BA%86%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E5%8D%95%E7%8B%AC%E5%9C%A8%E5%90%8E%E9%9D%A2%E5%BC%80%E4%B8%80%E9%A1%B5%E6%9D%A5%E6%94%BE%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">3.</span> <span class="nav-text">之后就是具体插入文献了：在想插入文献的地方，点击让光标到那个地方，再点击上面的“Zotero”栏，接着点击里面的“Add&#x2F;Edit
+Citation”选项，此时可以把想加载进来的文献选中，再之后就是选引用格式了，最后一路ok下来，应该就能正常引用了（可能需要单独在后面开一页来放参考文献）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%BF%87%E8%BF%99%E9%87%8C%E5%B0%B1%E5%BC%80%E5%A7%8B%E4%BC%9A%E6%9C%89%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E4%BA%86%E4%B8%80%E4%B8%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E8%99%BD%E7%84%B6%E6%9C%89%E5%BE%88%E5%A4%9A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8F%AF%E4%BB%A5%E9%80%89%E4%BD%86%E5%9C%A8%E6%9C%AC%E7%A7%91%E6%AF%95%E8%AE%BE%E8%BF%99%E4%B8%AA%E5%9C%BA%E6%99%AF%E4%B8%8B%E5%BE%88%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%9C%89%E4%B8%80%E4%BA%9B%E7%A8%80%E5%A5%87%E5%8F%A4%E6%80%AA%E7%9A%84%E6%A0%BC%E5%BC%8F%E8%A6%81%E6%B1%82%E5%AE%83%E5%B9%B6%E4%B8%8D%E6%94%AF%E6%8C%81%E7%8E%B0%E5%9C%A8%E7%9A%84%E8%AF%9D%E6%9A%82%E6%97%B6%E4%B8%8D%E7%9F%A5%E9%81%93%E8%BF%99%E4%B8%AA%E6%8F%92%E4%BB%B6%E6%94%AF%E4%B8%8D%E6%94%AF%E6%8C%81%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%95%E7%94%A8%E6%A0%BC%E5%BC%8F%E6%89%80%E4%BB%A5%E5%85%B6%E5%AE%9E%E4%B9%9F%E6%8C%BA%E9%BA%BB%E7%83%A6%E4%B8%80%E4%B8%AA%E7%AC%A8%E5%8A%9E%E6%B3%95%E5%B0%B1%E6%98%AF%E5%85%88%E7%94%A8%E6%8F%92%E4%BB%B6%E5%9C%A8%E6%AD%A3%E6%96%87%E9%87%8C%E6%8F%92%E5%85%A5%E5%90%8E%E9%9D%A2%E4%B9%9F%E4%BC%9A%E6%9C%89%E5%BC%95%E7%94%A8%E6%96%87%E7%8C%AE%E7%84%B6%E5%90%8E%E8%87%AA%E5%B7%B1%E5%86%8D%E6%89%8B%E5%8A%A8%E5%8E%BB%E5%90%8E%E9%9D%A2%E4%B8%80%E4%B8%AA%E4%B8%80%E4%B8%AA%E6%94%B9%E6%96%87%E7%8C%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">不过这里就开始会有一些问题了。一个是格式，虽然有很多的格式可以选，但在本科毕设这个场景下，很可能会有一些稀奇古怪的格式要求，它并不支持。现在的话，暂时不知道这个插件支不支持自定义引用格式。所以其实也挺麻烦……一个笨办法就是，先用插件在正文里插入，后面也会有引用文献，然后自己再手动去后面一个一个改文献格式……</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E5%9C%A8%E4%BA%8E%E5%8F%AF%E8%83%BD%E6%88%91%E4%BB%AC%E5%86%8D%E6%8A%8A%E6%96%87%E7%8C%AE%E4%B8%8B%E8%BD%BD%E5%88%B0zotero%E9%87%8C%E7%9A%84%E6%97%B6%E5%80%99%E6%98%AF%E4%BB%8Earxiv%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%9C%B0%E6%96%B9%E4%B8%8B%E8%BD%BD%E7%9A%84%E5%9B%A0%E6%AD%A4%E6%96%87%E7%8C%AE%E7%9A%84metadata%E9%87%8C%E5%8F%AF%E8%83%BD%E6%98%BE%E7%A4%BA%E5%8F%AA%E6%98%AFarxiv%E4%B9%8B%E7%B1%BB%E7%9A%84%E9%A2%84%E5%8D%B0%E6%9C%AC%E7%84%B6%E8%80%8C%E5%AE%9E%E9%99%85%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E5%8F%AF%E8%83%BD%E5%90%8E%E9%9D%A2%E5%8F%91%E8%A1%A8%E5%88%B0%E4%BA%86%E6%9F%90%E4%B8%AA%E6%9C%9F%E5%88%8A%E4%BC%9A%E8%AE%AE%E4%B8%8A%E4%BD%86%E8%BF%99%E5%9C%A8%E5%BC%95%E7%94%A8%E7%9A%84%E6%97%B6%E5%80%99%E6%98%AF%E4%BD%93%E7%8E%B0%E4%B8%8D%E5%87%BA%E6%9D%A5%E7%9A%84%E5%AE%83%E5%8F%AA%E4%BC%9A%E8%AF%BB%E5%8F%96zotero%E9%87%8C%E8%BF%99%E4%B8%AA%E6%96%87%E7%8C%AE%E7%9A%84metadata%E5%9B%A0%E6%AD%A4%E9%80%A0%E6%88%90%E7%9A%84%E4%B8%80%E4%B8%AA%E5%8F%AF%E8%83%BD%E7%9A%84%E7%8E%B0%E8%B1%A1%E6%98%AF%E6%98%8E%E6%98%8E%E6%89%BE%E7%9A%84%E9%83%BD%E6%98%AF%E4%B8%80%E4%BA%9B%E9%A1%B6%E4%BC%9A%E7%9A%84%E8%AE%BA%E6%96%87%E7%94%A8%E6%8F%92%E4%BB%B6%E5%BC%95%E7%94%A8%E5%AE%8C%E5%8D%B4%E5%8F%91%E7%8E%B0%E9%83%BD%E6%98%BE%E7%A4%BA%E6%98%AFarxiv%E7%9A%84%E9%A2%84%E5%8D%B0%E6%9C%AC%E8%BF%99%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E6%96%87%E7%8C%AEmetadata%E6%B2%A1%E6%9B%B4%E6%96%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.2.</span> <span class="nav-text">另一个问题在于，可能我们再把文献下载到zotero里的时候，是从arxiv之类的地方下载的。因此文献的metadata里可能显示只是arxiv之类的预印本，然而实际这篇文章可能后面发表到了某个期刊&#x2F;会议上。但这在引用的时候是体现不出来的，它只会读取zotero里这个文献的metadata。因此，造成的一个可能的现象是，明明找的都是一些顶会的论文，用插件引用完，却发现都显示是arxiv的预印本。这其实就是文献metadata没更新的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E6%90%9C%E7%B4%A2%E4%BA%86%E4%B8%80%E4%B8%8B%E4%BC%BC%E4%B9%8E%E6%9C%89%E4%BA%BA%E6%98%AF%E7%94%A8%E4%B8%80%E4%B8%AAquicker%E7%9A%84%E4%B8%9C%E8%A5%BF%E8%BF%9B%E8%A1%8C%E5%BF%AB%E9%80%9F%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%9C%80%E7%BB%88%E7%9A%84%E7%9B%AE%E6%A0%87%E5%BA%94%E8%AF%A5%E6%98%AF%E5%8F%AF%E4%BB%A5%E6%89%B9%E9%87%8F%E6%8A%8Azotero%E9%87%8C%E7%9A%84%E6%96%87%E7%8C%AE%E7%9A%84metadata%E7%BB%99%E6%9B%B4%E6%96%B0%E5%8F%AF%E4%BB%A5%E5%A7%91%E4%B8%94%E5%8F%82%E8%80%83%E4%B8%80%E4%B8%8B%E8%BF%99%E4%B8%AA%E7%9F%A5%E4%B9%8E%E5%9B%9E%E7%AD%94%E4%B8%8D%E8%BF%87%E5%AE%9E%E6%93%8D%E8%BF%98%E6%98%AF%E6%8C%BA%E9%9A%BE%E7%9A%84%E5%AE%83%E9%82%A3%E4%B8%AA%E4%B8%9C%E8%A5%BF%E6%9C%89%E7%82%B9%E9%9A%BE%E9%85%8D%E7%BD%AE%E7%89%B9%E5%88%AB%E6%98%AFzotero%E5%8D%87%E7%BA%A7%E5%88%B07.0%E7%89%88%E6%9C%AC%E4%BB%A5%E5%90%8E%E5%8F%8D%E6%AD%A3%E7%9B%AE%E5%89%8D%E6%9A%82%E6%97%B6%E8%BF%98%E6%B2%A1%E9%85%8D%E5%A5%BD"><span class="nav-number">3.2.1.</span> <span class="nav-text">关于这个问题，搜索了一下，似乎有人是用一个Quicker的东西进行快速实现的，最终的目标应该是可以批量把zotero里的文献的metadata给更新。可以姑且参考一下这个知乎回答（不过实操还是挺难的，它那个东西有点难配置，特别是zotero升级到7.0版本以后……反正目前暂时还没配好……）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E5%88%B0%E7%9A%84%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%96%B9%E6%B3%95%E6%98%AF%E5%9C%A8%E4%B8%80%E4%B8%AAcsdn%E5%8D%9A%E5%AE%A2%E4%B8%8A%E7%9C%8B%E5%88%B0%E7%9A%84%E5%AE%83%E6%98%AF%E7%94%A8%E5%88%B0%E4%B8%80%E4%B8%AAzotero%E7%9A%84%E6%8F%92%E4%BB%B6%E5%8F%ABarxiv-workflow-for-zoterogithub%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%E8%BF%99%E4%B8%AA%E4%B8%9C%E8%A5%BF%E5%8F%AF%E4%BB%A5%E6%9B%B4%E6%96%B0zotero%E9%87%8C%E7%9A%84%E6%96%87%E7%8C%AE%E7%9A%84metadata%E5%8F%AA%E4%B8%8D%E8%BF%87%E7%BC%BA%E7%82%B9%E6%98%AF%E9%9C%80%E8%A6%81%E6%89%8B%E5%8A%A8%E4%B8%80%E4%B8%AA%E4%B8%80%E4%B8%AA%E5%AF%B9%E6%83%B3%E6%9B%B4%E6%96%B0metadata%E7%9A%84%E6%96%87%E7%8C%AE%E6%9D%A5%E6%93%8D%E4%BD%9C%E8%80%8C%E4%B8%94%E5%AE%9E%E6%93%8D%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%91%E7%8E%B0%E6%9C%89%E4%BA%9B%E6%96%87%E7%8C%AE%E5%AE%83%E8%83%BD%E6%AD%A3%E7%A1%AE%E6%9B%B4%E6%96%B0%E6%9C%89%E4%BA%9B%E5%88%99%E4%B8%8D%E8%83%BD"><span class="nav-number">3.2.2.</span> <span class="nav-text">搜到的另一个方法是在一个csdn博客上看到的。它是用到一个zotero的插件，叫arXiv
+Workflow for Zotero（GitHub下载链接）。这个东西可以更新zotero里的文献的metadata（只不过缺点是需要手动一个一个对想更新metadata的文献来操作，而且实操的时候发现有些文献它能正确更新，有些则不能……）</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">70</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

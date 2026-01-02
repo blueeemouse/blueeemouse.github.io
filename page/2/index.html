@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/" class="post-title-link" itemprop="url">VideoRAG：Retrieval-Augmented Generation over Video Corpus</a>
+            <a href="/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/" class="post-title-link" itemprop="url">lec03&04-pruning</a>
         </h2>
 
         <div class="post-meta">
@@ -174,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-09-28 17:05:00" itemprop="dateCreated datePublished" datetime="2025-09-28T17:05:00+08:00">2025-09-28</time>
+              <time title="Created: 2025-09-03 17:08:00" itemprop="dateCreated datePublished" datetime="2025-09-03T17:08:00+08:00">2025-09-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-29 10:37:54" itemprop="dateModified" datetime="2025-09-29T10:37:54+08:00">2025-09-29</time>
+                <time title="Modified: 2025-09-24 15:59:33" itemprop="dateModified" datetime="2025-09-24T15:59:33+08:00">2025-09-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -189,23 +189,11 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
                 </span>
             </span>
 
@@ -220,23 +208,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="venueacl-25-findings">Venue：ACL 25 findings</h1>
-<h1 id="date2025-05-28">date：2025-05-28</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="现有rag方法通常忽视了视频模态但视频里其实也包含了很丰富的信息-尽管最近有一些研究在尝试利用视频来辅助回答但它们要么不够动态即人工预先定义好query的几个相关视频或者按照固定规则来定义相关视频要么损失了视频中丰富的信息把视频转成文字描述-因此论文提出videorag来直接检索回query相关的视频能同时利用文字和视觉信息">现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息<br>尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）<br>因此论文提出VideoRAG，来直接检索回query相关的视频，能同时利用文字和视觉信息</h2>
-<h3 id="关于现有方法不够动态的问题可以举几个例子来理解比如人工预先定义的话可能针对打领带这个query人为的找出两三个教学视频它们的确是打领带的教学视频之后如果有query是关于这个的则它们的参考视频就只会是这两三个而不会从海量的视频候选库里检索">关于现有方法不够动态的问题，可以举几个例子来理解。比如人工预先定义的话，可能针对“打领带”这个query，人为的找出两三个教学视频，它们的确是打领带的教学视频。之后如果有query是关于这个的，则它们的参考视频就只会是这两三个，而不会从海量的视频候选库里检索。</h3>
-<h2 id="虽然现在有很多image-text-rag但视频终究是有一些独特的性质导致它不能被图像完全取代吧">虽然现在有很多image-text
-RAG，但视频终究是有一些独特的性质，导致它不能被图像完全取代吧</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="判断视频是否和query相关其实也很重要千万不能忽视这一点否则检索的空间太大了">判断视频是否和query相关，其实也很重要。千万不能忽视这一点，否则检索的空间太大了</h2>
-<h2 id="视频模态的特点感觉体现在包括但不限于以下的几方面">视频模态的特点，感觉体现在（包括但不限于以下的几方面）：</h2>
-<h3 id="多帧之间的时序关系">多帧之间的时序关系</h3>
-<h3 id="画面图像和文本语音之间的对应关系">画面（图像）和文本/语音之间的对应关系</h3>
-<h1 id="contribution">contribution：</h1>
-<h2 id="支持了动态视频的检索包括能动态判断哪些视频是相关的并从中提取信息用于辅助生成">支持了动态视频的检索，包括能动态判断哪些视频是相关的，并从中提取信息用于辅助生成</h2>
+          <h1 id="引入">0. 引入</h1>
+<h2 id="一般定义">一般定义：</h2>
+<h3 id="所谓剪枝可以转化成一个优化问题怎么使得网络参数尽可能稀疏同时网络的效果也要尽可能保留我们对稀疏性的要求体现在约束w_p_0le-n上而我们对性能保留的要求则体现在优化问题argmin_w_plxw_p">所谓剪枝，可以转化成一个优化问题：怎么使得网络参数尽可能“稀疏”，同时网络的效果也要尽可能保留<img src="images/efficientml/lec03&amp;04/intro-to-prune.png">我们对稀疏性的要求，体现在约束<span class="math inline">\(||W_{p}||_{0}\le
+N\)</span>上，而我们对性能保留的要求则体现在优化问题<span class="math inline">\(\arg\min_{W_{p}}L(x;W_{p})\)</span></h3>
+<h2 id="大体上剪枝需要考虑这么几个方面剪枝的粒度剪枝的标准什么是重要的什么是不重要的剪枝率剪枝多少能达到效率和效果的平衡剪枝后的对网络的微调恢复性能我们不希望剪枝完之后性能掉得一塌糊涂">大体上，剪枝需要考虑这么几个方面：剪枝的粒度，剪枝的标准（什么是重要的，什么是不重要的），剪枝率（剪枝多少能达到效率和效果的平衡），剪枝后的对网络的微调（恢复性能，我们不希望剪枝完之后性能掉得一塌糊涂）</h2>
+<h2 id="下面依次介绍">下面依次介绍</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/#more" rel="contents">
+              <a class="btn" href="/2025/09/03/course_learning/efficientml_mit/lec03&04%20-pruning/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -260,7 +240,7 @@ RAG，但视频终究是有一些独特的性质，导致它不能被图像完�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +254,7 @@ RAG，但视频终究是有一些独特的性质，导致它不能被图像完�
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/" class="post-title-link" itemprop="url">安装库需要防止影响其它现有库的版本</a>
         </h2>
 
         <div class="post-meta">
@@ -285,1078 +265,7 @@ RAG，但视频终究是有一些独特的性质，导致它不能被图像完�
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-09-28 15:55:06 / Modified: 17:00:02" itemprop="dateCreated datePublished" datetime="2025-09-28T15:55:06+08:00">2025-09-28</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="acl-25">ACL 25</h1>
-<h2 id="videorag-retrieval-augmented-generation-over-video-corpus多模态的视频相关"><strong>VideoRAG:
-Retrieval-Augmented Generation over Video
-Corpus</strong>（多模态的，视频相关）</h2>
-<h1 id="iclr-25">ICLR 25</h1>
-<h2 id="tempme-video-temporal-token-merging-for-efficient-text-video-retrieval多模态的video和efficiency结合的看起来是在压缩video输入的也算是video相关的">TempMe:
-Video Temporal Token Merging for Efficient Text-Video
-Retrieval（多模态的，video和efficiency结合的，看起来是在压缩video输入的。也算是video相关的）</h2>
-<h2 id="generalized-video-moment-retrieval多模态的video相关">Generalized
-Video Moment Retrieval（多模态的,video相关）</h2>
-<h1 id="nips-24">NIPS 24</h1>
-<h2 id="diffusion-inspired-truncated-sampler-for-text-video-retrievaltext-video-retrieval">Diffusion-Inspired
-Truncated Sampler for Text-Video Retrieval（text-video retrieval）</h2>
-<h1 id="cvpr-25">CVPR 25</h1>
-<h2 id="drvideo-document-retrieval-based-long-video-understanding真对口了长视频理解方面的"><strong>DrVideo:
-Document Retrieval Based Long Video
-Understanding</strong>（真对口了，长视频理解方面的）</h2>
-<h2 id="salova-segment-augmented-long-video-assistant-for-targeted-retrieval-and-routing-in-long-form-video-analysis这也是经典了也是长视频理解这一块的">SALOVA:
-Segment-Augmented Long Video Assistant for Targeted Retrieval and
-Routing in Long-Form Video
-Analysis（这也是经典了，也是长视频理解这一块的）</h2>
-<h2 id="vlog-video-language-models-by-generative-retrieval-of-narration-vocabulary似乎是video相关的但是理解方面的吗"><strong>VLog:
-Video-Language Models by Generative Retrieval of Narration
-Vocabulary</strong>（似乎是video相关的，但是理解方面的吗？）</h2>
-<h2 id="learning-audio-guided-video-representation-with-gated-attention-for-video-text-retrieval又是text-video-retrieval啊"><strong>Learning
-Audio-guided Video Representation with Gated Attention for Video-Text
-Retrieval</strong>（又是text-video retrieval啊）</h2>
-<h2 id="rethinking-noisy-video-text-retrieval-via-relation-aware-alignment还是text-video-retrieval"><strong>Rethinking
-Noisy Video-Text Retrieval via Relation-aware
-Alignment</strong>（还是text-video retrieval）</h2>
-<h2 id="video-colbert-contextualized-late-interaction-for-text-to-video-retrieval还是text-to-video-retrieval"><strong>Video-ColBERT:
-Contextualized Late Interaction for Text-to-Video
-Retrieval</strong>（还是text-to-video retrieval）</h2>
-<h2 id="multivent-2.0-a-massive-multilingual-benchmark-for-event-centric-video-retrievalbenchmark类不过是关于video-retrieval的"><strong>MultiVENT
-2.0: A Massive Multilingual Benchmark for Event-Centric Video
-Retrieval</strong>（benchmark类，不过是关于video retrieval的）</h2>
-<h2 id="the-devil-is-in-the-prompts-retrieval-augmented-prompt-optimization-for-text-to-video-generation不会是prompt-engineering吧关注text-to-video-generation文生视频吗"><strong>The
-Devil is in the Prompts: Retrieval-Augmented Prompt Optimization for
-Text-to-Video Generation</strong>（不会是prompt
-engineering吧……）（关注text-to-video generation？文生视频吗？）</h2>
-<h2 id="narrating-the-video-boosting-text-video-retrieval-via-comprehensive-utilization-of-frame-level-captionstext-to-video-retrieval"><a target="_blank" rel="noopener" href="https://multimodal-understanding-group.github.io/NarVid/">Narrating
-the Video: Boosting Text-Video Retrieval via Comprehensive Utilization
-of Frame-Level Captions</a>（text-to-video retrieval）</h2>
-<h2 id="discovla-discrepancy-reduction-in-vision-language-and-alignment-for-parameter-efficient-video-text-retrieval呃efficiency和video结合text-to-video-retrieval"><a target="_blank" rel="noopener" href="https://github.com/LunarShen/DsicoVLA">DiscoVLA: Discrepancy
-Reduction in Vision, Language, and Alignment for Parameter-Efficient
-Video-Text Retrieval</a>（呃，efficiency和video结合，text-to-video
-retrieval）</h2>
-<h1 id="iccv-25">ICCV 25</h1>
-<h2 id="hybrid-tower-fine-grained-pseudo-query-interaction-and-generation-for-text-to-video-retrievaltext-to-video-retrievalvideo相关"><strong>Hybrid-Tower:
-Fine-grained Pseudo-query Interaction and Generation for Text-to-Video
-Retrieval</strong>（text-to-video retrieval，video相关）</h2>
-<h2 id="beyond-simple-edits-composed-video-retrieval-with-dense-modificationscomposed-video-retrievalvideo相关的"><strong>Beyond
-Simple Edits: Composed Video Retrieval with Dense
-Modifications</strong>（Composed Video Retrieval，video相关的）</h2>
-<h2 id="borrowing-eyes-for-the-blind-spot-overcoming-data-scarcity-in-malicious-video-detection-via-cross-domain-retrieval-augmentation这是啥video-detection嗯也算是video相关的但应该是那种low-level的video相关工作"><a target="_blank" rel="noopener" href="https://github.com/ronpay/CRAVE">Borrowing Eyes for the Blind
-Spot: Overcoming Data Scarcity in Malicious Video Detection via
-Cross-Domain Retrieval Augmentation</a>（这是啥？video
-detection？嗯，也算是video相关的，但应该是那种low-level的video相关工作）</h2>
-<h2 id="enhancing-partially-relevant-video-retrieval-with-hyperbolic-learningvideo-retrieval"><strong>Enhancing
-Partially Relevant Video Retrieval with Hyperbolic
-Learning</strong>（video retrieval）</h2>
-<h2 id="ophclip-hierarchical-retrieval-augmented-learning-for-ophthalmic-surgical-video-language-pretraining这是不太懂不过看起来是video相关的"><strong>OphCLIP:
-Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical
-Video-Language
-Pretraining</strong>（这是？不太懂，不过看起来是video相关的）</h2>
-<h2 id="quantifying-and-narrowing-the-unknown-interactive-text-to-video-retrieval-via-uncertainty-minimizationtext-to-video-retrievalvideo相关"><strong>Quantifying
-and Narrowing the Unknown: Interactive Text-to-Video Retrieval via
-Uncertainty Minimization</strong>（text-to-video
-retrieval，video相关）</h2>
-<h2 id="prototypes-are-balanced-units-for-efficient-and-effective-partially-relevant-video-retrievalvideo-retrievalvideo相关"><strong>Prototypes
-are Balanced Units for Efficient and Effective Partially Relevant Video
-Retrieval</strong>（video retrieval，video相关）</h2>
-<h2 id="bidirectional-likelihood-estimation-with-multi-modal-large-language-models-for-text-video-retrievaltext-to-video-retrievalvideo相关"><strong>Bidirectional
-Likelihood Estimation with Multi-Modal Large Language Models for
-Text-Video Retrieval</strong>（text-to-video retrieval，video相关）</h2>
-<h1 id="eccv-24">ECCV 24</h1>
-<h2 id="rethinking-video-text-understanding-retrieval-from-counterfactually-augmented-datavideo-text-understanding具体是做啥是video理解方面的吗"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/2083_ECCV_2024_paper.php">Rethinking
-Video-Text Understanding: Retrieval from Counterfactually Augmented
-Data</a>（video-text
-understanding？具体是做啥？是video理解方面的吗？）</h2>
-<h2 id="rgnet-a-unified-clip-retrieval-and-grounding-network-for-long-videoslong-video相关的不知道是不是长视频理解这方面的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/3186_ECCV_2024_paper.php">RGNet:
-A Unified Clip Retrieval and Grounding Network for Long Videos</a>（long
-video相关的，不知道是不是长视频理解这方面的）</h2>
-<h2 id="kdpror-a-knowledge-decoupling-probabilistic-framework-for-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5033_ECCV_2024_paper.php">KDProR:
-A Knowledge-Decoupling Probabilistic Framework for Video-Text
-Retrieval</a>（text-to-video retrieval，video相关）</h2>
-<h2 id="egocvr-an-egocentric-benchmark-for-fine-grained-composed-video-retrieval细粒度composed-video-retrieval"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5363_ECCV_2024_paper.php">EgoCVR:
-An Egocentric Benchmark for Fine-Grained Composed Video
-Retrieval</a>（细粒度Composed Video Retrieval）</h2>
-<h2 id="uncertainty-aware-sign-language-video-retrieval-with-probability-distribution-modelingvideo-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6074_ECCV_2024_paper.php">Uncertainty-aware
-sign language video retrieval with probability distribution
-modeling</a>（video retrieval，video相关）</h2>
-<h2 id="ea-vtr-event-aware-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6845_ECCV_2024_paper.php">EA-VTR:
-Event-Aware Video-Text Retrieval</a>（text-to-video
-retrieval，video相关）</h2>
-<h2 id="rap-retrieval-augmented-planner-for-adaptive-procedure-planning-in-instructional-videosvideo相关的但是具体是做什么的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/9950_ECCV_2024_paper.php">RAP:
-Retrieval-Augmented Planner for Adaptive Procedure Planning in
-Instructional Videos</a>（video相关的，但是具体是做什么的？）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%85%B3%E4%BA%8ERAG%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-28 15:49:03" itemprop="dateCreated datePublished" datetime="2025-09-28T15:49:03+08:00">2025-09-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-11-13 11:38:19" itemprop="dateModified" datetime="2025-11-13T11:38:19+08:00">2025-11-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="或许得思考一下为什么rag一直被人诟病它的问题到底在哪里graphrag解决了rag的哪些问题还有哪些本质问题没有解决">或许得思考一下为什么RAG一直被人诟病？它的问题到底在哪里？GraphRAG，解决了RAG的哪些问题？还有哪些本质问题没有解决？</h1>
-<h2 id="不妨先从传统rag开始说起那它的最开始的操作把文档进行chunk其实就是一个有很多弊端的操作硬性切分导致内容可能割裂例如一个完整的内容被切割到两个乃至多个chunk中">不妨先从传统RAG开始说起。那它的最开始的操作，把文档进行chunk，其实就是一个有很多弊端的操作：硬性切分，导致内容可能割裂（例如一个完整的内容被切割到两个，乃至多个chunk中）</h2>
-<h2 id="还有一个问题现在的rag里的很多技术或者说方法感觉都可能随着基模的发展而变得无用比如我们把知识库组织成graph的格式这是为了更好体现data之间的关系其实相当于我们显式地把这些关系给提炼出来以便模型能掌握到或者说是我们在担心如果不提炼出来那模型就感知不到这个关系但假如基模不断发展它的推理能力也不断提高最终我们只需要把检索到的内容直接拿给它它就能推理出这些关系甚至还能自发的研究更深层的关系那不就没必要搞graph了吗">还有一个问题，现在的RAG里的很多技术，或者说方法，感觉都可能随着基模的发展而变得无用。比如，我们把知识库组织成graph的格式，这是为了更好体现data之间的关系。其实相当于我们显式地把这些关系给提炼出来，以便模型能掌握到（或者说，是我们在担心，如果不提炼出来，那模型就感知不到这个关系）。但假如，基模不断发展，它的推理能力也不断提高，最终我们只需要把检索到的内容直接拿给它，它就能推理出这些关系，甚至还能自发的研究更深层的关系，那不就没必要搞graph了吗？</h2>
-<h2 id="另rag里很多时候都是在借用模型本身的能力自己做的实质就是一个prompt-engineer这就显得很没有技术含量但或许也该换个角度看不管这个事在别人看来是否有含金量如果它确实有效我们不妨也能称上一句simple-and-effective">另，RAG里很多时候都是在借用模型本身的能力，自己做的实质就是一个prompt
-engineer，这就显得很没有技术含量。但或许也该换个角度看，不管这个事在别人看来是否有含金量，如果它确实有效，我们不妨也能称上一句simple
-and effective</h2>
-<h2 id="rag的延迟很严重吗确实粗筛rerank精筛假如这一套流程走下来给人感觉步骤很多而且因为是级联的方式上一步的误差有可能影响下一步的误差但就没可能是我们下一步是基于上一步的结果进行纠正和前进吗这是讲故事还是确有其事有必要有可能通过轻量化等技术减缓延迟从而提高其实用性吗">RAG的延迟，很严重吗？确实，粗筛、rerank、精筛，假如这一套流程走下来，给人感觉步骤很多，而且因为是级联的方式，上一步的误差有可能影响下一步的误差（但就没可能是，我们下一步是基于上一步的结果进行纠正和前进吗？）。这是讲故事还是确有其事？有必要、有可能通过轻量化等技术减缓延迟，从而提高其实用性吗</h2>
-<h1 id="但不得不说即使模型的上下文窗口再怎么增长且不说它持续增长的情况下性能是否能和短上下文的时候的性能持平也不可能把所有的资料都一口气吃下去不管是大一点的本地资料库还是网络上的资料这都应该没可能全部吃进去也就是说对更大范围的知识以及最新知识的获取始终是模型的一个必要的需求至于说最终手段是不是rag或者说这个手段还叫不叫rag那感觉没那么重要简单来说借用一下机器之心的话rag-本身所代表的核心思想为-llm-提供精准可靠的外部知识的需求是永恒的">但不得不说，即使模型的上下文窗口再怎么增长（且不说它持续增长的情况下，性能是否能和短上下文的时候的性能持平），也不可能把所有的资料都一口气吃下去。不管是大一点的本地资料库，还是网络上的资料，这都应该没可能全部吃进去。也就是说，对更大范围的知识，以及最新知识的获取，始终是模型的一个必要的需求。至于说最终手段是不是RAG，或者说这个手段还叫不叫RAG，那感觉没那么重要。简单来说，借用一下机器之心的话，“RAG
-本身所代表的核心思想——为 LLM
-提供精准、可靠的外部知识——的需求是永恒的”</h1>
-<h2 id="来看看机器之心推文里的说法">来看看机器之心推文里的说法：</h2>
-<h3 id="未来的图景更可能是">未来的图景更可能是：</h3>
-<ul>
-<li><h4 id="rag-的角色转变rag-不再是所有应用的默认核心架构而是被降级为-agent-工具箱中的一个强大组件它将与代码解释器api-调用文件系统操作等工具平起平坐"><strong>RAG
-的角色转变</strong>：RAG 不再是所有应用的默认核心架构，而是被「降级」为
-Agent 工具箱中的一个强大组件。它将与代码解释器、API
-调用、文件系统操作等工具平起平坐。</h4></li>
-<li><h4 id="场景决定架构对于需要从海量非结构化数据中快速筛选信息的场景如智能客服企业知识库初筛由-agent-驱动的高度工程化的高级-rag-系统仍是最佳选择"><strong>场景决定架构</strong>：对于需要从海量、非结构化数据中快速筛选信息的场景（如智能客服、企业知识库初筛），由
-Agent 驱动的、高度工程化的高级 RAG 系统仍是最佳选择。</h4></li>
-<li><h4 id="长上下文的统治力对于需要对少量结构复杂的文档进行深度推理和分析的场景如财报分析法律合同审查长上下文窗口-agent-调查的范式将展现出碾压性的优势"><strong>长上下文的统治力</strong>：对于需要对少量、结构复杂的文档进行深度推理和分析的场景（如财报分析、法律合同审查），「长上下文窗口
-+ Agent 调查」的范式将展现出碾压性的优势。</h4>
-<h3 id="对于开发者而言关键在于理解不同技术范式的优劣并根据具体的应用场景灵活地将它们组合成最高效最可靠的解决方案">对于开发者而言，关键在于理解不同技术范式的优劣，并根据具体的应用场景，灵活地将它们组合成最高效、最可靠的解决方案。</h3>
-<h2 id="总结一下少量上下文的情况下还真不太需要rag了尤其是随着上下文窗口的增长少量的定义也将不断扩大这点不可否认但话又说回来rag本来也不是针对这个场景的吧回忆一下最经典的rag的故事是说模型要接触最新的知识以及其它的可能有用的知识吧-关于第一点rag的降级只能说没彻底死了就是好的可rag什么时候成了必须品了没感觉过啊但确实把它当一个工具还是不错的-而第二点确实当场景需要从大量非结构化数据里快速筛选信息的时候依然需要rag技术吧只不过可能推理啊检索啊之类的结合一下agent效果应该会更好">总结一下，少量上下文的情况下，还真不太需要RAG了。尤其是随着上下文窗口的增长，“少量”的定义也将不断扩大。这点不可否认。但话又说回来，RAG本来也不是针对这个场景的吧。回忆一下，最经典的RAG的故事，是说模型要接触最新的知识，以及其它的可能有用的知识吧<br>关于第一点，RAG的降级，只能说，没彻底死了就是好的。可RAG什么时候成了必须品了？没感觉过啊？但确实，把它当一个工具还是不错的<br>而第二点，确实，当场景需要从大量非结构化数据里快速筛选信息的时候，依然需要RAG技术吧，只不过可能推理啊，检索啊之类的，结合一下agent，效果应该会更好</h2></li>
-</ul>
-<h1 id="还有个问题随着deepseek-ocr的出现有人说会带来几个影响">还有个问题，随着deepseek
-OCR的出现，有人说，会带来几个影响：</h1>
-<h2 id="文本embedding会被抛弃因为它觉得ds-ocr能做到高效的压缩编码相比起传统的语义embedding压缩效率高太多了而且它结合现在大厂metagoogle开始越来越多使用grepripgrep做出判断对文本其实我们应该考虑直接去匹配原文">1.
-文本embedding会被抛弃。因为它觉得，ds
-ocr能做到高效的压缩编码，相比起传统的语义embedding，压缩效率高太多了。而且它结合现在大厂（meta，Google）开始越来越多使用grep/ripgrep，做出判断，对文本，其实我们应该考虑直接去匹配原文。</h2>
-<h3 id="但这应该只是纯文本的情况吧多模态rag呢多模态的东西你总得用embedding之类的latent表示吧那这样为了保持联系文本不应该也用embedding表示或者大家都用ds-ocr那样的latent-representation表示好了起码得统一">但这应该只是纯文本的情况吧。多模态RAG呢？多模态的东西，你总得用embedding之类的latent表示吧，那这样，为了保持联系，文本不应该也用embedding表示？或者大家都用ds
-ocr那样的latent representation表示好了。起码得统一</h3>
-<h2 id="chunk的困境会被破除">2. chunk的困境会被破除</h2>
-<h3 id="具体来说它认为因为ds-ocr的压缩效率很高可能一个100页的pdf用ds-ocr压缩之后也能轻松放到上下文窗口里此时一看就没有检索分块的必要了">具体来说，它认为，因为ds
-ocr的压缩效率很高，可能一个100页的pdf，用ds
-ocr压缩之后，也能轻松放到上下文窗口里。此时一看，就没有检索分块的必要了</h3>
-<h3 id="但这也仅仅是针对少数文档的情况吧因为压缩效率很高可以无需检索一旦文档多了比如有一个database的情况该检索还是得检索吧即使ds-ocr压缩效率很高不过确实好像这么一看每个文档我也不需要chunk了不过这样具体该怎么检索呢每个文档给压缩成了若干visual-token不好进行语义检索了吧嗯或许embedding也不是完全的一无是处粗筛一下还是能用的吧">但这也仅仅是针对少数文档的情况吧，因为压缩效率很高，可以无需检索。一旦文档多了，比如有一个database的情况，该检索还是得检索吧，即使ds
-ocr压缩效率很高。不过，确实好像这么一看，每个文档我也不需要chunk了？不过这样具体该怎么检索呢？每个文档给压缩成了若干visual
-token，不好进行语义检索了吧？嗯，或许embedding也不是完全的一无是处，粗筛一下还是能用的吧</h3>
-<h1 id="structure-r1这个有点像是把我想做的给做了具体来说它是把rag检索回来的文档转化成结构化形式感觉可以理解为把结构信息显式化了以便llm理解">structure-R1，这个有点像是把我想做的给做了。具体来说，它是把RAG检索回来的文档转化成结构化形式（感觉可以理解为，把结构信息显式化了，以便llm理解）</h1>
-<h1 id="多跳rag感觉实质也是在为chunk和embedding带来的低效检索补窟窿正是因为语义embedding的检索可能检索回来的东西不对chunk又把完整内容给划分得太碎了所以考虑引入graph结构并且进行多跳操作把可能的内容弥补回来这样的话精筛rerank的时候能不能有些不一样的评判标准另外多模态的graph和文本的graph相比多跳的时候有什么不一样吗">多跳RAG，感觉实质也是在为chunk和embedding带来的低效检索补窟窿。正是因为语义embedding的检索可能检索回来的东西不对，chunk又把完整内容给划分得太碎了，所以考虑引入graph结构，并且进行多跳操作，把可能的内容弥补回来（这样的话，精筛/rerank的时候，能不能有些不一样的评判标准？）另外，多模态的graph和文本的graph相比，多跳的时候有什么不一样吗</h1>
-<h1 id="还有agentic-rag有必要吗它解决了哪些rag的问题rag真的完全死了吗">还有，agentic
-RAG有必要吗？它解决了哪些RAG的问题？RAG真的完全死了吗？</h1>
-<h2 id="现在感觉rag并没有完全死吧毕竟它最大的问题是切chunk语义向量检索导致的检索精度差以及上下文不连贯那在相当一部分场景里是不好的但用它来粗筛或者是如果我们追求在大量数据上进行检索且不那么要求高质量那其实rag还是有用武之地的反而此时agentic-rag成本会比较高">现在感觉，RAG并没有完全死吧。毕竟它最大的问题是，切chunk+语义向量检索导致的检索精度差以及上下文不连贯。那在相当一部分场景里是不好的。但用它来粗筛，或者是如果我们追求在大量数据上进行检索，且不那么要求高质量，那其实RAG还是有用武之地的（反而此时agentic
-RAG成本会比较高）</h2>
-<h2 id="最近进一步激发rag已死言论的是claude-code的出现不仅效果比cursor要好还因为它没有用rag所以没有一个庞大的向量库需要维护因此也省了很多空间而claude-code其实是用回了七十年代的grep和glob这些文件系统工具看起来很返璞归真再联想一下rag的各种弊端似乎rag真的得被淘汰了">最近，进一步激发“RAG已死”言论的，是claude
-code的出现，不仅效果比cursor要好，还因为它没有用RAG，所以没有一个庞大的向量库需要维护，因此也省了很多空间。而Claude
-code其实是用回了七十年代的grep和glob这些文件系统工具。看起来很返璞归真，再联想一下RAG的各种弊端，似乎RAG真的得被淘汰了？</h2>
-<h3 id="但这只是因为grep和glob刚好在编程这一块很实用毕竟代码本质上是一种非常规范的文本但比如说聊天记录之类的这种就完全不规范了那还用grepglob这些能行吗就不好说了吧">但，这只是因为grep和glob刚好在编程这一块很实用。毕竟代码本质上是一种非常规范的文本。但比如说，聊天记录之类的，这种就完全不规范了，那还用grep、glob这些，能行吗？就不好说了吧？</h3>
-<h3 id="更进一步的这些都是针对文本的忽略了多模态的情况啊图像怎么办还能globgrep吗显然不行吧虽说文本你用grep这些图像再单独走另一套也不是不行吧但最起码多模态的rag它还是有用的说到底我们对图像的处理基本上还是得处理成向量吧">更进一步的，这些都是针对文本的，忽略了多模态的情况啊。图像怎么办？还能glob/grep吗？显然不行吧？虽说文本你用grep这些，图像再单独走另一套也不是不行吧。但最起码，多模态的RAG，它还是有用的（说到底，我们对图像的处理，基本上还是得处理成向量吧？）</h3>
-<h2 id="看看这几篇博文吧感觉都挺好的">看看这几篇博文吧，感觉都挺好的：</h2>
-<h3 id="rag与context-engineer的关系"><a target="_blank" rel="noopener" href="https://kirigaya.cn/blog/article?seq=356">RAG与Context
-Engineer的关系</a></h3>
-<h3 id="一篇疑似对rag已死的翻译的博文不过读起来还是可以的"><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1961345919405514850">一篇疑似对“RAG已死”的翻译的博文</a>，不过读起来还是可以的</h3>
-<h3 id="经典的rag已死或者说是rag的讣告">经典的<a target="_blank" rel="noopener" href="https://www.nicolasbustamante.com/p/the-rag-obituary-killed-by-agents">RAG已死，或者说是RAG的讣告</a></h3>
-<h3 id="一篇非常务实的回答关于rag与agentic-rag的优缺点"><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/1923191592593892684/answer/1945642914484053463">一篇非常务实的回答，关于RAG与agentic
-RAG的优缺点</a></h3>
-<h3 id="这个是关于agentic-rl的整理感觉它可以拓宽眼界从而能更加了解agentic-rag的必要性以及它的可能的用途">这个是<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1963453208383984904">关于agentic
-RL的整理</a>。感觉它可以拓宽眼界，从而能更加了解agentic
-RAG的必要性，以及它的可能的用途</h3>
-<h2 id="还有一个很关键的问题上述关于rag已死的言论似乎都是默认在文本模态下工作的吧一旦引入了图像音频视频之类的多模态除了编码成向量还能怎样总不能像文本那样可以grep了吧如果要在这方面做改进感觉确实得在检索方面下一些功夫了这个就比较底层应该也比较难吧">还有一个很关键的问题。上述关于RAG已死的言论，似乎都是默认在文本模态下工作的吧？一旦引入了图像、音频、视频之类的多模态，除了编码成向量，还能怎样？总不能像文本那样可以grep了吧？如果要在这方面做改进，感觉确实得在检索方面下一些功夫了，这个就比较底层，应该也比较难吧</h2>
-<h2 id="agentic-rag它的一大优点就是能动性可以自主地根据场合做决定而不需要依赖我们事先定义好的工作流也就是在当前场合下它会自动采取一个动作但这个动作具体怎么执行通常还是人来规定的这一点好不好长远来说可能不好吧我们当然希望agent能完全自主但这个还是有点远的吧至少现在就这么些规定好的动作让agent学会自主选择都还挺难的资源开销也不小了关于动作内容的自主化可能也是一个未来的研究方向吧">agentic
-RAG，它的一大优点，就是“能动性”，可以自主地根据场合做决定，而不需要依赖我们事先定义好的工作流。也就是，在当前场合下，它会自动采取一个动作。但这个动作具体怎么执行，通常还是人来规定的。这一点好不好？长远来说可能不好吧，我们当然希望agent能完全自主。但这个还是有点远的吧？至少现在，就这么些规定好的动作，让agent学会自主选择，都还挺难的，资源开销也不小了。关于动作内容的自主化，可能也是一个未来的研究方向吧</h2>
-<h1 id="我们如果做agentic-mmgraphrag可以吗它的确是没什么人做但是价值在哪呢以及能不能和现有的大厂做出来的agent进行融入就是作为插件加入到它们那边如果不行那我们是否需要换一个关注点比如它们的agent开销比较大模型大api调用花费多而我们就专注在小模型上这样对比也只需要跟小模型的方法对比而且训练也只需要训练小模型或许会好一些">我们如果做agentic
-mmgraphrag，可以吗？它的确是没什么人做，但是价值在哪呢？以及能不能和现有的大厂做出来的agent进行融入（就是作为插件加入到它们那边）？如果不行，那我们是否需要换一个关注点，比如它们的agent开销比较大（模型大/api调用花费多），而我们就专注在小模型上，这样对比也只需要跟小模型的方法对比，而且训练也只需要训练小模型，或许会好一些</h1>
-<h1 id="rag里确实基本假设是静态的知识库遇到新的知识来了呢">RAG里确实基本假设是静态的知识库。遇到新的知识来了呢</h1>
-<h2 id="不断有新知识出现这并不是一个可以直接由上网检索就能解决的问题因为新知识出现的地方也不止是网上很多企业应该都会有大量的业务数据这些数据显然不可能公开所以会有私有增量数据的情况此时就需要更新知识库了">不断有新知识出现，这并不是一个可以直接由上网检索就能解决的问题，因为新知识出现的地方也不止是网上。很多企业应该都会有大量的业务数据，这些数据显然不可能公开，所以会有私有增量数据的情况。此时，就需要更新知识库了</h2>
-<h3 id="更新知识库的时候也会有一些问题比如新旧知识之间的融合合并或者如果它们出现了冲突怎么办又或者有一些问题需要跨度比较大的新旧知识一起来分析怎么办旧的知识好像不应该一味地丢弃吧像之前读到过的versionrag其实就是关注了一个相当小的方面一个好一点的工作应该能完全囊括它吧">更新知识库的时候也会有一些问题，比如，新旧知识之间的融合？合并？或者如果它们出现了冲突怎么办？又或者有一些问题需要跨度比较大的新旧知识，一起来分析，怎么办？旧的知识好像不应该一味地丢弃吧？（像之前读到过的VersionRAG，其实就是关注了一个相当小的方面。一个好一点的工作，应该能完全囊括它吧）</h3>
-<h1 id="github">GitHub</h1>
-<h2 id="从初代版本进行全局了解后面根据prmr了解发展">从初代版本进行全局了解，后面根据PR、MR了解发展</h2>
-<h2 id="good-first-issue快速了解项目进行上手看roadmap后续的规划找ideaawesome-list">good
-first
-issue快速了解项目，进行上手，看roadmap（后续的规划）找idea，awesome
-list</h2>
-<h2 id="每日关注arxiv更新论文papers.coolgithub上关注大牛看他们的动态">每日关注arxiv更新论文（papers.cool），GitHub上关注大牛，看他们的动态</h2>
-<h2 id="最终还是需要通过调试来了解代码.vscodelaunch.jsonattach启动直接启动">最终还是需要通过调试来了解代码（.vscode/launch.json，attach启动/直接启动）</h2>
-<h3 id="如果是多线程的则需要一些额外的调试技巧比如trace的一些栈调用的打印而非简单的print">如果是多线程的，则需要一些额外的调试技巧。比如trace的一些栈调用的打印（而非简单的print）</h3>
-<h1 id="本地代码库的维护和更新">本地代码库的维护和更新</h1>
-<h2 id="开闭原则依赖倒转">开闭原则，依赖倒转</h2>
-<h3 id="代码库应该对增加是允许的对修改的拒绝的避免侵入式修改理想">代码库应该对“增加”是允许的，对“修改”的拒绝的（避免侵入式修改）（理想）</h3>
-<h3 id="尽量依靠抽象的父类而非子类">尽量依靠抽象的父类，而非子类</h3>
-<h2 id="装饰器模式自由组合多包装">装饰器模式自由组合（多包装）</h2>
-<h2 id="factory类按照config进行组装把修改点收束到factory类">factory类按照config进行组装（把修改点收束到factory类）</h2>
-<h2 id="版本迭代易出错">版本迭代易出错：</h2>
-<h3 id="防御性编程来约束自己善用assert以及-预定义接口这样可以确保结果是符合我们预期的例如我们知道数据形状是怎样的就可以assert一下">防御性编程来约束自己：善用assert，以及
-预定义接口（这样可以确保结果是符合我们预期的。例如，我们知道数据形状是怎样的，就可以assert一下）</h3>
-<h3 id="构建自动化管理机制例如代码快照">构建自动化管理机制，例如代码快照</h3>
-<h3 id="当想尝试新功能的时候不妨开一个新分支如果work了就merge到主分支">当想尝试新功能的时候，不妨开一个新分支（如果work了，就merge到主分支）</h3>
-<h1 id="敏捷开发">敏捷开发</h1>
-<h2 id="模块之间热插拔比如写一个配置的json文件可以单独开关某个模块">模块之间热插拔（比如写一个配置的json文件，可以单独开关某个模块）</h2>
-<h2 id="单元测试加入一个东西之前">单元测试（加入一个东西之前）</h2>
-<h2 id="代码中考虑加入详细的分阶段的指标可以供了解运行情况同时收集多了的话可以用于motivation">代码中考虑加入详细的分阶段的指标（可以供了解运行情况，同时收集多了的话可以用于motivation）</h2>
-<h2 id="加入新模块之后尝试自检跟自己的预期比较一下">加入新模块之后，尝试自检（跟自己的预期比较一下）</h2>
-<h2 id="可以考虑用print定位大方向之后用debugger进行细粒度排查如果是一些复杂环境如并发多机则在关键位置上保存上下文后面慢慢复现排查">可以考虑用print定位大方向，之后用debugger进行细粒度排查。如果是一些复杂环境（如并发、多机），则在关键位置上保存上下文，后面慢慢复现排查</h2>
-<h2 id="不同数据集消融实验时可以把配置都列出来写一个大的for循环">不同数据集、消融实验时，可以把配置都列出来，写一个大的for循环</h2>
-<h2 id="新旧模块之间保持高内聚低耦合">新旧模块之间，保持高内聚低耦合</h2>
-<h1 id="ai-coding经验">ai coding经验</h1>
-<h2 id="让ai生成计划">让ai生成计划</h2>
-<h2 id="小步快跑每一步逐步执行并且最好带上单元测试运行检查不要指望一次就生成完">小步快跑，每一步逐步执行，并且最好带上单元测试/运行检查，不要指望一次就生成完</h2>
-<h2 id="一旦遇到什么失败的立即回滚止损">一旦遇到什么失败的，立即回滚止损</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB%20%20KV%20Cache%E5%8E%8B%E7%BC%A9%E6%96%B0%E9%98%B6%E6%AE%B5%EF%BC%9A%E8%B5%B0%E5%90%91%E9%97%AE%E9%A2%98%E6%8C%87%E4%BB%A4%E6%97%A0%E5%85%B3%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%8E%A2%E7%B4%A2/" class="post-title-link" itemprop="url">博客阅读 KV Cache压缩新阶段：走向问题指令无关下的压缩探索</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-27 15:16:00 / Modified: 15:32:04" itemprop="dateCreated datePublished" datetime="2025-09-27T15:16:00+08:00">2025-09-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="核心观点">核心观点：</h1>
-<h2 id="简单来讲现在的kv-cache的一大问题是一旦没有特定的问题压缩效果就会大幅下降如果有特定的问题那压缩比例可以特别大且性能不降低太多然而如果没有特定的问题则稍微压缩一点都很容易损失精度">简单来讲，现在的kv
-cache的一大问题是，一旦没有特定的问题，压缩效果就会大幅下降。（如果有特定的问题，那压缩比例可以特别大，且性能不降低太多。然而如果没有特定的问题，则稍微压缩一点都很容易损失精度）</h2>
-<h2 id="因此博客提出在没有特定问题情况下的kv-cache-compression其实是值得研究的因为现有方法做不好有很大的提升空间基于此可以考虑">因此，博客提出，在没有特定问题情况下的kv
-cache
-compression其实是值得研究的（因为现有方法做不好，有很大的提升空间）。基于此，可以考虑：</h2>
-<h3 id="提出更好的指标来衡量token的重要性">提出更好的指标来衡量token的重要性</h3>
-<h3 id="提出更好的kv-cache-budget-allocation策略">提出更好的kv cache
-budget allocation策略</h3>
-<h1 id="关于博客里的一些术语的介绍">关于博客里的一些术语的介绍：</h1>
-<h2 id="chunked-prefill博客里的chunked-prefill应该是指对输入的超长序列prompt进行分块然后在各自的块内进行prefill操作这主要是因为prefill的时候需要计算注意力它是会利用prompt产生的所有token进行计算的而注意力机制是平方级的计算复杂度输入序列又是超长的那一起计算的话显存开销就无法承受了所以需要chunk再prefill另一套的chunked-prefill好像和通信什么的有关来着-另需要注意chunked-prefill虽然说会先chunk然后各自在块内进行prefill但块内的prefill并不会像一般的prefill那样生成第一个token那样就会很奇怪相当于基于截断的信息生成了一个token而且有很多个chunk最后就会是基于很多个阶段的信息各自生成一个token这些token可以认为其实没什么用的所以实际上是chunk完在各自块内计算kv然后进行压缩最后把压缩完的各个块的kv拼到一起来生成真正意义上的第一个token">chunked
-prefill：博客里的chunked
-prefill，应该是指，对输入的超长序列（prompt），进行分块，然后在各自的块内进行prefill操作。这主要是因为，prefill的时候需要计算注意力，它是会利用prompt产生的所有token进行计算的。而注意力机制是平方级的计算复杂度，输入序列又是超长的，那一起计算的话显存开销就无法承受了。所以需要chunk再prefill（另一套的chunked
-prefill好像和通信什么的有关来着）<br>（另，需要注意，chunked
-prefill虽然说会先chunk，然后各自在块内进行prefill，但块内的prefill并不会像一般的prefill那样生成第一个token。那样就会很奇怪，相当于基于截断的信息生成了一个token。而且有很多个chunk，最后就会是：基于很多个阶段的信息各自生成一个token。这些token可以认为其实没什么用的。所以实际上是chunk完，在各自块内计算kv，然后进行压缩，最后把压缩完的各个块的kv拼到一起，来生成真正意义上的第一个token）</h2>
-<h2 id="前缀上下文指用户在多轮对话中在具体提出问题前给出的背景性引导性信息本质上就是context模型的回答需要基于这些内容">前缀上下文：指用户在多轮对话中，在具体提出问题前，给出的背景性、引导性信息。本质上就是context，模型的回答需要基于这些内容</h2>
-<h1 id="我的问题">我的问题：</h1>
-<h2 id="带问题指令的kv-cache-compression是怎么工作的有哪些方法">带问题（指令）的kv
-cache compression，是怎么工作的？有哪些方法？</h2>
-<h2 id="多轮对话场景为什么是不带指令的kv-cache压缩场景">多轮对话场景为什么是不带指令的kv
-cache压缩场景？</h2>
-<h3 id="因为多轮对话里必然会有多个问题如果要带着问题指令进行压缩那就需要挑出一个问题来对kv-cache进行挑选但是这样就会有偏颇有可能一些内容对于这个问题而言是不重要的但是对于另外一个问题而言其实很重要我们不能保证用户之后不会问这个问题">因为多轮对话里必然会有多个问题。如果要带着问题（指令）进行压缩，那就需要挑出一个问题来对kv
-cache进行挑选。但是这样就会有偏颇，有可能一些内容对于这个问题而言是不重要的，但是对于另外一个问题而言其实很重要。我们不能保证用户之后不会问这个问题</h3>
-<h2 id="kv-cache-compression是针对哪些token而言的是针对prompt还是针对模型生成的token">kv
-cache
-compression是针对哪些token而言的？是针对prompt，还是针对模型生成的token？</h2>
-<h3 id="其实都可以prefill完是否对prompt-token的kv-cache进行压缩是一个可选的操作比如chunked-prefill里一般就会边chunk-prefill边压缩也就是一种流式的操作因为不然的话显存开销太大了把超长序列的所有token的kv-cache都存下来都叫超长序列了肯定是很多token的比如输入了一个很长的文档之类的">其实都可以。prefill完是否对prompt
-token的kv cache进行压缩，是一个可选的操作。比如chunked
-prefill里，一般就会边chunk
-prefill，边压缩（也就是一种流式的操作）。因为不然的话，显存开销太大了（把超长序列的所有token的kv
-cache都存下来。都叫超长序列了，肯定是很多token的。比如输入了一个很长的文档之类的）</h3>
-<h2 id="为什么观察窗口都采用近期的若干token这样不是会有点局限吗能不能通过采样把之前的一些token也采样进观察窗口这样会不会全面一点">为什么观察窗口都采用近期的若干token？这样不是会有点局限吗？能不能通过“采样”，把之前的一些token也采样进观察窗口？这样会不会全面一点？</h2>
-<h2 id="生成的token是如何压缩的看起来似乎是生成一定数量之后对所有的历史kv进行全量重新压缩有什么论文佐证吗可能得读一下snapkv了">生成的token是如何压缩的？看起来似乎是“生成一定数量之后，对所有的历史kv进行全量重新压缩”？有什么论文佐证吗？可能得读一下SnapKV了</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">kv cache基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-27 15:14:00 / Modified: 15:15:55" itemprop="dateCreated datePublished" datetime="2025-09-27T15:14:00+08:00">2025-09-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">blog阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog%E9%98%85%E8%AF%BB/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv cache</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="在了解kv-cache的过程中读到了游凯超的一篇回答感觉真的写的很详细而且不仅局限于kv-cache包括为何这样设计也讲清楚了">在了解kv
-cache的过程中，读到了<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/596900067/answer/3424958454">游凯超的一篇回答</a>，感觉真的写的很详细，而且不仅局限于kv
-cache，包括为何这样设计，也讲清楚了</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/kv%20cache%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/" class="post-title-link" itemprop="url">DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-24 17:15:00 / Modified: 17:28:18" itemprop="dateCreated datePublished" datetime="2025-09-24T17:15:00+08:00">2025-09-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/" itemprop="url" rel="index"><span itemprop="name">knowledge graph</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuenips-25">Venue：NIPS 25</h1>
-<h1 id="date2025-07-15">date：2025-07-15</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="现有的kg推理方法通常会遇到score-oversmoothing的问题有点类似gnn里的oversmoothing也就是推理后正确答案和错误答案的分数极为接近导致无法很好的分辨论文认为现有方法一味堆叠message-passing-layer和attn-layer导致score-oversmoothing问题进一步加剧同时现有方法大多是one-shot-reasoning因此判别能力有所不足">现有的KG推理方法通常会遇到score
-oversmoothing的问题（有点类似gnn里的oversmoothing）。也就是推理后，正确答案和错误答案的分数极为接近，导致无法很好的分辨。论文认为，现有方法一味堆叠message
-passing layer和attn layer，导致score
-oversmoothing问题进一步加剧；同时现有方法大多是one-shot
-reasoning，因此判别能力有所不足</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/" class="post-title-link" itemprop="url">Ada-KV：Optimizing KV Cache Eviction by Adaptive Budget Allocation for Efficient LLM Inference</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-23 11:18:00" itemprop="dateCreated datePublished" datetime="2025-09-23T11:18:00+08:00">2025-09-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-26 22:52:39" itemprop="dateModified" datetime="2025-09-26T22:52:39+08:00">2025-09-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv-cache</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuenips-25">Venue：NIPS 25</h1>
-<h1 id="date2025-01-26">date：2025-01-26</h1>
-<h1 id="背景">背景：</h1>
-<h2 id="得先简单介绍一下kv-cache自回归模型生成下一个token的时候需要利用当前的最后一个token所聚合到的信息变换得到一个概率分布从中采样得到下一个token而聚合信息会用到注意力机制注意力机制就会要求token之间的q和k进行交互计算从而得到token之间的关系attention最后和v一起进行加权求和-假设现有的prompt对应k个token的序列我们要生成token那么聚合之后根据第k个token的信息因为它和前面的所有token都有进行聚合所以是前面信息的总体的表征得到第k1个token也就是回答里的第一个token的概率分布之后要继续生成直到生成了eos为止那生成第k2个token的时候需要让第k1个token计算出qkv然后和前k个token的k进行交互得到attn完了利用前k个token加上第k1个token自己的v进行加权求和得到聚合后的信息此时我们发现生成第k1个token的时候用到了前k个token的k和v生成第k2个token的时候用到了前k1个token的k和v依次类推可以发现我们生成第i1个token的时候应该是要用到前i个token的k和v的因此如果我们把中间生成的token的k和v存下来后续就能一直复用不需要每一次都算显然速度上会更快但因为要存k和v所以这是一种用空间换时间的操作而且还有一个问题是随着我们生成的序列不断变长要存的k和v也越来越多甚至于这可能反而会成为显存开销里的大头因此有必要对存储的kv进行一些压缩剔除之类的操作否则开销无法承担">得先简单介绍一下kv
-cache。自回归模型，生成下一个token的时候，需要利用当前的最后一个token所聚合到的信息，变换得到一个概率分布，从中采样得到下一个token。而聚合信息会用到注意力机制。注意力机制就会要求token之间的q和k进行交互计算，从而得到token之间的关系（attention），最后和v一起进行加权求和<br>假设现有的prompt对应k个token的序列。我们要生成token。那么，聚合之后，根据第k个token的信息（因为它和前面的所有token都有进行聚合，所以是前面信息的总体的表征），得到第k+1个token（也就是回答里的第一个token）的概率分布。之后要继续生成，直到生成了<code>&lt;eos&gt;</code>为止。那生成第k+2个token的时候，需要让第k+1个token计算出q，k，v，然后和前k个token的k进行交互，得到attn，完了利用前k个token加上第k+1个token自己的v，进行加权求和，得到聚合后的信息。此时，我们发现，生成第k+1个token的时候，用到了前k个token的k和v；生成第k+2个token的时候，用到了前k+1个token的k和v。依次类推，可以发现，我们生成第i+1个token的时候，应该是要用到前i个token的k和v的。因此，如果我们把中间生成的token的k和v存下来，后续就能一直复用，不需要每一次都算。显然，速度上会更快，但因为要存k和v，所以这是一种用空间换时间的操作。而且还有一个问题是，随着我们生成的序列不断变长，要存的k和v也越来越多。甚至于，这可能反而会成为显存开销里的大头。因此，有必要对存储的kv进行一些压缩、剔除之类的操作，否则开销无法承担</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/rl-based/VRAG-RL%EF%BC%9AEmpower%20Vision-Perception-Based%20RAG%20for%20Visually%20Rich%20Information%20Understanding%20via%20Iterative%20Reasoning%20with%20Reinforcement%20Learning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/rl-based/VRAG-RL%EF%BC%9AEmpower%20Vision-Perception-Based%20RAG%20for%20Visually%20Rich%20Information%20Understanding%20via%20Iterative%20Reasoning%20with%20Reinforcement%20Learning/" class="post-title-link" itemprop="url">VRAG-RL：Empower Vision-Perception-Based RAG for Visually Rich Information Understanding via Iterative Reasoning with Reinforcement Learning</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-20 11:28:00 / Modified: 11:30:53" itemprop="dateCreated datePublished" datetime="2025-09-20T11:28:00+08:00">2025-09-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuearxiv">Venue：arxiv</h1>
-<h1 id="date2025-06-03">date：2025-06-03</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="section"></h2>
-<h1 id="insight">insight：</h1>
-<h1 id="contribution">contribution：</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/20/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/rl-based/VRAG-RL%EF%BC%9AEmpower%20Vision-Perception-Based%20RAG%20for%20Visually%20Rich%20Information%20Understanding%20via%20Iterative%20Reasoning%20with%20Reinforcement%20Learning/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4%E5%A4%9A%E6%A8%A1%E6%80%81RAG%20paper%E8%B0%83%E7%A0%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/11/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4%E5%A4%9A%E6%A8%A1%E6%80%81RAG%20paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-11 21:20:10 / Modified: 21:35:05" itemprop="dateCreated datePublished" datetime="2025-09-11T21:20:10+08:00">2025-09-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="wavrag-audio-integrated-retrieval-augmented-generation-for-spoken-dialogue-models多模态的不过是audio相关的"><strong>WavRAG:
-Audio-Integrated Retrieval Augmented Generation for Spoken Dialogue
-Models</strong>（多模态的，不过是audio相关的）</h3>
-<h3 id="real-mm-rag-a-real-world-multi-modal-retrieval-benchmark多模态的但是benchmark"><strong>REAL-MM-RAG:
-A Real-World Multi-Modal Retrieval
-Benchmark</strong>（多模态的，但是benchmark）</h3>
-<h3 id="videorag-retrieval-augmented-generation-over-video-corpus多模态的video相关"><strong>VideoRAG:
-Retrieval-Augmented Generation over Video
-Corpus</strong>（多模态的）（video相关）</h3>
-<h3 id="mes-rag-bringing-multi-modal-entity-storage-and-secure-enhancements-to-rag多模态的"><strong>MES-RAG:
-Bringing Multi-modal, Entity-Storage, and Secure Enhancements to
-RAG</strong>（多模态的）</h3>
-<h3 id="unirag-universal-retrieval-augmentation-for-large-vision-language-models多模态的关于vlm"><strong>UniRAG:
-Universal Retrieval Augmentation for Large Vision Language
-Models</strong>（多模态的，关于VLM）</h3>
-<h3 id="rule-reliable-multimodal-rag-for-factuality-in-medical-vision-language-models多模态的但是医学相关的"><strong>RULE:
-Reliable Multimodal RAG for Factuality in Medical Vision Language
-Models</strong>（多模态的，但是医学相关的）</h3>
-<h2 id="poisonedeye-knowledge-poisoning-attack-on-retrieval-augmented-generation-based-large-vision-language-models多模态的关于vlm"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/46373">PoisonedEye: Knowledge
-Poisoning Attack on Retrieval-Augmented Generation based Large
-Vision-Language Models</a>（多模态的）（关于VLM）</h2>
-<h2 id="she-streaming-media-hashing-retrieval疑似多模态的"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/45670">SHE: Streaming-media
-Hashing Retrieval</a>（疑似多模态的）</h2>
-<h2 id="qure-query-relevant-retrieval-through-hard-negative-sampling-in-composed-image-retrieval多模态的composed-image-retrieval"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/43476">QuRe: Query-Relevant
-Retrieval through Hard Negative Sampling in Composed Image
-Retrieval</a>（多模态的，composed Image retrieval）</h2>
-<h2 id="learning-attribute-aware-hash-codes-for-fine-grained-image-retrieval-via-query-optimization多模态的又是image-retrieval"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/43868">Learning
-Attribute-Aware Hash Codes for Fine-Grained Image Retrieval via Query
-Optimization</a>（多模态的）（又是Image retrieval）</h2>
-<h2 id="visual-abstraction-a-plug-and-play-approach-for-text-visual-retrieval多模态的text-visual-retrieval"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/46021">Visual Abstraction: A
-Plug-and-Play Approach for Text-Visual
-Retrieval</a>（多模态的）（text-visual retrieval）</h2>
-<h2 id="docks-rag-optimizing-document-level-relation-extraction-through-llm-enhanced-hybrid-prompt-tuning多模态的文档类"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/45220">DocKS-RAG: Optimizing
-Document-Level Relation Extraction through LLM-Enhanced Hybrid Prompt
-Tuning</a>（多模态的，文档类）</h2>
-<h2 id="retrieval-augmented-perception-high-resolution-image-perception-meets-visual-rag多模态的王中王神中神high-resolution-image-perception"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/44979">Retrieval-Augmented
-Perception: High-resolution Image Perception Meets Visual
-RAG</a>（多模态的，王中王，神中神）（High-resolution Image
-Perception）</h2>
-<h2 id="realrag-retrieval-augmented-realistic-image-generation-via-self-reflective-contrastive-learning也算多模态的吧结合rag与diffusion"><a target="_blank" rel="noopener" href="https://icml.cc/virtual/2025/poster/44615">RealRAG:
-Retrieval-augmented Realistic Image Generation via Self-reflective
-Contrastive Learning</a>（也算多模态的吧，结合RAG与diffusion）</h2>
-<h2 id="colpali-efficient-document-retrieval-with-vision-language-models优先多模态的关于vlm的">-
-ColPali: Efficient Document Retrieval with Vision Language
-Models（优先）（多模态的）（关于VLM的）</h2>
-<h2 id="visrag-vision-based-retrieval-augmented-generation-on-multi-modality-documents优先多模态的visual-rag">-
-VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality
-Documents（优先）（多模态的）（visual RAG）</h2>
-<h2 id="ra-tta-retrieval-augmented-test-time-adaptation-for-vision-language-models多模态的关于vlm的tta">RA-TTA:
-Retrieval-Augmented Test-Time Adaptation for Vision-Language
-Models（多模态的）（关于VLM的TTA）</h2>
-<h2 id="streaming-video-question-answering-with-in-context-video-kv-cache-retrieval多模态的video-qa">-
-Streaming Video Question-Answering with In-context Video KV-Cache
-Retrieval（多模态的）（video qa）</h2>
-<h2 id="mai-a-multi-turn-aggregation-iteration-model-for-composed-image-retrieval多模态的composed-image-retrieval">MAI:
-A Multi-turn Aggregation-Iteration Model for Composed Image
-Retrieval（多模态的）（composed Image retrieval）</h2>
-<h2 id="bridging-information-asymmetry-in-text-video-retrieval-a-data-centric-approach多模态的text-video-retrieval">Bridging
-Information Asymmetry in Text-video Retrieval: A Data-centric
-Approach（多模态的）（text-video retrieval）</h2>
-<h2 id="benchmarking-multimodal-retrieval-augmented-generation-with-dynamic-vqa-dataset-and-self-adaptive-planning-agent算多模态的涉及vqa了但是是benchmark类的论文">Benchmarking
-Multimodal Retrieval Augmented Generation with Dynamic VQA Dataset and
-Self-adaptive Planning
-Agent（算多模态的？涉及VQA了。但是是benchmark类的论文）</h2>
-<h2 id="retrieval-augmented-diffusion-model-for-structure-informed-antibody-design-and-optimization算多模态的涉及diffusionwc是ai4sci的吧都有抗体了算了">Retrieval
-Augmented Diffusion Model for Structure-informed Antibody Design and
-Optimization（算多模态的？涉及diffusion）（wc，是ai4sci的吧，都有抗体了，算了）</h2>
-<h2 id="mm-embed-universal-multimodal-retrieval-with-multimodal-llms多模态的">MM-EMBED:
-Universal Multimodal Retrieval with Multimodal LLMs（多模态的）</h2>
-<h2 id="tiger-unifying-text-to-image-generation-and-retrieval-with-large-multimodal-models多模态的好像是在做文生图和检索的统一工作">TIGeR:
-Unifying Text-to-Image Generation and Retrieval with Large Multimodal
-Models（多模态的）（好像是在做文生图和检索的统一工作）</h2>
-<h2 id="mrag-bench-vision-centric-evaluation-for-retrieval-augmented-multimodal-models多模态的只不过是benchmark类的">MRAG-Bench:
-Vision-Centric Evaluation for Retrieval-Augmented Multimodal
-Models（多模态的，只不过是benchmark类的）</h2>
-<h2 id="learning-fine-grained-representations-through-textual-token-disentanglement-in-composed-video-retrieval多模态的composed-video-retrieval">Learning
-Fine-Grained Representations through Textual Token Disentanglement in
-Composed Video Retrieval（多模态的）（composed video retrieval）</h2>
-<h2 id="tempme-video-temporal-token-merging-for-efficient-text-video-retrieval多模态的text-video-retrieval">TempMe:
-Video Temporal Token Merging for Efficient Text-Video
-Retrieval（多模态的）（text-video retrieval）</h2>
-<h2 id="mllm-as-retriever-interactively-learning-multimodal-retrieval-for-embodied-agents多模态的不过似乎是应用到具身方面">MLLM
-as Retriever: Interactively Learning Multimodal Retrieval for Embodied
-Agents（多模态的，不过似乎是应用到具身方面？）</h2>
-<h2 id="generalized-video-moment-retrieval多模态的video相关的似乎具体是moment相关">Generalized
-Video Moment
-Retrieval（多模态的）（video相关的，似乎具体是moment相关？）</h2>
-<h2 id="exploiting-distribution-constraints-for-scalable-and-efficient-image-retrieval多模态的image-retrieval">Exploiting
-Distribution Constraints for Scalable and Efficient Image
-Retrieval（多模态的）（Image Retrieval）</h2>
-<h2 id="rapid-retrieval-augmented-training-of-differentially-private-diffusion-models算多模态的涉及diffusion-models">RAPID:
-Retrieval Augmented Training of Differentially Private Diffusion
-Models（算多模态的？涉及diffusion models）</h2>
-<h2 id="g-retriever-retrieval-augmented-generation-for-textual-graph-understanding-and-question-answering"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/95524">G-Retriever:
-Retrieval-Augmented Generation for Textual Graph Understanding and
-Question Answering</a></h2>
-<h2 id="an-end-to-end-graph-attention-network-hashing-for-cross-modal-retrieval"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/95267">An End-To-End Graph
-Attention Network Hashing for Cross-Modal Retrieval</a></h2>
-<h2 id="wheres-waldo-diffusion-features-for-personalized-segmentation-and-retrieval"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/95609">Where's Waldo:
-Diffusion Features For Personalized Segmentation and Retrieval</a></h2>
-<h2 id="aligning-vision-models-with-human-aesthetics-in-retrieval-benchmarks-and-algorithmsbenchmark类啊"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/93151">Aligning Vision Models
-with Human Aesthetics in Retrieval: Benchmarks and
-Algorithms</a>（benchmark类啊）</h2>
-<h2 id="diffusion-inspired-truncated-sampler-for-text-video-retrieval"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/95072">Diffusion-Inspired
-Truncated Sampler for Text-Video Retrieval</a></h2>
-<h2 id="inquire-a-natural-world-text-to-image-retrieval-benchmark又是benchmark类"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/97543">INQUIRE: A Natural
-World Text-to-Image Retrieval Benchmark</a>（又是benchmark类）</h2>
-<h2 id="bivlc-extending-vision-language-compositionality-evaluation-with-text-to-image-retrieval"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/97657">BiVLC: Extending
-Vision-Language Compositionality Evaluation with Text-to-Image
-Retrieval</a></h2>
-<h2 id="verified-a-video-corpus-moment-retrieval-benchmark-for-fine-grained-video-understanding依然benchmark"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/97632">VERIFIED: A Video
-Corpus Moment Retrieval Benchmark for Fine-Grained Video
-Understanding</a>（依然benchmark）</h2>
-<h2 id="wikido-a-new-benchmark-evaluating-cross-modal-retrieval-for-vision-language-modelsbenchmark-again"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/97785">WikiDO: A New Benchmark
-Evaluating Cross-Modal Retrieval for Vision-Language
-Models</a>（benchmark again）</h2>
-<h2 id="retrieval-fine-tuning-for-in-context-tabular-models似乎是研究表格型数据的算吗"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/96776">Retrieval &amp;
-Fine-Tuning for In-Context Tabular
-Models</a>（似乎是研究表格型数据的？算吗？）</h2>
-<h2 id="uda-a-benchmark-suite-for-retrieval-augmented-generation-in-real-world-document-analysis研究document-analysis的"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/97735">UDA: A Benchmark Suite
-for Retrieval Augmented Generation in Real-World Document
-Analysis</a>（研究document analysis的）</h2>
-<h2 id="semi-open-3d-object-retrieval-via-hierarchical-equilibrium-on-hypergraph有点杂啊检索3d物体"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/96281">Semi-Open 3D Object
-Retrieval via Hierarchical Equilibrium on
-Hypergraph</a>（有点杂啊，检索3D物体）</h2>
-<h2 id="assembly-fuzzy-representation-on-hypergraph-for-open-set-3d-object-retrieval我去还有一篇吗研究3d-retrieval的"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/93088">Assembly Fuzzy
-Representation on Hypergraph for Open-Set 3D Object
-Retrieval</a>（我去，还有一篇吗，研究3D retrieval的）</h2>
-<h2 id="drvideo-document-retrieval-based-long-video-understandingvideo-understanding"><strong>DrVideo:
-Document Retrieval Based Long Video Understanding</strong>（video
-understanding）</h2>
-<h2 id="salova-segment-augmented-long-video-assistant-for-targeted-retrieval-and-routing-in-long-form-video-analysisvideo相关应该是长视频理解"><strong><a target="_blank" rel="noopener" href="https://ivy-lvlm.github.io/SALOVA/">SALOVA: Segment-Augmented Long
-Video Assistant for Targeted Retrieval and Routing in Long-Form Video
-Analysis</a></strong>（video相关，应该是长视频理解）</h2>
-<h2 id="vlog-video-language-models-by-generative-retrieval-of-narration-vocabularyvideo相关"><strong>VLog:
-Video-Language Models by Generative Retrieval of Narration
-Vocabulary</strong>（video相关）</h2>
-<h2 id="collm-a-large-language-model-for-composed-image-retrievalcomposed-image-retrieval"><a target="_blank" rel="noopener" href="https://collm-cvpr25.github.io/">CoLLM: A Large Language Model for
-Composed Image Retrieval</a>（Composed Image retrieval）</h2>
-<h2 id="search-and-detect-training-free-long-tail-object-detection-via-web-image-retrieval有点杂物体检测用到了image-retrieval技术"><strong>Search
-and Detect: Training-Free Long Tail Object Detection via Web-Image
-Retrieval</strong>（有点杂，物体检测，用到了Image Retrieval技术）</h2>
-<h2 id="learning-audio-guided-video-representation-with-gated-attention-for-video-text-retrievalaudio相关"><strong>Learning
-Audio-guided Video Representation with Gated Attention for Video-Text
-Retrieval</strong>（audio相关）</h2>
-<h2 id="lamra-large-multimodal-model-as-your-advanced-retrieval-assistantvlm相关"><a target="_blank" rel="noopener" href="https://code-kunkun.github.io/LamRA/">LamRA: Large Multimodal
-Model as Your Advanced Retrieval Assistant</a>（VLM相关）</h2>
-<h2 id="recurrence-enhanced-vision-and-language-transformers-for-robust-multimodal-document-retrievalvlm相关以及文档相关"><a target="_blank" rel="noopener" href="https://github.com/aimagelab/ReT">Recurrence-Enhanced
-Vision-and-Language Transformers for Robust Multimodal Document
-Retrieval</a>（VLM相关，以及文档相关）</h2>
-<h2 id="missing-target-relevant-information-prediction-with-world-model-for-accurate-zero-shot-composed-image-retrievalcomposed-image-retrieval"><strong>Missing
-Target-Relevant Information Prediction with World Model for Accurate
-Zero-Shot Composed Image Retrieval</strong>（composed Image
-retrieval）</h2>
-<h2 id="ilias-instance-level-image-retrieval-at-scaleimage-retrieval"><a target="_blank" rel="noopener" href="https://vrg.fel.cvut.cz/ilias/">ILIAS: Instance-Level Image
-retrieval At Scale</a>（Image retrieval）</h2>
-<h2 id="clip-is-almost-all-you-need-towards-parameter-efficient-scene-text-retrieval-without-ocrscene-text-retrieval"><strong>CLIP
-is Almost All You Need: Towards Parameter-Efficient Scene Text Retrieval
-without OCR</strong>（scene-text retrieval）</h2>
-<h2 id="rethinking-noisy-video-text-retrieval-via-relation-aware-alignmentvideo相关video-text-retrieval只不过多了一个noisy设定这个感觉真好灌水吧"><strong>Rethinking
-Noisy Video-Text Retrieval via Relation-aware
-Alignment</strong>（video相关，video-text
-retrieval，只不过多了一个noisy设定。这个感觉真好灌水吧……）</h2>
-<h2 id="bridging-modalities-improving-universal-multimodal-retrieval-by-multimodal-large-language-modelsvlm相关"><a target="_blank" rel="noopener" href="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct">Bridging
-Modalities: Improving Universal Multimodal Retrieval by Multimodal Large
-Language Models</a>（VLM相关）</h2>
-<h2 id="reason-before-retrieve-one-stage-reflective-chain-of-thoughts-for-training-free-zero-shot-composed-image-retrievalcomposed-image-retrieval"><a target="_blank" rel="noopener" href="https://github.com/Pter61/osrcir">Reason-before-Retrieve:
-One-Stage Reflective Chain-of-Thoughts for Training-Free Zero-Shot
-Composed Image Retrieval</a>（Composed Image Retrieval）</h2>
-<h2 id="vdocrag-retrieval-augmented-generation-over-visually-rich-documents这篇明确出现rag了啊document相关"><a target="_blank" rel="noopener" href="https://vdocrag.github.io/">VDocRAG: Retrieval-Augmented
-Generation over Visually-Rich
-Documents</a>（这篇明确出现RAG了啊）（document相关）</h2>
-<h2 id="rap-retrieval-augmented-personalization-for-multimodal-large-language-models我去这么巧和icml-oral那篇感觉做的题材有点像啊vlm相关"><a target="_blank" rel="noopener" href="https://hoar012.github.io/RAP-Project/">RAP: Retrieval-Augmented
-Personalization for Multimodal Large Language
-Models</a>（我去，这么巧，和ICML
-oral那篇感觉做的题材有点像啊）（VLM相关）</h2>
-<h2 id="video-colbert-contextualized-late-interaction-for-text-to-video-retrievalvideo相关video-text-retrieval"><strong>Video-ColBERT:
-Contextualized Late Interaction for Text-to-Video
-Retrieval</strong>（video相关，video-text retrieval）</h2>
-<h2 id="imagine-and-seek-improving-composed-image-retrieval-with-an-imagined-proxycomposed-image-retrieval"><strong>Imagine
-and Seek: Improving Composed Image Retrieval with an Imagined
-Proxy</strong>（Composed Image Retrieval）</h2>
-<h2 id="the-devil-is-in-the-prompts-retrieval-augmented-prompt-optimization-for-text-to-video-generation不会是prompt-engineering吧video相关text-video-retrieval"><strong>The
-Devil is in the Prompts: Retrieval-Augmented Prompt Optimization for
-Text-to-Video Generation</strong>（不会是prompt
-engineering吧……）（video相关，text-video retrieval）</h2>
-<h2 id="narrating-the-video-boosting-text-video-retrieval-via-comprehensive-utilization-of-frame-level-captionsvideo相关text-video-retrieval"><a target="_blank" rel="noopener" href="https://multimodal-understanding-group.github.io/NarVid/">Narrating
-the Video: Boosting Text-Video Retrieval via Comprehensive Utilization
-of Frame-Level Captions</a>（video相关，text-video retrieval）</h2>
-<h2 id="learning-with-noisy-triplet-correspondence-for-composed-image-retrievalcomposed-image-retrieval"><a target="_blank" rel="noopener" href="https://github.com/CharlesNeilWilliams/TME">Learning with Noisy
-Triplet Correspondence for Composed Image Retrieval</a>（Composed Image
-Retrieval）</h2>
-<h2 id="ccin-compositional-conflict-identification-and-neutralization-for-composed-image-retrievalcomposed-image-retrieval"><strong>CCIN:
-Compositional Conflict Identification and Neutralization for Composed
-Image Retrieval</strong>（Composed Image Retrieval）</h2>
-<h2 id="generative-zero-shot-composed-image-retrievalcomposed-image-retrieval"><strong>Generative
-Zero-Shot Composed Image Retrieval</strong>（Composed Image
-Retrieval）</h2>
-<h2 id="context-cir-learning-from-concepts-in-text-for-composed-image-retrieval好多这种composed-image-retrieval啊这个是啥啊"><strong>ConText-CIR:
-Learning from Concepts in Text for Composed Image
-Retrieval</strong>（好多这种composed image
-retrieval啊，这个是啥啊）</h2>
-<h2 id="discovla-discrepancy-reduction-in-vision-language-and-alignment-for-parameter-efficient-video-text-retrievaltext-video-retrieval"><a target="_blank" rel="noopener" href="https://github.com/LunarShen/DsicoVLA">DiscoVLA: Discrepancy
-Reduction in Vision, Language, and Alignment for Parameter-Efficient
-Video-Text Retrieval</a>（text-video retrieval）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/08/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/%E5%85%B3%E4%BA%8E%E7%BC%96%E8%AF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/08/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/%E5%85%B3%E4%BA%8E%E7%BC%96%E8%AF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">关于编译的一些常见问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-08 13:02:00 / Modified: 13:04:08" itemprop="dateCreated datePublished" datetime="2025-09-08T13:02:00+08:00">2025-09-08</time>
+              <time title="Created: 2025-09-03 15:37:00 / Modified: 15:44:47" itemprop="dateCreated datePublished" datetime="2025-09-03T15:37:00+08:00">2025-09-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1366,9 +275,94 @@ Video-Text Retrieval</a>（text-video retrieval）</h2>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
                 </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="如题在配置环境需要加装一些库的时候如果简单的pip-install可能会影响到我们现有的库最后可能出现新装的库没问题了但原来没问题的库反而报错了为此可以考虑pip-install的时候加上--no-deps这个是来告诉pip不要安装或升级这个包声明的依赖只装我点名的包的本体从而防止把已经配好的库的版本打乱了当然一些很复杂的情况下可能新的库和旧库的当前版本会出现冲突这就要视情况而定了">如题，在配置环境，需要加装一些库的时候，如果简单的pip
+install，可能会影响到我们现有的库，最后可能出现：新装的库没问题了，但原来没问题的库反而报错了。为此，可以考虑pip
+install的时候，加上<code>--no-deps</code>。这个是来告诉pip，“不要安装或升级这个包声明的依赖”，只装我点名的包的本体，从而防止把已经配好的库的版本打乱了（当然，一些很复杂的情况下，可能新的库和旧库的当前版本会出现冲突。这就要视情况而定了）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%AE%89%E8%A3%85%E5%BA%93%E9%9C%80%E8%A6%81%E9%98%B2%E6%AD%A2%E5%BD%B1%E5%93%8D%E5%85%B6%E5%AE%83%E7%8E%B0%E6%9C%89%E5%BA%93%E7%9A%84%E7%89%88%E6%9C%AC/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/" class="post-title-link" itemprop="url">和为目标值的最长子序列的长度</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-19 23:09:00 / Modified: 23:44:20" itemprop="dateCreated datePublished" datetime="2025-08-19T23:09:00+08:00">2025-08-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/" itemprop="url" rel="index"><span itemprop="name">本地latex</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
                 </span>
             </span>
 
@@ -1383,10 +377,624 @@ Video-Text Retrieval</a>（text-video retrieval）</h2>
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="有时候编译完虽然没报错可是会发现结果和我们想象的不一样比如用beamer主题做ppt的时候模板一般会支持右下角带一个页码的显示当前页数总页数但是可能我们编译完发现总页数会出问题这时并不一定是代码的问题从操作上看我们多编译几次可能就显示正常了虽然不太清楚是为什么">有时候编译完，虽然没报错，可是会发现结果和我们想象的不一样。比如，用beamer主题做ppt的时候，模板一般会支持右下角带一个页码的显示：当前页数/总页数。但是，可能我们编译完发现总页数会出问题，这时并不一定是代码的问题。从操作上看，我们多编译几次，可能就显示正常了（虽然不太清楚是为什么）</h1>
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/length-of-the-longest-subsequence-that-sums-to-target/description/">在这</a></h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/09/08/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0latex/%E5%85%B3%E4%BA%8E%E7%BC%96%E8%AF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/#more" rel="contents">
+              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/" class="post-title-link" itemprop="url">目标和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-19 18:02:00 / Modified: 18:10:29" itemprop="dateCreated datePublished" datetime="2025-08-19T18:02:00+08:00">2025-08-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/target-sum/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/12/course_learning/efficientml_mit/lec02-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/" class="post-title-link" itemprop="url">lec02-basics</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-12 18:13:00" itemprop="dateCreated datePublished" datetime="2025-08-12T18:13:00+08:00">2025-08-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-03 17:09:31" itemprop="dateModified" datetime="2025-09-03T17:09:31+08:00">2025-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="本章大纲">本章大纲：</h1>
+<h2 id="先讲了基本的pytorch概念权当复习了然后讲了衡量efficiency的基本指标">先讲了基本的pytorch概念（权当复习了），然后讲了衡量efficiency的基本指标</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/" class="post-title-link" itemprop="url">分割等和子集</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-11 15:39:00" itemprop="dateCreated datePublished" datetime="2025-08-11T15:39:00+08:00">2025-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-12 14:09:55" itemprop="dateModified" datetime="2025-08-12T14:09:55+08:00">2025-08-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/partition-equal-subset-sum/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/06/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E5%BC%82%E6%88%96%E5%80%BC%E4%B8%BA%E7%BB%99%E5%AE%9A%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%E6%95%B0%E7%9B%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/06/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E5%BC%82%E6%88%96%E5%80%BC%E4%B8%BA%E7%BB%99%E5%AE%9A%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%E6%95%B0%E7%9B%AE/" class="post-title-link" itemprop="url">统计异或值为给定值的路径数目</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-06 00:45:00 / Modified: 01:32:05" itemprop="dateCreated datePublished" datetime="2025-08-06T00:45:00+08:00">2025-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/count-paths-with-the-given-xor-value/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/06/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E7%BB%9F%E8%AE%A1%E5%BC%82%E6%88%96%E5%80%BC%E4%B8%BA%E7%BB%99%E5%AE%9A%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84%E6%95%B0%E7%9B%AE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/05/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/05/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/" class="post-title-link" itemprop="url">三角形最小路径和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-05 00:33:00 / Modified: 00:51:57" itemprop="dateCreated datePublished" datetime="2025-08-05T00:33:00+08:00">2025-08-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/triangle/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/05/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/" class="post-title-link" itemprop="url">不同路径 Ⅱ</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-04 23:35:00 / Modified: 23:41:17" itemprop="dateCreated datePublished" datetime="2025-08-04T23:35:00+08:00">2025-08-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths-ii/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84%20%E2%85%A1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/" class="post-title-link" itemprop="url">不同路径</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-08-04 23:23:00 / Modified: 23:40:36" itemprop="dateCreated datePublished" datetime="2025-08-04T23:23:00+08:00">2025-08-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/" itemprop="url" rel="index"><span itemprop="name">网格图DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">基础类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这"><a href="#原题链接在这" class="headerlink" title="原题链接在这"></a>原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/04/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%BD%91%E6%A0%BC%E5%9B%BEDP/%E5%9F%BA%E7%A1%80%E7%B1%BB/%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1409,7 +1017,7 @@ Video-Text Retrieval</a>（text-video retrieval）</h2>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1475,18 +1083,18 @@ Video-Text Retrieval</a>（text-video retrieval）</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">236</span>
+          <span class="site-state-item-count">123</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">78</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -1513,7 +1121,7 @@ Video-Text Retrieval</a>（text-video retrieval）</h2>
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
