@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="因为一个项目可以选择用uv管理python包，决定接触一下试试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本地（Windows）安装uv">
+<meta property="og:url" content="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="因为一个项目可以选择用uv管理python包，决定接触一下试试">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-01-14T13:56:00.000Z">
+<meta property="article:modified_time" content="2026-01-14T14:14:04.664Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>本地（Windows）安装uv | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          本地（Windows）安装uv
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-14 21:56:00 / Modified: 22:14:04" itemprop="dateCreated datePublished" datetime="2026-01-14T21:56:00+08:00">2026-01-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="因为一个项目可以选择用uv管理python包，决定接触一下试试"><a href="#因为一个项目可以选择用uv管理python包，决定接触一下试试" class="headerlink" title="因为一个项目可以选择用uv管理python包，决定接触一下试试"></a>因为一个项目可以选择用uv管理python包，决定接触一下试试</h1><span id="more"></span>
+<h1 id="uv简介"><a href="#uv简介" class="headerlink" title="uv简介"></a>uv简介</h1><h2 id="简单讲，uv是一个python包管理器，兼具简单的python环境创建和管理功能。所以，在包管理上，它可以替代pip，且一般比它更快，还能锁包的功能（防止一些包被我们安装的其它包给带得升级了，导致出现包之间的冲突）环境上，它创建的是venv，所以是每个项目独立的一个环境，而不是像conda那样，一个环境创建完了，其它项目也可以用。同时，uv的venv是纯python环境，和conda不同，conda支持跨语言-二进制包（但也比较重型，而uv显然更加轻量）"><a href="#简单讲，uv是一个python包管理器，兼具简单的python环境创建和管理功能。所以，在包管理上，它可以替代pip，且一般比它更快，还能锁包的功能（防止一些包被我们安装的其它包给带得升级了，导致出现包之间的冲突）环境上，它创建的是venv，所以是每个项目独立的一个环境，而不是像conda那样，一个环境创建完了，其它项目也可以用。同时，uv的venv是纯python环境，和conda不同，conda支持跨语言-二进制包（但也比较重型，而uv显然更加轻量）" class="headerlink" title="简单讲，uv是一个python包管理器，兼具简单的python环境创建和管理功能。所以，在包管理上，它可以替代pip，且一般比它更快，还能锁包的功能（防止一些包被我们安装的其它包给带得升级了，导致出现包之间的冲突）环境上，它创建的是venv，所以是每个项目独立的一个环境，而不是像conda那样，一个环境创建完了，其它项目也可以用。同时，uv的venv是纯python环境，和conda不同，conda支持跨语言&#x2F;二进制包（但也比较重型，而uv显然更加轻量）"></a>简单讲，uv是一个python包管理器，兼具简单的python环境创建和管理功能。所以，在包管理上，它可以替代pip，且一般比它更快，还能锁包的功能（防止一些包被我们安装的其它包给带得升级了，导致出现包之间的冲突）<br>环境上，它创建的是venv，所以是每个项目独立的一个环境，而不是像conda那样，一个环境创建完了，其它项目也可以用。同时，uv的venv是纯python环境，和conda不同，conda支持跨语言&#x2F;二进制包（但也比较重型，而uv显然更加轻量）</h2><h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="其实参考官网就好了，这个好像不是很难来着。终端执行该命令powershell-ExecutionPolicy-ByPass-c-irm-https-astral-sh-uv-install-ps1-iex-，之后终端正常应该会显示所有东西安装上了，且提示可以把一个bin的路径加入到我们的PATH里。得把这个路径加入到PATH环境变量中，才能正确识别到uv，并通过uv-version命令来验证是否可用了那因为在Windows，要永久地加入到环境变量里，不妨用笨办法，手动在用户变量里的Path加入这个路径（也不一定用户变量吧，系统变量也行。不过感觉上用户就够了）"><a href="#其实参考官网就好了，这个好像不是很难来着。终端执行该命令powershell-ExecutionPolicy-ByPass-c-irm-https-astral-sh-uv-install-ps1-iex-，之后终端正常应该会显示所有东西安装上了，且提示可以把一个bin的路径加入到我们的PATH里。得把这个路径加入到PATH环境变量中，才能正确识别到uv，并通过uv-version命令来验证是否可用了那因为在Windows，要永久地加入到环境变量里，不妨用笨办法，手动在用户变量里的Path加入这个路径（也不一定用户变量吧，系统变量也行。不过感觉上用户就够了）" class="headerlink" title="其实参考官网就好了，这个好像不是很难来着。终端执行该命令powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;，之后终端正常应该会显示所有东西安装上了，且提示可以把一个bin的路径加入到我们的PATH里。得把这个路径加入到PATH环境变量中，才能正确识别到uv，并通过uv --version命令来验证是否可用了那因为在Windows，要永久地加入到环境变量里，不妨用笨办法，手动在用户变量里的Path加入这个路径（也不一定用户变量吧，系统变量也行。不过感觉上用户就够了）"></a>其实参考官网就好了，这个好像不是很难来着。终端执行该命令<code>powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</code>，之后终端正常应该会显示所有东西安装上了，且提示可以把一个bin的路径加入到我们的PATH里。得把这个路径加入到PATH环境变量中，才能正确识别到uv，并通过<code>uv --version</code>命令来验证是否可用了<br>那因为在Windows，要永久地加入到环境变量里，不妨用笨办法，手动在用户变量里的Path加入这个路径（也不一定用户变量吧，系统变量也行。不过感觉上用户就够了）</h2><h2 id="最后，记得重启终端（然后可能有个问题，就是如果我们开了多个ide窗口，我们只是把在安装uv的那个窗口给关了，其它的没关，那么还是不行。本质是因为ide进程一直没退出，所以它的终端拿到的还是旧的PATH"><a href="#最后，记得重启终端（然后可能有个问题，就是如果我们开了多个ide窗口，我们只是把在安装uv的那个窗口给关了，其它的没关，那么还是不行。本质是因为ide进程一直没退出，所以它的终端拿到的还是旧的PATH" class="headerlink" title="最后，记得重启终端（然后可能有个问题，就是如果我们开了多个ide窗口，我们只是把在安装uv的那个窗口给关了，其它的没关，那么还是不行。本质是因为ide进程一直没退出，所以它的终端拿到的还是旧的PATH"></a>最后，记得重启终端（然后可能有个问题，就是如果我们开了多个ide窗口，我们只是把在安装uv的那个窗口给关了，其它的没关，那么还是不行。本质是因为ide进程一直没退出，所以它的终端拿到的还是旧的PATH</h2><h1 id="uv简介（可参考之前写的-venv简介-）"><a href="#uv简介（可参考之前写的-venv简介-）" class="headerlink" title="uv简介（可参考之前写的[[venv简介]]）"></a>uv简介（可参考之前写的[[venv简介]]）</h1>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/01/10/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%EF%BC%88Windows%EF%BC%89/" rel="prev" title="字符编码问题（Windows）">
+      <i class="fa fa-chevron-left"></i> 字符编码问题（Windows）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/01/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/GitHub%20git%20clone%E5%91%BD%E4%BB%A4%E5%A4%B1%E8%B4%A5%EF%BC%88Windows%EF%BC%89/" rel="next" title="GitHub git clone命令失败（Windows）">
+      GitHub git clone命令失败（Windows） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%8F%AF%E4%BB%A5%E9%80%89%E6%8B%A9%E7%94%A8uv%E7%AE%A1%E7%90%86python%E5%8C%85%EF%BC%8C%E5%86%B3%E5%AE%9A%E6%8E%A5%E8%A7%A6%E4%B8%80%E4%B8%8B%E8%AF%95%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">因为一个项目可以选择用uv管理python包，决定接触一下试试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#uv%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">uv简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%AE%B2%EF%BC%8Cuv%E6%98%AF%E4%B8%80%E4%B8%AApython%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%8C%E5%85%BC%E5%85%B7%E7%AE%80%E5%8D%95%E7%9A%84python%E7%8E%AF%E5%A2%83%E5%88%9B%E5%BB%BA%E5%92%8C%E7%AE%A1%E7%90%86%E5%8A%9F%E8%83%BD%E3%80%82%E6%89%80%E4%BB%A5%EF%BC%8C%E5%9C%A8%E5%8C%85%E7%AE%A1%E7%90%86%E4%B8%8A%EF%BC%8C%E5%AE%83%E5%8F%AF%E4%BB%A5%E6%9B%BF%E4%BB%A3pip%EF%BC%8C%E4%B8%94%E4%B8%80%E8%88%AC%E6%AF%94%E5%AE%83%E6%9B%B4%E5%BF%AB%EF%BC%8C%E8%BF%98%E8%83%BD%E9%94%81%E5%8C%85%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%88%E9%98%B2%E6%AD%A2%E4%B8%80%E4%BA%9B%E5%8C%85%E8%A2%AB%E6%88%91%E4%BB%AC%E5%AE%89%E8%A3%85%E7%9A%84%E5%85%B6%E5%AE%83%E5%8C%85%E7%BB%99%E5%B8%A6%E5%BE%97%E5%8D%87%E7%BA%A7%E4%BA%86%EF%BC%8C%E5%AF%BC%E8%87%B4%E5%87%BA%E7%8E%B0%E5%8C%85%E4%B9%8B%E9%97%B4%E7%9A%84%E5%86%B2%E7%AA%81%EF%BC%89%E7%8E%AF%E5%A2%83%E4%B8%8A%EF%BC%8C%E5%AE%83%E5%88%9B%E5%BB%BA%E7%9A%84%E6%98%AFvenv%EF%BC%8C%E6%89%80%E4%BB%A5%E6%98%AF%E6%AF%8F%E4%B8%AA%E9%A1%B9%E7%9B%AE%E7%8B%AC%E7%AB%8B%E7%9A%84%E4%B8%80%E4%B8%AA%E7%8E%AF%E5%A2%83%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%83%8Fconda%E9%82%A3%E6%A0%B7%EF%BC%8C%E4%B8%80%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%88%9B%E5%BB%BA%E5%AE%8C%E4%BA%86%EF%BC%8C%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E3%80%82%E5%90%8C%E6%97%B6%EF%BC%8Cuv%E7%9A%84venv%E6%98%AF%E7%BA%AFpython%E7%8E%AF%E5%A2%83%EF%BC%8C%E5%92%8Cconda%E4%B8%8D%E5%90%8C%EF%BC%8Cconda%E6%94%AF%E6%8C%81%E8%B7%A8%E8%AF%AD%E8%A8%80-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%85%EF%BC%88%E4%BD%86%E4%B9%9F%E6%AF%94%E8%BE%83%E9%87%8D%E5%9E%8B%EF%BC%8C%E8%80%8Cuv%E6%98%BE%E7%84%B6%E6%9B%B4%E5%8A%A0%E8%BD%BB%E9%87%8F%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">简单讲，uv是一个python包管理器，兼具简单的python环境创建和管理功能。所以，在包管理上，它可以替代pip，且一般比它更快，还能锁包的功能（防止一些包被我们安装的其它包给带得升级了，导致出现包之间的冲突）环境上，它创建的是venv，所以是每个项目独立的一个环境，而不是像conda那样，一个环境创建完了，其它项目也可以用。同时，uv的venv是纯python环境，和conda不同，conda支持跨语言&#x2F;二进制包（但也比较重型，而uv显然更加轻量）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E5%AE%9E%E5%8F%82%E8%80%83%E5%AE%98%E7%BD%91%E5%B0%B1%E5%A5%BD%E4%BA%86%EF%BC%8C%E8%BF%99%E4%B8%AA%E5%A5%BD%E5%83%8F%E4%B8%8D%E6%98%AF%E5%BE%88%E9%9A%BE%E6%9D%A5%E7%9D%80%E3%80%82%E7%BB%88%E7%AB%AF%E6%89%A7%E8%A1%8C%E8%AF%A5%E5%91%BD%E4%BB%A4powershell-ExecutionPolicy-ByPass-c-irm-https-astral-sh-uv-install-ps1-iex-%EF%BC%8C%E4%B9%8B%E5%90%8E%E7%BB%88%E7%AB%AF%E6%AD%A3%E5%B8%B8%E5%BA%94%E8%AF%A5%E4%BC%9A%E6%98%BE%E7%A4%BA%E6%89%80%E6%9C%89%E4%B8%9C%E8%A5%BF%E5%AE%89%E8%A3%85%E4%B8%8A%E4%BA%86%EF%BC%8C%E4%B8%94%E6%8F%90%E7%A4%BA%E5%8F%AF%E4%BB%A5%E6%8A%8A%E4%B8%80%E4%B8%AAbin%E7%9A%84%E8%B7%AF%E5%BE%84%E5%8A%A0%E5%85%A5%E5%88%B0%E6%88%91%E4%BB%AC%E7%9A%84PATH%E9%87%8C%E3%80%82%E5%BE%97%E6%8A%8A%E8%BF%99%E4%B8%AA%E8%B7%AF%E5%BE%84%E5%8A%A0%E5%85%A5%E5%88%B0PATH%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%AD%EF%BC%8C%E6%89%8D%E8%83%BD%E6%AD%A3%E7%A1%AE%E8%AF%86%E5%88%AB%E5%88%B0uv%EF%BC%8C%E5%B9%B6%E9%80%9A%E8%BF%87uv-version%E5%91%BD%E4%BB%A4%E6%9D%A5%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E5%8F%AF%E7%94%A8%E4%BA%86%E9%82%A3%E5%9B%A0%E4%B8%BA%E5%9C%A8Windows%EF%BC%8C%E8%A6%81%E6%B0%B8%E4%B9%85%E5%9C%B0%E5%8A%A0%E5%85%A5%E5%88%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%87%8C%EF%BC%8C%E4%B8%8D%E5%A6%A8%E7%94%A8%E7%AC%A8%E5%8A%9E%E6%B3%95%EF%BC%8C%E6%89%8B%E5%8A%A8%E5%9C%A8%E7%94%A8%E6%88%B7%E5%8F%98%E9%87%8F%E9%87%8C%E7%9A%84Path%E5%8A%A0%E5%85%A5%E8%BF%99%E4%B8%AA%E8%B7%AF%E5%BE%84%EF%BC%88%E4%B9%9F%E4%B8%8D%E4%B8%80%E5%AE%9A%E7%94%A8%E6%88%B7%E5%8F%98%E9%87%8F%E5%90%A7%EF%BC%8C%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F%E4%B9%9F%E8%A1%8C%E3%80%82%E4%B8%8D%E8%BF%87%E6%84%9F%E8%A7%89%E4%B8%8A%E7%94%A8%E6%88%B7%E5%B0%B1%E5%A4%9F%E4%BA%86%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">其实参考官网就好了，这个好像不是很难来着。终端执行该命令powershell -ExecutionPolicy ByPass -c &quot;irm https:&#x2F;&#x2F;astral.sh&#x2F;uv&#x2F;install.ps1 | iex&quot;，之后终端正常应该会显示所有东西安装上了，且提示可以把一个bin的路径加入到我们的PATH里。得把这个路径加入到PATH环境变量中，才能正确识别到uv，并通过uv --version命令来验证是否可用了那因为在Windows，要永久地加入到环境变量里，不妨用笨办法，手动在用户变量里的Path加入这个路径（也不一定用户变量吧，系统变量也行。不过感觉上用户就够了）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%EF%BC%8C%E8%AE%B0%E5%BE%97%E9%87%8D%E5%90%AF%E7%BB%88%E7%AB%AF%EF%BC%88%E7%84%B6%E5%90%8E%E5%8F%AF%E8%83%BD%E6%9C%89%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%8C%E5%B0%B1%E6%98%AF%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E5%BC%80%E4%BA%86%E5%A4%9A%E4%B8%AAide%E7%AA%97%E5%8F%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E5%8F%AA%E6%98%AF%E6%8A%8A%E5%9C%A8%E5%AE%89%E8%A3%85uv%E7%9A%84%E9%82%A3%E4%B8%AA%E7%AA%97%E5%8F%A3%E7%BB%99%E5%85%B3%E4%BA%86%EF%BC%8C%E5%85%B6%E5%AE%83%E7%9A%84%E6%B2%A1%E5%85%B3%EF%BC%8C%E9%82%A3%E4%B9%88%E8%BF%98%E6%98%AF%E4%B8%8D%E8%A1%8C%E3%80%82%E6%9C%AC%E8%B4%A8%E6%98%AF%E5%9B%A0%E4%B8%BAide%E8%BF%9B%E7%A8%8B%E4%B8%80%E7%9B%B4%E6%B2%A1%E9%80%80%E5%87%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E5%AE%83%E7%9A%84%E7%BB%88%E7%AB%AF%E6%8B%BF%E5%88%B0%E7%9A%84%E8%BF%98%E6%98%AF%E6%97%A7%E7%9A%84PATH"><span class="nav-number">3.2.</span> <span class="nav-text">最后，记得重启终端（然后可能有个问题，就是如果我们开了多个ide窗口，我们只是把在安装uv的那个窗口给关了，其它的没关，那么还是不行。本质是因为ide进程一直没退出，所以它的终端拿到的还是旧的PATH</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#uv%E7%AE%80%E4%BB%8B%EF%BC%88%E5%8F%AF%E5%8F%82%E8%80%83%E4%B9%8B%E5%89%8D%E5%86%99%E7%9A%84-venv%E7%AE%80%E4%BB%8B-%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">uv简介（可参考之前写的[[venv简介]]）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">256</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
