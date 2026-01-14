@@ -1,0 +1,21 @@
+{
+	"nodes":[
+		{"id":"78a23e862baef7a8","type":"text","text":"efficient RAG challenge-insight tree","x":-126,"y":-8,"width":266,"height":88},
+		{"id":"e752c98561521b26","type":"text","text":"时间方面","x":196,"y":-145,"width":250,"height":60},
+		{"id":"0caf6c74854d1547","type":"text","text":"cha：rag中哪些部分可以加速？应该如何加速？","x":511,"y":-254,"width":269,"height":74},
+		{"id":"5a47a1b4b37bf8ec","type":"text","text":"prefill阶段","x":823,"y":-372,"width":250,"height":60},
+		{"id":"55327cfec72251d9","type":"text","text":"原因：检索到的文档很多，对应产生的token也多。那么，llm的prefill阶段（也就是根据给定的输入，产生第一个token的过程）会比较长时间","x":1180,"y":-580,"width":250,"height":100},
+		{"id":"e32a73111d36b073","type":"text","text":"insight：压缩文档","x":1180,"y":-372,"width":250,"height":60},
+		{"id":"ec5d3dbb55e0f481","type":"text","text":"insight：kv cache技术","x":1180,"y":-205,"width":250,"height":60},
+		{"id":"0529de952b3f2508","x":1220,"y":-38,"width":250,"height":60,"type":"text","text":"例如，把之前的query和检索文档/响应 cache起来。如果来了新的query和它语义重复/相似，则可以考虑直接复用结果（参考[PentaRAG](https://arxiv.org/abs/2506.21593)"},
+		{"id":"d07b4d2fe5081a5c","x":823,"y":-38,"width":250,"height":60,"type":"text","text":"复用历史结果"}
+	],
+	"edges":[
+		{"id":"8d1fd745659671b7","fromNode":"78a23e862baef7a8","fromSide":"right","toNode":"e752c98561521b26","toSide":"left"},
+		{"id":"08d59e78c73edb11","fromNode":"e752c98561521b26","fromSide":"right","toNode":"0caf6c74854d1547","toSide":"left"},
+		{"id":"1adf42e5727d522a","fromNode":"0caf6c74854d1547","fromSide":"right","toNode":"5a47a1b4b37bf8ec","toSide":"left"},
+		{"id":"e4d55088fdd62888","fromNode":"5a47a1b4b37bf8ec","fromSide":"right","toNode":"55327cfec72251d9","toSide":"left"},
+		{"id":"a0229ab5805e752f","fromNode":"5a47a1b4b37bf8ec","fromSide":"right","toNode":"e32a73111d36b073","toSide":"left"},
+		{"id":"0944f7415c1c390c","fromNode":"5a47a1b4b37bf8ec","fromSide":"right","toNode":"ec5d3dbb55e0f481","toSide":"left"}
+	]
+}

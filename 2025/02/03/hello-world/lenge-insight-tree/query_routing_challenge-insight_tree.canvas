@@ -1,0 +1,21 @@
+{
+	"nodes":[
+		{"id":"784403f4fdf96896","type":"text","text":"话说，routing本质是对性能和成本的权衡。那实际应用的时候，支持二者权重的动态调整也是很重要的啊（比如，一开始我希望是平衡模式，那成本和性能各一半权重；后面可能我没钱了，希望极致性价比，则成本权重0.8；再后面有钱了，希望性能可以更高一点，就把性能权重调到0.7）","x":360,"y":-840,"width":398,"height":267},
+		{"id":"74e72a66194dd6c7","type":"text","text":"这样看，有点像，在给定的成本预算下，最大化性能啊（其实相当一部分工作也的确是这个思路来着）（或者说要达到给定的性能要求下，尽可能最小化成本）\n有没有可能引入一些最优化方法呢","x":869,"y":-758,"width":349,"height":205},
+		{"id":"f269ef492212d76b","type":"text","text":"经典的控制方法就是设置阈值了","x":575,"y":-509,"width":250,"height":60},
+		{"id":"f905ee3f6432600d","type":"text","text":"wc了，还真有，emnlp 24 findings的，乐","x":1241,"y":-640,"width":257,"height":87},
+		{"id":"0e74ed31c9b62f43","type":"text","text":"或者说，如果要严格的话，或许就得需要引入最优化方法？光是一个学习型router，或者是多目标加权损失，都是一种软约束。无法满足硬性要求。主要是它们的结果都是没有概率保证的，就是说，它们预测正确的概率，我们不知道。这一点影响我们提供严格的SLA（Service Level Agreement）满足保证\n\n把routing当成一个带硬性约束的优化问题，它的风险也是可以量化的。因为我们可以让预测正确的概率成为一个约束条件（不过此时就需要一个预测概率的东西/模型了）","x":942,"y":-486,"width":299,"height":186},
+		{"id":"5e2521995bbf1273","type":"text","text":"那最理想的情况就是，联合优化成本与约束","x":919,"y":-940,"width":250,"height":60},
+		{"id":"1223f0a06e78e570","type":"text","text":"query routing challenge-insight tree","x":-120,"y":-20,"width":269,"height":90},
+		{"id":"366c561d3038f88b","type":"text","text":"llm的性能和很多因素相关：prompt，query，其它外部输入……routing的时候应该考虑到这些再来routing吧？就像那篇nips 25的，考虑rag场景下的routing的，它其实就是把外部文档输入这部分考虑进来了","x":1412,"y":-458,"width":408,"height":198},
+		{"id":"80717cba2e1734ad","type":"text","text":"$y_x(t)=a_x(t)-\\lambda\\cdot c_x(t)$\n这是一篇nips 25paper概括的，常见的一种routing范式。它的意思是，对于query x，我们评估它是否要routing到模型t上，就是用这个表达式。$a_x(t)$表示query x在模型t上的quality（这可以有很多指标），$c_x(t)$则表示query x在模型t上运行的成本。我们的目标就是最大化这么一个效用函数（utility function）\n确实，我们可以尝试把各种方法、各种流派的数学形式抽象出来，或许能发现它们的一些不足（虽然感觉这个形式的方法应该很常见，但是为什么一下又想不到哪个方法真的是走这个路子的？……）\n[paper](https://arxiv.org/abs/2505.16037v2)","x":692,"y":-120,"width":400,"height":420},
+		{"id":"48bc35734752a3de","type":"text","text":"看了这篇[nips 25 paper](https://arxiv.org/abs/2505.21600)，感觉它的视角真的很有意思。但是在想尝试迁移过来的时候，总感觉是行不通的。于是想说llm routing和rag routing有什么不同的地方？这些不同的地方或许才是痛点。针对痛点设计方法才是比较合理的吧。但却描述不出来……","x":671,"y":528,"width":469,"height":212},
+		{"id":"bdc1ea63b94449be","x":1524,"y":-812,"width":456,"height":259,"type":"text","text":"query routing结果，可以考虑cache一下。如果来的新的query和以往的某个query语义上很相似，我们可以考虑直接复用routing结果（至于要缓存哪些query，感觉上还是得有限容量，不能所有的query都容纳进来。要么是反馈好的，要么是那些被复用过的，反正这些query的routing结果肯定是优先级更高的。这样看起来，我们可以借鉴一些数据结构了似乎"}
+	],
+	"edges":[
+		{"id":"ee83d2762e3ca60d","fromNode":"784403f4fdf96896","fromSide":"bottom","toNode":"f269ef492212d76b","toSide":"left"},
+		{"id":"69158aab4eb169ef","fromNode":"784403f4fdf96896","fromSide":"right","toNode":"74e72a66194dd6c7","toSide":"left"},
+		{"id":"5848f01b53cda250","fromNode":"5e2521995bbf1273","fromSide":"bottom","toNode":"74e72a66194dd6c7","toSide":"top"},
+		{"id":"2980c17edb902de8","fromNode":"784403f4fdf96896","fromSide":"right","toNode":"5e2521995bbf1273","toSide":"left"}
+	]
+}

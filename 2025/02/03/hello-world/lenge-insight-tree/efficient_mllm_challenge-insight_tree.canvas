@@ -1,0 +1,14 @@
+{
+	"nodes":[
+		{"id":"93b2dd51dadee37a","type":"text","text":"efficient mllm challenge-insight tree","x":-116,"y":-46,"width":296,"height":86},
+		{"id":"c582e33cf516b3d5","type":"text","text":"多图输入","x":960,"y":172,"width":250,"height":60},
+		{"id":"c5451a4b935708a9","type":"text","text":"输入爆炸","x":260,"y":-220,"width":250,"height":60},
+		{"id":"4256de340ed39988","type":"text","text":"视频模态","x":620,"y":-435,"width":250,"height":60},
+		{"id":"1c74a6484259e041","type":"text","text":"长视频输入","x":930,"y":-350,"width":250,"height":60},
+		{"id":"cb6e795f24439dbb","type":"text","text":"流式视频输入","x":930,"y":-560,"width":250,"height":60},
+		{"id":"a4f00ea9e07780b4","type":"text","text":"图像模态","x":620,"y":70,"width":250,"height":60},
+		{"id":"e88731d185778ad6","type":"text","text":"高分辨率图像","x":960,"y":-3,"width":250,"height":60},
+		{"id":"34c4fbe9811882f8","x":1300,"y":130,"width":297,"height":168,"type":"text","text":"insight：不仅考虑单图的冗余性，还考虑多图的冗余性，进行inter-image的剪枝（不过输入多了，一般也都可以这样考虑吧）（参考论文TrimTokenator-LC）"}
+	],
+	"edges":[]
+}

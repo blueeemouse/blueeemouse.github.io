@@ -1,0 +1,36 @@
+{
+	"nodes":[
+		{"id":"d1994cba1e5c35a6","type":"text","text":"graph rag","x":520,"y":-248,"width":250,"height":60},
+		{"id":"18261bc7de5c4e3c","type":"text","text":"如果是graph rag，因为可能会在graph上检索，大家的方式都不一样。所以设计一个更加高效的、在graph上检索的方式就能提高efficiency","x":900,"y":-388,"width":250,"height":230},
+		{"id":"c353543bc82143bb","type":"text","text":"还可以从其它角度考虑。比如从cache角度考虑（这方面起码是见到一篇nips25的paper了）。它的着眼点是，当前query如果和之前的query相同/类似，那么检索的时候可以加快。因为它能更快检索到更可能相关的chunk，模型更有可能判断信息已经足够，从而减少检索次数，提高efficiency（而它的做法是动态更新边的embedding）","x":900,"y":-78,"width":250,"height":518},
+		{"id":"ce0adc6c792aca69","type":"text","text":"检索","x":140,"y":-333,"width":250,"height":60},
+		{"id":"8edfe6519bddabea","type":"text","text":"rag efficiency","x":-720,"y":-40,"width":250,"height":60},
+		{"id":"f00eb0298f63d381","type":"text","text":"哪些方法可以改进呢？","x":-420,"y":-40,"width":250,"height":60},
+		{"id":"f34a1f834896e74d","type":"text","text":"naive rag","x":510,"y":-805,"width":270,"height":60},
+		{"id":"b2c42edc90c19ebf","type":"text","text":"一般是用faiss建立索引和检索。要是想从这个底层来改进，应该有难度，而且工程量可能不小（毕竟是用了这么久的）","x":910,"y":-1260,"width":250,"height":190},
+		{"id":"fe650e62bf7168ff","type":"text","text":"虽然还没有工作做，但很显然的，参考下面提到的那个做法，动态更新embedding的方法也可以放到naive rag里。反正都是通过动态更新embedding实现对相似query的快速检索","x":910,"y":-745,"width":250,"height":300},
+		{"id":"efd6e1e622236cec","type":"text","text":"本质上这个考虑的是更实际的场景，即用户会不断提出问题","x":1360,"y":-126,"width":250,"height":135},
+		{"id":"c3538333279fbb17","type":"text","text":"有新的做法吗？","x":1360,"y":76,"width":250,"height":60},
+		{"id":"78cfb2a29f8fc416","type":"text","text":"最简单的，它是只动态更新边的embedding。我们也可以考虑动态更新节点和子图的embedding吧","x":1720,"y":-12,"width":250,"height":193},
+		{"id":"43aff031e421dfc1","type":"text","text":"增强","x":120,"y":800,"width":250,"height":60},
+		{"id":"db853038189cb39d","type":"text","text":"生成","x":120,"y":1108,"width":250,"height":60},
+		{"id":"ecfd46c7ae693cb3","type":"text","text":"这两个角度好像有点重复。因为现在读到的相关paper里（也是主要的paper了），它们从这方面切入的时候，其实可以说是两个角度都涉及了。rag检索了一定的外部文档，然后要基于这些文档进行回答，相当于我们一定要把上下文变长。这会增加TTFT。而对此的解决方法，目前见到有两类，一类是压缩（即压缩检索到的上下文）；一类是cache类（指对于检索过的文档，我们复用它的kv）","x":505,"y":848,"width":520,"height":260}
+	],
+	"edges":[
+		{"id":"0fca8f19f9c6985d","fromNode":"8edfe6519bddabea","fromSide":"right","toNode":"f00eb0298f63d381","toSide":"left"},
+		{"id":"733d4b2b8d025c01","fromNode":"f00eb0298f63d381","fromSide":"right","toNode":"ce0adc6c792aca69","toSide":"left"},
+		{"id":"bf6054a96883e4a7","fromNode":"ce0adc6c792aca69","fromSide":"right","toNode":"f34a1f834896e74d","toSide":"left"},
+		{"id":"30be6436f9a99303","fromNode":"f34a1f834896e74d","fromSide":"right","toNode":"b2c42edc90c19ebf","toSide":"left"},
+		{"id":"cb880c0f1aba5785","fromNode":"ce0adc6c792aca69","fromSide":"right","toNode":"d1994cba1e5c35a6","toSide":"left"},
+		{"id":"10042b8452680d62","fromNode":"d1994cba1e5c35a6","fromSide":"right","toNode":"18261bc7de5c4e3c","toSide":"left"},
+		{"id":"695fbf869bf98ee7","fromNode":"d1994cba1e5c35a6","fromSide":"right","toNode":"c353543bc82143bb","toSide":"left"},
+		{"id":"cdd041b33d80bf9c","fromNode":"c353543bc82143bb","fromSide":"right","toNode":"efd6e1e622236cec","toSide":"left"},
+		{"id":"fa383ea177c57324","fromNode":"c3538333279fbb17","fromSide":"right","toNode":"78cfb2a29f8fc416","toSide":"left"},
+		{"id":"7d1f346d7263aadc","fromNode":"c353543bc82143bb","fromSide":"right","toNode":"c3538333279fbb17","toSide":"left"},
+		{"id":"8a111dda1eeb3262","fromNode":"f34a1f834896e74d","fromSide":"right","toNode":"fe650e62bf7168ff","toSide":"left"},
+		{"id":"68294cd945a4b951","fromNode":"43aff031e421dfc1","fromSide":"right","toNode":"ecfd46c7ae693cb3","toSide":"left"},
+		{"id":"8a164d0c0ef3295d","fromNode":"db853038189cb39d","fromSide":"right","toNode":"ecfd46c7ae693cb3","toSide":"left"},
+		{"id":"c46b03bd04baea04","fromNode":"f00eb0298f63d381","fromSide":"right","toNode":"43aff031e421dfc1","toSide":"left"},
+		{"id":"01590748db5098f1","fromNode":"f00eb0298f63d381","fromSide":"right","toNode":"db853038189cb39d","toSide":"left"}
+	]
+}

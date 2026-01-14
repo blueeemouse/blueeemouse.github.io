@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="zotero video-understanding的paper 韩家炜专场 Deepretrieval You Don&#39;t Need That Much Data to Train a Search Agent via RL An Empirical Study on Reinforcement Learning for Reasoning-Search Interleaved LL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/11/01/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/paper%20list/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="zotero video-understanding的paper 韩家炜专场 Deepretrieval You Don&#39;t Need That Much Data to Train a Search Agent via RL An Empirical Study on Reinforcement Learning for Reasoning-Search Interleaved LL">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-11-01T07:24:49.673Z">
+<meta property="article:modified_time" content="2025-12-08T12:51:41.211Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/11/01/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/paper%20list/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/01/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/paper%20list/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-01 15:24:49" itemprop="dateCreated datePublished" datetime="2025-11-01T15:24:49+08:00">2025-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-12-08 20:51:41" itemprop="dateModified" datetime="2025-12-08T20:51:41+08:00">2025-12-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="zotero-video-understanding的paper">zotero
+video-understanding的paper</h3>
+<h3 id="韩家炜专场">韩家炜专场</h3>
+<p><a href="%5B查看文章%5D(https://scholar.google.com/citations?view_op=view_citation&amp;hl=zh-CN&amp;user=Kv9AbjMAAAAJ&amp;cstart=700&amp;pagesize=100&amp;citation_for_view=Kv9AbjMAAAAJ:_UjOBC8JSJkC)">Deepretrieval</a>
+<a href="%5B查看文章%5D(https://scholar.google.com/citations?view_op=view_citation&amp;hl=zh-CN&amp;user=Kv9AbjMAAAAJ&amp;cstart=900&amp;pagesize=100&amp;citation_for_view=Kv9AbjMAAAAJ:Y2PVIMc7JHAC)">You
+Don't Need That Much Data to Train a Search Agent via RL</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.15117">An Empirical Study on
+Reinforcement Learning for Reasoning-Search Interleaved LLM Agents</a>
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.07233">DynamicRAG: Leveraging
+Outputs of Large Language Model as Feedback for Dynamic Reranking in
+Retrieval-Augmented Generation</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.10996">RAS: Retrieval-And-Structuring
+for Knowledge-Intensive LLM Generation</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.19288">Hypercube-RAG: Hypercube-Based
+Retrieval-Augmented Generation for In-domain Scientific
+Question-Answering</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.03699">Llm
+alignment as retriever optimization: An information retrieval
+perspective</a> <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3711896.3736557">Retrieval and
+structuring augmented generation with large language models</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.18454">Hybrid Latent Reasoning via
+Reinforcement Learning</a> <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/CVPR2025/html/Fang_GRAPHGPT-O_Synergistic_Multimodal_Comprehension_and_Generation_on_Graphs_CVPR_2025_paper.html">Graphgpt-o:
+Synergistic multimodal comprehension and generation on graphs</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2508.03728">WINELL: wikipedia never-ending
+updating with LLM agents</a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2504.01346">GTR: Graph-Table-RAG for
+Cross-Table Question Answering</a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.15191">Structure-R1: Dynamically
+Leveraging Structural Knowledge in LLM Reasoning through Reinforcement
+Learning</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.07315">Vibe Checker:
+Aligning Code Evaluation with Human Preference</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2509.25140">ReasoningBank: Scaling Agent
+Self-Evolving with Reasoning Memory</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2509.12451">Topic Coverage-based
+Demonstration Retrieval for In-Context Learning</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2506.08364">CC-RAG: Structured Multi-Hop
+Reasoning via Theme-Based Causal Graphs</a> <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3701716.3715870">Retrieval and
+Structuring Augmented Generation with LLMs for Web Applications</a> <a target="_blank" rel="noopener" href="https://peterjin.me/tutorials/sdm25/proposal.pdf">Integrating
+Textual and Graph Data: Advancing Knowledge Discovery with Semantic and
+Structural Insights</a> ### <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2511.08892">Lumine</a>，用agent玩原神，且训练完之后能zero-shot迁移到其它的动作游戏（如鸣潮，黑神话）
+### 流式视频处理的paper（streaming video）。<a target="_blank" rel="noopener" href="https://huggingface.co/papers/2510.09608">这个网址</a>还随手推荐了一批paper
+### knowledge distillation了解一下 ###
+推荐系统了解一下。感觉未必说是要去做它本身，但是可以考虑借用其中的思想，或者把它当成一个工具。推荐，也可以视为一种搜索
+### zotero里，llm下属privacy类别读一下（好像是machine
+unlearning用于隐私数据删除的？），还有context-engineering类别也读一下。这可能是之后会扩展过来做的方向
+### rag类别里，MaxShapley: Towards Incentive-compatible Generative
+Search with Fair Context
+Attribution这篇，可以抽时间看看。不算特别实用或者有影响力的，但是感觉蛮有意思的
+#### 把ai回答拿过来： ##### 问题背景</p>
+<p>随着基于大语言模型(LLM)的生成式搜索引擎逐渐取代传统搜索（如Google的AI概览），信息生态系统的运作方式发生了根本性变化：</p>
+<ul>
+<li><p><strong>传统搜索</strong>：用户点击搜索结果，内容提供者通过流量获得广告收入</p></li>
+<li><p><strong>生成式搜索</strong>：AI直接生成答案，用户可能不再访问源网站，内容提供者失去流量和收入</p></li>
+</ul>
+<p>这导致了一个关键挑战：<strong>如何设计一个激励相容的机制，确保内容提供者能根据其真实贡献获得公平补偿</strong>，从而维持健康可持续的信息生态系统。
+##### 核心研究问题</p>
+<p>论文聚焦的具体问题是：<strong>在检索增强生成(RAG)管道中，如何高效且准确地归因计算每个检索文档对最终生成答案的贡献度</strong>。</p>
+<h3 id="on-the-computability-of-artificial-general-intelligence这篇看着也蛮有意思的它似乎是说从计算上我们无法创造agi就是说无法创造出能真正创新的ai而且这并不是第一篇在研究这方面的paper似乎谷歌学术上搜索可以发现有其它的类似paper">On
+the Computability of Artificial General
+Intelligence这篇看着也蛮有意思的。它似乎是说，从计算上，我们无法创造AGI（就是说无法创造出能真正创新的ai？而且这并不是第一篇在研究这方面的paper，似乎谷歌学术上搜索，可以发现有其它的类似paper）</h3>
+<h3 id="the-missing-layer-of-agi-from-pattern-alchemy-to-coordination-physics这篇好像是在从理论角度证明llm是可以进行真正的推理的只是需要加一些层">The
+Missing Layer of AGI: From Pattern Alchemy to Coordination
+Physics这篇好像是在从理论角度证明，llm是可以进行真正的推理的？只是需要加一些层</h3>
+<h3 id="mitigating-self-preference-by-authorship-obfuscation这篇讨论llm的自我偏好的bias它发现简单的手段可以缓解这种bias但无法完全消除它偏向分析了">Mitigating
+Self-Preference by Authorship
+Obfuscation这篇讨论llm的自我偏好的bias。它发现，简单的手段可以缓解这种bias，但无法完全消除它（偏向分析了）</h3>
+<h3 id="interleaved-latent-visual-reasoning-with-selective-perceptual-modeling最近这种交错生成推理的论文还挺多这是在干啥呢是小的新热潮还是新的发展方向">Interleaved
+Latent Visual Reasoning with Selective Perceptual
+Modeling最近这种交错生成/推理的论文还挺多？这是在干啥呢？是小的新热潮还是新的发展方向？</h3>
+<h3 id="prompting-science-report-4-playing-pretend-expert-personas-dont-improve-factual-accuracy简单讲这篇论文在尝试面对研究生级别的题目的时候给llm不同的角色看能不能提高效果结论是即使让llm扮演那些专业对口的高知角色也基本不太能提高性能如果让它扮演专业不对口的或者是低知角色则会拉低性能">Prompting
+Science Report 4: Playing Pretend: Expert Personas Don't Improve Factual
+<strong>Accuracy</strong>简单讲，这篇论文在尝试面对研究生级别的题目的时候，给llm不同的角色，看能不能提高效果。结论是，即使让llm扮演那些专业对口的高知角色，也基本不太能提高性能。如果让它扮演专业不对口的，或者是低知角色，则会拉低性能</h3>
+<h3 id="sharp-shallow-layer-pruning-for-video-large-language-models-acceleration对vlm的一种剪枝加速oppo和bupt的">ShaRP:
+SHAllow-LayeR Pruning for Video Large Language Models
+Acceleration，对vlm的一种剪枝加速。oppo和bupt的</h3>
+<h3 id="parauni-enhance-generation-in-unified-multimodal-model-with-reinforcement-driven-hierarchical-parallel-information-interaction这个是做统一模型生成的它关注到视觉模型里不同层是有很丰富的特征的低层视觉特征的到高层的语义特征但生成模型部分没有很好地利用起来所以论文在尝试把这部分特征利用起来最终发现能提高生成质量ustc和华为的">ParaUni:
+Enhance Generation in Unified Multimodal Model with Reinforcement-driven
+Hierarchical Parallel Information
+Interaction。这个是做统一模型生成的，它关注到，视觉模型里不同层是有很丰富的特征的（低层视觉特征的到高层的语义特征），但生成模型部分没有很好地利用起来。所以论文在尝试把这部分特征利用起来，最终发现能提高生成质量。ustc和华为的</h3>
+<h3 id="conscious-gaze-adaptive-attention-mechanisms-for-hallucination-mitigation-in-vision-language-models嗯这个是研究vlm的幻觉的它关注到幻觉产生的一个原因是vlm会从视觉特征漂移到语言先验个人理解可能类似于看图的时候看到一个比较典型的东西就开始联想到自己以往见过的文字描述了之后就抛开图像进行理解和生成了最终体现出来就是幻觉了然后这篇论文希望能在vlm的内部就加上一些模块在发现将要偏移的时候及时制止把注意力拉回来感觉挺合理的似乎也蛮有意思的只不过是中国矿业大学的稍微的让人有点担心狗眼看人低了">Conscious
+Gaze: Adaptive Attention Mechanisms for Hallucination Mitigation in
+Vision-Language
+Models。嗯，这个是研究vlm的幻觉的。它关注到，幻觉产生的一个原因是，vlm会从视觉特征漂移到语言先验（个人理解，可能类似于，看图的时候，看到一个比较典型的东西，就开始联想到自己以往见过的文字描述了，之后就抛开图像进行理解和生成了。最终体现出来就是幻觉了）。然后这篇论文希望能在vlm的内部就加上一些模块，在发现将要偏移的时候，及时制止，把注意力拉回来（感觉挺合理的，似乎也蛮有意思的。只不过是中国矿业大学的，稍微的让人有点担心（狗眼看人低了……）</h3>
+<h3 id="probing-the-effectiveness-of-world-models-for-spatial-reasoning-through-test-time-scaling研究世界模型的可以开拓下眼界吧它关注的问题似乎是vlm在处理需要多视角理解和具身视角转换的空间推理任务上表现不够好现有方法在测试的时候使用世界模型来缓解这一问题并使用启发式验证器选择有用的视角但是对这些验证器缺乏系统的行为分析大概是说一直在用验证器解决多视角问题但是对这个验证器不够了解是吗">Probing
+the effectiveness of World Models for Spatial Reasoning through
+Test-time
+Scaling研究世界模型的。可以开拓下眼界吧。它关注的问题似乎是，vlm在处理需要多视角理解和具身视角转换的空间推理任务上，表现不够好。现有方法在测试的时候，使用世界模型，来缓解这一问题，并使用启发式验证器选择有用的视角，但是对这些验证器缺乏系统的行为分析（大概是说，一直在用验证器解决多视角问题，但是对这个验证器不够了解是吗？）</h3>
+<h3 id="hq-dm-single-hadamard-transformation-based-quantization-aware-training-for-low-bit-diffusion-models这篇关注的是扩散模型的量化简单讲扩散模型在量化的时候会遇到困难似乎是因为它的激活矩阵里面会有异常值所以用一般的量化方法性能会显著下降论文正是针对这一点进行处理ustc的">HQ-DM:
+Single Hadamard Transformation-Based Quantization-Aware Training for
+Low-Bit Diffusion
+Models。这篇关注的是扩散模型的量化。简单讲，扩散模型在量化的时候会遇到困难，似乎是因为它的激活矩阵里面会有异常值，所以用一般的量化方法性能会显著下降。论文正是针对这一点，进行处理。ustc的</h3>
+<h3 id="usv-unified-sparsification-for-accelerating-video-diffusion-models也是做扩散模型加速的它的出发点是现有方法对扩散模型加速的时候一般都是针对一个瓶颈去优化的容易遇到收益递减问题所以论文提出从多个角度下手同时优化国科大和腾讯混元的看着还蛮权威的">USV:
+Unified Sparsification for Accelerating Video Diffusion
+Models。也是做扩散模型加速的。它的出发点是，现有方法对扩散模型加速的时候，一般都是针对一个瓶颈去优化的，容易遇到收益递减问题。所以论文提出从多个角度下手同时优化（国科大和腾讯混元的，看着还蛮权威的）</h3>
+<h3 id="bring-your-dreams-to-life-continual-text-to-video-customization这篇有点类似于定制化的多模态模型不过它聚焦的是定制视频生成它的出发点是在定制的文本到视频生成任务中个性化概念都是不变的也就是不能更新概念吧而且学新的概念的时候会发生遗忘经典好多人做的工作">Bring
+Your Dreams to Life: Continual Text-to-Video
+Customization。这篇有点类似于定制化的多模态模型，不过它聚焦的是定制视频生成。它的出发点是，在定制的文本到视频生成任务中，个性化概念都是不变的（也就是不能更新概念吧？），而且学新的概念的时候，会发生遗忘（经典）（好多人做的工作）</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/10/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E9%9A%8F%E7%AC%941/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%EF%BC%89/" rel="next" title="neo4j安装（Ubuntu）">
+      neo4j安装（Ubuntu） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#zotero-video-understanding%E7%9A%84paper"><span class="nav-number">1.</span> <span class="nav-text">zotero
+video-understanding的paper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9F%A9%E5%AE%B6%E7%82%9C%E4%B8%93%E5%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">韩家炜专场</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#on-the-computability-of-artificial-general-intelligence%E8%BF%99%E7%AF%87%E7%9C%8B%E7%9D%80%E4%B9%9F%E8%9B%AE%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E5%AE%83%E4%BC%BC%E4%B9%8E%E6%98%AF%E8%AF%B4%E4%BB%8E%E8%AE%A1%E7%AE%97%E4%B8%8A%E6%88%91%E4%BB%AC%E6%97%A0%E6%B3%95%E5%88%9B%E9%80%A0agi%E5%B0%B1%E6%98%AF%E8%AF%B4%E6%97%A0%E6%B3%95%E5%88%9B%E9%80%A0%E5%87%BA%E8%83%BD%E7%9C%9F%E6%AD%A3%E5%88%9B%E6%96%B0%E7%9A%84ai%E8%80%8C%E4%B8%94%E8%BF%99%E5%B9%B6%E4%B8%8D%E6%98%AF%E7%AC%AC%E4%B8%80%E7%AF%87%E5%9C%A8%E7%A0%94%E7%A9%B6%E8%BF%99%E6%96%B9%E9%9D%A2%E7%9A%84paper%E4%BC%BC%E4%B9%8E%E8%B0%B7%E6%AD%8C%E5%AD%A6%E6%9C%AF%E4%B8%8A%E6%90%9C%E7%B4%A2%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E6%9C%89%E5%85%B6%E5%AE%83%E7%9A%84%E7%B1%BB%E4%BC%BCpaper"><span class="nav-number">3.</span> <span class="nav-text">On
+the Computability of Artificial General
+Intelligence这篇看着也蛮有意思的。它似乎是说，从计算上，我们无法创造AGI（就是说无法创造出能真正创新的ai？而且这并不是第一篇在研究这方面的paper，似乎谷歌学术上搜索，可以发现有其它的类似paper）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#the-missing-layer-of-agi-from-pattern-alchemy-to-coordination-physics%E8%BF%99%E7%AF%87%E5%A5%BD%E5%83%8F%E6%98%AF%E5%9C%A8%E4%BB%8E%E7%90%86%E8%AE%BA%E8%A7%92%E5%BA%A6%E8%AF%81%E6%98%8Ellm%E6%98%AF%E5%8F%AF%E4%BB%A5%E8%BF%9B%E8%A1%8C%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%8E%A8%E7%90%86%E7%9A%84%E5%8F%AA%E6%98%AF%E9%9C%80%E8%A6%81%E5%8A%A0%E4%B8%80%E4%BA%9B%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">The
+Missing Layer of AGI: From Pattern Alchemy to Coordination
+Physics这篇好像是在从理论角度证明，llm是可以进行真正的推理的？只是需要加一些层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mitigating-self-preference-by-authorship-obfuscation%E8%BF%99%E7%AF%87%E8%AE%A8%E8%AE%BAllm%E7%9A%84%E8%87%AA%E6%88%91%E5%81%8F%E5%A5%BD%E7%9A%84bias%E5%AE%83%E5%8F%91%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84%E6%89%8B%E6%AE%B5%E5%8F%AF%E4%BB%A5%E7%BC%93%E8%A7%A3%E8%BF%99%E7%A7%8Dbias%E4%BD%86%E6%97%A0%E6%B3%95%E5%AE%8C%E5%85%A8%E6%B6%88%E9%99%A4%E5%AE%83%E5%81%8F%E5%90%91%E5%88%86%E6%9E%90%E4%BA%86"><span class="nav-number">5.</span> <span class="nav-text">Mitigating
+Self-Preference by Authorship
+Obfuscation这篇讨论llm的自我偏好的bias。它发现，简单的手段可以缓解这种bias，但无法完全消除它（偏向分析了）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interleaved-latent-visual-reasoning-with-selective-perceptual-modeling%E6%9C%80%E8%BF%91%E8%BF%99%E7%A7%8D%E4%BA%A4%E9%94%99%E7%94%9F%E6%88%90%E6%8E%A8%E7%90%86%E7%9A%84%E8%AE%BA%E6%96%87%E8%BF%98%E6%8C%BA%E5%A4%9A%E8%BF%99%E6%98%AF%E5%9C%A8%E5%B9%B2%E5%95%A5%E5%91%A2%E6%98%AF%E5%B0%8F%E7%9A%84%E6%96%B0%E7%83%AD%E6%BD%AE%E8%BF%98%E6%98%AF%E6%96%B0%E7%9A%84%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91"><span class="nav-number">6.</span> <span class="nav-text">Interleaved
+Latent Visual Reasoning with Selective Perceptual
+Modeling最近这种交错生成&#x2F;推理的论文还挺多？这是在干啥呢？是小的新热潮还是新的发展方向？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prompting-science-report-4-playing-pretend-expert-personas-dont-improve-factual-accuracy%E7%AE%80%E5%8D%95%E8%AE%B2%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E5%9C%A8%E5%B0%9D%E8%AF%95%E9%9D%A2%E5%AF%B9%E7%A0%94%E7%A9%B6%E7%94%9F%E7%BA%A7%E5%88%AB%E7%9A%84%E9%A2%98%E7%9B%AE%E7%9A%84%E6%97%B6%E5%80%99%E7%BB%99llm%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A7%92%E8%89%B2%E7%9C%8B%E8%83%BD%E4%B8%8D%E8%83%BD%E6%8F%90%E9%AB%98%E6%95%88%E6%9E%9C%E7%BB%93%E8%AE%BA%E6%98%AF%E5%8D%B3%E4%BD%BF%E8%AE%A9llm%E6%89%AE%E6%BC%94%E9%82%A3%E4%BA%9B%E4%B8%93%E4%B8%9A%E5%AF%B9%E5%8F%A3%E7%9A%84%E9%AB%98%E7%9F%A5%E8%A7%92%E8%89%B2%E4%B9%9F%E5%9F%BA%E6%9C%AC%E4%B8%8D%E5%A4%AA%E8%83%BD%E6%8F%90%E9%AB%98%E6%80%A7%E8%83%BD%E5%A6%82%E6%9E%9C%E8%AE%A9%E5%AE%83%E6%89%AE%E6%BC%94%E4%B8%93%E4%B8%9A%E4%B8%8D%E5%AF%B9%E5%8F%A3%E7%9A%84%E6%88%96%E8%80%85%E6%98%AF%E4%BD%8E%E7%9F%A5%E8%A7%92%E8%89%B2%E5%88%99%E4%BC%9A%E6%8B%89%E4%BD%8E%E6%80%A7%E8%83%BD"><span class="nav-number">7.</span> <span class="nav-text">Prompting
+Science Report 4: Playing Pretend: Expert Personas Don&#39;t Improve Factual
+Accuracy简单讲，这篇论文在尝试面对研究生级别的题目的时候，给llm不同的角色，看能不能提高效果。结论是，即使让llm扮演那些专业对口的高知角色，也基本不太能提高性能。如果让它扮演专业不对口的，或者是低知角色，则会拉低性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sharp-shallow-layer-pruning-for-video-large-language-models-acceleration%E5%AF%B9vlm%E7%9A%84%E4%B8%80%E7%A7%8D%E5%89%AA%E6%9E%9D%E5%8A%A0%E9%80%9Foppo%E5%92%8Cbupt%E7%9A%84"><span class="nav-number">8.</span> <span class="nav-text">ShaRP:
+SHAllow-LayeR Pruning for Video Large Language Models
+Acceleration，对vlm的一种剪枝加速。oppo和bupt的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parauni-enhance-generation-in-unified-multimodal-model-with-reinforcement-driven-hierarchical-parallel-information-interaction%E8%BF%99%E4%B8%AA%E6%98%AF%E5%81%9A%E7%BB%9F%E4%B8%80%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90%E7%9A%84%E5%AE%83%E5%85%B3%E6%B3%A8%E5%88%B0%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B%E9%87%8C%E4%B8%8D%E5%90%8C%E5%B1%82%E6%98%AF%E6%9C%89%E5%BE%88%E4%B8%B0%E5%AF%8C%E7%9A%84%E7%89%B9%E5%BE%81%E7%9A%84%E4%BD%8E%E5%B1%82%E8%A7%86%E8%A7%89%E7%89%B9%E5%BE%81%E7%9A%84%E5%88%B0%E9%AB%98%E5%B1%82%E7%9A%84%E8%AF%AD%E4%B9%89%E7%89%B9%E5%BE%81%E4%BD%86%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E9%83%A8%E5%88%86%E6%B2%A1%E6%9C%89%E5%BE%88%E5%A5%BD%E5%9C%B0%E5%88%A9%E7%94%A8%E8%B5%B7%E6%9D%A5%E6%89%80%E4%BB%A5%E8%AE%BA%E6%96%87%E5%9C%A8%E5%B0%9D%E8%AF%95%E6%8A%8A%E8%BF%99%E9%83%A8%E5%88%86%E7%89%B9%E5%BE%81%E5%88%A9%E7%94%A8%E8%B5%B7%E6%9D%A5%E6%9C%80%E7%BB%88%E5%8F%91%E7%8E%B0%E8%83%BD%E6%8F%90%E9%AB%98%E7%94%9F%E6%88%90%E8%B4%A8%E9%87%8Fustc%E5%92%8C%E5%8D%8E%E4%B8%BA%E7%9A%84"><span class="nav-number">9.</span> <span class="nav-text">ParaUni:
+Enhance Generation in Unified Multimodal Model with Reinforcement-driven
+Hierarchical Parallel Information
+Interaction。这个是做统一模型生成的，它关注到，视觉模型里不同层是有很丰富的特征的（低层视觉特征的到高层的语义特征），但生成模型部分没有很好地利用起来。所以论文在尝试把这部分特征利用起来，最终发现能提高生成质量。ustc和华为的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conscious-gaze-adaptive-attention-mechanisms-for-hallucination-mitigation-in-vision-language-models%E5%97%AF%E8%BF%99%E4%B8%AA%E6%98%AF%E7%A0%94%E7%A9%B6vlm%E7%9A%84%E5%B9%BB%E8%A7%89%E7%9A%84%E5%AE%83%E5%85%B3%E6%B3%A8%E5%88%B0%E5%B9%BB%E8%A7%89%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%80%E4%B8%AA%E5%8E%9F%E5%9B%A0%E6%98%AFvlm%E4%BC%9A%E4%BB%8E%E8%A7%86%E8%A7%89%E7%89%B9%E5%BE%81%E6%BC%82%E7%A7%BB%E5%88%B0%E8%AF%AD%E8%A8%80%E5%85%88%E9%AA%8C%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3%E5%8F%AF%E8%83%BD%E7%B1%BB%E4%BC%BC%E4%BA%8E%E7%9C%8B%E5%9B%BE%E7%9A%84%E6%97%B6%E5%80%99%E7%9C%8B%E5%88%B0%E4%B8%80%E4%B8%AA%E6%AF%94%E8%BE%83%E5%85%B8%E5%9E%8B%E7%9A%84%E4%B8%9C%E8%A5%BF%E5%B0%B1%E5%BC%80%E5%A7%8B%E8%81%94%E6%83%B3%E5%88%B0%E8%87%AA%E5%B7%B1%E4%BB%A5%E5%BE%80%E8%A7%81%E8%BF%87%E7%9A%84%E6%96%87%E5%AD%97%E6%8F%8F%E8%BF%B0%E4%BA%86%E4%B9%8B%E5%90%8E%E5%B0%B1%E6%8A%9B%E5%BC%80%E5%9B%BE%E5%83%8F%E8%BF%9B%E8%A1%8C%E7%90%86%E8%A7%A3%E5%92%8C%E7%94%9F%E6%88%90%E4%BA%86%E6%9C%80%E7%BB%88%E4%BD%93%E7%8E%B0%E5%87%BA%E6%9D%A5%E5%B0%B1%E6%98%AF%E5%B9%BB%E8%A7%89%E4%BA%86%E7%84%B6%E5%90%8E%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E5%B8%8C%E6%9C%9B%E8%83%BD%E5%9C%A8vlm%E7%9A%84%E5%86%85%E9%83%A8%E5%B0%B1%E5%8A%A0%E4%B8%8A%E4%B8%80%E4%BA%9B%E6%A8%A1%E5%9D%97%E5%9C%A8%E5%8F%91%E7%8E%B0%E5%B0%86%E8%A6%81%E5%81%8F%E7%A7%BB%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%8A%E6%97%B6%E5%88%B6%E6%AD%A2%E6%8A%8A%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%8B%89%E5%9B%9E%E6%9D%A5%E6%84%9F%E8%A7%89%E6%8C%BA%E5%90%88%E7%90%86%E7%9A%84%E4%BC%BC%E4%B9%8E%E4%B9%9F%E8%9B%AE%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%98%AF%E4%B8%AD%E5%9B%BD%E7%9F%BF%E4%B8%9A%E5%A4%A7%E5%AD%A6%E7%9A%84%E7%A8%8D%E5%BE%AE%E7%9A%84%E8%AE%A9%E4%BA%BA%E6%9C%89%E7%82%B9%E6%8B%85%E5%BF%83%E7%8B%97%E7%9C%BC%E7%9C%8B%E4%BA%BA%E4%BD%8E%E4%BA%86"><span class="nav-number">10.</span> <span class="nav-text">Conscious
+Gaze: Adaptive Attention Mechanisms for Hallucination Mitigation in
+Vision-Language
+Models。嗯，这个是研究vlm的幻觉的。它关注到，幻觉产生的一个原因是，vlm会从视觉特征漂移到语言先验（个人理解，可能类似于，看图的时候，看到一个比较典型的东西，就开始联想到自己以往见过的文字描述了，之后就抛开图像进行理解和生成了。最终体现出来就是幻觉了）。然后这篇论文希望能在vlm的内部就加上一些模块，在发现将要偏移的时候，及时制止，把注意力拉回来（感觉挺合理的，似乎也蛮有意思的。只不过是中国矿业大学的，稍微的让人有点担心（狗眼看人低了……）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#probing-the-effectiveness-of-world-models-for-spatial-reasoning-through-test-time-scaling%E7%A0%94%E7%A9%B6%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E4%BB%A5%E5%BC%80%E6%8B%93%E4%B8%8B%E7%9C%BC%E7%95%8C%E5%90%A7%E5%AE%83%E5%85%B3%E6%B3%A8%E7%9A%84%E9%97%AE%E9%A2%98%E4%BC%BC%E4%B9%8E%E6%98%AFvlm%E5%9C%A8%E5%A4%84%E7%90%86%E9%9C%80%E8%A6%81%E5%A4%9A%E8%A7%86%E8%A7%92%E7%90%86%E8%A7%A3%E5%92%8C%E5%85%B7%E8%BA%AB%E8%A7%86%E8%A7%92%E8%BD%AC%E6%8D%A2%E7%9A%84%E7%A9%BA%E9%97%B4%E6%8E%A8%E7%90%86%E4%BB%BB%E5%8A%A1%E4%B8%8A%E8%A1%A8%E7%8E%B0%E4%B8%8D%E5%A4%9F%E5%A5%BD%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E5%9C%A8%E6%B5%8B%E8%AF%95%E7%9A%84%E6%97%B6%E5%80%99%E4%BD%BF%E7%94%A8%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B%E6%9D%A5%E7%BC%93%E8%A7%A3%E8%BF%99%E4%B8%80%E9%97%AE%E9%A2%98%E5%B9%B6%E4%BD%BF%E7%94%A8%E5%90%AF%E5%8F%91%E5%BC%8F%E9%AA%8C%E8%AF%81%E5%99%A8%E9%80%89%E6%8B%A9%E6%9C%89%E7%94%A8%E7%9A%84%E8%A7%86%E8%A7%92%E4%BD%86%E6%98%AF%E5%AF%B9%E8%BF%99%E4%BA%9B%E9%AA%8C%E8%AF%81%E5%99%A8%E7%BC%BA%E4%B9%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90%E5%A4%A7%E6%A6%82%E6%98%AF%E8%AF%B4%E4%B8%80%E7%9B%B4%E5%9C%A8%E7%94%A8%E9%AA%8C%E8%AF%81%E5%99%A8%E8%A7%A3%E5%86%B3%E5%A4%9A%E8%A7%86%E8%A7%92%E9%97%AE%E9%A2%98%E4%BD%86%E6%98%AF%E5%AF%B9%E8%BF%99%E4%B8%AA%E9%AA%8C%E8%AF%81%E5%99%A8%E4%B8%8D%E5%A4%9F%E4%BA%86%E8%A7%A3%E6%98%AF%E5%90%97"><span class="nav-number">11.</span> <span class="nav-text">Probing
+the effectiveness of World Models for Spatial Reasoning through
+Test-time
+Scaling研究世界模型的。可以开拓下眼界吧。它关注的问题似乎是，vlm在处理需要多视角理解和具身视角转换的空间推理任务上，表现不够好。现有方法在测试的时候，使用世界模型，来缓解这一问题，并使用启发式验证器选择有用的视角，但是对这些验证器缺乏系统的行为分析（大概是说，一直在用验证器解决多视角问题，但是对这个验证器不够了解是吗？）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hq-dm-single-hadamard-transformation-based-quantization-aware-training-for-low-bit-diffusion-models%E8%BF%99%E7%AF%87%E5%85%B3%E6%B3%A8%E7%9A%84%E6%98%AF%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%87%8F%E5%8C%96%E7%AE%80%E5%8D%95%E8%AE%B2%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E5%9C%A8%E9%87%8F%E5%8C%96%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E9%81%87%E5%88%B0%E5%9B%B0%E9%9A%BE%E4%BC%BC%E4%B9%8E%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%AE%83%E7%9A%84%E6%BF%80%E6%B4%BB%E7%9F%A9%E9%98%B5%E9%87%8C%E9%9D%A2%E4%BC%9A%E6%9C%89%E5%BC%82%E5%B8%B8%E5%80%BC%E6%89%80%E4%BB%A5%E7%94%A8%E4%B8%80%E8%88%AC%E7%9A%84%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95%E6%80%A7%E8%83%BD%E4%BC%9A%E6%98%BE%E8%91%97%E4%B8%8B%E9%99%8D%E8%AE%BA%E6%96%87%E6%AD%A3%E6%98%AF%E9%92%88%E5%AF%B9%E8%BF%99%E4%B8%80%E7%82%B9%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86ustc%E7%9A%84"><span class="nav-number">12.</span> <span class="nav-text">HQ-DM:
+Single Hadamard Transformation-Based Quantization-Aware Training for
+Low-Bit Diffusion
+Models。这篇关注的是扩散模型的量化。简单讲，扩散模型在量化的时候会遇到困难，似乎是因为它的激活矩阵里面会有异常值，所以用一般的量化方法性能会显著下降。论文正是针对这一点，进行处理。ustc的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usv-unified-sparsification-for-accelerating-video-diffusion-models%E4%B9%9F%E6%98%AF%E5%81%9A%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F%E7%9A%84%E5%AE%83%E7%9A%84%E5%87%BA%E5%8F%91%E7%82%B9%E6%98%AF%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E5%AF%B9%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%80%E8%88%AC%E9%83%BD%E6%98%AF%E9%92%88%E5%AF%B9%E4%B8%80%E4%B8%AA%E7%93%B6%E9%A2%88%E5%8E%BB%E4%BC%98%E5%8C%96%E7%9A%84%E5%AE%B9%E6%98%93%E9%81%87%E5%88%B0%E6%94%B6%E7%9B%8A%E9%80%92%E5%87%8F%E9%97%AE%E9%A2%98%E6%89%80%E4%BB%A5%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BA%E4%BB%8E%E5%A4%9A%E4%B8%AA%E8%A7%92%E5%BA%A6%E4%B8%8B%E6%89%8B%E5%90%8C%E6%97%B6%E4%BC%98%E5%8C%96%E5%9B%BD%E7%A7%91%E5%A4%A7%E5%92%8C%E8%85%BE%E8%AE%AF%E6%B7%B7%E5%85%83%E7%9A%84%E7%9C%8B%E7%9D%80%E8%BF%98%E8%9B%AE%E6%9D%83%E5%A8%81%E7%9A%84"><span class="nav-number">13.</span> <span class="nav-text">USV:
+Unified Sparsification for Accelerating Video Diffusion
+Models。也是做扩散模型加速的。它的出发点是，现有方法对扩散模型加速的时候，一般都是针对一个瓶颈去优化的，容易遇到收益递减问题。所以论文提出从多个角度下手同时优化（国科大和腾讯混元的，看着还蛮权威的）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bring-your-dreams-to-life-continual-text-to-video-customization%E8%BF%99%E7%AF%87%E6%9C%89%E7%82%B9%E7%B1%BB%E4%BC%BC%E4%BA%8E%E5%AE%9A%E5%88%B6%E5%8C%96%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B%E4%B8%8D%E8%BF%87%E5%AE%83%E8%81%9A%E7%84%A6%E7%9A%84%E6%98%AF%E5%AE%9A%E5%88%B6%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E5%AE%83%E7%9A%84%E5%87%BA%E5%8F%91%E7%82%B9%E6%98%AF%E5%9C%A8%E5%AE%9A%E5%88%B6%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%B0%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E4%BB%BB%E5%8A%A1%E4%B8%AD%E4%B8%AA%E6%80%A7%E5%8C%96%E6%A6%82%E5%BF%B5%E9%83%BD%E6%98%AF%E4%B8%8D%E5%8F%98%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%B8%8D%E8%83%BD%E6%9B%B4%E6%96%B0%E6%A6%82%E5%BF%B5%E5%90%A7%E8%80%8C%E4%B8%94%E5%AD%A6%E6%96%B0%E7%9A%84%E6%A6%82%E5%BF%B5%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E5%8F%91%E7%94%9F%E9%81%97%E5%BF%98%E7%BB%8F%E5%85%B8%E5%A5%BD%E5%A4%9A%E4%BA%BA%E5%81%9A%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-number">14.</span> <span class="nav-text">Bring
+Your Dreams to Life: Continual Text-to-Video
+Customization。这篇有点类似于定制化的多模态模型，不过它聚焦的是定制视频生成。它的出发点是，在定制的文本到视频生成任务中，个性化概念都是不变的（也就是不能更新概念吧？），而且学新的概念的时候，会发生遗忘（经典）（好多人做的工作）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

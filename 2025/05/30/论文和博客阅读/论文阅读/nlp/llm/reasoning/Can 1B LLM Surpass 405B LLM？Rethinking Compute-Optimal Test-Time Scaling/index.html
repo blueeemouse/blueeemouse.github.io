@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1. abstract 这篇论文关注的是，在不同的policy models、PRMs（Process Reward Models）以及problem difficulty下，是否有一个最优的tts策略？以及，tts方法的扩展上限在哪里？小模型能否通过tts，在推理方面胜过大模型？ 结果表明，tts的策略选择极大地依赖于policy model，PRM以及problem difficul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Can 1B LLM Surpass 405B LLM？Rethinking Compute-Optimal Test-Time Scaling">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/reasoning/Can%201B%20LLM%20Surpass%20405B%20LLM%EF%BC%9FRethinking%20Compute-Optimal%20Test-Time%20Scaling/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="1. abstract 这篇论文关注的是，在不同的policy models、PRMs（Process Reward Models）以及problem difficulty下，是否有一个最优的tts策略？以及，tts方法的扩展上限在哪里？小模型能否通过tts，在推理方面胜过大模型？ 结果表明，tts的策略选择极大地依赖于policy model，PRM以及problem difficul">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-30T07:26:00.000Z">
+<meta property="article:modified_time" content="2025-05-30T08:35:29.038Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="TTS">
+<meta property="article:tag" content="inference">
+<meta property="article:tag" content="llm">
+<meta property="article:tag" content="reasoning">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/reasoning/Can%201B%20LLM%20Surpass%20405B%20LLM%EF%BC%9FRethinking%20Compute-Optimal%20Test-Time%20Scaling/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Can 1B LLM Surpass 405B LLM？Rethinking Compute-Optimal Test-Time Scaling | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/reasoning/Can%201B%20LLM%20Surpass%20405B%20LLM%EF%BC%9FRethinking%20Compute-Optimal%20Test-Time%20Scaling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Can 1B LLM Surpass 405B LLM？Rethinking Compute-Optimal Test-Time Scaling
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-30 15:26:00 / Modified: 16:35:29" itemprop="dateCreated datePublished" datetime="2025-05-30T15:26:00+08:00">2025-05-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/llm/reasoning/" itemprop="url" rel="index"><span itemprop="name">reasoning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="abstract">1. abstract</h1>
+<h2 id="这篇论文关注的是在不同的policy-modelsprmsprocess-reward-models以及problem-difficulty下是否有一个最优的tts策略-以及tts方法的扩展上限在哪里小模型能否通过tts在推理方面胜过大模型">这篇论文关注的是，在不同的policy
+models、PRMs（Process Reward Models）以及problem
+difficulty下，是否有一个最优的tts策略？<br>以及，tts方法的扩展上限在哪里？小模型能否通过tts，在推理方面胜过大模型？</h2>
+<h2 id="结果表明tts的策略选择极大地依赖于policy-modelprm以及problem-difficulty">结果表明，tts的策略选择极大地依赖于policy
+model，PRM以及problem difficulty；</h2>
+<h2 id="另外小模型确实能通过tts的扩展在推理方面击败大模型">另外，小模型确实能通过tts的扩展，在推理方面击败大模型</h2>
+<h2 id="综上tts是一个在提高llm推理能力上比较有前景的方法">综上，tts是一个在提高llm推理能力上比较有前景的方法</h2>
+<span id="more"></span>
+<p>问题：什么是tts？它是怎么运作的？ 什么是policy
+models？看论文里的脚注，好像是指推理情景下，生成答案的llms？
+那什么是Process Reward Models？ # 2. Setup &amp; Preliminaries ## 2.1.
+Problem Formulation ### 首先，我们把推理问题放到马尔可夫决策过程（Markov
+Decision Process，MDP）的框架下。它的五元组是<span class="math inline">\((S,A,P,R,\gamma)\)</span>，分别表示状态空间、动作空间、转移函数、奖励函数以及折扣因子
+###
+给定prompt（对应到推理问题，也就是给定问题），大模型（或者说策略模型，policy）需要开始产生动作：<span class="math inline">\(a_{1}\sim
+\pi_{\theta}(\cdot|s_{1})\)</span>，由此得到一个奖励<span class="math inline">\(R(s_{1},a_{1})\)</span>，并转移状态到<span class="math inline">\(s_{2}=[s_{1},a_{1}]\)</span>（此处<span class="math inline">\([\cdot,\cdot]\)</span>表示把两个字符串给拼起来。重复上述过程，直至这一幕（episode）结束，或者达到了最大的生成步数，又或者生成了<span class="math inline">\(&lt;EOS&gt;\)</span>
+token<br>最终，我们得到了一个trajectory，记作<span class="math inline">\(\tau =\{  a_{1},a_{2},\cdots,a_{H} \}\)</span> ##
+2.2. Test-Time Scaling Method ###
+这里是在规定，我们要考察哪些TTS方法。主要是Best-of-N（BoN），beam
+search以及Diverse Verifier Tree
+Search（DVTS）<br>这里需要注意一个点，因为lookahead
+search效率不高，所以这里不对这种方式进行评估，且涉及到lookahead
+search的方式也都不评估（例如Monte Carlo Tree Search，MCTS） ## 2.3.
+Compute-Optimal Test-Time Scaling ###
+感觉这里实质上就是给出一个优化函数，即，我们希望学习参数，使得回答正确率尽可能高（可这不是废话吗？还是说，这里是想告诉我们，推理模型的训练，不是一般的那种llm的训练了，是得关注问题准确率，而非一定要重复标准答案？）
+问题：什么是lookahead search？ 什么是Compute-Optimal Test-Time
+Scaling？</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TTS/" rel="tag"># TTS</a>
+              <a href="/tags/inference/" rel="tag"># inference</a>
+              <a href="/tags/llm/" rel="tag"># llm</a>
+              <a href="/tags/reasoning/" rel="tag"># reasoning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/05/30/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%8E%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" rel="prev" title="线性回归与逻辑回归">
+      <i class="fa fa-chevron-left"></i> 线性回归与逻辑回归
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/05/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/reasoning/Learning%20to%20reason%20with%20LLMs/" rel="next" title="Learning to reason with LLMs">
+      Learning to reason with LLMs <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#abstract"><span class="nav-number">1.</span> <span class="nav-text">1. abstract</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E5%85%B3%E6%B3%A8%E7%9A%84%E6%98%AF%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84policy-modelsprmsprocess-reward-models%E4%BB%A5%E5%8F%8Aproblem-difficulty%E4%B8%8B%E6%98%AF%E5%90%A6%E6%9C%89%E4%B8%80%E4%B8%AA%E6%9C%80%E4%BC%98%E7%9A%84tts%E7%AD%96%E7%95%A5-%E4%BB%A5%E5%8F%8Atts%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A9%E5%B1%95%E4%B8%8A%E9%99%90%E5%9C%A8%E5%93%AA%E9%87%8C%E5%B0%8F%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%90%A6%E9%80%9A%E8%BF%87tts%E5%9C%A8%E6%8E%A8%E7%90%86%E6%96%B9%E9%9D%A2%E8%83%9C%E8%BF%87%E5%A4%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">这篇论文关注的是，在不同的policy
+models、PRMs（Process Reward Models）以及problem
+difficulty下，是否有一个最优的tts策略？以及，tts方法的扩展上限在哪里？小模型能否通过tts，在推理方面胜过大模型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E8%A1%A8%E6%98%8Etts%E7%9A%84%E7%AD%96%E7%95%A5%E9%80%89%E6%8B%A9%E6%9E%81%E5%A4%A7%E5%9C%B0%E4%BE%9D%E8%B5%96%E4%BA%8Epolicy-modelprm%E4%BB%A5%E5%8F%8Aproblem-difficulty"><span class="nav-number">1.2.</span> <span class="nav-text">结果表明，tts的策略选择极大地依赖于policy
+model，PRM以及problem difficulty；</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E5%B0%8F%E6%A8%A1%E5%9E%8B%E7%A1%AE%E5%AE%9E%E8%83%BD%E9%80%9A%E8%BF%87tts%E7%9A%84%E6%89%A9%E5%B1%95%E5%9C%A8%E6%8E%A8%E7%90%86%E6%96%B9%E9%9D%A2%E5%87%BB%E8%B4%A5%E5%A4%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">另外，小模型确实能通过tts的扩展，在推理方面击败大模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E4%B8%8Atts%E6%98%AF%E4%B8%80%E4%B8%AA%E5%9C%A8%E6%8F%90%E9%AB%98llm%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E4%B8%8A%E6%AF%94%E8%BE%83%E6%9C%89%E5%89%8D%E6%99%AF%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">综上，tts是一个在提高llm推理能力上比较有前景的方法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

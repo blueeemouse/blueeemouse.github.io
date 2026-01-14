@@ -1,0 +1,27 @@
+{
+	"nodes":[
+		{"id":"6d403d022e23f4ff","type":"text","text":"efficient GraphRAG challenge-insight tree","x":-114,"y":-9,"width":254,"height":89},
+		{"id":"146b307152655a2b","type":"text","text":"indexing","x":200,"y":-240,"width":250,"height":60},
+		{"id":"7d0759da8c3bc775","type":"text","text":"insight：构图的时候减少llm的调用，转而使用传统的nlp工具","x":505,"y":-415,"width":250,"height":95},
+		{"id":"b17e5a1147f327f1","type":"text","text":"一方面是llm开销大（计算上/金钱上/时间上），同时llm提取的三元组也未必总是准确，还有可能犯一些错误","x":808,"y":-548,"width":250,"height":133},
+		{"id":"f449ce75e0248caa","type":"text","text":"另一方面，传统nlp工具，简单、快速、便宜，特定场景下效果也还行","x":808,"y":-320,"width":250,"height":140},
+		{"id":"a7d8c75085d7f277","type":"text","text":"我们想方设法做这些改进，能长期有用吗？感觉llm再往后发展，能力继续变强，效果更好的话，那在追求效果的前提下可能还是得用llm构建graph；而如果llm能在进一步“民主化”，更小，更快，说不定能彻底否定掉传统nlp工具。但感觉还有点远。就算是现在最小的那类llm，其实开销也还是有的","x":1160,"y":-456,"width":382,"height":178},
+		{"id":"e44edebe9be7302f","type":"text","text":"insight：减小构建的graph的规模","x":504,"y":-123,"width":250,"height":60},
+		{"id":"50aa24db63d7f5e3","type":"text","text":"相应的，为了减小graph规模，同时确保效果，一般都会引进granular kg，比如global的，local的信息，提取关键chunk，关键实体","x":1160,"y":-153,"width":382,"height":133},
+		{"id":"bc247a0ea05ed292","type":"text","text":"小的graph可以用llm构建，大的一般就不会再用llm构建了。否则就又绕回去了。这里可能会用一些比较经典的方法来构建graph（co-occurance、包含关键词……）","x":808,"y":6,"width":250,"height":134},
+		{"id":"39f375011ce8f8c4","type":"text","text":"这是从更加根本的角度入手——即使避免不了使用llm构图，但我们通过减小构建的graph的规模，也能相应减少调用llm的次数","x":808,"y":-136,"width":250,"height":99}
+	],
+	"edges":[
+		{"id":"3cdcb8eabc5641ae","fromNode":"6d403d022e23f4ff","fromSide":"right","toNode":"146b307152655a2b","toSide":"left"},
+		{"id":"aa544df488507669","fromNode":"146b307152655a2b","fromSide":"right","toNode":"7d0759da8c3bc775","toSide":"left"},
+		{"id":"b1d7304caf5c2a58","fromNode":"146b307152655a2b","fromSide":"right","toNode":"e44edebe9be7302f","toSide":"left"},
+		{"id":"cb2cd36e435760c3","fromNode":"7d0759da8c3bc775","fromSide":"right","toNode":"b17e5a1147f327f1","toSide":"left"},
+		{"id":"6ab34b823eb332c7","fromNode":"7d0759da8c3bc775","fromSide":"right","toNode":"f449ce75e0248caa","toSide":"left"},
+		{"id":"ad8c8cd2544f9e24","fromNode":"e44edebe9be7302f","fromSide":"right","toNode":"39f375011ce8f8c4","toSide":"left"},
+		{"id":"79d235ae0dfd7249","fromNode":"e44edebe9be7302f","fromSide":"right","toNode":"bc247a0ea05ed292","toSide":"left"},
+		{"id":"62a5eb95256dde6d","fromNode":"39f375011ce8f8c4","fromSide":"right","toNode":"50aa24db63d7f5e3","toSide":"left"},
+		{"id":"4d4af33fb8d7652d","fromNode":"bc247a0ea05ed292","fromSide":"right","toNode":"50aa24db63d7f5e3","toSide":"left"},
+		{"id":"8ea87c886f7e072a","fromNode":"f449ce75e0248caa","fromSide":"right","toNode":"a7d8c75085d7f277","toSide":"left"},
+		{"id":"88cc562570c1cbe1","fromNode":"b17e5a1147f327f1","fromSide":"right","toNode":"a7d8c75085d7f277","toSide":"left"}
+	]
+}

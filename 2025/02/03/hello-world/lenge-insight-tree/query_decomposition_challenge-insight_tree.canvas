@@ -1,0 +1,29 @@
+{
+	"nodes":[
+		{"id":"dd1ddbe8b3a7a54f","type":"text","text":"query decompostion challenge-insight tree","x":-140,"y":-11,"width":260,"height":71},
+		{"id":"5af50eb00fc3dfd0","type":"text","text":"用llm拆解","x":179,"y":-137,"width":141,"height":57},
+		{"id":"b1f4c1561c69d7c4","type":"text","text":"其实整体性的问题，可能就不需要拆解啊？直接去搜索知识（如果需要），并且迭代过程，不也行吗？就是说，我们对于那些显式的，事实性的问题，那可能需要进行一些拆解之类的操作，本质上是为了提高我们检索的效果，因为这类问题可以说，只要检索得当，就基本能回答正确","x":60,"y":-780,"width":405,"height":269},
+		{"id":"92048d2b862c3c61","type":"text","text":"话说不需要检索的情况，要么是那种开放性的问题，要么是判断能用模型参数知识回答的吧。工程上，设计一个专门的判断是否能用参数知识回答的模块，还挺合理（也很常见，这个方案）","x":513,"y":-675,"width":327,"height":115},
+		{"id":"86737d2015370c1a","type":"text","text":"话说对query的拆解，也可以单纯用于扩大知识面啊，未必一定要遵循“分别解决，聚合答案”的那套范式","x":978,"y":-646,"width":250,"height":186},
+		{"id":"303d6efd075efce1","x":340,"y":300,"width":770,"height":400,"type":"text","text":"我们说，query decomposer的训练数据很难获取，一个原因是很难定义。简单的从更高级、更大的llm上用prompt压榨出一些数据，似乎很难说就是好的。不过，如果考虑把标准定为，对于那些“没分解之前回答错误，分解之后回答正确”的query，我们或许就可以考虑把它作为训练样本？类似的，如果有“分解前回答正确，分解后回答错误”的问题，那或许可以考虑作为负样本？（但负样本具体怎么使用呢……）（正负样本配比也是一个问题？）（但在我们的场景里，似乎不太能用上负样本？sft的负样本使用，一般就是说，让模型看到错误的输入后，能学会输出对这个输入的批判，从而学到，“这个东西是错的”，并且知道”为什么错，错在哪“。但我们这里，训练decomposer的时候，输入应该就是一个query+它的分解结果吧？对这个分解结果的评判从哪里来？也是从一个大的llm来吗？（这里的idea主要参考Beyond Query-Level Comparison: Fine-Grained Reinforcement Learning for Text-to-SQL with Automated Interpretable Critiques）\n\n同时一个疑虑是，仅靠sft从教师llm蒸馏出来的数据学习，很可能超不过。所以rl的引入应该说是必要的？"},
+		{"id":"b7f2ba1c05c44061","x":376,"y":38,"width":179,"height":69,"type":"text","text":"人工设计llm的拆解prompt"},
+		{"id":"5eca16f282f586da","type":"text","text":"约束llm进行一步一步的拆解","x":658,"y":73,"width":179,"height":71},
+		{"id":"b62f6bc55275d499","type":"text","text":"一个小细节是，论文（Chain-of-Question）提到，要确保后一个子问题对前一个子问题是有依赖的。乍一看很奇怪，为什么要有这种依赖关系？个人认为是，通过这种依赖关系，尽可能保证了我们的拆解是有逻辑的，连贯的，从而尽量避免llm一次性拆解那样，产生一些可能比较突兀的子问题","x":1228,"y":-72,"width":250,"height":196},
+		{"id":"ce86e38cf0c37eba","type":"text","text":"缺点：说来说去，这套方法依然是prompt engineering。终究还是依靠llm的能力。没有什么更好的优化方法（甚至原论文只是设计了这套方法，也没打算优化）","x":1608,"y":-42,"width":250,"height":138},
+		{"id":"d0f7ba82f9b8e593","type":"text","text":"一般会确保前后有逻辑约束；相比于一次性让llm把所有子问题都拆解出来，它分解出来的问题逻辑未必上通畅，但又没有修补的余地）","x":901,"y":-43,"width":250,"height":137},
+		{"id":"18de0d205e15f1ce","type":"text","text":"实操上，可以考虑few-shot的prompt（附带一些样例。很经典的做法）。重点是样例要体现我们期望的分解过程，是一种类似于CoT的样例","x":901,"y":171,"width":250,"height":60},
+		{"id":"6ef75821fceeea3b","type":"text","text":"缺点：大概率不能端到端的用梯度下降优化……因为拆解query是很前面的工作，后面会经历检索之类的离散不可导操作，所以拿不到梯度。或许只能用所谓零阶优化了（即没有梯度信息情况下的优化。那llm in-context learning，还有各种的启发式算法，就得派上用场了……）","x":651,"y":-381,"width":250,"height":244},
+		{"id":"b80b9cab89b966d3","type":"text","text":"优化llm的拆解的prompt","x":381,"y":-293,"width":179,"height":68}
+	],
+	"edges":[
+		{"id":"8696b12427bbe65e","fromNode":"dd1ddbe8b3a7a54f","fromSide":"right","toNode":"5af50eb00fc3dfd0","toSide":"left"},
+		{"id":"5eae77f34015d715","fromNode":"5af50eb00fc3dfd0","fromSide":"right","toNode":"b80b9cab89b966d3","toSide":"left"},
+		{"id":"5dec7bacb621cbd8","fromNode":"b80b9cab89b966d3","fromSide":"right","toNode":"6ef75821fceeea3b","toSide":"left"},
+		{"id":"dfbf26b1a3f52d42","fromNode":"5af50eb00fc3dfd0","fromSide":"right","toNode":"b7f2ba1c05c44061","toSide":"left"},
+		{"id":"4331d207722d1bb3","fromNode":"b7f2ba1c05c44061","fromSide":"right","toNode":"5eca16f282f586da","toSide":"left"},
+		{"id":"10f287dea5f92dbc","fromNode":"5eca16f282f586da","fromSide":"right","toNode":"d0f7ba82f9b8e593","toSide":"left"},
+		{"id":"2753e8d582218319","fromNode":"d0f7ba82f9b8e593","fromSide":"bottom","toNode":"18de0d205e15f1ce","toSide":"top"},
+		{"id":"4afe5a55c655f3bb","fromNode":"d0f7ba82f9b8e593","fromSide":"right","toNode":"b62f6bc55275d499","toSide":"left"},
+		{"id":"22f215a212ff2a17","fromNode":"b62f6bc55275d499","fromSide":"right","toNode":"ce86e38cf0c37eba","toSide":"left"}
+	]
+}

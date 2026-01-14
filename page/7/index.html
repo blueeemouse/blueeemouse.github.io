@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap8.%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E9%9A%90%E7%A7%81%EF%BC%88AI%20Security%20&%20Privacy%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/24/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4RAG%20paper%E8%B0%83%E7%A0%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap8.%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E9%9A%90%E7%A7%81%EF%BC%88AI%20Security%20&%20Privacy%EF%BC%89/" class="post-title-link" itemprop="url">chap8.人工智能安全隐私（AI Security & Privacy）</a>
+            <a href="/2025/08/24/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4RAG%20paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">近年RAG paper调研</a>
         </h2>
 
         <div class="post-meta">
@@ -173,21 +173,35 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-05-26 23:45:00 / Modified: 23:46:04" itemprop="dateCreated datePublished" datetime="2025-05-26T23:45:00+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-24 23:35:00" itemprop="dateCreated datePublished" datetime="2025-08-24T23:35:00+08:00">2025-08-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-03 13:00:12" itemprop="dateModified" datetime="2025-10-03T13:00:12+08:00">2025-10-03</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
                 </span>
             </span>
 
@@ -202,11 +216,48 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="背景">1. 背景</h1>
-<h2 id="ai的安全重要性无需多言而我们关注的一些安全方面的性质主要有-完整性integrity主要是要求模型的学习和预测过程完整不受干扰输出结果符合模型的正常表现主要体现在对抗攻击和防御上-保密性confidentiality这里要求的是模型在使用过程中其参数和数据不能被窃取导致泄露也就是要求数据和模型具有保密性-伦理ethics这个方面主要是要约束ai的应用和结果要符合法律道德和伦理一些可能的隐患比如ai的一些偏见如生成图像时有色人种被还原成白人又比如一些假内容的生成可能引起一些社会上的骚乱">AI的安全，重要性无需多言。而我们关注的一些安全方面的性质，主要有：<br>完整性（Integrity）（主要是要求模型的学习和预测过程完整，不受干扰，输出结果符合模型的正常表现，主要体现在对抗攻击和防御上）<br>保密性（Confidentiality）（这里要求的是，模型在使用过程中，其参数和数据不能被窃取导致泄露，也就是要求数据和模型具有保密性）<br>伦理（Ethics）（这个方面，主要是要约束AI的应用和结果，要符合法律、道德和伦理）（一些可能的隐患，比如AI的一些偏见（如，生成图像时，有色人种被还原成白人）；又比如一些假内容的生成，可能引起一些社会上的骚乱）</h2>
+          <h1 id="acl-25">ACL 25</h1>
+<h2 id="main">main</h2>
+<h3 id="hybgrag-hybrid-retrieval-augmented-generation-on-textual-and-relational-knowledge-bases"><strong>HybGRAG:
+Hybrid Retrieval-Augmented Generation on Textual and Relational
+Knowledge Bases</strong></h3>
+<h3 id="main-rag-multi-agent-filtering-retrieval-augmented-generation"><strong>MAIN-RAG:
+Multi-Agent Filtering Retrieval-Augmented Generation</strong></h3>
+<h3 id="rag-critic-leveraging-automated-critic-guided-agentic-workflow-for-retrieval-augmented-generation似乎是agent和rag的结合"><strong>RAG-Critic:
+Leveraging Automated Critic-Guided Agentic Workflow for Retrieval
+Augmented Generation</strong>（似乎是agent和RAG的结合）</h3>
+<h3 id="saferag-benchmarking-security-in-retrieval-augmented-generation-of-large-language-model"><strong>SafeRAG:
+Benchmarking Security in Retrieval-Augmented Generation of Large
+Language Model</strong></h3>
+<h3 id="on-the-robustness-of-rag-systems-in-educational-question-answering-under-knowledge-discrepancies"><strong>On
+the Robustness of RAG Systems in Educational Question Answering under
+Knowledge Discrepancies</strong></h3>
+<h3 id="pandoras-box-or-aladdins-lamp-a-comprehensive-analysis-revealing-the-role-of-rag-noise-in-large-language-models"><strong>Pandora’s
+Box or Aladdin’s Lamp: A Comprehensive Analysis Revealing the Role of
+RAG Noise in Large Language Models</strong></h3>
+<h3 id="neusym-rag-hybrid-neural-symbolic-retrieval-with-multiview-structuring-for-pdf-question-answering针对pdf-qa的rag算多模态的吗可能不太算而且怎么是神经符号混合的总感觉有点不对"><strong>NeuSym-RAG:
+Hybrid Neural Symbolic Retrieval with Multiview Structuring for PDF
+Question Answering</strong>（针对pdf
+QA的RAG，算多模态的吗？……可能不太算？而且怎么是神经符号混合的？总感觉有点不对？）</h3>
+<h3 id="drag-distilling-rag-for-slms-from-llms-to-transfer-knowledge-and-mitigate-hallucination-via-evidence-and-graph-based-distillation"><strong>DRAG:
+Distilling RAG for SLMs from LLMs to Transfer Knowledge and Mitigate
+Hallucination via Evidence and Graph-based Distillation</strong></h3>
+<h3 id="rageval-scenario-specific-rag-evaluation-dataset-generation-framework"><strong>RAGEval:
+Scenario Specific RAG Evaluation Dataset Generation
+Framework</strong></h3>
+<h3 id="are-llms-effective-psychological-assessors-leveraging-adaptive-rag-for-interpretable-mental-health-screening-through-psychometric-practice"><strong>Are
+LLMs effective psychological assessors? Leveraging adaptive RAG for
+interpretable mental health screening through psychometric
+practice</strong></h3>
+<h3 id="s-rag-a-novel-audit-framework-for-detecting-unauthorized-use-of-personal-data-in-rag-systems"><strong>S-RAG:
+A Novel Audit Framework for Detecting Unauthorized Use of Personal Data
+in RAG Systems</strong></h3>
+<h3 id="gainrag-preference-alignment-in-retrieval-augmented-generation-through-gain-signal-synthesis"><strong>GainRAG:
+Preference Alignment in Retrieval-Augmented Generation through Gain
+Signal Synthesis</strong></h3>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap8.%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E9%9A%90%E7%A7%81%EF%BC%88AI%20Security%20&%20Privacy%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2025/08/24/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E8%BF%91%E5%B9%B4RAG%20paper%E8%B0%83%E7%A0%94/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -230,7 +281,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap7.%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97%E9%9B%86%E7%BE%A4%E8%B0%83%E5%BA%A6%E4%B8%8E%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88Scheduling%20and%20resource%20management%20system%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/long-context/seminar%E8%AE%B0%E5%BD%95%EF%BC%9AFAI-Seminar%20%20MIT%20%E7%8E%8B%E4%B8%80%E9%A3%9E%20%20LLM%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E5%9B%B0%E5%A2%83%EF%BC%9ANTP%E4%BB%BB%E5%8A%A1%E4%B8%8ETransformer%E6%9E%B6%E6%9E%84%E7%9A%84%E5%86%85%E5%9C%A8%E5%81%8F%E5%B7%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -244,7 +295,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap7.%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97%E9%9B%86%E7%BE%A4%E8%B0%83%E5%BA%A6%E4%B8%8E%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88Scheduling%20and%20resource%20management%20system%EF%BC%89/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2025/08/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/long-context/seminar%E8%AE%B0%E5%BD%95%EF%BC%9AFAI-Seminar%20%20MIT%20%E7%8E%8B%E4%B8%80%E9%A3%9E%20%20LLM%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E5%9B%B0%E5%A2%83%EF%BC%9ANTP%E4%BB%BB%E5%8A%A1%E4%B8%8ETransformer%E6%9E%B6%E6%9E%84%E7%9A%84%E5%86%85%E5%9C%A8%E5%81%8F%E5%B7%AE/" class="post-title-link" itemprop="url">seminar记录：FAI-Seminar MIT 王一飞 LLM的长文本困境：NTP任务与Transformer架构的内在偏差</a>
         </h2>
 
         <div class="post-meta">
@@ -253,9 +304,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-05-26 21:45:18 / Modified: 21:45:41" itemprop="dateCreated datePublished" datetime="2025-05-26T21:45:18+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-22 17:36:00" itemprop="dateCreated datePublished" datetime="2025-08-22T17:36:00+08:00">2025-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:59:46" itemprop="dateModified" datetime="2025-09-24T15:59:46+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
             </span>
 
           
@@ -269,8 +335,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="section"></h1>
-
+          <h1 id="如今的llm大体上就是两个构件nest-token-prediction训练范式ntp和transformer架构虽然有很多变体目前大概还是没有逃出这个范式以及主流架构依然是transformer类型的这个seminar主要探讨的就是这两个点ntp的范式还能做得更好吗虽然一套训练范式也许是有它自己的上限的现在的结果也有点表明了因为scaling-law不再像最开始那样卓有成效了但现在ntp范式就已经达到上限了吗还能不能做得更好呢-transformer架构呢它有什么自己的问题吗">如今的llm，大体上就是两个构件：nest
+token
+prediction训练范式（NTP）和transformer架构（虽然有很多变体）。目前大概还是没有逃出这个范式，以及主流架构依然是transformer类型的。这个seminar主要探讨的就是这两个点：NTP的范式还能做得更好吗？（虽然一套训练范式也许是有它自己的上限的，现在的结果也有点表明了，因为scaling
+law不再像最开始那样卓有成效了。但现在NTP范式就已经达到上限了吗？还能不能做得更好呢？）<br>Transformer架构呢？它有什么自己的问题吗？</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/long-context/seminar%E8%AE%B0%E5%BD%95%EF%BC%9AFAI-Seminar%20%20MIT%20%E7%8E%8B%E4%B8%80%E9%A3%9E%20%20LLM%E7%9A%84%E9%95%BF%E6%96%87%E6%9C%AC%E5%9B%B0%E5%A2%83%EF%BC%9ANTP%E4%BB%BB%E5%8A%A1%E4%B8%8ETransformer%E6%9E%B6%E6%9E%84%E7%9A%84%E5%86%85%E5%9C%A8%E5%81%8F%E5%B7%AE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -289,7 +365,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -303,7 +379,112 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/" class="post-title-link" itemprop="url">数据流的中位数</a>
+            <a href="/2025/08/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/" class="post-title-link" itemprop="url">Divide-Then-Align：Honest Alignment based on the Knowledge Boundary of RAG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-22 13:52:00" itemprop="dateCreated datePublished" datetime="2025-08-22T13:52:00+08:00">2025-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-08-24 15:30:08" itemprop="dateModified" datetime="2025-08-24T15:30:08+08:00">2025-08-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueacl-25">Venue：ACL 25</h1>
+<h1 id="date2025-07">date：2025-07</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="llm有了rag支持后能回答的问题范围确实更大了但也依然存在一些问题即使有rag检索到的内容也回答不上来也就是这个问题超出了llm权重里的知识范围同时还超出了检索到的外部知识的范围这个时候llm理应回答不知道而不是强行回答一些幻觉内容这限制了llm在高风险对准确率要求极高的场景下的应用比如经典的医疗法律和金融-但是现有方法如retrieval-augmented-fine-tuning-raft它会强制模型作出回答因此就有可能出现上面提到的模型不懂装懂的问题">llm有了rag支持后，能回答的问题范围确实更大了。但也依然存在一些问题，即使有rag检索到的内容，也回答不上来（也就是这个问题超出了llm权重里的知识范围，同时还超出了检索到的外部知识的范围）。这个时候，llm理应回答“不知道”，而不是强行回答一些幻觉内容（这限制了llm在高风险、对准确率要求极高的场景下的应用，比如经典的医疗、法律和金融）<br>但是现有方法，如Retrieval-Augmented
+Fine-Tuning
+（RAFT），它会强制模型作出回答。因此就有可能出现上面提到的，模型不懂装懂的问题</h2>
+<h2 id="这篇论文就是想解决这个问题">这篇论文就是想解决这个问题</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="论文把它研究的问题llm不懂装懂处理成一个偏好问题或者说认为这是现有方法的一个特点因此考虑从后训练入手利用rl具体来说是dpo加上专门构造的数据集这个构造四象限的数据集还蛮有意思让llm懂得要在不懂的时候说出自己不懂">论文把它研究的问题（llm不懂装懂）处理成一个偏好问题，或者说认为这是现有方法的一个特点？因此考虑从后训练入手，利用rl（具体来说是DPO）加上专门构造的数据集（这个构造四象限的数据集，还蛮有意思），让llm懂得，要在不懂的时候说出自己不懂</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="发现了现有的raft类的方法的共性问题会让模型不懂装懂强行回答">发现了现有的RAFT类的方法的共性问题：会让模型不懂装懂，强行回答</h2>
+<h2 id="创新性地提出了把数据按照是否处在模型知识范围以及外部知识范围划分到四个象限算是提出了一个新的构建偏好数据集的方法">创新性地提出了把数据按照是否处在模型知识范围以及外部知识范围，划分到四个象限（算是提出了一个新的构建偏好数据集的方法）</h2>
+<h2 id="提出了一套后训练的方法合适地把rl引入通过dpo算法利用构造的偏好数据集让模型学会在正确的时机放弃回答减少了幻觉">提出了一套后训练的方法，合适地把rl引入，通过DPO算法，利用构造的偏好数据集，让模型学会在正确的时机放弃回答，减少了幻觉</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/Divide-Then-Align%EF%BC%9AHonest%20Alignment%20based%20on%20the%20Knowledge%20Boundary%20of%20RAG/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/" class="post-title-link" itemprop="url">和为目标值的最长子序列的长度</a>
         </h2>
 
         <div class="post-meta">
@@ -314,7 +495,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-26 20:49:00 / Modified: 21:38:23" itemprop="dateCreated datePublished" datetime="2025-05-26T20:49:00+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-19 23:09:00 / Modified: 23:44:20" itemprop="dateCreated datePublished" datetime="2025-08-19T23:09:00+08:00">2025-08-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -326,7 +507,15 @@
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
                 </span>
             </span>
 
@@ -341,10 +530,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-median-from-data-stream/description/">在这</a></h1>
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/length-of-the-longest-subsequence-that-sums-to-target/description/">在这</a></h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/26/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E6%8D%AE%E6%B5%81%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/#more" rel="contents">
+              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%92%8C%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%80%BC%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E5%BA%8F%E5%88%97%E7%9A%84%E9%95%BF%E5%BA%A6/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -368,7 +557,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap5.%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E7%A8%80%E7%96%8F%E5%8C%96%E4%B8%8E%E8%BD%BB%E9%87%8F%E5%8C%96%EF%BC%88Efficiency%20via%20sparsity%20and%20lightweight%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -382,7 +571,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap5.%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E7%A8%80%E7%96%8F%E5%8C%96%E4%B8%8E%E8%BD%BB%E9%87%8F%E5%8C%96%EF%BC%88Efficiency%20via%20sparsity%20and%20lightweight%EF%BC%89/" class="post-title-link" itemprop="url">chap5.神经网络的稀疏化与轻量化（Efficiency via sparsity and lightweight）</a>
+            <a href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/" class="post-title-link" itemprop="url">目标和</a>
         </h2>
 
         <div class="post-meta">
@@ -393,7 +582,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-26 15:51:00 / Modified: 17:01:03" itemprop="dateCreated datePublished" datetime="2025-05-26T15:51:00+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-19 18:02:00 / Modified: 18:10:29" itemprop="dateCreated datePublished" datetime="2025-08-19T18:02:00+08:00">2025-08-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -401,11 +590,19 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
                 </span>
             </span>
 
@@ -420,12 +617,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="背景">1. 背景</h1>
-<h2 id="现在一般来说仍然有这种趋势模型越大性能越好但训练大的模型开销就大不论是时间上的还是金钱上的为了更好更快地训练大的模型有两条路可以考虑一个是研发更强更大的处理器另一条是模型压缩与稀疏化">现在，一般来说，仍然有这种趋势：模型越大，性能越好。但训练大的模型，开销就大，不论是时间上的还是金钱上的。为了更好更快地训练大的模型，有两条路可以考虑：一个是研发更强更大的处理器，另一条是模型压缩与稀疏化</h2>
-<h2 id="之所以能稀疏化是因为我们生活里的数据是高度结构化的因此如果算法能捕捉到其中的结构那么很多信息其实都是不需要的也就是模型学到的表征里可能只有少数是真正有用的这就是表达的稀疏性如果我们能把那些无用的部分给去掉就可能可以做到保证性能的同时降低存储和计算的开销甚至还可能提升精度这ppt里也是一堆冗余的信息还得手动提炼一下">之所以能稀疏化，是因为，我们生活里的数据是高度结构化的；因此，如果算法能捕捉到其中的结构，那么很多信息其实都是不需要的。也就是模型学到的表征里，可能只有少数是真正有用的。这就是表达的稀疏性。如果我们能把那些无用的部分给去掉，就可能可以做到保证性能的同时，降低存储和计算的开销（甚至还可能提升精度）（这ppt里也是，一堆冗余的信息，还得手动提炼一下……）</h2>
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/target-sum/description/">在这</a></h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap5.%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E7%A8%80%E7%96%8F%E5%8C%96%E4%B8%8E%E8%BD%BB%E9%87%8F%E5%8C%96%EF%BC%88Efficiency%20via%20sparsity%20and%20lightweight%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2025/08/19/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E7%9B%AE%E6%A0%87%E5%92%8C/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -449,7 +644,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap3.%E7%9F%A9%E9%98%B5%E8%AE%A1%E7%AE%97%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88Computer%20architecture%20for%20Matrix%20computation%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Interleaving%20Retrieval%20with%20Chain-of-Thought%20Reasoning%20for%20Knowledge-Intensive%20Multi-Step%20Questions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -463,7 +658,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap3.%E7%9F%A9%E9%98%B5%E8%AE%A1%E7%AE%97%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88Computer%20architecture%20for%20Matrix%20computation%EF%BC%89/" class="post-title-link" itemprop="url">chap3.矩阵计算与计算机体系结构（Computer architecture for Matrix computation）</a>
+            <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Interleaving%20Retrieval%20with%20Chain-of-Thought%20Reasoning%20for%20Knowledge-Intensive%20Multi-Step%20Questions/" class="post-title-link" itemprop="url">Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions</a>
         </h2>
 
         <div class="post-meta">
@@ -473,14 +668,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-05-26 15:50:00" itemprop="dateCreated datePublished" datetime="2025-05-26T15:50:00+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-19 01:21:00" itemprop="dateCreated datePublished" datetime="2025-08-19T01:21:00+08:00">2025-08-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-27 18:14:24" itemprop="dateModified" datetime="2025-05-27T18:14:24+08:00">2025-05-27</time>
+                <time title="Modified: 2025-09-24 15:55:14" itemprop="dateModified" datetime="2025-09-24T15:55:14+08:00">2025-09-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -488,11 +683,23 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
                 </span>
             </span>
 
@@ -507,11 +714,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="常见的层的计算方式">1.常见的层的计算方式</h1>
-<h2 id="不管是最简单的线性层还是之前很经典的卷积层抑或是之后的循环层注意力层它们的计算都可以表达成矩阵的运算或者说都可以表达成矩阵的乘法-而关于为什么要把网络结构表达成矩阵计算一个点在于矩阵计算有较好的计算并行性有没有更具体的理解另外矩阵计算有成熟的配套计算硬件和软件库也就是能用的工具比较多我们希望把问题都化归到矩阵乘法上">不管是最简单的线性层，还是之前很经典的卷积层，抑或是之后的循环层、注意力层，它们的计算都可以表达成矩阵的运算，或者说都可以表达成矩阵的乘法<br>而关于为什么要把网络结构表达成矩阵计算，一个点在于，矩阵计算有较好的计算并行性（有没有更具体的理解？）；另外，矩阵计算有成熟的配套计算硬件和软件库。也就是能用的工具比较多，我们希望把问题都化归到矩阵乘法上</h2>
+          <h1 id="venueacl-23">Venue：ACL 23</h1>
+<h1 id="date2023-06-23">date：2023-06-23</h1>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h1 id="contribution">contribution：</h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap3.%E7%9F%A9%E9%98%B5%E8%AE%A1%E7%AE%97%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88Computer%20architecture%20for%20Matrix%20computation%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2025/08/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Interleaving%20Retrieval%20with%20Chain-of-Thought%20Reasoning%20for%20Knowledge-Intensive%20Multi-Step%20Questions/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -535,7 +745,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap4.AI%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%88AI%20Compiler%20and%20Optimization%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -549,7 +759,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap4.AI%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%88AI%20Compiler%20and%20Optimization%EF%BC%89/" class="post-title-link" itemprop="url">chap4.AI编译器与编译优化（AI Compiler and Optimization）</a>
+            <a href="/2025/08/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/" class="post-title-link" itemprop="url">Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy</a>
         </h2>
 
         <div class="post-meta">
@@ -559,14 +769,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-05-26 15:50:00" itemprop="dateCreated datePublished" datetime="2025-05-26T15:50:00+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-19 00:58:00" itemprop="dateCreated datePublished" datetime="2025-08-19T00:58:00+08:00">2025-08-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-27 18:41:09" itemprop="dateModified" datetime="2025-05-27T18:41:09+08:00">2025-05-27</time>
+                <time title="Modified: 2025-09-24 15:55:08" itemprop="dateModified" datetime="2025-09-24T15:55:08+08:00">2025-09-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -574,11 +784,23 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
                 </span>
             </span>
 
@@ -593,12 +815,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="传统编译器">1. 传统编译器</h1>
-<h2 id="什么是编译器">1.1. 什么是编译器：</h2>
-<h3 id="它是一种计算机程序用于把高级的程序语言例如cpppython编写的源代码转换为计算机能够理解和执行的机器语言代码">它是一种计算机程序，用于把高级的程序语言（例如cpp，python）编写的源代码转换为计算机能够理解和执行的机器语言代码</h3>
+          <h1 id="venuearxiv-23">Venue：arxiv 23</h1>
+<h1 id="date2023-10-23">date：2023-10-23</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="连这个都暂时没太搞清楚大体上论文认为对于复杂的问题现有方法的检索效果还不够好具体表现为复杂的问题例如多跳的推理长文本的qa按照我们的常识可能需要很多的外部信息且中间可能需要多次地进行检索类似于多步的推理举个例子xx电影的导演的配偶的职业是要解决这个问题那么需要依次搜索出xx电影的导演是谁然后再去搜它的配偶最后去搜职业如果是只检索一次那么因为一般的检索器是基于语义相似度来检索如果仅仅把这个问题作为query可能就检索不到答案但现有方法一类是一次性检索这显然是效果不够好的因为仅仅把输入当作query检索了一次就结束了很可能我们实际需要根据中间结果来多次地检索一类确实是会在生成过程中多次进行检索但检索的方法不尽如人意例如检索时无法把xx作为一个整体来处理以及多次地检索需要频繁地把新的检索结果加入到prompt里导致llm计算开销很大这一块不是很理解啊目前可能得把那几篇相关的paper读一下了"><del>连这个都暂时没太搞清楚……</del>大体上，论文认为，对于复杂的问题，现有方法的检索效果还不够好。具体表现为，复杂的问题（例如多跳的推理、长文本的QA），按照我们的常识，可能需要很多的外部信息，且中间可能需要多次地进行检索（类似于多步的推理。举个例子，xx电影的导演的配偶的职业是？要解决这个问题，那么需要依次搜索出xx电影的导演是谁，然后再去搜它的配偶，最后去搜职业。如果是只检索一次，那么因为一般的检索器是基于语义相似度来检索，如果仅仅把这个问题作为query，可能就检索不到答案）；但现有方法，一类是一次性检索（这显然是效果不够好的，因为仅仅把输入当作query检索了一次就结束了，很可能我们实际需要根据中间结果来多次地检索），一类确实是会在生成过程中多次进行检索，但检索的方法不尽如人意（例如，检索时无法把xx作为一个整体来处理？以及多次地检索，需要频繁地把新的检索结果加入到prompt里，导致llm计算开销很大？这一块不是很理解啊目前，可能得把那几篇相关的paper读一下了）</h2>
+<h2 id="也就是说现有方法大多是在生成的过程中进行干预即我先生成一部分然后检索一下得到一些可能有用的外部知识之后结合这些外部知识进行下一步的生成完了再根据新生成的内容继续检索得到新的外部知识再结合新的外部知识进一步生成以此类推-而这篇论文作出的改动是我们的确会有多轮的检索但每次的检索都是在一个完整的生成之后举个例子我们要回答一个用户的问题也就是拿到用户的输入即prompt那么可能就是先用这个问题检索得到一定的外部知识再进行第一次的完整的生成此时我们有了一个完整的生成结果再基于这个结果和原来的问题再一次地检索外部知识这里我们认为检索的query更丰富了那么我们得到的检索结果应该也更加切题可靠然后来重新地生成结果重复若干次上述过程即得到最终结果但是说到底凭什么就认为这样的效果会好也许实验上是如此但理论上或者说直观上为什么这种迭代方式比生成一些检索一些的方式要好">也就是说，现有方法大多是在生成的过程中进行干预（即，我先生成一部分，然后检索一下，得到一些可能有用的外部知识，之后结合这些外部知识进行下一步的生成；完了再根据新生成的内容，继续检索，得到新的外部知识，再结合新的外部知识进一步生成，以此类推……）<br>而这篇论文作出的改动是，我们的确会有多轮的检索，但每次的检索都是在一个完整的生成之后。举个例子，我们要回答一个用户的问题（也就是拿到用户的输入，即prompt），那么可能就是先用这个问题，检索得到一定的外部知识，再进行第一次的完整的生成；此时我们有了一个完整的生成结果，再基于这个结果和原来的问题，再一次地检索外部知识（这里我们认为，检索的query更丰富了，那么我们得到的检索结果应该也更加切题可靠），然后来重新地生成结果；重复若干次上述过程，即得到最终结果（但是说到底，凭什么就认为这样的效果会好？也许实验上是如此，但理论上，或者说直观上，为什么这种迭代方式比“生成一些检索一些”的方式要好？）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="虽然也是多次检索和多次生成但这篇论文的方法的每一次迭代的替换都是在上一个过程完成之后而不是进行到中间的时候就替换也就是由检索到生成是要检索完之后才去生成而生成到检索也是要生成了完整的答案之后才再次检索而非生成一部分就去检索了">虽然也是多次检索和多次生成，但这篇论文的方法的每一次迭代的替换，都是在上一个过程完成之后，而不是进行到中间的时候就替换（也就是，由检索，到生成，是要检索完之后才去生成；而生成到检索，也是要生成了完整的答案之后才再次检索，而非生成一部分就去检索了）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了新的iter-retgen方法在多个benchmark达到sota推进了llm在复杂推理方面的进展虽然这个时候的复杂推理和现在的专攻数学的复杂推理并不是一个东西不过在那个时候也算是很难的任务了">提出了新的ITER-RETGEN方法，在多个benchmark达到sota，推进了llm在复杂推理方面的进展（虽然这个时候的“复杂推理”和现在的专攻数学的“复杂推理”并不是一个东西……不过在那个时候也算是很难的任务了）</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap4.AI%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8E%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%88AI%20Compiler%20and%20Optimization%EF%BC%89/#more" rel="contents">
+              <a class="btn" href="/2025/08/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Enhancing%20Retrieval-Augmented%20Large%20Language%20Models%20with%20Iterative%20Retrieval-Generation%20Synergy/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -622,7 +850,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/12/course_learning/efficientml_mit/lec02-basics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -636,7 +864,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap2.Pytorch%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap2.Pytorch基础</a>
+            <a href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/" class="post-title-link" itemprop="url">lec02-basics</a>
         </h2>
 
         <div class="post-meta">
@@ -646,14 +874,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-05-26 15:49:00" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-12 18:13:00" itemprop="dateCreated datePublished" datetime="2025-08-12T18:13:00+08:00">2025-08-12</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-27 16:00:43" itemprop="dateModified" datetime="2025-05-27T16:00:43+08:00">2025-05-27</time>
+                <time title="Modified: 2025-09-03 17:09:31" itemprop="dateModified" datetime="2025-09-03T17:09:31+08:00">2025-09-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -661,11 +889,11 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
+                  <a href="/categories/course-learning/" itemprop="url" rel="index"><span itemprop="name">course_learning</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
+                  <a href="/categories/course-learning/efficientml/" itemprop="url" rel="index"><span itemprop="name">efficientml</span></a>
                 </span>
             </span>
 
@@ -680,150 +908,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-<h1 id="神经网络模型搭建">1.神经网络模型搭建</h1>
-<h2 id="这里主要是通过三个例子简单介绍一下pytorch怎么建立模型">这里主要是通过三个例子，简单介绍一下pytorch怎么建立模型</h2>
-<h2 id="例1.-lenet的搭建">例1. LeNet的搭建</h2>
-<h3 id="知道各个基本的层例如conv2d的计算过程avg-poolingmax-pooling的计算过程">知道各个基本的层，例如Conv2d的计算过程，Avg
-Pooling、Max Pooling的计算过程</h3>
-<h3 id="此外需要掌握编写神经网络的类的细节">此外，需要掌握编写神经网络的类的细节：</h3>
-<h4 id="第一网络的类一般是继承了nn.module类的">第一，网络的类一般是继承了nn.Module类的</h4>
-<h4 id="第二因为继承了这个类所以也需要先初始化一下也就是superyour_network_name-self.__-init__">第二，因为继承了这个类，所以也需要先初始化一下，也就是super(Your_Network_Name,
-self).__ init__()</h4>
-<h4 id="第三一般我们把网络里可训练的层的初始化放到__-init__函数里">第三，一般我们把网络里可训练的层的初始化放到__
-init__函数里</h4>
-<h3 id="了解常见层的计算过程这里主要介绍的是cnn里常用的卷积和池化能根据输入数据的形状以及各个层的参数算出输出数据的尺寸">了解常见层的计算过程（这里主要介绍的是CNN里常用的卷积和池化），能根据输入数据的形状以及各个层的参数，算出输出数据的尺寸</h3>
-<h2 id="例2.-googlenet的搭建">例2. GoogLeNet的搭建</h2>
-<h3 id="这里也不太清楚怎么考可能是要把googlenet的网络架构记下来然后每个分支都能写出相应代码吧">这里也不太清楚怎么考，可能是要把GoogLeNet的网络架构记下来，然后每个分支都能写出相应代码吧</h3>
-<h2 id="例3.-resnet的搭建">例3. ResNet的搭建</h2>
-<h3 id="首先resnet的搭建基本就是靠堆叠残差块实现的残差块分了两种模式18和34层的resnet用的是basicblock而50及更高层数的resnet用的是bottleneck">首先，ResNet的搭建基本就是靠堆叠残差块实现的。残差块分了两种模式，18和34层的ResNet，用的是BasicBlock，而50及更高层数的ResNet用的是Bottleneck</h3>
-<h3 id="resnet的实例化一般就是通过指定每种残差块的个数来实现的一般它会被分成四个大的layer每个layer里可能有若干个残差块我们只需要通过一个列表指定这四个大layer里残差块的格式即可得到具体的resnet">ResNet的实例化，一般就是通过指定每种残差块的个数来实现的。一般它会被分成四个“大的”layer，每个layer里可能有若干个残差块，我们只需要通过一个列表，指定这四个“大”layer里残差块的格式，即可得到具体的ResNet</h3>
-<h1 id="定制数据集">2.定制数据集</h1>
-<h2 id="这里介绍了一般的关于现有数据集的一些操作以及怎么定制一个自己的数据集">这里介绍了一般的关于现有数据集的一些操作，以及怎么定制一个自己的数据集</h2>
-<h2 id="使用现有数据集">2.1. 使用现有数据集</h2>
-<h3 id="直接当函数调用即可例如要调用cifar10的训练数据则执行形如这样的代码即可trainset-torchvision.datasets.cifar10root.data-traintrue-downloadtrue-transformtransform-注意到这里有transform参数它代表了我们要对数据进行的预处理的操作传进去的一般是transforms库里的compose得到的一个一系列的操作例如transform-transforms.composetransforms.totensor-transforms.normalize0.5-0.5-0.5-0.5-0.5-0.5这里可能还需要我们了解常见的数据预处理的操作例如此处的totensor就是把numpy格式的图像数据给转化成torch格式的图像数据二者的主要区别在于channel维度在第几个维度numpy格式是htimes-wtimes-c而torch格式是ctimes-htimes-w">直接当函数调用即可。例如，要调用CIFAR10的训练数据，则执行形如这样的代码即可<code>trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)</code><br>注意到这里有transform参数，它代表了我们要对数据进行的预处理的操作。传进去的一般是transforms库里的Compose得到的一个一系列的操作，例如：<code>transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])</code>（这里可能还需要我们了解常见的数据预处理的操作。例如，此处的ToTensor就是把numpy格式的图像数据给转化成torch格式的图像数据，二者的主要区别在于Channel维度在第几个维度，numpy格式是<span class="math inline">\(H\times W\times C\)</span>，而torch格式是<span class="math inline">\(C\times H\times W\)</span></h3>
-<h3 id="上面我们得到了现有的数据集但实际使用时需要把数据放到一个dataloader里以便加载使用一般用torch.utils.data.dataloader例如trainloader-torch.utils.data.dataloadertrainset-batch_size4-shuffletrue-num_workers这里我们可以通过shuffle参数指定是否打乱数据集以及可以用multiprocessing-workers并行地加载数据">上面我们得到了现有的数据集，但实际使用时，需要把数据放到一个dataloader里，以便加载使用。一般用torch.utils.data.DataLoader，例如：<code>trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers)</code>，这里我们可以通过shuffle参数指定是否打乱数据集，以及可以用multiprocessing
-workers并行地加载数据</h3>
-<h2 id="定制自己的数据集">2.2. 定制自己的数据集</h2>
-<h3 id="定制自己的数据集首先得有自己的数据然而原始的数据可能格式不太对需要一些转换这时可能要用到一些库了">2.2.1.
-定制自己的数据集，首先得有自己的数据。然而原始的数据可能格式不太对，需要一些转换，这时可能要用到一些库了</h3>
-<h3 id="下一步是打标签这里是以经典的图像分类任务为例那可以考虑labelimg这个工具当然还有其它的例如labelme">2.2.2.
-下一步是打标签。这里是以经典的图像分类任务为例，那可以考虑labelimg这个工具。当然还有其它的，例如labelme</h3>
-<h3 id="有了数据以后类似上面调用现有数据集的方式我们还是需要一个数据集的类从而可以通过这个类来获取数据集因为本质上我们最后希望的效果是通过dataloader来获取batch-data而dataloader获取batch-data的本质是生成索引然后每个batch就用相应的batch索引从数据集类里获取数据这也是为什么实例化一个dataloader的时候我们要传入dataset-我们要继承的是一个torch.utils.data.dataset类它代表了一个数据集的抽象类我们自定义的时候重点关注三个函数__-len__函数它可以返回数据集的大小-__-getitem__函数它支持根据索引取出具体的数据例如dataseti就可以取出第i个样本这种方式的好处是我们不需要每次都把所有的数据加载到内存里毕竟这样一旦数据集大点可能内存就炸了而是要用到哪些数据时我就加载这些数据-__-init__函数一个类当然要有初始的函数了具体到这里的例子我们可能会在这里放一些类似于数据路径要对数据进行的预处理操作transform等以供__-getitem__或其它函数使用">2.2.3.
-有了数据以后，类似上面调用现有数据集的方式，我们还是需要一个数据集的类，从而可以通过这个类来获取数据集。因为本质上，我们最后希望的效果是通过dataloader来获取batch
-data，而dataloader获取batch
-data的本质是，生成索引，然后每个batch就用相应的batch索引，从数据集类里获取数据（这也是为什么实例化一个dataloader的时候我们要传入dataset）<br>我们要继承的是一个torch.utils.data.Dataset类，它代表了一个数据集的抽象类。我们自定义的时候，重点关注三个函数：__
-len__函数，它可以返回数据集的大小；<br>__
-getitem__函数，它支持根据索引取出具体的数据，例如dataset[i]就可以取出第i个样本。这种方式的好处是，我们不需要每次都把所有的数据加载到内存里（毕竟这样一旦数据集大点，可能内存就炸了），而是要用到哪些数据时，我就加载这些数据<br>__
-init__函数，一个类当然要有初始的函数了。具体到这里的例子，我们可能会在这里放一些类似于数据路径、要对数据进行的预处理操作transform等，以供__
-getitem__或其它函数使用</h3>
-<h3 id="实际使用时我们可能需要定制化的transform此时则可以考虑把操作给写成一个类然后transforms.compose的时候我们就传入这些自己写的类就行当然此时需要修改它的__-init__方法和__-call__方法以及它继承的是object类">2.2.4.
-实际使用时，我们可能需要定制化的transform，此时则可以考虑把操作给写成一个类，然后transforms.Compose的时候，我们就传入这些自己写的类就行（当然，此时需要修改它的__
-init__方法和__ call__方法。以及，它继承的是object类）</h3>
-<h3 id="综上我们定制了自己的数据集的类它可以顺利加载数据且进行相应的数据增强操作如果有并且想定制数据增强操作也是可以的之后就是按照一般流程走了实例化一个数据集的类再构造对应的dataloader即可">综上，我们定制了自己的数据集的类，它可以顺利加载数据，且进行相应的数据增强操作（如果有），并且想定制数据增强操作也是可以的。之后就是按照一般流程走了，实例化一个数据集的类，再构造对应的dataloader即可</h3>
-<h1 id="使用服务器">3.使用服务器</h1>
-<h2 id="简介">3.1. 简介：</h2>
-<h3 id="服务器一般都是linux系统且因为linux系统中一切都是文件而配置一个服务本质上就是在修改配置文件里的一些设置所以日常使用时一定会编写文档因此需要一个文档编辑器最经典的就是vim了">服务器，一般都是linux系统。且因为linux系统中，一切都是文件，而配置一个服务，本质上就是在修改配置文件里的一些设置；所以，日常使用时一定会编写文档，因此需要一个文档编辑器。最经典的就是vim了</h3>
-<h4 id="再简单介绍一下vim它有三种模式输入模式命令模式和末行模式">再简单介绍一下vim。它有三种模式，输入模式、命令模式和末行模式</h4>
-<h4 id="输入模式就是一般的模式我们打字就能编辑文档一般是通过aio等键位例如最常用的i表示换到插入模式从命令模式转到输入模式按esc键则可以从输入模式切换到命令模式从命令模式按冒号可以切换到末行模式也因此一些常用的退出保存等操作都是带个冒号的比如q就是退出w就是保存wq就是强制保存退出而从末行模式再按esc则可以切换到命令模式由此可以看出来esc键是可以在任何情况下切到命令模式的事实上命令模式也充当了一个中介的作用毕竟输入模式和末行模式相互之间无法直接切换得通过命令模式来所以切换到命令模式当然得尽量快捷简便">输入模式，就是一般的模式，我们打字，就能编辑文档。一般是通过a、i、o等键位（例如最常用的，i表示换到插入模式），从命令模式转到输入模式；按Esc键，则可以从输入模式切换到命令模式。从命令模式，按冒号可以切换到末行模式（也因此，一些常用的退出、保存等操作，都是带个冒号的。比如，<code>:q</code>就是退出，<code>:w</code>就是保存，<code>:wq</code>就是强制保存退出）；而从末行模式，再按Esc，则可以切换到命令模式（由此可以看出来，Esc键是可以在任何情况下切到命令模式的。事实上，命令模式也充当了一个中介的作用，毕竟输入模式和末行模式相互之间无法直接切换，得通过命令模式来，所以切换到命令模式当然得尽量快捷简便）</h4>
-<h2 id="框架简介与环境配置">3.2. 框架简介与环境配置：</h2>
-<h3 id="gpu环境的配置一般依赖于以下这几个东西">GPU环境的配置，一般依赖于以下这几个东西：</h3>
-<h4 id="nvidia-driver">Nvidia Driver</h4>
-<h4 id="cudnn">cuDNN</h4>
-<h4 id="cuda">CUDA</h4>
-<h4 id="pytorch">PyTorch</h4>
-<h1 id="训练过程可视化">4.训练过程可视化</h1>
-<h2 id="这里介绍的是用tensorboard进行可视化它相比于老式的一大堆print可视化效果更好也更加方便些不过这并不意味着print的方式就被彻底淘汰了">这里介绍的是用TensorBoard进行可视化（它相比于老式的一大堆print，可视化效果更好，也更加方便些）（不过这并不意味着print的方式就被彻底淘汰了）</h2>
-<h2 id="使用tensorboard的五个步骤">使用TensorBoard的五个步骤：</h2>
-<h3 id="记录想要观察的张量例如w2_hist-tf.summary.histogramweights2-w2cost_summ-tf.summary.scalarcost-cost">1.
-记录想要观察的张量。例如，<code>w2_hist = tf.summary.histogram("weights2", W2)</code>；<code>cost_summ = tf.summary.scalar("cost", cost)</code></h3>
-<h3 id="合并所有的summaries简单理解就是把所有的记录合并一下summary-tf.summary.merge_all">2.
-合并所有的summaries（简单理解，就是把所有的记录合并一下）。<code>summary = tf.summary.merge_all()</code></h3>
-<h3 id="创建writer并添加graph">3. 创建writer，并添加graph</h3>
-<h4 id="这里应该是要把结果给保存到某个路径下因此需要用到一个writer以及需要添加graph这里添加graph主要是为了得到模型的架构以方便后续的可视化还有用于分析模型的复杂度等-writer-tf.summayr.filewriter.logs-writer.add_graphsess.graph">这里应该是要把结果给保存到某个路径下，因此需要用到一个writer；以及，需要添加graph（这里添加graph，主要是为了得到模型的架构，以方便后续的可视化；还有用于分析模型的复杂度等）<br><code>writer = tf.summayr.FileWriter('./logs')</code><br><code>writer.add_graph(sess.graph)</code></h4>
-<h3 id="run-summary-merge-and-add_summary但这一步好像是tensorflow-1.x里的东西了在2.x的版本里被简化了所以感觉不会考代码啊">4.
-Run summary merge and add_summary（但这一步好像是tensorflow
-1.x里的东西了，在2.x的版本里被简化了？所以感觉不会考代码啊）</h3>
-<h3 id="launch-tensorboard">5. Launch TensorBoard</h3>
-<h4 id="这个倒是常见tensorboard---log-dir.logs指定一下记录的文件的路径就可以打开tensorboard了">这个倒是常见，<code>tensorboard --log-dir=./logs</code>，指定一下记录的文件的路径，就可以打开tensorboard了</h4>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">chap1.深度神经网络基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-26 15:49:00 / Modified: 17:00:41" itemprop="dateCreated datePublished" datetime="2025-05-26T15:49:00+08:00">2025-05-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/" itemprop="url" rel="index"><span itemprop="name">mlsys</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mlsys/foundation/" itemprop="url" rel="index"><span itemprop="name">foundation</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前略一些发展历史">1.前略，一些发展历史</h1>
-<h1 id="深度神经网络计算框架">2.深度神经网络计算框架</h1>
-<h2 id="深度学习框架的必要性">2.1.深度学习框架的必要性：</h2>
-<h3 id="如果没有现在的各种计算框架例如pytorchtensorflow则我们要训练一个神经网络就需要手动实现各种层的前向以及后向且性能可能就没有现在调用库的函数那么高效每个人写出来的函数也未必完全一样可移植性也不够好同一个算子很难跑在不同的加速设备上-因此非常有必要发展深度神经网络的计算框架要是没有现在这些框架魔改模型也会更加麻烦吧门槛就更高了魔改类的文章也会更少了且上面的缺点正是框架被提出的目的">如果没有现在的各种计算框架，例如pytorch，tensorflow，则我们要训练一个神经网络，就需要手动实现各种层的前向以及后向，且性能可能就没有现在调用库的函数那么高效；每个人写出来的函数也未必完全一样，可移植性也不够好；同一个算子很难跑在不同的加速设备上<br>因此，非常有必要发展深度神经网络的计算框架（要是没有现在这些框架，魔改模型也会更加麻烦吧，门槛就更高了，魔改类的文章也会更少了……），且上面的缺点，正是框架被提出的目的</h3>
+          <h1 id="本章大纲">本章大纲：</h1>
+<h2 id="先讲了基本的pytorch概念权当复习了然后讲了衡量efficiency的基本指标">先讲了基本的pytorch概念（权当复习了），然后讲了衡量efficiency的基本指标</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap1.%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/#more" rel="contents">
+              <a class="btn" href="/2025/08/12/course_learning/efficientml_mit/lec02-basics/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -847,7 +936,7 @@ Run summary merge and add_summary（但这一步好像是tensorflow
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -861,7 +950,7 @@ Run summary merge and add_summary（但这一步好像是tensorflow
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/" class="post-title-link" itemprop="url">分割等和子集</a>
         </h2>
 
         <div class="post-meta">
@@ -871,91 +960,14 @@ Run summary merge and add_summary（但这一步好像是tensorflow
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-05-26 15:08:24" itemprop="dateCreated datePublished" datetime="2025-05-26T15:08:24+08:00">2025-05-26</time>
+              <time title="Created: 2025-08-11 15:39:00" itemprop="dateCreated datePublished" datetime="2025-08-11T15:39:00+08:00">2025-08-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-27 15:39:54" itemprop="dateModified" datetime="2025-05-27T15:39:54+08:00">2025-05-27</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="section">#</h2>
-<p>title: chap6.深度学习中的分布式训练——算法及系统 date: 2025-05-26
-15:51 tags: [分布式训练] categories: [mlsys, foundation] --- # 1.
-分布式训练的必要性 ##
-随着问题规模的增大（包括数据量和计算量层面的），单一设备处理速度逐渐无法满足我们的需求（比如太慢了，或者是干脆单设备放不下模型了）<br>而用分布式算法，把问题划分为若干小问题后，再经过分布式系统来执行处理，能做到较快解决较大的问题
-## 这里还介绍两个并行加速定律，来说明分布式训练的意义。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/26/mlsys_foundation/chap6.%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83%E2%80%94%E2%80%94%E7%AE%97%E6%B3%95%E5%8F%8A%E7%B3%BB%E7%BB%9F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">数组中的第K个最大元素</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-23 23:59:00" itemprop="dateCreated datePublished" datetime="2025-05-23T23:59:00+08:00">2025-05-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-26 20:34:54" itemprop="dateModified" datetime="2025-05-26T20:34:54+08:00">2025-05-26</time>
+                <time title="Modified: 2025-08-12 14:09:55" itemprop="dateModified" datetime="2025-08-12T14:09:55+08:00">2025-08-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -967,7 +979,15 @@ Run summary merge and add_summary（但这一步好像是tensorflow
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">背包</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/" itemprop="url" rel="index"><span itemprop="name">0-1背包</span></a>
                 </span>
             </span>
 
@@ -982,10 +1002,118 @@ Run summary merge and add_summary（但这一步好像是tensorflow
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/kth-largest-element-in-an-array/description/">在这</a></h1>
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/partition-equal-subset-sum/">在这</a></h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/23/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%A0%86%E3%80%81%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/#more" rel="contents">
+              <a class="btn" href="/2025/08/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85/0-1%E8%83%8C%E5%8C%85/%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/08/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/08/08/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/" class="post-title-link" itemprop="url">Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-08 23:36:00" itemprop="dateCreated datePublished" datetime="2025-08-08T23:36:00+08:00">2025-08-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-24 15:55:04" itemprop="dateModified" datetime="2025-09-24T15:55:04+08:00">2025-09-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive-rag/" itemprop="url" rel="index"><span itemprop="name">naive rag</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuenips-20">Venue：NIPS 20</h1>
+<h1 id="date2021-04-12">date：2021-04-12</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="语言模型的幻觉问题是一直存在的同时语言模型它是通过把知识编码到它的参数里来进行记忆的因此知识的修改更新是很麻烦的需要微调故考虑引入外部知识库来进行辅助一来可以减少幻觉二来可以外部知识库的更新还是方便的如果有新的更改那么对外部知识库例如维基百科进行操作就行就不需要微调模型了这一通操作就是所谓retrieval-augmented检索增强">语言模型的幻觉问题是一直存在的；同时，语言模型它是通过把知识编码到它的参数里来进行记忆的，因此知识的修改/更新是很麻烦的，需要微调。故，考虑引入外部知识库，来进行辅助。一来可以减少幻觉，二来可以外部知识库的更新还是方便的，如果有新的更改，那么对外部知识库（例如维基百科）进行操作就行，就不需要微调模型了。这一通操作就是所谓retrieval
+augmented，检索增强</h2>
+<h2 id="但是此前的研究主要是聚焦于把检索增强操作应用到抽取型任务中而忽略了把它应用到生成型任务中论文主要就是填补这个空缺将检索增强操作应用到语言模型的一般生成上从而缓解幻觉">但是，此前的研究主要是聚焦于把检索增强操作应用到抽取型任务中，而忽略了把它应用到生成型任务中。论文主要就是填补这个空缺，将检索增强操作应用到语言模型的一般生成上，从而缓解幻觉</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="感觉主要是在当时能想到把检索增强应用到生成型任务上了算是弥补了当时的一个空缺吧有点开山之作的意思毕竟万引了但是现在有了llm以后所有的nlp任务几乎都被建模成了生成型的任务并且一个llm就能完成大部分所以现在一提起检索增强应该立马想到的都是检索增强生成也即rag吧但似乎retrieval-augmented这个概念并不是一经提出就是配套于generation的啊">感觉主要是在当时能想到把检索增强应用到生成型任务上了？算是弥补了当时的一个空缺吧（有点开山之作的意思？毕竟万引了）。但是现在有了llm以后，所有的nlp任务几乎都被建模成了生成型的任务，并且一个llm就能完成大部分，所以现在一提起检索增强，应该立马想到的都是检索增强生成，也即RAG吧……但似乎Retrieval
+Augmented这个概念并不是一经提出就是配套于Generation的啊</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一套框架可以端到端训练把检索增强操作应用到生成式任务上了并且训练好的retriever包含一个query-encoder以及一个passage-encoder是可以迁移的">提出了一套框架，可以端到端训练，把检索增强操作应用到生成式任务上了；并且训练好的retriever（包含一个query
+encoder以及一个passage encoder）是可以迁移的</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/08/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/naive_rag/Retrieval-Augmented%20Generation%20for%20Knowledge-Intensive%20NLP%20Tasks/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1008,7 +1136,7 @@ Run summary merge and add_summary（但这一步好像是tensorflow
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1074,18 +1202,18 @@ Run summary merge and add_summary（但这一步好像是tensorflow
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">252</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">70</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

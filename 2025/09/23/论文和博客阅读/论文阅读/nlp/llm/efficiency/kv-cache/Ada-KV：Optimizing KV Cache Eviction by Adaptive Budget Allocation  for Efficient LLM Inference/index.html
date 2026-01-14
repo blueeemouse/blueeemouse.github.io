@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：NIPS 25 date：2025-01-26 背景： 得先简单介绍一下kv cache。自回归模型，生成下一个token的时候，需要利用当前的最后一个token所聚合到的信息，变换得到一个概率分布，从中采样得到下一个token。而聚合信息会用到注意力机制。注意力机制就会要求token之间的q和k进行交互计算，从而得到token之间的关系（attention），最后和v一起进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ada-KV：Optimizing KV Cache Eviction by Adaptive Budget Allocation for Efficient LLM Inference">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/23/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：NIPS 25 date：2025-01-26 背景： 得先简单介绍一下kv cache。自回归模型，生成下一个token的时候，需要利用当前的最后一个token所聚合到的信息，变换得到一个概率分布，从中采样得到下一个token。而聚合信息会用到注意力机制。注意力机制就会要求token之间的q和k进行交互计算，从而得到token之间的关系（attention），最后和v一起进行">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-23T03:18:00.000Z">
+<meta property="article:modified_time" content="2025-09-26T14:52:39.903Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/23/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Ada-KV：Optimizing KV Cache Eviction by Adaptive Budget Allocation for Efficient LLM Inference | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/23/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/Ada-KV%EF%BC%9AOptimizing%20KV%20Cache%20Eviction%20by%20Adaptive%20Budget%20Allocation%20%20for%20Efficient%20LLM%20Inference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ada-KV：Optimizing KV Cache Eviction by Adaptive Budget Allocation for Efficient LLM Inference
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-23 11:18:00" itemprop="dateCreated datePublished" datetime="2025-09-23T11:18:00+08:00">2025-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-26 22:52:39" itemprop="dateModified" datetime="2025-09-26T22:52:39+08:00">2025-09-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/" itemprop="url" rel="index"><span itemprop="name">efficiency</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/" itemprop="url" rel="index"><span itemprop="name">kv-cache</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venuenips-25">Venue：NIPS 25</h1>
+<h1 id="date2025-01-26">date：2025-01-26</h1>
+<h1 id="背景">背景：</h1>
+<h2 id="得先简单介绍一下kv-cache自回归模型生成下一个token的时候需要利用当前的最后一个token所聚合到的信息变换得到一个概率分布从中采样得到下一个token而聚合信息会用到注意力机制注意力机制就会要求token之间的q和k进行交互计算从而得到token之间的关系attention最后和v一起进行加权求和-假设现有的prompt对应k个token的序列我们要生成token那么聚合之后根据第k个token的信息因为它和前面的所有token都有进行聚合所以是前面信息的总体的表征得到第k1个token也就是回答里的第一个token的概率分布之后要继续生成直到生成了eos为止那生成第k2个token的时候需要让第k1个token计算出qkv然后和前k个token的k进行交互得到attn完了利用前k个token加上第k1个token自己的v进行加权求和得到聚合后的信息此时我们发现生成第k1个token的时候用到了前k个token的k和v生成第k2个token的时候用到了前k1个token的k和v依次类推可以发现我们生成第i1个token的时候应该是要用到前i个token的k和v的因此如果我们把中间生成的token的k和v存下来后续就能一直复用不需要每一次都算显然速度上会更快但因为要存k和v所以这是一种用空间换时间的操作而且还有一个问题是随着我们生成的序列不断变长要存的k和v也越来越多甚至于这可能反而会成为显存开销里的大头因此有必要对存储的kv进行一些压缩剔除之类的操作否则开销无法承担">得先简单介绍一下kv
+cache。自回归模型，生成下一个token的时候，需要利用当前的最后一个token所聚合到的信息，变换得到一个概率分布，从中采样得到下一个token。而聚合信息会用到注意力机制。注意力机制就会要求token之间的q和k进行交互计算，从而得到token之间的关系（attention），最后和v一起进行加权求和<br>假设现有的prompt对应k个token的序列。我们要生成token。那么，聚合之后，根据第k个token的信息（因为它和前面的所有token都有进行聚合，所以是前面信息的总体的表征），得到第k+1个token（也就是回答里的第一个token）的概率分布。之后要继续生成，直到生成了<code>&lt;eos&gt;</code>为止。那生成第k+2个token的时候，需要让第k+1个token计算出q，k，v，然后和前k个token的k进行交互，得到attn，完了利用前k个token加上第k+1个token自己的v，进行加权求和，得到聚合后的信息。此时，我们发现，生成第k+1个token的时候，用到了前k个token的k和v；生成第k+2个token的时候，用到了前k+1个token的k和v。依次类推，可以发现，我们生成第i+1个token的时候，应该是要用到前i个token的k和v的。因此，如果我们把中间生成的token的k和v存下来，后续就能一直复用，不需要每一次都算。显然，速度上会更快，但因为要存k和v，所以这是一种用空间换时间的操作。而且还有一个问题是，随着我们生成的序列不断变长，要存的k和v也越来越多。甚至于，这可能反而会成为显存开销里的大头。因此，有必要对存储的kv进行一些压缩、剔除之类的操作，否则开销无法承担</h2>
+<span id="more"></span>
+<h3 id="另由上面的描述我们可以发现之所以没有所谓q-cache是因为往后生成的时候我们用不到前面的token的q没有复用的必要所以不需要存">（另，由上面的描述，我们可以发现，之所以没有所谓q-cache，是因为往后生成的时候，我们用不到前面的token的q，没有复用的必要，所以不需要存）</h3>
+<h2 id="关于prefill和decode">关于prefill和decode：</h2>
+<h3 id="这是自回归模型推理的时候需要先后经历的两个阶段-首先是prefill阶段它相当于是处理好输入的prompt具体来说是计算并存储prompt-token中的kv然后生成第一个token便于后续生成回答-第二步是decode阶段它就是基于prefill处理好的prompt-kv-cache进行自回归式的生成">这是自回归模型推理的时候需要先后经历的两个阶段<br>首先是prefill阶段。它相当于是处理好输入的prompt（具体来说是计算并存储prompt
+token中的kv，然后生成第一个token），便于后续生成回答；<br>第二步是decode阶段，它就是基于prefill处理好的prompt
+kv cache，进行自回归式的生成</h3>
+<h3 id="prefill已经讲清楚了而对于decode阶段稍微详细一点就是它是先用prefill阶段生成的第一个token生成第二个token然后把这第二个token的kv和之前的kv-cache拼到一起并基于这个新的token生成第三个token就是利用这个token的q和之前的kv-cache计算注意力聚合信息最后得到下一个token的概率分布并采样生成以此类推当然这里讲的是最朴素的做法所有token的kv都直接存没有什么kv-cache-compression的操作">prefill已经讲清楚了。而对于decode阶段，稍微详细一点，就是，它是先用prefill阶段生成的第一个token，生成第二个token，然后把这第二个token的kv和之前的kv
+cache拼到一起，并基于这个新的token生成第三个token（就是利用这个token的q，和之前的kv
+cache计算注意力，聚合信息，最后得到下一个token的概率分布，并采样生成），以此类推（当然，这里讲的是最朴素的做法，所有token的kv都直接存，没有什么kv
+cache compression的操作）</h3>
+<h3 id="如果分析一下两个阶段的一些性质可以发现一些不同这也是后续的一些研究的出发点prefill阶段会一次性处理所有的输入prompt-token所以它的计算量是om2假设输入prompt-token个数为m-而decode阶段它的计算量则是on这表示一次decode的计算复杂度也就是生成一个token的计算复杂度其中我们记当前时刻的历史序列长度为n可以想见decode需要进行多次因为我们一般都要生成多个token每次生成token之后下一次的计算量就会更大因为历史序列更长了此处我们仅考虑最朴素的情况没有什么token-eviction的操作那么假设prompt-token数量为m一共我们要生成n个token则总的decode计算量应该是ontimes-mfracnn-12当生成的token数量很多的时候主导项就应该是ofracnn-12也就是此时的计算量是平方级的了如果prompt很长则总的计算量近似为onm">如果分析一下两个阶段的一些性质，可以发现一些不同。这也是后续的一些研究的出发点：prefill阶段会一次性处理所有的输入prompt
+token，所以它的计算量是<span class="math inline">\(O(m^{2})\)</span>（假设输入prompt
+token个数为m）；<br>而decode阶段，它的计算量则是<span class="math inline">\(O(n)\)</span>（这表示一次decode的计算复杂度。也就是生成一个token的计算复杂度。其中，我们记当前时刻的历史序列长度为n）。可以想见，decode需要进行多次（因为我们一般都要生成多个token）。每次生成token之后，下一次的计算量就会更大（因为历史序列更长了。此处我们仅考虑最朴素的情况，没有什么token
+eviction的操作）。那么，假设prompt
+token数量为m，一共我们要生成n个token，则总的decode计算量应该是<span class="math inline">\(O(n\times
+m+\frac{n(n-1)}{2})\)</span>。当生成的token数量很多的时候，主导项就应该是<span class="math inline">\(O(\frac{n(n-1)}{2})\)</span>，也就是此时的计算量是平方级的了；如果prompt很长，则总的计算量近似为<span class="math inline">\(O(nm)\)</span></h3>
+<h2 id="关于论文中提到的识别key-token的window-size">关于论文中提到的，识别key
+token的window size：</h2>
+<h3 id="现有方法大部分都是top-k-eviction类的方法它们的思想是保留历史序列里的top-k重要的token而怎么挑选呢最朴素的方法是说我们看看当前的最后一个token它和之前的各个token之间的注意力大小挑出前k大的这些就是关键token它们的kv就是要cache起来的-但这样的问题在于我们仅依赖于一个token来观察可能有偶然性为此如果我们能看多个token比如看最后32个token和前面的token之间的注意力然后通过一些方式汇总到一起例如池化均值等再来看看哪些token是重要的这样的方式就会更加稳定一些而我们用多少个token来观察这个token的数量就是所谓window-size">现有方法大部分都是top-k
+eviction类的方法。它们的思想是，保留历史序列里的top-k重要的token。而怎么挑选呢？最朴素的方法是说，我们看看当前的最后一个token，它和之前的各个token之间的注意力大小，挑出前k大的。这些就是关键token，它们的kv就是要cache起来的<br>但这样的问题在于，我们仅依赖于一个token来观察，可能有偶然性。为此，如果我们能看多个token，比如看最后32个token和前面的token之间的注意力，然后通过一些方式汇总到一起（例如池化、均值等），再来看看哪些token是重要的，这样的方式就会更加稳定一些。而我们用多少个token来观察，这个token的数量就是所谓window
+size</h3>
+<h1 id="动机">动机：</h1>
+<h2 id="kv-cache可以帮助节省显存开销以及访存开销现有的方法大多是layer-wise的它们可能注意到layer之间有一些不同的注意力模式并据此进行设计提出方法但是忽略了不同的head之间也是有不同的注意力模式的因此论文考虑提出head-wise的自适应budget分配策略且是plug-and-play的">kv
+cache可以帮助节省显存开销以及访存开销。现有的方法大多是layer-wise的，它们可能注意到layer之间有一些不同的注意力模式，并据此进行设计，提出方法。但是忽略了：不同的head之间也是有不同的注意力模式的。因此，论文考虑提出head-wise的自适应budget分配策略（且是plug-and-play的）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="注意到head之间也有不同的注意力模式因此提出可以在head-wise上进行budget的分配">注意到head之间也有不同的注意力模式，因此提出可以在head-wise上进行budget的分配</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出一个自适应的budget分配策略">提出一个自适应的budget分配策略</h2>
+<h2 id="提出一个eviction-loss证明了各种cache-eviction策略其实就是在想办法优化这个loss">提出一个eviction
+loss，证明了各种cache eviction策略其实就是在想办法优化这个loss</h2>
+<h1 id="method">method</h1>
+<h2 id="evict非关键token之后注意力权重结果就会变化这会带来一些精度上的损失因此论文提出一个l1-eviction-loss来衡量eviction对精度的影响基于此论文给出了一个损失的上界同时说明了各种cache-eviction方法以top-k的eviction方法为代表其实都是在最小化这个损失而后续论文将证明论文的head-wise-adaptive-budget-allocation会帮助进一步最小化这个loss">evict非关键token之后，注意力权重结果就会变化，这会带来一些精度上的损失。因此，论文提出一个L1
+Eviction
+loss，来衡量eviction对精度的影响。基于此，论文给出了一个损失的上界，同时说明了各种cache
+eviction方法（以top-k的eviction方法为代表）其实都是在最小化这个损失。而后续论文将证明，论文的head-wise
+adaptive budget allocation会帮助进一步最小化这个loss</h2>
+<h2 id="论文的策略有两版第一版是基于现有的一般的top-k-methods进行改进的它的特点是head-wise也就是每个head的budget是不同的根据前面的分析论文发现有些head需要多一点的budget而有些只需要少一点的budget就够了因此此处的操作是先把每一层的所有head放到一起看挑出最重要的top-k的attn-weights具体的k其实就是取为budget-b之后数一下每个head里有多少top-k的attn-weights有多少个我们就认为这个head应该有多少配额因为一个head里有越多的top-k的attn-weights表明这个head里重要的部分越多要保留的kv也应该越多">论文的策略有两版。第一版是基于现有的、一般的top-k
+methods进行改进的。它的特点是head-wise，也就是每个head的budget是不同的。根据前面的分析，论文发现，有些head需要多一点的budget，而有些只需要少一点的budget就够了。因此，此处的操作是，先把每一层的所有head放到一起看，挑出最重要的top-k的attn
+weights（具体的k其实就是取为budget
+B）。之后数一下每个head里有多少top-k的attn
+weights。有多少个，我们就认为这个head应该有多少配额。（因为一个head里有越多的top-k的attn
+weights，表明这个head里重要的部分越多，要保留的kv也应该越多）</h2>
+<h2 id="另外因为论文的策略其实是plug-and-play的为了展示这一点论文给出了和sota方法snapkv以及pyramid结合的变体也就是第二版大概讲一下的话就是先根据最近的winsize里的token也就是观察窗口里的token计算出和历史token之间的注意力权重之后通过一些pooling以及mean的操作聚合注意力最终得到每个head的注意力分布的表征指标通过这个指标我们可以判断一个head它是更偏向于sparse-head需要更少配额还是更偏向dispersed-head需要更多配额">另外，因为论文的策略其实是plug-and-play的。为了展示这一点，论文给出了和sota方法（SnapKV以及pyramid）结合的变体（也就是第二版）。大概讲一下的话，就是，先根据最近的winsize里的token（也就是观察窗口里的token），计算出和历史token之间的注意力权重，之后通过一些pooling以及mean的操作，聚合注意力，最终得到每个head的注意力分布的表征指标。通过这个指标，我们可以判断一个head它是更偏向于sparse
+head（需要更少配额）还是更偏向dispersed head（需要更多配额）</h2>
+<h3 id="不过这里有点疑问啊怎么感觉它的algorithm-2和algorithm-1有点冲突了如果要不冲突则需要一个类似取反的操作可是论文里没有明说啊">不过这里有点疑问啊，怎么感觉它的Algorithm
+2和Algorithm
+1有点冲突了？如果要不冲突，则需要一个类似取反的操作。可是论文里没有明说啊？</h3>
+<h2 id="关于具体实现">关于具体实现：</h2>
+<h3 id="因为论文采取动态分配的策略每个head的cache是变长的这不利于高效计算因此论文结合flashattn设计了一种flatten-cache-storage-layout同时实现了一个自定义的cuda-kernel最终做到了和一般的flash-attn差不多的速度">因为论文采取动态分配的策略，每个head的cache是变长的，这不利于高效计算。因此，论文结合FlashAttn，设计了一种flatten
+cache storage layout，同时实现了一个自定义的cuda
+kernel，最终做到了和一般的Flash Attn差不多的速度</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/20/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/rl-based/VRAG-RL%EF%BC%9AEmpower%20Vision-Perception-Based%20RAG%20for%20Visually%20Rich%20Information%20Understanding%20via%20Iterative%20Reasoning%20with%20Reinforcement%20Learning/" rel="prev" title="VRAG-RL：Empower Vision-Perception-Based RAG for Visually Rich Information Understanding via Iterative Reasoning with Reinforcement Learning">
+      <i class="fa fa-chevron-left"></i> VRAG-RL：Empower Vision-Perception-Based RAG for Visually Rich Information Understanding via Iterative Reasoning with Reinforcement Learning
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/24/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/knowledge-graph/DuetGraph%EF%BC%9ACoarse-to-Fine%20Knowledge%20Graph%20Reasoning%20with%20Dual-Pathway%20Global-Local%20Fusion/" rel="next" title="DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion">
+      DuetGraph：Coarse-to-Fine Knowledge Graph Reasoning with Dual-Pathway Global-Local Fusion <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venuenips-25"><span class="nav-number">1.</span> <span class="nav-text">Venue：NIPS 25</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2025-01-26"><span class="nav-number">2.</span> <span class="nav-text">date：2025-01-26</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text">背景：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%97%E5%85%88%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8Bkv-cache%E8%87%AA%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90%E4%B8%8B%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%88%A9%E7%94%A8%E5%BD%93%E5%89%8D%E7%9A%84%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AAtoken%E6%89%80%E8%81%9A%E5%90%88%E5%88%B0%E7%9A%84%E4%BF%A1%E6%81%AF%E5%8F%98%E6%8D%A2%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AA%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83%E4%BB%8E%E4%B8%AD%E9%87%87%E6%A0%B7%E5%BE%97%E5%88%B0%E4%B8%8B%E4%B8%80%E4%B8%AAtoken%E8%80%8C%E8%81%9A%E5%90%88%E4%BF%A1%E6%81%AF%E4%BC%9A%E7%94%A8%E5%88%B0%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E5%B0%B1%E4%BC%9A%E8%A6%81%E6%B1%82token%E4%B9%8B%E9%97%B4%E7%9A%84q%E5%92%8Ck%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92%E8%AE%A1%E7%AE%97%E4%BB%8E%E8%80%8C%E5%BE%97%E5%88%B0token%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BBattention%E6%9C%80%E5%90%8E%E5%92%8Cv%E4%B8%80%E8%B5%B7%E8%BF%9B%E8%A1%8C%E5%8A%A0%E6%9D%83%E6%B1%82%E5%92%8C-%E5%81%87%E8%AE%BE%E7%8E%B0%E6%9C%89%E7%9A%84prompt%E5%AF%B9%E5%BA%94k%E4%B8%AAtoken%E7%9A%84%E5%BA%8F%E5%88%97%E6%88%91%E4%BB%AC%E8%A6%81%E7%94%9F%E6%88%90token%E9%82%A3%E4%B9%88%E8%81%9A%E5%90%88%E4%B9%8B%E5%90%8E%E6%A0%B9%E6%8D%AE%E7%AC%ACk%E4%B8%AAtoken%E7%9A%84%E4%BF%A1%E6%81%AF%E5%9B%A0%E4%B8%BA%E5%AE%83%E5%92%8C%E5%89%8D%E9%9D%A2%E7%9A%84%E6%89%80%E6%9C%89token%E9%83%BD%E6%9C%89%E8%BF%9B%E8%A1%8C%E8%81%9A%E5%90%88%E6%89%80%E4%BB%A5%E6%98%AF%E5%89%8D%E9%9D%A2%E4%BF%A1%E6%81%AF%E7%9A%84%E6%80%BB%E4%BD%93%E7%9A%84%E8%A1%A8%E5%BE%81%E5%BE%97%E5%88%B0%E7%AC%ACk1%E4%B8%AAtoken%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%9B%9E%E7%AD%94%E9%87%8C%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83%E4%B9%8B%E5%90%8E%E8%A6%81%E7%BB%A7%E7%BB%AD%E7%94%9F%E6%88%90%E7%9B%B4%E5%88%B0%E7%94%9F%E6%88%90%E4%BA%86eos%E4%B8%BA%E6%AD%A2%E9%82%A3%E7%94%9F%E6%88%90%E7%AC%ACk2%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E8%AE%A9%E7%AC%ACk1%E4%B8%AAtoken%E8%AE%A1%E7%AE%97%E5%87%BAqkv%E7%84%B6%E5%90%8E%E5%92%8C%E5%89%8Dk%E4%B8%AAtoken%E7%9A%84k%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92%E5%BE%97%E5%88%B0attn%E5%AE%8C%E4%BA%86%E5%88%A9%E7%94%A8%E5%89%8Dk%E4%B8%AAtoken%E5%8A%A0%E4%B8%8A%E7%AC%ACk1%E4%B8%AAtoken%E8%87%AA%E5%B7%B1%E7%9A%84v%E8%BF%9B%E8%A1%8C%E5%8A%A0%E6%9D%83%E6%B1%82%E5%92%8C%E5%BE%97%E5%88%B0%E8%81%9A%E5%90%88%E5%90%8E%E7%9A%84%E4%BF%A1%E6%81%AF%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%E7%94%9F%E6%88%90%E7%AC%ACk1%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E5%80%99%E7%94%A8%E5%88%B0%E4%BA%86%E5%89%8Dk%E4%B8%AAtoken%E7%9A%84k%E5%92%8Cv%E7%94%9F%E6%88%90%E7%AC%ACk2%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E5%80%99%E7%94%A8%E5%88%B0%E4%BA%86%E5%89%8Dk1%E4%B8%AAtoken%E7%9A%84k%E5%92%8Cv%E4%BE%9D%E6%AC%A1%E7%B1%BB%E6%8E%A8%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E7%AC%ACi1%E4%B8%AAtoken%E7%9A%84%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5%E6%98%AF%E8%A6%81%E7%94%A8%E5%88%B0%E5%89%8Di%E4%B8%AAtoken%E7%9A%84k%E5%92%8Cv%E7%9A%84%E5%9B%A0%E6%AD%A4%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%8A%8A%E4%B8%AD%E9%97%B4%E7%94%9F%E6%88%90%E7%9A%84token%E7%9A%84k%E5%92%8Cv%E5%AD%98%E4%B8%8B%E6%9D%A5%E5%90%8E%E7%BB%AD%E5%B0%B1%E8%83%BD%E4%B8%80%E7%9B%B4%E5%A4%8D%E7%94%A8%E4%B8%8D%E9%9C%80%E8%A6%81%E6%AF%8F%E4%B8%80%E6%AC%A1%E9%83%BD%E7%AE%97%E6%98%BE%E7%84%B6%E9%80%9F%E5%BA%A6%E4%B8%8A%E4%BC%9A%E6%9B%B4%E5%BF%AB%E4%BD%86%E5%9B%A0%E4%B8%BA%E8%A6%81%E5%AD%98k%E5%92%8Cv%E6%89%80%E4%BB%A5%E8%BF%99%E6%98%AF%E4%B8%80%E7%A7%8D%E7%94%A8%E7%A9%BA%E9%97%B4%E6%8D%A2%E6%97%B6%E9%97%B4%E7%9A%84%E6%93%8D%E4%BD%9C%E8%80%8C%E4%B8%94%E8%BF%98%E6%9C%89%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E6%98%AF%E9%9A%8F%E7%9D%80%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E7%9A%84%E5%BA%8F%E5%88%97%E4%B8%8D%E6%96%AD%E5%8F%98%E9%95%BF%E8%A6%81%E5%AD%98%E7%9A%84k%E5%92%8Cv%E4%B9%9F%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%A4%9A%E7%94%9A%E8%87%B3%E4%BA%8E%E8%BF%99%E5%8F%AF%E8%83%BD%E5%8F%8D%E8%80%8C%E4%BC%9A%E6%88%90%E4%B8%BA%E6%98%BE%E5%AD%98%E5%BC%80%E9%94%80%E9%87%8C%E7%9A%84%E5%A4%A7%E5%A4%B4%E5%9B%A0%E6%AD%A4%E6%9C%89%E5%BF%85%E8%A6%81%E5%AF%B9%E5%AD%98%E5%82%A8%E7%9A%84kv%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%BA%9B%E5%8E%8B%E7%BC%A9%E5%89%94%E9%99%A4%E4%B9%8B%E7%B1%BB%E7%9A%84%E6%93%8D%E4%BD%9C%E5%90%A6%E5%88%99%E5%BC%80%E9%94%80%E6%97%A0%E6%B3%95%E6%89%BF%E6%8B%85"><span class="nav-number">3.1.</span> <span class="nav-text">得先简单介绍一下kv
+cache。自回归模型，生成下一个token的时候，需要利用当前的最后一个token所聚合到的信息，变换得到一个概率分布，从中采样得到下一个token。而聚合信息会用到注意力机制。注意力机制就会要求token之间的q和k进行交互计算，从而得到token之间的关系（attention），最后和v一起进行加权求和假设现有的prompt对应k个token的序列。我们要生成token。那么，聚合之后，根据第k个token的信息（因为它和前面的所有token都有进行聚合，所以是前面信息的总体的表征），得到第k+1个token（也就是回答里的第一个token）的概率分布。之后要继续生成，直到生成了&lt;eos&gt;为止。那生成第k+2个token的时候，需要让第k+1个token计算出q，k，v，然后和前k个token的k进行交互，得到attn，完了利用前k个token加上第k+1个token自己的v，进行加权求和，得到聚合后的信息。此时，我们发现，生成第k+1个token的时候，用到了前k个token的k和v；生成第k+2个token的时候，用到了前k+1个token的k和v。依次类推，可以发现，我们生成第i+1个token的时候，应该是要用到前i个token的k和v的。因此，如果我们把中间生成的token的k和v存下来，后续就能一直复用，不需要每一次都算。显然，速度上会更快，但因为要存k和v，所以这是一种用空间换时间的操作。而且还有一个问题是，随着我们生成的序列不断变长，要存的k和v也越来越多。甚至于，这可能反而会成为显存开销里的大头。因此，有必要对存储的kv进行一些压缩、剔除之类的操作，否则开销无法承担</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A6%E7%94%B1%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%8F%8F%E8%BF%B0%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E4%B9%8B%E6%89%80%E4%BB%A5%E6%B2%A1%E6%9C%89%E6%89%80%E8%B0%93q-cache%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%BE%80%E5%90%8E%E7%94%9F%E6%88%90%E7%9A%84%E6%97%B6%E5%80%99%E6%88%91%E4%BB%AC%E7%94%A8%E4%B8%8D%E5%88%B0%E5%89%8D%E9%9D%A2%E7%9A%84token%E7%9A%84q%E6%B2%A1%E6%9C%89%E5%A4%8D%E7%94%A8%E7%9A%84%E5%BF%85%E8%A6%81%E6%89%80%E4%BB%A5%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AD%98"><span class="nav-number">3.1.1.</span> <span class="nav-text">（另，由上面的描述，我们可以发现，之所以没有所谓q-cache，是因为往后生成的时候，我们用不到前面的token的q，没有复用的必要，所以不需要存）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Eprefill%E5%92%8Cdecode"><span class="nav-number">3.2.</span> <span class="nav-text">关于prefill和decode：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E6%98%AF%E8%87%AA%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E7%9A%84%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%85%88%E5%90%8E%E7%BB%8F%E5%8E%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5-%E9%A6%96%E5%85%88%E6%98%AFprefill%E9%98%B6%E6%AE%B5%E5%AE%83%E7%9B%B8%E5%BD%93%E4%BA%8E%E6%98%AF%E5%A4%84%E7%90%86%E5%A5%BD%E8%BE%93%E5%85%A5%E7%9A%84prompt%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%98%AF%E8%AE%A1%E7%AE%97%E5%B9%B6%E5%AD%98%E5%82%A8prompt-token%E4%B8%AD%E7%9A%84kv%E7%84%B6%E5%90%8E%E7%94%9F%E6%88%90%E7%AC%AC%E4%B8%80%E4%B8%AAtoken%E4%BE%BF%E4%BA%8E%E5%90%8E%E7%BB%AD%E7%94%9F%E6%88%90%E5%9B%9E%E7%AD%94-%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%98%AFdecode%E9%98%B6%E6%AE%B5%E5%AE%83%E5%B0%B1%E6%98%AF%E5%9F%BA%E4%BA%8Eprefill%E5%A4%84%E7%90%86%E5%A5%BD%E7%9A%84prompt-kv-cache%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%9B%9E%E5%BD%92%E5%BC%8F%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">3.2.1.</span> <span class="nav-text">这是自回归模型推理的时候需要先后经历的两个阶段首先是prefill阶段。它相当于是处理好输入的prompt（具体来说是计算并存储prompt
+token中的kv，然后生成第一个token），便于后续生成回答；第二步是decode阶段，它就是基于prefill处理好的prompt
+kv cache，进行自回归式的生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prefill%E5%B7%B2%E7%BB%8F%E8%AE%B2%E6%B8%85%E6%A5%9A%E4%BA%86%E8%80%8C%E5%AF%B9%E4%BA%8Edecode%E9%98%B6%E6%AE%B5%E7%A8%8D%E5%BE%AE%E8%AF%A6%E7%BB%86%E4%B8%80%E7%82%B9%E5%B0%B1%E6%98%AF%E5%AE%83%E6%98%AF%E5%85%88%E7%94%A8prefill%E9%98%B6%E6%AE%B5%E7%94%9F%E6%88%90%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAtoken%E7%94%9F%E6%88%90%E7%AC%AC%E4%BA%8C%E4%B8%AAtoken%E7%84%B6%E5%90%8E%E6%8A%8A%E8%BF%99%E7%AC%AC%E4%BA%8C%E4%B8%AAtoken%E7%9A%84kv%E5%92%8C%E4%B9%8B%E5%89%8D%E7%9A%84kv-cache%E6%8B%BC%E5%88%B0%E4%B8%80%E8%B5%B7%E5%B9%B6%E5%9F%BA%E4%BA%8E%E8%BF%99%E4%B8%AA%E6%96%B0%E7%9A%84token%E7%94%9F%E6%88%90%E7%AC%AC%E4%B8%89%E4%B8%AAtoken%E5%B0%B1%E6%98%AF%E5%88%A9%E7%94%A8%E8%BF%99%E4%B8%AAtoken%E7%9A%84q%E5%92%8C%E4%B9%8B%E5%89%8D%E7%9A%84kv-cache%E8%AE%A1%E7%AE%97%E6%B3%A8%E6%84%8F%E5%8A%9B%E8%81%9A%E5%90%88%E4%BF%A1%E6%81%AF%E6%9C%80%E5%90%8E%E5%BE%97%E5%88%B0%E4%B8%8B%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83%E5%B9%B6%E9%87%87%E6%A0%B7%E7%94%9F%E6%88%90%E4%BB%A5%E6%AD%A4%E7%B1%BB%E6%8E%A8%E5%BD%93%E7%84%B6%E8%BF%99%E9%87%8C%E8%AE%B2%E7%9A%84%E6%98%AF%E6%9C%80%E6%9C%B4%E7%B4%A0%E7%9A%84%E5%81%9A%E6%B3%95%E6%89%80%E6%9C%89token%E7%9A%84kv%E9%83%BD%E7%9B%B4%E6%8E%A5%E5%AD%98%E6%B2%A1%E6%9C%89%E4%BB%80%E4%B9%88kv-cache-compression%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.2.</span> <span class="nav-text">prefill已经讲清楚了。而对于decode阶段，稍微详细一点，就是，它是先用prefill阶段生成的第一个token，生成第二个token，然后把这第二个token的kv和之前的kv
+cache拼到一起，并基于这个新的token生成第三个token（就是利用这个token的q，和之前的kv
+cache计算注意力，聚合信息，最后得到下一个token的概率分布，并采样生成），以此类推（当然，这里讲的是最朴素的做法，所有token的kv都直接存，没有什么kv
+cache compression的操作）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%88%86%E6%9E%90%E4%B8%80%E4%B8%8B%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%A7%E8%B4%A8%E5%8F%AF%E4%BB%A5%E5%8F%91%E7%8E%B0%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C%E8%BF%99%E4%B9%9F%E6%98%AF%E5%90%8E%E7%BB%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%A0%94%E7%A9%B6%E7%9A%84%E5%87%BA%E5%8F%91%E7%82%B9prefill%E9%98%B6%E6%AE%B5%E4%BC%9A%E4%B8%80%E6%AC%A1%E6%80%A7%E5%A4%84%E7%90%86%E6%89%80%E6%9C%89%E7%9A%84%E8%BE%93%E5%85%A5prompt-token%E6%89%80%E4%BB%A5%E5%AE%83%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E6%98%AFom2%E5%81%87%E8%AE%BE%E8%BE%93%E5%85%A5prompt-token%E4%B8%AA%E6%95%B0%E4%B8%BAm-%E8%80%8Cdecode%E9%98%B6%E6%AE%B5%E5%AE%83%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E5%88%99%E6%98%AFon%E8%BF%99%E8%A1%A8%E7%A4%BA%E4%B8%80%E6%AC%A1decode%E7%9A%84%E8%AE%A1%E7%AE%97%E5%A4%8D%E6%9D%82%E5%BA%A6%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAtoken%E7%9A%84%E8%AE%A1%E7%AE%97%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%85%B6%E4%B8%AD%E6%88%91%E4%BB%AC%E8%AE%B0%E5%BD%93%E5%89%8D%E6%97%B6%E5%88%BB%E7%9A%84%E5%8E%86%E5%8F%B2%E5%BA%8F%E5%88%97%E9%95%BF%E5%BA%A6%E4%B8%BAn%E5%8F%AF%E4%BB%A5%E6%83%B3%E8%A7%81decode%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%A4%9A%E6%AC%A1%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E4%B8%80%E8%88%AC%E9%83%BD%E8%A6%81%E7%94%9F%E6%88%90%E5%A4%9A%E4%B8%AAtoken%E6%AF%8F%E6%AC%A1%E7%94%9F%E6%88%90token%E4%B9%8B%E5%90%8E%E4%B8%8B%E4%B8%80%E6%AC%A1%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E5%B0%B1%E4%BC%9A%E6%9B%B4%E5%A4%A7%E5%9B%A0%E4%B8%BA%E5%8E%86%E5%8F%B2%E5%BA%8F%E5%88%97%E6%9B%B4%E9%95%BF%E4%BA%86%E6%AD%A4%E5%A4%84%E6%88%91%E4%BB%AC%E4%BB%85%E8%80%83%E8%99%91%E6%9C%80%E6%9C%B4%E7%B4%A0%E7%9A%84%E6%83%85%E5%86%B5%E6%B2%A1%E6%9C%89%E4%BB%80%E4%B9%88token-eviction%E7%9A%84%E6%93%8D%E4%BD%9C%E9%82%A3%E4%B9%88%E5%81%87%E8%AE%BEprompt-token%E6%95%B0%E9%87%8F%E4%B8%BAm%E4%B8%80%E5%85%B1%E6%88%91%E4%BB%AC%E8%A6%81%E7%94%9F%E6%88%90n%E4%B8%AAtoken%E5%88%99%E6%80%BB%E7%9A%84decode%E8%AE%A1%E7%AE%97%E9%87%8F%E5%BA%94%E8%AF%A5%E6%98%AFontimes-mfracnn-12%E5%BD%93%E7%94%9F%E6%88%90%E7%9A%84token%E6%95%B0%E9%87%8F%E5%BE%88%E5%A4%9A%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%BB%E5%AF%BC%E9%A1%B9%E5%B0%B1%E5%BA%94%E8%AF%A5%E6%98%AFofracnn-12%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%AD%A4%E6%97%B6%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E6%98%AF%E5%B9%B3%E6%96%B9%E7%BA%A7%E7%9A%84%E4%BA%86%E5%A6%82%E6%9E%9Cprompt%E5%BE%88%E9%95%BF%E5%88%99%E6%80%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E8%BF%91%E4%BC%BC%E4%B8%BAonm"><span class="nav-number">3.2.3.</span> <span class="nav-text">如果分析一下两个阶段的一些性质，可以发现一些不同。这也是后续的一些研究的出发点：prefill阶段会一次性处理所有的输入prompt
+token，所以它的计算量是\(O(m^{2})\)（假设输入prompt
+token个数为m）；而decode阶段，它的计算量则是\(O(n)\)（这表示一次decode的计算复杂度。也就是生成一个token的计算复杂度。其中，我们记当前时刻的历史序列长度为n）。可以想见，decode需要进行多次（因为我们一般都要生成多个token）。每次生成token之后，下一次的计算量就会更大（因为历史序列更长了。此处我们仅考虑最朴素的情况，没有什么token
+eviction的操作）。那么，假设prompt
+token数量为m，一共我们要生成n个token，则总的decode计算量应该是\(O(n\times
+m+\frac{n(n-1)}{2})\)。当生成的token数量很多的时候，主导项就应该是\(O(\frac{n(n-1)}{2})\)，也就是此时的计算量是平方级的了；如果prompt很长，则总的计算量近似为\(O(nm)\)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%AE%BA%E6%96%87%E4%B8%AD%E6%8F%90%E5%88%B0%E7%9A%84%E8%AF%86%E5%88%ABkey-token%E7%9A%84window-size"><span class="nav-number">3.3.</span> <span class="nav-text">关于论文中提到的，识别key
+token的window size：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E5%A4%A7%E9%83%A8%E5%88%86%E9%83%BD%E6%98%AFtop-k-eviction%E7%B1%BB%E7%9A%84%E6%96%B9%E6%B3%95%E5%AE%83%E4%BB%AC%E7%9A%84%E6%80%9D%E6%83%B3%E6%98%AF%E4%BF%9D%E7%95%99%E5%8E%86%E5%8F%B2%E5%BA%8F%E5%88%97%E9%87%8C%E7%9A%84top-k%E9%87%8D%E8%A6%81%E7%9A%84token%E8%80%8C%E6%80%8E%E4%B9%88%E6%8C%91%E9%80%89%E5%91%A2%E6%9C%80%E6%9C%B4%E7%B4%A0%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E8%AF%B4%E6%88%91%E4%BB%AC%E7%9C%8B%E7%9C%8B%E5%BD%93%E5%89%8D%E7%9A%84%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AAtoken%E5%AE%83%E5%92%8C%E4%B9%8B%E5%89%8D%E7%9A%84%E5%90%84%E4%B8%AAtoken%E4%B9%8B%E9%97%B4%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%A4%A7%E5%B0%8F%E6%8C%91%E5%87%BA%E5%89%8Dk%E5%A4%A7%E7%9A%84%E8%BF%99%E4%BA%9B%E5%B0%B1%E6%98%AF%E5%85%B3%E9%94%AEtoken%E5%AE%83%E4%BB%AC%E7%9A%84kv%E5%B0%B1%E6%98%AF%E8%A6%81cache%E8%B5%B7%E6%9D%A5%E7%9A%84-%E4%BD%86%E8%BF%99%E6%A0%B7%E7%9A%84%E9%97%AE%E9%A2%98%E5%9C%A8%E4%BA%8E%E6%88%91%E4%BB%AC%E4%BB%85%E4%BE%9D%E8%B5%96%E4%BA%8E%E4%B8%80%E4%B8%AAtoken%E6%9D%A5%E8%A7%82%E5%AF%9F%E5%8F%AF%E8%83%BD%E6%9C%89%E5%81%B6%E7%84%B6%E6%80%A7%E4%B8%BA%E6%AD%A4%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E8%83%BD%E7%9C%8B%E5%A4%9A%E4%B8%AAtoken%E6%AF%94%E5%A6%82%E7%9C%8B%E6%9C%80%E5%90%8E32%E4%B8%AAtoken%E5%92%8C%E5%89%8D%E9%9D%A2%E7%9A%84token%E4%B9%8B%E9%97%B4%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E7%84%B6%E5%90%8E%E9%80%9A%E8%BF%87%E4%B8%80%E4%BA%9B%E6%96%B9%E5%BC%8F%E6%B1%87%E6%80%BB%E5%88%B0%E4%B8%80%E8%B5%B7%E4%BE%8B%E5%A6%82%E6%B1%A0%E5%8C%96%E5%9D%87%E5%80%BC%E7%AD%89%E5%86%8D%E6%9D%A5%E7%9C%8B%E7%9C%8B%E5%93%AA%E4%BA%9Btoken%E6%98%AF%E9%87%8D%E8%A6%81%E7%9A%84%E8%BF%99%E6%A0%B7%E7%9A%84%E6%96%B9%E5%BC%8F%E5%B0%B1%E4%BC%9A%E6%9B%B4%E5%8A%A0%E7%A8%B3%E5%AE%9A%E4%B8%80%E4%BA%9B%E8%80%8C%E6%88%91%E4%BB%AC%E7%94%A8%E5%A4%9A%E5%B0%91%E4%B8%AAtoken%E6%9D%A5%E8%A7%82%E5%AF%9F%E8%BF%99%E4%B8%AAtoken%E7%9A%84%E6%95%B0%E9%87%8F%E5%B0%B1%E6%98%AF%E6%89%80%E8%B0%93window-size"><span class="nav-number">3.3.1.</span> <span class="nav-text">现有方法大部分都是top-k
+eviction类的方法。它们的思想是，保留历史序列里的top-k重要的token。而怎么挑选呢？最朴素的方法是说，我们看看当前的最后一个token，它和之前的各个token之间的注意力大小，挑出前k大的。这些就是关键token，它们的kv就是要cache起来的但这样的问题在于，我们仅依赖于一个token来观察，可能有偶然性。为此，如果我们能看多个token，比如看最后32个token和前面的token之间的注意力，然后通过一些方式汇总到一起（例如池化、均值等），再来看看哪些token是重要的，这样的方式就会更加稳定一些。而我们用多少个token来观察，这个token的数量就是所谓window
+size</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">4.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#kv-cache%E5%8F%AF%E4%BB%A5%E5%B8%AE%E5%8A%A9%E8%8A%82%E7%9C%81%E6%98%BE%E5%AD%98%E5%BC%80%E9%94%80%E4%BB%A5%E5%8F%8A%E8%AE%BF%E5%AD%98%E5%BC%80%E9%94%80%E7%8E%B0%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95%E5%A4%A7%E5%A4%9A%E6%98%AFlayer-wise%E7%9A%84%E5%AE%83%E4%BB%AC%E5%8F%AF%E8%83%BD%E6%B3%A8%E6%84%8F%E5%88%B0layer%E4%B9%8B%E9%97%B4%E6%9C%89%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%BC%8F%E5%B9%B6%E6%8D%AE%E6%AD%A4%E8%BF%9B%E8%A1%8C%E8%AE%BE%E8%AE%A1%E6%8F%90%E5%87%BA%E6%96%B9%E6%B3%95%E4%BD%86%E6%98%AF%E5%BF%BD%E7%95%A5%E4%BA%86%E4%B8%8D%E5%90%8C%E7%9A%84head%E4%B9%8B%E9%97%B4%E4%B9%9F%E6%98%AF%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%9B%A0%E6%AD%A4%E8%AE%BA%E6%96%87%E8%80%83%E8%99%91%E6%8F%90%E5%87%BAhead-wise%E7%9A%84%E8%87%AA%E9%80%82%E5%BA%94budget%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5%E4%B8%94%E6%98%AFplug-and-play%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">kv
+cache可以帮助节省显存开销以及访存开销。现有的方法大多是layer-wise的，它们可能注意到layer之间有一些不同的注意力模式，并据此进行设计，提出方法。但是忽略了：不同的head之间也是有不同的注意力模式的。因此，论文考虑提出head-wise的自适应budget分配策略（且是plug-and-play的）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">5.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%88%B0head%E4%B9%8B%E9%97%B4%E4%B9%9F%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%BC%8F%E5%9B%A0%E6%AD%A4%E6%8F%90%E5%87%BA%E5%8F%AF%E4%BB%A5%E5%9C%A8head-wise%E4%B8%8A%E8%BF%9B%E8%A1%8Cbudget%E7%9A%84%E5%88%86%E9%85%8D"><span class="nav-number">5.1.</span> <span class="nav-text">注意到head之间也有不同的注意力模式，因此提出可以在head-wise上进行budget的分配</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">6.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%B8%80%E4%B8%AA%E8%87%AA%E9%80%82%E5%BA%94%E7%9A%84budget%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="nav-number">6.1.</span> <span class="nav-text">提出一个自适应的budget分配策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%B8%80%E4%B8%AAeviction-loss%E8%AF%81%E6%98%8E%E4%BA%86%E5%90%84%E7%A7%8Dcache-eviction%E7%AD%96%E7%95%A5%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E5%9C%A8%E6%83%B3%E5%8A%9E%E6%B3%95%E4%BC%98%E5%8C%96%E8%BF%99%E4%B8%AAloss"><span class="nav-number">6.2.</span> <span class="nav-text">提出一个eviction
+loss，证明了各种cache eviction策略其实就是在想办法优化这个loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#method"><span class="nav-number">7.</span> <span class="nav-text">method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#evict%E9%9D%9E%E5%85%B3%E9%94%AEtoken%E4%B9%8B%E5%90%8E%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9D%83%E9%87%8D%E7%BB%93%E6%9E%9C%E5%B0%B1%E4%BC%9A%E5%8F%98%E5%8C%96%E8%BF%99%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%B8%80%E4%BA%9B%E7%B2%BE%E5%BA%A6%E4%B8%8A%E7%9A%84%E6%8D%9F%E5%A4%B1%E5%9B%A0%E6%AD%A4%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BA%E4%B8%80%E4%B8%AAl1-eviction-loss%E6%9D%A5%E8%A1%A1%E9%87%8Feviction%E5%AF%B9%E7%B2%BE%E5%BA%A6%E7%9A%84%E5%BD%B1%E5%93%8D%E5%9F%BA%E4%BA%8E%E6%AD%A4%E8%AE%BA%E6%96%87%E7%BB%99%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E6%8D%9F%E5%A4%B1%E7%9A%84%E4%B8%8A%E7%95%8C%E5%90%8C%E6%97%B6%E8%AF%B4%E6%98%8E%E4%BA%86%E5%90%84%E7%A7%8Dcache-eviction%E6%96%B9%E6%B3%95%E4%BB%A5top-k%E7%9A%84eviction%E6%96%B9%E6%B3%95%E4%B8%BA%E4%BB%A3%E8%A1%A8%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E5%9C%A8%E6%9C%80%E5%B0%8F%E5%8C%96%E8%BF%99%E4%B8%AA%E6%8D%9F%E5%A4%B1%E8%80%8C%E5%90%8E%E7%BB%AD%E8%AE%BA%E6%96%87%E5%B0%86%E8%AF%81%E6%98%8E%E8%AE%BA%E6%96%87%E7%9A%84head-wise-adaptive-budget-allocation%E4%BC%9A%E5%B8%AE%E5%8A%A9%E8%BF%9B%E4%B8%80%E6%AD%A5%E6%9C%80%E5%B0%8F%E5%8C%96%E8%BF%99%E4%B8%AAloss"><span class="nav-number">7.1.</span> <span class="nav-text">evict非关键token之后，注意力权重结果就会变化，这会带来一些精度上的损失。因此，论文提出一个L1
+Eviction
+loss，来衡量eviction对精度的影响。基于此，论文给出了一个损失的上界，同时说明了各种cache
+eviction方法（以top-k的eviction方法为代表）其实都是在最小化这个损失。而后续论文将证明，论文的head-wise
+adaptive budget allocation会帮助进一步最小化这个loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E7%9A%84%E7%AD%96%E7%95%A5%E6%9C%89%E4%B8%A4%E7%89%88%E7%AC%AC%E4%B8%80%E7%89%88%E6%98%AF%E5%9F%BA%E4%BA%8E%E7%8E%B0%E6%9C%89%E7%9A%84%E4%B8%80%E8%88%AC%E7%9A%84top-k-methods%E8%BF%9B%E8%A1%8C%E6%94%B9%E8%BF%9B%E7%9A%84%E5%AE%83%E7%9A%84%E7%89%B9%E7%82%B9%E6%98%AFhead-wise%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%AF%8F%E4%B8%AAhead%E7%9A%84budget%E6%98%AF%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A0%B9%E6%8D%AE%E5%89%8D%E9%9D%A2%E7%9A%84%E5%88%86%E6%9E%90%E8%AE%BA%E6%96%87%E5%8F%91%E7%8E%B0%E6%9C%89%E4%BA%9Bhead%E9%9C%80%E8%A6%81%E5%A4%9A%E4%B8%80%E7%82%B9%E7%9A%84budget%E8%80%8C%E6%9C%89%E4%BA%9B%E5%8F%AA%E9%9C%80%E8%A6%81%E5%B0%91%E4%B8%80%E7%82%B9%E7%9A%84budget%E5%B0%B1%E5%A4%9F%E4%BA%86%E5%9B%A0%E6%AD%A4%E6%AD%A4%E5%A4%84%E7%9A%84%E6%93%8D%E4%BD%9C%E6%98%AF%E5%85%88%E6%8A%8A%E6%AF%8F%E4%B8%80%E5%B1%82%E7%9A%84%E6%89%80%E6%9C%89head%E6%94%BE%E5%88%B0%E4%B8%80%E8%B5%B7%E7%9C%8B%E6%8C%91%E5%87%BA%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84top-k%E7%9A%84attn-weights%E5%85%B7%E4%BD%93%E7%9A%84k%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E5%8F%96%E4%B8%BAbudget-b%E4%B9%8B%E5%90%8E%E6%95%B0%E4%B8%80%E4%B8%8B%E6%AF%8F%E4%B8%AAhead%E9%87%8C%E6%9C%89%E5%A4%9A%E5%B0%91top-k%E7%9A%84attn-weights%E6%9C%89%E5%A4%9A%E5%B0%91%E4%B8%AA%E6%88%91%E4%BB%AC%E5%B0%B1%E8%AE%A4%E4%B8%BA%E8%BF%99%E4%B8%AAhead%E5%BA%94%E8%AF%A5%E6%9C%89%E5%A4%9A%E5%B0%91%E9%85%8D%E9%A2%9D%E5%9B%A0%E4%B8%BA%E4%B8%80%E4%B8%AAhead%E9%87%8C%E6%9C%89%E8%B6%8A%E5%A4%9A%E7%9A%84top-k%E7%9A%84attn-weights%E8%A1%A8%E6%98%8E%E8%BF%99%E4%B8%AAhead%E9%87%8C%E9%87%8D%E8%A6%81%E7%9A%84%E9%83%A8%E5%88%86%E8%B6%8A%E5%A4%9A%E8%A6%81%E4%BF%9D%E7%95%99%E7%9A%84kv%E4%B9%9F%E5%BA%94%E8%AF%A5%E8%B6%8A%E5%A4%9A"><span class="nav-number">7.2.</span> <span class="nav-text">论文的策略有两版。第一版是基于现有的、一般的top-k
+methods进行改进的。它的特点是head-wise，也就是每个head的budget是不同的。根据前面的分析，论文发现，有些head需要多一点的budget，而有些只需要少一点的budget就够了。因此，此处的操作是，先把每一层的所有head放到一起看，挑出最重要的top-k的attn
+weights（具体的k其实就是取为budget
+B）。之后数一下每个head里有多少top-k的attn
+weights。有多少个，我们就认为这个head应该有多少配额。（因为一个head里有越多的top-k的attn
+weights，表明这个head里重要的部分越多，要保留的kv也应该越多）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E5%9B%A0%E4%B8%BA%E8%AE%BA%E6%96%87%E7%9A%84%E7%AD%96%E7%95%A5%E5%85%B6%E5%AE%9E%E6%98%AFplug-and-play%E7%9A%84%E4%B8%BA%E4%BA%86%E5%B1%95%E7%A4%BA%E8%BF%99%E4%B8%80%E7%82%B9%E8%AE%BA%E6%96%87%E7%BB%99%E5%87%BA%E4%BA%86%E5%92%8Csota%E6%96%B9%E6%B3%95snapkv%E4%BB%A5%E5%8F%8Apyramid%E7%BB%93%E5%90%88%E7%9A%84%E5%8F%98%E4%BD%93%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%AC%AC%E4%BA%8C%E7%89%88%E5%A4%A7%E6%A6%82%E8%AE%B2%E4%B8%80%E4%B8%8B%E7%9A%84%E8%AF%9D%E5%B0%B1%E6%98%AF%E5%85%88%E6%A0%B9%E6%8D%AE%E6%9C%80%E8%BF%91%E7%9A%84winsize%E9%87%8C%E7%9A%84token%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%A7%82%E5%AF%9F%E7%AA%97%E5%8F%A3%E9%87%8C%E7%9A%84token%E8%AE%A1%E7%AE%97%E5%87%BA%E5%92%8C%E5%8E%86%E5%8F%B2token%E4%B9%8B%E9%97%B4%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9D%83%E9%87%8D%E4%B9%8B%E5%90%8E%E9%80%9A%E8%BF%87%E4%B8%80%E4%BA%9Bpooling%E4%BB%A5%E5%8F%8Amean%E7%9A%84%E6%93%8D%E4%BD%9C%E8%81%9A%E5%90%88%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%80%E7%BB%88%E5%BE%97%E5%88%B0%E6%AF%8F%E4%B8%AAhead%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%88%86%E5%B8%83%E7%9A%84%E8%A1%A8%E5%BE%81%E6%8C%87%E6%A0%87%E9%80%9A%E8%BF%87%E8%BF%99%E4%B8%AA%E6%8C%87%E6%A0%87%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AAhead%E5%AE%83%E6%98%AF%E6%9B%B4%E5%81%8F%E5%90%91%E4%BA%8Esparse-head%E9%9C%80%E8%A6%81%E6%9B%B4%E5%B0%91%E9%85%8D%E9%A2%9D%E8%BF%98%E6%98%AF%E6%9B%B4%E5%81%8F%E5%90%91dispersed-head%E9%9C%80%E8%A6%81%E6%9B%B4%E5%A4%9A%E9%85%8D%E9%A2%9D"><span class="nav-number">7.3.</span> <span class="nav-text">另外，因为论文的策略其实是plug-and-play的。为了展示这一点，论文给出了和sota方法（SnapKV以及pyramid）结合的变体（也就是第二版）。大概讲一下的话，就是，先根据最近的winsize里的token（也就是观察窗口里的token），计算出和历史token之间的注意力权重，之后通过一些pooling以及mean的操作，聚合注意力，最终得到每个head的注意力分布的表征指标。通过这个指标，我们可以判断一个head它是更偏向于sparse
+head（需要更少配额）还是更偏向dispersed head（需要更多配额）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E8%BF%87%E8%BF%99%E9%87%8C%E6%9C%89%E7%82%B9%E7%96%91%E9%97%AE%E5%95%8A%E6%80%8E%E4%B9%88%E6%84%9F%E8%A7%89%E5%AE%83%E7%9A%84algorithm-2%E5%92%8Calgorithm-1%E6%9C%89%E7%82%B9%E5%86%B2%E7%AA%81%E4%BA%86%E5%A6%82%E6%9E%9C%E8%A6%81%E4%B8%8D%E5%86%B2%E7%AA%81%E5%88%99%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E5%8F%96%E5%8F%8D%E7%9A%84%E6%93%8D%E4%BD%9C%E5%8F%AF%E6%98%AF%E8%AE%BA%E6%96%87%E9%87%8C%E6%B2%A1%E6%9C%89%E6%98%8E%E8%AF%B4%E5%95%8A"><span class="nav-number">7.3.1.</span> <span class="nav-text">不过这里有点疑问啊，怎么感觉它的Algorithm
+2和Algorithm
+1有点冲突了？如果要不冲突，则需要一个类似取反的操作。可是论文里没有明说啊？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.4.</span> <span class="nav-text">关于具体实现：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E8%AE%BA%E6%96%87%E9%87%87%E5%8F%96%E5%8A%A8%E6%80%81%E5%88%86%E9%85%8D%E7%9A%84%E7%AD%96%E7%95%A5%E6%AF%8F%E4%B8%AAhead%E7%9A%84cache%E6%98%AF%E5%8F%98%E9%95%BF%E7%9A%84%E8%BF%99%E4%B8%8D%E5%88%A9%E4%BA%8E%E9%AB%98%E6%95%88%E8%AE%A1%E7%AE%97%E5%9B%A0%E6%AD%A4%E8%AE%BA%E6%96%87%E7%BB%93%E5%90%88flashattn%E8%AE%BE%E8%AE%A1%E4%BA%86%E4%B8%80%E7%A7%8Dflatten-cache-storage-layout%E5%90%8C%E6%97%B6%E5%AE%9E%E7%8E%B0%E4%BA%86%E4%B8%80%E4%B8%AA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84cuda-kernel%E6%9C%80%E7%BB%88%E5%81%9A%E5%88%B0%E4%BA%86%E5%92%8C%E4%B8%80%E8%88%AC%E7%9A%84flash-attn%E5%B7%AE%E4%B8%8D%E5%A4%9A%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="nav-number">7.4.1.</span> <span class="nav-text">因为论文采取动态分配的策略，每个head的cache是变长的，这不利于高效计算。因此，论文结合FlashAttn，设计了一种flatten
+cache storage layout，同时实现了一个自定义的cuda
+kernel，最终做到了和一般的Flash Attn差不多的速度</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

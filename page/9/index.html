@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">验证回文串</a>
+            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/" class="post-title-link" itemprop="url">CodeAgent：Enhancing Code Generation with Tool-Integrated Agent Systems for Real-World Repo-level Coding Challenges</a>
         </h2>
 
         <div class="post-meta">
@@ -175,7 +175,377 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-13 17:08:00 / Modified: 17:35:59" itemprop="dateCreated datePublished" datetime="2025-05-13T17:08:00+08:00">2025-05-13</time>
+              <time title="Created: 2025-07-17 13:25:00 / Modified: 14:50:52" itemprop="dateCreated datePublished" datetime="2025-07-17T13:25:00+08:00">2025-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueacl-24">Venue：ACL 24</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有方法无法处理真实世界仓库级代码生成而这类任务是实际软件开发的核心需求为此论文借鉴了人类处理这类问题的方法借助工具感觉这也是讲故事啥方法不能说是借鉴人类啊人类解决问题那方法可是多种多样的">现有方法无法处理真实世界仓库级代码生成，而这类任务是实际软件开发的核心需求。为此，论文借鉴了人类处理这类问题的方法：借助工具（感觉这也是讲故事……啥方法不能说是借鉴人类啊，人类解决问题，那方法可是多种多样的……）</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="这篇感觉纯粹是把agent搬到了repo-level-code-generation这个任务上因为之前没有人做过这方面的工作然后讲个故事说是借鉴人类的做法给llm装备上各种tools并相应地指定策略让llm能在合适的时机选择合适的tool">这篇感觉纯粹是把agent搬到了repo-level
+code
+generation这个任务上（因为之前没有人做过这方面的工作）。然后，讲个故事，说是借鉴人类的做法，给llm装备上各种tools，并相应地指定策略，让llm能在合适的时机选择合适的tool……</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="定义了repo-level-code-generation-task明确它和现有任务的区别">定义了repo-level
+code generation task，明确它和现有任务的区别</h2>
+<h2 id="提出一个codeagent框架增强了llm的repo-level-code-generation-ability">提出一个CodeAgent框架，增强了llm的repo-level
+code generation ability</h2>
+<h2 id="提出了一个codeagentbench用于repo-level-task的评估它和swe-bench的关系是">提出了一个CodeAgentBench，用于repo-level
+task的评估（它和SWE-Bench的关系是？）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/CodeAgent%EF%BC%9AEnhancing%20Code%20Generation%20with%20Tool-Integrated%20Agent%20Systems%20for%20Real-World%20Repo-level%20Coding%20Challenges/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/" class="post-title-link" itemprop="url">Self-collaboration Code Generation via ChatGPT</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-17 12:52:00 / Modified: 13:22:35" itemprop="dateCreated datePublished" datetime="2025-07-17T12:52:00+08:00">2025-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venue">Venue：</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有-llm-在复杂代码生成任务如多文件依赖长逻辑任务中表现不足而人类通过团队协作解决复杂任务的模式可被借鉴">现有
+LLM
+在复杂代码生成任务（如多文件依赖、长逻辑任务）中表现不足，而人类通过团队协作解决复杂任务的模式可被借鉴</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="通过简单的角色指令本质就是prompt-engineering就能让llm化作不同的角色从而实现用一个llm就完成多个角色的分工所以其实可以理解为我们用不同的prompt激发了llm的不同方面的能力从而实现了self-collaborationself-collaboration就是说我们完成一个任务可能它很复杂需要分工有多个角色要完成各自的任务我们可以用同一个llm然后依次让它扮演相应角色并给它相应的prompt">通过简单的“角色指令”（本质就是prompt
+engineering），就能让llm化作不同的角色，从而实现用一个llm就完成多个角色的分工（所以其实可以理解为，我们用不同的prompt激发了llm的不同方面的能力，从而实现了self-collaboration。self-collaboration就是说，我们完成一个任务，可能它很复杂，需要分工，有多个角色要完成各自的任务。我们可以用同一个llm，然后依次让它扮演相应角色，并给它相应的prompt）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一套框架可以让llm扮演不同角色处理复杂任务感觉本质上就是一套提示词工程">提出了一套框架，可以让llm扮演不同角色，处理复杂任务（感觉本质上就是一套提示词工程）</h2>
+<h2 id="基于软件开发方法论设计了三个角色并组成一个虚拟团队明确了分工和协作的规则这里有点讲故事的嫌疑为它们设计的三个role找到背书">基于软件开发方法论，设计了三个角色，并组成一个虚拟团队，明确了分工和协作的规则（这里有点讲故事的嫌疑，为它们设计的三个role找到背书）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Self-collaboration%20Code%20Generation%20via%20ChatGPT/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-17 05:02:32 / Modified: 05:06:51" itemprop="dateCreated datePublished" datetime="2025-07-17T05:02:32+08:00">2025-07-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="pca算法是一种基于特征值和特征向量的数据降维算法其核心是保留数据中最关键的信息去掉冗余信息而这个所谓的信息就是特征的协方差矩阵的特征向量信息的重要度则是由特征向量对应的特征值的大小来表征的">PCA算法，是一种基于特征值和特征向量的数据降维算法。其核心是，保留数据中最关键的信息，去掉冗余信息。而这个所谓的信息，就是特征的协方差矩阵的特征向量；信息的重要度，则是由特征向量对应的特征值的大小来表征的</h1>
+<h2 id="其具体步骤可以参考下面的代码及相应注释">其具体步骤，可以参考下面的代码及相应注释</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤1：准备数据（加载并预处理图像）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 假设图像存放在&quot;faces&quot;文件夹，均为20×20灰度图</span></span><br><span class="line">img_dir = <span class="string">&quot;faces&quot;</span></span><br><span class="line">img_list = []</span><br><span class="line"><span class="keyword">for</span> img_name <span class="keyword">in</span> os.listdir(img_dir):</span><br><span class="line">    img_path = os.path.join(img_dir, img_name)</span><br><span class="line">    img = Image.<span class="built_in">open</span>(img_path).convert(<span class="string">&#x27;L&#x27;</span>)  <span class="comment"># 转为灰度图</span></span><br><span class="line">    img = img.resize((<span class="number">20</span>, <span class="number">20</span>))  <span class="comment"># 统一尺寸为20×20</span></span><br><span class="line">    img_array = np.array(img)  <span class="comment"># 转为数组（20×20）</span></span><br><span class="line">    img_flat = img_array.flatten()  <span class="comment"># 展平为1维向量（400维）</span></span><br><span class="line">    img_list.append(img_flat)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转为矩阵：shape=(样本数, 400)，每行是一张图像的向量</span></span><br><span class="line">X = np.array(img_list)</span><br><span class="line">n_samples, n_features = X.shape  <span class="comment"># n_samples=5, n_features=400</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤2：数据中心化（PCA核心步骤1）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 计算每个特征（像素）的均值</span></span><br><span class="line">mean_X = np.mean(X, axis=<span class="number">0</span>)  <span class="comment"># shape=(400,)，每个像素的平均亮度</span></span><br><span class="line"><span class="comment"># 中心化：每个样本减去均值（去除图像整体亮度偏移的影响）</span></span><br><span class="line">X_centered = X - mean_X  <span class="comment"># shape=(5, 400)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤3：计算协方差矩阵（PCA核心步骤2）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 协方差矩阵：反映像素之间的相关性（shape=(400, 400)）</span></span><br><span class="line"><span class="comment"># 公式：cov = (X_centered.T @ X_centered) / (n_samples - 1)（样本协方差）</span></span><br><span class="line">cov_matrix = np.cov(X_centered.T)  <span class="comment"># 等价于上述公式，直接用numpy的cov函数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤4：特征值分解（PCA核心步骤3）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 对协方差矩阵分解，得到特征值和特征向量</span></span><br><span class="line">eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)</span><br><span class="line"><span class="comment"># 特征向量：shape=(400, 400)，每列是一个主成分方向（&quot;特征脸&quot;）</span></span><br><span class="line"><span class="comment"># 特征值：shape=(400,)，表示对应主成分的&quot;信息量&quot;（值越大，信息越多）</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤5：选择主成分（PCA核心步骤4）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 按特征值从大到小排序，取前k个主成分（这里k=50）</span></span><br><span class="line">k = <span class="number">50</span></span><br><span class="line"><span class="comment"># 排序索引（从大到小）</span></span><br><span class="line">sorted_idx = np.argsort(eigenvalues)[::-<span class="number">1</span>]</span><br><span class="line"><span class="comment"># 取前k个特征向量（主成分）</span></span><br><span class="line">top_eigenvectors = eigenvectors[:, sorted_idx[:k]]  <span class="comment"># shape=(400, 50)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 步骤6：降维映射（PCA核心步骤5）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 将中心化数据投影到主成分上，得到降维后的数据（shape=(5, 50)）</span></span><br><span class="line">X_pca = X_centered @ top_eigenvectors  <span class="comment"># 每个样本从400维→50维</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 额外：用降维数据重构图像（验证效果）</span></span><br><span class="line"><span class="comment"># --------------------------</span></span><br><span class="line"><span class="comment"># 重构公式：中心化数据≈降维数据×主成分 + 均值</span></span><br><span class="line">X_reconstructed = X_pca @ top_eigenvectors.T + mean_X  <span class="comment"># shape=(5, 400)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存重构图像（对比原图）</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_samples):</span><br><span class="line">    <span class="comment"># 转为0-255整数（图像像素范围）</span></span><br><span class="line">    recon_img = X_reconstructed[i].reshape(<span class="number">20</span>, <span class="number">20</span>).astype(np.uint8)</span><br><span class="line">    Image.fromarray(recon_img).save(<span class="string">f&quot;reconstructed_face_<span class="subst">&#123;i&#125;</span>.png&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/" class="post-title-link" itemprop="url">Code Graph Model (CGM)：A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-15 23:06:00" itemprop="dateCreated datePublished" datetime="2025-07-15T23:06:00+08:00">2025-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-16 15:44:00" itemprop="dateModified" datetime="2025-07-16T15:44:00+08:00">2025-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-06-23">date：2025-06-23</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="感觉动机这一块其实挺常见的llm发展很快将其应用到单文件的各种代码任务都表现得很好但是到了更加真实复杂的se-task上例如repo-level的任务上它的表现就不够好了">感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE
+task上，例如repo-level的任务上，它的表现就不够好了</h2>
+<h2 id="而现有的方法表现更好的是利用闭源模型的基于agent的方法但这类方法因为依赖于闭源模型所以难以接触到模型权重因而难以进行改进同时基于agent的方法通常推理步骤会很长因此中间的错误可能会不断积累导致影响决策-所以为了避免这些问题我们会想用开源模型并且避免用agent的方法但现在基于开源模型的方法性能还是比上面提到的那类要差一截还不太能处理repo-level-task因此是有极大的改进空间的-而论文尝试做出的改进则是想让模型对repo的理解更上一层楼具体来说是让模型更加了解repo里的代码文件本身的含义以及相互之间的关系">而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于agent的方法，通常推理步骤会很长，因此中间的错误可能会不断积累导致影响决策<br>所以，为了避免这些问题，我们会想用开源模型，并且避免用agent的方法。但现在基于开源模型的方法，性能还是比上面提到的那类要差一截，还不太能处理repo-level
+task，因此是有极大的改进空间的<br>而论文尝试做出的改进，则是想让模型对repo的理解更上一层楼，具体来说是让模型更加了解repo里的代码文件本身的含义，以及相互之间的关系</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="怎么乍一看没什么新奇的呢也是想提高模型对repo的理解语义以及结构也是用graph结构也是让llm利用graph顶多是细节上不太一样框架没怎么变化吧和repograph对比一下吧">怎么乍一看，没什么新奇的呢……也是想提高模型对repo的理解（语义以及结构），也是用graph结构，也是让llm利用graph，顶多是细节上不太一样，框架没怎么变化吧（和RepoGraph对比一下吧……）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一个新的架构大概是在开源的llm上加一些新的模块用来提高llm对repo的理解然后可以一起进行微调从而适应se-tasks且性能不错最优的结果还是加上了graph-rag但话说这个设计的graph-rag是真的出于锦上添花还是说本来仅仅用新架构无法work或者说性能不够好所以特意设计了一个graph-rag来make-it-work可能得看一下实验表格里有没有单独用新架构而没用graph-rag的结果了">提出了一个新的架构，大概是在开源的llm上加一些新的模块，用来提高llm对repo的理解，然后可以一起进行微调，从而适应SE
+tasks，且性能不错（最优的结果还是加上了Graph
+RAG。但话说，这个设计的Graph
+RAG是真的出于锦上添花，还是说，本来仅仅用新架构，无法work，或者说性能不够好，所以特意设计了一个Graph
+RAG来make it work？可能得看一下实验表格里有没有单独用新架构而没用Graph
+RAG的结果了……）</h2>
+<h2 id="配套的还设计了一个graph-rag的框架可以进行辅助">配套的，还设计了一个Graph
+RAG的框架，可以进行辅助</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" class="post-title-link" itemprop="url">在排序数组中查找元素的第一个和最后一个位置</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-07-15 10:39:00 / Modified: 10:49:42" itemprop="dateCreated datePublished" datetime="2025-07-15T10:39:00+08:00">2025-07-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -187,7 +557,15 @@
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                  <a href="/categories/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">二分算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" itemprop="url" rel="index"><span itemprop="name">二分查找</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
                 </span>
             </span>
 
@@ -202,10 +580,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/first-unique-character-in-a-string/description/">在这</a></h1>
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/">在这</a></h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6/#more" rel="contents">
+              <a class="btn" href="/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -229,7 +607,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/SWE-BENCH%EF%BC%9ACAN%20LANGUAGE%20MODELS%20RESOLVE%20REAL-WORLD%20GITHUB%20ISSUES%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -243,7 +621,313 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/" class="post-title-link" itemprop="url">单词搜索Ⅱ</a>
+            <a href="/2025/07/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/SWE-BENCH%EF%BC%9ACAN%20LANGUAGE%20MODELS%20RESOLVE%20REAL-WORLD%20GITHUB%20ISSUES%EF%BC%9F/" class="post-title-link" itemprop="url">SWE-BENCH：CAN LANGUAGE MODELS RESOLVE REAL-WORLD GITHUB ISSUES？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-14 15:32:00" itemprop="dateCreated datePublished" datetime="2025-07-14T15:32:00+08:00">2025-07-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-15 22:58:49" itemprop="dateModified" datetime="2025-07-15T22:58:49+08:00">2025-07-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueiclr-24">Venue：ICLR 24</h1>
+<h1 id="date2024-11-11">date：2024-11-11</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现在大模型发展过快我们对它们的能力的评价有点跟不上了如果还是像以前那样在一些固定的榜单不断把分刷上去似乎效果提升并不大因为各家公司推出的新模型通常都会在榜单上有若干项刷到sota然而使用体感上好像没有那么大的提升-需要一个真正有含金量的benchmark对llm有难度且具有实际意义才能更好地衡量llm目前的能力边界-而现实生活中的软件工程就是一个不错的测试场景它具有实际应用价值同时因为软件工程内部各个部分都相互联系关系错综复杂因此对llm的长上下文处理能力复杂推理能力等都有很高的要求如果llm能很好地在这个场景进行应用那无疑表明llm的能力有了实质性的提高-因此文章提出了swe-bench收集了若干github仓库的issue测试llm能否解决这些issue">现在大模型发展过快，我们对它们的能力的评价有点跟不上了（如果还是像以前那样，在一些固定的榜单不断把分刷上去，似乎效果提升并不大，因为各家公司推出的新模型，通常都会在榜单上有若干项刷到sota，然而使用体感上好像没有那么大的提升）<br>需要一个真正有含金量的benchmark，对llm有难度，且具有实际意义，才能更好地衡量llm目前的能力边界<br>而现实生活中的软件工程，就是一个不错的测试场景。它具有实际应用价值，同时因为软件工程内部各个部分都相互联系，关系错综复杂，因此对llm的长上下文处理能力、复杂推理能力等都有很高的要求。如果llm能很好地在这个场景进行应用，那无疑表明llm的能力有了实质性的提高<br>因此，文章提出了SWE-bench，收集了若干GitHub仓库的issue，测试llm能否解决这些issue</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="这篇论文主要的工作还是提出高难度的benchmark这可能更多说明了高质量的工作未必一定就是算法层面的创新如果确实注意到了某个领域里有效的benchmark的缺失那么构建一个solid的benchmark无疑就是一个极有影响力也非常有意义的工作">这篇论文主要的工作还是提出高难度的benchmark。这可能更多说明了，高质量的工作未必一定就是算法层面的创新，如果确实注意到了某个领域里有效的benchmark的缺失，那么构建一个solid的benchmark，无疑就是一个极有影响力也非常有意义的工作</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了新的高难度的benchmark可以在长期衡量模型能力的进展">提出了新的、高难度的benchmark，可以在长期衡量模型能力的进展</h2>
+<h2 id="微调了一些模型但意义可能更多在于说明即使微调之后效果也还是不够好未来还有很长的路要走">微调了一些模型（但意义可能更多在于说明，即使微调之后效果也还是不够好，未来还有很长的路要走）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/SWE-BENCH%EF%BC%9ACAN%20LANGUAGE%20MODELS%20RESOLVE%20REAL-WORLD%20GITHUB%20ISSUES%EF%BC%9F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/13/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/RepoCoder%EF%BC%9ARepository-Level%20Code%20Completion%20Through%20Iterative%20Retrieval%20and%20Generation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/13/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/RepoCoder%EF%BC%9ARepository-Level%20Code%20Completion%20Through%20Iterative%20Retrieval%20and%20Generation/" class="post-title-link" itemprop="url">RepoCoder：Repository-Level Code Completion Through Iterative Retrieval and Generation</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-13 21:41:00" itemprop="dateCreated datePublished" datetime="2025-07-13T21:41:00+08:00">2025-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-15 22:58:53" itemprop="dateModified" datetime="2025-07-15T22:58:53+08:00">2025-07-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueemnlp-23">Venue：EMNLP 23</h1>
+<h1 id="date2023-10-20">date：2023-10-20</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有的代码补全工具通常仅能利用上单个文件里的上下文信息进行补全但如果要进行repo-level的补全那就不能仅仅依靠单个文件的信息而应该对整个仓库的上下文信息有所选择地利用因为仓库里的文件相互之间是有相较于单个文件更为复杂的依赖关系的因此需要专门提出repo-level-code-completion这个任务进行研究">现有的代码补全工具，通常仅能利用上单个文件里的上下文信息进行补全。但如果要进行repo-level的补全，那就不能仅仅依靠单个文件的信息，而应该对整个仓库的上下文信息有所选择地利用（因为仓库里的文件相互之间是有相较于单个文件更为复杂的依赖关系的）。因此需要专门提出repo-level
+code completion这个任务进行研究</h2>
+<h2 id="现有的研究这个任务的方法主要是两类-一类是依赖静态代码分析与启发式规则的方法另一类是基于有标签数据对语言模型进行微调的方法">现有的研究这个任务的方法，主要是两类，<br>一类是依赖静态代码分析与启发式规则的方法，另一类是基于有标签数据，对语言模型进行微调的方法</h2>
+<h4 id="第一类它能可靠地解析上下文但是补全能力首先无法生成不同长度的内容且不支持再文件任意位置进行补全说到底可以认为是rule-based的通病">第一类，它能可靠地解析上下文，但是补全能力首先，无法生成不同长度的内容，且不支持再文件任意位置进行补全（说到底，可以认为是rule-based的通病）</h4>
+<h4 id="第二类主要问题在于泛化性不够好对于没见过的仓库要进行补全效果还是比较差的">第二类，主要问题在于泛化性不够好，对于没见过的仓库，要进行补全，效果还是比较差的</h4>
+<h1 id="insight">insight：</h1>
+<h2 id="但凡是repo-level的任务不管是代码理解还是代码生成抑或是其它的应该都要求对repo有一个整体的理解以及在处理片段代码的时候能利用好检索到正确的上下文这篇论文最核心的贡献可以说就是在解决这个问题如何更好地得到正确的合理的上下文它的做法是改进rag变成多轮的rag以期提高检索质量联想一下之前被的repograph它是通过把仓库的各文件之间的关系抽象为一个graph用处理graph的方法来处理文件之间的关系并由此得到正确的上下文二者似乎是可以融合的不过这也挺显然的吧毕竟人家repograph设计之初就是一个plug-in的模式当然可以融合但更重要的可能是二者的思路不同一个是利用外部的模型进行辅助一个是把数据的形式进行转变两条思路是并行的且可以合并的吧">但凡是repo-level的任务，不管是代码理解还是代码生成，抑或是其它的，应该都要求对repo有一个整体的理解，以及在处理片段代码的时候能利用好、检索到正确的上下文。这篇论文最核心的贡献可以说就是在解决这个问题：如何更好地得到正确的、合理的上下文。它的做法是改进RAG，变成多轮的RAG，以期提高检索质量（联想一下之前被的REPOGRAPH，它是通过把仓库的各文件之间的关系抽象为一个graph，用处理graph的方法来处理文件之间的关系，并由此得到正确的上下文。二者似乎是可以融合的。不过这也挺显然的吧，毕竟人家REPOGRAPH设计之初就是一个plug-in的模式，当然可以融合。但更重要的可能是，二者的思路不同，一个是利用外部的模型进行辅助，一个是把数据的形式进行转变。两条思路是并行的，且可以合并的吧）</h2>
+<h2 id="另外这个由单轮的rag变成多轮rag的迭代的方法也是一个比较通用的方法或者说技巧虽说也有可能因为检索到的结果不够好反而影响了补全效果然后下一次迭代时搜索得到的结果更差形成负循环但这也是有改进余地的吧但话又说回来看论文2.2-code-retrieval部分它也专门提到了基于之前的补全结果来检索效果就是能有所提升即使说补全结果不那么准确虽然不清楚这个结论的依据是什么">另外，这个由单轮的RAG变成多轮RAG的迭代的方法，也是一个比较通用的方法，或者说技巧？虽说也有可能因为检索到的结果不够好，反而影响了补全效果，然后下一次迭代时，搜索得到的结果更差，形成负循环，但这也是有改进余地的吧（但话又说回来，看论文2.2
+Code
+Retrieval部分，它也专门提到了，基于之前的补全结果来检索，效果就是能有所提升，即使说补全结果不那么准确。虽然不清楚这个结论的依据是什么……）</h2>
+<h2 id="还有用滑动窗口把一个大的内容分割成若干个小的内容似乎也是一个实践上常用的技巧">还有，用滑动窗口把一个大的内容，分割成若干个小的内容，似乎也是一个实践上常用的技巧</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一套新的框架repocoder是一种迭代地使用rag的框架可用于repo-level-code-completion-task">提出了一套新的框架，RepoCoder，是一种迭代地使用RAG的框架，可用于repo-level
+code completion task</h2>
+<h2 id="提出了一个新的benchmarkrepoeval可以衡量模型在repo-level-code-completion方面的能力且包含了多种粒度">提出了一个新的benchmark，RepoEval，可以衡量模型在repo-level
+code completion方面的能力。且包含了多种粒度</h2>
+<h2 id="对repocoder进行了严格的分析便于后续的改进">对RepoCoder进行了严格的分析，便于后续的改进</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/13/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/RepoCoder%EF%BC%9ARepository-Level%20Code%20Completion%20Through%20Iterative%20Retrieval%20and%20Generation/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/K%20%E6%AC%A1%E4%B8%B2%E8%81%94%E5%90%8E%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/K%20%E6%AC%A1%E4%B8%B2%E8%81%94%E5%90%8E%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/" class="post-title-link" itemprop="url">K 次串联后最大子数组之和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-11 23:18:00" itemprop="dateCreated datePublished" datetime="2025-07-11T23:18:00+08:00">2025-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-12 00:06:53" itemprop="dateModified" datetime="2025-07-12T00:06:53+08:00">2025-07-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">最大子数组和类</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/k-concatenation-maximum-sum/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/K%20%E6%AC%A1%E4%B8%B2%E8%81%94%E5%90%8E%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E4%B9%8B%E5%92%8C/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/%E4%BB%BB%E6%84%8F%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E7%BB%9D%E5%AF%B9%E5%80%BC%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/%E4%BB%BB%E6%84%8F%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E7%BB%9D%E5%AF%B9%E5%80%BC%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" class="post-title-link" itemprop="url">任意子数组和的绝对值的最大值</a>
         </h2>
 
         <div class="post-meta">
@@ -254,7 +938,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-05-12 23:00:00 / Modified: 23:24:11" itemprop="dateCreated datePublished" datetime="2025-05-12T23:00:00+08:00">2025-05-12</time>
+              <time title="Created: 2025-07-11 16:51:00 / Modified: 23:18:33" itemprop="dateCreated datePublished" datetime="2025-07-11T16:51:00+08:00">2025-07-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,263 +950,15 @@
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/word-search-ii/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%BB%99hexo%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%8A%E7%B1%BB%E5%88%AB%E9%A1%B5%E9%9D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%BB%99hexo%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%8A%E7%B1%BB%E5%88%AB%E9%A1%B5%E9%9D%A2/" class="post-title-link" itemprop="url">给hexo搭建的博客页面加上类别页面</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-08 22:29:00 / Modified: 22:54:28" itemprop="dateCreated datePublished" datetime="2025-05-08T22:29:00+08:00">2025-05-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8D%A3%E9%BC%93blog/" itemprop="url" rel="index"><span itemprop="name">捣鼓blog</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="需求就如标题所说我希望给博客的首页加上类别的页面这样找文章是比较方便的下面的教程参考了比较多这个博客">需求就如标题所说，我希望给博客的首页加上类别的页面，这样找文章是比较方便的（下面的教程，参考了比较多<a target="_blank" rel="noopener" href="https://blog.csdn.net/cflsup/article/details/123452683?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-123452683-blog-137717020.235%5Ev43%5Epc_blog_bottom_relevance_base7&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">这个博客</a>）</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%BB%99hexo%E6%90%AD%E5%BB%BA%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%8A%E7%B1%BB%E5%88%AB%E9%A1%B5%E9%9D%A2/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AE%9E%E7%8E%B0Trie%EF%BC%88%E5%89%8D%E7%BC%80%E6%A0%91%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AE%9E%E7%8E%B0Trie%EF%BC%88%E5%89%8D%E7%BC%80%E6%A0%91%EF%BC%89/" class="post-title-link" itemprop="url">实现Trie（前缀树）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-08 21:08:00 / Modified: 22:55:18" itemprop="dateCreated datePublished" datetime="2025-05-08T21:08:00+08:00">2025-05-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">动态规划</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/" itemprop="url" rel="index"><span itemprop="name">入门DP</span></a>
                 </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-trie-prefix-tree/">在这</a></h1>
-<h1 id="题目描述请你实现-trie-类">题目描述：请你实现 Trie 类：</h1>
-<h2 id="trie-初始化前缀树对象---void-insertstring-word-向前缀树中插入字符串-word---boolean-searchstring-word-如果字符串-word-在前缀树中返回-true即在检索之前已经插入否则返回-false---boolean-startswithstring-prefix-如果之前已经插入的字符串-word-的前缀之一为-prefix-返回-true-否则返回-false">-
-<code>Trie()</code> 初始化前缀树对象。<br>-
-<code>void insert(String word)</code> 向前缀树中插入字符串 <code>word</code> 。<br>-
-<code>boolean search(String word)</code> 如果字符串 <code>word</code> 在前缀树中，返回 <code>true</code>（即，在检索之前已经插入）；否则，返回 <code>false</code> 。<br>-
-<code>boolean startsWith(String prefix)</code> 如果之前已经插入的字符串 <code>word</code> 的前缀之一为 <code>prefix</code> ，返回 <code>true</code> ；否则，返回 <code>false</code> 。</h2>
-<h2 id="示例"><strong>示例：</strong></h2>
-<h3 id="输入-trie-insert-search-search-startswith-insert-search-apple-apple-app-app-app-app"><strong>输入</strong><br>["Trie",
-"insert", "search", "search", "startsWith", "insert", "search"]<br>[[],
-["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]</h3>
-<h3 id="输出-null-null-true-false-true-null-true"><strong>输出</strong><br>[null,
-null, true, false, true, null, true]</h3>
-<h3 id="解释-trie-trie-new-trie-trie.insertapple-trie.searchapple-返回-true-trie.searchapp-返回-false-trie.startswithapp-返回-true-trie.insertapp-trie.searchapp-返回-true"><strong>解释</strong><br>Trie
-trie = new Trie();<br>trie.insert("apple");<br>trie.search("apple"); //
-返回 True<br>trie.search("app"); // 返回
-False<br>trie.startsWith("app"); // 返回
-True<br>trie.insert("app");<br>trie.search("app"); // 返回 True</h3>
-<h3 id="提示---1-word.length-prefix.length-2000---word-和-prefix-仅由小写英文字母组成---insertsearch-和-startswith-调用次数-总计-不超过-3-104-次"><strong>提示：</strong><br>-
-<code>1 &lt;= word.length, prefix.length &lt;= 2000</code><br>-
-<code>word</code> 和 <code>prefix</code> 仅由小写英文字母组成<br>-
-<code>insert</code>、<code>search</code> 和 <code>startsWith</code> 调用次数 <strong>总计</strong> 不超过 <code>3 * 104</code> 次</h3>
-<h1 id="思路">思路：</h1>
-<h2 id="这题明确说了是考trie树事实上也确实如此没有别的技巧手法所以这里就讲一下trie树是什么它的原理又是什么">这题明确说了是考Trie树，事实上也确实如此，没有别的技巧手法。所以这里就讲一下Trie树是什么，它的原理又是什么</h2>
-<h2 id="灵茶山艾府的题解写的很好他的引入也比较好假设一个字符串只有两种字符我们可以怎么表示这个字符串不妨记其中一种字符为a另一种字符为b然后比如字符串是abbaabb从左到右我们可以把它看成是一颗二叉树a就是左儿子b就是右儿子这样这个字符串可以被一个二叉树所唯一地表示然后这一题里主要有三个要求初始化暂且先不管第一个是insert也就是向前缀树中插入字符串那么在这里只有两种字符的例子中就还是构造相应的二叉树即可-第二个是search也就是从根节点出发搜索一下有没有待搜索的字符串的对应的二叉树考虑到有可能一些字符是另一些字符的前缀例如abab和ababaa所以我们考虑给每个节点再附带上一个end属性用来表征它是不是一个终止节点从根节点出发走到一个终止节点就代表遍历了一个字符串这样search的时候我们从根节点出发一个一个搜索字符串里的字符不仅要全部都出现而且在搜索到了最后一个字符时对应的节点必须end属性为true-第三个是startswith它要判断给定的一个字符串是否为已经出现过的某个字符串的前缀与第二个要求对比其实就是搜索的时候我们只要求所有的字符一定要出现且不要求搜到最后一个字符的时候end属性一定为true此时我们不关注end属性了为true或为false都行"><a target="_blank" rel="noopener" href="https://leetcode.cn/u/endlesscheng/">灵茶山艾府</a>的题解写的很好。他的引入也比较好，假设一个字符串只有两种字符，我们可以怎么表示这个字符串？不妨记其中一种字符为a，另一种字符为b，然后，比如字符串是abbaabb，从左到右，我们可以把它看成是一颗二叉树，a就是左儿子，b就是右儿子，这样，这个字符串可以被一个二叉树所唯一地表示。然后，这一题里主要有三个要求（初始化暂且先不管），第一个是insert，也就是向前缀树中插入字符串，那么在这里只有两种字符的例子中，就还是构造相应的二叉树即可；<br>第二个是search，也就是从根节点出发，搜索一下，有没有待搜索的字符串的对应的二叉树。考虑到有可能一些字符是另一些字符的前缀，例如，abab和ababaa，所以我们考虑给每个节点再附带上一个end属性，用来表征它是不是一个终止节点。从根节点出发，走到一个终止节点，就代表遍历了一个字符串。这样，search的时候，我们从根节点出发，一个一个搜索字符串里的字符，不仅要全部都出现，而且在搜索到了最后一个字符时，对应的节点必须end属性为true<br>第三个是startsWith，它要判断给定的一个字符串是否为已经出现过的某个字符串的前缀。与第二个要求对比，其实就是，搜索的时候，我们只要求所有的字符一定要出现，且不要求搜到最后一个字符的时候，end属性一定为true，此时我们不关注end属性了，为true或为false都行</h2>
-<h2 id="那么现在落实到题目里的要求会出现所有的小写英文字母那也就是26种字符则我们构造的树就变成了26叉树了至于insertsearch以及startswith三个操作原理还是没变的">那么，现在落实到题目里的要求，会出现所有的小写英文字母，那也就是26种字符，则我们构造的树就变成了26叉树了。至于insert，search以及startsWith三个操作，原理还是没变的</h2>
-<h1 id="代码">代码：</h1>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line"></span><br><span class="line">    Node* son[<span class="number">26</span>]&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">bool</span> end = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Trie</span> &#123;</span><br><span class="line"></span><br><span class="line">    Node* root = <span class="keyword">new</span> <span class="built_in">Node</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Trie</span>() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(string word)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Node* cur = root;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; word.<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> idx = word[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (cur-&gt;son[idx] == <span class="literal">nullptr</span>)&#123;</span><br><span class="line"></span><br><span class="line">                cur-&gt;son[idx] = <span class="keyword">new</span> <span class="built_in">Node</span>();</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            cur = cur-&gt;son[idx];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cur-&gt;end = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">search</span><span class="params">(string word)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Node* cur = root;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">char</span> c:word)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> idx = c - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (cur-&gt;son[idx] == <span class="literal">nullptr</span>)&#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            cur = cur-&gt;son[idx];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (cur-&gt;end == <span class="literal">true</span>)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">startsWith</span><span class="params">(string prefix)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Node* cur = root;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">char</span> c:prefix)&#123;</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> idx = c - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (cur-&gt;son[idx] == <span class="literal">nullptr</span>)&#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            cur = cur-&gt;son[idx];</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * Your Trie object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * Trie* obj = new Trie();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * obj-&gt;insert(word);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * bool param_2 = obj-&gt;search(word);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * bool param_3 = obj-&gt;startsWith(prefix);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-<h2 id="感觉主要是很久没用struct了有点不熟练啊-简单看一下三个函数的部分insert那就是把给定要插入的字符串从左到右遍历一下每个字符确保都插入以及记得最后给end属性赋值为true-search部分中间一旦搜索到某个字符不存在则直接返回false搜到最后一个字符了再检查一下end是true还是false-startswith部分类似search部分只是不检查end了所以其实可以把startswith以及search的公共逻辑部分抽象成一个函数那样看起来会简洁一点">感觉主要是很久没用struct了，有点不熟练啊……<br>简单看一下三个函数的部分，insert，那就是把给定要插入的字符串从左到右遍历一下，每个字符确保都插入；以及记得最后给end属性赋值为true<br>search部分，中间一旦搜索到某个字符不存在，则直接返回false；搜到最后一个字符了，再检查一下end是true还是false<br>startsWith部分，类似search部分，只是不检查end了。所以其实可以把startsWith以及search的公共逻辑部分抽象成一个函数，那样看起来会简洁一点</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%AC%94%E8%AE%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%92%8C%E5%8D%9A%E5%AE%A2%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%86%E7%A6%BB%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%AC%94%E8%AE%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%92%8C%E5%8D%9A%E5%AE%A2%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%86%E7%A6%BB%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">笔记文件夹和博客文件夹分离的问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-08 14:50:00" itemprop="dateCreated datePublished" datetime="2025-05-08T14:50:00+08:00">2025-05-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-19 19:16:29" itemprop="dateModified" datetime="2025-06-19T19:16:29+08:00">2025-06-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
+                  , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8D%A3%E9%BC%93blog/" itemprop="url" rel="index"><span itemprop="name">捣鼓blog</span></a>
+                  <a href="/categories/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">最大子数组和类</span></a>
                 </span>
             </span>
 
@@ -537,11 +973,10 @@ True<br>trie.insert("app");<br>trie.search("app"); // 返回 True</h3>
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="问题如标题所述当我们记录的笔记和博客的src文件夹目前用hexogithub-pages搭建的博客是有个src文件夹存放那些发布到博客上的内容的不同的时候又想把笔记发布到博客上应该怎么办如果总是手动把要发布的内容复制到src文件夹下一是很麻烦二是如果有更改的话还得把更改了的内容手动更新到src文件夹下然而很可能会忘记这回事">问题如标题所述，当我们记录的笔记和博客的src文件夹（目前用hexo+github
-pages搭建的博客是有个src文件夹，存放那些发布到博客上的内容的）不同的时候，又想把笔记发布到博客上，应该怎么办？如果总是手动把要发布的内容复制到src文件夹下，一是很麻烦，二是如果有更改的话，还得把更改了的内容手动更新到src文件夹下，然而很可能会忘记这回事……</h1>
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/maximum-absolute-sum-of-any-subarray/">在这</a></h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/08/%E6%8D%A3%E9%BC%93blog/%E7%AC%94%E8%AE%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%92%8C%E5%8D%9A%E5%AE%A2%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%86%E7%A6%BB%E7%9A%84%E9%97%AE%E9%A2%98/#more" rel="contents">
+              <a class="btn" href="/2025/07/11/algo/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%85%A5%E9%97%A8DP/%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%B1%BB/%E4%BB%BB%E6%84%8F%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C%E7%9A%84%E7%BB%9D%E5%AF%B9%E5%80%BC%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -565,7 +1000,7 @@ pages搭建的博客是有个src文件夹，存放那些发布到博客上的内
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E9%AA%8C%E8%AF%81%E5%9B%9E%E6%96%87%E4%B8%B2/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/REPOGRAPH%EF%BC%9AENHANCING%20AI%20SOFTWARE%20ENGINEERING%20WITH%20REPOSITORY-LEVEL%20CODE%20GRAPH/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -579,7 +1014,7 @@ pages搭建的博客是有个src文件夹，存放那些发布到博客上的内
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E9%AA%8C%E8%AF%81%E5%9B%9E%E6%96%87%E4%B8%B2/" class="post-title-link" itemprop="url">验证回文串</a>
+            <a href="/2025/07/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/REPOGRAPH%EF%BC%9AENHANCING%20AI%20SOFTWARE%20ENGINEERING%20WITH%20REPOSITORY-LEVEL%20CODE%20GRAPH/" class="post-title-link" itemprop="url">REPOGRAPH：ENHANCING AI SOFTWARE ENGINEERING WITH REPOSITORY-LEVEL CODE GRAPH</a>
         </h2>
 
         <div class="post-meta">
@@ -588,21 +1023,35 @@ pages搭建的博客是有个src文件夹，存放那些发布到博客上的内
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-05-08 12:58:00 / Modified: 22:55:22" itemprop="dateCreated datePublished" datetime="2025-05-08T12:58:00+08:00">2025-05-08</time>
+              <time title="Created: 2025-07-10 15:57:00" itemprop="dateCreated datePublished" datetime="2025-07-10T15:57:00+08:00">2025-07-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-16 09:31:25" itemprop="dateModified" datetime="2025-07-16T09:31:25+08:00">2025-07-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
                 </span>
             </span>
 
@@ -617,346 +1066,24 @@ pages搭建的博客是有个src文件夹，存放那些发布到博客上的内
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-palindrome/description/">在这</a></h1>
-<h1 id="题目描述如果在将所有大写字符转换为小写字符并移除所有非字母数字字符之后短语正着读和反着读都一样则可以认为该短语是一个-回文串-字母和数字都属于字母数字字符-给你一个字符串-s如果它是-回文串-返回-true-否则返回-false">题目描述：如果在将所有大写字符转换为小写字符、并移除所有非字母数字字符之后，短语正着读和反着读都一样。则可以认为该短语是一个 <strong>回文串</strong> 。<br>字母和数字都属于字母数字字符。<br>给你一个字符串 <code>s</code>，如果它是 <strong>回文串</strong> ，返回 <code>true</code> ；否则，返回 <code>false</code> 。</h1>
+          <h1 id="venueiclr-25">Venue：ICLR 25</h1>
+<h1 id="date2025-03-18">date：2025-03-18</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="实际软件开发里涉及的代码的体量较大是repo-level的而非一般的function-level或file-level虽然现在有各种coding-llm在file-level及以下的各种任务如补全debug等都做得比较好但迁移到repo-level任务上表现欠佳-原因在于repo-level的代码文件之间有复杂的依赖关系因此整个repo内部是有结构的要在repo-level的任务上表现好就需要能掌握这种结构现在的各种方法对这个结构没有很好地把握住-因此考虑提出用graph结构来更好解读利用这种repo里的结构">实际软件开发里涉及的代码的体量较大，是repo-level的，而非一般的function-level或file-level。虽然现在有各种coding
+llm，在file-level及以下的各种任务（如补全、debug等）都做得比较好，但迁移到repo-level任务上表现欠佳<br>原因在于repo-level的代码文件之间有复杂的依赖关系，因此整个repo内部是有结构的，要在repo-level的任务上表现好，就需要能掌握这种结构。现在的各种方法对这个结构没有很好地把握住<br>因此考虑提出用graph结构来更好解读、利用这种repo里的结构</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="用graph结构来定位和理解把代码之间的关系抽象成graph其实是稍微会好一点的比起直接把所有的文件一起当作输入">用graph结构来定位和理解。把代码之间的关系抽象成graph，其实是稍微会好一点的，比起直接把所有的文件一起当作输入</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一种plug-in-module可以适配现有的方法能增进对代码仓库的整体理解以及定位">提出了一种plug-in
+module，可以适配现有的方法，能增进对代码仓库的整体理解以及定位</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/05/08/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E9%AA%8C%E8%AF%81%E5%9B%9E%E6%96%87%E4%B8%B2/#more" rel="contents">
+              <a class="btn" href="/2025/07/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/REPOGRAPH%EF%BC%9AENHANCING%20AI%20SOFTWARE%20ENGINEERING%20WITH%20REPOSITORY-LEVEL%20CODE%20GRAPH/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BB%88%E7%AB%AF%E9%87%8C%E8%83%BD%E6%AD%A3%E5%B8%B8%E7%94%A8conda%EF%BC%8C%E4%BD%86%E8%BF%9B%E5%85%A5tmux%E4%BC%9A%E8%AF%9D%E5%90%8E%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">在服务器终端里能正常用conda，但进入tmux会话后无法使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-08 22:18:13" itemprop="dateModified" datetime="2025-05-08T22:18:13+08:00">2025-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="问题描述">问题描述：</h1>
-<h2 id="就如标题所述在外面是能正常用conda的进入到一个tmux会话之后就不行了因为在外面可以所以应该是正常安装上了那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的-事实上在tmux会话里用conda相关命令之后它会提示要先进行conda-init然而如果用conda-init会发现什么结果也没有它展示了一串配置文件然后说no-change之后再尝试用conda命令依然输出说让先进行conda-init卡这了">就如标题所述。在外面是能正常用conda的，进入到一个tmux会话之后就不行了。因为在外面可以，所以应该是正常安装上了，那么可能的原因应该是在tmux会话里没激活相应的配置文件之类的<br>事实上，在tmux会话里用conda相关命令之后，它会提示要先进行conda
-init，然而如果用conda
-init，会发现什么结果也没有，它展示了一串配置文件，然后说no
-change；之后再尝试用conda命令，依然输出说让先进行conda init，卡这了</h2>
-<h1 id="解决方法">解决方法：</h1>
-<h2 id="一个暂时的但也见效很快的方法就是在tmux会话里用source-.bashrc激活一下bash的配置文件当然未必一定是bashrc要根据具体用哪个shell来决定不过我倒是几乎全都是用bash的至少我尝试之后这个问题就解决了至于说暂时体现在如果又重新开一个会话或者在一个会话里新开一个窗口都会发现还是有之前的问题这样就需要每次新开一个会话都用一下source-.bashrc其实倒也还好吧不能说特别麻烦但就有点疙瘩的感觉">一个暂时的，但也见效很快的方法，就是在tmux会话里用<code>source ~/.bashrc</code>激活一下bash的配置文件（当然，未必一定是bashrc，要根据具体用哪个shell来决定。不过我倒是几乎全都是用bash的）。至少我尝试之后，这个问题就解决了（至于说暂时，体现在：如果又重新开一个会话，或者在一个会话里新开一个窗口，都会发现还是有之前的问题。这样就需要每次新开一个会话，都用一下<code>source ~/.bashrc</code>，其实倒也还好吧，不能说特别麻烦，但就有点疙瘩的感觉</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E7%BB%88%E7%AB%AFtmux%E4%BC%9A%E8%AF%9D%E9%87%8C%E6%8C%89%E5%88%B0ctrl+z%E4%B9%8B%E5%90%8E%E6%B2%A1%E8%83%BD%E5%BD%BB%E5%BA%95%E6%9D%80%E6%8E%89%E7%A8%8B%E5%BA%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%9C%A8%E7%BB%88%E7%AB%AFtmux%E4%BC%9A%E8%AF%9D%E9%87%8C%E6%8C%89%E5%88%B0ctrl+z%E4%B9%8B%E5%90%8E%E6%B2%A1%E8%83%BD%E5%BD%BB%E5%BA%95%E6%9D%80%E6%8E%89%E7%A8%8B%E5%BA%8F/" class="post-title-link" itemprop="url">在终端tmux会话里按到ctrl+z之后没能彻底杀掉程序</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-08 22:18:18" itemprop="dateModified" datetime="2025-05-08T22:18:18+08:00">2025-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h2 id="ctrlz是无法终止程序的它只是把程序挂起来暂停但没停掉所以也不知道这个到底有什么用">ctrl+z是无法终止程序的，它只是把程序挂起来，暂停，但没停掉（所以也不知道这个到底有什么用。。。）</h2>
-<h2 id="其实一般我是不会用这个的更可能的是不小心按错了">其实一般我是不会用这个的，更可能的是不小心按错了</h2>
-<h2 id="此时应该终止掉它也就是切出去看一下是哪个进程然后kill--9">此时应该终止掉它，也就是切出去看一下是哪个进程，然后kill
--9</h2>
-<h2 id="但不知道为什么我遇到这个问题的时候明明kill--9了之后再nvidia-smi的时候也没看到这个进程了可是一旦我再用之前那张显卡程序一开始就会报错out-of-memory很明显是之前的程序还在占用着显存">但不知道为什么，我遇到这个问题的时候，明明kill
--9了，之后再nvidia-smi的时候也没看到这个进程了，可是一旦我再用之前那张显卡，程序一开始就会报错out
-of memory，很明显是之前的程序还在占用着显存</h2>
-<h2 id="一个解决方法是在终端运行ps--ax它大概是会把各种各样的进程都展示出来并且会显示每个进程具体的运行命令根据这个命令可以锁定哪个进程是之前不小心按到ctrlz的然后再对应kill--9即可这里看的时候除了我的那个不小心被挂起的程序的进程还有一个进程id是前面那个程序的进程1好像是一个类似于指示标识的作用应该是因为前一个程序被ctrlz给暂停了才会有的吧">一个解决方法是，在终端运行<code>ps -ax</code>，它大概是会把各种各样的进程都展示出来，并且会显示每个进程具体的运行命令。根据这个命令，可以锁定哪个进程是之前不小心按到ctrl+z的，然后再对应kill
--9即可。（这里看的时候，除了我的那个不小心被挂起的程序的进程，还有一个进程，ID是前面那个程序的进程+1，好像是一个类似于指示/标识的作用？应该是因为前一个程序被ctrl+z给暂停了才会有的吧）</h2>
-<h2 id="反正从操作上要解决这个问题就是-用ps--ax找出对应的进程以及可能的id1的那个附带的进程-然后kill--9把两个进程都kill掉如果有第二个进程-之后再尝试用这张显卡就能正常用了">反正从操作上，要解决这个问题，就是：<br>用ps
--ax找出对应的进程（以及可能的ID+1的那个附带的进程）<br>然后kill
--9把两个进程都kill掉（如果有第二个进程）<br>之后再尝试用这张显卡，就能正常用了</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E2%80%9C%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9D%E7%9A%84%E6%83%85%E5%86%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E2%80%9C%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%9D%E7%9A%84%E6%83%85%E5%86%B5/" class="post-title-link" itemprop="url">登录服务器的时候遇到“无法下载服务器”的情况</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-08 22:16:10" itemprop="dateModified" datetime="2025-05-08T22:16:10+08:00">2025-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题大概就标题所述具体的症状一般是之前能登陆服务器而现在用vscode插件登录服务器的时候输完密码明明没错但就是上不去本来输入密码是在窗口的顶上的但在那里输入完密码之后在终端它又要你输入一遍完了等一会就会报错说的大概就是这种failed-to-install-the-vs-code-server">问题大概就标题所述，具体的症状一般是，（之前能登陆服务器，而现在）用vscode插件登录服务器的时候，输完密码，明明没错，但就是上不去。本来输入密码是在窗口的顶上的，但在那里输入完密码之后，在终端它又要你输入一遍，完了等一会就会报错，说的大概就是这种“Failed
-to install the vs code server”</h1>
-<h1 id="这个应该算是相对常见的bug吧一般的解决方法就是用其它方式登上服务器例如直接用终端或者用mobaxterm等其它工具进入到用户的目录下把.vscode-server这个文件夹给删掉之后再尝试用vscode插件登录服务器应该就能登上了可以参考一下这个博客">这个应该算是相对常见的bug吧，一般的解决方法就是，用其它方式登上服务器（例如，直接用终端，或者用MobaXterm等其它工具），进入到用户的目录下，把.vscode-server这个文件夹给删掉，之后再尝试用vscode插件登录服务器，应该就能登上了（可以参考一下<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44504069/article/details/127457003">这个博客</a>）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/07/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/%E7%AC%AC%E4%B8%80%E5%BC%B9/" class="post-title-link" itemprop="url">第一弹</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-05-07 22:06:00" itemprop="dateCreated datePublished" datetime="2025-05-07T22:06:00+08:00">2025-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-05-08 22:42:08" itemprop="dateModified" datetime="2025-05-08T22:42:08+08:00">2025-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/%E5%AE%89%E8%A3%85%E5%BA%93%E7%9A%84%E5%B8%B8%E8%A7%81%E9%9A%BE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">安装库的常见难题和解决方法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="这里简单记录一些看起来有些共性的配置环境中遇到的问题">这里简单记录一些看起来有些共性的，配置环境中遇到的问题</h1>
-<h1 id="pip-install--i-httpspypi.tuna.tsinghua.edu.cnsimple--r-requirements.txt报错如下">1.pip
-install -i https://pypi.tuna.tsinghua.edu.cn/simple -r
-requirements.txt报错如下：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/glfw/</span><br><span class="line">ERROR: Could not find a version that satisfies the requirement glfw&gt;=1.4.0 (from versions: none)</span><br><span class="line">ERROR: No matching distribution found <span class="keyword">for</span> glfw&gt;=1.4.0</span><br><span class="line">WARNING: There was an error checking the latest version of pip.</span><br></pre></td></tr></table></figure>
-<h2 id="这个问题其实看起来还挺正常的而它最后的warning显示应该是版本的一些不匹配的问题然而我是新创建了一个python环境来配置mujoco且也是按照网上的教程来的虽然不排除是版本问题可是人家是走通了的我这里也没先装上什么库应该不太会有库之间的冲突吧经评论区提醒关掉梯子之后再执行就没问题了但尚且不清楚原因">这个问题其实看起来还挺正常的，而它最后的warning显示，应该是版本的一些不匹配的问题。然而，我是新创建了一个python环境，来配置mujoco，且也是按照网上的教程来的。虽然不排除是版本问题，可是人家是走通了的，我这里也没先装上什么库，应该不太会有库之间的冲突吧？经评论区提醒，关掉梯子之后再执行，就没问题了（但尚且不清楚原因）</h2>
-<h2 id="后面安装其它库的时候也有类似的报错">后面安装其它库的时候，也有类似的报错：</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> pip install cython==0.29.21 -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3748&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F38D0&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3AC8&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=1, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3C18&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br><span class="line">WARNING: Retrying (Retry(total=0, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;NewConnectionError(&#x27;</span>&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000020DF98F3D68&gt;: Failed to establish a new connection: [Errno 11002] getaddrinfo failed<span class="string">&#x27;)&#x27;</span>: /simple/cython/</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.dev.txt</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">WARNING: Retrying (Retry(total=4, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=3, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br><span class="line">WARNING: Retrying (Retry(total=2, connect=None, <span class="built_in">read</span>=None, redirect=None, status=None)) after connection broken by <span class="string">&#x27;ProxyError(&#x27;</span>Cannot connect to proxy.<span class="string">&#x27;, OSError(0, &#x27;</span>Error<span class="string">&#x27;))&#x27;</span>: /simple/imagehash/</span><br></pre></td></tr></table></figure>
-<h2 id="看到这种类似的错一样可以按照上面的方法尝试一下因为都有可能是网络问题还有可能出现把梯子关掉再尝试之后依然不行然后又尝试不指定源直接下也不行这时可以试试把梯子开了再下然后关掉再下有可能就成了有点难绷但确实是一种方法实操过是有效的其实感觉这样一通操作下来就验证了很有可能是网络问题了">看到这种类似的错，一样可以按照上面的方法尝试一下，因为都有可能是网络问题。还有，可能出现，把梯子关掉，再尝试之后，依然不行；然后又尝试不指定源，直接下，也不行。这时可以试试把梯子开了，再下；然后关掉，再下，有可能就成了（有点难绷，但确实是一种方法，实操过是有效的。其实感觉这样一通操作下来，就验证了很有可能是网络问题了）</h2>
-
       
     </div>
 
@@ -974,7 +1101,7 @@ requirements.txt报错如下：</h1>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1040,18 +1167,18 @@ requirements.txt报错如下：</h1>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">252</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">70</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="孙浩，做rl和llm交叉的 孙浩，另一个，pku的博士，主要是他的方向可能和我之后会选的有点类似，可以看看他的情况 李磊，名人啊，而且也很强，学术新星，更重要的是看看这类人在做什么，对前沿可以有更好的了解 王一飞，主要是既有理论，又有实际意义，很强 魏泽明，做理论的猛人，而且引用高的全都是他一作的，感觉solid，要入门理论或许可以看看他的论文 Tri Dao，真学术大神啊，上升的很快，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8F%AF%E4%BB%A5follow%E7%9A%84%E5%AD%A6%E8%80%85/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="孙浩，做rl和llm交叉的 孙浩，另一个，pku的博士，主要是他的方向可能和我之后会选的有点类似，可以看看他的情况 李磊，名人啊，而且也很强，学术新星，更重要的是看看这类人在做什么，对前沿可以有更好的了解 王一飞，主要是既有理论，又有实际意义，很强 魏泽明，做理论的猛人，而且引用高的全都是他一作的，感觉solid，要入门理论或许可以看看他的论文 Tri Dao，真学术大神啊，上升的很快，">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-08-27T08:16:31.991Z">
+<meta property="article:modified_time" content="2026-01-12T02:31:13.459Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8F%AF%E4%BB%A5follow%E7%9A%84%E5%AD%A6%E8%80%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/08/27/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8F%AF%E4%BB%A5follow%E7%9A%84%E5%AD%A6%E8%80%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-27 16:16:31" itemprop="dateCreated datePublished" datetime="2025-08-27T16:16:31+08:00">2025-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-01-12 10:31:13" itemprop="dateModified" datetime="2026-01-12T10:31:13+08:00">2026-01-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://holarissun.github.io/">孙浩</a>，做rl和llm交叉的 <a target="_blank" rel="noopener" href="https://sunhaonlp.github.io/">孙浩</a>，另一个，pku的博士，主要是他的方向可能和我之后会选的有点类似，可以看看他的情况
+<a target="_blank" rel="noopener" href="https://lilei-nlp.github.io/">李磊</a>，名人啊，而且也很强，学术新星，更重要的是看看这类人在做什么，对前沿可以有更好的了解
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=-CLy6YsAAAAJ">王一飞</a>，主要是既有理论，又有实际意义，很强
+<a target="_blank" rel="noopener" href="https://weizeming.github.io/">魏泽明</a>，做理论的猛人，而且引用高的全都是他一作的，感觉solid，要入门理论或许可以看看他的论文
+<a target="_blank" rel="noopener" href="https://tridao.me/">Tri
+Dao</a>，真学术大神啊，上升的很快，做的也很solid感觉。和hardware结合起来了，以及做long-range
+memory management相关的（这也是他做mamba的原因吧） <a target="_blank" rel="noopener" href="https://www.tianle.website/#/">蔡天乐</a>，早有耳闻的猛人。phd的citation都赶上一般的教授了。做的比较广吧，有偏理论的，也有偏硬件的（如hardware-aware
+design）（llm高效推理，长序列建模，graph结构学习相关， <a target="_blank" rel="noopener" href="https://arctanxarc.github.io/">安睿川</a>，本校的学长，看他可以看到大组做多模态都在做些什么
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=WvbKfLgAAAAJ">高焕昂</a>，thu特奖，可以看看很厉害的人做到了什么地步（虽然他做的领域不是特别感兴趣……）
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=VaYRTxEAAAAJ">yuwei
+niu</a>，很厉害的同龄人，而且做的是unified
+mllm，语言先验之类的，感觉是有意思的 <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=1chlis0AAAAJ">杨松琳</a>，linear
+attn的大神。这个方向渐渐又有点火起来了，值得关注 <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=m7_ceMcAAAAJ&amp;hl=zh-CN&amp;oi=sra">董俊男</a>，Tencent
+youtu
+lab的，做GraphRAG和agent的（没想到啊，GraphRAG真的能引起重视么……但感觉其实重点还是在agent上。GraphRAG更多是作为一个辅助项的）
+<a target="_blank" rel="noopener" href="http://www.xandery.top/">原旭</a>，一个hk
+polyu博士生，做比较多RAG这块，可以看看 <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=Y3rLP9UAAAAJ&amp;hl=en&amp;oi=ao">冯尚彬</a>，本校的一个学长，很牛，oral和best发不停了属于是，但有做social
+networks的，也有做llm collaboration的 <a target="_blank" rel="noopener" href="https://zhenyangliu.github.io/">liuzhenyang</a>，一个复旦和创智联培的博一学生（也就是比我大一岁吧），虽然是做3D多模态重建、空间推理之类的。可以看看联培学生都在做什么。同时不妨以他为目标吧（一年级3篇一作顶会paper，30citation）
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=TjdFs3EAAAAJ">Noah
+Smith</a>，据说是中生代nlp学者的代表人物了，看看他做什么可以了解前沿趋势吧
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=OdpmpDsAAAAJ&amp;hl=zh-CN&amp;oi=ao">zeping
+yu</a>，我草，很solid的一位做可解释性、涌现、in-context
+learning等理论方向的phd <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=iUIC-JEAAAAJ&amp;hl=zh-CN&amp;oi=sra">Fanqing
+Meng</a>，也是当年看的保研帖子的作者了。在sh
+ailab混得风生水起啊，主做多模态大模型以及benchmark的 <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=MnNISsEAAAAJ">Haoran
+Luo</a>，NTU&amp;BUPT的博士生，做KG、llm、rag还是比较多的 <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=icT6GMsAAAAJ&amp;hl=zh-CN&amp;oi=sra">何晓昕</a>，拿过谷歌奖学金的。做的主线好像是graph相关的，她的代表作是rag用到graph理解上的
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=xvfuhRUAAAAJ&amp;hl=zh-CN">孟繁续</a>，做model
+compression相关的，pku的phd <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=oTmQCFUAAAAJ">温凯越</a>，深中的学长，做理论+linear
+attn的牛人，Stanford phd <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=J3NTnmEAAAAJ">张金涛</a>，thu
+phd，做ml sys，efficiency的 <a target="_blank" rel="noopener" href="https://yueyang130.github.io/">乐洋</a>，thu黄高组的，做rl的，有点强
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=vy-F5U4AAAAJ">yuzheng
+cai</a>，fdu final-year phd。做rag，graph相关的。顶会很多啊，research
+intern经历也很丰富，但是citations确实不高。是领域问题吗…… <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=Ltv5xvcAAAAJ&amp;hl=zh-CN&amp;oi=ao">Yinhuai
+Wang</a>，做robotics的很强的hkust的phd <a target="_blank" rel="noopener" href="https://scholar.google.com/citations?user=zYDaX-4AAAAJ&amp;hl=zh-CN&amp;oi=ao">杨仝</a>，这位是pku的老师啊，没想到竟然也做sketch的，难得遇到一个。貌似之前是做比较偏向网络和数据库那边的？最近几年在往llm上转，有做蒸馏、量化、kv
+cache（就是比较像efficient
+llm的方向），也有涉及一点安全的？（怎么转型都和组里这么像啊）（感觉他sketch才是主业啊，最多的paper）
+<a target="_blank" rel="noopener" href="https://jyrao.github.io/">饶珈源</a>，谢伟迪组的。做cv的。感觉它们组的学生的paper确实不多，也不是引用量爆炸的那种，但大多都是一作，而且oral、spotlight感觉还蛮多的。真挺solid的吧
+<a target="_blank" rel="noopener" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=oalOgLgAAAAJ">yibin
+yan</a>，这位基本同上，不过感觉更厉害 <a target="_blank" rel="noopener" href="https://scholar.google.com.hk/citations?user=4YL23GMAAAAJ">刘希慧</a>，hku的年轻ap，做cv、mllm之类的。貌似也是上升得很快啊，而且还是大牛的老师
+<a target="_blank" rel="noopener" href="https://gszfwsb.github.io/">王少博</a>，sjtu张林峰组的。做dataset
+distillation，pruning以及可解释性之类的。感觉很solid，很猛</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/08/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/UniRAG%EF%BC%9AUnified%20Query%20Understanding%20Method%20for%20%20Retrieval%20Augmented%20Generation/" rel="prev" title="UniRAG：Unified Query Understanding Method for Retrieval Augmented Generation">
+      <i class="fa fa-chevron-left"></i> UniRAG：Unified Query Understanding Method for Retrieval Augmented Generation
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/08/27/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/model-merging/NAN%EF%BC%9AA%20Training-Free%20Solution%20to%20Coefficient%20Estimation%20in%20Model%20Merging/" rel="next" title="NAN：A Training-Free Solution to Coefficient Estimation in Model Merging">
+      NAN：A Training-Free Solution to Coefficient Estimation in Model Merging <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

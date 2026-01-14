@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：ICLR 24 date：2024-11-11 动机： 现在大模型发展过快，我们对它们的能力的评价有点跟不上了（如果还是像以前那样，在一些固定的榜单不断把分刷上去，似乎效果提升并不大，因为各家公司推出的新模型，通常都会在榜单上有若干项刷到sota，然而使用体感上好像没有那么大的提升）需要一个真正有含金量的benchmark，对llm有难度，且具有实际意义，才能更好地衡量llm目前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SWE-BENCH：CAN LANGUAGE MODELS RESOLVE REAL-WORLD GITHUB ISSUES？">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/07/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/SWE-BENCH%EF%BC%9ACAN%20LANGUAGE%20MODELS%20RESOLVE%20REAL-WORLD%20GITHUB%20ISSUES%EF%BC%9F/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：ICLR 24 date：2024-11-11 动机： 现在大模型发展过快，我们对它们的能力的评价有点跟不上了（如果还是像以前那样，在一些固定的榜单不断把分刷上去，似乎效果提升并不大，因为各家公司推出的新模型，通常都会在榜单上有若干项刷到sota，然而使用体感上好像没有那么大的提升）需要一个真正有含金量的benchmark，对llm有难度，且具有实际意义，才能更好地衡量llm目前">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-14T07:32:00.000Z">
+<meta property="article:modified_time" content="2025-07-15T14:58:49.722Z">
+<meta property="article:author" content="bluemouse">
+<meta property="article:tag" content="SWE-bench">
+<meta property="article:tag" content="benchmark">
+<meta property="article:tag" content="llm4code">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/07/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/SWE-BENCH%EF%BC%9ACAN%20LANGUAGE%20MODELS%20RESOLVE%20REAL-WORLD%20GITHUB%20ISSUES%EF%BC%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>SWE-BENCH：CAN LANGUAGE MODELS RESOLVE REAL-WORLD GITHUB ISSUES？ | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/SWE-BENCH%EF%BC%9ACAN%20LANGUAGE%20MODELS%20RESOLVE%20REAL-WORLD%20GITHUB%20ISSUES%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SWE-BENCH：CAN LANGUAGE MODELS RESOLVE REAL-WORLD GITHUB ISSUES？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-14 15:32:00" itemprop="dateCreated datePublished" datetime="2025-07-14T15:32:00+08:00">2025-07-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-15 22:58:49" itemprop="dateModified" datetime="2025-07-15T22:58:49+08:00">2025-07-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venueiclr-24">Venue：ICLR 24</h1>
+<h1 id="date2024-11-11">date：2024-11-11</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现在大模型发展过快我们对它们的能力的评价有点跟不上了如果还是像以前那样在一些固定的榜单不断把分刷上去似乎效果提升并不大因为各家公司推出的新模型通常都会在榜单上有若干项刷到sota然而使用体感上好像没有那么大的提升-需要一个真正有含金量的benchmark对llm有难度且具有实际意义才能更好地衡量llm目前的能力边界-而现实生活中的软件工程就是一个不错的测试场景它具有实际应用价值同时因为软件工程内部各个部分都相互联系关系错综复杂因此对llm的长上下文处理能力复杂推理能力等都有很高的要求如果llm能很好地在这个场景进行应用那无疑表明llm的能力有了实质性的提高-因此文章提出了swe-bench收集了若干github仓库的issue测试llm能否解决这些issue">现在大模型发展过快，我们对它们的能力的评价有点跟不上了（如果还是像以前那样，在一些固定的榜单不断把分刷上去，似乎效果提升并不大，因为各家公司推出的新模型，通常都会在榜单上有若干项刷到sota，然而使用体感上好像没有那么大的提升）<br>需要一个真正有含金量的benchmark，对llm有难度，且具有实际意义，才能更好地衡量llm目前的能力边界<br>而现实生活中的软件工程，就是一个不错的测试场景。它具有实际应用价值，同时因为软件工程内部各个部分都相互联系，关系错综复杂，因此对llm的长上下文处理能力、复杂推理能力等都有很高的要求。如果llm能很好地在这个场景进行应用，那无疑表明llm的能力有了实质性的提高<br>因此，文章提出了SWE-bench，收集了若干GitHub仓库的issue，测试llm能否解决这些issue</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="这篇论文主要的工作还是提出高难度的benchmark这可能更多说明了高质量的工作未必一定就是算法层面的创新如果确实注意到了某个领域里有效的benchmark的缺失那么构建一个solid的benchmark无疑就是一个极有影响力也非常有意义的工作">这篇论文主要的工作还是提出高难度的benchmark。这可能更多说明了，高质量的工作未必一定就是算法层面的创新，如果确实注意到了某个领域里有效的benchmark的缺失，那么构建一个solid的benchmark，无疑就是一个极有影响力也非常有意义的工作</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了新的高难度的benchmark可以在长期衡量模型能力的进展">提出了新的、高难度的benchmark，可以在长期衡量模型能力的进展</h2>
+<h2 id="微调了一些模型但意义可能更多在于说明即使微调之后效果也还是不够好未来还有很长的路要走">微调了一些模型（但意义可能更多在于说明，即使微调之后效果也还是不够好，未来还有很长的路要走）</h2>
+<span id="more"></span>
+<h1 id="swe-bench介绍">SWE-Bench介绍：</h1>
+<h2 id="这是论文的一大核心贡献即提出了一个新的有难度的benchmark">这是论文的一大核心贡献，即提出了一个新的、有难度的benchmark</h2>
+<h2 id="先讲讲数据集如何构建">先讲讲数据集如何构建</h2>
+<h3 id="benchmark-construction">1. benchmark construction</h3>
+<h4 id="因为直接找一个仓库然后把它的issue以及pr都拿过来当数据是不太现实的所以需要一些清洗筛选的操作论文里提到有三个阶段">因为直接找一个仓库，然后把它的issue以及PR都拿过来当数据是不太现实的，所以需要一些清洗筛选的操作。论文里提到有三个阶段</h4>
+<h5 id="stage-ⅰrepo-selection-and-data-scraping">Stage Ⅰ：Repo selection
+and data scraping</h5>
+<h6 id="这里首先是选了12个流行的开源python-github仓库收集了一共约90000条pr选流行的开源仓库也是为了数据质量有保证一般这种仓库的测试会更完备维护得会更好且每条pr都有对应的codebase就是说每个pr都对应了一个特定状态的代码库这个状态是由base-commit确定的而base-commit是指pr创建时基于的代码仓库版本所以有base-commit的话我们就能还原出pr修改前的代码库状态了这样就能通过对比修改前后代码的测试通过率来衡量pr是否有效了">这里，首先是选了12个流行的开源python
+Github仓库，收集了一共约90000条PR。选流行的开源仓库，也是为了数据质量有保证，一般这种仓库的测试会更完备，维护得会更好，且每条PR都有对应的codebase（就是说，每个PR都对应了一个特定状态的代码库，这个状态是由base
+commit确定的。而base
+commit是指，PR创建时基于的代码仓库版本。所以，有base
+commit的话，我们就能还原出PR修改前的代码库状态了，这样就能通过对比修改前后，代码的测试通过率，来衡量PR是否有效了）</h6>
+<h5 id="stage-ⅱattribute-based-filtering">Stage Ⅱ：Attribute-based
+filtering</h5>
+<h6 id="这个阶段做的正是过滤要确保留下来的pr是高质量的而高质量的pr我们对它有若干要求要是已经合并到仓库里的也就是这些pr要是merged要确保是解决了问题的也就是resolve-a-github-issue并且可测试这一点主要是通过判断pr是否修改了测试文件来判断一个pr如果它还修改了测试文件这表明它很可能是在加上这个pr对应的测试代码用来测试这个pr是否解决了issue这时我们就认为这个pr是可以测试的但是我们也可以想见这里是有一些不严谨的因为修改了测试文件并不意味着这个pr就一定添加了测试用例吧即使添加了我们也不能保证它添加的测试用力就一定是有效的吧所以这里我们可以认为是做了一个大致的筛选经过这一步筛选的是大概率有效能解决问题且可测试的pr下面我们还会进行查缺补漏">这个阶段，做的正是过滤。要确保留下来的PR是高质量的。而高质量的PR，我们对它有若干要求：要是已经合并到仓库里的（也就是这些PR要是merged）；要确保是解决了问题的（也就是resolve
+a Github
+issue）；并且可测试（这一点主要是通过判断PR是否修改了测试文件来判断。一个PR，如果它还修改了测试文件，这表明它很可能是在加上这个PR对应的测试代码，用来测试这个PR是否解决了issue。这时我们就认为这个PR是可以测试的）（但是，我们也可以想见，这里是有一些不严谨的。因为，修改了测试文件，并不意味着这个PR就一定添加了测试用例吧？即使添加了，我们也不能保证它添加的测试用力就一定是有效的吧？所以这里我们可以认为是做了一个大致的筛选，经过这一步筛选的，是大概率有效、能解决问题且可测试的PR。下面我们还会进行查缺补漏）</h6>
+<h5 id="stage-ⅲexecution-based-filtering">Stage Ⅲ：Execution-based
+filtering</h5>
+<h6 id="这里还是进行过滤但可以认为是在补上面的漏洞我们会对上一步筛选出的pr进一步筛查具体来说我们会对这些pr执行对应的测试文件然后我们要观察pr修改前后是否有至少一个测试用例的状态从失败变成通过也就是说pr的修改确实是有成效的即存在有效的fail-to-pass测试-此外我们还会排除存在安装错误或者运行时错误的实例确保任务可以正常评估">这里还是进行过滤，但可以认为是在补上面的漏洞。我们会对上一步筛选出的PR进一步筛查。具体来说，我们会对这些PR，执行对应的测试文件，然后我们要观察，PR修改前后，是否有至少一个测试用例的状态从”失败“变成”通过“（也就是说，PR的修改确实是有成效的，即存在有效的“fail-to-pass”测试）<br>此外，我们还会排除存在安装错误或者运行时错误的实例，确保任务可以正常评估</h6>
+<h4 id="经过上述的三个stage的清洗我们最终从约90000个pr里选出了2294个任务实例由此组成了swe-bench">经过上述的三个stage的清洗，我们最终从约90000个PR里选出了2294个任务实例，由此组成了SWE-Bench</h4>
+<h2 id="接着我们构建得到了数据集之后就来看看具体怎么利用这个数据集也就是看看任务的定义">接着，我们构建得到了数据集之后，就来看看具体怎么利用这个数据集。也就是看看任务的定义</h2>
+<h3 id="task-formulation">2. Task Formulation</h3>
+<h4 id="模型的输入方面是给模型一个issue的文本描述以及一个完整的codebase而模型的输出则要求是描述如何改动这个codebase以解决issue模型的输出要求是以patch-files的形式">模型的输入方面，是给模型一个issue的文本描述，以及一个完整的codebase。而模型的输出则要求是描述如何改动这个codebase以解决issue。模型的输出要求是以patch
+files的形式</h4>
+<h4 id="评价指标上我们用的是测试用例的通过率具体来说我们会把模型生成的patch文件应用到codebase上然后跑一下这个任务相关的测试用例如果全都通过当然是最好的情况也就是成功解决了这个issue而如果不是全部通过则我们用通过率来作为指标">评价指标上，我们用的是测试用例的通过率。具体来说，我们会把模型生成的patch文件应用到codebase上，然后跑一下这个任务相关的测试用例。如果全都通过，当然是最好的情况，也就是成功解决了这个issue。而如果不是全部通过，则我们用通过率来作为指标</h4>
+<h2 id="虽然得到了一个不错的足以在长期衡量llm能力进展的benchmark但它因为太难了现在的实验表明llm在这个benchmark上表现还是太差了导致有可能模型的不够大的能力进展表现不出来以及如果有开发者想在短期内一定程度上提高模型能力并进行衡量swe-bench似乎就不太合适了所以论文还提出了一个轻量版的benchmark也即swe-bench-lite它是从原来的benchmark里筛出300个实例并且尽量保证在各个仓库里的分布和原来是保持一致的分布也尽量保持一致这样就能尽可能做到lite版本和原版benchmark的风格是基本一致的只不过规模和难度有所不同而已">虽然得到了一个不错的、足以在长期衡量llm能力进展的benchmark，但它因为太难了（现在的实验表明，llm在这个benchmark上表现还是太差了），导致有可能模型的不够大的能力进展，表现不出来；以及如果有开发者想在短期内一定程度上提高模型能力并进行衡量，SWE-bench似乎就不太合适了。所以，论文还提出了一个轻量版的benchmark，也即SWE-bench
+lite。它是从原来的benchmark里筛出300个实例，并且尽量保证在各个仓库里的分布和原来是保持一致的，分布也尽量保持一致（这样就能尽可能做到，lite版本和原版benchmark的风格是基本一致的，只不过规模和难度有所不同而已）</h2>
+<h1 id="swe-llama">SWE-Llama</h1>
+<h2 id="这是本文的另一大贡献即收集相关issue-pr数据对并微调得到用于解决issue的llm并且也是因为在论文写作时只有codellama能处理很长的上下文从而能在这个设定里进行测试但现有开源的codellama生成的结果又实在不够好经常会输出占位响应符或者不相关的代码所以作者决定对模型进行微调应该是之前的实在太差了基本啥都评估不了所以微调一下提高能力看看提高之后是个什么效果">这是本文的另一大贡献，即收集相关issue-PR数据对，并微调得到用于解决issue的llm。并且，也是因为，在论文写作时，只有CodeLlama能处理很长的上下文，从而能在这个设定里进行测试；但现有开源的CodeLlama生成的结果又实在不够好（经常会输出占位响应符或者不相关的代码），所以作者决定对模型进行微调（应该是之前的实在太差了，基本啥都评估不了，所以微调一下提高能力，看看提高之后是个什么效果）</h2>
+<h2 id="微调数据收集">微调数据收集：</h2>
+<h3 id="遵循上面提到的三个stage收集数据的流程这里收集了37个python包的仓库得到了共计19000条issue-pr数据对然后和上面的不同在于这里我们收集数据的时候不再要求pr一定要修改了测试文档为了获得更大的数据量个人理解主要还是因为收集的时候stage-ⅲ里会执行pr进行测试这样还是能保证筛出来的pr是有效的只不过没有了前面的一定要修改测试文档的筛选候选的数据会更多工作量会更大而已但确实这样可以增加数据量-还有为了防止数据泄露这里收集的训练数据是和上面swe-bench的评估数据不重合的">遵循上面提到的三个stage收集数据的流程，这里收集了37个python包的仓库，得到了共计19000条issue-PR数据对。然后和上面的不同在于，这里我们收集数据的时候，不再要求PR一定要修改了测试文档（为了获得更大的数据量。个人理解，主要还是因为收集的时候，stage
+Ⅲ里会执行PR进行测试，这样还是能保证筛出来的PR是有效的，只不过没有了前面的“一定要修改测试文档”的筛选，候选的数据会更多，工作量会更大而已。但确实这样可以增加数据量）<br>还有，为了防止数据泄露，这里收集的训练数据是和上面SWE-Bench的评估数据不重合的</h3>
+<h2 id="具体微调方式">具体微调方式</h2>
+<h3 id="给模型的输入是issue-text相关代码文件以及我们的指令输出则要求是patch-file我们期望这个patch-file是能解决issue的">给模型的输入是issue
+text，相关代码文件以及我们的指令，输出则要求是patch
+file，我们期望这个patch file是能解决issue的</h3>
+<h3 id="为了节省显存论文里是用lora微调模型里的注意力层的就算是这样微调8b模型也要4张a100微调13b模型更是用到了8张a100-此外论文还把输入序列多于30000-tokens的数据都舍弃了最终训练数据大概是10000个样本">为了节省显存，论文里是用lora微调模型里的注意力层的（就算是这样，微调8b模型也要4张A100，微调13b模型更是用到了8张A100）<br>此外，论文还把输入序列多于30000
+tokens的数据都舍弃了。最终训练数据大概是10000个样本</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SWE-bench/" rel="tag"># SWE-bench</a>
+              <a href="/tags/benchmark/" rel="tag"># benchmark</a>
+              <a href="/tags/llm4code/" rel="tag"># llm4code</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/13/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/RepoCoder%EF%BC%9ARepository-Level%20Code%20Completion%20Through%20Iterative%20Retrieval%20and%20Generation/" rel="prev" title="RepoCoder：Repository-Level Code Completion Through Iterative Retrieval and Generation">
+      <i class="fa fa-chevron-left"></i> RepoCoder：Repository-Level Code Completion Through Iterative Retrieval and Generation
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" rel="next" title="在排序数组中查找元素的第一个和最后一个位置">
+      在排序数组中查找元素的第一个和最后一个位置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venueiclr-24"><span class="nav-number">1.</span> <span class="nav-text">Venue：ICLR 24</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2024-11-11"><span class="nav-number">2.</span> <span class="nav-text">date：2024-11-11</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B1%95%E8%BF%87%E5%BF%AB%E6%88%91%E4%BB%AC%E5%AF%B9%E5%AE%83%E4%BB%AC%E7%9A%84%E8%83%BD%E5%8A%9B%E7%9A%84%E8%AF%84%E4%BB%B7%E6%9C%89%E7%82%B9%E8%B7%9F%E4%B8%8D%E4%B8%8A%E4%BA%86%E5%A6%82%E6%9E%9C%E8%BF%98%E6%98%AF%E5%83%8F%E4%BB%A5%E5%89%8D%E9%82%A3%E6%A0%B7%E5%9C%A8%E4%B8%80%E4%BA%9B%E5%9B%BA%E5%AE%9A%E7%9A%84%E6%A6%9C%E5%8D%95%E4%B8%8D%E6%96%AD%E6%8A%8A%E5%88%86%E5%88%B7%E4%B8%8A%E5%8E%BB%E4%BC%BC%E4%B9%8E%E6%95%88%E6%9E%9C%E6%8F%90%E5%8D%87%E5%B9%B6%E4%B8%8D%E5%A4%A7%E5%9B%A0%E4%B8%BA%E5%90%84%E5%AE%B6%E5%85%AC%E5%8F%B8%E6%8E%A8%E5%87%BA%E7%9A%84%E6%96%B0%E6%A8%A1%E5%9E%8B%E9%80%9A%E5%B8%B8%E9%83%BD%E4%BC%9A%E5%9C%A8%E6%A6%9C%E5%8D%95%E4%B8%8A%E6%9C%89%E8%8B%A5%E5%B9%B2%E9%A1%B9%E5%88%B7%E5%88%B0sota%E7%84%B6%E8%80%8C%E4%BD%BF%E7%94%A8%E4%BD%93%E6%84%9F%E4%B8%8A%E5%A5%BD%E5%83%8F%E6%B2%A1%E6%9C%89%E9%82%A3%E4%B9%88%E5%A4%A7%E7%9A%84%E6%8F%90%E5%8D%87-%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E7%9C%9F%E6%AD%A3%E6%9C%89%E5%90%AB%E9%87%91%E9%87%8F%E7%9A%84benchmark%E5%AF%B9llm%E6%9C%89%E9%9A%BE%E5%BA%A6%E4%B8%94%E5%85%B7%E6%9C%89%E5%AE%9E%E9%99%85%E6%84%8F%E4%B9%89%E6%89%8D%E8%83%BD%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%A1%A1%E9%87%8Fllm%E7%9B%AE%E5%89%8D%E7%9A%84%E8%83%BD%E5%8A%9B%E8%BE%B9%E7%95%8C-%E8%80%8C%E7%8E%B0%E5%AE%9E%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%8D%E9%94%99%E7%9A%84%E6%B5%8B%E8%AF%95%E5%9C%BA%E6%99%AF%E5%AE%83%E5%85%B7%E6%9C%89%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E4%BB%B7%E5%80%BC%E5%90%8C%E6%97%B6%E5%9B%A0%E4%B8%BA%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%86%85%E9%83%A8%E5%90%84%E4%B8%AA%E9%83%A8%E5%88%86%E9%83%BD%E7%9B%B8%E4%BA%92%E8%81%94%E7%B3%BB%E5%85%B3%E7%B3%BB%E9%94%99%E7%BB%BC%E5%A4%8D%E6%9D%82%E5%9B%A0%E6%AD%A4%E5%AF%B9llm%E7%9A%84%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%A4%8D%E6%9D%82%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E7%AD%89%E9%83%BD%E6%9C%89%E5%BE%88%E9%AB%98%E7%9A%84%E8%A6%81%E6%B1%82%E5%A6%82%E6%9E%9Cllm%E8%83%BD%E5%BE%88%E5%A5%BD%E5%9C%B0%E5%9C%A8%E8%BF%99%E4%B8%AA%E5%9C%BA%E6%99%AF%E8%BF%9B%E8%A1%8C%E5%BA%94%E7%94%A8%E9%82%A3%E6%97%A0%E7%96%91%E8%A1%A8%E6%98%8Ellm%E7%9A%84%E8%83%BD%E5%8A%9B%E6%9C%89%E4%BA%86%E5%AE%9E%E8%B4%A8%E6%80%A7%E7%9A%84%E6%8F%90%E9%AB%98-%E5%9B%A0%E6%AD%A4%E6%96%87%E7%AB%A0%E6%8F%90%E5%87%BA%E4%BA%86swe-bench%E6%94%B6%E9%9B%86%E4%BA%86%E8%8B%A5%E5%B9%B2github%E4%BB%93%E5%BA%93%E7%9A%84issue%E6%B5%8B%E8%AF%95llm%E8%83%BD%E5%90%A6%E8%A7%A3%E5%86%B3%E8%BF%99%E4%BA%9Bissue"><span class="nav-number">3.1.</span> <span class="nav-text">现在大模型发展过快，我们对它们的能力的评价有点跟不上了（如果还是像以前那样，在一些固定的榜单不断把分刷上去，似乎效果提升并不大，因为各家公司推出的新模型，通常都会在榜单上有若干项刷到sota，然而使用体感上好像没有那么大的提升）需要一个真正有含金量的benchmark，对llm有难度，且具有实际意义，才能更好地衡量llm目前的能力边界而现实生活中的软件工程，就是一个不错的测试场景。它具有实际应用价值，同时因为软件工程内部各个部分都相互联系，关系错综复杂，因此对llm的长上下文处理能力、复杂推理能力等都有很高的要求。如果llm能很好地在这个场景进行应用，那无疑表明llm的能力有了实质性的提高因此，文章提出了SWE-bench，收集了若干GitHub仓库的issue，测试llm能否解决这些issue</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E4%B8%BB%E8%A6%81%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%BF%98%E6%98%AF%E6%8F%90%E5%87%BA%E9%AB%98%E9%9A%BE%E5%BA%A6%E7%9A%84benchmark%E8%BF%99%E5%8F%AF%E8%83%BD%E6%9B%B4%E5%A4%9A%E8%AF%B4%E6%98%8E%E4%BA%86%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%AA%E5%BF%85%E4%B8%80%E5%AE%9A%E5%B0%B1%E6%98%AF%E7%AE%97%E6%B3%95%E5%B1%82%E9%9D%A2%E7%9A%84%E5%88%9B%E6%96%B0%E5%A6%82%E6%9E%9C%E7%A1%AE%E5%AE%9E%E6%B3%A8%E6%84%8F%E5%88%B0%E4%BA%86%E6%9F%90%E4%B8%AA%E9%A2%86%E5%9F%9F%E9%87%8C%E6%9C%89%E6%95%88%E7%9A%84benchmark%E7%9A%84%E7%BC%BA%E5%A4%B1%E9%82%A3%E4%B9%88%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AAsolid%E7%9A%84benchmark%E6%97%A0%E7%96%91%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E6%9E%81%E6%9C%89%E5%BD%B1%E5%93%8D%E5%8A%9B%E4%B9%9F%E9%9D%9E%E5%B8%B8%E6%9C%89%E6%84%8F%E4%B9%89%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-number">4.1.</span> <span class="nav-text">这篇论文主要的工作还是提出高难度的benchmark。这可能更多说明了，高质量的工作未必一定就是算法层面的创新，如果确实注意到了某个领域里有效的benchmark的缺失，那么构建一个solid的benchmark，无疑就是一个极有影响力也非常有意义的工作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%BA%86%E6%96%B0%E7%9A%84%E9%AB%98%E9%9A%BE%E5%BA%A6%E7%9A%84benchmark%E5%8F%AF%E4%BB%A5%E5%9C%A8%E9%95%BF%E6%9C%9F%E8%A1%A1%E9%87%8F%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%E7%9A%84%E8%BF%9B%E5%B1%95"><span class="nav-number">5.1.</span> <span class="nav-text">提出了新的、高难度的benchmark，可以在长期衡量模型能力的进展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E4%BA%86%E4%B8%80%E4%BA%9B%E6%A8%A1%E5%9E%8B%E4%BD%86%E6%84%8F%E4%B9%89%E5%8F%AF%E8%83%BD%E6%9B%B4%E5%A4%9A%E5%9C%A8%E4%BA%8E%E8%AF%B4%E6%98%8E%E5%8D%B3%E4%BD%BF%E5%BE%AE%E8%B0%83%E4%B9%8B%E5%90%8E%E6%95%88%E6%9E%9C%E4%B9%9F%E8%BF%98%E6%98%AF%E4%B8%8D%E5%A4%9F%E5%A5%BD%E6%9C%AA%E6%9D%A5%E8%BF%98%E6%9C%89%E5%BE%88%E9%95%BF%E7%9A%84%E8%B7%AF%E8%A6%81%E8%B5%B0"><span class="nav-number">5.2.</span> <span class="nav-text">微调了一些模型（但意义可能更多在于说明，即使微调之后效果也还是不够好，未来还有很长的路要走）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#swe-bench%E4%BB%8B%E7%BB%8D"><span class="nav-number">6.</span> <span class="nav-text">SWE-Bench介绍：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%98%AF%E8%AE%BA%E6%96%87%E7%9A%84%E4%B8%80%E5%A4%A7%E6%A0%B8%E5%BF%83%E8%B4%A1%E7%8C%AE%E5%8D%B3%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E6%9C%89%E9%9A%BE%E5%BA%A6%E7%9A%84benchmark"><span class="nav-number">6.1.</span> <span class="nav-text">这是论文的一大核心贡献，即提出了一个新的、有难度的benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E8%AE%B2%E8%AE%B2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BA"><span class="nav-number">6.2.</span> <span class="nav-text">先讲讲数据集如何构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#benchmark-construction"><span class="nav-number">6.2.1.</span> <span class="nav-text">1. benchmark construction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E7%9B%B4%E6%8E%A5%E6%89%BE%E4%B8%80%E4%B8%AA%E4%BB%93%E5%BA%93%E7%84%B6%E5%90%8E%E6%8A%8A%E5%AE%83%E7%9A%84issue%E4%BB%A5%E5%8F%8Apr%E9%83%BD%E6%8B%BF%E8%BF%87%E6%9D%A5%E5%BD%93%E6%95%B0%E6%8D%AE%E6%98%AF%E4%B8%8D%E5%A4%AA%E7%8E%B0%E5%AE%9E%E7%9A%84%E6%89%80%E4%BB%A5%E9%9C%80%E8%A6%81%E4%B8%80%E4%BA%9B%E6%B8%85%E6%B4%97%E7%AD%9B%E9%80%89%E7%9A%84%E6%93%8D%E4%BD%9C%E8%AE%BA%E6%96%87%E9%87%8C%E6%8F%90%E5%88%B0%E6%9C%89%E4%B8%89%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-number">6.2.1.1.</span> <span class="nav-text">因为直接找一个仓库，然后把它的issue以及PR都拿过来当数据是不太现实的，所以需要一些清洗筛选的操作。论文里提到有三个阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#stage-%E2%85%B0repo-selection-and-data-scraping"><span class="nav-number">6.2.1.1.1.</span> <span class="nav-text">Stage Ⅰ：Repo selection
+and data scraping</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E9%A6%96%E5%85%88%E6%98%AF%E9%80%89%E4%BA%8612%E4%B8%AA%E6%B5%81%E8%A1%8C%E7%9A%84%E5%BC%80%E6%BA%90python-github%E4%BB%93%E5%BA%93%E6%94%B6%E9%9B%86%E4%BA%86%E4%B8%80%E5%85%B1%E7%BA%A690000%E6%9D%A1pr%E9%80%89%E6%B5%81%E8%A1%8C%E7%9A%84%E5%BC%80%E6%BA%90%E4%BB%93%E5%BA%93%E4%B9%9F%E6%98%AF%E4%B8%BA%E4%BA%86%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F%E6%9C%89%E4%BF%9D%E8%AF%81%E4%B8%80%E8%88%AC%E8%BF%99%E7%A7%8D%E4%BB%93%E5%BA%93%E7%9A%84%E6%B5%8B%E8%AF%95%E4%BC%9A%E6%9B%B4%E5%AE%8C%E5%A4%87%E7%BB%B4%E6%8A%A4%E5%BE%97%E4%BC%9A%E6%9B%B4%E5%A5%BD%E4%B8%94%E6%AF%8F%E6%9D%A1pr%E9%83%BD%E6%9C%89%E5%AF%B9%E5%BA%94%E7%9A%84codebase%E5%B0%B1%E6%98%AF%E8%AF%B4%E6%AF%8F%E4%B8%AApr%E9%83%BD%E5%AF%B9%E5%BA%94%E4%BA%86%E4%B8%80%E4%B8%AA%E7%89%B9%E5%AE%9A%E7%8A%B6%E6%80%81%E7%9A%84%E4%BB%A3%E7%A0%81%E5%BA%93%E8%BF%99%E4%B8%AA%E7%8A%B6%E6%80%81%E6%98%AF%E7%94%B1base-commit%E7%A1%AE%E5%AE%9A%E7%9A%84%E8%80%8Cbase-commit%E6%98%AF%E6%8C%87pr%E5%88%9B%E5%BB%BA%E6%97%B6%E5%9F%BA%E4%BA%8E%E7%9A%84%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93%E7%89%88%E6%9C%AC%E6%89%80%E4%BB%A5%E6%9C%89base-commit%E7%9A%84%E8%AF%9D%E6%88%91%E4%BB%AC%E5%B0%B1%E8%83%BD%E8%BF%98%E5%8E%9F%E5%87%BApr%E4%BF%AE%E6%94%B9%E5%89%8D%E7%9A%84%E4%BB%A3%E7%A0%81%E5%BA%93%E7%8A%B6%E6%80%81%E4%BA%86%E8%BF%99%E6%A0%B7%E5%B0%B1%E8%83%BD%E9%80%9A%E8%BF%87%E5%AF%B9%E6%AF%94%E4%BF%AE%E6%94%B9%E5%89%8D%E5%90%8E%E4%BB%A3%E7%A0%81%E7%9A%84%E6%B5%8B%E8%AF%95%E9%80%9A%E8%BF%87%E7%8E%87%E6%9D%A5%E8%A1%A1%E9%87%8Fpr%E6%98%AF%E5%90%A6%E6%9C%89%E6%95%88%E4%BA%86"><span class="nav-number">6.2.1.1.1.1.</span> <span class="nav-text">这里，首先是选了12个流行的开源python
+Github仓库，收集了一共约90000条PR。选流行的开源仓库，也是为了数据质量有保证，一般这种仓库的测试会更完备，维护得会更好，且每条PR都有对应的codebase（就是说，每个PR都对应了一个特定状态的代码库，这个状态是由base
+commit确定的。而base
+commit是指，PR创建时基于的代码仓库版本。所以，有base
+commit的话，我们就能还原出PR修改前的代码库状态了，这样就能通过对比修改前后，代码的测试通过率，来衡量PR是否有效了）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#stage-%E2%85%B1attribute-based-filtering"><span class="nav-number">6.2.1.1.2.</span> <span class="nav-text">Stage Ⅱ：Attribute-based
+filtering</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E9%98%B6%E6%AE%B5%E5%81%9A%E7%9A%84%E6%AD%A3%E6%98%AF%E8%BF%87%E6%BB%A4%E8%A6%81%E7%A1%AE%E4%BF%9D%E7%95%99%E4%B8%8B%E6%9D%A5%E7%9A%84pr%E6%98%AF%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E8%80%8C%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84pr%E6%88%91%E4%BB%AC%E5%AF%B9%E5%AE%83%E6%9C%89%E8%8B%A5%E5%B9%B2%E8%A6%81%E6%B1%82%E8%A6%81%E6%98%AF%E5%B7%B2%E7%BB%8F%E5%90%88%E5%B9%B6%E5%88%B0%E4%BB%93%E5%BA%93%E9%87%8C%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%BF%99%E4%BA%9Bpr%E8%A6%81%E6%98%AFmerged%E8%A6%81%E7%A1%AE%E4%BF%9D%E6%98%AF%E8%A7%A3%E5%86%B3%E4%BA%86%E9%97%AE%E9%A2%98%E7%9A%84%E4%B9%9F%E5%B0%B1%E6%98%AFresolve-a-github-issue%E5%B9%B6%E4%B8%94%E5%8F%AF%E6%B5%8B%E8%AF%95%E8%BF%99%E4%B8%80%E7%82%B9%E4%B8%BB%E8%A6%81%E6%98%AF%E9%80%9A%E8%BF%87%E5%88%A4%E6%96%ADpr%E6%98%AF%E5%90%A6%E4%BF%AE%E6%94%B9%E4%BA%86%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E6%9D%A5%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AApr%E5%A6%82%E6%9E%9C%E5%AE%83%E8%BF%98%E4%BF%AE%E6%94%B9%E4%BA%86%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E8%BF%99%E8%A1%A8%E6%98%8E%E5%AE%83%E5%BE%88%E5%8F%AF%E8%83%BD%E6%98%AF%E5%9C%A8%E5%8A%A0%E4%B8%8A%E8%BF%99%E4%B8%AApr%E5%AF%B9%E5%BA%94%E7%9A%84%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E7%94%A8%E6%9D%A5%E6%B5%8B%E8%AF%95%E8%BF%99%E4%B8%AApr%E6%98%AF%E5%90%A6%E8%A7%A3%E5%86%B3%E4%BA%86issue%E8%BF%99%E6%97%B6%E6%88%91%E4%BB%AC%E5%B0%B1%E8%AE%A4%E4%B8%BA%E8%BF%99%E4%B8%AApr%E6%98%AF%E5%8F%AF%E4%BB%A5%E6%B5%8B%E8%AF%95%E7%9A%84%E4%BD%86%E6%98%AF%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%83%B3%E8%A7%81%E8%BF%99%E9%87%8C%E6%98%AF%E6%9C%89%E4%B8%80%E4%BA%9B%E4%B8%8D%E4%B8%A5%E8%B0%A8%E7%9A%84%E5%9B%A0%E4%B8%BA%E4%BF%AE%E6%94%B9%E4%BA%86%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%B9%B6%E4%B8%8D%E6%84%8F%E5%91%B3%E7%9D%80%E8%BF%99%E4%B8%AApr%E5%B0%B1%E4%B8%80%E5%AE%9A%E6%B7%BB%E5%8A%A0%E4%BA%86%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E5%90%A7%E5%8D%B3%E4%BD%BF%E6%B7%BB%E5%8A%A0%E4%BA%86%E6%88%91%E4%BB%AC%E4%B9%9F%E4%B8%8D%E8%83%BD%E4%BF%9D%E8%AF%81%E5%AE%83%E6%B7%BB%E5%8A%A0%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E5%8A%9B%E5%B0%B1%E4%B8%80%E5%AE%9A%E6%98%AF%E6%9C%89%E6%95%88%E7%9A%84%E5%90%A7%E6%89%80%E4%BB%A5%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E6%98%AF%E5%81%9A%E4%BA%86%E4%B8%80%E4%B8%AA%E5%A4%A7%E8%87%B4%E7%9A%84%E7%AD%9B%E9%80%89%E7%BB%8F%E8%BF%87%E8%BF%99%E4%B8%80%E6%AD%A5%E7%AD%9B%E9%80%89%E7%9A%84%E6%98%AF%E5%A4%A7%E6%A6%82%E7%8E%87%E6%9C%89%E6%95%88%E8%83%BD%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E4%B8%94%E5%8F%AF%E6%B5%8B%E8%AF%95%E7%9A%84pr%E4%B8%8B%E9%9D%A2%E6%88%91%E4%BB%AC%E8%BF%98%E4%BC%9A%E8%BF%9B%E8%A1%8C%E6%9F%A5%E7%BC%BA%E8%A1%A5%E6%BC%8F"><span class="nav-number">6.2.1.1.2.1.</span> <span class="nav-text">这个阶段，做的正是过滤。要确保留下来的PR是高质量的。而高质量的PR，我们对它有若干要求：要是已经合并到仓库里的（也就是这些PR要是merged）；要确保是解决了问题的（也就是resolve
+a Github
+issue）；并且可测试（这一点主要是通过判断PR是否修改了测试文件来判断。一个PR，如果它还修改了测试文件，这表明它很可能是在加上这个PR对应的测试代码，用来测试这个PR是否解决了issue。这时我们就认为这个PR是可以测试的）（但是，我们也可以想见，这里是有一些不严谨的。因为，修改了测试文件，并不意味着这个PR就一定添加了测试用例吧？即使添加了，我们也不能保证它添加的测试用力就一定是有效的吧？所以这里我们可以认为是做了一个大致的筛选，经过这一步筛选的，是大概率有效、能解决问题且可测试的PR。下面我们还会进行查缺补漏）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#stage-%E2%85%B2execution-based-filtering"><span class="nav-number">6.2.1.1.3.</span> <span class="nav-text">Stage Ⅲ：Execution-based
+filtering</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E8%BF%98%E6%98%AF%E8%BF%9B%E8%A1%8C%E8%BF%87%E6%BB%A4%E4%BD%86%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E6%98%AF%E5%9C%A8%E8%A1%A5%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%88%91%E4%BB%AC%E4%BC%9A%E5%AF%B9%E4%B8%8A%E4%B8%80%E6%AD%A5%E7%AD%9B%E9%80%89%E5%87%BA%E7%9A%84pr%E8%BF%9B%E4%B8%80%E6%AD%A5%E7%AD%9B%E6%9F%A5%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%88%91%E4%BB%AC%E4%BC%9A%E5%AF%B9%E8%BF%99%E4%BA%9Bpr%E6%89%A7%E8%A1%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E7%84%B6%E5%90%8E%E6%88%91%E4%BB%AC%E8%A6%81%E8%A7%82%E5%AF%9Fpr%E4%BF%AE%E6%94%B9%E5%89%8D%E5%90%8E%E6%98%AF%E5%90%A6%E6%9C%89%E8%87%B3%E5%B0%91%E4%B8%80%E4%B8%AA%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E7%9A%84%E7%8A%B6%E6%80%81%E4%BB%8E%E5%A4%B1%E8%B4%A5%E5%8F%98%E6%88%90%E9%80%9A%E8%BF%87%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4pr%E7%9A%84%E4%BF%AE%E6%94%B9%E7%A1%AE%E5%AE%9E%E6%98%AF%E6%9C%89%E6%88%90%E6%95%88%E7%9A%84%E5%8D%B3%E5%AD%98%E5%9C%A8%E6%9C%89%E6%95%88%E7%9A%84fail-to-pass%E6%B5%8B%E8%AF%95-%E6%AD%A4%E5%A4%96%E6%88%91%E4%BB%AC%E8%BF%98%E4%BC%9A%E6%8E%92%E9%99%A4%E5%AD%98%E5%9C%A8%E5%AE%89%E8%A3%85%E9%94%99%E8%AF%AF%E6%88%96%E8%80%85%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%A1%AE%E4%BF%9D%E4%BB%BB%E5%8A%A1%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8%E8%AF%84%E4%BC%B0"><span class="nav-number">6.2.1.1.3.1.</span> <span class="nav-text">这里还是进行过滤，但可以认为是在补上面的漏洞。我们会对上一步筛选出的PR进一步筛查。具体来说，我们会对这些PR，执行对应的测试文件，然后我们要观察，PR修改前后，是否有至少一个测试用例的状态从”失败“变成”通过“（也就是说，PR的修改确实是有成效的，即存在有效的“fail-to-pass”测试）此外，我们还会排除存在安装错误或者运行时错误的实例，确保任务可以正常评估</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%8F%E8%BF%87%E4%B8%8A%E8%BF%B0%E7%9A%84%E4%B8%89%E4%B8%AAstage%E7%9A%84%E6%B8%85%E6%B4%97%E6%88%91%E4%BB%AC%E6%9C%80%E7%BB%88%E4%BB%8E%E7%BA%A690000%E4%B8%AApr%E9%87%8C%E9%80%89%E5%87%BA%E4%BA%862294%E4%B8%AA%E4%BB%BB%E5%8A%A1%E5%AE%9E%E4%BE%8B%E7%94%B1%E6%AD%A4%E7%BB%84%E6%88%90%E4%BA%86swe-bench"><span class="nav-number">6.2.1.2.</span> <span class="nav-text">经过上述的三个stage的清洗，我们最终从约90000个PR里选出了2294个任务实例，由此组成了SWE-Bench</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E7%9D%80%E6%88%91%E4%BB%AC%E6%9E%84%E5%BB%BA%E5%BE%97%E5%88%B0%E4%BA%86%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B9%8B%E5%90%8E%E5%B0%B1%E6%9D%A5%E7%9C%8B%E7%9C%8B%E5%85%B7%E4%BD%93%E6%80%8E%E4%B9%88%E5%88%A9%E7%94%A8%E8%BF%99%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%9C%8B%E7%9C%8B%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">6.3.</span> <span class="nav-text">接着，我们构建得到了数据集之后，就来看看具体怎么利用这个数据集。也就是看看任务的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#task-formulation"><span class="nav-number">6.3.1.</span> <span class="nav-text">2. Task Formulation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E6%96%B9%E9%9D%A2%E6%98%AF%E7%BB%99%E6%A8%A1%E5%9E%8B%E4%B8%80%E4%B8%AAissue%E7%9A%84%E6%96%87%E6%9C%AC%E6%8F%8F%E8%BF%B0%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84codebase%E8%80%8C%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%87%BA%E5%88%99%E8%A6%81%E6%B1%82%E6%98%AF%E6%8F%8F%E8%BF%B0%E5%A6%82%E4%BD%95%E6%94%B9%E5%8A%A8%E8%BF%99%E4%B8%AAcodebase%E4%BB%A5%E8%A7%A3%E5%86%B3issue%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%87%BA%E8%A6%81%E6%B1%82%E6%98%AF%E4%BB%A5patch-files%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-number">6.3.1.1.</span> <span class="nav-text">模型的输入方面，是给模型一个issue的文本描述，以及一个完整的codebase。而模型的输出则要求是描述如何改动这个codebase以解决issue。模型的输出要求是以patch
+files的形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87%E4%B8%8A%E6%88%91%E4%BB%AC%E7%94%A8%E7%9A%84%E6%98%AF%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E7%9A%84%E9%80%9A%E8%BF%87%E7%8E%87%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%88%91%E4%BB%AC%E4%BC%9A%E6%8A%8A%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90%E7%9A%84patch%E6%96%87%E4%BB%B6%E5%BA%94%E7%94%A8%E5%88%B0codebase%E4%B8%8A%E7%84%B6%E5%90%8E%E8%B7%91%E4%B8%80%E4%B8%8B%E8%BF%99%E4%B8%AA%E4%BB%BB%E5%8A%A1%E7%9B%B8%E5%85%B3%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E5%A6%82%E6%9E%9C%E5%85%A8%E9%83%BD%E9%80%9A%E8%BF%87%E5%BD%93%E7%84%B6%E6%98%AF%E6%9C%80%E5%A5%BD%E7%9A%84%E6%83%85%E5%86%B5%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%88%90%E5%8A%9F%E8%A7%A3%E5%86%B3%E4%BA%86%E8%BF%99%E4%B8%AAissue%E8%80%8C%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%98%AF%E5%85%A8%E9%83%A8%E9%80%9A%E8%BF%87%E5%88%99%E6%88%91%E4%BB%AC%E7%94%A8%E9%80%9A%E8%BF%87%E7%8E%87%E6%9D%A5%E4%BD%9C%E4%B8%BA%E6%8C%87%E6%A0%87"><span class="nav-number">6.3.1.2.</span> <span class="nav-text">评价指标上，我们用的是测试用例的通过率。具体来说，我们会把模型生成的patch文件应用到codebase上，然后跑一下这个任务相关的测试用例。如果全都通过，当然是最好的情况，也就是成功解决了这个issue。而如果不是全部通过，则我们用通过率来作为指标</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%BD%E7%84%B6%E5%BE%97%E5%88%B0%E4%BA%86%E4%B8%80%E4%B8%AA%E4%B8%8D%E9%94%99%E7%9A%84%E8%B6%B3%E4%BB%A5%E5%9C%A8%E9%95%BF%E6%9C%9F%E8%A1%A1%E9%87%8Fllm%E8%83%BD%E5%8A%9B%E8%BF%9B%E5%B1%95%E7%9A%84benchmark%E4%BD%86%E5%AE%83%E5%9B%A0%E4%B8%BA%E5%A4%AA%E9%9A%BE%E4%BA%86%E7%8E%B0%E5%9C%A8%E7%9A%84%E5%AE%9E%E9%AA%8C%E8%A1%A8%E6%98%8Ellm%E5%9C%A8%E8%BF%99%E4%B8%AAbenchmark%E4%B8%8A%E8%A1%A8%E7%8E%B0%E8%BF%98%E6%98%AF%E5%A4%AA%E5%B7%AE%E4%BA%86%E5%AF%BC%E8%87%B4%E6%9C%89%E5%8F%AF%E8%83%BD%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%B8%8D%E5%A4%9F%E5%A4%A7%E7%9A%84%E8%83%BD%E5%8A%9B%E8%BF%9B%E5%B1%95%E8%A1%A8%E7%8E%B0%E4%B8%8D%E5%87%BA%E6%9D%A5%E4%BB%A5%E5%8F%8A%E5%A6%82%E6%9E%9C%E6%9C%89%E5%BC%80%E5%8F%91%E8%80%85%E6%83%B3%E5%9C%A8%E7%9F%AD%E6%9C%9F%E5%86%85%E4%B8%80%E5%AE%9A%E7%A8%8B%E5%BA%A6%E4%B8%8A%E6%8F%90%E9%AB%98%E6%A8%A1%E5%9E%8B%E8%83%BD%E5%8A%9B%E5%B9%B6%E8%BF%9B%E8%A1%8C%E8%A1%A1%E9%87%8Fswe-bench%E4%BC%BC%E4%B9%8E%E5%B0%B1%E4%B8%8D%E5%A4%AA%E5%90%88%E9%80%82%E4%BA%86%E6%89%80%E4%BB%A5%E8%AE%BA%E6%96%87%E8%BF%98%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E8%BD%BB%E9%87%8F%E7%89%88%E7%9A%84benchmark%E4%B9%9F%E5%8D%B3swe-bench-lite%E5%AE%83%E6%98%AF%E4%BB%8E%E5%8E%9F%E6%9D%A5%E7%9A%84benchmark%E9%87%8C%E7%AD%9B%E5%87%BA300%E4%B8%AA%E5%AE%9E%E4%BE%8B%E5%B9%B6%E4%B8%94%E5%B0%BD%E9%87%8F%E4%BF%9D%E8%AF%81%E5%9C%A8%E5%90%84%E4%B8%AA%E4%BB%93%E5%BA%93%E9%87%8C%E7%9A%84%E5%88%86%E5%B8%83%E5%92%8C%E5%8E%9F%E6%9D%A5%E6%98%AF%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E7%9A%84%E5%88%86%E5%B8%83%E4%B9%9F%E5%B0%BD%E9%87%8F%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E8%BF%99%E6%A0%B7%E5%B0%B1%E8%83%BD%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%81%9A%E5%88%B0lite%E7%89%88%E6%9C%AC%E5%92%8C%E5%8E%9F%E7%89%88benchmark%E7%9A%84%E9%A3%8E%E6%A0%BC%E6%98%AF%E5%9F%BA%E6%9C%AC%E4%B8%80%E8%87%B4%E7%9A%84%E5%8F%AA%E4%B8%8D%E8%BF%87%E8%A7%84%E6%A8%A1%E5%92%8C%E9%9A%BE%E5%BA%A6%E6%9C%89%E6%89%80%E4%B8%8D%E5%90%8C%E8%80%8C%E5%B7%B2"><span class="nav-number">6.4.</span> <span class="nav-text">虽然得到了一个不错的、足以在长期衡量llm能力进展的benchmark，但它因为太难了（现在的实验表明，llm在这个benchmark上表现还是太差了），导致有可能模型的不够大的能力进展，表现不出来；以及如果有开发者想在短期内一定程度上提高模型能力并进行衡量，SWE-bench似乎就不太合适了。所以，论文还提出了一个轻量版的benchmark，也即SWE-bench
+lite。它是从原来的benchmark里筛出300个实例，并且尽量保证在各个仓库里的分布和原来是保持一致的，分布也尽量保持一致（这样就能尽可能做到，lite版本和原版benchmark的风格是基本一致的，只不过规模和难度有所不同而已）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#swe-llama"><span class="nav-number">7.</span> <span class="nav-text">SWE-Llama</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%98%AF%E6%9C%AC%E6%96%87%E7%9A%84%E5%8F%A6%E4%B8%80%E5%A4%A7%E8%B4%A1%E7%8C%AE%E5%8D%B3%E6%94%B6%E9%9B%86%E7%9B%B8%E5%85%B3issue-pr%E6%95%B0%E6%8D%AE%E5%AF%B9%E5%B9%B6%E5%BE%AE%E8%B0%83%E5%BE%97%E5%88%B0%E7%94%A8%E4%BA%8E%E8%A7%A3%E5%86%B3issue%E7%9A%84llm%E5%B9%B6%E4%B8%94%E4%B9%9F%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%9C%A8%E8%AE%BA%E6%96%87%E5%86%99%E4%BD%9C%E6%97%B6%E5%8F%AA%E6%9C%89codellama%E8%83%BD%E5%A4%84%E7%90%86%E5%BE%88%E9%95%BF%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BB%8E%E8%80%8C%E8%83%BD%E5%9C%A8%E8%BF%99%E4%B8%AA%E8%AE%BE%E5%AE%9A%E9%87%8C%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95%E4%BD%86%E7%8E%B0%E6%9C%89%E5%BC%80%E6%BA%90%E7%9A%84codellama%E7%94%9F%E6%88%90%E7%9A%84%E7%BB%93%E6%9E%9C%E5%8F%88%E5%AE%9E%E5%9C%A8%E4%B8%8D%E5%A4%9F%E5%A5%BD%E7%BB%8F%E5%B8%B8%E4%BC%9A%E8%BE%93%E5%87%BA%E5%8D%A0%E4%BD%8D%E5%93%8D%E5%BA%94%E7%AC%A6%E6%88%96%E8%80%85%E4%B8%8D%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%80%E4%BB%A5%E4%BD%9C%E8%80%85%E5%86%B3%E5%AE%9A%E5%AF%B9%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E5%BE%AE%E8%B0%83%E5%BA%94%E8%AF%A5%E6%98%AF%E4%B9%8B%E5%89%8D%E7%9A%84%E5%AE%9E%E5%9C%A8%E5%A4%AA%E5%B7%AE%E4%BA%86%E5%9F%BA%E6%9C%AC%E5%95%A5%E9%83%BD%E8%AF%84%E4%BC%B0%E4%B8%8D%E4%BA%86%E6%89%80%E4%BB%A5%E5%BE%AE%E8%B0%83%E4%B8%80%E4%B8%8B%E6%8F%90%E9%AB%98%E8%83%BD%E5%8A%9B%E7%9C%8B%E7%9C%8B%E6%8F%90%E9%AB%98%E4%B9%8B%E5%90%8E%E6%98%AF%E4%B8%AA%E4%BB%80%E4%B9%88%E6%95%88%E6%9E%9C"><span class="nav-number">7.1.</span> <span class="nav-text">这是本文的另一大贡献，即收集相关issue-PR数据对，并微调得到用于解决issue的llm。并且，也是因为，在论文写作时，只有CodeLlama能处理很长的上下文，从而能在这个设定里进行测试；但现有开源的CodeLlama生成的结果又实在不够好（经常会输出占位响应符或者不相关的代码），所以作者决定对模型进行微调（应该是之前的实在太差了，基本啥都评估不了，所以微调一下提高能力，看看提高之后是个什么效果）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86"><span class="nav-number">7.2.</span> <span class="nav-text">微调数据收集：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%B5%E5%BE%AA%E4%B8%8A%E9%9D%A2%E6%8F%90%E5%88%B0%E7%9A%84%E4%B8%89%E4%B8%AAstage%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E7%9A%84%E6%B5%81%E7%A8%8B%E8%BF%99%E9%87%8C%E6%94%B6%E9%9B%86%E4%BA%8637%E4%B8%AApython%E5%8C%85%E7%9A%84%E4%BB%93%E5%BA%93%E5%BE%97%E5%88%B0%E4%BA%86%E5%85%B1%E8%AE%A119000%E6%9D%A1issue-pr%E6%95%B0%E6%8D%AE%E5%AF%B9%E7%84%B6%E5%90%8E%E5%92%8C%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%B8%8D%E5%90%8C%E5%9C%A8%E4%BA%8E%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%8D%E5%86%8D%E8%A6%81%E6%B1%82pr%E4%B8%80%E5%AE%9A%E8%A6%81%E4%BF%AE%E6%94%B9%E4%BA%86%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3%E4%B8%BA%E4%BA%86%E8%8E%B7%E5%BE%97%E6%9B%B4%E5%A4%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E9%87%8F%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3%E4%B8%BB%E8%A6%81%E8%BF%98%E6%98%AF%E5%9B%A0%E4%B8%BA%E6%94%B6%E9%9B%86%E7%9A%84%E6%97%B6%E5%80%99stage-%E2%85%B2%E9%87%8C%E4%BC%9A%E6%89%A7%E8%A1%8Cpr%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95%E8%BF%99%E6%A0%B7%E8%BF%98%E6%98%AF%E8%83%BD%E4%BF%9D%E8%AF%81%E7%AD%9B%E5%87%BA%E6%9D%A5%E7%9A%84pr%E6%98%AF%E6%9C%89%E6%95%88%E7%9A%84%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%B2%A1%E6%9C%89%E4%BA%86%E5%89%8D%E9%9D%A2%E7%9A%84%E4%B8%80%E5%AE%9A%E8%A6%81%E4%BF%AE%E6%94%B9%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3%E7%9A%84%E7%AD%9B%E9%80%89%E5%80%99%E9%80%89%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%9A%E6%9B%B4%E5%A4%9A%E5%B7%A5%E4%BD%9C%E9%87%8F%E4%BC%9A%E6%9B%B4%E5%A4%A7%E8%80%8C%E5%B7%B2%E4%BD%86%E7%A1%AE%E5%AE%9E%E8%BF%99%E6%A0%B7%E5%8F%AF%E4%BB%A5%E5%A2%9E%E5%8A%A0%E6%95%B0%E6%8D%AE%E9%87%8F-%E8%BF%98%E6%9C%89%E4%B8%BA%E4%BA%86%E9%98%B2%E6%AD%A2%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2%E8%BF%99%E9%87%8C%E6%94%B6%E9%9B%86%E7%9A%84%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E6%98%AF%E5%92%8C%E4%B8%8A%E9%9D%A2swe-bench%E7%9A%84%E8%AF%84%E4%BC%B0%E6%95%B0%E6%8D%AE%E4%B8%8D%E9%87%8D%E5%90%88%E7%9A%84"><span class="nav-number">7.2.1.</span> <span class="nav-text">遵循上面提到的三个stage收集数据的流程，这里收集了37个python包的仓库，得到了共计19000条issue-PR数据对。然后和上面的不同在于，这里我们收集数据的时候，不再要求PR一定要修改了测试文档（为了获得更大的数据量。个人理解，主要还是因为收集的时候，stage
+Ⅲ里会执行PR进行测试，这样还是能保证筛出来的PR是有效的，只不过没有了前面的“一定要修改测试文档”的筛选，候选的数据会更多，工作量会更大而已。但确实这样可以增加数据量）还有，为了防止数据泄露，这里收集的训练数据是和上面SWE-Bench的评估数据不重合的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E5%BE%AE%E8%B0%83%E6%96%B9%E5%BC%8F"><span class="nav-number">7.3.</span> <span class="nav-text">具体微调方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%85%A5%E6%98%AFissue-text%E7%9B%B8%E5%85%B3%E4%BB%A3%E7%A0%81%E6%96%87%E4%BB%B6%E4%BB%A5%E5%8F%8A%E6%88%91%E4%BB%AC%E7%9A%84%E6%8C%87%E4%BB%A4%E8%BE%93%E5%87%BA%E5%88%99%E8%A6%81%E6%B1%82%E6%98%AFpatch-file%E6%88%91%E4%BB%AC%E6%9C%9F%E6%9C%9B%E8%BF%99%E4%B8%AApatch-file%E6%98%AF%E8%83%BD%E8%A7%A3%E5%86%B3issue%E7%9A%84"><span class="nav-number">7.3.1.</span> <span class="nav-text">给模型的输入是issue
+text，相关代码文件以及我们的指令，输出则要求是patch
+file，我们期望这个patch file是能解决issue的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BA%86%E8%8A%82%E7%9C%81%E6%98%BE%E5%AD%98%E8%AE%BA%E6%96%87%E9%87%8C%E6%98%AF%E7%94%A8lora%E5%BE%AE%E8%B0%83%E6%A8%A1%E5%9E%8B%E9%87%8C%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%B1%82%E7%9A%84%E5%B0%B1%E7%AE%97%E6%98%AF%E8%BF%99%E6%A0%B7%E5%BE%AE%E8%B0%838b%E6%A8%A1%E5%9E%8B%E4%B9%9F%E8%A6%814%E5%BC%A0a100%E5%BE%AE%E8%B0%8313b%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%98%AF%E7%94%A8%E5%88%B0%E4%BA%868%E5%BC%A0a100-%E6%AD%A4%E5%A4%96%E8%AE%BA%E6%96%87%E8%BF%98%E6%8A%8A%E8%BE%93%E5%85%A5%E5%BA%8F%E5%88%97%E5%A4%9A%E4%BA%8E30000-tokens%E7%9A%84%E6%95%B0%E6%8D%AE%E9%83%BD%E8%88%8D%E5%BC%83%E4%BA%86%E6%9C%80%E7%BB%88%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E5%A4%A7%E6%A6%82%E6%98%AF10000%E4%B8%AA%E6%A0%B7%E6%9C%AC"><span class="nav-number">7.3.2.</span> <span class="nav-text">为了节省显存，论文里是用lora微调模型里的注意力层的（就算是这样，微调8b模型也要4张A100，微调13b模型更是用到了8张A100）此外，论文还把输入序列多于30000
+tokens的数据都舍弃了。最终训练数据大概是10000个样本</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

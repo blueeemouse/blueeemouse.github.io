@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="文章聚焦于多智能体系统中协作任务下智能体的自适应行为构建问题。现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性，导致在零样本协作场景（即与未知队友协作）中，智能体缺乏战略适应能力。研究旨在解决这一挑战，提出利用大语言模型（LLMs）构建可动态适应队友行为的主动协作智能体框架 ProAgent。 零样本协作挑战指智能体在没有预先训练或微调的情况下，与未知队友（包括 AI 或人类）协">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/05/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="文章聚焦于多智能体系统中协作任务下智能体的自适应行为构建问题。现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性，导致在零样本协作场景（即与未知队友协作）中，智能体缺乏战略适应能力。研究旨在解决这一挑战，提出利用大语言模型（LLMs）构建可动态适应队友行为的主动协作智能体框架 ProAgent。 零样本协作挑战指智能体在没有预先训练或微调的情况下，与未知队友（包括 AI 或人类）协">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-28T17:08:46.418Z">
+<meta property="article:modified_time" content="2025-05-28T17:38:26.847Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/05/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/agents/ProAgent%EF%BC%9ABuilding%20Proactive%20Cooperative%20Agents%20with%20Large%20Language%20Models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-29 01:08:46 / Modified: 01:38:26" itemprop="dateCreated datePublished" datetime="2025-05-29T01:08:46+08:00">2025-05-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="文章聚焦于多智能体系统中协作任务下智能体的自适应行为构建问题现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性导致在零样本协作场景即与未知队友协作中智能体缺乏战略适应能力研究旨在解决这一挑战提出利用大语言模型llms构建可动态适应队友行为的主动协作智能体框架-proagent">文章聚焦于多智能体系统中<strong>协作任务下智能体的自适应行为构建问题</strong>。现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性，导致在<strong>零样本协作场景</strong>（即与未知队友协作）中，智能体缺乏战略适应能力。研究旨在解决这一挑战，提出利用大语言模型（LLMs）构建可动态适应队友行为的主动协作智能体框架
+ProAgent。</h1>
+<h1 id="零样本协作挑战指智能体在没有预先训练或微调的情况下与未知队友包括-ai-或人类协作时面临的适应性难题文中提到现有-zsc-方法如基于种群训练-pbt心智理论-tom需消耗大量计算资源进行数据收集和模型优化且生成的策略缺乏可解释性难以在未见过的协作场景中有效泛化例如在-overcooked-ai-环境中传统方法无法高效推断新队友的意图导致协作效率低下">零样本协作挑战指智能体在<strong>没有预先训练或微调</strong>的情况下，与未知队友（包括
+AI 或人类）协作时面临的适应性难题。文中提到，现有 ZSC
+方法（如基于种群训练 PBT、心智理论
+ToM）需消耗大量计算资源进行数据收集和模型优化，且生成的策略缺乏可解释性，难以在未见过的协作场景中有效泛化。例如，在
+Overcooked-AI
+环境中，传统方法无法高效推断新队友的意图，导致协作效率低下。</h1>
+<h1 id="动态意图推理的挑战">动态意图推理的挑战</h1>
+<h2 id="动态意图推理的挑战指在协作过程中智能体需实时推断队友的行为意图并动态调整自身策略但现有方法难以实现这一点具体而言">动态意图推理的挑战指在协作过程中，智能体需<strong>实时推断队友的行为意图并动态调整自身策略</strong>，但现有方法难以实现这一点。具体而言</h2>
+<h3 id="传统方法依赖固定训练数据无法适应队友策略的动态变化">-
+传统方法依赖固定训练数据，无法适应队友策略的动态变化；</h3>
+<h3 id="缺乏对队友实际行为与预测意图的修正机制导致推理偏差累积">-
+缺乏对队友实际行为与预测意图的修正机制，导致推理偏差累积；</h3>
+<h3 id="难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析">-
+难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析。</h3>
+<h1 id="现有方法的缺陷">现有方法的缺陷</h1>
+<h2 id="策略泛化能力受限">（1）策略泛化能力受限</h2>
+<h3 id="依赖训练阶段队友多样性无法适应未知队友例如基于自玩sp或种群训练pbt的方法在零样本场景中性能显著下降">-
+依赖训练阶段队友多样性，无法适应未知队友。例如，基于自玩（SP）或种群训练（PBT）的方法在零样本场景中性能显著下降。</h3>
+<h2 id="计算与数据效率低">（2）计算与数据效率低</h2>
+<h3 id="零样本协作方法如-pbtmep需大量数据收集和模型优化资源消耗大">-
+零样本协作方法（如 PBT、MEP）需大量数据收集和模型优化，资源消耗大。</h3>
+<h2 id="可解释性不足">（3）可解释性不足</h2>
+<h3 id="学习型方法如强化学习的策略为黑盒难以解释决策逻辑而-proagent-通过自然语言推理提升可解释性">-
+学习型方法（如强化学习）的策略为黑盒，难以解释决策逻辑，而 ProAgent
+通过自然语言推理提升可解释性。</h3>
+<h2 id="动态意图推理能力弱">（4）动态意图推理能力弱</h2>
+<h3 id="缺乏显式的意图推断与修正机制无法根据队友实时行为调整策略导致协作效率低下">-
+缺乏显式的意图推断与修正机制，无法根据队友实时行为调整策略，导致协作效率低下。</h3>
+<h1 id="解决上述挑战的方法proagent-框架">解决上述挑战的方法：ProAgent
+框架</h1>
+<h2 id="proagent-通过以下机制解决零样本协作与动态意图推理挑战">ProAgent
+通过以下机制解决零样本协作与动态意图推理挑战：</h2>
+<h3 id="基于-llm-的动态意图推理与规划">（1）基于 LLM
+的动态意图推理与规划</h3>
+<h4 id="planner-模块利用-llm-的链式思维cot推理分析当前状态并推断队友意图生成高层协作策略">-
+<strong>Planner 模块</strong>：利用 LLM
+的链式思维（CoT）推理，分析当前状态并推断队友意图，生成高层协作策略。</h4>
+<h4 id="belief-correction-信念修正机制将预测的队友意图与实际行为对比更新信念库提升后续推理准确性例如若预测队友会拾取洋葱但实际未执行机制会修正信念并调整后续计划">-
+<strong>Belief Correction
+信念修正机制</strong>：将预测的队友意图与实际行为对比，更新信念库，提升后续推理准确性。例如，若预测队友会拾取洋葱但实际未执行，机制会修正信念并调整后续计划。</h4>
+<h3 id="模块化设计支持零样本适应">（2）模块化设计支持零样本适应</h3>
+<h4 id="verificator-模块验证计划可行性若失败则通过多轮提示分析原因如前提条件不满足触发重新规划">-
+<strong>Verificator
+模块</strong>：验证计划可行性，若失败则通过多轮提示分析原因（如前提条件不满足），触发重新规划。</h4>
+<h4 id="memory-模块存储任务知识历史状态与信念支持基于上下文的快速决策无需额外训练">-
+<strong>Memory
+模块</strong>：存储任务知识、历史状态与信念，支持基于上下文的快速决策，无需额外训练。</h4>
+<h4 id="controller-模块将高层技能分解为底层动作适配不同环境如-overcooked-ai-中的路径搜索">-
+<strong>Controller
+模块</strong>：将高层技能分解为底层动作，适配不同环境（如 Overcooked-AI
+中的路径搜索）。</h4>
+<h3 id="把上面各个模块串一下有个planner模块类似于大脑会优先用它进行分析当前状态得到决策而当前状态包括环境状态以及队友状态状态是经由一个llm进行提取的提取状态时会用到一个长期的memory模块决策则包括自身的预决策也就是打算做的事以及对队友意图的预测-对队友意图的预测可能会被纠正只需要看看队友实际做了什么就知道我们是否预测对了这部分由belief-correction机制实现-自身的预决策需要先判断能否进行这个动作可能实际环境限制导致无法开展此时就需要verificator模块来验证可行性可行则由controller模块进一步细分并执行不可行则需要分析原因并重新规划">把上面各个模块串一下：有个planner模块，类似于大脑，会优先用它进行分析当前状态，得到决策。而当前状态，包括环境状态以及队友状态（状态是经由一个llm进行提取的。提取状态时，会用到一个长期的Memory模块）；决策则包括自身的预决策（也就是打算做的事），以及对队友意图的预测<br>对队友意图的预测，可能会被纠正（只需要看看队友实际做了什么，就知道我们是否预测对了。这部分由Belief
+Correction机制实现）<br>自身的预决策，需要先判断能否进行这个动作（可能实际环境限制，导致无法开展）。此时就需要Verificator模块，来验证可行性。可行，则由Controller模块进一步细分并执行；不可行，则需要分析原因，并重新规划</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/05/29/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/pytorch/%E5%85%B3%E4%BA%8E.reshape%E5%92%8C.view%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8C%BA%E5%88%AB%E5%92%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" rel="prev" title="关于.reshape和.view的一些区别和注意事项">
+      <i class="fa fa-chevron-left"></i> 关于.reshape和.view的一些区别和注意事项
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/05/30/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%8E%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" rel="next" title="线性回归与逻辑回归">
+      线性回归与逻辑回归 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E8%81%9A%E7%84%A6%E4%BA%8E%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%8D%8F%E4%BD%9C%E4%BB%BB%E5%8A%A1%E4%B8%8B%E6%99%BA%E8%83%BD%E4%BD%93%E7%9A%84%E8%87%AA%E9%80%82%E5%BA%94%E8%A1%8C%E4%B8%BA%E6%9E%84%E5%BB%BA%E9%97%AE%E9%A2%98%E7%8E%B0%E6%9C%89%E5%9F%BA%E4%BA%8E%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8D%8F%E4%BD%9C%E6%99%BA%E8%83%BD%E4%BD%93%E6%96%B9%E6%B3%95%E9%AB%98%E5%BA%A6%E4%BE%9D%E8%B5%96%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5%E4%BA%A4%E4%BA%92%E9%98%9F%E5%8F%8B%E7%9A%84%E5%A4%9A%E6%A0%B7%E6%80%A7%E5%AF%BC%E8%87%B4%E5%9C%A8%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%8D%8F%E4%BD%9C%E5%9C%BA%E6%99%AF%E5%8D%B3%E4%B8%8E%E6%9C%AA%E7%9F%A5%E9%98%9F%E5%8F%8B%E5%8D%8F%E4%BD%9C%E4%B8%AD%E6%99%BA%E8%83%BD%E4%BD%93%E7%BC%BA%E4%B9%8F%E6%88%98%E7%95%A5%E9%80%82%E5%BA%94%E8%83%BD%E5%8A%9B%E7%A0%94%E7%A9%B6%E6%97%A8%E5%9C%A8%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%80%E6%8C%91%E6%88%98%E6%8F%90%E5%87%BA%E5%88%A9%E7%94%A8%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8Bllms%E6%9E%84%E5%BB%BA%E5%8F%AF%E5%8A%A8%E6%80%81%E9%80%82%E5%BA%94%E9%98%9F%E5%8F%8B%E8%A1%8C%E4%B8%BA%E7%9A%84%E4%B8%BB%E5%8A%A8%E5%8D%8F%E4%BD%9C%E6%99%BA%E8%83%BD%E4%BD%93%E6%A1%86%E6%9E%B6-proagent"><span class="nav-number">1.</span> <span class="nav-text">文章聚焦于多智能体系统中协作任务下智能体的自适应行为构建问题。现有基于学习的协作智能体方法高度依赖训练阶段交互队友的多样性，导致在零样本协作场景（即与未知队友协作）中，智能体缺乏战略适应能力。研究旨在解决这一挑战，提出利用大语言模型（LLMs）构建可动态适应队友行为的主动协作智能体框架
+ProAgent。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%8D%8F%E4%BD%9C%E6%8C%91%E6%88%98%E6%8C%87%E6%99%BA%E8%83%BD%E4%BD%93%E5%9C%A8%E6%B2%A1%E6%9C%89%E9%A2%84%E5%85%88%E8%AE%AD%E7%BB%83%E6%88%96%E5%BE%AE%E8%B0%83%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E4%B8%8E%E6%9C%AA%E7%9F%A5%E9%98%9F%E5%8F%8B%E5%8C%85%E6%8B%AC-ai-%E6%88%96%E4%BA%BA%E7%B1%BB%E5%8D%8F%E4%BD%9C%E6%97%B6%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%80%82%E5%BA%94%E6%80%A7%E9%9A%BE%E9%A2%98%E6%96%87%E4%B8%AD%E6%8F%90%E5%88%B0%E7%8E%B0%E6%9C%89-zsc-%E6%96%B9%E6%B3%95%E5%A6%82%E5%9F%BA%E4%BA%8E%E7%A7%8D%E7%BE%A4%E8%AE%AD%E7%BB%83-pbt%E5%BF%83%E6%99%BA%E7%90%86%E8%AE%BA-tom%E9%9C%80%E6%B6%88%E8%80%97%E5%A4%A7%E9%87%8F%E8%AE%A1%E7%AE%97%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86%E5%92%8C%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96%E4%B8%94%E7%94%9F%E6%88%90%E7%9A%84%E7%AD%96%E7%95%A5%E7%BC%BA%E4%B9%8F%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E9%9A%BE%E4%BB%A5%E5%9C%A8%E6%9C%AA%E8%A7%81%E8%BF%87%E7%9A%84%E5%8D%8F%E4%BD%9C%E5%9C%BA%E6%99%AF%E4%B8%AD%E6%9C%89%E6%95%88%E6%B3%9B%E5%8C%96%E4%BE%8B%E5%A6%82%E5%9C%A8-overcooked-ai-%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95%E6%97%A0%E6%B3%95%E9%AB%98%E6%95%88%E6%8E%A8%E6%96%AD%E6%96%B0%E9%98%9F%E5%8F%8B%E7%9A%84%E6%84%8F%E5%9B%BE%E5%AF%BC%E8%87%B4%E5%8D%8F%E4%BD%9C%E6%95%88%E7%8E%87%E4%BD%8E%E4%B8%8B"><span class="nav-number">2.</span> <span class="nav-text">零样本协作挑战指智能体在没有预先训练或微调的情况下，与未知队友（包括
+AI 或人类）协作时面临的适应性难题。文中提到，现有 ZSC
+方法（如基于种群训练 PBT、心智理论
+ToM）需消耗大量计算资源进行数据收集和模型优化，且生成的策略缺乏可解释性，难以在未见过的协作场景中有效泛化。例如，在
+Overcooked-AI
+环境中，传统方法无法高效推断新队友的意图，导致协作效率低下。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%84%8F%E5%9B%BE%E6%8E%A8%E7%90%86%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">3.</span> <span class="nav-text">动态意图推理的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%84%8F%E5%9B%BE%E6%8E%A8%E7%90%86%E7%9A%84%E6%8C%91%E6%88%98%E6%8C%87%E5%9C%A8%E5%8D%8F%E4%BD%9C%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%99%BA%E8%83%BD%E4%BD%93%E9%9C%80%E5%AE%9E%E6%97%B6%E6%8E%A8%E6%96%AD%E9%98%9F%E5%8F%8B%E7%9A%84%E8%A1%8C%E4%B8%BA%E6%84%8F%E5%9B%BE%E5%B9%B6%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4%E8%87%AA%E8%BA%AB%E7%AD%96%E7%95%A5%E4%BD%86%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E9%9A%BE%E4%BB%A5%E5%AE%9E%E7%8E%B0%E8%BF%99%E4%B8%80%E7%82%B9%E5%85%B7%E4%BD%93%E8%80%8C%E8%A8%80"><span class="nav-number">3.1.</span> <span class="nav-text">动态意图推理的挑战指在协作过程中，智能体需实时推断队友的行为意图并动态调整自身策略，但现有方法难以实现这一点。具体而言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95%E4%BE%9D%E8%B5%96%E5%9B%BA%E5%AE%9A%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E6%97%A0%E6%B3%95%E9%80%82%E5%BA%94%E9%98%9F%E5%8F%8B%E7%AD%96%E7%95%A5%E7%9A%84%E5%8A%A8%E6%80%81%E5%8F%98%E5%8C%96"><span class="nav-number">3.1.1.</span> <span class="nav-text">-
+传统方法依赖固定训练数据，无法适应队友策略的动态变化；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E4%B9%8F%E5%AF%B9%E9%98%9F%E5%8F%8B%E5%AE%9E%E9%99%85%E8%A1%8C%E4%B8%BA%E4%B8%8E%E9%A2%84%E6%B5%8B%E6%84%8F%E5%9B%BE%E7%9A%84%E4%BF%AE%E6%AD%A3%E6%9C%BA%E5%88%B6%E5%AF%BC%E8%87%B4%E6%8E%A8%E7%90%86%E5%81%8F%E5%B7%AE%E7%B4%AF%E7%A7%AF"><span class="nav-number">3.1.2.</span> <span class="nav-text">-
+缺乏对队友实际行为与预测意图的修正机制，导致推理偏差累积；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%BE%E4%BB%A5%E5%9C%A8%E5%A4%8D%E6%9D%82%E5%9C%BA%E6%99%AF%E4%B8%AD%E7%BB%93%E5%90%88%E5%8E%86%E5%8F%B2%E4%BA%A4%E4%BA%92%E4%BF%A1%E6%81%AF%E4%B8%8E%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%84%8F%E5%9B%BE%E5%88%86%E6%9E%90"><span class="nav-number">3.1.3.</span> <span class="nav-text">-
+难以在复杂场景中结合历史交互信息与当前状态进行联合意图分析。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-number">4.</span> <span class="nav-text">现有方法的缺陷</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%B3%9B%E5%8C%96%E8%83%BD%E5%8A%9B%E5%8F%97%E9%99%90"><span class="nav-number">4.1.</span> <span class="nav-text">（1）策略泛化能力受限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E8%AE%AD%E7%BB%83%E9%98%B6%E6%AE%B5%E9%98%9F%E5%8F%8B%E5%A4%9A%E6%A0%B7%E6%80%A7%E6%97%A0%E6%B3%95%E9%80%82%E5%BA%94%E6%9C%AA%E7%9F%A5%E9%98%9F%E5%8F%8B%E4%BE%8B%E5%A6%82%E5%9F%BA%E4%BA%8E%E8%87%AA%E7%8E%A9sp%E6%88%96%E7%A7%8D%E7%BE%A4%E8%AE%AD%E7%BB%83pbt%E7%9A%84%E6%96%B9%E6%B3%95%E5%9C%A8%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%9C%BA%E6%99%AF%E4%B8%AD%E6%80%A7%E8%83%BD%E6%98%BE%E8%91%97%E4%B8%8B%E9%99%8D"><span class="nav-number">4.1.1.</span> <span class="nav-text">-
+依赖训练阶段队友多样性，无法适应未知队友。例如，基于自玩（SP）或种群训练（PBT）的方法在零样本场景中性能显著下降。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%95%88%E7%8E%87%E4%BD%8E"><span class="nav-number">4.2.</span> <span class="nav-text">（2）计算与数据效率低</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%8D%8F%E4%BD%9C%E6%96%B9%E6%B3%95%E5%A6%82-pbtmep%E9%9C%80%E5%A4%A7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86%E5%92%8C%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96%E8%B5%84%E6%BA%90%E6%B6%88%E8%80%97%E5%A4%A7"><span class="nav-number">4.2.1.</span> <span class="nav-text">-
+零样本协作方法（如 PBT、MEP）需大量数据收集和模型优化，资源消耗大。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E4%B8%8D%E8%B6%B3"><span class="nav-number">4.3.</span> <span class="nav-text">（3）可解释性不足</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E5%9E%8B%E6%96%B9%E6%B3%95%E5%A6%82%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%AD%96%E7%95%A5%E4%B8%BA%E9%BB%91%E7%9B%92%E9%9A%BE%E4%BB%A5%E8%A7%A3%E9%87%8A%E5%86%B3%E7%AD%96%E9%80%BB%E8%BE%91%E8%80%8C-proagent-%E9%80%9A%E8%BF%87%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E6%8E%A8%E7%90%86%E6%8F%90%E5%8D%87%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7"><span class="nav-number">4.3.1.</span> <span class="nav-text">-
+学习型方法（如强化学习）的策略为黑盒，难以解释决策逻辑，而 ProAgent
+通过自然语言推理提升可解释性。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%84%8F%E5%9B%BE%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E5%BC%B1"><span class="nav-number">4.4.</span> <span class="nav-text">（4）动态意图推理能力弱</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E4%B9%8F%E6%98%BE%E5%BC%8F%E7%9A%84%E6%84%8F%E5%9B%BE%E6%8E%A8%E6%96%AD%E4%B8%8E%E4%BF%AE%E6%AD%A3%E6%9C%BA%E5%88%B6%E6%97%A0%E6%B3%95%E6%A0%B9%E6%8D%AE%E9%98%9F%E5%8F%8B%E5%AE%9E%E6%97%B6%E8%A1%8C%E4%B8%BA%E8%B0%83%E6%95%B4%E7%AD%96%E7%95%A5%E5%AF%BC%E8%87%B4%E5%8D%8F%E4%BD%9C%E6%95%88%E7%8E%87%E4%BD%8E%E4%B8%8B"><span class="nav-number">4.4.1.</span> <span class="nav-text">-
+缺乏显式的意图推断与修正机制，无法根据队友实时行为调整策略，导致协作效率低下。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E4%B8%8A%E8%BF%B0%E6%8C%91%E6%88%98%E7%9A%84%E6%96%B9%E6%B3%95proagent-%E6%A1%86%E6%9E%B6"><span class="nav-number">5.</span> <span class="nav-text">解决上述挑战的方法：ProAgent
+框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#proagent-%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%9C%BA%E5%88%B6%E8%A7%A3%E5%86%B3%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%8D%8F%E4%BD%9C%E4%B8%8E%E5%8A%A8%E6%80%81%E6%84%8F%E5%9B%BE%E6%8E%A8%E7%90%86%E6%8C%91%E6%88%98"><span class="nav-number">5.1.</span> <span class="nav-text">ProAgent
+通过以下机制解决零样本协作与动态意图推理挑战：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-llm-%E7%9A%84%E5%8A%A8%E6%80%81%E6%84%8F%E5%9B%BE%E6%8E%A8%E7%90%86%E4%B8%8E%E8%A7%84%E5%88%92"><span class="nav-number">5.1.1.</span> <span class="nav-text">（1）基于 LLM
+的动态意图推理与规划</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#planner-%E6%A8%A1%E5%9D%97%E5%88%A9%E7%94%A8-llm-%E7%9A%84%E9%93%BE%E5%BC%8F%E6%80%9D%E7%BB%B4cot%E6%8E%A8%E7%90%86%E5%88%86%E6%9E%90%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E5%B9%B6%E6%8E%A8%E6%96%AD%E9%98%9F%E5%8F%8B%E6%84%8F%E5%9B%BE%E7%94%9F%E6%88%90%E9%AB%98%E5%B1%82%E5%8D%8F%E4%BD%9C%E7%AD%96%E7%95%A5"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">-
+Planner 模块：利用 LLM
+的链式思维（CoT）推理，分析当前状态并推断队友意图，生成高层协作策略。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#belief-correction-%E4%BF%A1%E5%BF%B5%E4%BF%AE%E6%AD%A3%E6%9C%BA%E5%88%B6%E5%B0%86%E9%A2%84%E6%B5%8B%E7%9A%84%E9%98%9F%E5%8F%8B%E6%84%8F%E5%9B%BE%E4%B8%8E%E5%AE%9E%E9%99%85%E8%A1%8C%E4%B8%BA%E5%AF%B9%E6%AF%94%E6%9B%B4%E6%96%B0%E4%BF%A1%E5%BF%B5%E5%BA%93%E6%8F%90%E5%8D%87%E5%90%8E%E7%BB%AD%E6%8E%A8%E7%90%86%E5%87%86%E7%A1%AE%E6%80%A7%E4%BE%8B%E5%A6%82%E8%8B%A5%E9%A2%84%E6%B5%8B%E9%98%9F%E5%8F%8B%E4%BC%9A%E6%8B%BE%E5%8F%96%E6%B4%8B%E8%91%B1%E4%BD%86%E5%AE%9E%E9%99%85%E6%9C%AA%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%E4%BC%9A%E4%BF%AE%E6%AD%A3%E4%BF%A1%E5%BF%B5%E5%B9%B6%E8%B0%83%E6%95%B4%E5%90%8E%E7%BB%AD%E8%AE%A1%E5%88%92"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">-
+Belief Correction
+信念修正机制：将预测的队友意图与实际行为对比，更新信念库，提升后续推理准确性。例如，若预测队友会拾取洋葱但实际未执行，机制会修正信念并调整后续计划。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81%E9%9B%B6%E6%A0%B7%E6%9C%AC%E9%80%82%E5%BA%94"><span class="nav-number">5.1.2.</span> <span class="nav-text">（2）模块化设计支持零样本适应</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#verificator-%E6%A8%A1%E5%9D%97%E9%AA%8C%E8%AF%81%E8%AE%A1%E5%88%92%E5%8F%AF%E8%A1%8C%E6%80%A7%E8%8B%A5%E5%A4%B1%E8%B4%A5%E5%88%99%E9%80%9A%E8%BF%87%E5%A4%9A%E8%BD%AE%E6%8F%90%E7%A4%BA%E5%88%86%E6%9E%90%E5%8E%9F%E5%9B%A0%E5%A6%82%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6%E4%B8%8D%E6%BB%A1%E8%B6%B3%E8%A7%A6%E5%8F%91%E9%87%8D%E6%96%B0%E8%A7%84%E5%88%92"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">-
+Verificator
+模块：验证计划可行性，若失败则通过多轮提示分析原因（如前提条件不满足），触发重新规划。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#memory-%E6%A8%A1%E5%9D%97%E5%AD%98%E5%82%A8%E4%BB%BB%E5%8A%A1%E7%9F%A5%E8%AF%86%E5%8E%86%E5%8F%B2%E7%8A%B6%E6%80%81%E4%B8%8E%E4%BF%A1%E5%BF%B5%E6%94%AF%E6%8C%81%E5%9F%BA%E4%BA%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%BF%AB%E9%80%9F%E5%86%B3%E7%AD%96%E6%97%A0%E9%9C%80%E9%A2%9D%E5%A4%96%E8%AE%AD%E7%BB%83"><span class="nav-number">5.1.2.2.</span> <span class="nav-text">-
+Memory
+模块：存储任务知识、历史状态与信念，支持基于上下文的快速决策，无需额外训练。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#controller-%E6%A8%A1%E5%9D%97%E5%B0%86%E9%AB%98%E5%B1%82%E6%8A%80%E8%83%BD%E5%88%86%E8%A7%A3%E4%B8%BA%E5%BA%95%E5%B1%82%E5%8A%A8%E4%BD%9C%E9%80%82%E9%85%8D%E4%B8%8D%E5%90%8C%E7%8E%AF%E5%A2%83%E5%A6%82-overcooked-ai-%E4%B8%AD%E7%9A%84%E8%B7%AF%E5%BE%84%E6%90%9C%E7%B4%A2"><span class="nav-number">5.1.2.3.</span> <span class="nav-text">-
+Controller
+模块：将高层技能分解为底层动作，适配不同环境（如 Overcooked-AI
+中的路径搜索）。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%8A%E4%B8%8A%E9%9D%A2%E5%90%84%E4%B8%AA%E6%A8%A1%E5%9D%97%E4%B8%B2%E4%B8%80%E4%B8%8B%E6%9C%89%E4%B8%AAplanner%E6%A8%A1%E5%9D%97%E7%B1%BB%E4%BC%BC%E4%BA%8E%E5%A4%A7%E8%84%91%E4%BC%9A%E4%BC%98%E5%85%88%E7%94%A8%E5%AE%83%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E5%BE%97%E5%88%B0%E5%86%B3%E7%AD%96%E8%80%8C%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81%E5%8C%85%E6%8B%AC%E7%8E%AF%E5%A2%83%E7%8A%B6%E6%80%81%E4%BB%A5%E5%8F%8A%E9%98%9F%E5%8F%8B%E7%8A%B6%E6%80%81%E7%8A%B6%E6%80%81%E6%98%AF%E7%BB%8F%E7%94%B1%E4%B8%80%E4%B8%AAllm%E8%BF%9B%E8%A1%8C%E6%8F%90%E5%8F%96%E7%9A%84%E6%8F%90%E5%8F%96%E7%8A%B6%E6%80%81%E6%97%B6%E4%BC%9A%E7%94%A8%E5%88%B0%E4%B8%80%E4%B8%AA%E9%95%BF%E6%9C%9F%E7%9A%84memory%E6%A8%A1%E5%9D%97%E5%86%B3%E7%AD%96%E5%88%99%E5%8C%85%E6%8B%AC%E8%87%AA%E8%BA%AB%E7%9A%84%E9%A2%84%E5%86%B3%E7%AD%96%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%89%93%E7%AE%97%E5%81%9A%E7%9A%84%E4%BA%8B%E4%BB%A5%E5%8F%8A%E5%AF%B9%E9%98%9F%E5%8F%8B%E6%84%8F%E5%9B%BE%E7%9A%84%E9%A2%84%E6%B5%8B-%E5%AF%B9%E9%98%9F%E5%8F%8B%E6%84%8F%E5%9B%BE%E7%9A%84%E9%A2%84%E6%B5%8B%E5%8F%AF%E8%83%BD%E4%BC%9A%E8%A2%AB%E7%BA%A0%E6%AD%A3%E5%8F%AA%E9%9C%80%E8%A6%81%E7%9C%8B%E7%9C%8B%E9%98%9F%E5%8F%8B%E5%AE%9E%E9%99%85%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%E5%B0%B1%E7%9F%A5%E9%81%93%E6%88%91%E4%BB%AC%E6%98%AF%E5%90%A6%E9%A2%84%E6%B5%8B%E5%AF%B9%E4%BA%86%E8%BF%99%E9%83%A8%E5%88%86%E7%94%B1belief-correction%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0-%E8%87%AA%E8%BA%AB%E7%9A%84%E9%A2%84%E5%86%B3%E7%AD%96%E9%9C%80%E8%A6%81%E5%85%88%E5%88%A4%E6%96%AD%E8%83%BD%E5%90%A6%E8%BF%9B%E8%A1%8C%E8%BF%99%E4%B8%AA%E5%8A%A8%E4%BD%9C%E5%8F%AF%E8%83%BD%E5%AE%9E%E9%99%85%E7%8E%AF%E5%A2%83%E9%99%90%E5%88%B6%E5%AF%BC%E8%87%B4%E6%97%A0%E6%B3%95%E5%BC%80%E5%B1%95%E6%AD%A4%E6%97%B6%E5%B0%B1%E9%9C%80%E8%A6%81verificator%E6%A8%A1%E5%9D%97%E6%9D%A5%E9%AA%8C%E8%AF%81%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%8F%AF%E8%A1%8C%E5%88%99%E7%94%B1controller%E6%A8%A1%E5%9D%97%E8%BF%9B%E4%B8%80%E6%AD%A5%E7%BB%86%E5%88%86%E5%B9%B6%E6%89%A7%E8%A1%8C%E4%B8%8D%E5%8F%AF%E8%A1%8C%E5%88%99%E9%9C%80%E8%A6%81%E5%88%86%E6%9E%90%E5%8E%9F%E5%9B%A0%E5%B9%B6%E9%87%8D%E6%96%B0%E8%A7%84%E5%88%92"><span class="nav-number">5.1.3.</span> <span class="nav-text">把上面各个模块串一下：有个planner模块，类似于大脑，会优先用它进行分析当前状态，得到决策。而当前状态，包括环境状态以及队友状态（状态是经由一个llm进行提取的。提取状态时，会用到一个长期的Memory模块）；决策则包括自身的预决策（也就是打算做的事），以及对队友意图的预测对队友意图的预测，可能会被纠正（只需要看看队友实际做了什么，就知道我们是否预测对了。这部分由Belief
+Correction机制实现）自身的预决策，需要先判断能否进行这个动作（可能实际环境限制，导致无法开展）。此时就需要Verificator模块，来验证可行性。可行，则由Controller模块进一步细分并执行；不可行，则需要分析原因，并重新规划</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

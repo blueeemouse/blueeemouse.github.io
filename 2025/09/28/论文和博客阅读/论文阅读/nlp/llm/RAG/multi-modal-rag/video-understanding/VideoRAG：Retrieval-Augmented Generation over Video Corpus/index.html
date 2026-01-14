@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：ACL 25 findings date：2025-05-28 动机： 现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）因此论文提出VideoRAG，来直接检索回query相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VideoRAG：Retrieval-Augmented Generation over Video Corpus">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：ACL 25 findings date：2025-05-28 动机： 现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）因此论文提出VideoRAG，来直接检索回query相关">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-28T09:05:00.000Z">
+<meta property="article:modified_time" content="2025-09-29T02:37:54.965Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>VideoRAG：Retrieval-Augmented Generation over Video Corpus | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VideoRAG：Retrieval-Augmented Generation over Video Corpus
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-09-28 17:05:00" itemprop="dateCreated datePublished" datetime="2025-09-28T17:05:00+08:00">2025-09-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-29 10:37:54" itemprop="dateModified" datetime="2025-09-29T10:37:54+08:00">2025-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venueacl-25-findings">Venue：ACL 25 findings</h1>
+<h1 id="date2025-05-28">date：2025-05-28</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="现有rag方法通常忽视了视频模态但视频里其实也包含了很丰富的信息-尽管最近有一些研究在尝试利用视频来辅助回答但它们要么不够动态即人工预先定义好query的几个相关视频或者按照固定规则来定义相关视频要么损失了视频中丰富的信息把视频转成文字描述-因此论文提出videorag来直接检索回query相关的视频能同时利用文字和视觉信息">现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息<br>尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）<br>因此论文提出VideoRAG，来直接检索回query相关的视频，能同时利用文字和视觉信息</h2>
+<h3 id="关于现有方法不够动态的问题可以举几个例子来理解比如人工预先定义的话可能针对打领带这个query人为的找出两三个教学视频它们的确是打领带的教学视频之后如果有query是关于这个的则它们的参考视频就只会是这两三个而不会从海量的视频候选库里检索">关于现有方法不够动态的问题，可以举几个例子来理解。比如人工预先定义的话，可能针对“打领带”这个query，人为的找出两三个教学视频，它们的确是打领带的教学视频。之后如果有query是关于这个的，则它们的参考视频就只会是这两三个，而不会从海量的视频候选库里检索。</h3>
+<h2 id="虽然现在有很多image-text-rag但视频终究是有一些独特的性质导致它不能被图像完全取代吧">虽然现在有很多image-text
+RAG，但视频终究是有一些独特的性质，导致它不能被图像完全取代吧</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="判断视频是否和query相关其实也很重要千万不能忽视这一点否则检索的空间太大了">判断视频是否和query相关，其实也很重要。千万不能忽视这一点，否则检索的空间太大了</h2>
+<h2 id="视频模态的特点感觉体现在包括但不限于以下的几方面">视频模态的特点，感觉体现在（包括但不限于以下的几方面）：</h2>
+<h3 id="多帧之间的时序关系">多帧之间的时序关系</h3>
+<h3 id="画面图像和文本语音之间的对应关系">画面（图像）和文本/语音之间的对应关系</h3>
+<h1 id="contribution">contribution：</h1>
+<h2 id="支持了动态视频的检索包括能动态判断哪些视频是相关的并从中提取信息用于辅助生成">支持了动态视频的检索，包括能动态判断哪些视频是相关的，并从中提取信息用于辅助生成</h2>
+<span id="more"></span>
+<h1 id="method">method：</h1>
+<h2 id="视频检索与多模态生成协同">1. 视频检索与多模态生成协同</h2>
+<ul>
+<li><h3 id="检索阶段将查询与视频含视觉帧-文本信息输入-lvlms分别生成查询嵌入f_query与视频嵌入f_video通过余弦相似度计算相关性检索-top-k-相关视频"><strong>检索阶段</strong>：将查询与视频（含视觉帧
++ 文本信息）输入
+LVLMs，分别生成查询嵌入（(f_{query})）与视频嵌入（(f_{video})），通过余弦相似度计算相关性，检索
+Top-k 相关视频；</h3></li>
+<li><h3 id="生成阶段将检索到的视频帧视频关联文本字幕或语音转录与查询拼接为v₁t₁...vₖtₖq的多模态输入输入-lvlms-生成基于视频多模态信息的答案确保答案接地于视频内容如-汽车仪表盘烤饼干-的步骤生成需结合视频中的工具使用与温度要求"><strong>生成阶段</strong>：将检索到的视频帧、视频关联文本（字幕或语音转录）与查询拼接为<code>[V₁,t₁,...,Vₖ,tₖ,q]</code>的多模态输入，输入
+LVLMs 生成基于视频多模态信息的答案，确保答案接地于视频内容（如
+“汽车仪表盘烤饼干” 的步骤生成需结合视频中的工具使用与温度要求）。</h3>
+<h2 id="自适应帧选择机制">2. 自适应帧选择机制</h2>
+<h3 id="用k-means把候选视频的视频帧进行聚类得到k组每一组里面选和质心最接近的那一帧作为候选帧这主要是为了降低检索的空间否则直接从视频里所有帧中进行检索计算开销太大了">用k-means把候选视频的视频帧进行聚类，得到k组，每一组里面选和质心最接近的那一帧作为候选帧（这主要是为了降低检索的空间，否则直接从视频里所有帧中进行检索，计算开销太大了）</h3>
+<h3 id="在缩小了检索空间之后就需要具体的进行检索其中这里分检索和生成两个阶段很关键">在缩小了检索空间之后，就需要具体的进行检索。其中，这里分检索和生成两个阶段（很关键）</h3>
+<h4 id="检索阶段其实我们的首要目标应该是确定哪些视频是和我们的query相关的之后再从相关视频里检索重要的帧而不是说我们直接从所有的视频里进行检索即使每个视频我们都进行了上述的聚类缩小检索空间的操作这样的计算开销还是很大因此论文在这里每个视频经过压缩后仅从压缩后的候选帧中选择与query相似度最高的4帧通过这4帧来判断视频是否和我们的query相关">检索阶段，其实我们的首要目标应该是确定哪些视频是和我们的query相关的，之后再从相关视频里检索重要的帧；而不是说我们直接从所有的视频里进行检索（即使每个视频我们都进行了上述的聚类缩小检索空间的操作，这样的计算开销还是很大）。因此论文在这里，每个视频经过压缩后，仅从压缩后的候选帧中，选择与query相似度最高的4帧，通过这4帧来判断视频是否和我们的query相关</h4>
+<h4 id="而生成阶段我们已经确定了一些相关视频了我们之所以要检索视频就是因为视频里有很丰富的信息并且是图像之类的模态所没有的所以论文在这一阶段它会检索相关视频里rouge-l-分数最优的-32-帧可以简单理解为挑选了视频里最具代表性的32帧尽可能多的包含了视频的信息然后利用这32帧的信息进行回答这里之所以检索的帧数更多了是因为我们要进行回答了当然是希望尽可能的可以利用上视频信息">而生成阶段，我们已经确定了一些相关视频了。我们之所以要检索视频，就是因为视频里有很丰富的信息，并且是图像之类的模态所没有的。所以论文在这一阶段，它会检索相关视频里ROUGE-L
+分数最优的 32
+帧（可以简单理解为挑选了视频里最具代表性的32帧，尽可能多的包含了视频的信息），然后利用这32帧的信息进行回答。这里之所以检索的帧数更多了，是因为我们要进行回答了，当然是希望尽可能的可以利用上视频信息</h4>
+<h5 id="生成阶段的-rouge-l-分数并非直接评估帧本身而是评估-帧-文本-多模态信息经-lvlms-处理后生成的-步骤描述-与-参考文本如视频对应的标准答案-的相似度即对每个候选帧如-64-个结合视频文本信息生成一段步骤描述计算该描述与参考文本的-rouge-l-分数最终筛选出分数最高的-32-个帧对应的多模态信息用于答案生成这一步的核心是-通过文本生成质量反向筛选帧而非直接对帧打分确保筛选出的帧能有效支撑准确的文本生成">生成阶段的
+ROUGE-L 分数并非直接评估帧本身，而是评估 “帧 + 文本” 多模态信息经 LVLMs
+处理后生成的 “步骤描述” 与 “参考文本（如视频对应的标准答案）”
+的相似度。即：对每个候选帧（如 64
+个），结合视频文本信息生成一段步骤描述，计算该描述与参考文本的 ROUGE-L
+分数，最终筛选出分数最高的 32
+个帧对应的多模态信息，用于答案生成。这一步的核心是
+“通过文本生成质量反向筛选帧”，而非直接对帧打分，确保筛选出的帧能有效支撑准确的文本生成。</h5>
+<h2 id="辅助文本生成策略">3. 辅助文本生成策略</h2>
+<h3 id="这个其实相对没那么重要有点工程上的补丁的意思简单说有些视频是没字幕的这会稍微影响对视频的理解毕竟视频的一大特点在于文字语音和画面的对应二者的对应可以承载很多信息-所以论文会通过自动语音识别asr提取视频音频并转为文本使用-whisper-模型生成辅助文本t_aux替代缺失的字幕确保所有视频均能提供-视觉-文本-双模态特征提升检索精度">这个其实相对没那么重要，有点工程上的补丁的意思。简单说，有些视频是没字幕的，这会稍微影响对视频的理解。毕竟视频的一大特点在于，文字/语音和画面的对应。二者的对应可以承载很多信息<br>所以论文会通过自动语音识别（ASR）提取视频音频并转为文本（使用
+Whisper 模型），生成辅助文本<span class="math inline">\(t_{aux}\)</span>，替代缺失的字幕，确保所有视频均能提供
+“视觉 + 文本” 双模态特征，提升检索精度</h3></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/" rel="next" title="DrVideo：Document Retrieval Based Long Video Understanding">
+      DrVideo：Document Retrieval Based Long Video Understanding <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venueacl-25-findings"><span class="nav-number">1.</span> <span class="nav-text">Venue：ACL 25 findings</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2025-05-28"><span class="nav-number">2.</span> <span class="nav-text">date：2025-05-28</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89rag%E6%96%B9%E6%B3%95%E9%80%9A%E5%B8%B8%E5%BF%BD%E8%A7%86%E4%BA%86%E8%A7%86%E9%A2%91%E6%A8%A1%E6%80%81%E4%BD%86%E8%A7%86%E9%A2%91%E9%87%8C%E5%85%B6%E5%AE%9E%E4%B9%9F%E5%8C%85%E5%90%AB%E4%BA%86%E5%BE%88%E4%B8%B0%E5%AF%8C%E7%9A%84%E4%BF%A1%E6%81%AF-%E5%B0%BD%E7%AE%A1%E6%9C%80%E8%BF%91%E6%9C%89%E4%B8%80%E4%BA%9B%E7%A0%94%E7%A9%B6%E5%9C%A8%E5%B0%9D%E8%AF%95%E5%88%A9%E7%94%A8%E8%A7%86%E9%A2%91%E6%9D%A5%E8%BE%85%E5%8A%A9%E5%9B%9E%E7%AD%94%E4%BD%86%E5%AE%83%E4%BB%AC%E8%A6%81%E4%B9%88%E4%B8%8D%E5%A4%9F%E5%8A%A8%E6%80%81%E5%8D%B3%E4%BA%BA%E5%B7%A5%E9%A2%84%E5%85%88%E5%AE%9A%E4%B9%89%E5%A5%BDquery%E7%9A%84%E5%87%A0%E4%B8%AA%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91%E6%88%96%E8%80%85%E6%8C%89%E7%85%A7%E5%9B%BA%E5%AE%9A%E8%A7%84%E5%88%99%E6%9D%A5%E5%AE%9A%E4%B9%89%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91%E8%A6%81%E4%B9%88%E6%8D%9F%E5%A4%B1%E4%BA%86%E8%A7%86%E9%A2%91%E4%B8%AD%E4%B8%B0%E5%AF%8C%E7%9A%84%E4%BF%A1%E6%81%AF%E6%8A%8A%E8%A7%86%E9%A2%91%E8%BD%AC%E6%88%90%E6%96%87%E5%AD%97%E6%8F%8F%E8%BF%B0-%E5%9B%A0%E6%AD%A4%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BAvideorag%E6%9D%A5%E7%9B%B4%E6%8E%A5%E6%A3%80%E7%B4%A2%E5%9B%9Equery%E7%9B%B8%E5%85%B3%E7%9A%84%E8%A7%86%E9%A2%91%E8%83%BD%E5%90%8C%E6%97%B6%E5%88%A9%E7%94%A8%E6%96%87%E5%AD%97%E5%92%8C%E8%A7%86%E8%A7%89%E4%BF%A1%E6%81%AF"><span class="nav-number">3.1.</span> <span class="nav-text">现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）因此论文提出VideoRAG，来直接检索回query相关的视频，能同时利用文字和视觉信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%8E%B0%E6%9C%89%E6%96%B9%E6%B3%95%E4%B8%8D%E5%A4%9F%E5%8A%A8%E6%80%81%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%AF%E4%BB%A5%E4%B8%BE%E5%87%A0%E4%B8%AA%E4%BE%8B%E5%AD%90%E6%9D%A5%E7%90%86%E8%A7%A3%E6%AF%94%E5%A6%82%E4%BA%BA%E5%B7%A5%E9%A2%84%E5%85%88%E5%AE%9A%E4%B9%89%E7%9A%84%E8%AF%9D%E5%8F%AF%E8%83%BD%E9%92%88%E5%AF%B9%E6%89%93%E9%A2%86%E5%B8%A6%E8%BF%99%E4%B8%AAquery%E4%BA%BA%E4%B8%BA%E7%9A%84%E6%89%BE%E5%87%BA%E4%B8%A4%E4%B8%89%E4%B8%AA%E6%95%99%E5%AD%A6%E8%A7%86%E9%A2%91%E5%AE%83%E4%BB%AC%E7%9A%84%E7%A1%AE%E6%98%AF%E6%89%93%E9%A2%86%E5%B8%A6%E7%9A%84%E6%95%99%E5%AD%A6%E8%A7%86%E9%A2%91%E4%B9%8B%E5%90%8E%E5%A6%82%E6%9E%9C%E6%9C%89query%E6%98%AF%E5%85%B3%E4%BA%8E%E8%BF%99%E4%B8%AA%E7%9A%84%E5%88%99%E5%AE%83%E4%BB%AC%E7%9A%84%E5%8F%82%E8%80%83%E8%A7%86%E9%A2%91%E5%B0%B1%E5%8F%AA%E4%BC%9A%E6%98%AF%E8%BF%99%E4%B8%A4%E4%B8%89%E4%B8%AA%E8%80%8C%E4%B8%8D%E4%BC%9A%E4%BB%8E%E6%B5%B7%E9%87%8F%E7%9A%84%E8%A7%86%E9%A2%91%E5%80%99%E9%80%89%E5%BA%93%E9%87%8C%E6%A3%80%E7%B4%A2"><span class="nav-number">3.1.1.</span> <span class="nav-text">关于现有方法不够动态的问题，可以举几个例子来理解。比如人工预先定义的话，可能针对“打领带”这个query，人为的找出两三个教学视频，它们的确是打领带的教学视频。之后如果有query是关于这个的，则它们的参考视频就只会是这两三个，而不会从海量的视频候选库里检索。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%BD%E7%84%B6%E7%8E%B0%E5%9C%A8%E6%9C%89%E5%BE%88%E5%A4%9Aimage-text-rag%E4%BD%86%E8%A7%86%E9%A2%91%E7%BB%88%E7%A9%B6%E6%98%AF%E6%9C%89%E4%B8%80%E4%BA%9B%E7%8B%AC%E7%89%B9%E7%9A%84%E6%80%A7%E8%B4%A8%E5%AF%BC%E8%87%B4%E5%AE%83%E4%B8%8D%E8%83%BD%E8%A2%AB%E5%9B%BE%E5%83%8F%E5%AE%8C%E5%85%A8%E5%8F%96%E4%BB%A3%E5%90%A7"><span class="nav-number">3.2.</span> <span class="nav-text">虽然现在有很多image-text
+RAG，但视频终究是有一些独特的性质，导致它不能被图像完全取代吧</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E8%A7%86%E9%A2%91%E6%98%AF%E5%90%A6%E5%92%8Cquery%E7%9B%B8%E5%85%B3%E5%85%B6%E5%AE%9E%E4%B9%9F%E5%BE%88%E9%87%8D%E8%A6%81%E5%8D%83%E4%B8%87%E4%B8%8D%E8%83%BD%E5%BF%BD%E8%A7%86%E8%BF%99%E4%B8%80%E7%82%B9%E5%90%A6%E5%88%99%E6%A3%80%E7%B4%A2%E7%9A%84%E7%A9%BA%E9%97%B4%E5%A4%AA%E5%A4%A7%E4%BA%86"><span class="nav-number">4.1.</span> <span class="nav-text">判断视频是否和query相关，其实也很重要。千万不能忽视这一点，否则检索的空间太大了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E6%A8%A1%E6%80%81%E7%9A%84%E7%89%B9%E7%82%B9%E6%84%9F%E8%A7%89%E4%BD%93%E7%8E%B0%E5%9C%A8%E5%8C%85%E6%8B%AC%E4%BD%86%E4%B8%8D%E9%99%90%E4%BA%8E%E4%BB%A5%E4%B8%8B%E7%9A%84%E5%87%A0%E6%96%B9%E9%9D%A2"><span class="nav-number">4.2.</span> <span class="nav-text">视频模态的特点，感觉体现在（包括但不限于以下的几方面）：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B8%A7%E4%B9%8B%E9%97%B4%E7%9A%84%E6%97%B6%E5%BA%8F%E5%85%B3%E7%B3%BB"><span class="nav-number">4.2.1.</span> <span class="nav-text">多帧之间的时序关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E9%9D%A2%E5%9B%BE%E5%83%8F%E5%92%8C%E6%96%87%E6%9C%AC%E8%AF%AD%E9%9F%B3%E4%B9%8B%E9%97%B4%E7%9A%84%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB"><span class="nav-number">4.2.2.</span> <span class="nav-text">画面（图像）和文本&#x2F;语音之间的对应关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E4%BA%86%E5%8A%A8%E6%80%81%E8%A7%86%E9%A2%91%E7%9A%84%E6%A3%80%E7%B4%A2%E5%8C%85%E6%8B%AC%E8%83%BD%E5%8A%A8%E6%80%81%E5%88%A4%E6%96%AD%E5%93%AA%E4%BA%9B%E8%A7%86%E9%A2%91%E6%98%AF%E7%9B%B8%E5%85%B3%E7%9A%84%E5%B9%B6%E4%BB%8E%E4%B8%AD%E6%8F%90%E5%8F%96%E4%BF%A1%E6%81%AF%E7%94%A8%E4%BA%8E%E8%BE%85%E5%8A%A9%E7%94%9F%E6%88%90"><span class="nav-number">5.1.</span> <span class="nav-text">支持了动态视频的检索，包括能动态判断哪些视频是相关的，并从中提取信息用于辅助生成</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#method"><span class="nav-number">6.</span> <span class="nav-text">method：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E6%A3%80%E7%B4%A2%E4%B8%8E%E5%A4%9A%E6%A8%A1%E6%80%81%E7%94%9F%E6%88%90%E5%8D%8F%E5%90%8C"><span class="nav-number">6.1.</span> <span class="nav-text">1. 视频检索与多模态生成协同</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E9%98%B6%E6%AE%B5%E5%B0%86%E6%9F%A5%E8%AF%A2%E4%B8%8E%E8%A7%86%E9%A2%91%E5%90%AB%E8%A7%86%E8%A7%89%E5%B8%A7-%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF%E8%BE%93%E5%85%A5-lvlms%E5%88%86%E5%88%AB%E7%94%9F%E6%88%90%E6%9F%A5%E8%AF%A2%E5%B5%8C%E5%85%A5f_query%E4%B8%8E%E8%A7%86%E9%A2%91%E5%B5%8C%E5%85%A5f_video%E9%80%9A%E8%BF%87%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97%E7%9B%B8%E5%85%B3%E6%80%A7%E6%A3%80%E7%B4%A2-top-k-%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91"><span class="nav-number">6.1.1.</span> <span class="nav-text">检索阶段：将查询与视频（含视觉帧
++ 文本信息）输入
+LVLMs，分别生成查询嵌入（(f_{query})）与视频嵌入（(f_{video})），通过余弦相似度计算相关性，检索
+Top-k 相关视频；</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%98%B6%E6%AE%B5%E5%B0%86%E6%A3%80%E7%B4%A2%E5%88%B0%E7%9A%84%E8%A7%86%E9%A2%91%E5%B8%A7%E8%A7%86%E9%A2%91%E5%85%B3%E8%81%94%E6%96%87%E6%9C%AC%E5%AD%97%E5%B9%95%E6%88%96%E8%AF%AD%E9%9F%B3%E8%BD%AC%E5%BD%95%E4%B8%8E%E6%9F%A5%E8%AF%A2%E6%8B%BC%E6%8E%A5%E4%B8%BAv%E2%82%81t%E2%82%81...v%E2%82%96t%E2%82%96q%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E8%BE%93%E5%85%A5%E8%BE%93%E5%85%A5-lvlms-%E7%94%9F%E6%88%90%E5%9F%BA%E4%BA%8E%E8%A7%86%E9%A2%91%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BF%A1%E6%81%AF%E7%9A%84%E7%AD%94%E6%A1%88%E7%A1%AE%E4%BF%9D%E7%AD%94%E6%A1%88%E6%8E%A5%E5%9C%B0%E4%BA%8E%E8%A7%86%E9%A2%91%E5%86%85%E5%AE%B9%E5%A6%82-%E6%B1%BD%E8%BD%A6%E4%BB%AA%E8%A1%A8%E7%9B%98%E7%83%A4%E9%A5%BC%E5%B9%B2-%E7%9A%84%E6%AD%A5%E9%AA%A4%E7%94%9F%E6%88%90%E9%9C%80%E7%BB%93%E5%90%88%E8%A7%86%E9%A2%91%E4%B8%AD%E7%9A%84%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%B8%A9%E5%BA%A6%E8%A6%81%E6%B1%82"><span class="nav-number">6.1.2.</span> <span class="nav-text">生成阶段：将检索到的视频帧、视频关联文本（字幕或语音转录）与查询拼接为[V₁,t₁,...,Vₖ,tₖ,q]的多模态输入，输入
+LVLMs 生成基于视频多模态信息的答案，确保答案接地于视频内容（如
+“汽车仪表盘烤饼干” 的步骤生成需结合视频中的工具使用与温度要求）。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E5%B8%A7%E9%80%89%E6%8B%A9%E6%9C%BA%E5%88%B6"><span class="nav-number">6.2.</span> <span class="nav-text">2. 自适应帧选择机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8k-means%E6%8A%8A%E5%80%99%E9%80%89%E8%A7%86%E9%A2%91%E7%9A%84%E8%A7%86%E9%A2%91%E5%B8%A7%E8%BF%9B%E8%A1%8C%E8%81%9A%E7%B1%BB%E5%BE%97%E5%88%B0k%E7%BB%84%E6%AF%8F%E4%B8%80%E7%BB%84%E9%87%8C%E9%9D%A2%E9%80%89%E5%92%8C%E8%B4%A8%E5%BF%83%E6%9C%80%E6%8E%A5%E8%BF%91%E7%9A%84%E9%82%A3%E4%B8%80%E5%B8%A7%E4%BD%9C%E4%B8%BA%E5%80%99%E9%80%89%E5%B8%A7%E8%BF%99%E4%B8%BB%E8%A6%81%E6%98%AF%E4%B8%BA%E4%BA%86%E9%99%8D%E4%BD%8E%E6%A3%80%E7%B4%A2%E7%9A%84%E7%A9%BA%E9%97%B4%E5%90%A6%E5%88%99%E7%9B%B4%E6%8E%A5%E4%BB%8E%E8%A7%86%E9%A2%91%E9%87%8C%E6%89%80%E6%9C%89%E5%B8%A7%E4%B8%AD%E8%BF%9B%E8%A1%8C%E6%A3%80%E7%B4%A2%E8%AE%A1%E7%AE%97%E5%BC%80%E9%94%80%E5%A4%AA%E5%A4%A7%E4%BA%86"><span class="nav-number">6.2.1.</span> <span class="nav-text">用k-means把候选视频的视频帧进行聚类，得到k组，每一组里面选和质心最接近的那一帧作为候选帧（这主要是为了降低检索的空间，否则直接从视频里所有帧中进行检索，计算开销太大了）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BC%A9%E5%B0%8F%E4%BA%86%E6%A3%80%E7%B4%A2%E7%A9%BA%E9%97%B4%E4%B9%8B%E5%90%8E%E5%B0%B1%E9%9C%80%E8%A6%81%E5%85%B7%E4%BD%93%E7%9A%84%E8%BF%9B%E8%A1%8C%E6%A3%80%E7%B4%A2%E5%85%B6%E4%B8%AD%E8%BF%99%E9%87%8C%E5%88%86%E6%A3%80%E7%B4%A2%E5%92%8C%E7%94%9F%E6%88%90%E4%B8%A4%E4%B8%AA%E9%98%B6%E6%AE%B5%E5%BE%88%E5%85%B3%E9%94%AE"><span class="nav-number">6.2.2.</span> <span class="nav-text">在缩小了检索空间之后，就需要具体的进行检索。其中，这里分检索和生成两个阶段（很关键）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E9%98%B6%E6%AE%B5%E5%85%B6%E5%AE%9E%E6%88%91%E4%BB%AC%E7%9A%84%E9%A6%96%E8%A6%81%E7%9B%AE%E6%A0%87%E5%BA%94%E8%AF%A5%E6%98%AF%E7%A1%AE%E5%AE%9A%E5%93%AA%E4%BA%9B%E8%A7%86%E9%A2%91%E6%98%AF%E5%92%8C%E6%88%91%E4%BB%AC%E7%9A%84query%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B9%8B%E5%90%8E%E5%86%8D%E4%BB%8E%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91%E9%87%8C%E6%A3%80%E7%B4%A2%E9%87%8D%E8%A6%81%E7%9A%84%E5%B8%A7%E8%80%8C%E4%B8%8D%E6%98%AF%E8%AF%B4%E6%88%91%E4%BB%AC%E7%9B%B4%E6%8E%A5%E4%BB%8E%E6%89%80%E6%9C%89%E7%9A%84%E8%A7%86%E9%A2%91%E9%87%8C%E8%BF%9B%E8%A1%8C%E6%A3%80%E7%B4%A2%E5%8D%B3%E4%BD%BF%E6%AF%8F%E4%B8%AA%E8%A7%86%E9%A2%91%E6%88%91%E4%BB%AC%E9%83%BD%E8%BF%9B%E8%A1%8C%E4%BA%86%E4%B8%8A%E8%BF%B0%E7%9A%84%E8%81%9A%E7%B1%BB%E7%BC%A9%E5%B0%8F%E6%A3%80%E7%B4%A2%E7%A9%BA%E9%97%B4%E7%9A%84%E6%93%8D%E4%BD%9C%E8%BF%99%E6%A0%B7%E7%9A%84%E8%AE%A1%E7%AE%97%E5%BC%80%E9%94%80%E8%BF%98%E6%98%AF%E5%BE%88%E5%A4%A7%E5%9B%A0%E6%AD%A4%E8%AE%BA%E6%96%87%E5%9C%A8%E8%BF%99%E9%87%8C%E6%AF%8F%E4%B8%AA%E8%A7%86%E9%A2%91%E7%BB%8F%E8%BF%87%E5%8E%8B%E7%BC%A9%E5%90%8E%E4%BB%85%E4%BB%8E%E5%8E%8B%E7%BC%A9%E5%90%8E%E7%9A%84%E5%80%99%E9%80%89%E5%B8%A7%E4%B8%AD%E9%80%89%E6%8B%A9%E4%B8%8Equery%E7%9B%B8%E4%BC%BC%E5%BA%A6%E6%9C%80%E9%AB%98%E7%9A%844%E5%B8%A7%E9%80%9A%E8%BF%87%E8%BF%994%E5%B8%A7%E6%9D%A5%E5%88%A4%E6%96%AD%E8%A7%86%E9%A2%91%E6%98%AF%E5%90%A6%E5%92%8C%E6%88%91%E4%BB%AC%E7%9A%84query%E7%9B%B8%E5%85%B3"><span class="nav-number">6.2.2.1.</span> <span class="nav-text">检索阶段，其实我们的首要目标应该是确定哪些视频是和我们的query相关的，之后再从相关视频里检索重要的帧；而不是说我们直接从所有的视频里进行检索（即使每个视频我们都进行了上述的聚类缩小检索空间的操作，这样的计算开销还是很大）。因此论文在这里，每个视频经过压缩后，仅从压缩后的候选帧中，选择与query相似度最高的4帧，通过这4帧来判断视频是否和我们的query相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%80%8C%E7%94%9F%E6%88%90%E9%98%B6%E6%AE%B5%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F%E7%A1%AE%E5%AE%9A%E4%BA%86%E4%B8%80%E4%BA%9B%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91%E4%BA%86%E6%88%91%E4%BB%AC%E4%B9%8B%E6%89%80%E4%BB%A5%E8%A6%81%E6%A3%80%E7%B4%A2%E8%A7%86%E9%A2%91%E5%B0%B1%E6%98%AF%E5%9B%A0%E4%B8%BA%E8%A7%86%E9%A2%91%E9%87%8C%E6%9C%89%E5%BE%88%E4%B8%B0%E5%AF%8C%E7%9A%84%E4%BF%A1%E6%81%AF%E5%B9%B6%E4%B8%94%E6%98%AF%E5%9B%BE%E5%83%8F%E4%B9%8B%E7%B1%BB%E7%9A%84%E6%A8%A1%E6%80%81%E6%89%80%E6%B2%A1%E6%9C%89%E7%9A%84%E6%89%80%E4%BB%A5%E8%AE%BA%E6%96%87%E5%9C%A8%E8%BF%99%E4%B8%80%E9%98%B6%E6%AE%B5%E5%AE%83%E4%BC%9A%E6%A3%80%E7%B4%A2%E7%9B%B8%E5%85%B3%E8%A7%86%E9%A2%91%E9%87%8Crouge-l-%E5%88%86%E6%95%B0%E6%9C%80%E4%BC%98%E7%9A%84-32-%E5%B8%A7%E5%8F%AF%E4%BB%A5%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3%E4%B8%BA%E6%8C%91%E9%80%89%E4%BA%86%E8%A7%86%E9%A2%91%E9%87%8C%E6%9C%80%E5%85%B7%E4%BB%A3%E8%A1%A8%E6%80%A7%E7%9A%8432%E5%B8%A7%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%A4%9A%E7%9A%84%E5%8C%85%E5%90%AB%E4%BA%86%E8%A7%86%E9%A2%91%E7%9A%84%E4%BF%A1%E6%81%AF%E7%84%B6%E5%90%8E%E5%88%A9%E7%94%A8%E8%BF%9932%E5%B8%A7%E7%9A%84%E4%BF%A1%E6%81%AF%E8%BF%9B%E8%A1%8C%E5%9B%9E%E7%AD%94%E8%BF%99%E9%87%8C%E4%B9%8B%E6%89%80%E4%BB%A5%E6%A3%80%E7%B4%A2%E7%9A%84%E5%B8%A7%E6%95%B0%E6%9B%B4%E5%A4%9A%E4%BA%86%E6%98%AF%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%9B%9E%E7%AD%94%E4%BA%86%E5%BD%93%E7%84%B6%E6%98%AF%E5%B8%8C%E6%9C%9B%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%9A%84%E5%8F%AF%E4%BB%A5%E5%88%A9%E7%94%A8%E4%B8%8A%E8%A7%86%E9%A2%91%E4%BF%A1%E6%81%AF"><span class="nav-number">6.2.2.2.</span> <span class="nav-text">而生成阶段，我们已经确定了一些相关视频了。我们之所以要检索视频，就是因为视频里有很丰富的信息，并且是图像之类的模态所没有的。所以论文在这一阶段，它会检索相关视频里ROUGE-L
+分数最优的 32
+帧（可以简单理解为挑选了视频里最具代表性的32帧，尽可能多的包含了视频的信息），然后利用这32帧的信息进行回答。这里之所以检索的帧数更多了，是因为我们要进行回答了，当然是希望尽可能的可以利用上视频信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%98%B6%E6%AE%B5%E7%9A%84-rouge-l-%E5%88%86%E6%95%B0%E5%B9%B6%E9%9D%9E%E7%9B%B4%E6%8E%A5%E8%AF%84%E4%BC%B0%E5%B8%A7%E6%9C%AC%E8%BA%AB%E8%80%8C%E6%98%AF%E8%AF%84%E4%BC%B0-%E5%B8%A7-%E6%96%87%E6%9C%AC-%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BF%A1%E6%81%AF%E7%BB%8F-lvlms-%E5%A4%84%E7%90%86%E5%90%8E%E7%94%9F%E6%88%90%E7%9A%84-%E6%AD%A5%E9%AA%A4%E6%8F%8F%E8%BF%B0-%E4%B8%8E-%E5%8F%82%E8%80%83%E6%96%87%E6%9C%AC%E5%A6%82%E8%A7%86%E9%A2%91%E5%AF%B9%E5%BA%94%E7%9A%84%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88-%E7%9A%84%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%8D%B3%E5%AF%B9%E6%AF%8F%E4%B8%AA%E5%80%99%E9%80%89%E5%B8%A7%E5%A6%82-64-%E4%B8%AA%E7%BB%93%E5%90%88%E8%A7%86%E9%A2%91%E6%96%87%E6%9C%AC%E4%BF%A1%E6%81%AF%E7%94%9F%E6%88%90%E4%B8%80%E6%AE%B5%E6%AD%A5%E9%AA%A4%E6%8F%8F%E8%BF%B0%E8%AE%A1%E7%AE%97%E8%AF%A5%E6%8F%8F%E8%BF%B0%E4%B8%8E%E5%8F%82%E8%80%83%E6%96%87%E6%9C%AC%E7%9A%84-rouge-l-%E5%88%86%E6%95%B0%E6%9C%80%E7%BB%88%E7%AD%9B%E9%80%89%E5%87%BA%E5%88%86%E6%95%B0%E6%9C%80%E9%AB%98%E7%9A%84-32-%E4%B8%AA%E5%B8%A7%E5%AF%B9%E5%BA%94%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BF%A1%E6%81%AF%E7%94%A8%E4%BA%8E%E7%AD%94%E6%A1%88%E7%94%9F%E6%88%90%E8%BF%99%E4%B8%80%E6%AD%A5%E7%9A%84%E6%A0%B8%E5%BF%83%E6%98%AF-%E9%80%9A%E8%BF%87%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E8%B4%A8%E9%87%8F%E5%8F%8D%E5%90%91%E7%AD%9B%E9%80%89%E5%B8%A7%E8%80%8C%E9%9D%9E%E7%9B%B4%E6%8E%A5%E5%AF%B9%E5%B8%A7%E6%89%93%E5%88%86%E7%A1%AE%E4%BF%9D%E7%AD%9B%E9%80%89%E5%87%BA%E7%9A%84%E5%B8%A7%E8%83%BD%E6%9C%89%E6%95%88%E6%94%AF%E6%92%91%E5%87%86%E7%A1%AE%E7%9A%84%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90"><span class="nav-number">6.2.2.2.1.</span> <span class="nav-text">生成阶段的
+ROUGE-L 分数并非直接评估帧本身，而是评估 “帧 + 文本” 多模态信息经 LVLMs
+处理后生成的 “步骤描述” 与 “参考文本（如视频对应的标准答案）”
+的相似度。即：对每个候选帧（如 64
+个），结合视频文本信息生成一段步骤描述，计算该描述与参考文本的 ROUGE-L
+分数，最终筛选出分数最高的 32
+个帧对应的多模态信息，用于答案生成。这一步的核心是
+“通过文本生成质量反向筛选帧”，而非直接对帧打分，确保筛选出的帧能有效支撑准确的文本生成。</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%85%E5%8A%A9%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E7%AD%96%E7%95%A5"><span class="nav-number">6.3.</span> <span class="nav-text">3. 辅助文本生成策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E5%85%B6%E5%AE%9E%E7%9B%B8%E5%AF%B9%E6%B2%A1%E9%82%A3%E4%B9%88%E9%87%8D%E8%A6%81%E6%9C%89%E7%82%B9%E5%B7%A5%E7%A8%8B%E4%B8%8A%E7%9A%84%E8%A1%A5%E4%B8%81%E7%9A%84%E6%84%8F%E6%80%9D%E7%AE%80%E5%8D%95%E8%AF%B4%E6%9C%89%E4%BA%9B%E8%A7%86%E9%A2%91%E6%98%AF%E6%B2%A1%E5%AD%97%E5%B9%95%E7%9A%84%E8%BF%99%E4%BC%9A%E7%A8%8D%E5%BE%AE%E5%BD%B1%E5%93%8D%E5%AF%B9%E8%A7%86%E9%A2%91%E7%9A%84%E7%90%86%E8%A7%A3%E6%AF%95%E7%AB%9F%E8%A7%86%E9%A2%91%E7%9A%84%E4%B8%80%E5%A4%A7%E7%89%B9%E7%82%B9%E5%9C%A8%E4%BA%8E%E6%96%87%E5%AD%97%E8%AF%AD%E9%9F%B3%E5%92%8C%E7%94%BB%E9%9D%A2%E7%9A%84%E5%AF%B9%E5%BA%94%E4%BA%8C%E8%80%85%E7%9A%84%E5%AF%B9%E5%BA%94%E5%8F%AF%E4%BB%A5%E6%89%BF%E8%BD%BD%E5%BE%88%E5%A4%9A%E4%BF%A1%E6%81%AF-%E6%89%80%E4%BB%A5%E8%AE%BA%E6%96%87%E4%BC%9A%E9%80%9A%E8%BF%87%E8%87%AA%E5%8A%A8%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%ABasr%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E9%9F%B3%E9%A2%91%E5%B9%B6%E8%BD%AC%E4%B8%BA%E6%96%87%E6%9C%AC%E4%BD%BF%E7%94%A8-whisper-%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90%E8%BE%85%E5%8A%A9%E6%96%87%E6%9C%ACt_aux%E6%9B%BF%E4%BB%A3%E7%BC%BA%E5%A4%B1%E7%9A%84%E5%AD%97%E5%B9%95%E7%A1%AE%E4%BF%9D%E6%89%80%E6%9C%89%E8%A7%86%E9%A2%91%E5%9D%87%E8%83%BD%E6%8F%90%E4%BE%9B-%E8%A7%86%E8%A7%89-%E6%96%87%E6%9C%AC-%E5%8F%8C%E6%A8%A1%E6%80%81%E7%89%B9%E5%BE%81%E6%8F%90%E5%8D%87%E6%A3%80%E7%B4%A2%E7%B2%BE%E5%BA%A6"><span class="nav-number">6.3.1.</span> <span class="nav-text">这个其实相对没那么重要，有点工程上的补丁的意思。简单说，有些视频是没字幕的，这会稍微影响对视频的理解。毕竟视频的一大特点在于，文字&#x2F;语音和画面的对应。二者的对应可以承载很多信息所以论文会通过自动语音识别（ASR）提取视频音频并转为文本（使用
+Whisper 模型），生成辅助文本\(t_{aux}\)，替代缺失的字幕，确保所有视频均能提供
+“视觉 + 文本” 双模态特征，提升检索精度</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

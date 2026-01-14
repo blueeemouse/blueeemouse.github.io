@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：arxiv date：2025-06-23 动机： 感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE task上，例如repo-level的任务上，它的表现就不够好了 而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Code Graph Model (CGM)：A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/07/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：arxiv date：2025-06-23 动机： 感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE task上，例如repo-level的任务上，它的表现就不够好了 而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-15T15:06:00.000Z">
+<meta property="article:modified_time" content="2025-07-16T07:44:00.922Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/07/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Code Graph Model (CGM)：A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/07/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/Code%20Graph%20Model%20(CGM)%EF%BC%9AA%20Graph-Integrated%20Large%20Language%20Model%20for%20Repository-Level%20Software%20Engineering%20Tasks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Code Graph Model (CGM)：A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-07-15 23:06:00" itemprop="dateCreated datePublished" datetime="2025-07-15T23:06:00+08:00">2025-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-07-16 15:44:00" itemprop="dateModified" datetime="2025-07-16T15:44:00+08:00">2025-07-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/llm4code/" itemprop="url" rel="index"><span itemprop="name">llm4code</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venuearxiv">Venue：arxiv</h1>
+<h1 id="date2025-06-23">date：2025-06-23</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="感觉动机这一块其实挺常见的llm发展很快将其应用到单文件的各种代码任务都表现得很好但是到了更加真实复杂的se-task上例如repo-level的任务上它的表现就不够好了">感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE
+task上，例如repo-level的任务上，它的表现就不够好了</h2>
+<h2 id="而现有的方法表现更好的是利用闭源模型的基于agent的方法但这类方法因为依赖于闭源模型所以难以接触到模型权重因而难以进行改进同时基于agent的方法通常推理步骤会很长因此中间的错误可能会不断积累导致影响决策-所以为了避免这些问题我们会想用开源模型并且避免用agent的方法但现在基于开源模型的方法性能还是比上面提到的那类要差一截还不太能处理repo-level-task因此是有极大的改进空间的-而论文尝试做出的改进则是想让模型对repo的理解更上一层楼具体来说是让模型更加了解repo里的代码文件本身的含义以及相互之间的关系">而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于agent的方法，通常推理步骤会很长，因此中间的错误可能会不断积累导致影响决策<br>所以，为了避免这些问题，我们会想用开源模型，并且避免用agent的方法。但现在基于开源模型的方法，性能还是比上面提到的那类要差一截，还不太能处理repo-level
+task，因此是有极大的改进空间的<br>而论文尝试做出的改进，则是想让模型对repo的理解更上一层楼，具体来说是让模型更加了解repo里的代码文件本身的含义，以及相互之间的关系</h2>
+<h1 id="insight">insight：</h1>
+<h2 id="怎么乍一看没什么新奇的呢也是想提高模型对repo的理解语义以及结构也是用graph结构也是让llm利用graph顶多是细节上不太一样框架没怎么变化吧和repograph对比一下吧">怎么乍一看，没什么新奇的呢……也是想提高模型对repo的理解（语义以及结构），也是用graph结构，也是让llm利用graph，顶多是细节上不太一样，框架没怎么变化吧（和RepoGraph对比一下吧……）</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="提出了一个新的架构大概是在开源的llm上加一些新的模块用来提高llm对repo的理解然后可以一起进行微调从而适应se-tasks且性能不错最优的结果还是加上了graph-rag但话说这个设计的graph-rag是真的出于锦上添花还是说本来仅仅用新架构无法work或者说性能不够好所以特意设计了一个graph-rag来make-it-work可能得看一下实验表格里有没有单独用新架构而没用graph-rag的结果了">提出了一个新的架构，大概是在开源的llm上加一些新的模块，用来提高llm对repo的理解，然后可以一起进行微调，从而适应SE
+tasks，且性能不错（最优的结果还是加上了Graph
+RAG。但话说，这个设计的Graph
+RAG是真的出于锦上添花，还是说，本来仅仅用新架构，无法work，或者说性能不够好，所以特意设计了一个Graph
+RAG来make it work？可能得看一下实验表格里有没有单独用新架构而没用Graph
+RAG的结果了……）</h2>
+<h2 id="配套的还设计了一个graph-rag的框架可以进行辅助">配套的，还设计了一个Graph
+RAG的框架，可以进行辅助</h2>
+<span id="more"></span>
+<h1 id="细节问题">细节问题：</h1>
+<h2 id="基于agent的方法与不基于agent的方法">1.
+基于agent的方法与不基于agent的方法</h2>
+<h3 id="论文中多次提到基于agent的方法因为是多步决策需要与repo进行多轮的交互中间可能会有一些小错误而这些错误的累积可能影响最后的结果这里简单说明一下二者的大致流程">论文中多次提到，基于agent的方法，因为是多步决策，需要与repo进行多轮的交互，中间可能会有一些小错误，而这些错误的累积可能影响最后的结果。这里简单说明一下二者的大致流程</h3>
+<h3 id="基于agent的方法">基于agent的方法：</h3>
+<h4 id="它会要求与repo多次进行交互然后依据观测结果如测试的结果等来调整决策逐步推进任务或许可以类比这个例子agent先尝试改改这个文件里的某个部分然后测试一下发现效果不好没有新通过的例子就复原接着改下一个文件">它会要求与repo多次进行交互，然后依据观测结果（如测试的结果）等来调整决策，逐步推进任务（或许可以类比这个例子：agent先尝试改改这个文件里的某个部分，然后测试一下，发现效果不好，没有新通过的例子，就复原，接着改下一个文件……）</h4>
+<h3 id="不基于agent的方法">不基于agent的方法：</h3>
+<h4 id="这类方法它更加注重对repo的整体理解一般在接收输入的时候就会用各种方法去尝试理解repo里代码文件之间的相互关系比如用graph来表征关系尝试用各种花里胡哨的方法在不同粒度建图-对整体有充分的观察之后再作出决策">这类方法，它更加注重对repo的整体理解。一般在接收输入的时候，就会用各种方法去尝试理解repo里代码文件之间的相互关系（比如用graph来表征关系，尝试用各种花里胡哨的方法，在不同粒度建图）<br>对整体有“充分的观察”之后，再作出决策</h4>
+<h3 id="简单的想法">简单的想法：</h3>
+<h4 id="其实感觉上基于agent的方法它的核心在于trial-error和一般的agentrl没什么区别只不过是应用到了llm4code这个领域了而已而不用agent的方法它注重对repo整体的理解不像基于agent的方法是通过不断的试错来逐步获得对repo的理解的有了整体的理解之后再下手这样很容易想到为何不把二者结合起来也没什么矛盾的地方吧一开始先用graph等手段得到对repo整体的理解然后再用agent来不断尝试因为有了对repo更全面的理解所以尝试的时候会更加准确正确率也会更加低甚至也可以考虑二者交替着来比如先用一段时间不基于agent的方法再用一下基于agent的方法好像也不是不行而之所以考虑这样做是因为这样有望把两种方法的优点都结合起来吧">其实感觉上，基于agent的方法，它的核心在于trial-error，和一般的agent/rl没什么区别，只不过是应用到了llm4code这个领域了而已；而不用agent的方法，它注重对repo整体的理解（不像基于agent的方法，是通过不断的试错来逐步获得对repo的理解的），有了整体的理解之后再下手。这样很容易想到，为何不把二者结合起来？也没什么矛盾的地方吧？一开始先用graph等手段，得到对repo整体的理解，然后再用agent来不断尝试。因为有了对repo更全面的理解，所以尝试的时候会更加准确，正确率也会更加低；甚至也可以考虑二者交替着来，比如先用一段时间不基于agent的方法，再用一下基于agent的方法，好像也不是不行。而之所以考虑这样做，是因为这样有望把两种方法的优点都结合起来吧？</h4>
+<h2 id="节点的属性到底是什么看起来似乎节点的属性就是文本因为它会输入到一个预训练的encoder根据论文是codet5如果是这样的话它是如何存储的">2.
+节点的属性到底是什么？看起来，似乎节点的属性就是文本，因为它会输入到一个预训练的Encoder（根据论文，是CodeT5+）。如果是这样的话，它是如何存储的？</h2>
+<h2 id="graph-aware-attention-mask是怎么实现的得看一下github仓库了">3.
+graph-aware attention mask是怎么实现的？得看一下GitHub仓库了</h2>
+<h1 id="method">method</h1>
+<h2 id="因为是用graph的方法整体还是两步建图用图">因为是用graph的方法，整体还是两步：建图，用图</h2>
+<h2 id="code-graph-construction">1. Code Graph Construction</h2>
+<h3 id="大体上讲最后我们建立的图它既有上下级的关系例如继承也有平级的关系例如xx引用xx它建图的流程是先根据ast抽象语法树构建出上下级关系得到一个自上而下的树之后再用lightweight-semantic-analysis来分析实体之间的引用调用等关系最终得到一个graph">大体上讲，最后我们建立的图，它既有上下级的关系（例如继承），也有平级的关系（例如xx引用xx）。它建图的流程，是先根据AST（抽象语法树），构建出上下级关系，得到一个自上而下的树；之后再用lightweight
+semantic
+analysis来分析实体之间的引用、调用等关系，最终得到一个graph</h3>
+<h3 id="先构建的上下级关系它涉及多个层次的实体大到repo具体来说一开始构建的树的根节点就是repo它表征了整个仓库本身最小到func也就是函数而不是像repograph那样最小到行代码中间有pkgfileclass等级别的实体">先构建的上下级关系，它涉及多个层次的实体，大到repo（具体来说，一开始构建的树的根节点就是repo，它表征了整个仓库本身），最小到func（也就是函数，而不是像RepoGraph那样，最小到行代码），中间有pkg、file、class等级别的实体</h3>
+<h2 id="code-graph-modelscgm">2. Code Graph Models（CGM）</h2>
+<h3 id="整个的算法涉及三个部分一是对前面得到的graph应该如何处理这里主要是模型架构上的创新-二是训练的策略-三是附加的graph-rag的框架">整个的算法，涉及三个部分。一是对前面得到的graph应该如何处理，这里主要是模型架构上的创新；<br>二是训练的策略；<br>三是附加的Graph
+RAG的框架</h3>
+<h3 id="model-architecture">model architecture：</h3>
+<h4 id="大体上这里是利用输入的图数据增进llm对仓库的理解语义和结构两方面分两部分先是semantic-integration再是structural-integration前者把输入的graph最终转换到llm的embedding空间变成若干的节点token这个节点token会和正常输入的文本token拼到一起成为最终的token-seq后者则在处理输入token-seq的时候设计专门的graph-aware-attention-mask让节点node之间的交互仅局限于节点和它的邻居对应的token进行交互">大体上，这里是利用输入的图数据，增进llm对仓库的理解（语义和结构两方面），分两部分，先是semantic
+integration，再是structural
+integration。前者把输入的graph，最终转换到llm的embedding空间，变成若干的节点token（这个节点token会和正常输入的文本token拼到一起，成为最终的token
+seq）；后者则在处理输入token seq的时候，设计专门的graph-aware attention
+mask，让节点node之间的交互，仅局限于节点和它的邻居对应的token进行交互</h4>
+<h4 id="semantic-integration">semantic integration：</h4>
+<h5 id="输入的graph它的每个节点的属性都是若干的文本对这个节点对应的实体的描述首先会经过一个tokenizer把文本变成token-seq这一步还有个关键的地方就是chunk的划分如果一个节点的属性对应的token-seq太长了具体表现为超过512个token则需要把它划分为若干个chunk每个chunk最多512个token并且每个chunk我们都会单独复制一个节点此时这些复制的节点它们可以被视为一个整体在和其它节点的关系上它们完全一致邻居关系和原来的节点保持一致而在对内上这几个chunk对应的复制出来的节点它们必须是相互连接的因为它们本来是同一个节点里的这个全连接的关系相当于为了让它们保持联系-然后是由text-encoder来编码论文选用的是预训练的codet5这里会把一个节点的对应token-seq压缩到一个向量对应后续的llm-embedding空间里的一个token这个操作可以减少上下文的占用近似提高了512倍的context-length-之后经过一个adapter把上述得到的向量转换到llm的embedding空间所谓adapter就是一个简单mlp至此每个节点都对应了一个token且是在llm-embedding空间的token可以和文本输入的token一起被处理">输入的graph，它的每个节点的属性都是若干的文本（对这个节点对应的实体的描述），首先会经过一个tokenizer，把文本变成token
+seq。这一步还有个关键的地方，就是chunk的划分。如果一个节点的属性对应的token
+seq太长了（具体表现为超过512个token），则需要把它划分为若干个chunk，每个chunk最多512个token。并且，每个chunk我们都会单独复制一个节点，此时这些复制的节点，它们可以被视为一个整体：在和其它节点的关系上，它们完全一致，邻居关系和原来的节点保持一致；而在“对内“上，这几个chunk对应的复制出来的节点，它们必须是相互连接的（因为它们本来是同一个节点里的，这个全连接的关系相当于为了让它们保持”联系“）<br>然后是由text
+encoder来编码（论文选用的是预训练的CodeT5+），这里会把一个节点的对应token
+seq压缩到一个向量（对应后续的llm
+embedding空间里的一个token）（这个操作可以减少上下文的占用，近似提高了512倍的context
+length）；<br>之后经过一个adapter，把上述得到的向量转换到llm的embedding空间（所谓adapter就是一个简单MLP）。至此，每个节点都对应了一个token，且是在llm
+embedding空间的token，可以和文本输入的token一起被处理</h5>
+<h4 id="structural-integration">structural integration：</h4>
+<h5 id="到这里我们已经有了节点对应的tokens以及文本对应的tokens然后会把它们拼起来得到新的token-seq而为了保证节点对应的token还能呼应上原来graph的结构我们希望对每个节点token而言它只会和原来与它邻接的节点的token进行注意力的交互这里就需要用专门的attention-mask来实现即graph-aware-attention-mask可以由graph的邻接矩阵得到">到这里，我们已经有了节点对应的tokens以及文本对应的tokens，然后会把它们拼起来得到新的token
+seq。而为了保证节点对应的token还能呼应上原来graph的结构，我们希望，对每个节点token而言，它只会和原来与它邻接的节点的token进行注意力的交互。这里就需要用专门的attention
+mask来实现（即graph-aware attention
+mask），可以由graph的邻接矩阵得到</h5>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/07/15/algo/%E4%BA%8C%E5%88%86%E7%AE%97%E6%B3%95/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/%E5%9F%BA%E7%A1%80/%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" rel="prev" title="在排序数组中查找元素的第一个和最后一个位置">
+      <i class="fa fa-chevron-left"></i> 在排序数组中查找元素的第一个和最后一个位置
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/07/17/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/PCA%E7%AE%97%E6%B3%95/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venuearxiv"><span class="nav-number">1.</span> <span class="nav-text">Venue：arxiv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2025-06-23"><span class="nav-number">2.</span> <span class="nav-text">date：2025-06-23</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%84%9F%E8%A7%89%E5%8A%A8%E6%9C%BA%E8%BF%99%E4%B8%80%E5%9D%97%E5%85%B6%E5%AE%9E%E6%8C%BA%E5%B8%B8%E8%A7%81%E7%9A%84llm%E5%8F%91%E5%B1%95%E5%BE%88%E5%BF%AB%E5%B0%86%E5%85%B6%E5%BA%94%E7%94%A8%E5%88%B0%E5%8D%95%E6%96%87%E4%BB%B6%E7%9A%84%E5%90%84%E7%A7%8D%E4%BB%A3%E7%A0%81%E4%BB%BB%E5%8A%A1%E9%83%BD%E8%A1%A8%E7%8E%B0%E5%BE%97%E5%BE%88%E5%A5%BD%E4%BD%86%E6%98%AF%E5%88%B0%E4%BA%86%E6%9B%B4%E5%8A%A0%E7%9C%9F%E5%AE%9E%E5%A4%8D%E6%9D%82%E7%9A%84se-task%E4%B8%8A%E4%BE%8B%E5%A6%82repo-level%E7%9A%84%E4%BB%BB%E5%8A%A1%E4%B8%8A%E5%AE%83%E7%9A%84%E8%A1%A8%E7%8E%B0%E5%B0%B1%E4%B8%8D%E5%A4%9F%E5%A5%BD%E4%BA%86"><span class="nav-number">3.1.</span> <span class="nav-text">感觉动机这一块其实挺常见的。llm发展很快，将其应用到单文件的各种代码任务都表现得很好，但是到了更加真实复杂的SE
+task上，例如repo-level的任务上，它的表现就不够好了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%8C%E7%8E%B0%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95%E8%A1%A8%E7%8E%B0%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%98%AF%E5%88%A9%E7%94%A8%E9%97%AD%E6%BA%90%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%86%E8%BF%99%E7%B1%BB%E6%96%B9%E6%B3%95%E5%9B%A0%E4%B8%BA%E4%BE%9D%E8%B5%96%E4%BA%8E%E9%97%AD%E6%BA%90%E6%A8%A1%E5%9E%8B%E6%89%80%E4%BB%A5%E9%9A%BE%E4%BB%A5%E6%8E%A5%E8%A7%A6%E5%88%B0%E6%A8%A1%E5%9E%8B%E6%9D%83%E9%87%8D%E5%9B%A0%E8%80%8C%E9%9A%BE%E4%BB%A5%E8%BF%9B%E8%A1%8C%E6%94%B9%E8%BF%9B%E5%90%8C%E6%97%B6%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E9%80%9A%E5%B8%B8%E6%8E%A8%E7%90%86%E6%AD%A5%E9%AA%A4%E4%BC%9A%E5%BE%88%E9%95%BF%E5%9B%A0%E6%AD%A4%E4%B8%AD%E9%97%B4%E7%9A%84%E9%94%99%E8%AF%AF%E5%8F%AF%E8%83%BD%E4%BC%9A%E4%B8%8D%E6%96%AD%E7%A7%AF%E7%B4%AF%E5%AF%BC%E8%87%B4%E5%BD%B1%E5%93%8D%E5%86%B3%E7%AD%96-%E6%89%80%E4%BB%A5%E4%B8%BA%E4%BA%86%E9%81%BF%E5%85%8D%E8%BF%99%E4%BA%9B%E9%97%AE%E9%A2%98%E6%88%91%E4%BB%AC%E4%BC%9A%E6%83%B3%E7%94%A8%E5%BC%80%E6%BA%90%E6%A8%A1%E5%9E%8B%E5%B9%B6%E4%B8%94%E9%81%BF%E5%85%8D%E7%94%A8agent%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%86%E7%8E%B0%E5%9C%A8%E5%9F%BA%E4%BA%8E%E5%BC%80%E6%BA%90%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%96%B9%E6%B3%95%E6%80%A7%E8%83%BD%E8%BF%98%E6%98%AF%E6%AF%94%E4%B8%8A%E9%9D%A2%E6%8F%90%E5%88%B0%E7%9A%84%E9%82%A3%E7%B1%BB%E8%A6%81%E5%B7%AE%E4%B8%80%E6%88%AA%E8%BF%98%E4%B8%8D%E5%A4%AA%E8%83%BD%E5%A4%84%E7%90%86repo-level-task%E5%9B%A0%E6%AD%A4%E6%98%AF%E6%9C%89%E6%9E%81%E5%A4%A7%E7%9A%84%E6%94%B9%E8%BF%9B%E7%A9%BA%E9%97%B4%E7%9A%84-%E8%80%8C%E8%AE%BA%E6%96%87%E5%B0%9D%E8%AF%95%E5%81%9A%E5%87%BA%E7%9A%84%E6%94%B9%E8%BF%9B%E5%88%99%E6%98%AF%E6%83%B3%E8%AE%A9%E6%A8%A1%E5%9E%8B%E5%AF%B9repo%E7%9A%84%E7%90%86%E8%A7%A3%E6%9B%B4%E4%B8%8A%E4%B8%80%E5%B1%82%E6%A5%BC%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E6%98%AF%E8%AE%A9%E6%A8%A1%E5%9E%8B%E6%9B%B4%E5%8A%A0%E4%BA%86%E8%A7%A3repo%E9%87%8C%E7%9A%84%E4%BB%A3%E7%A0%81%E6%96%87%E4%BB%B6%E6%9C%AC%E8%BA%AB%E7%9A%84%E5%90%AB%E4%B9%89%E4%BB%A5%E5%8F%8A%E7%9B%B8%E4%BA%92%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text">而现有的方法，表现更好的是利用闭源模型的基于agent的方法，但这类方法，因为依赖于闭源模型，所以难以接触到模型权重，因而难以进行改进；同时基于agent的方法，通常推理步骤会很长，因此中间的错误可能会不断积累导致影响决策所以，为了避免这些问题，我们会想用开源模型，并且避免用agent的方法。但现在基于开源模型的方法，性能还是比上面提到的那类要差一截，还不太能处理repo-level
+task，因此是有极大的改进空间的而论文尝试做出的改进，则是想让模型对repo的理解更上一层楼，具体来说是让模型更加了解repo里的代码文件本身的含义，以及相互之间的关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E4%B9%8D%E4%B8%80%E7%9C%8B%E6%B2%A1%E4%BB%80%E4%B9%88%E6%96%B0%E5%A5%87%E7%9A%84%E5%91%A2%E4%B9%9F%E6%98%AF%E6%83%B3%E6%8F%90%E9%AB%98%E6%A8%A1%E5%9E%8B%E5%AF%B9repo%E7%9A%84%E7%90%86%E8%A7%A3%E8%AF%AD%E4%B9%89%E4%BB%A5%E5%8F%8A%E7%BB%93%E6%9E%84%E4%B9%9F%E6%98%AF%E7%94%A8graph%E7%BB%93%E6%9E%84%E4%B9%9F%E6%98%AF%E8%AE%A9llm%E5%88%A9%E7%94%A8graph%E9%A1%B6%E5%A4%9A%E6%98%AF%E7%BB%86%E8%8A%82%E4%B8%8A%E4%B8%8D%E5%A4%AA%E4%B8%80%E6%A0%B7%E6%A1%86%E6%9E%B6%E6%B2%A1%E6%80%8E%E4%B9%88%E5%8F%98%E5%8C%96%E5%90%A7%E5%92%8Crepograph%E5%AF%B9%E6%AF%94%E4%B8%80%E4%B8%8B%E5%90%A7"><span class="nav-number">4.1.</span> <span class="nav-text">怎么乍一看，没什么新奇的呢……也是想提高模型对repo的理解（语义以及结构），也是用graph结构，也是让llm利用graph，顶多是细节上不太一样，框架没怎么变化吧（和RepoGraph对比一下吧……）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E6%9E%B6%E6%9E%84%E5%A4%A7%E6%A6%82%E6%98%AF%E5%9C%A8%E5%BC%80%E6%BA%90%E7%9A%84llm%E4%B8%8A%E5%8A%A0%E4%B8%80%E4%BA%9B%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9D%97%E7%94%A8%E6%9D%A5%E6%8F%90%E9%AB%98llm%E5%AF%B9repo%E7%9A%84%E7%90%86%E8%A7%A3%E7%84%B6%E5%90%8E%E5%8F%AF%E4%BB%A5%E4%B8%80%E8%B5%B7%E8%BF%9B%E8%A1%8C%E5%BE%AE%E8%B0%83%E4%BB%8E%E8%80%8C%E9%80%82%E5%BA%94se-tasks%E4%B8%94%E6%80%A7%E8%83%BD%E4%B8%8D%E9%94%99%E6%9C%80%E4%BC%98%E7%9A%84%E7%BB%93%E6%9E%9C%E8%BF%98%E6%98%AF%E5%8A%A0%E4%B8%8A%E4%BA%86graph-rag%E4%BD%86%E8%AF%9D%E8%AF%B4%E8%BF%99%E4%B8%AA%E8%AE%BE%E8%AE%A1%E7%9A%84graph-rag%E6%98%AF%E7%9C%9F%E7%9A%84%E5%87%BA%E4%BA%8E%E9%94%A6%E4%B8%8A%E6%B7%BB%E8%8A%B1%E8%BF%98%E6%98%AF%E8%AF%B4%E6%9C%AC%E6%9D%A5%E4%BB%85%E4%BB%85%E7%94%A8%E6%96%B0%E6%9E%B6%E6%9E%84%E6%97%A0%E6%B3%95work%E6%88%96%E8%80%85%E8%AF%B4%E6%80%A7%E8%83%BD%E4%B8%8D%E5%A4%9F%E5%A5%BD%E6%89%80%E4%BB%A5%E7%89%B9%E6%84%8F%E8%AE%BE%E8%AE%A1%E4%BA%86%E4%B8%80%E4%B8%AAgraph-rag%E6%9D%A5make-it-work%E5%8F%AF%E8%83%BD%E5%BE%97%E7%9C%8B%E4%B8%80%E4%B8%8B%E5%AE%9E%E9%AA%8C%E8%A1%A8%E6%A0%BC%E9%87%8C%E6%9C%89%E6%B2%A1%E6%9C%89%E5%8D%95%E7%8B%AC%E7%94%A8%E6%96%B0%E6%9E%B6%E6%9E%84%E8%80%8C%E6%B2%A1%E7%94%A8graph-rag%E7%9A%84%E7%BB%93%E6%9E%9C%E4%BA%86"><span class="nav-number">5.1.</span> <span class="nav-text">提出了一个新的架构，大概是在开源的llm上加一些新的模块，用来提高llm对repo的理解，然后可以一起进行微调，从而适应SE
+tasks，且性能不错（最优的结果还是加上了Graph
+RAG。但话说，这个设计的Graph
+RAG是真的出于锦上添花，还是说，本来仅仅用新架构，无法work，或者说性能不够好，所以特意设计了一个Graph
+RAG来make it work？可能得看一下实验表格里有没有单独用新架构而没用Graph
+RAG的结果了……）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E5%A5%97%E7%9A%84%E8%BF%98%E8%AE%BE%E8%AE%A1%E4%BA%86%E4%B8%80%E4%B8%AAgraph-rag%E7%9A%84%E6%A1%86%E6%9E%B6%E5%8F%AF%E4%BB%A5%E8%BF%9B%E8%A1%8C%E8%BE%85%E5%8A%A9"><span class="nav-number">5.2.</span> <span class="nav-text">配套的，还设计了一个Graph
+RAG的框架，可以进行辅助</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%86%E8%8A%82%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">细节问题：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%8E%E4%B8%8D%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">6.1.</span> <span class="nav-text">1.
+基于agent的方法与不基于agent的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E4%B8%AD%E5%A4%9A%E6%AC%A1%E6%8F%90%E5%88%B0%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E5%9B%A0%E4%B8%BA%E6%98%AF%E5%A4%9A%E6%AD%A5%E5%86%B3%E7%AD%96%E9%9C%80%E8%A6%81%E4%B8%8Erepo%E8%BF%9B%E8%A1%8C%E5%A4%9A%E8%BD%AE%E7%9A%84%E4%BA%A4%E4%BA%92%E4%B8%AD%E9%97%B4%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%9C%89%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%94%99%E8%AF%AF%E8%80%8C%E8%BF%99%E4%BA%9B%E9%94%99%E8%AF%AF%E7%9A%84%E7%B4%AF%E7%A7%AF%E5%8F%AF%E8%83%BD%E5%BD%B1%E5%93%8D%E6%9C%80%E5%90%8E%E7%9A%84%E7%BB%93%E6%9E%9C%E8%BF%99%E9%87%8C%E7%AE%80%E5%8D%95%E8%AF%B4%E6%98%8E%E4%B8%80%E4%B8%8B%E4%BA%8C%E8%80%85%E7%9A%84%E5%A4%A7%E8%87%B4%E6%B5%81%E7%A8%8B"><span class="nav-number">6.1.1.</span> <span class="nav-text">论文中多次提到，基于agent的方法，因为是多步决策，需要与repo进行多轮的交互，中间可能会有一些小错误，而这些错误的累积可能影响最后的结果。这里简单说明一下二者的大致流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">6.1.2.</span> <span class="nav-text">基于agent的方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%83%E4%BC%9A%E8%A6%81%E6%B1%82%E4%B8%8Erepo%E5%A4%9A%E6%AC%A1%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92%E7%84%B6%E5%90%8E%E4%BE%9D%E6%8D%AE%E8%A7%82%E6%B5%8B%E7%BB%93%E6%9E%9C%E5%A6%82%E6%B5%8B%E8%AF%95%E7%9A%84%E7%BB%93%E6%9E%9C%E7%AD%89%E6%9D%A5%E8%B0%83%E6%95%B4%E5%86%B3%E7%AD%96%E9%80%90%E6%AD%A5%E6%8E%A8%E8%BF%9B%E4%BB%BB%E5%8A%A1%E6%88%96%E8%AE%B8%E5%8F%AF%E4%BB%A5%E7%B1%BB%E6%AF%94%E8%BF%99%E4%B8%AA%E4%BE%8B%E5%AD%90agent%E5%85%88%E5%B0%9D%E8%AF%95%E6%94%B9%E6%94%B9%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E9%87%8C%E7%9A%84%E6%9F%90%E4%B8%AA%E9%83%A8%E5%88%86%E7%84%B6%E5%90%8E%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E5%8F%91%E7%8E%B0%E6%95%88%E6%9E%9C%E4%B8%8D%E5%A5%BD%E6%B2%A1%E6%9C%89%E6%96%B0%E9%80%9A%E8%BF%87%E7%9A%84%E4%BE%8B%E5%AD%90%E5%B0%B1%E5%A4%8D%E5%8E%9F%E6%8E%A5%E7%9D%80%E6%94%B9%E4%B8%8B%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-number">6.1.2.1.</span> <span class="nav-text">它会要求与repo多次进行交互，然后依据观测结果（如测试的结果）等来调整决策，逐步推进任务（或许可以类比这个例子：agent先尝试改改这个文件里的某个部分，然后测试一下，发现效果不好，没有新通过的例子，就复原，接着改下一个文件……）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">6.1.3.</span> <span class="nav-text">不基于agent的方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%99%E7%B1%BB%E6%96%B9%E6%B3%95%E5%AE%83%E6%9B%B4%E5%8A%A0%E6%B3%A8%E9%87%8D%E5%AF%B9repo%E7%9A%84%E6%95%B4%E4%BD%93%E7%90%86%E8%A7%A3%E4%B8%80%E8%88%AC%E5%9C%A8%E6%8E%A5%E6%94%B6%E8%BE%93%E5%85%A5%E7%9A%84%E6%97%B6%E5%80%99%E5%B0%B1%E4%BC%9A%E7%94%A8%E5%90%84%E7%A7%8D%E6%96%B9%E6%B3%95%E5%8E%BB%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3repo%E9%87%8C%E4%BB%A3%E7%A0%81%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E5%85%B3%E7%B3%BB%E6%AF%94%E5%A6%82%E7%94%A8graph%E6%9D%A5%E8%A1%A8%E5%BE%81%E5%85%B3%E7%B3%BB%E5%B0%9D%E8%AF%95%E7%94%A8%E5%90%84%E7%A7%8D%E8%8A%B1%E9%87%8C%E8%83%A1%E5%93%A8%E7%9A%84%E6%96%B9%E6%B3%95%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%B2%92%E5%BA%A6%E5%BB%BA%E5%9B%BE-%E5%AF%B9%E6%95%B4%E4%BD%93%E6%9C%89%E5%85%85%E5%88%86%E7%9A%84%E8%A7%82%E5%AF%9F%E4%B9%8B%E5%90%8E%E5%86%8D%E4%BD%9C%E5%87%BA%E5%86%B3%E7%AD%96"><span class="nav-number">6.1.3.1.</span> <span class="nav-text">这类方法，它更加注重对repo的整体理解。一般在接收输入的时候，就会用各种方法去尝试理解repo里代码文件之间的相互关系（比如用graph来表征关系，尝试用各种花里胡哨的方法，在不同粒度建图）对整体有“充分的观察”之后，再作出决策</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%83%B3%E6%B3%95"><span class="nav-number">6.1.4.</span> <span class="nav-text">简单的想法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E5%AE%9E%E6%84%9F%E8%A7%89%E4%B8%8A%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E5%AE%83%E7%9A%84%E6%A0%B8%E5%BF%83%E5%9C%A8%E4%BA%8Etrial-error%E5%92%8C%E4%B8%80%E8%88%AC%E7%9A%84agentrl%E6%B2%A1%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E5%8F%AA%E4%B8%8D%E8%BF%87%E6%98%AF%E5%BA%94%E7%94%A8%E5%88%B0%E4%BA%86llm4code%E8%BF%99%E4%B8%AA%E9%A2%86%E5%9F%9F%E4%BA%86%E8%80%8C%E5%B7%B2%E8%80%8C%E4%B8%8D%E7%94%A8agent%E7%9A%84%E6%96%B9%E6%B3%95%E5%AE%83%E6%B3%A8%E9%87%8D%E5%AF%B9repo%E6%95%B4%E4%BD%93%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8D%E5%83%8F%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E9%80%9A%E8%BF%87%E4%B8%8D%E6%96%AD%E7%9A%84%E8%AF%95%E9%94%99%E6%9D%A5%E9%80%90%E6%AD%A5%E8%8E%B7%E5%BE%97%E5%AF%B9repo%E7%9A%84%E7%90%86%E8%A7%A3%E7%9A%84%E6%9C%89%E4%BA%86%E6%95%B4%E4%BD%93%E7%9A%84%E7%90%86%E8%A7%A3%E4%B9%8B%E5%90%8E%E5%86%8D%E4%B8%8B%E6%89%8B%E8%BF%99%E6%A0%B7%E5%BE%88%E5%AE%B9%E6%98%93%E6%83%B3%E5%88%B0%E4%B8%BA%E4%BD%95%E4%B8%8D%E6%8A%8A%E4%BA%8C%E8%80%85%E7%BB%93%E5%90%88%E8%B5%B7%E6%9D%A5%E4%B9%9F%E6%B2%A1%E4%BB%80%E4%B9%88%E7%9F%9B%E7%9B%BE%E7%9A%84%E5%9C%B0%E6%96%B9%E5%90%A7%E4%B8%80%E5%BC%80%E5%A7%8B%E5%85%88%E7%94%A8graph%E7%AD%89%E6%89%8B%E6%AE%B5%E5%BE%97%E5%88%B0%E5%AF%B9repo%E6%95%B4%E4%BD%93%E7%9A%84%E7%90%86%E8%A7%A3%E7%84%B6%E5%90%8E%E5%86%8D%E7%94%A8agent%E6%9D%A5%E4%B8%8D%E6%96%AD%E5%B0%9D%E8%AF%95%E5%9B%A0%E4%B8%BA%E6%9C%89%E4%BA%86%E5%AF%B9repo%E6%9B%B4%E5%85%A8%E9%9D%A2%E7%9A%84%E7%90%86%E8%A7%A3%E6%89%80%E4%BB%A5%E5%B0%9D%E8%AF%95%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E6%9B%B4%E5%8A%A0%E5%87%86%E7%A1%AE%E6%AD%A3%E7%A1%AE%E7%8E%87%E4%B9%9F%E4%BC%9A%E6%9B%B4%E5%8A%A0%E4%BD%8E%E7%94%9A%E8%87%B3%E4%B9%9F%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E4%BA%8C%E8%80%85%E4%BA%A4%E6%9B%BF%E7%9D%80%E6%9D%A5%E6%AF%94%E5%A6%82%E5%85%88%E7%94%A8%E4%B8%80%E6%AE%B5%E6%97%B6%E9%97%B4%E4%B8%8D%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E5%86%8D%E7%94%A8%E4%B8%80%E4%B8%8B%E5%9F%BA%E4%BA%8Eagent%E7%9A%84%E6%96%B9%E6%B3%95%E5%A5%BD%E5%83%8F%E4%B9%9F%E4%B8%8D%E6%98%AF%E4%B8%8D%E8%A1%8C%E8%80%8C%E4%B9%8B%E6%89%80%E4%BB%A5%E8%80%83%E8%99%91%E8%BF%99%E6%A0%B7%E5%81%9A%E6%98%AF%E5%9B%A0%E4%B8%BA%E8%BF%99%E6%A0%B7%E6%9C%89%E6%9C%9B%E6%8A%8A%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95%E7%9A%84%E4%BC%98%E7%82%B9%E9%83%BD%E7%BB%93%E5%90%88%E8%B5%B7%E6%9D%A5%E5%90%A7"><span class="nav-number">6.1.4.1.</span> <span class="nav-text">其实感觉上，基于agent的方法，它的核心在于trial-error，和一般的agent&#x2F;rl没什么区别，只不过是应用到了llm4code这个领域了而已；而不用agent的方法，它注重对repo整体的理解（不像基于agent的方法，是通过不断的试错来逐步获得对repo的理解的），有了整体的理解之后再下手。这样很容易想到，为何不把二者结合起来？也没什么矛盾的地方吧？一开始先用graph等手段，得到对repo整体的理解，然后再用agent来不断尝试。因为有了对repo更全面的理解，所以尝试的时候会更加准确，正确率也会更加低；甚至也可以考虑二者交替着来，比如先用一段时间不基于agent的方法，再用一下基于agent的方法，好像也不是不行。而之所以考虑这样做，是因为这样有望把两种方法的优点都结合起来吧？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E7%9A%84%E5%B1%9E%E6%80%A7%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%E7%9C%8B%E8%B5%B7%E6%9D%A5%E4%BC%BC%E4%B9%8E%E8%8A%82%E7%82%B9%E7%9A%84%E5%B1%9E%E6%80%A7%E5%B0%B1%E6%98%AF%E6%96%87%E6%9C%AC%E5%9B%A0%E4%B8%BA%E5%AE%83%E4%BC%9A%E8%BE%93%E5%85%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E9%A2%84%E8%AE%AD%E7%BB%83%E7%9A%84encoder%E6%A0%B9%E6%8D%AE%E8%AE%BA%E6%96%87%E6%98%AFcodet5%E5%A6%82%E6%9E%9C%E6%98%AF%E8%BF%99%E6%A0%B7%E7%9A%84%E8%AF%9D%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E7%9A%84"><span class="nav-number">6.2.</span> <span class="nav-text">2.
+节点的属性到底是什么？看起来，似乎节点的属性就是文本，因为它会输入到一个预训练的Encoder（根据论文，是CodeT5+）。如果是这样的话，它是如何存储的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graph-aware-attention-mask%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%BE%97%E7%9C%8B%E4%B8%80%E4%B8%8Bgithub%E4%BB%93%E5%BA%93%E4%BA%86"><span class="nav-number">6.3.</span> <span class="nav-text">3.
+graph-aware attention mask是怎么实现的？得看一下GitHub仓库了</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#method"><span class="nav-number">7.</span> <span class="nav-text">method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%94%A8graph%E7%9A%84%E6%96%B9%E6%B3%95%E6%95%B4%E4%BD%93%E8%BF%98%E6%98%AF%E4%B8%A4%E6%AD%A5%E5%BB%BA%E5%9B%BE%E7%94%A8%E5%9B%BE"><span class="nav-number">7.1.</span> <span class="nav-text">因为是用graph的方法，整体还是两步：建图，用图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#code-graph-construction"><span class="nav-number">7.2.</span> <span class="nav-text">1. Code Graph Construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E4%BD%93%E4%B8%8A%E8%AE%B2%E6%9C%80%E5%90%8E%E6%88%91%E4%BB%AC%E5%BB%BA%E7%AB%8B%E7%9A%84%E5%9B%BE%E5%AE%83%E6%97%A2%E6%9C%89%E4%B8%8A%E4%B8%8B%E7%BA%A7%E7%9A%84%E5%85%B3%E7%B3%BB%E4%BE%8B%E5%A6%82%E7%BB%A7%E6%89%BF%E4%B9%9F%E6%9C%89%E5%B9%B3%E7%BA%A7%E7%9A%84%E5%85%B3%E7%B3%BB%E4%BE%8B%E5%A6%82xx%E5%BC%95%E7%94%A8xx%E5%AE%83%E5%BB%BA%E5%9B%BE%E7%9A%84%E6%B5%81%E7%A8%8B%E6%98%AF%E5%85%88%E6%A0%B9%E6%8D%AEast%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91%E6%9E%84%E5%BB%BA%E5%87%BA%E4%B8%8A%E4%B8%8B%E7%BA%A7%E5%85%B3%E7%B3%BB%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AA%E8%87%AA%E4%B8%8A%E8%80%8C%E4%B8%8B%E7%9A%84%E6%A0%91%E4%B9%8B%E5%90%8E%E5%86%8D%E7%94%A8lightweight-semantic-analysis%E6%9D%A5%E5%88%86%E6%9E%90%E5%AE%9E%E4%BD%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%BC%95%E7%94%A8%E8%B0%83%E7%94%A8%E7%AD%89%E5%85%B3%E7%B3%BB%E6%9C%80%E7%BB%88%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AAgraph"><span class="nav-number">7.2.1.</span> <span class="nav-text">大体上讲，最后我们建立的图，它既有上下级的关系（例如继承），也有平级的关系（例如xx引用xx）。它建图的流程，是先根据AST（抽象语法树），构建出上下级关系，得到一个自上而下的树；之后再用lightweight
+semantic
+analysis来分析实体之间的引用、调用等关系，最终得到一个graph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E6%9E%84%E5%BB%BA%E7%9A%84%E4%B8%8A%E4%B8%8B%E7%BA%A7%E5%85%B3%E7%B3%BB%E5%AE%83%E6%B6%89%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B1%82%E6%AC%A1%E7%9A%84%E5%AE%9E%E4%BD%93%E5%A4%A7%E5%88%B0repo%E5%85%B7%E4%BD%93%E6%9D%A5%E8%AF%B4%E4%B8%80%E5%BC%80%E5%A7%8B%E6%9E%84%E5%BB%BA%E7%9A%84%E6%A0%91%E7%9A%84%E6%A0%B9%E8%8A%82%E7%82%B9%E5%B0%B1%E6%98%AFrepo%E5%AE%83%E8%A1%A8%E5%BE%81%E4%BA%86%E6%95%B4%E4%B8%AA%E4%BB%93%E5%BA%93%E6%9C%AC%E8%BA%AB%E6%9C%80%E5%B0%8F%E5%88%B0func%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%87%BD%E6%95%B0%E8%80%8C%E4%B8%8D%E6%98%AF%E5%83%8Frepograph%E9%82%A3%E6%A0%B7%E6%9C%80%E5%B0%8F%E5%88%B0%E8%A1%8C%E4%BB%A3%E7%A0%81%E4%B8%AD%E9%97%B4%E6%9C%89pkgfileclass%E7%AD%89%E7%BA%A7%E5%88%AB%E7%9A%84%E5%AE%9E%E4%BD%93"><span class="nav-number">7.2.2.</span> <span class="nav-text">先构建的上下级关系，它涉及多个层次的实体，大到repo（具体来说，一开始构建的树的根节点就是repo，它表征了整个仓库本身），最小到func（也就是函数，而不是像RepoGraph那样，最小到行代码），中间有pkg、file、class等级别的实体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#code-graph-modelscgm"><span class="nav-number">7.3.</span> <span class="nav-text">2. Code Graph Models（CGM）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%B8%AA%E7%9A%84%E7%AE%97%E6%B3%95%E6%B6%89%E5%8F%8A%E4%B8%89%E4%B8%AA%E9%83%A8%E5%88%86%E4%B8%80%E6%98%AF%E5%AF%B9%E5%89%8D%E9%9D%A2%E5%BE%97%E5%88%B0%E7%9A%84graph%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%BF%99%E9%87%8C%E4%B8%BB%E8%A6%81%E6%98%AF%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E4%B8%8A%E7%9A%84%E5%88%9B%E6%96%B0-%E4%BA%8C%E6%98%AF%E8%AE%AD%E7%BB%83%E7%9A%84%E7%AD%96%E7%95%A5-%E4%B8%89%E6%98%AF%E9%99%84%E5%8A%A0%E7%9A%84graph-rag%E7%9A%84%E6%A1%86%E6%9E%B6"><span class="nav-number">7.3.1.</span> <span class="nav-text">整个的算法，涉及三个部分。一是对前面得到的graph应该如何处理，这里主要是模型架构上的创新；二是训练的策略；三是附加的Graph
+RAG的框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#model-architecture"><span class="nav-number">7.3.2.</span> <span class="nav-text">model architecture：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E4%BD%93%E4%B8%8A%E8%BF%99%E9%87%8C%E6%98%AF%E5%88%A9%E7%94%A8%E8%BE%93%E5%85%A5%E7%9A%84%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%A2%9E%E8%BF%9Bllm%E5%AF%B9%E4%BB%93%E5%BA%93%E7%9A%84%E7%90%86%E8%A7%A3%E8%AF%AD%E4%B9%89%E5%92%8C%E7%BB%93%E6%9E%84%E4%B8%A4%E6%96%B9%E9%9D%A2%E5%88%86%E4%B8%A4%E9%83%A8%E5%88%86%E5%85%88%E6%98%AFsemantic-integration%E5%86%8D%E6%98%AFstructural-integration%E5%89%8D%E8%80%85%E6%8A%8A%E8%BE%93%E5%85%A5%E7%9A%84graph%E6%9C%80%E7%BB%88%E8%BD%AC%E6%8D%A2%E5%88%B0llm%E7%9A%84embedding%E7%A9%BA%E9%97%B4%E5%8F%98%E6%88%90%E8%8B%A5%E5%B9%B2%E7%9A%84%E8%8A%82%E7%82%B9token%E8%BF%99%E4%B8%AA%E8%8A%82%E7%82%B9token%E4%BC%9A%E5%92%8C%E6%AD%A3%E5%B8%B8%E8%BE%93%E5%85%A5%E7%9A%84%E6%96%87%E6%9C%ACtoken%E6%8B%BC%E5%88%B0%E4%B8%80%E8%B5%B7%E6%88%90%E4%B8%BA%E6%9C%80%E7%BB%88%E7%9A%84token-seq%E5%90%8E%E8%80%85%E5%88%99%E5%9C%A8%E5%A4%84%E7%90%86%E8%BE%93%E5%85%A5token-seq%E7%9A%84%E6%97%B6%E5%80%99%E8%AE%BE%E8%AE%A1%E4%B8%93%E9%97%A8%E7%9A%84graph-aware-attention-mask%E8%AE%A9%E8%8A%82%E7%82%B9node%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E4%BA%92%E4%BB%85%E5%B1%80%E9%99%90%E4%BA%8E%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%83%E7%9A%84%E9%82%BB%E5%B1%85%E5%AF%B9%E5%BA%94%E7%9A%84token%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92"><span class="nav-number">7.3.2.1.</span> <span class="nav-text">大体上，这里是利用输入的图数据，增进llm对仓库的理解（语义和结构两方面），分两部分，先是semantic
+integration，再是structural
+integration。前者把输入的graph，最终转换到llm的embedding空间，变成若干的节点token（这个节点token会和正常输入的文本token拼到一起，成为最终的token
+seq）；后者则在处理输入token seq的时候，设计专门的graph-aware attention
+mask，让节点node之间的交互，仅局限于节点和它的邻居对应的token进行交互</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#semantic-integration"><span class="nav-number">7.3.2.2.</span> <span class="nav-text">semantic integration：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E7%9A%84graph%E5%AE%83%E7%9A%84%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%B1%9E%E6%80%A7%E9%83%BD%E6%98%AF%E8%8B%A5%E5%B9%B2%E7%9A%84%E6%96%87%E6%9C%AC%E5%AF%B9%E8%BF%99%E4%B8%AA%E8%8A%82%E7%82%B9%E5%AF%B9%E5%BA%94%E7%9A%84%E5%AE%9E%E4%BD%93%E7%9A%84%E6%8F%8F%E8%BF%B0%E9%A6%96%E5%85%88%E4%BC%9A%E7%BB%8F%E8%BF%87%E4%B8%80%E4%B8%AAtokenizer%E6%8A%8A%E6%96%87%E6%9C%AC%E5%8F%98%E6%88%90token-seq%E8%BF%99%E4%B8%80%E6%AD%A5%E8%BF%98%E6%9C%89%E4%B8%AA%E5%85%B3%E9%94%AE%E7%9A%84%E5%9C%B0%E6%96%B9%E5%B0%B1%E6%98%AFchunk%E7%9A%84%E5%88%92%E5%88%86%E5%A6%82%E6%9E%9C%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%B1%9E%E6%80%A7%E5%AF%B9%E5%BA%94%E7%9A%84token-seq%E5%A4%AA%E9%95%BF%E4%BA%86%E5%85%B7%E4%BD%93%E8%A1%A8%E7%8E%B0%E4%B8%BA%E8%B6%85%E8%BF%87512%E4%B8%AAtoken%E5%88%99%E9%9C%80%E8%A6%81%E6%8A%8A%E5%AE%83%E5%88%92%E5%88%86%E4%B8%BA%E8%8B%A5%E5%B9%B2%E4%B8%AAchunk%E6%AF%8F%E4%B8%AAchunk%E6%9C%80%E5%A4%9A512%E4%B8%AAtoken%E5%B9%B6%E4%B8%94%E6%AF%8F%E4%B8%AAchunk%E6%88%91%E4%BB%AC%E9%83%BD%E4%BC%9A%E5%8D%95%E7%8B%AC%E5%A4%8D%E5%88%B6%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9%E6%AD%A4%E6%97%B6%E8%BF%99%E4%BA%9B%E5%A4%8D%E5%88%B6%E7%9A%84%E8%8A%82%E7%82%B9%E5%AE%83%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%A2%AB%E8%A7%86%E4%B8%BA%E4%B8%80%E4%B8%AA%E6%95%B4%E4%BD%93%E5%9C%A8%E5%92%8C%E5%85%B6%E5%AE%83%E8%8A%82%E7%82%B9%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%8A%E5%AE%83%E4%BB%AC%E5%AE%8C%E5%85%A8%E4%B8%80%E8%87%B4%E9%82%BB%E5%B1%85%E5%85%B3%E7%B3%BB%E5%92%8C%E5%8E%9F%E6%9D%A5%E7%9A%84%E8%8A%82%E7%82%B9%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E8%80%8C%E5%9C%A8%E5%AF%B9%E5%86%85%E4%B8%8A%E8%BF%99%E5%87%A0%E4%B8%AAchunk%E5%AF%B9%E5%BA%94%E7%9A%84%E5%A4%8D%E5%88%B6%E5%87%BA%E6%9D%A5%E7%9A%84%E8%8A%82%E7%82%B9%E5%AE%83%E4%BB%AC%E5%BF%85%E9%A1%BB%E6%98%AF%E7%9B%B8%E4%BA%92%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%9B%A0%E4%B8%BA%E5%AE%83%E4%BB%AC%E6%9C%AC%E6%9D%A5%E6%98%AF%E5%90%8C%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9%E9%87%8C%E7%9A%84%E8%BF%99%E4%B8%AA%E5%85%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%85%B3%E7%B3%BB%E7%9B%B8%E5%BD%93%E4%BA%8E%E4%B8%BA%E4%BA%86%E8%AE%A9%E5%AE%83%E4%BB%AC%E4%BF%9D%E6%8C%81%E8%81%94%E7%B3%BB-%E7%84%B6%E5%90%8E%E6%98%AF%E7%94%B1text-encoder%E6%9D%A5%E7%BC%96%E7%A0%81%E8%AE%BA%E6%96%87%E9%80%89%E7%94%A8%E7%9A%84%E6%98%AF%E9%A2%84%E8%AE%AD%E7%BB%83%E7%9A%84codet5%E8%BF%99%E9%87%8C%E4%BC%9A%E6%8A%8A%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E5%AF%B9%E5%BA%94token-seq%E5%8E%8B%E7%BC%A9%E5%88%B0%E4%B8%80%E4%B8%AA%E5%90%91%E9%87%8F%E5%AF%B9%E5%BA%94%E5%90%8E%E7%BB%AD%E7%9A%84llm-embedding%E7%A9%BA%E9%97%B4%E9%87%8C%E7%9A%84%E4%B8%80%E4%B8%AAtoken%E8%BF%99%E4%B8%AA%E6%93%8D%E4%BD%9C%E5%8F%AF%E4%BB%A5%E5%87%8F%E5%B0%91%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%8D%A0%E7%94%A8%E8%BF%91%E4%BC%BC%E6%8F%90%E9%AB%98%E4%BA%86512%E5%80%8D%E7%9A%84context-length-%E4%B9%8B%E5%90%8E%E7%BB%8F%E8%BF%87%E4%B8%80%E4%B8%AAadapter%E6%8A%8A%E4%B8%8A%E8%BF%B0%E5%BE%97%E5%88%B0%E7%9A%84%E5%90%91%E9%87%8F%E8%BD%AC%E6%8D%A2%E5%88%B0llm%E7%9A%84embedding%E7%A9%BA%E9%97%B4%E6%89%80%E8%B0%93adapter%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95mlp%E8%87%B3%E6%AD%A4%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E9%83%BD%E5%AF%B9%E5%BA%94%E4%BA%86%E4%B8%80%E4%B8%AAtoken%E4%B8%94%E6%98%AF%E5%9C%A8llm-embedding%E7%A9%BA%E9%97%B4%E7%9A%84token%E5%8F%AF%E4%BB%A5%E5%92%8C%E6%96%87%E6%9C%AC%E8%BE%93%E5%85%A5%E7%9A%84token%E4%B8%80%E8%B5%B7%E8%A2%AB%E5%A4%84%E7%90%86"><span class="nav-number">7.3.2.2.1.</span> <span class="nav-text">输入的graph，它的每个节点的属性都是若干的文本（对这个节点对应的实体的描述），首先会经过一个tokenizer，把文本变成token
+seq。这一步还有个关键的地方，就是chunk的划分。如果一个节点的属性对应的token
+seq太长了（具体表现为超过512个token），则需要把它划分为若干个chunk，每个chunk最多512个token。并且，每个chunk我们都会单独复制一个节点，此时这些复制的节点，它们可以被视为一个整体：在和其它节点的关系上，它们完全一致，邻居关系和原来的节点保持一致；而在“对内“上，这几个chunk对应的复制出来的节点，它们必须是相互连接的（因为它们本来是同一个节点里的，这个全连接的关系相当于为了让它们保持”联系“）然后是由text
+encoder来编码（论文选用的是预训练的CodeT5+），这里会把一个节点的对应token
+seq压缩到一个向量（对应后续的llm
+embedding空间里的一个token）（这个操作可以减少上下文的占用，近似提高了512倍的context
+length）；之后经过一个adapter，把上述得到的向量转换到llm的embedding空间（所谓adapter就是一个简单MLP）。至此，每个节点都对应了一个token，且是在llm
+embedding空间的token，可以和文本输入的token一起被处理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#structural-integration"><span class="nav-number">7.3.2.3.</span> <span class="nav-text">structural integration：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%B0%E8%BF%99%E9%87%8C%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F%E6%9C%89%E4%BA%86%E8%8A%82%E7%82%B9%E5%AF%B9%E5%BA%94%E7%9A%84tokens%E4%BB%A5%E5%8F%8A%E6%96%87%E6%9C%AC%E5%AF%B9%E5%BA%94%E7%9A%84tokens%E7%84%B6%E5%90%8E%E4%BC%9A%E6%8A%8A%E5%AE%83%E4%BB%AC%E6%8B%BC%E8%B5%B7%E6%9D%A5%E5%BE%97%E5%88%B0%E6%96%B0%E7%9A%84token-seq%E8%80%8C%E4%B8%BA%E4%BA%86%E4%BF%9D%E8%AF%81%E8%8A%82%E7%82%B9%E5%AF%B9%E5%BA%94%E7%9A%84token%E8%BF%98%E8%83%BD%E5%91%BC%E5%BA%94%E4%B8%8A%E5%8E%9F%E6%9D%A5graph%E7%9A%84%E7%BB%93%E6%9E%84%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E5%AF%B9%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9token%E8%80%8C%E8%A8%80%E5%AE%83%E5%8F%AA%E4%BC%9A%E5%92%8C%E5%8E%9F%E6%9D%A5%E4%B8%8E%E5%AE%83%E9%82%BB%E6%8E%A5%E7%9A%84%E8%8A%82%E7%82%B9%E7%9A%84token%E8%BF%9B%E8%A1%8C%E6%B3%A8%E6%84%8F%E5%8A%9B%E7%9A%84%E4%BA%A4%E4%BA%92%E8%BF%99%E9%87%8C%E5%B0%B1%E9%9C%80%E8%A6%81%E7%94%A8%E4%B8%93%E9%97%A8%E7%9A%84attention-mask%E6%9D%A5%E5%AE%9E%E7%8E%B0%E5%8D%B3graph-aware-attention-mask%E5%8F%AF%E4%BB%A5%E7%94%B1graph%E7%9A%84%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E5%BE%97%E5%88%B0"><span class="nav-number">7.3.2.3.1.</span> <span class="nav-text">到这里，我们已经有了节点对应的tokens以及文本对应的tokens，然后会把它们拼起来得到新的token
+seq。而为了保证节点对应的token还能呼应上原来graph的结构，我们希望，对每个节点token而言，它只会和原来与它邻接的节点的token进行注意力的交互。这里就需要用专门的attention
+mask来实现（即graph-aware attention
+mask），可以由graph的邻接矩阵得到</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

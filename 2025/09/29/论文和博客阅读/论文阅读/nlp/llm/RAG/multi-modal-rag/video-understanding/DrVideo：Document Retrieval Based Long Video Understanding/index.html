@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Venue：CVPR 25 date：2024-11-24 动机： insight： 对于视频，我们总是希望找到它的关键帧&#x2F;关键部分，并且是希望能一次性地在任务开始时就找到。但是其实也未必如此，如果采用一种不断完善的方法来寻找视频的关键信息，最终也能回答好问题，那其实也是可以的。就像这篇论文，前面的操作其实都是最朴素的操作了，可就是因为引入了两个agent，所以有弥补的空间：可以决定是否要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DrVideo：Document Retrieval Based Long Video Understanding">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="Venue：CVPR 25 date：2024-11-24 动机： insight： 对于视频，我们总是希望找到它的关键帧&#x2F;关键部分，并且是希望能一次性地在任务开始时就找到。但是其实也未必如此，如果采用一种不断完善的方法来寻找视频的关键信息，最终也能回答好问题，那其实也是可以的。就像这篇论文，前面的操作其实都是最朴素的操作了，可就是因为引入了两个agent，所以有弥补的空间：可以决定是否要">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-29T02:41:00.000Z">
+<meta property="article:modified_time" content="2025-09-29T03:27:51.976Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>DrVideo：Document Retrieval Based Long Video Understanding | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DrVideo：Document Retrieval Based Long Video Understanding
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-09-29 10:41:00 / Modified: 11:27:51" itemprop="dateCreated datePublished" datetime="2025-09-29T10:41:00+08:00">2025-09-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="venuecvpr-25">Venue：CVPR 25</h1>
+<h1 id="date2024-11-24">date：2024-11-24</h1>
+<h1 id="动机">动机：</h1>
+<h1 id="insight">insight：</h1>
+<h2 id="对于视频我们总是希望找到它的关键帧关键部分并且是希望能一次性地在任务开始时就找到但是其实也未必如此如果采用一种不断完善的方法来寻找视频的关键信息最终也能回答好问题那其实也是可以的就像这篇论文前面的操作其实都是最朴素的操作了可就是因为引入了两个agent所以有弥补的空间可以决定是否要重新去检索关键帧可以决定是否要深挖已有的关键帧">对于视频，我们总是希望找到它的关键帧/关键部分，并且是希望能一次性地在任务开始时就找到。但是其实也未必如此，如果采用一种不断完善的方法来寻找视频的关键信息，最终也能回答好问题，那其实也是可以的。就像这篇论文，前面的操作其实都是最朴素的操作了，可就是因为引入了两个agent，所以有弥补的空间：可以决定是否要重新去检索关键帧；可以决定是否要深挖已有的关键帧</h2>
+<h1 id="contribution">contribution：</h1>
+<h2 id="再稍微读一下感觉没什么贡献啊可能就引入agent那一步值得说到一下其它感觉都是现有的而且那个retrieval-module不就是一个简单的检索吗这也能包装成一个之前没有的东西吗">再稍微读一下，感觉没什么贡献啊……可能就引入agent那一步值得说到一下，其它感觉都是现有的。而且那个retrieval
+module不就是一个简单的检索吗，这也能包装成一个之前没有的东西吗……</h2>
+<span id="more"></span>
+<h1 id="简介">简介：</h1>
+<h2 id="一研究的核心问题">一、研究的核心问题</h2>
+<p>现有长视频理解技术难以应对时长从几分钟到 1
+小时以上的视频，核心需解决两大关键挑战，同时突破现有方法的技术瓶颈： 1.
+<strong>长视频固有的技术难题</strong> -
+<strong>关键信息定位难</strong>：长视频（如 44 分钟的教学视频、10
+分钟的电影片段）包含海量帧，现有方法难以精准筛选与查询相关的关键帧（如
+“视频中使用的釉料颜色” 这类细节查询，易被冗余帧干扰）； -
+<strong>长程推理能力弱</strong>：需整合视频中跨时段的事件逻辑（如
+“主角从准备工具到完成手工的步骤衔接”），但现有模型受限于上下文窗口或模态融合能力，无法有效建立长时序关联。
+2. <strong>现有方法的应用局限</strong> - 无法处理超长时间视频（如超过 1
+小时的视频），多数方法仅针对几十秒的短视频设计； -
+对开放域查询的适应性差，难以应对需要细节理解（如视觉特征、步骤细节）的复杂查询（如
+“视频中人物操作工具的具体角度”）。 ## 二、现有方法的不足
+论文明确指出两类主流长视频理解方法的核心缺陷，具体如下： ### 1. 视频 -
+语言模型（Video-LMs）的局限</p>
+<p>这类方法将视频编码为视觉 token 与语言 token 拼接后输入
+LLM，但存在三大问题： - <strong>输入长度受限</strong>：视觉编码器（如
+CLIP-L-14）每帧输出 24×24 个 token，而主流 Video-LM（如
+LLaVA-NeXT-Video）的最大上下文窗口仅 8192 个 token，无法处理全帧（如 10
+分钟视频按 0.5FPS 采样约 300 帧，总 token 数远超窗口限制）； -
+<strong>帧采样盲目</strong>：采用固定大步长均匀 / 随机采样（如 PLLaVA 用
+16 帧步长、IG-VLM 用 6 帧步长），未考虑内容相关性，易丢失关键帧（如
+“蛋糕烘焙中的烤箱温度调整” 这类短时段关键操作）； -
+<strong>视觉信息定位难</strong>：视觉 token 与语言 token 简单拼接后，LLM
+难以在长序列中定位与查询相关的视觉信息（如查询
+“视频中人物穿的衣服颜色”，模型易被背景帧的视觉 token 干扰）。 ### 2.
+基于 LLM 的视频字幕转换方法的局限 这类方法（如
+LLoVi、VideoAgent）将视频拆分为短片段并转为文本描述，再利用 LLM
+推理，但存在两大关键缺陷： - <strong>关键帧定位不准确</strong>：依赖 LLM
+先验知识推断缺失信息，再通过 CLIP 图像 -
+文本相似度筛选帧，缺乏对视频内容的全局把控。例如 VideoAgent 仅采样 5
+帧生成文本，易因初始帧代表性不足导致后续定位偏差（如
+“识别手工制作步骤时，漏选‘打结固定’的关键帧”）； -
+<strong>信息丢失严重</strong>：将视频转为字幕或简短描述时，会丢弃视觉细节。例如描述
+“女性在镜子前” 无法覆盖 “衣服款式、颜色” 等关键信息，导致 LLM 回答
+“女性穿什么衣服” 时只能盲目猜测，无法提供准确依据。 ##
+三、论文提出的解决方法 论文提出<strong>DrVideo
+框架</strong>，核心思路是将 “长视频理解” 转化为
+“长文档检索与理解”，通过五大模块协同解决上述问题，具体流程如图 1 所示：
+### 1. 视频 - 文档转换模块：建立长视频的文本化表示 -
+<strong>操作逻辑</strong>：用预训练视觉 - 语言字幕模型（如
+LaViLa、LLaVA-NeXT）将视频帧（或短片段）转为简短文本描述(<span class="math inline">\(S_{V_t}\)</span>)，构建初始视频文档<span class="math inline">\((Doc_{init}=\{\{1,S_{V_1}\},\{2,S_{V_2}\},...,\{T,S_{V_T}\}\})\)</span>（T为视频总帧数）。例如将
+“揉面团” 的帧转为 “人物用手掌按压面团，表面逐渐光滑” 的文本，让 LLM
+能通过文本快速把握视频内容； -
+<strong>关键设计</strong>：支持多字幕模型替换（如
+BLIP-2），并针对不同数据集优化采样率（EgoSchema 用 0.5FPS、Video-MME 用
+0.2FPS），在减少冗余的同时保留关键信息。 ### 2.
+文档（帧）检索模块：精准筛选初始关键帧 - <strong>操作逻辑</strong>：用
+OpenAI 嵌入模型生成初始文档中每个帧描述的向量表示(<span class="math inline">\(E_{doc_t}\)</span>)，计算查询向量(<span class="math inline">\(E_{RT}\)</span>)与(<span class="math inline">\(E_{doc_t}\)</span>)的余弦相似度，检索 Top-K（默认
+K=5）与查询最相关的帧（如查询 “釉料颜色” 时，筛选出包含
+“粉色、绿色、蓝色釉料”
+描述的帧）；（这里实际实验的时候，是会进行一个均匀采样的） -
+<strong>作用</strong>：快速缩小关键帧范围，避免后续处理全量帧的高计算成本，同时为后续信息增强提供基础。
+### 3. 文档增强模块：补充关键帧的细节信息 -
+<strong>操作逻辑</strong>：对检索到的 Top-K 帧，用 LLaVA-NeXT
+结合不同增强提示（AP）生成详细描述(<span class="math inline">\(L_{V_{t&#39;}}\)</span>)，更新文档为({AD})（仅增强关键帧，非关键帧保留原描述）。例如针对
+“人物操作工具” 的帧，提示模型生成 “工具为银色剪刀，刀刃与材料夹角约 45
+度” 的细节描述； - <strong>关键设计</strong>：增强提示分两类 ——A
+类（图像详细描述）补充视觉细节，B 类（视觉问答）直接关联查询需求（如查询
+“步骤顺序” 时，生成
+“该帧为第三步，需在第二步搅拌后进行”），确保信息针对性。（都是在生成更加丰富的文字描述，本意是想深入挖掘这些检索回来的关键帧。看起来会损失很多的视觉信息，但是好在这里有B类增强提示，它会更加好地利用视觉信息，通过一个Visual
+QA，针对query来深挖关键帧的视觉信息） ### 4.
+多阶段智能体交互循环：动态补全缺失信息 设计 “规划智能体（Planning
+Agent）+ 交互智能体（Interaction Agent）” 的迭代 loop，解决
+“初始关键帧信息不足” 的问题： -
+<strong>规划智能体</strong>：输入当前更新文档(<em>i)、查询 Q
+与历史分析记录 H，判断信息是否足够生成答案。若不足（如
+“未找到釉料颜色的所有描述”），输出缺失原因并更新 H； -
+<strong>交互智能体</strong>：基于 H 从非 Top-K 帧中筛选 N
+个（N&lt;K）缺失关键帧（如补充 “蓝色釉料使用”
+的帧），并指定增强类型（A/B 类），调用文档增强模块更新文档； -
+<strong>迭代终止条件</strong>：直至规划智能体确认信息充足或达到最大迭代次数（实验中默认
+2
+轮达最优性能）。（这个智能体的交互循环其实才是这套方法有效的根本原因吧，不然仅仅是前面的那些步骤，其实和现有方法感觉也没多大区别。但正是因为有这个智能体的交互循环，所以能减少关键帧的遗漏，尽可能减少视觉信息的损失）
+### 5. 回答模块：基于链推理（CoT）生成答案 -
+<strong>操作逻辑</strong>：将最终文档(</em>{final})与查询输入 LLM，采用
+CoT 策略生成答案、置信度与推理过程。例如回答 “釉料颜色” 时，先梳理 “帧
+15 提到粉色、帧 32 提到绿色、帧 46 提到蓝色”，再汇总得出 “3 种颜色”
+的结论； -
+<strong>优势</strong>：提升答案准确性的同时，通过推理步骤确保可解释性（如追踪
+“为何排除其他颜色” 的逻辑）。 ## 四、方法的创新性 1.
+<strong>任务范式创新：首次将长视频理解转化为长文档任务</strong>突破传统
+“视频→视觉 token” 的处理思路，通过文本化将长视频转化为 LLM
+擅长的长文档格式，直接复用 LLM
+在关键信息定位（如文档检索）与长程推理（如跨段落逻辑分析）的优势。例如处理
+44 分钟的 Video-MME 视频时，文档化后 LLM 可像分析长文本一样梳理
+“从材料准备到成品展示” 的全流程，无需处理复杂的视觉 token 序列。 2.
+<strong>动态信息补全：多智能体循环实现精准信息挖掘</strong> - 区别于
+VideoAgent 等方法 “一次性采样 + 固定增强”
+的模式，设计双智能体迭代机制：规划智能体负责 “判断信息缺口”（如
+“是否遗漏釉料颜色”），交互智能体负责
+“精准补全”（如补充未检索到的蓝色釉料帧），实现
+“需求驱动→信息补全→验证优化” 的闭环； - 实验表明，该机制在 EgoSchema
+数据集上仅需 2 轮迭代即达最优性能，且关键帧定位精度比 VideoAgent 高
+6.2%。 3. <strong>信息增强的适应性：按需匹配增强类型</strong>
+针对不同关键帧的信息需求，自适应选择增强类型（A 类补充视觉细节、B
+类关联查询），避免单一增强导致的信息冗余或不足。例如： - 对 “人物动作”
+类帧用 A 类增强（如 “手部握笔姿势”），补充视觉特征； - 对 “步骤顺序”
+类帧用 B 类增强（如 “该步骤在搅拌之后”），直接关联查询逻辑； - ablation
+实验证明，同时使用两类增强的准确率（62.6%）显著高于单独使用 A
+类（60.4%）或 B 类（61.8%）。 4. <strong>高效性与通用性：零训练成本 +
+宽场景适配</strong> - <strong>零训练设计</strong>：基于预训练 VLM（如
+LaViLa）与 LLM（如 GPT-3.5/4）构建，无需额外训练，在 RTX 4090
+上即可复现结果，降低研究门槛； - <strong>跨场景适配</strong>：在 3
+分钟的 EgoSchema、10 分钟的 MovieChat-1K、44 分钟的 Video-MME
+三大基准数据集上均显著优于 SOTA，尤其在 Video-MME 中结合字幕达 71.7%
+准确率，超过 Gemini 1.5 Flash（68.8%）、GPT-4V（56.9%）等 proprietary
+模型。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/" rel="prev" title="VideoRAG：Retrieval-Augmented Generation over Video Corpus">
+      <i class="fa fa-chevron-left"></i> VideoRAG：Retrieval-Augmented Generation over Video Corpus
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/efficiency/kv-cache/SnapKV%EF%BC%9ALLM%20Knows%20What%20You%20Are%20Looking%20for%20before%20Generation/" rel="next" title="SnapKV：LLM Knows What You Are Looking for before Generation">
+      SnapKV：LLM Knows What You Are Looking for before Generation <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#venuecvpr-25"><span class="nav-number">1.</span> <span class="nav-text">Venue：CVPR 25</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#date2024-11-24"><span class="nav-number">2.</span> <span class="nav-text">date：2024-11-24</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">动机：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insight"><span class="nav-number">4.</span> <span class="nav-text">insight：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E8%A7%86%E9%A2%91%E6%88%91%E4%BB%AC%E6%80%BB%E6%98%AF%E5%B8%8C%E6%9C%9B%E6%89%BE%E5%88%B0%E5%AE%83%E7%9A%84%E5%85%B3%E9%94%AE%E5%B8%A7%E5%85%B3%E9%94%AE%E9%83%A8%E5%88%86%E5%B9%B6%E4%B8%94%E6%98%AF%E5%B8%8C%E6%9C%9B%E8%83%BD%E4%B8%80%E6%AC%A1%E6%80%A7%E5%9C%B0%E5%9C%A8%E4%BB%BB%E5%8A%A1%E5%BC%80%E5%A7%8B%E6%97%B6%E5%B0%B1%E6%89%BE%E5%88%B0%E4%BD%86%E6%98%AF%E5%85%B6%E5%AE%9E%E4%B9%9F%E6%9C%AA%E5%BF%85%E5%A6%82%E6%AD%A4%E5%A6%82%E6%9E%9C%E9%87%87%E7%94%A8%E4%B8%80%E7%A7%8D%E4%B8%8D%E6%96%AD%E5%AE%8C%E5%96%84%E7%9A%84%E6%96%B9%E6%B3%95%E6%9D%A5%E5%AF%BB%E6%89%BE%E8%A7%86%E9%A2%91%E7%9A%84%E5%85%B3%E9%94%AE%E4%BF%A1%E6%81%AF%E6%9C%80%E7%BB%88%E4%B9%9F%E8%83%BD%E5%9B%9E%E7%AD%94%E5%A5%BD%E9%97%AE%E9%A2%98%E9%82%A3%E5%85%B6%E5%AE%9E%E4%B9%9F%E6%98%AF%E5%8F%AF%E4%BB%A5%E7%9A%84%E5%B0%B1%E5%83%8F%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E5%89%8D%E9%9D%A2%E7%9A%84%E6%93%8D%E4%BD%9C%E5%85%B6%E5%AE%9E%E9%83%BD%E6%98%AF%E6%9C%80%E6%9C%B4%E7%B4%A0%E7%9A%84%E6%93%8D%E4%BD%9C%E4%BA%86%E5%8F%AF%E5%B0%B1%E6%98%AF%E5%9B%A0%E4%B8%BA%E5%BC%95%E5%85%A5%E4%BA%86%E4%B8%A4%E4%B8%AAagent%E6%89%80%E4%BB%A5%E6%9C%89%E5%BC%A5%E8%A1%A5%E7%9A%84%E7%A9%BA%E9%97%B4%E5%8F%AF%E4%BB%A5%E5%86%B3%E5%AE%9A%E6%98%AF%E5%90%A6%E8%A6%81%E9%87%8D%E6%96%B0%E5%8E%BB%E6%A3%80%E7%B4%A2%E5%85%B3%E9%94%AE%E5%B8%A7%E5%8F%AF%E4%BB%A5%E5%86%B3%E5%AE%9A%E6%98%AF%E5%90%A6%E8%A6%81%E6%B7%B1%E6%8C%96%E5%B7%B2%E6%9C%89%E7%9A%84%E5%85%B3%E9%94%AE%E5%B8%A7"><span class="nav-number">4.1.</span> <span class="nav-text">对于视频，我们总是希望找到它的关键帧&#x2F;关键部分，并且是希望能一次性地在任务开始时就找到。但是其实也未必如此，如果采用一种不断完善的方法来寻找视频的关键信息，最终也能回答好问题，那其实也是可以的。就像这篇论文，前面的操作其实都是最朴素的操作了，可就是因为引入了两个agent，所以有弥补的空间：可以决定是否要重新去检索关键帧；可以决定是否要深挖已有的关键帧</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contribution"><span class="nav-number">5.</span> <span class="nav-text">contribution：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E7%A8%8D%E5%BE%AE%E8%AF%BB%E4%B8%80%E4%B8%8B%E6%84%9F%E8%A7%89%E6%B2%A1%E4%BB%80%E4%B9%88%E8%B4%A1%E7%8C%AE%E5%95%8A%E5%8F%AF%E8%83%BD%E5%B0%B1%E5%BC%95%E5%85%A5agent%E9%82%A3%E4%B8%80%E6%AD%A5%E5%80%BC%E5%BE%97%E8%AF%B4%E5%88%B0%E4%B8%80%E4%B8%8B%E5%85%B6%E5%AE%83%E6%84%9F%E8%A7%89%E9%83%BD%E6%98%AF%E7%8E%B0%E6%9C%89%E7%9A%84%E8%80%8C%E4%B8%94%E9%82%A3%E4%B8%AAretrieval-module%E4%B8%8D%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A3%80%E7%B4%A2%E5%90%97%E8%BF%99%E4%B9%9F%E8%83%BD%E5%8C%85%E8%A3%85%E6%88%90%E4%B8%80%E4%B8%AA%E4%B9%8B%E5%89%8D%E6%B2%A1%E6%9C%89%E7%9A%84%E4%B8%9C%E8%A5%BF%E5%90%97"><span class="nav-number">5.1.</span> <span class="nav-text">再稍微读一下，感觉没什么贡献啊……可能就引入agent那一步值得说到一下，其它感觉都是现有的。而且那个retrieval
+module不就是一个简单的检索吗，这也能包装成一个之前没有的东西吗……</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">6.</span> <span class="nav-text">简介：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A0%94%E7%A9%B6%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">一、研究的核心问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

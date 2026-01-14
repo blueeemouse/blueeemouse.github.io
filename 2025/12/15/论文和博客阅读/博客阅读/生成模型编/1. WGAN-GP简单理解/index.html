@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="引用一下：苏剑林. (Jun. 08, 2017). 《互怼的艺术：从零直达WGAN-GP 》Blog post. Retrieved from https:&#x2F;&#x2F;www.spaces.ac.cn&#x2F;archives&#x2F;4439 通过读这篇博客，简单了解一下WGAN-GP，重点是了解一下它将距离度量也用神经网络学到的这个思想">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. WGAN-GP简单理解">
+<meta property="og:url" content="https://blueeemouse.github.io/2025/12/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/1.%20WGAN-GP%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="引用一下：苏剑林. (Jun. 08, 2017). 《互怼的艺术：从零直达WGAN-GP 》Blog post. Retrieved from https:&#x2F;&#x2F;www.spaces.ac.cn&#x2F;archives&#x2F;4439 通过读这篇博客，简单了解一下WGAN-GP，重点是了解一下它将距离度量也用神经网络学到的这个思想">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-12-15T01:55:00.000Z">
+<meta property="article:modified_time" content="2025-12-19T02:02:54.900Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2025/12/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/1.%20WGAN-GP%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>1. WGAN-GP简单理解 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/12/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/1.%20WGAN-GP%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1. WGAN-GP简单理解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-12-15 09:55:00" itemprop="dateCreated datePublished" datetime="2025-12-15T09:55:00+08:00">2025-12-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-12-19 10:02:54" itemprop="dateModified" datetime="2025-12-19T10:02:54+08:00">2025-12-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">博客阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/cv/generation-model/" itemprop="url" rel="index"><span itemprop="name">generation model</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="引用一下苏剑林.-jun.-08-2017.-互怼的艺术从零直达wgan-gp-blog-post.-retrieved-from-httpswww.spaces.ac.cnarchives4439">引用一下：苏剑林.
+(Jun. 08, 2017). 《互怼的艺术：从零直达WGAN-GP 》Blog post. Retrieved
+from <a target="_blank" rel="noopener" href="https://www.spaces.ac.cn/archives/4439">https://www.spaces.ac.cn/archives/4439</a></h1>
+<h2 id="通过读这篇博客简单了解一下wgan-gp重点是了解一下它将距离度量也用神经网络学到的这个思想">通过读这篇博客，简单了解一下WGAN-GP，重点是了解一下它将距离度量也用神经网络学到的这个思想</h2>
+<span id="more"></span>
+<h1 id="思路">思路</h1>
+<h2 id="生成过程可以视为分布之间的变换将我们希望生成的图像服从的分布视为目标分布我们采样的噪声服从的分布视为起点分布则我们希望能找到一个映射可以让服从起点分布的变量经过映射就变成服从目标分布的变量这样我们从起点分布里采样一个点用这个映射操作一下得到的就是期望的图像了">生成过程可以视为分布之间的变换。将我们希望生成的图像服从的分布视为目标分布，我们采样的噪声服从的分布视为起点分布，则我们希望能找到一个映射，可以让服从起点分布的变量经过映射就变成服从目标分布的变量。这样，我们从起点分布里采样一个点，用这个映射操作一下，得到的就是期望的图像了</h2>
+<h2 id="困难">困难：</h2>
+<h3 id="如果想从数学角度推导出这个映射几乎不可能即使是起点和重点分布都很简单的情况下">如果想从数学角度推导出这个映射，几乎不可能，即使是起点和重点分布都很简单的情况下</h3>
+<h3 id="所以我们可以考虑让神经网络把这个映射学出来算不出来的就用神经网络学不妨记为gx-theta其中theta是这个神经网络待学习的参数x是输入的服从起点分布的变量">所以，我们可以考虑让神经网络把这个映射学出来（<strong><em>算不出来的就用神经网络学</em></strong>）。不妨记为<span class="math inline">\(G(X, \theta)\)</span>，其中<span class="math inline">\(\theta\)</span>是这个神经网络待学习的参数，X是输入的服从起点分布的变量</h3>
+<h2 id="如何学习">如何学习：</h2>
+<h3 id="现在我们想学出这个映射来也就是学出一个神经网络来需要找到一个目标我们手头一般会有的是我们期望生成的那种图片的一批数据比如我们想让模型生成人脸图像可能我们手头就有一批人脸图像">现在我们想学出这个映射来（也就是学出一个神经网络来）。需要找到一个目标。我们手头一般会有的，是我们期望生成的那种图片的一批数据（比如，我们想让模型生成人脸图像，可能我们手头就有一批人脸图像）</h3>
+<h3 id="我们的目标是让服从起点变换的变量经过映射得到的是服从目标变换的变量则我们应该有一步衡量分布差异的操作也就是我们需要衡量经过映射后我们算出来的目标分布和实际的目标分布之间的差异这个差异越小表示我们找到的这个映射效果越好也就是生成效果越好">我们的目标是让服从起点变换的变量经过映射，得到的是服从目标变换的变量。则，我们应该有一步衡量分布差异的操作。也就是，我们需要衡量经过映射后，我们算出来的目标分布和实际的目标分布之间的差异。这个差异越小，表示我们找到的这个映射效果越好，也就是生成效果越好</h3>
+<h3 id="计算分布差异通常有kl散度js散度等还有其它的一些指标可以用但是都困于我们没有实际的目标分布的数学表示所以显然想直接套公式进行数值计算都不行那如果还要用这套方法的话就需要对真实的目标分布进行一个估计也就是用我们手头有的那一批训练数据估计真实目标分布比如用频率估计概率">计算分布差异，通常有KL散度，JS散度等，还有其它的一些指标可以用。但是都困于我们没有实际的目标分布的数学表示，所以显然想直接套公式进行数值计算都不行。那如果还要用这套方法的话，就需要对真实的目标分布进行一个估计。也就是，用我们手头有的那一批训练数据，估计真实目标分布（比如用频率估计概率）</h3>
+<h3 id="但是实际的图像都是高维变量而在此基础上用频率估计概率的计算量更是太大无法承受所以上面的方法其实是行不通的故我们可以考虑用神经网络学一个距离ly_i_i1m-z_i_i1n-thetal表示我们要用神经网络学的一个度量距离的函数theta表示这个神经网络的要学习的参数y_i_i1m表示我们自己生成的一批我们认为服从目标分布的数据z_i_i1n表示实际的一批服从目标分布的数据或者说是训练数据吧之所以用集合的方式表示数据是因为我们希望的是用一批数据估计相应的分布用一批我们生成出来的数据估计我们生成的数据所服从的分布用一批真实数据估计真实的目标分布我们希望在l学得比较好能确实地判别分布距离的情况下这两个分布的距离可以尽可能小这样就表明我们的生成还不错">但是，实际的图像都是高维变量，而在此基础上，用频率估计概率的计算量更是太大，无法承受。所以上面的方法其实是行不通的。故，我们可以考虑用神经网络学一个距离：<span class="math display">\[L(\{y_i\}_{i=1}^{M},\ \{z_{i}\}_{i=1}^{N},\
+\Theta)\]</span>L表示我们要用神经网络学的一个度量距离的函数。<span class="math inline">\(\Theta\)</span>表示这个神经网络的要学习的参数。<span class="math inline">\(\{y_{i}\}_{i=1}^{M}\)</span>表示我们自己生成的一批“我们认为服从目标分布”的数据，<span class="math inline">\(\{z_{i}\}_{i=1}^{N}\)</span>表示实际的一批服从目标分布的数据（或者说是训练数据吧）。之所以用集合的方式表示数据，是因为我们希望的是用一批数据估计相应的分布：用一批我们生成出来的数据估计我们生成的数据所服从的分布，用一批真实数据估计真实的目标分布。我们希望，在L学得比较好，能确实地判别分布距离的情况下，这两个分布的距离可以尽可能小。这样就表明我们的生成还不错</h3>
+<h3 id="之后我们可以对这个距离的形式做进一步的化简正如原博客所言对于一个特定的任务来说z_i_i1n不是变量是给定的以及这个距离应该和数据的出现顺序无关因为它衡量的是分布的距离分布如何显然和数据怎么出现是无关的只和数据的集合有关最终我们可以得到的一种看起来比较简单的形式是lfrac1msum_i1mdy_i-theta此时我们的网络形式就是输入是一个一批样本数据输出是一个一批距离">之后我们可以对这个距离的形式做进一步的化简，正如原博客所言：对于一个特定的任务来说，<span class="math inline">\(\{z_{i}\}_{i=1}^{N}\)</span>不是变量，是给定的；以及这个距离应该和数据的出现顺序无关，因为它衡量的是分布的距离，分布如何显然和数据怎么出现是无关的，只和数据的集合有关。最终我们可以得到的一种看起来比较简单的形式是：<span class="math display">\[L=\frac{1}{M}\sum_{i=1}^{M}D(y_{i},
+\Theta)\]</span>此时我们的网络形式就是，输入是一个/一批样本数据，输出是一个/一批距离</h3>
+<h2 id="两个待学习的网络">两个待学习的网络：</h2>
+<h3 id="现在我们是有一个映射g和一个分布距离度量l要学也就是有两个神经网络应该怎么学习优化呢">现在我们是有一个映射G和一个分布距离度量L要学。也就是有两个神经网络。应该怎么学习优化呢</h3>
+<h3 id="正如上所述我们前面提到对于映射gxtheta我们是期望在距离度量已经学好的情况下让经过映射得到的数据在度量下的损失尽可能小但是一开始我们的距离度量也没什么用需要学距离度量在一个特定的任务下表示的是一批数据对应的分布和我们的训练数据的分布之间的差异那如果我们把训练数据带入到l里面理论上讲这个输出应该是0如果把我们生成的数据带入则输出应该尽可能大这就找到优化目标了-beginalign-theta-argmax_theta-l_1-argmax_theta-frac1bsum_i1bdy_itheta-dz_itheta-endalign-可以看到上面的优化式子里我们希望让整体尽量大就会希望我们判别器距离度量d能尽量判断出我们生成的数据和训练数据的分布差异大而训练数据自己和自己的分布差异小">正如上所述，我们前面提到，对于映射<span class="math inline">\(G(X,\theta)\)</span>，我们是期望在距离度量已经学好的情况下，让经过映射得到的数据在度量下的损失尽可能小；但是一开始我们的距离度量也没什么用，需要学。距离度量在一个特定的任务下表示的是一批数据对应的分布和我们的训练数据的分布之间的差异。那如果我们把训练数据带入到L里面，理论上讲这个输出应该是0；如果把我们生成的数据带入，则输出应该尽可能大。这就找到优化目标了：<br><span class="math display">\[\begin{align*}
+    \Theta &amp;= \arg\max_{\Theta} L_{1} \\
+           &amp;= \arg\max_{\Theta}
+\frac{1}{B}\sum_{i=1}^{B}D(y_{i},\Theta)-D(z_{i},\Theta) \\
+\end{align*}
+\]</span><br>可以看到，上面的优化式子里，我们希望让整体尽量大，就会希望我们判别器/距离度量D能尽量判断出我们生成的数据和训练数据的分布差异大，而训练数据自己和自己的分布差异小</h3>
+<h3 id="至于映射g的学习则是要优化这个式子thetaargmin_thetafrac1b-sum_i1b-dgx_ithetatheta落实到代码上的话我们可以看到每次训练都是d网络先训练5个iter再是g网络训练1个iter二者不断提高就是显式的对抗过程而对d网络更加偏重则是一种类似于训练稳定的技巧同时也是因为g的优化是我们的最终目标我们毕竟要的是gd只是一个工具因为没办法正常算出距离而创造的而g的优化又很依赖d的指导">至于映射G的学习，则是要优化这个式子：<span class="math display">\[\theta=\arg\min_{\theta}\frac{1}{B}
+\sum_{i=1}^{B}
+D(G(x_{i},\theta),\Theta)\]</span>落实到代码上的话，我们可以看到，每次训练都是D网络先训练5个iter，再是G网络训练1个iter。二者不断提高，就是显式的对抗过程。而对D网络更加偏重，则是一种类似于训练稳定的技巧，同时也是因为G的优化是我们的最终目标（我们毕竟要的是G，D只是一个工具，因为没办法正常算出距离而创造的），而G的优化又很依赖D的指导</h3>
+<h2 id="gp的部分">GP的部分</h2>
+<h3 id="gan的部分差不多就是这样了标题里的gp部分指的是gradient-penalty主要是用来约束loss防止它跑到无穷远去也就是说可以认为是一个稳定训练的技巧话虽如此我感觉这个加进来的gp确实可以让训练更稳定但是说防止loss无穷大这一点好像并不直观">GAN的部分差不多就是这样了。标题里的GP部分，指的是Gradient
+Penalty，主要是用来约束loss，防止它跑到无穷远去。也就是说可以认为是一个稳定训练的技巧（话虽如此，我感觉这个加进来的GP确实可以让训练更稳定，但是说防止loss无穷大，这一点好像并不直观……）</h3>
+<h3 id="也不是很清楚为什么会有人想到这一点啊是因为没加的时候观察到loss出现一些异常了吗">（也不是很清楚为什么会有人想到这一点啊，是因为没加的时候观察到loss出现一些异常了吗？……）</h3>
+<h3 id="总而言之简单看一下gp的引入为了稳定训练我们期望距离度量也具有稳定的性质也就是当输入只改变了一点点的时候输出应该也是只改变一点点这一点可以用一个约束表示dy-theta-dy-theta-leq-cy-yalpha这下很直观了确实如果满足这个约束的话就能保证输出的变化不会太过剧烈而其中的alpha当它取为1的时候其实就是lipschitz约束了或者说我们的d满足l-lipschitz连续而为了满足这个约束可以考虑一个充分条件fracpartial-dy-thetapartial-y-le-cgp的作用类似于将这个充分条件作为一个惩罚项加入到损失函数中大体上形式可以类似于lambda-fracpartial-dy-thetapartial-y---12这样的话我们平方项是非负的它会加在损失里为了让损失最小我们会希望让这个想最小那么也就是希望这个项尽可能接近0也就是里面的梯度项尽可能接近1虽然它可能是大一点可能是小一点但没有关系我们施加这个约束就是让梯度在1附近徘徊从而一样约束了梯度不会太大-当然这个损失的形式也是很多样的不局限于此比如原博客里提到的lambda-maxfracpartial-dy-thetapartial-y-1此时这个项是一个取max同样的当我们的梯度过大的时候也就是大于1取max之后取的就是我们的梯度的幅值为了让损失最小我们会让梯度的幅值变小从而达到约束的功能不过这个形式的话类似于一个单边的约束因为它相当于只约束我们的梯度幅值不要太大但是太小的情况是不会去管的而上面第一个原作者提出的形式是双边的约束太大太小都要管">总而言之，简单看一下GP的引入。为了稳定训练，我们期望距离度量也具有稳定的性质。也就是，当输入只改变了一点点的时候，输出应该也是只改变一点点。这一点可以用一个约束表示：<span class="math display">\[||D(y, \Theta)-D(y&#39;, \Theta)|| \leq
+C||y-y&#39;||^{\alpha}\]</span>这下很直观了，确实如果满足这个约束的话就能保证输出的变化不会太过剧烈。而其中的<span class="math inline">\(\alpha\)</span>，当它取为1的时候，其实就是Lipschitz约束了，或者说我们的D满足<strong>L-Lipschitz连续</strong>。而为了满足这个约束，可以考虑一个充分条件：<span class="math display">\[||\frac{\partial D(y, \Theta)}{\partial y}|| \le
+C\]</span>GP的作用类似于将这个充分条件作为一个惩罚项加入到损失函数中。大体上，形式可以类似于<span class="math display">\[\lambda (||\frac{\partial D(y, \Theta)}{\partial
+y}|| -
+1)^{2}\]</span>（这样的话，我们平方项是非负的，它会加在损失里。为了让损失最小，我们会希望让这个想最小，那么也就是希望这个项尽可能接近0，也就是里面的梯度项尽可能接近1。虽然它可能是大一点可能是小一点，但没有关系，我们施加这个约束，就是让梯度在1附近徘徊，从而一样约束了梯度不会太大）<br>当然，这个损失的形式也是很多样的，不局限于此。比如原博客里提到的：<span class="math display">\[\lambda \max(||\frac{\partial D(y,
+\Theta)}{\partial y}||,
+1)\]</span>（此时这个项是一个取max，同样的，当我们的梯度过大的时候（也就是大于1），取max之后取的就是我们的梯度的幅值，为了让损失最小，我们会让梯度的幅值变小，从而达到约束的功能。不过这个形式的话，类似于一个单边的约束，因为它相当于只约束我们的梯度幅值不要太大，但是太小的情况是不会去管的。而上面第一个，原作者提出的形式，是双边的约束，太大太小都要管）</h3>
+<h3 id="明确了gp的形式还要知道gp怎么算或者说带入哪些数据结合一下原博客的内容其实可以说明理论上我们希望对d在整个空间都能施加这个约束但是这显然不可能所以就变成我们希望可以在相当大一部分的地方对d施加约束以至于在我们的训练过程中它不会有什么影响那如果只在真实样本点和生成样本点上算可能约束范围会太小或许也是实际试了之后发现效果不好故考虑在真实样本和生成样本之间随机插值得到的地方进行约束每个iter我们都会在一个batch的生成样本和随机样本之间进行插值然后在这些地方进行约束那么训练得多了插值覆盖到的地方应该也是比较广了则约束施加的范围确实有在扩大了不过不太明白的是为什么代码实现上是只在插值的地方施加约束而不在生成样本和真实样本处施加约束还是因为上面说的效果不好吗又或者理论上这样会造成什么损失">明确了GP的形式，还要知道GP怎么算。或者说，带入哪些数据。结合一下原博客的内容，其实可以说明，理论上我们希望对D在整个空间都能施加这个约束。但是这显然不可能。所以就变成，我们希望可以在相当大一部分的地方对D施加约束，以至于在我们的训练过程中它不会有什么影响。那如果只在真实样本点和生成样本点上算，可能约束范围会太小（或许也是实际试了之后发现效果不好？）。故考虑在真实样本和生成样本之间随机插值得到的地方进行约束。每个iter，我们都会在一个batch的生成样本和随机样本之间进行插值，然后在这些地方进行约束。那么训练得多了，插值覆盖到的地方应该也是比较“广”了，则约束施加的范围确实有在扩大了（不过不太明白的是，为什么代码实现上是只在插值的地方施加约束，而不在生成样本和真实样本处施加约束。还是因为上面说的效果不好吗？又或者理论上这样会造成什么损失？）</h3>
+<h1 id="总结">总结：</h1>
+<h2 id="什么难算就可以考虑一下用神经网络拟合">什么难算，就可以考虑一下用神经网络拟合</h2>
+<h2 id="lipschitz约束感觉这个东西很漂亮啊貌似还蛮实用的可以帮助神经网络稳定">Lipschitz约束，感觉这个东西很漂亮啊，貌似还蛮实用的，可以帮助神经网络稳定</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/12/09/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84zip%E7%9A%84%E7%94%A8%E6%B3%95/" rel="prev" title="关于python中的zip的用法">
+      <i class="fa fa-chevron-left"></i> 关于python中的zip的用法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/12/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/2.%20VAE%E7%AE%80%E8%BF%B0/" rel="next" title="2. VAE简述">
+      2. VAE简述 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E4%B8%80%E4%B8%8B%E8%8B%8F%E5%89%91%E6%9E%97.-jun.-08-2017.-%E4%BA%92%E6%80%BC%E7%9A%84%E8%89%BA%E6%9C%AF%E4%BB%8E%E9%9B%B6%E7%9B%B4%E8%BE%BEwgan-gp-blog-post.-retrieved-from-httpswww.spaces.ac.cnarchives4439"><span class="nav-number">1.</span> <span class="nav-text">引用一下：苏剑林.
+(Jun. 08, 2017). 《互怼的艺术：从零直达WGAN-GP 》Blog post. Retrieved
+from https:&#x2F;&#x2F;www.spaces.ac.cn&#x2F;archives&#x2F;4439</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E8%AF%BB%E8%BF%99%E7%AF%87%E5%8D%9A%E5%AE%A2%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8Bwgan-gp%E9%87%8D%E7%82%B9%E6%98%AF%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%E5%AE%83%E5%B0%86%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E4%B9%9F%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E5%88%B0%E7%9A%84%E8%BF%99%E4%B8%AA%E6%80%9D%E6%83%B3"><span class="nav-number">1.1.</span> <span class="nav-text">通过读这篇博客，简单了解一下WGAN-GP，重点是了解一下它将距离度量也用神经网络学到的这个思想</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B%E5%8F%AF%E4%BB%A5%E8%A7%86%E4%B8%BA%E5%88%86%E5%B8%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8F%98%E6%8D%A2%E5%B0%86%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E5%83%8F%E6%9C%8D%E4%BB%8E%E7%9A%84%E5%88%86%E5%B8%83%E8%A7%86%E4%B8%BA%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E6%88%91%E4%BB%AC%E9%87%87%E6%A0%B7%E7%9A%84%E5%99%AA%E5%A3%B0%E6%9C%8D%E4%BB%8E%E7%9A%84%E5%88%86%E5%B8%83%E8%A7%86%E4%B8%BA%E8%B5%B7%E7%82%B9%E5%88%86%E5%B8%83%E5%88%99%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E8%83%BD%E6%89%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E6%98%A0%E5%B0%84%E5%8F%AF%E4%BB%A5%E8%AE%A9%E6%9C%8D%E4%BB%8E%E8%B5%B7%E7%82%B9%E5%88%86%E5%B8%83%E7%9A%84%E5%8F%98%E9%87%8F%E7%BB%8F%E8%BF%87%E6%98%A0%E5%B0%84%E5%B0%B1%E5%8F%98%E6%88%90%E6%9C%8D%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E7%9A%84%E5%8F%98%E9%87%8F%E8%BF%99%E6%A0%B7%E6%88%91%E4%BB%AC%E4%BB%8E%E8%B5%B7%E7%82%B9%E5%88%86%E5%B8%83%E9%87%8C%E9%87%87%E6%A0%B7%E4%B8%80%E4%B8%AA%E7%82%B9%E7%94%A8%E8%BF%99%E4%B8%AA%E6%98%A0%E5%B0%84%E6%93%8D%E4%BD%9C%E4%B8%80%E4%B8%8B%E5%BE%97%E5%88%B0%E7%9A%84%E5%B0%B1%E6%98%AF%E6%9C%9F%E6%9C%9B%E7%9A%84%E5%9B%BE%E5%83%8F%E4%BA%86"><span class="nav-number">2.1.</span> <span class="nav-text">生成过程可以视为分布之间的变换。将我们希望生成的图像服从的分布视为目标分布，我们采样的噪声服从的分布视为起点分布，则我们希望能找到一个映射，可以让服从起点分布的变量经过映射就变成服从目标分布的变量。这样，我们从起点分布里采样一个点，用这个映射操作一下，得到的就是期望的图像了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%B0%E9%9A%BE"><span class="nav-number">2.2.</span> <span class="nav-text">困难：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%83%B3%E4%BB%8E%E6%95%B0%E5%AD%A6%E8%A7%92%E5%BA%A6%E6%8E%A8%E5%AF%BC%E5%87%BA%E8%BF%99%E4%B8%AA%E6%98%A0%E5%B0%84%E5%87%A0%E4%B9%8E%E4%B8%8D%E5%8F%AF%E8%83%BD%E5%8D%B3%E4%BD%BF%E6%98%AF%E8%B5%B7%E7%82%B9%E5%92%8C%E9%87%8D%E7%82%B9%E5%88%86%E5%B8%83%E9%83%BD%E5%BE%88%E7%AE%80%E5%8D%95%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">如果想从数学角度推导出这个映射，几乎不可能，即使是起点和重点分布都很简单的情况下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E4%BB%A5%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E8%AE%A9%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%8A%8A%E8%BF%99%E4%B8%AA%E6%98%A0%E5%B0%84%E5%AD%A6%E5%87%BA%E6%9D%A5%E7%AE%97%E4%B8%8D%E5%87%BA%E6%9D%A5%E7%9A%84%E5%B0%B1%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B8%8D%E5%A6%A8%E8%AE%B0%E4%B8%BAgx-theta%E5%85%B6%E4%B8%ADtheta%E6%98%AF%E8%BF%99%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%BE%85%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8F%82%E6%95%B0x%E6%98%AF%E8%BE%93%E5%85%A5%E7%9A%84%E6%9C%8D%E4%BB%8E%E8%B5%B7%E7%82%B9%E5%88%86%E5%B8%83%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">所以，我们可以考虑让神经网络把这个映射学出来（算不出来的就用神经网络学）。不妨记为\(G(X, \theta)\)，其中\(\theta\)是这个神经网络待学习的参数，X是输入的服从起点分布的变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.3.</span> <span class="nav-text">如何学习：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E6%88%91%E4%BB%AC%E6%83%B3%E5%AD%A6%E5%87%BA%E8%BF%99%E4%B8%AA%E6%98%A0%E5%B0%84%E6%9D%A5%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%AD%A6%E5%87%BA%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9D%A5%E9%9C%80%E8%A6%81%E6%89%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E7%9B%AE%E6%A0%87%E6%88%91%E4%BB%AC%E6%89%8B%E5%A4%B4%E4%B8%80%E8%88%AC%E4%BC%9A%E6%9C%89%E7%9A%84%E6%98%AF%E6%88%91%E4%BB%AC%E6%9C%9F%E6%9C%9B%E7%94%9F%E6%88%90%E7%9A%84%E9%82%A3%E7%A7%8D%E5%9B%BE%E7%89%87%E7%9A%84%E4%B8%80%E6%89%B9%E6%95%B0%E6%8D%AE%E6%AF%94%E5%A6%82%E6%88%91%E4%BB%AC%E6%83%B3%E8%AE%A9%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90%E4%BA%BA%E8%84%B8%E5%9B%BE%E5%83%8F%E5%8F%AF%E8%83%BD%E6%88%91%E4%BB%AC%E6%89%8B%E5%A4%B4%E5%B0%B1%E6%9C%89%E4%B8%80%E6%89%B9%E4%BA%BA%E8%84%B8%E5%9B%BE%E5%83%8F"><span class="nav-number">2.3.1.</span> <span class="nav-text">现在我们想学出这个映射来（也就是学出一个神经网络来）。需要找到一个目标。我们手头一般会有的，是我们期望生成的那种图片的一批数据（比如，我们想让模型生成人脸图像，可能我们手头就有一批人脸图像）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E7%9A%84%E7%9B%AE%E6%A0%87%E6%98%AF%E8%AE%A9%E6%9C%8D%E4%BB%8E%E8%B5%B7%E7%82%B9%E5%8F%98%E6%8D%A2%E7%9A%84%E5%8F%98%E9%87%8F%E7%BB%8F%E8%BF%87%E6%98%A0%E5%B0%84%E5%BE%97%E5%88%B0%E7%9A%84%E6%98%AF%E6%9C%8D%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%8F%98%E6%8D%A2%E7%9A%84%E5%8F%98%E9%87%8F%E5%88%99%E6%88%91%E4%BB%AC%E5%BA%94%E8%AF%A5%E6%9C%89%E4%B8%80%E6%AD%A5%E8%A1%A1%E9%87%8F%E5%88%86%E5%B8%83%E5%B7%AE%E5%BC%82%E7%9A%84%E6%93%8D%E4%BD%9C%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E8%A1%A1%E9%87%8F%E7%BB%8F%E8%BF%87%E6%98%A0%E5%B0%84%E5%90%8E%E6%88%91%E4%BB%AC%E7%AE%97%E5%87%BA%E6%9D%A5%E7%9A%84%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E5%92%8C%E5%AE%9E%E9%99%85%E7%9A%84%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82%E8%BF%99%E4%B8%AA%E5%B7%AE%E5%BC%82%E8%B6%8A%E5%B0%8F%E8%A1%A8%E7%A4%BA%E6%88%91%E4%BB%AC%E6%89%BE%E5%88%B0%E7%9A%84%E8%BF%99%E4%B8%AA%E6%98%A0%E5%B0%84%E6%95%88%E6%9E%9C%E8%B6%8A%E5%A5%BD%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%94%9F%E6%88%90%E6%95%88%E6%9E%9C%E8%B6%8A%E5%A5%BD"><span class="nav-number">2.3.2.</span> <span class="nav-text">我们的目标是让服从起点变换的变量经过映射，得到的是服从目标变换的变量。则，我们应该有一步衡量分布差异的操作。也就是，我们需要衡量经过映射后，我们算出来的目标分布和实际的目标分布之间的差异。这个差异越小，表示我们找到的这个映射效果越好，也就是生成效果越好</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%B7%AE%E5%BC%82%E9%80%9A%E5%B8%B8%E6%9C%89kl%E6%95%A3%E5%BA%A6js%E6%95%A3%E5%BA%A6%E7%AD%89%E8%BF%98%E6%9C%89%E5%85%B6%E5%AE%83%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8C%87%E6%A0%87%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%BD%86%E6%98%AF%E9%83%BD%E5%9B%B0%E4%BA%8E%E6%88%91%E4%BB%AC%E6%B2%A1%E6%9C%89%E5%AE%9E%E9%99%85%E7%9A%84%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E7%9A%84%E6%95%B0%E5%AD%A6%E8%A1%A8%E7%A4%BA%E6%89%80%E4%BB%A5%E6%98%BE%E7%84%B6%E6%83%B3%E7%9B%B4%E6%8E%A5%E5%A5%97%E5%85%AC%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97%E9%83%BD%E4%B8%8D%E8%A1%8C%E9%82%A3%E5%A6%82%E6%9E%9C%E8%BF%98%E8%A6%81%E7%94%A8%E8%BF%99%E5%A5%97%E6%96%B9%E6%B3%95%E7%9A%84%E8%AF%9D%E5%B0%B1%E9%9C%80%E8%A6%81%E5%AF%B9%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E8%BF%9B%E8%A1%8C%E4%B8%80%E4%B8%AA%E4%BC%B0%E8%AE%A1%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%94%A8%E6%88%91%E4%BB%AC%E6%89%8B%E5%A4%B4%E6%9C%89%E7%9A%84%E9%82%A3%E4%B8%80%E6%89%B9%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E4%BC%B0%E8%AE%A1%E7%9C%9F%E5%AE%9E%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E6%AF%94%E5%A6%82%E7%94%A8%E9%A2%91%E7%8E%87%E4%BC%B0%E8%AE%A1%E6%A6%82%E7%8E%87"><span class="nav-number">2.3.3.</span> <span class="nav-text">计算分布差异，通常有KL散度，JS散度等，还有其它的一些指标可以用。但是都困于我们没有实际的目标分布的数学表示，所以显然想直接套公式进行数值计算都不行。那如果还要用这套方法的话，就需要对真实的目标分布进行一个估计。也就是，用我们手头有的那一批训练数据，估计真实目标分布（比如用频率估计概率）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%86%E6%98%AF%E5%AE%9E%E9%99%85%E7%9A%84%E5%9B%BE%E5%83%8F%E9%83%BD%E6%98%AF%E9%AB%98%E7%BB%B4%E5%8F%98%E9%87%8F%E8%80%8C%E5%9C%A8%E6%AD%A4%E5%9F%BA%E7%A1%80%E4%B8%8A%E7%94%A8%E9%A2%91%E7%8E%87%E4%BC%B0%E8%AE%A1%E6%A6%82%E7%8E%87%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F%E6%9B%B4%E6%98%AF%E5%A4%AA%E5%A4%A7%E6%97%A0%E6%B3%95%E6%89%BF%E5%8F%97%E6%89%80%E4%BB%A5%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%96%B9%E6%B3%95%E5%85%B6%E5%AE%9E%E6%98%AF%E8%A1%8C%E4%B8%8D%E9%80%9A%E7%9A%84%E6%95%85%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B8%80%E4%B8%AA%E8%B7%9D%E7%A6%BBly_i_i1m-z_i_i1n-thetal%E8%A1%A8%E7%A4%BA%E6%88%91%E4%BB%AC%E8%A6%81%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BA%A6%E9%87%8F%E8%B7%9D%E7%A6%BB%E7%9A%84%E5%87%BD%E6%95%B0theta%E8%A1%A8%E7%A4%BA%E8%BF%99%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A6%81%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8F%82%E6%95%B0y_i_i1m%E8%A1%A8%E7%A4%BA%E6%88%91%E4%BB%AC%E8%87%AA%E5%B7%B1%E7%94%9F%E6%88%90%E7%9A%84%E4%B8%80%E6%89%B9%E6%88%91%E4%BB%AC%E8%AE%A4%E4%B8%BA%E6%9C%8D%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E7%9A%84%E6%95%B0%E6%8D%AEz_i_i1n%E8%A1%A8%E7%A4%BA%E5%AE%9E%E9%99%85%E7%9A%84%E4%B8%80%E6%89%B9%E6%9C%8D%E4%BB%8E%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E7%9A%84%E6%95%B0%E6%8D%AE%E6%88%96%E8%80%85%E8%AF%B4%E6%98%AF%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E5%90%A7%E4%B9%8B%E6%89%80%E4%BB%A5%E7%94%A8%E9%9B%86%E5%90%88%E7%9A%84%E6%96%B9%E5%BC%8F%E8%A1%A8%E7%A4%BA%E6%95%B0%E6%8D%AE%E6%98%AF%E5%9B%A0%E4%B8%BA%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E7%9A%84%E6%98%AF%E7%94%A8%E4%B8%80%E6%89%B9%E6%95%B0%E6%8D%AE%E4%BC%B0%E8%AE%A1%E7%9B%B8%E5%BA%94%E7%9A%84%E5%88%86%E5%B8%83%E7%94%A8%E4%B8%80%E6%89%B9%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E5%87%BA%E6%9D%A5%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%B0%E8%AE%A1%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E6%8D%AE%E6%89%80%E6%9C%8D%E4%BB%8E%E7%9A%84%E5%88%86%E5%B8%83%E7%94%A8%E4%B8%80%E6%89%B9%E7%9C%9F%E5%AE%9E%E6%95%B0%E6%8D%AE%E4%BC%B0%E8%AE%A1%E7%9C%9F%E5%AE%9E%E7%9A%84%E7%9B%AE%E6%A0%87%E5%88%86%E5%B8%83%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E5%9C%A8l%E5%AD%A6%E5%BE%97%E6%AF%94%E8%BE%83%E5%A5%BD%E8%83%BD%E7%A1%AE%E5%AE%9E%E5%9C%B0%E5%88%A4%E5%88%AB%E5%88%86%E5%B8%83%E8%B7%9D%E7%A6%BB%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E8%BF%99%E4%B8%A4%E4%B8%AA%E5%88%86%E5%B8%83%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%8F%AF%E4%BB%A5%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%B0%8F%E8%BF%99%E6%A0%B7%E5%B0%B1%E8%A1%A8%E6%98%8E%E6%88%91%E4%BB%AC%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%98%E4%B8%8D%E9%94%99"><span class="nav-number">2.3.4.</span> <span class="nav-text">但是，实际的图像都是高维变量，而在此基础上，用频率估计概率的计算量更是太大，无法承受。所以上面的方法其实是行不通的。故，我们可以考虑用神经网络学一个距离：\[L(\{y_i\}_{i&#x3D;1}^{M},\ \{z_{i}\}_{i&#x3D;1}^{N},\
+\Theta)\]L表示我们要用神经网络学的一个度量距离的函数。\(\Theta\)表示这个神经网络的要学习的参数。\(\{y_{i}\}_{i&#x3D;1}^{M}\)表示我们自己生成的一批“我们认为服从目标分布”的数据，\(\{z_{i}\}_{i&#x3D;1}^{N}\)表示实际的一批服从目标分布的数据（或者说是训练数据吧）。之所以用集合的方式表示数据，是因为我们希望的是用一批数据估计相应的分布：用一批我们生成出来的数据估计我们生成的数据所服从的分布，用一批真实数据估计真实的目标分布。我们希望，在L学得比较好，能确实地判别分布距离的情况下，这两个分布的距离可以尽可能小。这样就表明我们的生成还不错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%8B%E5%90%8E%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%AF%B9%E8%BF%99%E4%B8%AA%E8%B7%9D%E7%A6%BB%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%81%9A%E8%BF%9B%E4%B8%80%E6%AD%A5%E7%9A%84%E5%8C%96%E7%AE%80%E6%AD%A3%E5%A6%82%E5%8E%9F%E5%8D%9A%E5%AE%A2%E6%89%80%E8%A8%80%E5%AF%B9%E4%BA%8E%E4%B8%80%E4%B8%AA%E7%89%B9%E5%AE%9A%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%9D%A5%E8%AF%B4z_i_i1n%E4%B8%8D%E6%98%AF%E5%8F%98%E9%87%8F%E6%98%AF%E7%BB%99%E5%AE%9A%E7%9A%84%E4%BB%A5%E5%8F%8A%E8%BF%99%E4%B8%AA%E8%B7%9D%E7%A6%BB%E5%BA%94%E8%AF%A5%E5%92%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E5%87%BA%E7%8E%B0%E9%A1%BA%E5%BA%8F%E6%97%A0%E5%85%B3%E5%9B%A0%E4%B8%BA%E5%AE%83%E8%A1%A1%E9%87%8F%E7%9A%84%E6%98%AF%E5%88%86%E5%B8%83%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%88%86%E5%B8%83%E5%A6%82%E4%BD%95%E6%98%BE%E7%84%B6%E5%92%8C%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E5%87%BA%E7%8E%B0%E6%98%AF%E6%97%A0%E5%85%B3%E7%9A%84%E5%8F%AA%E5%92%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E9%9B%86%E5%90%88%E6%9C%89%E5%85%B3%E6%9C%80%E7%BB%88%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%BE%97%E5%88%B0%E7%9A%84%E4%B8%80%E7%A7%8D%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%AF%94%E8%BE%83%E7%AE%80%E5%8D%95%E7%9A%84%E5%BD%A2%E5%BC%8F%E6%98%AFlfrac1msum_i1mdy_i-theta%E6%AD%A4%E6%97%B6%E6%88%91%E4%BB%AC%E7%9A%84%E7%BD%91%E7%BB%9C%E5%BD%A2%E5%BC%8F%E5%B0%B1%E6%98%AF%E8%BE%93%E5%85%A5%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%80%E6%89%B9%E6%A0%B7%E6%9C%AC%E6%95%B0%E6%8D%AE%E8%BE%93%E5%87%BA%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%80%E6%89%B9%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.3.5.</span> <span class="nav-text">之后我们可以对这个距离的形式做进一步的化简，正如原博客所言：对于一个特定的任务来说，\(\{z_{i}\}_{i&#x3D;1}^{N}\)不是变量，是给定的；以及这个距离应该和数据的出现顺序无关，因为它衡量的是分布的距离，分布如何显然和数据怎么出现是无关的，只和数据的集合有关。最终我们可以得到的一种看起来比较简单的形式是：\[L&#x3D;\frac{1}{M}\sum_{i&#x3D;1}^{M}D(y_{i},
+\Theta)\]此时我们的网络形式就是，输入是一个&#x2F;一批样本数据，输出是一个&#x2F;一批距离</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%BE%85%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%BD%91%E7%BB%9C"><span class="nav-number">2.4.</span> <span class="nav-text">两个待学习的网络：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E6%88%91%E4%BB%AC%E6%98%AF%E6%9C%89%E4%B8%80%E4%B8%AA%E6%98%A0%E5%B0%84g%E5%92%8C%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8Fl%E8%A6%81%E5%AD%A6%E4%B9%9F%E5%B0%B1%E6%98%AF%E6%9C%89%E4%B8%A4%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%AD%A6%E4%B9%A0%E4%BC%98%E5%8C%96%E5%91%A2"><span class="nav-number">2.4.1.</span> <span class="nav-text">现在我们是有一个映射G和一个分布距离度量L要学。也就是有两个神经网络。应该怎么学习优化呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%A6%82%E4%B8%8A%E6%89%80%E8%BF%B0%E6%88%91%E4%BB%AC%E5%89%8D%E9%9D%A2%E6%8F%90%E5%88%B0%E5%AF%B9%E4%BA%8E%E6%98%A0%E5%B0%84gxtheta%E6%88%91%E4%BB%AC%E6%98%AF%E6%9C%9F%E6%9C%9B%E5%9C%A8%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E5%B7%B2%E7%BB%8F%E5%AD%A6%E5%A5%BD%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E8%AE%A9%E7%BB%8F%E8%BF%87%E6%98%A0%E5%B0%84%E5%BE%97%E5%88%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%BA%A6%E9%87%8F%E4%B8%8B%E7%9A%84%E6%8D%9F%E5%A4%B1%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%B0%8F%E4%BD%86%E6%98%AF%E4%B8%80%E5%BC%80%E5%A7%8B%E6%88%91%E4%BB%AC%E7%9A%84%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E4%B9%9F%E6%B2%A1%E4%BB%80%E4%B9%88%E7%94%A8%E9%9C%80%E8%A6%81%E5%AD%A6%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E5%9C%A8%E4%B8%80%E4%B8%AA%E7%89%B9%E5%AE%9A%E7%9A%84%E4%BB%BB%E5%8A%A1%E4%B8%8B%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%98%AF%E4%B8%80%E6%89%B9%E6%95%B0%E6%8D%AE%E5%AF%B9%E5%BA%94%E7%9A%84%E5%88%86%E5%B8%83%E5%92%8C%E6%88%91%E4%BB%AC%E7%9A%84%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E5%B8%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82%E9%82%A3%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%8A%8A%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E5%B8%A6%E5%85%A5%E5%88%B0l%E9%87%8C%E9%9D%A2%E7%90%86%E8%AE%BA%E4%B8%8A%E8%AE%B2%E8%BF%99%E4%B8%AA%E8%BE%93%E5%87%BA%E5%BA%94%E8%AF%A5%E6%98%AF0%E5%A6%82%E6%9E%9C%E6%8A%8A%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B8%A6%E5%85%A5%E5%88%99%E8%BE%93%E5%87%BA%E5%BA%94%E8%AF%A5%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%A4%A7%E8%BF%99%E5%B0%B1%E6%89%BE%E5%88%B0%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87%E4%BA%86-beginalign-theta-argmax_theta-l_1-argmax_theta-frac1bsum_i1bdy_itheta-dz_itheta-endalign-%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E5%BC%8F%E5%AD%90%E9%87%8C%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E8%AE%A9%E6%95%B4%E4%BD%93%E5%B0%BD%E9%87%8F%E5%A4%A7%E5%B0%B1%E4%BC%9A%E5%B8%8C%E6%9C%9B%E6%88%91%E4%BB%AC%E5%88%A4%E5%88%AB%E5%99%A8%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8Fd%E8%83%BD%E5%B0%BD%E9%87%8F%E5%88%A4%E6%96%AD%E5%87%BA%E6%88%91%E4%BB%AC%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E6%8D%AE%E5%92%8C%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E5%B8%83%E5%B7%AE%E5%BC%82%E5%A4%A7%E8%80%8C%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E8%87%AA%E5%B7%B1%E5%92%8C%E8%87%AA%E5%B7%B1%E7%9A%84%E5%88%86%E5%B8%83%E5%B7%AE%E5%BC%82%E5%B0%8F"><span class="nav-number">2.4.2.</span> <span class="nav-text">正如上所述，我们前面提到，对于映射\(G(X,\theta)\)，我们是期望在距离度量已经学好的情况下，让经过映射得到的数据在度量下的损失尽可能小；但是一开始我们的距离度量也没什么用，需要学。距离度量在一个特定的任务下表示的是一批数据对应的分布和我们的训练数据的分布之间的差异。那如果我们把训练数据带入到L里面，理论上讲这个输出应该是0；如果把我们生成的数据带入，则输出应该尽可能大。这就找到优化目标了：\[\begin{align*}
+    \Theta &amp;&#x3D; \arg\max_{\Theta} L_{1} \\
+           &amp;&#x3D; \arg\max_{\Theta}
+\frac{1}{B}\sum_{i&#x3D;1}^{B}D(y_{i},\Theta)-D(z_{i},\Theta) \\
+\end{align*}
+\]可以看到，上面的优化式子里，我们希望让整体尽量大，就会希望我们判别器&#x2F;距离度量D能尽量判断出我们生成的数据和训练数据的分布差异大，而训练数据自己和自己的分布差异小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%B3%E4%BA%8E%E6%98%A0%E5%B0%84g%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%88%99%E6%98%AF%E8%A6%81%E4%BC%98%E5%8C%96%E8%BF%99%E4%B8%AA%E5%BC%8F%E5%AD%90thetaargmin_thetafrac1b-sum_i1b-dgx_ithetatheta%E8%90%BD%E5%AE%9E%E5%88%B0%E4%BB%A3%E7%A0%81%E4%B8%8A%E7%9A%84%E8%AF%9D%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E6%AF%8F%E6%AC%A1%E8%AE%AD%E7%BB%83%E9%83%BD%E6%98%AFd%E7%BD%91%E7%BB%9C%E5%85%88%E8%AE%AD%E7%BB%835%E4%B8%AAiter%E5%86%8D%E6%98%AFg%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%831%E4%B8%AAiter%E4%BA%8C%E8%80%85%E4%B8%8D%E6%96%AD%E6%8F%90%E9%AB%98%E5%B0%B1%E6%98%AF%E6%98%BE%E5%BC%8F%E7%9A%84%E5%AF%B9%E6%8A%97%E8%BF%87%E7%A8%8B%E8%80%8C%E5%AF%B9d%E7%BD%91%E7%BB%9C%E6%9B%B4%E5%8A%A0%E5%81%8F%E9%87%8D%E5%88%99%E6%98%AF%E4%B8%80%E7%A7%8D%E7%B1%BB%E4%BC%BC%E4%BA%8E%E8%AE%AD%E7%BB%83%E7%A8%B3%E5%AE%9A%E7%9A%84%E6%8A%80%E5%B7%A7%E5%90%8C%E6%97%B6%E4%B9%9F%E6%98%AF%E5%9B%A0%E4%B8%BAg%E7%9A%84%E4%BC%98%E5%8C%96%E6%98%AF%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%80%E7%BB%88%E7%9B%AE%E6%A0%87%E6%88%91%E4%BB%AC%E6%AF%95%E7%AB%9F%E8%A6%81%E7%9A%84%E6%98%AFgd%E5%8F%AA%E6%98%AF%E4%B8%80%E4%B8%AA%E5%B7%A5%E5%85%B7%E5%9B%A0%E4%B8%BA%E6%B2%A1%E5%8A%9E%E6%B3%95%E6%AD%A3%E5%B8%B8%E7%AE%97%E5%87%BA%E8%B7%9D%E7%A6%BB%E8%80%8C%E5%88%9B%E9%80%A0%E7%9A%84%E8%80%8Cg%E7%9A%84%E4%BC%98%E5%8C%96%E5%8F%88%E5%BE%88%E4%BE%9D%E8%B5%96d%E7%9A%84%E6%8C%87%E5%AF%BC"><span class="nav-number">2.4.3.</span> <span class="nav-text">至于映射G的学习，则是要优化这个式子：\[\theta&#x3D;\arg\min_{\theta}\frac{1}{B}
+\sum_{i&#x3D;1}^{B}
+D(G(x_{i},\theta),\Theta)\]落实到代码上的话，我们可以看到，每次训练都是D网络先训练5个iter，再是G网络训练1个iter。二者不断提高，就是显式的对抗过程。而对D网络更加偏重，则是一种类似于训练稳定的技巧，同时也是因为G的优化是我们的最终目标（我们毕竟要的是G，D只是一个工具，因为没办法正常算出距离而创造的），而G的优化又很依赖D的指导</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gp%E7%9A%84%E9%83%A8%E5%88%86"><span class="nav-number">2.5.</span> <span class="nav-text">GP的部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gan%E7%9A%84%E9%83%A8%E5%88%86%E5%B7%AE%E4%B8%8D%E5%A4%9A%E5%B0%B1%E6%98%AF%E8%BF%99%E6%A0%B7%E4%BA%86%E6%A0%87%E9%A2%98%E9%87%8C%E7%9A%84gp%E9%83%A8%E5%88%86%E6%8C%87%E7%9A%84%E6%98%AFgradient-penalty%E4%B8%BB%E8%A6%81%E6%98%AF%E7%94%A8%E6%9D%A5%E7%BA%A6%E6%9D%9Floss%E9%98%B2%E6%AD%A2%E5%AE%83%E8%B7%91%E5%88%B0%E6%97%A0%E7%A9%B7%E8%BF%9C%E5%8E%BB%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%AF%B4%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E6%98%AF%E4%B8%80%E4%B8%AA%E7%A8%B3%E5%AE%9A%E8%AE%AD%E7%BB%83%E7%9A%84%E6%8A%80%E5%B7%A7%E8%AF%9D%E8%99%BD%E5%A6%82%E6%AD%A4%E6%88%91%E6%84%9F%E8%A7%89%E8%BF%99%E4%B8%AA%E5%8A%A0%E8%BF%9B%E6%9D%A5%E7%9A%84gp%E7%A1%AE%E5%AE%9E%E5%8F%AF%E4%BB%A5%E8%AE%A9%E8%AE%AD%E7%BB%83%E6%9B%B4%E7%A8%B3%E5%AE%9A%E4%BD%86%E6%98%AF%E8%AF%B4%E9%98%B2%E6%AD%A2loss%E6%97%A0%E7%A9%B7%E5%A4%A7%E8%BF%99%E4%B8%80%E7%82%B9%E5%A5%BD%E5%83%8F%E5%B9%B6%E4%B8%8D%E7%9B%B4%E8%A7%82"><span class="nav-number">2.5.1.</span> <span class="nav-text">GAN的部分差不多就是这样了。标题里的GP部分，指的是Gradient
+Penalty，主要是用来约束loss，防止它跑到无穷远去。也就是说可以认为是一个稳定训练的技巧（话虽如此，我感觉这个加进来的GP确实可以让训练更稳定，但是说防止loss无穷大，这一点好像并不直观……）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%9F%E4%B8%8D%E6%98%AF%E5%BE%88%E6%B8%85%E6%A5%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E4%BA%BA%E6%83%B3%E5%88%B0%E8%BF%99%E4%B8%80%E7%82%B9%E5%95%8A%E6%98%AF%E5%9B%A0%E4%B8%BA%E6%B2%A1%E5%8A%A0%E7%9A%84%E6%97%B6%E5%80%99%E8%A7%82%E5%AF%9F%E5%88%B0loss%E5%87%BA%E7%8E%B0%E4%B8%80%E4%BA%9B%E5%BC%82%E5%B8%B8%E4%BA%86%E5%90%97"><span class="nav-number">2.5.2.</span> <span class="nav-text">（也不是很清楚为什么会有人想到这一点啊，是因为没加的时候观察到loss出现一些异常了吗？……）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E8%80%8C%E8%A8%80%E4%B9%8B%E7%AE%80%E5%8D%95%E7%9C%8B%E4%B8%80%E4%B8%8Bgp%E7%9A%84%E5%BC%95%E5%85%A5%E4%B8%BA%E4%BA%86%E7%A8%B3%E5%AE%9A%E8%AE%AD%E7%BB%83%E6%88%91%E4%BB%AC%E6%9C%9F%E6%9C%9B%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F%E4%B9%9F%E5%85%B7%E6%9C%89%E7%A8%B3%E5%AE%9A%E7%9A%84%E6%80%A7%E8%B4%A8%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%BD%93%E8%BE%93%E5%85%A5%E5%8F%AA%E6%94%B9%E5%8F%98%E4%BA%86%E4%B8%80%E7%82%B9%E7%82%B9%E7%9A%84%E6%97%B6%E5%80%99%E8%BE%93%E5%87%BA%E5%BA%94%E8%AF%A5%E4%B9%9F%E6%98%AF%E5%8F%AA%E6%94%B9%E5%8F%98%E4%B8%80%E7%82%B9%E7%82%B9%E8%BF%99%E4%B8%80%E7%82%B9%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%80%E4%B8%AA%E7%BA%A6%E6%9D%9F%E8%A1%A8%E7%A4%BAdy-theta-dy-theta-leq-cy-yalpha%E8%BF%99%E4%B8%8B%E5%BE%88%E7%9B%B4%E8%A7%82%E4%BA%86%E7%A1%AE%E5%AE%9E%E5%A6%82%E6%9E%9C%E6%BB%A1%E8%B6%B3%E8%BF%99%E4%B8%AA%E7%BA%A6%E6%9D%9F%E7%9A%84%E8%AF%9D%E5%B0%B1%E8%83%BD%E4%BF%9D%E8%AF%81%E8%BE%93%E5%87%BA%E7%9A%84%E5%8F%98%E5%8C%96%E4%B8%8D%E4%BC%9A%E5%A4%AA%E8%BF%87%E5%89%A7%E7%83%88%E8%80%8C%E5%85%B6%E4%B8%AD%E7%9A%84alpha%E5%BD%93%E5%AE%83%E5%8F%96%E4%B8%BA1%E7%9A%84%E6%97%B6%E5%80%99%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AFlipschitz%E7%BA%A6%E6%9D%9F%E4%BA%86%E6%88%96%E8%80%85%E8%AF%B4%E6%88%91%E4%BB%AC%E7%9A%84d%E6%BB%A1%E8%B6%B3l-lipschitz%E8%BF%9E%E7%BB%AD%E8%80%8C%E4%B8%BA%E4%BA%86%E6%BB%A1%E8%B6%B3%E8%BF%99%E4%B8%AA%E7%BA%A6%E6%9D%9F%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E4%B8%80%E4%B8%AA%E5%85%85%E5%88%86%E6%9D%A1%E4%BB%B6fracpartial-dy-thetapartial-y-le-cgp%E7%9A%84%E4%BD%9C%E7%94%A8%E7%B1%BB%E4%BC%BC%E4%BA%8E%E5%B0%86%E8%BF%99%E4%B8%AA%E5%85%85%E5%88%86%E6%9D%A1%E4%BB%B6%E4%BD%9C%E4%B8%BA%E4%B8%80%E4%B8%AA%E6%83%A9%E7%BD%9A%E9%A1%B9%E5%8A%A0%E5%85%A5%E5%88%B0%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E4%B8%AD%E5%A4%A7%E4%BD%93%E4%B8%8A%E5%BD%A2%E5%BC%8F%E5%8F%AF%E4%BB%A5%E7%B1%BB%E4%BC%BC%E4%BA%8Elambda-fracpartial-dy-thetapartial-y---12%E8%BF%99%E6%A0%B7%E7%9A%84%E8%AF%9D%E6%88%91%E4%BB%AC%E5%B9%B3%E6%96%B9%E9%A1%B9%E6%98%AF%E9%9D%9E%E8%B4%9F%E7%9A%84%E5%AE%83%E4%BC%9A%E5%8A%A0%E5%9C%A8%E6%8D%9F%E5%A4%B1%E9%87%8C%E4%B8%BA%E4%BA%86%E8%AE%A9%E6%8D%9F%E5%A4%B1%E6%9C%80%E5%B0%8F%E6%88%91%E4%BB%AC%E4%BC%9A%E5%B8%8C%E6%9C%9B%E8%AE%A9%E8%BF%99%E4%B8%AA%E6%83%B3%E6%9C%80%E5%B0%8F%E9%82%A3%E4%B9%88%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%B8%8C%E6%9C%9B%E8%BF%99%E4%B8%AA%E9%A1%B9%E5%B0%BD%E5%8F%AF%E8%83%BD%E6%8E%A5%E8%BF%910%E4%B9%9F%E5%B0%B1%E6%98%AF%E9%87%8C%E9%9D%A2%E7%9A%84%E6%A2%AF%E5%BA%A6%E9%A1%B9%E5%B0%BD%E5%8F%AF%E8%83%BD%E6%8E%A5%E8%BF%911%E8%99%BD%E7%84%B6%E5%AE%83%E5%8F%AF%E8%83%BD%E6%98%AF%E5%A4%A7%E4%B8%80%E7%82%B9%E5%8F%AF%E8%83%BD%E6%98%AF%E5%B0%8F%E4%B8%80%E7%82%B9%E4%BD%86%E6%B2%A1%E6%9C%89%E5%85%B3%E7%B3%BB%E6%88%91%E4%BB%AC%E6%96%BD%E5%8A%A0%E8%BF%99%E4%B8%AA%E7%BA%A6%E6%9D%9F%E5%B0%B1%E6%98%AF%E8%AE%A9%E6%A2%AF%E5%BA%A6%E5%9C%A81%E9%99%84%E8%BF%91%E5%BE%98%E5%BE%8A%E4%BB%8E%E8%80%8C%E4%B8%80%E6%A0%B7%E7%BA%A6%E6%9D%9F%E4%BA%86%E6%A2%AF%E5%BA%A6%E4%B8%8D%E4%BC%9A%E5%A4%AA%E5%A4%A7-%E5%BD%93%E7%84%B6%E8%BF%99%E4%B8%AA%E6%8D%9F%E5%A4%B1%E7%9A%84%E5%BD%A2%E5%BC%8F%E4%B9%9F%E6%98%AF%E5%BE%88%E5%A4%9A%E6%A0%B7%E7%9A%84%E4%B8%8D%E5%B1%80%E9%99%90%E4%BA%8E%E6%AD%A4%E6%AF%94%E5%A6%82%E5%8E%9F%E5%8D%9A%E5%AE%A2%E9%87%8C%E6%8F%90%E5%88%B0%E7%9A%84lambda-maxfracpartial-dy-thetapartial-y-1%E6%AD%A4%E6%97%B6%E8%BF%99%E4%B8%AA%E9%A1%B9%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8F%96max%E5%90%8C%E6%A0%B7%E7%9A%84%E5%BD%93%E6%88%91%E4%BB%AC%E7%9A%84%E6%A2%AF%E5%BA%A6%E8%BF%87%E5%A4%A7%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%A4%A7%E4%BA%8E1%E5%8F%96max%E4%B9%8B%E5%90%8E%E5%8F%96%E7%9A%84%E5%B0%B1%E6%98%AF%E6%88%91%E4%BB%AC%E7%9A%84%E6%A2%AF%E5%BA%A6%E7%9A%84%E5%B9%85%E5%80%BC%E4%B8%BA%E4%BA%86%E8%AE%A9%E6%8D%9F%E5%A4%B1%E6%9C%80%E5%B0%8F%E6%88%91%E4%BB%AC%E4%BC%9A%E8%AE%A9%E6%A2%AF%E5%BA%A6%E7%9A%84%E5%B9%85%E5%80%BC%E5%8F%98%E5%B0%8F%E4%BB%8E%E8%80%8C%E8%BE%BE%E5%88%B0%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%8A%9F%E8%83%BD%E4%B8%8D%E8%BF%87%E8%BF%99%E4%B8%AA%E5%BD%A2%E5%BC%8F%E7%9A%84%E8%AF%9D%E7%B1%BB%E4%BC%BC%E4%BA%8E%E4%B8%80%E4%B8%AA%E5%8D%95%E8%BE%B9%E7%9A%84%E7%BA%A6%E6%9D%9F%E5%9B%A0%E4%B8%BA%E5%AE%83%E7%9B%B8%E5%BD%93%E4%BA%8E%E5%8F%AA%E7%BA%A6%E6%9D%9F%E6%88%91%E4%BB%AC%E7%9A%84%E6%A2%AF%E5%BA%A6%E5%B9%85%E5%80%BC%E4%B8%8D%E8%A6%81%E5%A4%AA%E5%A4%A7%E4%BD%86%E6%98%AF%E5%A4%AA%E5%B0%8F%E7%9A%84%E6%83%85%E5%86%B5%E6%98%AF%E4%B8%8D%E4%BC%9A%E5%8E%BB%E7%AE%A1%E7%9A%84%E8%80%8C%E4%B8%8A%E9%9D%A2%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8E%9F%E4%BD%9C%E8%80%85%E6%8F%90%E5%87%BA%E7%9A%84%E5%BD%A2%E5%BC%8F%E6%98%AF%E5%8F%8C%E8%BE%B9%E7%9A%84%E7%BA%A6%E6%9D%9F%E5%A4%AA%E5%A4%A7%E5%A4%AA%E5%B0%8F%E9%83%BD%E8%A6%81%E7%AE%A1"><span class="nav-number">2.5.3.</span> <span class="nav-text">总而言之，简单看一下GP的引入。为了稳定训练，我们期望距离度量也具有稳定的性质。也就是，当输入只改变了一点点的时候，输出应该也是只改变一点点。这一点可以用一个约束表示：\[||D(y, \Theta)-D(y&#39;, \Theta)|| \leq
+C||y-y&#39;||^{\alpha}\]这下很直观了，确实如果满足这个约束的话就能保证输出的变化不会太过剧烈。而其中的\(\alpha\)，当它取为1的时候，其实就是Lipschitz约束了，或者说我们的D满足L-Lipschitz连续。而为了满足这个约束，可以考虑一个充分条件：\[||\frac{\partial D(y, \Theta)}{\partial y}|| \le
+C\]GP的作用类似于将这个充分条件作为一个惩罚项加入到损失函数中。大体上，形式可以类似于\[\lambda (||\frac{\partial D(y, \Theta)}{\partial
+y}|| -
+1)^{2}\]（这样的话，我们平方项是非负的，它会加在损失里。为了让损失最小，我们会希望让这个想最小，那么也就是希望这个项尽可能接近0，也就是里面的梯度项尽可能接近1。虽然它可能是大一点可能是小一点，但没有关系，我们施加这个约束，就是让梯度在1附近徘徊，从而一样约束了梯度不会太大）当然，这个损失的形式也是很多样的，不局限于此。比如原博客里提到的：\[\lambda \max(||\frac{\partial D(y,
+\Theta)}{\partial y}||,
+1)\]（此时这个项是一个取max，同样的，当我们的梯度过大的时候（也就是大于1），取max之后取的就是我们的梯度的幅值，为了让损失最小，我们会让梯度的幅值变小，从而达到约束的功能。不过这个形式的话，类似于一个单边的约束，因为它相当于只约束我们的梯度幅值不要太大，但是太小的情况是不会去管的。而上面第一个，原作者提出的形式，是双边的约束，太大太小都要管）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%8E%E7%A1%AE%E4%BA%86gp%E7%9A%84%E5%BD%A2%E5%BC%8F%E8%BF%98%E8%A6%81%E7%9F%A5%E9%81%93gp%E6%80%8E%E4%B9%88%E7%AE%97%E6%88%96%E8%80%85%E8%AF%B4%E5%B8%A6%E5%85%A5%E5%93%AA%E4%BA%9B%E6%95%B0%E6%8D%AE%E7%BB%93%E5%90%88%E4%B8%80%E4%B8%8B%E5%8E%9F%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%86%85%E5%AE%B9%E5%85%B6%E5%AE%9E%E5%8F%AF%E4%BB%A5%E8%AF%B4%E6%98%8E%E7%90%86%E8%AE%BA%E4%B8%8A%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E5%AF%B9d%E5%9C%A8%E6%95%B4%E4%B8%AA%E7%A9%BA%E9%97%B4%E9%83%BD%E8%83%BD%E6%96%BD%E5%8A%A0%E8%BF%99%E4%B8%AA%E7%BA%A6%E6%9D%9F%E4%BD%86%E6%98%AF%E8%BF%99%E6%98%BE%E7%84%B6%E4%B8%8D%E5%8F%AF%E8%83%BD%E6%89%80%E4%BB%A5%E5%B0%B1%E5%8F%98%E6%88%90%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E5%8F%AF%E4%BB%A5%E5%9C%A8%E7%9B%B8%E5%BD%93%E5%A4%A7%E4%B8%80%E9%83%A8%E5%88%86%E7%9A%84%E5%9C%B0%E6%96%B9%E5%AF%B9d%E6%96%BD%E5%8A%A0%E7%BA%A6%E6%9D%9F%E4%BB%A5%E8%87%B3%E4%BA%8E%E5%9C%A8%E6%88%91%E4%BB%AC%E7%9A%84%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%AE%83%E4%B8%8D%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%E9%82%A3%E5%A6%82%E6%9E%9C%E5%8F%AA%E5%9C%A8%E7%9C%9F%E5%AE%9E%E6%A0%B7%E6%9C%AC%E7%82%B9%E5%92%8C%E7%94%9F%E6%88%90%E6%A0%B7%E6%9C%AC%E7%82%B9%E4%B8%8A%E7%AE%97%E5%8F%AF%E8%83%BD%E7%BA%A6%E6%9D%9F%E8%8C%83%E5%9B%B4%E4%BC%9A%E5%A4%AA%E5%B0%8F%E6%88%96%E8%AE%B8%E4%B9%9F%E6%98%AF%E5%AE%9E%E9%99%85%E8%AF%95%E4%BA%86%E4%B9%8B%E5%90%8E%E5%8F%91%E7%8E%B0%E6%95%88%E6%9E%9C%E4%B8%8D%E5%A5%BD%E6%95%85%E8%80%83%E8%99%91%E5%9C%A8%E7%9C%9F%E5%AE%9E%E6%A0%B7%E6%9C%AC%E5%92%8C%E7%94%9F%E6%88%90%E6%A0%B7%E6%9C%AC%E4%B9%8B%E9%97%B4%E9%9A%8F%E6%9C%BA%E6%8F%92%E5%80%BC%E5%BE%97%E5%88%B0%E7%9A%84%E5%9C%B0%E6%96%B9%E8%BF%9B%E8%A1%8C%E7%BA%A6%E6%9D%9F%E6%AF%8F%E4%B8%AAiter%E6%88%91%E4%BB%AC%E9%83%BD%E4%BC%9A%E5%9C%A8%E4%B8%80%E4%B8%AAbatch%E7%9A%84%E7%94%9F%E6%88%90%E6%A0%B7%E6%9C%AC%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A0%B7%E6%9C%AC%E4%B9%8B%E9%97%B4%E8%BF%9B%E8%A1%8C%E6%8F%92%E5%80%BC%E7%84%B6%E5%90%8E%E5%9C%A8%E8%BF%99%E4%BA%9B%E5%9C%B0%E6%96%B9%E8%BF%9B%E8%A1%8C%E7%BA%A6%E6%9D%9F%E9%82%A3%E4%B9%88%E8%AE%AD%E7%BB%83%E5%BE%97%E5%A4%9A%E4%BA%86%E6%8F%92%E5%80%BC%E8%A6%86%E7%9B%96%E5%88%B0%E7%9A%84%E5%9C%B0%E6%96%B9%E5%BA%94%E8%AF%A5%E4%B9%9F%E6%98%AF%E6%AF%94%E8%BE%83%E5%B9%BF%E4%BA%86%E5%88%99%E7%BA%A6%E6%9D%9F%E6%96%BD%E5%8A%A0%E7%9A%84%E8%8C%83%E5%9B%B4%E7%A1%AE%E5%AE%9E%E6%9C%89%E5%9C%A8%E6%89%A9%E5%A4%A7%E4%BA%86%E4%B8%8D%E8%BF%87%E4%B8%8D%E5%A4%AA%E6%98%8E%E7%99%BD%E7%9A%84%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%B8%8A%E6%98%AF%E5%8F%AA%E5%9C%A8%E6%8F%92%E5%80%BC%E7%9A%84%E5%9C%B0%E6%96%B9%E6%96%BD%E5%8A%A0%E7%BA%A6%E6%9D%9F%E8%80%8C%E4%B8%8D%E5%9C%A8%E7%94%9F%E6%88%90%E6%A0%B7%E6%9C%AC%E5%92%8C%E7%9C%9F%E5%AE%9E%E6%A0%B7%E6%9C%AC%E5%A4%84%E6%96%BD%E5%8A%A0%E7%BA%A6%E6%9D%9F%E8%BF%98%E6%98%AF%E5%9B%A0%E4%B8%BA%E4%B8%8A%E9%9D%A2%E8%AF%B4%E7%9A%84%E6%95%88%E6%9E%9C%E4%B8%8D%E5%A5%BD%E5%90%97%E5%8F%88%E6%88%96%E8%80%85%E7%90%86%E8%AE%BA%E4%B8%8A%E8%BF%99%E6%A0%B7%E4%BC%9A%E9%80%A0%E6%88%90%E4%BB%80%E4%B9%88%E6%8D%9F%E5%A4%B1"><span class="nav-number">2.5.4.</span> <span class="nav-text">明确了GP的形式，还要知道GP怎么算。或者说，带入哪些数据。结合一下原博客的内容，其实可以说明，理论上我们希望对D在整个空间都能施加这个约束。但是这显然不可能。所以就变成，我们希望可以在相当大一部分的地方对D施加约束，以至于在我们的训练过程中它不会有什么影响。那如果只在真实样本点和生成样本点上算，可能约束范围会太小（或许也是实际试了之后发现效果不好？）。故考虑在真实样本和生成样本之间随机插值得到的地方进行约束。每个iter，我们都会在一个batch的生成样本和随机样本之间进行插值，然后在这些地方进行约束。那么训练得多了，插值覆盖到的地方应该也是比较“广”了，则约束施加的范围确实有在扩大了（不过不太明白的是，为什么代码实现上是只在插值的地方施加约束，而不在生成样本和真实样本处施加约束。还是因为上面说的效果不好吗？又或者理论上这样会造成什么损失？）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E9%9A%BE%E7%AE%97%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E4%B8%80%E4%B8%8B%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%8B%9F%E5%90%88"><span class="nav-number">3.1.</span> <span class="nav-text">什么难算，就可以考虑一下用神经网络拟合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lipschitz%E7%BA%A6%E6%9D%9F%E6%84%9F%E8%A7%89%E8%BF%99%E4%B8%AA%E4%B8%9C%E8%A5%BF%E5%BE%88%E6%BC%82%E4%BA%AE%E5%95%8A%E8%B2%8C%E4%BC%BC%E8%BF%98%E8%9B%AE%E5%AE%9E%E7%94%A8%E7%9A%84%E5%8F%AF%E4%BB%A5%E5%B8%AE%E5%8A%A9%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A8%B3%E5%AE%9A"><span class="nav-number">3.2.</span> <span class="nav-text">Lipschitz约束，感觉这个东西很漂亮啊，貌似还蛮实用的，可以帮助神经网络稳定</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

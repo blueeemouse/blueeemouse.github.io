@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="cvpr23 problem：老生常谈之modality gap导致学习modality-shared feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel Augmentation for Visible-Infrared Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性） motivatio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="cvpr23 problem：老生常谈之modality gap导致学习modality-shared feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel Augmentation for Visible-Infrared Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性） motivatio">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-10-31T06:12:37.319Z">
+<meta property="article:modified_time" content="2024-10-31T07:11:58.443Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/31/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Shape-Erased%20Feature%20Learning%20for%20Visible-Infrared%20Person%20Re-Identification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-10-31 14:12:37 / Modified: 15:11:58" itemprop="dateCreated datePublished" datetime="2024-10-31T14:12:37+08:00">2024-10-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="cvpr23">cvpr23</h1>
+<h1 id="problem老生常谈之modality-gap导致学习modality-shared-feature很困难这篇论文聚焦于学习shape即人物的轮廓信息不由得让人想到之前的channel-augmentation-for-visible-infrared-re-identification主要想学习颜色信息也是想去学习某种特定的属性">problem：老生常谈之modality
+gap导致学习modality-shared
+feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel
+Augmentation for Visible-Infrared
+Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性）</h1>
+<h1 id="motivation希望能通过一种方法把表征分成两部分一部分是shape相关另一部分是shape无关然后先利用shape无关的表征去学习这样会逼迫这部分特征学习其它方面的内容不去利用shape信息进行判别最后把这部分表征和shape相关表征组合起来就能得到更强的表征">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</h1>
+<h1 id="method">method：</h1>
+<h2 id="关于shape信息的提取用到一篇20年tpami提出的分割人体形状的模型给定一幅图模型会给出各个像素属于头部躯干四肢等部位的概率最终整幅图上各个位置都有一个概率进行可视化理论上那些对应概率高的就显示出一个人的轮廓">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部/躯干/四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</h2>
+<h2 id="shape-erased-feature-learning-paradigm">Shape-Erased Feature
+Learning Paradigm</h2>
+<h3 id="这里有个关键的假设即shape-related-feature和shape-erased-feature之间是独立的这样才能做到学习一个特征而不影响另一个特征注意到前面motivation里已经说了它是要单独去学习一下shape-erased-feature此时这部分表征里没有了shape-feature于是这会逼迫它去学习其它的特征这样就达成了特征多样性的目的-论文提出严格的描述两个特征独立的方法是互信息为0但互信息求解起来太麻烦了虽然我不知道为什么于是松弛一下用个简化的条件即两个特征正交-guoqu-关于具体的shape-erased-feature-learning总的来说它用到各种互信息进行推导没太看懂忘得七七八八了但几个比较关键的公式背后的要求期望还是比较合理的或许可以借鉴一下其中的insightequation4期望用shape-erased-feature也能尽可能好地预测出identity毕竟前面说了这是训练中重要的一环5是为了优化4中的第一项而提出的好吧真不好写提出一大堆损失一些是用来训练shape-erased-feature的一些是用来消除shape-related-feature中的modality-specific成分的从而让它更加modality-shared最后一些是常规损失就是分类损失那些">这里有个关键的假设，即shape-related
+feature和shape-erased
+feature之间是独立的。这样才能做到，学习一个特征，而不影响另一个特征（注意到，前面motivation里已经说了，它是要单独去学习一下shape-erased
+feature，此时这部分表征里没有了shape
+feature，于是这会逼迫它去学习其它的特征，这样就达成了特征多样性的目的）<br>论文提出，严格的描述两个特征独立的方法是互信息为0，但互信息求解起来太麻烦了（虽然我不知道为什么。。。），于是松弛一下，用个简化的条件，即两个特征正交<br>guoqu<br>关于具体的shape-erased
+feature
+learning，总的来说，它用到各种互信息进行推导，没太看懂。。忘得七七八八了。但几个比较关键的公式，背后的要求/期望还是比较合理的。或许可以借鉴一下其中的insight。equation（4）期望用shape-erased
+feature也能尽可能好地预测出identity（毕竟前面说了，这是训练中重要的一环）；（5）是为了优化（4）中的第一项而提出的；好吧，真不好写。提出一大堆损失，一些是用来训练shape-erased
+feature的，一些是用来消除shape-related
+feature中的modality-specific成分的，从而让它更加modality-shared；最后一些是常规损失，就是分类损失那些</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/Diverse%20Embedding%20Expansion%20Network%20and%20Low-Light%20Cross-Modality%20Benchmark%20for%20Visible-Infrared%20Person%20Re-Identification/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/31/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Unsupervised%20visible-infrared%20person%20re-identification%20via%20progressive%20graph%20matching%20and%20alternate%20learning/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cvpr23"><span class="nav-number">1.</span> <span class="nav-text">cvpr23</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#problem%E8%80%81%E7%94%9F%E5%B8%B8%E8%B0%88%E4%B9%8Bmodality-gap%E5%AF%BC%E8%87%B4%E5%AD%A6%E4%B9%A0modality-shared-feature%E5%BE%88%E5%9B%B0%E9%9A%BE%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E8%81%9A%E7%84%A6%E4%BA%8E%E5%AD%A6%E4%B9%A0shape%E5%8D%B3%E4%BA%BA%E7%89%A9%E7%9A%84%E8%BD%AE%E5%BB%93%E4%BF%A1%E6%81%AF%E4%B8%8D%E7%94%B1%E5%BE%97%E8%AE%A9%E4%BA%BA%E6%83%B3%E5%88%B0%E4%B9%8B%E5%89%8D%E7%9A%84channel-augmentation-for-visible-infrared-re-identification%E4%B8%BB%E8%A6%81%E6%83%B3%E5%AD%A6%E4%B9%A0%E9%A2%9C%E8%89%B2%E4%BF%A1%E6%81%AF%E4%B9%9F%E6%98%AF%E6%83%B3%E5%8E%BB%E5%AD%A6%E4%B9%A0%E6%9F%90%E7%A7%8D%E7%89%B9%E5%AE%9A%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">problem：老生常谈之modality
+gap导致学习modality-shared
+feature很困难。这篇论文聚焦于学习shape，即人物的轮廓信息（不由得让人想到之前的[[Channel
+Augmentation for Visible-Infrared
+Re-Identification]]主要想学习颜色信息，也是想去学习某种特定的属性）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#motivation%E5%B8%8C%E6%9C%9B%E8%83%BD%E9%80%9A%E8%BF%87%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%E6%8A%8A%E8%A1%A8%E5%BE%81%E5%88%86%E6%88%90%E4%B8%A4%E9%83%A8%E5%88%86%E4%B8%80%E9%83%A8%E5%88%86%E6%98%AFshape%E7%9B%B8%E5%85%B3%E5%8F%A6%E4%B8%80%E9%83%A8%E5%88%86%E6%98%AFshape%E6%97%A0%E5%85%B3%E7%84%B6%E5%90%8E%E5%85%88%E5%88%A9%E7%94%A8shape%E6%97%A0%E5%85%B3%E7%9A%84%E8%A1%A8%E5%BE%81%E5%8E%BB%E5%AD%A6%E4%B9%A0%E8%BF%99%E6%A0%B7%E4%BC%9A%E9%80%BC%E8%BF%AB%E8%BF%99%E9%83%A8%E5%88%86%E7%89%B9%E5%BE%81%E5%AD%A6%E4%B9%A0%E5%85%B6%E5%AE%83%E6%96%B9%E9%9D%A2%E7%9A%84%E5%86%85%E5%AE%B9%E4%B8%8D%E5%8E%BB%E5%88%A9%E7%94%A8shape%E4%BF%A1%E6%81%AF%E8%BF%9B%E8%A1%8C%E5%88%A4%E5%88%AB%E6%9C%80%E5%90%8E%E6%8A%8A%E8%BF%99%E9%83%A8%E5%88%86%E8%A1%A8%E5%BE%81%E5%92%8Cshape%E7%9B%B8%E5%85%B3%E8%A1%A8%E5%BE%81%E7%BB%84%E5%90%88%E8%B5%B7%E6%9D%A5%E5%B0%B1%E8%83%BD%E5%BE%97%E5%88%B0%E6%9B%B4%E5%BC%BA%E7%9A%84%E8%A1%A8%E5%BE%81"><span class="nav-number">3.</span> <span class="nav-text">motivation：希望能通过一种方法，把表征分成两部分，一部分是shape相关，另一部分是shape无关。然后先利用shape无关的表征去学习，这样会逼迫这部分特征学习其它方面的内容，不去利用shape信息进行判别。最后把这部分表征和shape相关表征组合起来，就能得到更强的表征</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#method"><span class="nav-number">4.</span> <span class="nav-text">method：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Eshape%E4%BF%A1%E6%81%AF%E7%9A%84%E6%8F%90%E5%8F%96%E7%94%A8%E5%88%B0%E4%B8%80%E7%AF%8720%E5%B9%B4tpami%E6%8F%90%E5%87%BA%E7%9A%84%E5%88%86%E5%89%B2%E4%BA%BA%E4%BD%93%E5%BD%A2%E7%8A%B6%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%BB%99%E5%AE%9A%E4%B8%80%E5%B9%85%E5%9B%BE%E6%A8%A1%E5%9E%8B%E4%BC%9A%E7%BB%99%E5%87%BA%E5%90%84%E4%B8%AA%E5%83%8F%E7%B4%A0%E5%B1%9E%E4%BA%8E%E5%A4%B4%E9%83%A8%E8%BA%AF%E5%B9%B2%E5%9B%9B%E8%82%A2%E7%AD%89%E9%83%A8%E4%BD%8D%E7%9A%84%E6%A6%82%E7%8E%87%E6%9C%80%E7%BB%88%E6%95%B4%E5%B9%85%E5%9B%BE%E4%B8%8A%E5%90%84%E4%B8%AA%E4%BD%8D%E7%BD%AE%E9%83%BD%E6%9C%89%E4%B8%80%E4%B8%AA%E6%A6%82%E7%8E%87%E8%BF%9B%E8%A1%8C%E5%8F%AF%E8%A7%86%E5%8C%96%E7%90%86%E8%AE%BA%E4%B8%8A%E9%82%A3%E4%BA%9B%E5%AF%B9%E5%BA%94%E6%A6%82%E7%8E%87%E9%AB%98%E7%9A%84%E5%B0%B1%E6%98%BE%E7%A4%BA%E5%87%BA%E4%B8%80%E4%B8%AA%E4%BA%BA%E7%9A%84%E8%BD%AE%E5%BB%93"><span class="nav-number">4.1.</span> <span class="nav-text">0.关于shape信息的提取：用到一篇20年tpami提出的分割人体形状的模型（给定一幅图，模型会给出各个像素属于头部&#x2F;躯干&#x2F;四肢等部位的概率，最终整幅图上各个位置都有一个概率，进行可视化，理论上那些对应概率高的，就显示出一个人的轮廓）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-erased-feature-learning-paradigm"><span class="nav-number">4.2.</span> <span class="nav-text">Shape-Erased Feature
+Learning Paradigm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E6%9C%89%E4%B8%AA%E5%85%B3%E9%94%AE%E7%9A%84%E5%81%87%E8%AE%BE%E5%8D%B3shape-related-feature%E5%92%8Cshape-erased-feature%E4%B9%8B%E9%97%B4%E6%98%AF%E7%8B%AC%E7%AB%8B%E7%9A%84%E8%BF%99%E6%A0%B7%E6%89%8D%E8%83%BD%E5%81%9A%E5%88%B0%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E7%89%B9%E5%BE%81%E8%80%8C%E4%B8%8D%E5%BD%B1%E5%93%8D%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%88%B0%E5%89%8D%E9%9D%A2motivation%E9%87%8C%E5%B7%B2%E7%BB%8F%E8%AF%B4%E4%BA%86%E5%AE%83%E6%98%AF%E8%A6%81%E5%8D%95%E7%8B%AC%E5%8E%BB%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%8Bshape-erased-feature%E6%AD%A4%E6%97%B6%E8%BF%99%E9%83%A8%E5%88%86%E8%A1%A8%E5%BE%81%E9%87%8C%E6%B2%A1%E6%9C%89%E4%BA%86shape-feature%E4%BA%8E%E6%98%AF%E8%BF%99%E4%BC%9A%E9%80%BC%E8%BF%AB%E5%AE%83%E5%8E%BB%E5%AD%A6%E4%B9%A0%E5%85%B6%E5%AE%83%E7%9A%84%E7%89%B9%E5%BE%81%E8%BF%99%E6%A0%B7%E5%B0%B1%E8%BE%BE%E6%88%90%E4%BA%86%E7%89%B9%E5%BE%81%E5%A4%9A%E6%A0%B7%E6%80%A7%E7%9A%84%E7%9B%AE%E7%9A%84-%E8%AE%BA%E6%96%87%E6%8F%90%E5%87%BA%E4%B8%A5%E6%A0%BC%E7%9A%84%E6%8F%8F%E8%BF%B0%E4%B8%A4%E4%B8%AA%E7%89%B9%E5%BE%81%E7%8B%AC%E7%AB%8B%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E4%BA%92%E4%BF%A1%E6%81%AF%E4%B8%BA0%E4%BD%86%E4%BA%92%E4%BF%A1%E6%81%AF%E6%B1%82%E8%A7%A3%E8%B5%B7%E6%9D%A5%E5%A4%AA%E9%BA%BB%E7%83%A6%E4%BA%86%E8%99%BD%E7%84%B6%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BA%8E%E6%98%AF%E6%9D%BE%E5%BC%9B%E4%B8%80%E4%B8%8B%E7%94%A8%E4%B8%AA%E7%AE%80%E5%8C%96%E7%9A%84%E6%9D%A1%E4%BB%B6%E5%8D%B3%E4%B8%A4%E4%B8%AA%E7%89%B9%E5%BE%81%E6%AD%A3%E4%BA%A4-guoqu-%E5%85%B3%E4%BA%8E%E5%85%B7%E4%BD%93%E7%9A%84shape-erased-feature-learning%E6%80%BB%E7%9A%84%E6%9D%A5%E8%AF%B4%E5%AE%83%E7%94%A8%E5%88%B0%E5%90%84%E7%A7%8D%E4%BA%92%E4%BF%A1%E6%81%AF%E8%BF%9B%E8%A1%8C%E6%8E%A8%E5%AF%BC%E6%B2%A1%E5%A4%AA%E7%9C%8B%E6%87%82%E5%BF%98%E5%BE%97%E4%B8%83%E4%B8%83%E5%85%AB%E5%85%AB%E4%BA%86%E4%BD%86%E5%87%A0%E4%B8%AA%E6%AF%94%E8%BE%83%E5%85%B3%E9%94%AE%E7%9A%84%E5%85%AC%E5%BC%8F%E8%83%8C%E5%90%8E%E7%9A%84%E8%A6%81%E6%B1%82%E6%9C%9F%E6%9C%9B%E8%BF%98%E6%98%AF%E6%AF%94%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E6%88%96%E8%AE%B8%E5%8F%AF%E4%BB%A5%E5%80%9F%E9%89%B4%E4%B8%80%E4%B8%8B%E5%85%B6%E4%B8%AD%E7%9A%84insightequation4%E6%9C%9F%E6%9C%9B%E7%94%A8shape-erased-feature%E4%B9%9F%E8%83%BD%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%A5%BD%E5%9C%B0%E9%A2%84%E6%B5%8B%E5%87%BAidentity%E6%AF%95%E7%AB%9F%E5%89%8D%E9%9D%A2%E8%AF%B4%E4%BA%86%E8%BF%99%E6%98%AF%E8%AE%AD%E7%BB%83%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%80%E7%8E%AF5%E6%98%AF%E4%B8%BA%E4%BA%86%E4%BC%98%E5%8C%964%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E9%A1%B9%E8%80%8C%E6%8F%90%E5%87%BA%E7%9A%84%E5%A5%BD%E5%90%A7%E7%9C%9F%E4%B8%8D%E5%A5%BD%E5%86%99%E6%8F%90%E5%87%BA%E4%B8%80%E5%A4%A7%E5%A0%86%E6%8D%9F%E5%A4%B1%E4%B8%80%E4%BA%9B%E6%98%AF%E7%94%A8%E6%9D%A5%E8%AE%AD%E7%BB%83shape-erased-feature%E7%9A%84%E4%B8%80%E4%BA%9B%E6%98%AF%E7%94%A8%E6%9D%A5%E6%B6%88%E9%99%A4shape-related-feature%E4%B8%AD%E7%9A%84modality-specific%E6%88%90%E5%88%86%E7%9A%84%E4%BB%8E%E8%80%8C%E8%AE%A9%E5%AE%83%E6%9B%B4%E5%8A%A0modality-shared%E6%9C%80%E5%90%8E%E4%B8%80%E4%BA%9B%E6%98%AF%E5%B8%B8%E8%A7%84%E6%8D%9F%E5%A4%B1%E5%B0%B1%E6%98%AF%E5%88%86%E7%B1%BB%E6%8D%9F%E5%A4%B1%E9%82%A3%E4%BA%9B"><span class="nav-number">4.2.1.</span> <span class="nav-text">这里有个关键的假设，即shape-related
+feature和shape-erased
+feature之间是独立的。这样才能做到，学习一个特征，而不影响另一个特征（注意到，前面motivation里已经说了，它是要单独去学习一下shape-erased
+feature，此时这部分表征里没有了shape
+feature，于是这会逼迫它去学习其它的特征，这样就达成了特征多样性的目的）论文提出，严格的描述两个特征独立的方法是互信息为0，但互信息求解起来太麻烦了（虽然我不知道为什么。。。），于是松弛一下，用个简化的条件，即两个特征正交guoqu关于具体的shape-erased
+feature
+learning，总的来说，它用到各种互信息进行推导，没太看懂。。忘得七七八八了。但几个比较关键的公式，背后的要求&#x2F;期望还是比较合理的。或许可以借鉴一下其中的insight。equation（4）期望用shape-erased
+feature也能尽可能好地预测出identity（毕竟前面说了，这是训练中重要的一环）；（5）是为了优化（4）中的第一项而提出的；好吧，真不好写。提出一大堆损失，一些是用来训练shape-erased
+feature的，一些是用来消除shape-related
+feature中的modality-specific成分的，从而让它更加modality-shared；最后一些是常规损失，就是分类损失那些</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

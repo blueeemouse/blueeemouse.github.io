@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="update：cvpr25有一篇相关论文From Laboratory to Real World: A New Benchmark Towards Privacy-Preserved Visible-Infrared Person Re-Identification，但还没放出论文 cvpr24 Shallow-Deep Collaborative Learning for Unsup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/paper%E8%B0%83%E7%A0%94%20vi-reid/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="update：cvpr25有一篇相关论文From Laboratory to Real World: A New Benchmark Towards Privacy-Preserved Visible-Infrared Person Re-Identification，但还没放出论文 cvpr24 Shallow-Deep Collaborative Learning for Unsup">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-10-25T01:38:09.214Z">
+<meta property="article:modified_time" content="2025-03-09T03:00:18.971Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/paper%E8%B0%83%E7%A0%94%20vi-reid/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2024/10/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/paper%E8%B0%83%E7%A0%94%20vi-reid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-10-25 09:38:09" itemprop="dateCreated datePublished" datetime="2024-10-25T09:38:09+08:00">2024-10-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-09 11:00:18" itemprop="dateModified" datetime="2025-03-09T11:00:18+08:00">2025-03-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="updatecvpr25有一篇相关论文from-laboratory-to-real-world-a-new-benchmark-towards-privacy-preserved-visible-infrared-person-re-identification但还没放出论文">update：cvpr25有一篇相关论文<strong>From
+Laboratory to Real World: A New Benchmark Towards Privacy-Preserved
+Visible-Infrared Person Re-Identification</strong>，但还没放出论文</h1>
+<h1 id="cvpr24">cvpr24</h1>
+<h2 id="shallow-deep-collaborative-learning-for-unsupervised-visible-infrared-person-re-identification强相关"><strong>Shallow-Deep
+Collaborative Learning for Unsupervised Visible-Infrared Person
+Re-Identification</strong>（强相关）</h2>
+<h2 id="fusing-personal-and-environmental-cues-for-identification-and-segmentation-of-first-person-camera-wearers-in-third-person-views"><strong>Fusing
+Personal and Environmental Cues for Identification and Segmentation of
+First-Person Camera Wearers in Third-Person Views</strong></h2>
+<h2 id="instruct-reid-a-multi-purpose-person-re-identification-task-with-instructions"><strong>Instruct-ReID:
+A Multi-purpose Person Re-identification Task with
+Instructions</strong></h2>
+<h2 id="efficient-hyperparameter-optimization-with-adaptive-fidelity-identification"><strong>Efficient
+Hyperparameter Optimization with Adaptive Fidelity
+Identification</strong></h2>
+<h2 id="activity-biometrics-person-identification-from-daily-activities"><strong>Activity-Biometrics:
+Person Identification from Daily Activities</strong></h2>
+<h2 id="ca-jaccard-camera-aware-jaccard-distance-for-person-re-identification"><strong>CA-Jaccard:
+Camera-aware Jaccard Distance for Person Re-identification</strong></h2>
+<h2 id="lidar-based-person-re-identification">LiDAR-based Person
+Re-identification</h2>
+<h2 id="distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification本组"><strong>Distribution-aware
+Knowledge Prototyping for Non-exemplar Lifelong Person
+Re-identification</strong>（本组）</h2>
+<h2 id="all-in-one-framework-for-multimodal-re-identification-in-the-wild"><strong>All
+in One Framework for Multimodal Re-identification in the
+Wild</strong></h2>
+<h2 id="day-night-cross-domain-vehicle-re-identification"><strong>Day-Night
+Cross-domain Vehicle Re-identification</strong></h2>
+<h2 id="seas-shape-aligned-supervision-for-person-re-identification"><strong>SEAS:
+ShapE-Aligned Supervision for Person Re-Identification</strong></h2>
+<h2 id="implicit-discriminative-knowledge-learning-for-visible-infrared-person-re-identification强相关"><strong>Implicit
+Discriminative Knowledge Learning for Visible-Infrared Person
+Re-Identification</strong>（强相关）</h2>
+<h2 id="learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification本组"><strong>Learning
+Continual Compatible Representation for Re-indexing Free Lifelong Person
+Re-identification</strong>（本组）</h2>
+<h2 id="view-decoupled-transformer-for-person-re-identification-under-aerial-ground-camera-network"><strong>View-decoupled
+Transformer for Person Re-identification under Aerial-ground Camera
+Network</strong></h2>
+<h1 id="eccv24">eccv24</h1>
+<h2 id="multi-memory-matching-for-unsupervised-visible-infrared-person-re-identification强相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/2819_ECCV_2024_paper.php">Multi-Memory
+Matching for Unsupervised Visible-Infrared Person
+Re-Identification</a>(强相关)</h2>
+<h2 id="privacy-preserving-adaptive-re-identification-without-image-transfer"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6850_ECCV_2024_paper.php">Privacy-Preserving
+Adaptive Re-Identification without Image Transfer</a></h2>
+<h2 id="wrim-net-wide-ranging-information-mining-network-for-visible-infrared-person-re-identification强相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6947_ECCV_2024_paper.php">WRIM-Net:
+Wide-Ranging Information Mining Network for Visible-Infrared Person
+Re-Identification</a>（强相关）</h2>
+<h2 id="rethinking-normalization-layers-for-domain-generalizable-person-re-identification"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/8753_ECCV_2024_paper.php">Rethinking
+Normalization Layers for Domain Generalizable Person
+Re-identification</a></h2>
+<h2 id="domain-shifting-a-generalized-solution-for-heterogeneous-cross-modality-person-re-identification"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/9119_ECCV_2024_paper.php">Domain
+Shifting: A Generalized Solution for Heterogeneous Cross-Modality Person
+Re-Identification</a></h2>
+<h2 id="keypoint-promptable-re-identification"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/10180_ECCV_2024_paper.php">Keypoint
+Promptable Re-Identification</a></h2>
+<h1 id="aaai24">aaai24</h1>
+<h2 id="high-order-structure-based-middle-feature-learning-for-visible-infrared-person-re-identification强相关">High-Order
+Structure Based Middle-Feature Learning for Visible-Infrared Person
+Re-identification（强相关）</h2>
+<h1 id="tpami23-24">tpami23-24</h1>
+<h2 id="channel-augmentation-for-visible-infrared-re-identification">Channel
+Augmentation for Visible-Infrared Re-Identification</h2>
+<h1 id="nips24">nips24</h1>
+<h2 id="learning-commonality-divergence-and-variety-for-unsupervised-visible-infrared-person-re-identification强相关">Learning
+Commonality, Divergence and Variety for Unsupervised Visible-Infrared
+Person Re-identification（强相关）</h2>
+<h2 id="empowering-visible-infrared-person-re-identification-with-large-foundation-models这个好像还没公开出来谷歌学术和arxiv上都没有"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/93497">Empowering
+Visible-Infrared Person Re-Identification with Large Foundation
+Models</a>（这个好像还没公开出来，谷歌学术和arxiv上都没有）</h2>
+<h2 id="feature-level-adversarial-attacks-and-ranking-disruption-for-visible-infrared-person-re-identification同上还没公开"><a target="_blank" rel="noopener" href="https://nips.cc/virtual/2024/poster/95162">Feature-Level
+Adversarial Attacks and Ranking Disruption for Visible-Infrared Person
+Re-identification</a>（同上，还没公开）</h2>
+<h1 id="ijcv23-24上应该是没有相关论文了">ijcv23-24上应该是没有相关论文了</h1>
+<h1 id="cvpr23">cvpr23</h1>
+<h2 id="toplight-lightweight-neural-networks-with-task-oriented-pretraining-for-visible-infrared-recognition但这是recognition和re-identification不太一样吧"><strong>TOPLight:
+Lightweight Neural Networks With Task-Oriented Pretraining for
+Visible-Infrared
+Recognition</strong>（但这是recognition，和re-identification不太一样吧）</h2>
+<h2 id="diverse-embedding-expansion-network-and-low-light-cross-modality-benchmark-for-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://github.com/ZYK100/LLCM">Diverse Embedding Expansion
+Network and Low-Light Cross-Modality Benchmark for Visible-Infrared
+Person Re-Identification</a></h2>
+<h2 id="unsupervised-visible-infrared-person-re-identification-via-progressive-graph-matching-and-alternate-learning"><a target="_blank" rel="noopener" href="https://github.com/zesenwu23/USL-VI-ReID">Unsupervised
+Visible-Infrared Person Re-Identification via Progressive Graph Matching
+and Alternate Learning</a></h2>
+<h2 id="shape-erased-feature-learning-for-visible-infrared-person-re-identification"><strong>Shape-Erased
+Feature Learning for Visible-Infrared Person
+Re-Identification</strong></h2>
+<h2 id="partmix-regularization-strategy-to-learn-part-discovery-for-visible-infrared-person-re-identification"><strong>PartMix:
+Regularization Strategy To Learn Part Discovery for Visible-Infrared
+Person Re-Identification</strong></h2>
+<h1 id="aaai23">aaai23</h1>
+<h2 id="mrcn-a-novel-modality-restitution-and-compensation-network-for-visible-infrared-person-re-identification">MRCN:
+A Novel Modality Restitution and Compensation Network for
+Visible-Infrared Person Re-identification</h2>
+<h2 id="learning-progressive-modality-shared-transformers-for-effective-visible-infrared-person-re-identification">Learning
+Progressive Modality-Shared Transformers for Effective Visible-Infrared
+Person Re-identification</h2>
+<h1 id="iccv23">iccv23</h1>
+<h2 id="towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification无监督"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Yang_Towards_Grand_Unified_Representation_Learning_for_Unsupervised_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Towards
+Grand Unified Representation Learning for Unsupervised Visible-Infrared
+Person Re-Identification</a>（无监督）</h2>
+<h2 id="visible-infrared-person-re-identification-via-semantic-alignment-and-affinity-inference"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Fang_Visible-Infrared_Person_Re-Identification_via_Semantic_Alignment_and_Affinity_Inference_ICCV_2023_paper.html">Visible-Infrared
+Person Re-Identification via Semantic Alignment and Affinity
+Inference</a></h2>
+<h2 id="learning-concordant-attention-via-target-aware-alignment-for-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Wu_Learning_Concordant_Attention_via_Target-aware_Alignment_for_Visible-Infrared_Person_Re-identification_ICCV_2023_paper.html">Learning
+Concordant Attention via Target-aware Alignment for Visible-Infrared
+Person Re-identification</a></h2>
+<h2 id="modality-unifying-network-for-visible-infrared-person-re-identification"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Yu_Modality_Unifying_Network_for_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Modality
+Unifying Network for Visible-Infrared Person Re-Identification</a></h2>
+<h2 id="dual-pseudo-labels-interactive-self-training-for-semi-supervised-visible-infrared-person-re-identification这篇是半监督的啊"><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2023/html/Shi_Dual_Pseudo-Labels_Interactive_Self-Training_for_Semi-Supervised_Visible-Infrared_Person_Re-Identification_ICCV_2023_paper.html">Dual
+Pseudo-Labels Interactive Self-Training for Semi-Supervised
+Visible-Infrared Person Re-Identification</a>（这篇是半监督的啊）</h2>
+<h1 id="acm-mm24">acm mm24</h1>
+<h2 id="enhancing-unsupervised-visible-infrared-person-re-identification-with-bidirectional-consistency-gradual-matching无监督的"><strong>Enhancing
+Unsupervised Visible-Infrared Person Re-Identification with
+Bidirectional-Consistency Gradual Matching</strong>（无监督的）</h2>
+<h2 id="semi-supervised-visible-infrared-person-re-identification-via-modality-unification-and-confidence-guidance半监督的"><strong>Semi-supervised
+Visible-Infrared Person Re-identification via Modality Unification and
+Confidence Guidance</strong>（半监督的）</h2>
+<h2 id="robust-pseudo-label-learning-with-neighbor-relation-for-unsupervised-visible-infrared-person-re-identification无监督的"><strong>Robust
+Pseudo-label Learning with Neighbor Relation for Unsupervised
+Visible-Infrared Person Re-Identification</strong>（无监督的）</h2>
+<h1 id="acm-mm23">acm mm23</h1>
+<h2 id="protohpe-prototype-guided-high-frequency-patch-enhancement-for-visible-infrared-person-re-identification.">ProtoHPE:
+Prototype-guided High-frequency Patch Enhancement for Visible-Infrared
+Person Re-identification.</h2>
+<h2 id="video-based-visible-infrared-person-re-identification-via-style-disturbance-defense-and-dual-interaction">Video-based
+Visible-Infrared Person Re-Identification via Style Disturbance Defense
+and Dual Interaction</h2>
+<h2 id="efficient-bilateral-cross-modality-cluster-matching-for-unsupervised-visible-infrared-person-reid无监督">Efficient
+Bilateral Cross-Modality Cluster Matching for Unsupervised
+Visible-Infrared Person ReID（无监督）</h2>
+<h2 id="unveiling-the-power-of-clip-in-unsupervised-visible-infrared-person-re-identification无监督">Unveiling
+the Power of CLIP in Unsupervised Visible-Infrared Person
+Re-Identification（无监督）</h2>
+<h2 id="unsupervised-visible-infrared-person-reid-by-collaborative-learning-with-neighbor-guided-label-refinement无监督">Unsupervised
+Visible-Infrared Person ReID by Collaborative Learning with
+Neighbor-Guided Label Refinement（无监督）</h2>
+<h1 id="ijcai23-24好像都没有来着">ijcai23-24好像都没有来着</h1>
+<h1 id="三大会23年也没有">三大会23年也没有</h1>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/24/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/survey----Deep%20learning%20for%20visible-infrared%20cross-modality%20person%20re-identification%20%20A%20comprehensive%20review/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/Unsupervised-VI-ReID/Shallow-Deep%20Collaborative%20Learning%20for%20Unsupervised%20Visible-Infrared%20%20Person%20Re-Identification/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#updatecvpr25%E6%9C%89%E4%B8%80%E7%AF%87%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87from-laboratory-to-real-world-a-new-benchmark-towards-privacy-preserved-visible-infrared-person-re-identification%E4%BD%86%E8%BF%98%E6%B2%A1%E6%94%BE%E5%87%BA%E8%AE%BA%E6%96%87"><span class="nav-number">1.</span> <span class="nav-text">update：cvpr25有一篇相关论文From
+Laboratory to Real World: A New Benchmark Towards Privacy-Preserved
+Visible-Infrared Person Re-Identification，但还没放出论文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cvpr24"><span class="nav-number">2.</span> <span class="nav-text">cvpr24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#shallow-deep-collaborative-learning-for-unsupervised-visible-infrared-person-re-identification%E5%BC%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">2.1.</span> <span class="nav-text">Shallow-Deep
+Collaborative Learning for Unsupervised Visible-Infrared Person
+Re-Identification（强相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fusing-personal-and-environmental-cues-for-identification-and-segmentation-of-first-person-camera-wearers-in-third-person-views"><span class="nav-number">2.2.</span> <span class="nav-text">Fusing
+Personal and Environmental Cues for Identification and Segmentation of
+First-Person Camera Wearers in Third-Person Views</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#instruct-reid-a-multi-purpose-person-re-identification-task-with-instructions"><span class="nav-number">2.3.</span> <span class="nav-text">Instruct-ReID:
+A Multi-purpose Person Re-identification Task with
+Instructions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#efficient-hyperparameter-optimization-with-adaptive-fidelity-identification"><span class="nav-number">2.4.</span> <span class="nav-text">Efficient
+Hyperparameter Optimization with Adaptive Fidelity
+Identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#activity-biometrics-person-identification-from-daily-activities"><span class="nav-number">2.5.</span> <span class="nav-text">Activity-Biometrics:
+Person Identification from Daily Activities</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ca-jaccard-camera-aware-jaccard-distance-for-person-re-identification"><span class="nav-number">2.6.</span> <span class="nav-text">CA-Jaccard:
+Camera-aware Jaccard Distance for Person Re-identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lidar-based-person-re-identification"><span class="nav-number">2.7.</span> <span class="nav-text">LiDAR-based Person
+Re-identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#distribution-aware-knowledge-prototyping-for-non-exemplar-lifelong-person-re-identification%E6%9C%AC%E7%BB%84"><span class="nav-number">2.8.</span> <span class="nav-text">Distribution-aware
+Knowledge Prototyping for Non-exemplar Lifelong Person
+Re-identification（本组）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#all-in-one-framework-for-multimodal-re-identification-in-the-wild"><span class="nav-number">2.9.</span> <span class="nav-text">All
+in One Framework for Multimodal Re-identification in the
+Wild</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#day-night-cross-domain-vehicle-re-identification"><span class="nav-number">2.10.</span> <span class="nav-text">Day-Night
+Cross-domain Vehicle Re-identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#seas-shape-aligned-supervision-for-person-re-identification"><span class="nav-number">2.11.</span> <span class="nav-text">SEAS:
+ShapE-Aligned Supervision for Person Re-Identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#implicit-discriminative-knowledge-learning-for-visible-infrared-person-re-identification%E5%BC%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">2.12.</span> <span class="nav-text">Implicit
+Discriminative Knowledge Learning for Visible-Infrared Person
+Re-Identification（强相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-continual-compatible-representation-for-re-indexing-free-lifelong-person-re-identification%E6%9C%AC%E7%BB%84"><span class="nav-number">2.13.</span> <span class="nav-text">Learning
+Continual Compatible Representation for Re-indexing Free Lifelong Person
+Re-identification（本组）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#view-decoupled-transformer-for-person-re-identification-under-aerial-ground-camera-network"><span class="nav-number">2.14.</span> <span class="nav-text">View-decoupled
+Transformer for Person Re-identification under Aerial-ground Camera
+Network</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#eccv24"><span class="nav-number">3.</span> <span class="nav-text">eccv24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-memory-matching-for-unsupervised-visible-infrared-person-re-identification%E5%BC%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">3.1.</span> <span class="nav-text">Multi-Memory
+Matching for Unsupervised Visible-Infrared Person
+Re-Identification(强相关)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#privacy-preserving-adaptive-re-identification-without-image-transfer"><span class="nav-number">3.2.</span> <span class="nav-text">Privacy-Preserving
+Adaptive Re-Identification without Image Transfer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wrim-net-wide-ranging-information-mining-network-for-visible-infrared-person-re-identification%E5%BC%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">3.3.</span> <span class="nav-text">WRIM-Net:
+Wide-Ranging Information Mining Network for Visible-Infrared Person
+Re-Identification（强相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rethinking-normalization-layers-for-domain-generalizable-person-re-identification"><span class="nav-number">3.4.</span> <span class="nav-text">Rethinking
+Normalization Layers for Domain Generalizable Person
+Re-identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#domain-shifting-a-generalized-solution-for-heterogeneous-cross-modality-person-re-identification"><span class="nav-number">3.5.</span> <span class="nav-text">Domain
+Shifting: A Generalized Solution for Heterogeneous Cross-Modality Person
+Re-Identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keypoint-promptable-re-identification"><span class="nav-number">3.6.</span> <span class="nav-text">Keypoint
+Promptable Re-Identification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#aaai24"><span class="nav-number">4.</span> <span class="nav-text">aaai24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#high-order-structure-based-middle-feature-learning-for-visible-infrared-person-re-identification%E5%BC%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">4.1.</span> <span class="nav-text">High-Order
+Structure Based Middle-Feature Learning for Visible-Infrared Person
+Re-identification（强相关）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tpami23-24"><span class="nav-number">5.</span> <span class="nav-text">tpami23-24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#channel-augmentation-for-visible-infrared-re-identification"><span class="nav-number">5.1.</span> <span class="nav-text">Channel
+Augmentation for Visible-Infrared Re-Identification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nips24"><span class="nav-number">6.</span> <span class="nav-text">nips24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-commonality-divergence-and-variety-for-unsupervised-visible-infrared-person-re-identification%E5%BC%BA%E7%9B%B8%E5%85%B3"><span class="nav-number">6.1.</span> <span class="nav-text">Learning
+Commonality, Divergence and Variety for Unsupervised Visible-Infrared
+Person Re-identification（强相关）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#empowering-visible-infrared-person-re-identification-with-large-foundation-models%E8%BF%99%E4%B8%AA%E5%A5%BD%E5%83%8F%E8%BF%98%E6%B2%A1%E5%85%AC%E5%BC%80%E5%87%BA%E6%9D%A5%E8%B0%B7%E6%AD%8C%E5%AD%A6%E6%9C%AF%E5%92%8Carxiv%E4%B8%8A%E9%83%BD%E6%B2%A1%E6%9C%89"><span class="nav-number">6.2.</span> <span class="nav-text">Empowering
+Visible-Infrared Person Re-Identification with Large Foundation
+Models（这个好像还没公开出来，谷歌学术和arxiv上都没有）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feature-level-adversarial-attacks-and-ranking-disruption-for-visible-infrared-person-re-identification%E5%90%8C%E4%B8%8A%E8%BF%98%E6%B2%A1%E5%85%AC%E5%BC%80"><span class="nav-number">6.3.</span> <span class="nav-text">Feature-Level
+Adversarial Attacks and Ranking Disruption for Visible-Infrared Person
+Re-identification（同上，还没公开）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ijcv23-24%E4%B8%8A%E5%BA%94%E8%AF%A5%E6%98%AF%E6%B2%A1%E6%9C%89%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87%E4%BA%86"><span class="nav-number">7.</span> <span class="nav-text">ijcv23-24上应该是没有相关论文了</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cvpr23"><span class="nav-number">8.</span> <span class="nav-text">cvpr23</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#toplight-lightweight-neural-networks-with-task-oriented-pretraining-for-visible-infrared-recognition%E4%BD%86%E8%BF%99%E6%98%AFrecognition%E5%92%8Cre-identification%E4%B8%8D%E5%A4%AA%E4%B8%80%E6%A0%B7%E5%90%A7"><span class="nav-number">8.1.</span> <span class="nav-text">TOPLight:
+Lightweight Neural Networks With Task-Oriented Pretraining for
+Visible-Infrared
+Recognition（但这是recognition，和re-identification不太一样吧）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#diverse-embedding-expansion-network-and-low-light-cross-modality-benchmark-for-visible-infrared-person-re-identification"><span class="nav-number">8.2.</span> <span class="nav-text">Diverse Embedding Expansion
+Network and Low-Light Cross-Modality Benchmark for Visible-Infrared
+Person Re-Identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unsupervised-visible-infrared-person-re-identification-via-progressive-graph-matching-and-alternate-learning"><span class="nav-number">8.3.</span> <span class="nav-text">Unsupervised
+Visible-Infrared Person Re-Identification via Progressive Graph Matching
+and Alternate Learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-erased-feature-learning-for-visible-infrared-person-re-identification"><span class="nav-number">8.4.</span> <span class="nav-text">Shape-Erased
+Feature Learning for Visible-Infrared Person
+Re-Identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#partmix-regularization-strategy-to-learn-part-discovery-for-visible-infrared-person-re-identification"><span class="nav-number">8.5.</span> <span class="nav-text">PartMix:
+Regularization Strategy To Learn Part Discovery for Visible-Infrared
+Person Re-Identification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#aaai23"><span class="nav-number">9.</span> <span class="nav-text">aaai23</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mrcn-a-novel-modality-restitution-and-compensation-network-for-visible-infrared-person-re-identification"><span class="nav-number">9.1.</span> <span class="nav-text">MRCN:
+A Novel Modality Restitution and Compensation Network for
+Visible-Infrared Person Re-identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-progressive-modality-shared-transformers-for-effective-visible-infrared-person-re-identification"><span class="nav-number">9.2.</span> <span class="nav-text">Learning
+Progressive Modality-Shared Transformers for Effective Visible-Infrared
+Person Re-identification</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iccv23"><span class="nav-number">10.</span> <span class="nav-text">iccv23</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#towards-grand-unified-representation-learning-for-unsupervised-visible-infrared-person-re-identification%E6%97%A0%E7%9B%91%E7%9D%A3"><span class="nav-number">10.1.</span> <span class="nav-text">Towards
+Grand Unified Representation Learning for Unsupervised Visible-Infrared
+Person Re-Identification（无监督）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#visible-infrared-person-re-identification-via-semantic-alignment-and-affinity-inference"><span class="nav-number">10.2.</span> <span class="nav-text">Visible-Infrared
+Person Re-Identification via Semantic Alignment and Affinity
+Inference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-concordant-attention-via-target-aware-alignment-for-visible-infrared-person-re-identification"><span class="nav-number">10.3.</span> <span class="nav-text">Learning
+Concordant Attention via Target-aware Alignment for Visible-Infrared
+Person Re-identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modality-unifying-network-for-visible-infrared-person-re-identification"><span class="nav-number">10.4.</span> <span class="nav-text">Modality
+Unifying Network for Visible-Infrared Person Re-Identification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dual-pseudo-labels-interactive-self-training-for-semi-supervised-visible-infrared-person-re-identification%E8%BF%99%E7%AF%87%E6%98%AF%E5%8D%8A%E7%9B%91%E7%9D%A3%E7%9A%84%E5%95%8A"><span class="nav-number">10.5.</span> <span class="nav-text">Dual
+Pseudo-Labels Interactive Self-Training for Semi-Supervised
+Visible-Infrared Person Re-Identification（这篇是半监督的啊）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#acm-mm24"><span class="nav-number">11.</span> <span class="nav-text">acm mm24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#enhancing-unsupervised-visible-infrared-person-re-identification-with-bidirectional-consistency-gradual-matching%E6%97%A0%E7%9B%91%E7%9D%A3%E7%9A%84"><span class="nav-number">11.1.</span> <span class="nav-text">Enhancing
+Unsupervised Visible-Infrared Person Re-Identification with
+Bidirectional-Consistency Gradual Matching（无监督的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#semi-supervised-visible-infrared-person-re-identification-via-modality-unification-and-confidence-guidance%E5%8D%8A%E7%9B%91%E7%9D%A3%E7%9A%84"><span class="nav-number">11.2.</span> <span class="nav-text">Semi-supervised
+Visible-Infrared Person Re-identification via Modality Unification and
+Confidence Guidance（半监督的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#robust-pseudo-label-learning-with-neighbor-relation-for-unsupervised-visible-infrared-person-re-identification%E6%97%A0%E7%9B%91%E7%9D%A3%E7%9A%84"><span class="nav-number">11.3.</span> <span class="nav-text">Robust
+Pseudo-label Learning with Neighbor Relation for Unsupervised
+Visible-Infrared Person Re-Identification（无监督的）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#acm-mm23"><span class="nav-number">12.</span> <span class="nav-text">acm mm23</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#protohpe-prototype-guided-high-frequency-patch-enhancement-for-visible-infrared-person-re-identification."><span class="nav-number">12.1.</span> <span class="nav-text">ProtoHPE:
+Prototype-guided High-frequency Patch Enhancement for Visible-Infrared
+Person Re-identification.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#video-based-visible-infrared-person-re-identification-via-style-disturbance-defense-and-dual-interaction"><span class="nav-number">12.2.</span> <span class="nav-text">Video-based
+Visible-Infrared Person Re-Identification via Style Disturbance Defense
+and Dual Interaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#efficient-bilateral-cross-modality-cluster-matching-for-unsupervised-visible-infrared-person-reid%E6%97%A0%E7%9B%91%E7%9D%A3"><span class="nav-number">12.3.</span> <span class="nav-text">Efficient
+Bilateral Cross-Modality Cluster Matching for Unsupervised
+Visible-Infrared Person ReID（无监督）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unveiling-the-power-of-clip-in-unsupervised-visible-infrared-person-re-identification%E6%97%A0%E7%9B%91%E7%9D%A3"><span class="nav-number">12.4.</span> <span class="nav-text">Unveiling
+the Power of CLIP in Unsupervised Visible-Infrared Person
+Re-Identification（无监督）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unsupervised-visible-infrared-person-reid-by-collaborative-learning-with-neighbor-guided-label-refinement%E6%97%A0%E7%9B%91%E7%9D%A3"><span class="nav-number">12.5.</span> <span class="nav-text">Unsupervised
+Visible-Infrared Person ReID by Collaborative Learning with
+Neighbor-Guided Label Refinement（无监督）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ijcai23-24%E5%A5%BD%E5%83%8F%E9%83%BD%E6%B2%A1%E6%9C%89%E6%9D%A5%E7%9D%80"><span class="nav-number">13.</span> <span class="nav-text">ijcai23-24好像都没有来着</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E5%A4%A7%E4%BC%9A23%E5%B9%B4%E4%B9%9F%E6%B2%A1%E6%9C%89"><span class="nav-number">14.</span> <span class="nav-text">三大会23年也没有</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
