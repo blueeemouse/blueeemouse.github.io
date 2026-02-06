@@ -150,6 +150,333 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/" class="post-title-link" itemprop="url">TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-11-10 17:19:00 / Modified: 23:27:26" itemprop="dateCreated datePublished" datetime="2025-11-10T17:19:00+08:00">2025-11-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/" itemprop="url" rel="index"><span itemprop="name">efficientRAG</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="venueemnlp-25">Venue：EMNLP 25</h1>
+<h1 id="date">date：</h1>
+<h1 id="动机">动机：</h1>
+<h2 id="这篇文章是从cache的角度来提高rag的efficiency的但这么说可能也不太对应该说是论文观察到一个现象阻碍了rag的efficiency而一个可以考虑的解决方法正是类似kv-cache的技术">这篇文章是从cache的角度来提高rag的efficiency的。但这么说可能也不太对，应该说是论文观察到一个现象阻碍了rag的efficiency，而一个可以考虑的解决方法正是类似kv
+cache的技术</h2>
+<h2 id="rag需要检索很多外部的信息然后结合prompt进行回答问题就在于检索到的文档会产生比较多的token这就导致注意力机制进行计算的时候会花比较多的时间从而产生第一个token的时间会比较久也就是time-to-first-tokenttft会比较长这降低了rag的efficiency时间上而且每次检索到的文档都需要计算对应的kv这是一种重复性的工作让我们想到能否可以通过复用减少时间开销论文想解决这一问题从而提高efficiency">rag需要检索很多外部的信息，然后结合prompt进行回答。问题就在于检索到的文档会产生比较多的token，这就导致注意力机制进行计算的时候会花比较多的时间，从而产生第一个token的时间会比较久。也就是time-to-first-token（TTFT）会比较长。这降低了rag的efficiency（时间上）（而且每次检索到的文档都需要计算对应的kv，这是一种重复性的工作，让我们想到能否可以通过复用减少时间开销）。论文想解决这一问题，从而提高efficiency</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%E5%92%8CWindows%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%E5%92%8CWindows%EF%BC%89/" class="post-title-link" itemprop="url">neo4j安装（Ubuntu和Windows）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-07 11:20:00" itemprop="dateCreated datePublished" datetime="2025-11-07T11:20:00+08:00">2025-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-01-17 10:28:22" itemprop="dateModified" datetime="2026-01-17T10:28:22+08:00">2026-01-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="因为复现代码要用到neo4j捣鼓了好久">因为复现代码，要用到neo4j。捣鼓了好久……</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/11/07/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/neo4j%E5%AE%89%E8%A3%85%EF%BC%88Ubuntu%E5%92%8CWindows%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/01/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/paper%20list/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/01/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/paper%20list/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-01 15:24:49" itemprop="dateCreated datePublished" datetime="2025-11-01T15:24:49+08:00">2025-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-12-08 20:51:41" itemprop="dateModified" datetime="2025-12-08T20:51:41+08:00">2025-12-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="zotero-video-understanding的paper">zotero
+video-understanding的paper</h3>
+<h3 id="韩家炜专场">韩家炜专场</h3>
+<p><a href="%5B查看文章%5D(https://scholar.google.com/citations?view_op=view_citation&amp;hl=zh-CN&amp;user=Kv9AbjMAAAAJ&amp;cstart=700&amp;pagesize=100&amp;citation_for_view=Kv9AbjMAAAAJ:_UjOBC8JSJkC)">Deepretrieval</a>
+<a href="%5B查看文章%5D(https://scholar.google.com/citations?view_op=view_citation&amp;hl=zh-CN&amp;user=Kv9AbjMAAAAJ&amp;cstart=900&amp;pagesize=100&amp;citation_for_view=Kv9AbjMAAAAJ:Y2PVIMc7JHAC)">You
+Don't Need That Much Data to Train a Search Agent via RL</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.15117">An Empirical Study on
+Reinforcement Learning for Reasoning-Search Interleaved LLM Agents</a>
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.07233">DynamicRAG: Leveraging
+Outputs of Large Language Model as Feedback for Dynamic Reranking in
+Retrieval-Augmented Generation</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.10996">RAS: Retrieval-And-Structuring
+for Knowledge-Intensive LLM Generation</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.19288">Hypercube-RAG: Hypercube-Based
+Retrieval-Augmented Generation for In-domain Scientific
+Question-Answering</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.03699">Llm
+alignment as retriever optimization: An information retrieval
+perspective</a> <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3711896.3736557">Retrieval and
+structuring augmented generation with large language models</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.18454">Hybrid Latent Reasoning via
+Reinforcement Learning</a> <a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/CVPR2025/html/Fang_GRAPHGPT-O_Synergistic_Multimodal_Comprehension_and_Generation_on_Graphs_CVPR_2025_paper.html">Graphgpt-o:
+Synergistic multimodal comprehension and generation on graphs</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2508.03728">WINELL: wikipedia never-ending
+updating with LLM agents</a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2504.01346">GTR: Graph-Table-RAG for
+Cross-Table Question Answering</a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.15191">Structure-R1: Dynamically
+Leveraging Structural Knowledge in LLM Reasoning through Reinforcement
+Learning</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2510.07315">Vibe Checker:
+Aligning Code Evaluation with Human Preference</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2509.25140">ReasoningBank: Scaling Agent
+Self-Evolving with Reasoning Memory</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2509.12451">Topic Coverage-based
+Demonstration Retrieval for In-Context Learning</a> <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2506.08364">CC-RAG: Structured Multi-Hop
+Reasoning via Theme-Based Causal Graphs</a> <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3701716.3715870">Retrieval and
+Structuring Augmented Generation with LLMs for Web Applications</a> <a target="_blank" rel="noopener" href="https://peterjin.me/tutorials/sdm25/proposal.pdf">Integrating
+Textual and Graph Data: Advancing Knowledge Discovery with Semantic and
+Structural Insights</a> ### <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2511.08892">Lumine</a>，用agent玩原神，且训练完之后能zero-shot迁移到其它的动作游戏（如鸣潮，黑神话）
+### 流式视频处理的paper（streaming video）。<a target="_blank" rel="noopener" href="https://huggingface.co/papers/2510.09608">这个网址</a>还随手推荐了一批paper
+### knowledge distillation了解一下 ###
+推荐系统了解一下。感觉未必说是要去做它本身，但是可以考虑借用其中的思想，或者把它当成一个工具。推荐，也可以视为一种搜索
+### zotero里，llm下属privacy类别读一下（好像是machine
+unlearning用于隐私数据删除的？），还有context-engineering类别也读一下。这可能是之后会扩展过来做的方向
+### rag类别里，MaxShapley: Towards Incentive-compatible Generative
+Search with Fair Context
+Attribution这篇，可以抽时间看看。不算特别实用或者有影响力的，但是感觉蛮有意思的
+#### 把ai回答拿过来： ##### 问题背景</p>
+<p>随着基于大语言模型(LLM)的生成式搜索引擎逐渐取代传统搜索（如Google的AI概览），信息生态系统的运作方式发生了根本性变化：</p>
+<ul>
+<li><p><strong>传统搜索</strong>：用户点击搜索结果，内容提供者通过流量获得广告收入</p></li>
+<li><p><strong>生成式搜索</strong>：AI直接生成答案，用户可能不再访问源网站，内容提供者失去流量和收入</p></li>
+</ul>
+<p>这导致了一个关键挑战：<strong>如何设计一个激励相容的机制，确保内容提供者能根据其真实贡献获得公平补偿</strong>，从而维持健康可持续的信息生态系统。
+##### 核心研究问题</p>
+<p>论文聚焦的具体问题是：<strong>在检索增强生成(RAG)管道中，如何高效且准确地归因计算每个检索文档对最终生成答案的贡献度</strong>。</p>
+<h3 id="on-the-computability-of-artificial-general-intelligence这篇看着也蛮有意思的它似乎是说从计算上我们无法创造agi就是说无法创造出能真正创新的ai而且这并不是第一篇在研究这方面的paper似乎谷歌学术上搜索可以发现有其它的类似paper">On
+the Computability of Artificial General
+Intelligence这篇看着也蛮有意思的。它似乎是说，从计算上，我们无法创造AGI（就是说无法创造出能真正创新的ai？而且这并不是第一篇在研究这方面的paper，似乎谷歌学术上搜索，可以发现有其它的类似paper）</h3>
+<h3 id="the-missing-layer-of-agi-from-pattern-alchemy-to-coordination-physics这篇好像是在从理论角度证明llm是可以进行真正的推理的只是需要加一些层">The
+Missing Layer of AGI: From Pattern Alchemy to Coordination
+Physics这篇好像是在从理论角度证明，llm是可以进行真正的推理的？只是需要加一些层</h3>
+<h3 id="mitigating-self-preference-by-authorship-obfuscation这篇讨论llm的自我偏好的bias它发现简单的手段可以缓解这种bias但无法完全消除它偏向分析了">Mitigating
+Self-Preference by Authorship
+Obfuscation这篇讨论llm的自我偏好的bias。它发现，简单的手段可以缓解这种bias，但无法完全消除它（偏向分析了）</h3>
+<h3 id="interleaved-latent-visual-reasoning-with-selective-perceptual-modeling最近这种交错生成推理的论文还挺多这是在干啥呢是小的新热潮还是新的发展方向">Interleaved
+Latent Visual Reasoning with Selective Perceptual
+Modeling最近这种交错生成/推理的论文还挺多？这是在干啥呢？是小的新热潮还是新的发展方向？</h3>
+<h3 id="prompting-science-report-4-playing-pretend-expert-personas-dont-improve-factual-accuracy简单讲这篇论文在尝试面对研究生级别的题目的时候给llm不同的角色看能不能提高效果结论是即使让llm扮演那些专业对口的高知角色也基本不太能提高性能如果让它扮演专业不对口的或者是低知角色则会拉低性能">Prompting
+Science Report 4: Playing Pretend: Expert Personas Don't Improve Factual
+<strong>Accuracy</strong>简单讲，这篇论文在尝试面对研究生级别的题目的时候，给llm不同的角色，看能不能提高效果。结论是，即使让llm扮演那些专业对口的高知角色，也基本不太能提高性能。如果让它扮演专业不对口的，或者是低知角色，则会拉低性能</h3>
+<h3 id="sharp-shallow-layer-pruning-for-video-large-language-models-acceleration对vlm的一种剪枝加速oppo和bupt的">ShaRP:
+SHAllow-LayeR Pruning for Video Large Language Models
+Acceleration，对vlm的一种剪枝加速。oppo和bupt的</h3>
+<h3 id="parauni-enhance-generation-in-unified-multimodal-model-with-reinforcement-driven-hierarchical-parallel-information-interaction这个是做统一模型生成的它关注到视觉模型里不同层是有很丰富的特征的低层视觉特征的到高层的语义特征但生成模型部分没有很好地利用起来所以论文在尝试把这部分特征利用起来最终发现能提高生成质量ustc和华为的">ParaUni:
+Enhance Generation in Unified Multimodal Model with Reinforcement-driven
+Hierarchical Parallel Information
+Interaction。这个是做统一模型生成的，它关注到，视觉模型里不同层是有很丰富的特征的（低层视觉特征的到高层的语义特征），但生成模型部分没有很好地利用起来。所以论文在尝试把这部分特征利用起来，最终发现能提高生成质量。ustc和华为的</h3>
+<h3 id="conscious-gaze-adaptive-attention-mechanisms-for-hallucination-mitigation-in-vision-language-models嗯这个是研究vlm的幻觉的它关注到幻觉产生的一个原因是vlm会从视觉特征漂移到语言先验个人理解可能类似于看图的时候看到一个比较典型的东西就开始联想到自己以往见过的文字描述了之后就抛开图像进行理解和生成了最终体现出来就是幻觉了然后这篇论文希望能在vlm的内部就加上一些模块在发现将要偏移的时候及时制止把注意力拉回来感觉挺合理的似乎也蛮有意思的只不过是中国矿业大学的稍微的让人有点担心狗眼看人低了">Conscious
+Gaze: Adaptive Attention Mechanisms for Hallucination Mitigation in
+Vision-Language
+Models。嗯，这个是研究vlm的幻觉的。它关注到，幻觉产生的一个原因是，vlm会从视觉特征漂移到语言先验（个人理解，可能类似于，看图的时候，看到一个比较典型的东西，就开始联想到自己以往见过的文字描述了，之后就抛开图像进行理解和生成了。最终体现出来就是幻觉了）。然后这篇论文希望能在vlm的内部就加上一些模块，在发现将要偏移的时候，及时制止，把注意力拉回来（感觉挺合理的，似乎也蛮有意思的。只不过是中国矿业大学的，稍微的让人有点担心（狗眼看人低了……）</h3>
+<h3 id="probing-the-effectiveness-of-world-models-for-spatial-reasoning-through-test-time-scaling研究世界模型的可以开拓下眼界吧它关注的问题似乎是vlm在处理需要多视角理解和具身视角转换的空间推理任务上表现不够好现有方法在测试的时候使用世界模型来缓解这一问题并使用启发式验证器选择有用的视角但是对这些验证器缺乏系统的行为分析大概是说一直在用验证器解决多视角问题但是对这个验证器不够了解是吗">Probing
+the effectiveness of World Models for Spatial Reasoning through
+Test-time
+Scaling研究世界模型的。可以开拓下眼界吧。它关注的问题似乎是，vlm在处理需要多视角理解和具身视角转换的空间推理任务上，表现不够好。现有方法在测试的时候，使用世界模型，来缓解这一问题，并使用启发式验证器选择有用的视角，但是对这些验证器缺乏系统的行为分析（大概是说，一直在用验证器解决多视角问题，但是对这个验证器不够了解是吗？）</h3>
+<h3 id="hq-dm-single-hadamard-transformation-based-quantization-aware-training-for-low-bit-diffusion-models这篇关注的是扩散模型的量化简单讲扩散模型在量化的时候会遇到困难似乎是因为它的激活矩阵里面会有异常值所以用一般的量化方法性能会显著下降论文正是针对这一点进行处理ustc的">HQ-DM:
+Single Hadamard Transformation-Based Quantization-Aware Training for
+Low-Bit Diffusion
+Models。这篇关注的是扩散模型的量化。简单讲，扩散模型在量化的时候会遇到困难，似乎是因为它的激活矩阵里面会有异常值，所以用一般的量化方法性能会显著下降。论文正是针对这一点，进行处理。ustc的</h3>
+<h3 id="usv-unified-sparsification-for-accelerating-video-diffusion-models也是做扩散模型加速的它的出发点是现有方法对扩散模型加速的时候一般都是针对一个瓶颈去优化的容易遇到收益递减问题所以论文提出从多个角度下手同时优化国科大和腾讯混元的看着还蛮权威的">USV:
+Unified Sparsification for Accelerating Video Diffusion
+Models。也是做扩散模型加速的。它的出发点是，现有方法对扩散模型加速的时候，一般都是针对一个瓶颈去优化的，容易遇到收益递减问题。所以论文提出从多个角度下手同时优化（国科大和腾讯混元的，看着还蛮权威的）</h3>
+<h3 id="bring-your-dreams-to-life-continual-text-to-video-customization这篇有点类似于定制化的多模态模型不过它聚焦的是定制视频生成它的出发点是在定制的文本到视频生成任务中个性化概念都是不变的也就是不能更新概念吧而且学新的概念的时候会发生遗忘经典好多人做的工作">Bring
+Your Dreams to Life: Continual Text-to-Video
+Customization。这篇有点类似于定制化的多模态模型，不过它聚焦的是定制视频生成。它的出发点是，在定制的文本到视频生成任务中，个性化概念都是不变的（也就是不能更新概念吧？），而且学新的概念的时候，会发生遗忘（经典）（好多人做的工作）</h3>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/10/19/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E9%9A%8F%E7%AC%941/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -683,7 +1010,7 @@ personalization的数据集</h2>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%A4%9A%E6%A8%A1%E6%80%81GraphRAG%E7%9B%B8%E5%85%B3paper%E8%B0%83%E7%A0%94/">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/%E5%A4%9A%E6%A8%A1%E6%80%81GraphRAG%E7%9B%B8%E5%85%B3paper%E8%B0%83%E7%A0%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -697,7 +1024,7 @@ personalization的数据集</h2>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/09/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/%E5%A4%9A%E6%A8%A1%E6%80%81GraphRAG%E7%9B%B8%E5%85%B3paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2025/09/30/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/%E5%A4%9A%E6%A8%A1%E6%80%81GraphRAG%E7%9B%B8%E5%85%B3paper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -876,374 +1203,10 @@ token的kv cache</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/" class="post-title-link" itemprop="url">DrVideo：Document Retrieval Based Long Video Understanding</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-29 10:41:00 / Modified: 11:27:51" itemprop="dateCreated datePublished" datetime="2025-09-29T10:41:00+08:00">2025-09-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venuecvpr-25">Venue：CVPR 25</h1>
-<h1 id="date2024-11-24">date：2024-11-24</h1>
-<h1 id="动机">动机：</h1>
-<h1 id="insight">insight：</h1>
-<h2 id="对于视频我们总是希望找到它的关键帧关键部分并且是希望能一次性地在任务开始时就找到但是其实也未必如此如果采用一种不断完善的方法来寻找视频的关键信息最终也能回答好问题那其实也是可以的就像这篇论文前面的操作其实都是最朴素的操作了可就是因为引入了两个agent所以有弥补的空间可以决定是否要重新去检索关键帧可以决定是否要深挖已有的关键帧">对于视频，我们总是希望找到它的关键帧/关键部分，并且是希望能一次性地在任务开始时就找到。但是其实也未必如此，如果采用一种不断完善的方法来寻找视频的关键信息，最终也能回答好问题，那其实也是可以的。就像这篇论文，前面的操作其实都是最朴素的操作了，可就是因为引入了两个agent，所以有弥补的空间：可以决定是否要重新去检索关键帧；可以决定是否要深挖已有的关键帧</h2>
-<h1 id="contribution">contribution：</h1>
-<h2 id="再稍微读一下感觉没什么贡献啊可能就引入agent那一步值得说到一下其它感觉都是现有的而且那个retrieval-module不就是一个简单的检索吗这也能包装成一个之前没有的东西吗">再稍微读一下，感觉没什么贡献啊……可能就引入agent那一步值得说到一下，其它感觉都是现有的。而且那个retrieval
-module不就是一个简单的检索吗，这也能包装成一个之前没有的东西吗……</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/29/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/DrVideo%EF%BC%9ADocument%20Retrieval%20Based%20Long%20Video%20Understanding/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/" class="post-title-link" itemprop="url">VideoRAG：Retrieval-Augmented Generation over Video Corpus</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-09-28 17:05:00" itemprop="dateCreated datePublished" datetime="2025-09-28T17:05:00+08:00">2025-09-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-09-29 10:37:54" itemprop="dateModified" datetime="2025-09-29T10:37:54+08:00">2025-09-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-RAG/" itemprop="url" rel="index"><span itemprop="name">multi-modal RAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueacl-25-findings">Venue：ACL 25 findings</h1>
-<h1 id="date2025-05-28">date：2025-05-28</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="现有rag方法通常忽视了视频模态但视频里其实也包含了很丰富的信息-尽管最近有一些研究在尝试利用视频来辅助回答但它们要么不够动态即人工预先定义好query的几个相关视频或者按照固定规则来定义相关视频要么损失了视频中丰富的信息把视频转成文字描述-因此论文提出videorag来直接检索回query相关的视频能同时利用文字和视觉信息">现有RAG方法通常忽视了视频模态。但视频里其实也包含了很丰富的信息<br>尽管最近有一些研究在尝试利用视频来辅助回答，但它们要么不够动态（即人工预先定义好query的几个相关视频，或者按照固定规则来定义相关视频），要么损失了视频中丰富的信息（把视频转成文字描述）<br>因此论文提出VideoRAG，来直接检索回query相关的视频，能同时利用文字和视觉信息</h2>
-<h3 id="关于现有方法不够动态的问题可以举几个例子来理解比如人工预先定义的话可能针对打领带这个query人为的找出两三个教学视频它们的确是打领带的教学视频之后如果有query是关于这个的则它们的参考视频就只会是这两三个而不会从海量的视频候选库里检索">关于现有方法不够动态的问题，可以举几个例子来理解。比如人工预先定义的话，可能针对“打领带”这个query，人为的找出两三个教学视频，它们的确是打领带的教学视频。之后如果有query是关于这个的，则它们的参考视频就只会是这两三个，而不会从海量的视频候选库里检索。</h3>
-<h2 id="虽然现在有很多image-text-rag但视频终究是有一些独特的性质导致它不能被图像完全取代吧">虽然现在有很多image-text
-RAG，但视频终究是有一些独特的性质，导致它不能被图像完全取代吧</h2>
-<h1 id="insight">insight：</h1>
-<h2 id="判断视频是否和query相关其实也很重要千万不能忽视这一点否则检索的空间太大了">判断视频是否和query相关，其实也很重要。千万不能忽视这一点，否则检索的空间太大了</h2>
-<h2 id="视频模态的特点感觉体现在包括但不限于以下的几方面">视频模态的特点，感觉体现在（包括但不限于以下的几方面）：</h2>
-<h3 id="多帧之间的时序关系">多帧之间的时序关系</h3>
-<h3 id="画面图像和文本语音之间的对应关系">画面（图像）和文本/语音之间的对应关系</h3>
-<h1 id="contribution">contribution：</h1>
-<h2 id="支持了动态视频的检索包括能动态判断哪些视频是相关的并从中提取信息用于辅助生成">支持了动态视频的检索，包括能动态判断哪些视频是相关的，并从中提取信息用于辅助生成</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/multi-modal-rag/video-understanding/VideoRAG%EF%BC%9ARetrieval-Augmented%20Generation%20over%20Video%20Corpus/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/09/28/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/video%E7%9B%B8%E5%85%B3%E7%9A%84RAGpaper%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-09-28 15:55:06 / Modified: 17:00:02" itemprop="dateCreated datePublished" datetime="2025-09-28T15:55:06+08:00">2025-09-28</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="acl-25">ACL 25</h1>
-<h2 id="videorag-retrieval-augmented-generation-over-video-corpus多模态的视频相关"><strong>VideoRAG:
-Retrieval-Augmented Generation over Video
-Corpus</strong>（多模态的，视频相关）</h2>
-<h1 id="iclr-25">ICLR 25</h1>
-<h2 id="tempme-video-temporal-token-merging-for-efficient-text-video-retrieval多模态的video和efficiency结合的看起来是在压缩video输入的也算是video相关的">TempMe:
-Video Temporal Token Merging for Efficient Text-Video
-Retrieval（多模态的，video和efficiency结合的，看起来是在压缩video输入的。也算是video相关的）</h2>
-<h2 id="generalized-video-moment-retrieval多模态的video相关">Generalized
-Video Moment Retrieval（多模态的,video相关）</h2>
-<h1 id="nips-24">NIPS 24</h1>
-<h2 id="diffusion-inspired-truncated-sampler-for-text-video-retrievaltext-video-retrieval">Diffusion-Inspired
-Truncated Sampler for Text-Video Retrieval（text-video retrieval）</h2>
-<h1 id="cvpr-25">CVPR 25</h1>
-<h2 id="drvideo-document-retrieval-based-long-video-understanding真对口了长视频理解方面的"><strong>DrVideo:
-Document Retrieval Based Long Video
-Understanding</strong>（真对口了，长视频理解方面的）</h2>
-<h2 id="salova-segment-augmented-long-video-assistant-for-targeted-retrieval-and-routing-in-long-form-video-analysis这也是经典了也是长视频理解这一块的">SALOVA:
-Segment-Augmented Long Video Assistant for Targeted Retrieval and
-Routing in Long-Form Video
-Analysis（这也是经典了，也是长视频理解这一块的）</h2>
-<h2 id="vlog-video-language-models-by-generative-retrieval-of-narration-vocabulary似乎是video相关的但是理解方面的吗"><strong>VLog:
-Video-Language Models by Generative Retrieval of Narration
-Vocabulary</strong>（似乎是video相关的，但是理解方面的吗？）</h2>
-<h2 id="learning-audio-guided-video-representation-with-gated-attention-for-video-text-retrieval又是text-video-retrieval啊"><strong>Learning
-Audio-guided Video Representation with Gated Attention for Video-Text
-Retrieval</strong>（又是text-video retrieval啊）</h2>
-<h2 id="rethinking-noisy-video-text-retrieval-via-relation-aware-alignment还是text-video-retrieval"><strong>Rethinking
-Noisy Video-Text Retrieval via Relation-aware
-Alignment</strong>（还是text-video retrieval）</h2>
-<h2 id="video-colbert-contextualized-late-interaction-for-text-to-video-retrieval还是text-to-video-retrieval"><strong>Video-ColBERT:
-Contextualized Late Interaction for Text-to-Video
-Retrieval</strong>（还是text-to-video retrieval）</h2>
-<h2 id="multivent-2.0-a-massive-multilingual-benchmark-for-event-centric-video-retrievalbenchmark类不过是关于video-retrieval的"><strong>MultiVENT
-2.0: A Massive Multilingual Benchmark for Event-Centric Video
-Retrieval</strong>（benchmark类，不过是关于video retrieval的）</h2>
-<h2 id="the-devil-is-in-the-prompts-retrieval-augmented-prompt-optimization-for-text-to-video-generation不会是prompt-engineering吧关注text-to-video-generation文生视频吗"><strong>The
-Devil is in the Prompts: Retrieval-Augmented Prompt Optimization for
-Text-to-Video Generation</strong>（不会是prompt
-engineering吧……）（关注text-to-video generation？文生视频吗？）</h2>
-<h2 id="narrating-the-video-boosting-text-video-retrieval-via-comprehensive-utilization-of-frame-level-captionstext-to-video-retrieval"><a target="_blank" rel="noopener" href="https://multimodal-understanding-group.github.io/NarVid/">Narrating
-the Video: Boosting Text-Video Retrieval via Comprehensive Utilization
-of Frame-Level Captions</a>（text-to-video retrieval）</h2>
-<h2 id="discovla-discrepancy-reduction-in-vision-language-and-alignment-for-parameter-efficient-video-text-retrieval呃efficiency和video结合text-to-video-retrieval"><a target="_blank" rel="noopener" href="https://github.com/LunarShen/DsicoVLA">DiscoVLA: Discrepancy
-Reduction in Vision, Language, and Alignment for Parameter-Efficient
-Video-Text Retrieval</a>（呃，efficiency和video结合，text-to-video
-retrieval）</h2>
-<h1 id="iccv-25">ICCV 25</h1>
-<h2 id="hybrid-tower-fine-grained-pseudo-query-interaction-and-generation-for-text-to-video-retrievaltext-to-video-retrievalvideo相关"><strong>Hybrid-Tower:
-Fine-grained Pseudo-query Interaction and Generation for Text-to-Video
-Retrieval</strong>（text-to-video retrieval，video相关）</h2>
-<h2 id="beyond-simple-edits-composed-video-retrieval-with-dense-modificationscomposed-video-retrievalvideo相关的"><strong>Beyond
-Simple Edits: Composed Video Retrieval with Dense
-Modifications</strong>（Composed Video Retrieval，video相关的）</h2>
-<h2 id="borrowing-eyes-for-the-blind-spot-overcoming-data-scarcity-in-malicious-video-detection-via-cross-domain-retrieval-augmentation这是啥video-detection嗯也算是video相关的但应该是那种low-level的video相关工作"><a target="_blank" rel="noopener" href="https://github.com/ronpay/CRAVE">Borrowing Eyes for the Blind
-Spot: Overcoming Data Scarcity in Malicious Video Detection via
-Cross-Domain Retrieval Augmentation</a>（这是啥？video
-detection？嗯，也算是video相关的，但应该是那种low-level的video相关工作）</h2>
-<h2 id="enhancing-partially-relevant-video-retrieval-with-hyperbolic-learningvideo-retrieval"><strong>Enhancing
-Partially Relevant Video Retrieval with Hyperbolic
-Learning</strong>（video retrieval）</h2>
-<h2 id="ophclip-hierarchical-retrieval-augmented-learning-for-ophthalmic-surgical-video-language-pretraining这是不太懂不过看起来是video相关的"><strong>OphCLIP:
-Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical
-Video-Language
-Pretraining</strong>（这是？不太懂，不过看起来是video相关的）</h2>
-<h2 id="quantifying-and-narrowing-the-unknown-interactive-text-to-video-retrieval-via-uncertainty-minimizationtext-to-video-retrievalvideo相关"><strong>Quantifying
-and Narrowing the Unknown: Interactive Text-to-Video Retrieval via
-Uncertainty Minimization</strong>（text-to-video
-retrieval，video相关）</h2>
-<h2 id="prototypes-are-balanced-units-for-efficient-and-effective-partially-relevant-video-retrievalvideo-retrievalvideo相关"><strong>Prototypes
-are Balanced Units for Efficient and Effective Partially Relevant Video
-Retrieval</strong>（video retrieval，video相关）</h2>
-<h2 id="bidirectional-likelihood-estimation-with-multi-modal-large-language-models-for-text-video-retrievaltext-to-video-retrievalvideo相关"><strong>Bidirectional
-Likelihood Estimation with Multi-Modal Large Language Models for
-Text-Video Retrieval</strong>（text-to-video retrieval，video相关）</h2>
-<h1 id="eccv-24">ECCV 24</h1>
-<h2 id="rethinking-video-text-understanding-retrieval-from-counterfactually-augmented-datavideo-text-understanding具体是做啥是video理解方面的吗"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/2083_ECCV_2024_paper.php">Rethinking
-Video-Text Understanding: Retrieval from Counterfactually Augmented
-Data</a>（video-text
-understanding？具体是做啥？是video理解方面的吗？）</h2>
-<h2 id="rgnet-a-unified-clip-retrieval-and-grounding-network-for-long-videoslong-video相关的不知道是不是长视频理解这方面的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/3186_ECCV_2024_paper.php">RGNet:
-A Unified Clip Retrieval and Grounding Network for Long Videos</a>（long
-video相关的，不知道是不是长视频理解这方面的）</h2>
-<h2 id="kdpror-a-knowledge-decoupling-probabilistic-framework-for-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5033_ECCV_2024_paper.php">KDProR:
-A Knowledge-Decoupling Probabilistic Framework for Video-Text
-Retrieval</a>（text-to-video retrieval，video相关）</h2>
-<h2 id="egocvr-an-egocentric-benchmark-for-fine-grained-composed-video-retrieval细粒度composed-video-retrieval"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/5363_ECCV_2024_paper.php">EgoCVR:
-An Egocentric Benchmark for Fine-Grained Composed Video
-Retrieval</a>（细粒度Composed Video Retrieval）</h2>
-<h2 id="uncertainty-aware-sign-language-video-retrieval-with-probability-distribution-modelingvideo-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6074_ECCV_2024_paper.php">Uncertainty-aware
-sign language video retrieval with probability distribution
-modeling</a>（video retrieval，video相关）</h2>
-<h2 id="ea-vtr-event-aware-video-text-retrievaltext-to-video-retrievalvideo相关"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/6845_ECCV_2024_paper.php">EA-VTR:
-Event-Aware Video-Text Retrieval</a>（text-to-video
-retrieval，video相关）</h2>
-<h2 id="rap-retrieval-augmented-planner-for-adaptive-procedure-planning-in-instructional-videosvideo相关的但是具体是做什么的"><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/html/9950_ECCV_2024_paper.php">RAP:
-Retrieval-Augmented Planner for Adaptive Procedure Planning in
-Instructional Videos</a>（video相关的，但是具体是做什么的？）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1309,18 +1272,18 @@ Instructional Videos</a>（video相关的，但是具体是做什么的？）</h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">256</span>
+          <span class="site-state-item-count">243</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-count">102</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

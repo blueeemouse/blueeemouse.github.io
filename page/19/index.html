@@ -567,67 +567,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/04/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/hugging%20face%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDtokenizer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/04/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/hugging%20face%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDtokenizer/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-04 15:22:45 / Modified: 15:25:39" itemprop="dateCreated datePublished" datetime="2025-05-04T15:22:45+08:00">2025-05-04</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="完整的报错好像是这样的">完整的报错好像是这样的：</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">OSError: Can’t load tokenizer <span class="keyword">for</span> ‘bert-base-chinese’. If you were trying to load it from ‘https://huggingface.co/models’, make sure you don’t have a <span class="built_in">local</span> directory with the same name. Otherwise, make sure ‘bert-base-chinese’ is the correct path to a directory containing allrelevant files <span class="keyword">for</span> a BertTokenizer tokenizer.</span><br><span class="line">————————————————</span><br><span class="line"></span><br><span class="line">版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</span><br><span class="line">                        </span><br><span class="line">原文链接：https://blog.csdn.net/weixin_48958956/article/details/137292748</span><br></pre></td></tr></table></figure>
-<h1 id="这个是我在训练一个gpt2的模型的时候遇到的此时我是在服务器上进行训练然后要加载bert-base-chinese的tokenizer而此前我已经在本地尝试过了是可以正常加载以及训练的查了一下应该是网络问题解决方法大致就是从网上把模型下载下来然后传到服务器上加载的时候指定一下路径具体的解决方法可以参考上面的博客注意一下下载下来的几个几个文件要放到同一个文件夹下">这个是我在训练一个gpt2的模型的时候遇到的。此时我是在服务器上进行训练，然后要加载bert-base-chinese的tokenizer。而此前我已经在本地尝试过了，是可以正常加载以及训练的。查了一下，应该是网络问题。解决方法大致就是从网上把模型下载下来，然后传到服务器上，加载的时候指定一下路径。具体的解决方法可以参考上面的博客（注意一下，下载下来的几个几个文件，要放到同一个文件夹下）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ubuntu%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -668,77 +607,6 @@
 
       
           <h1 id="大致的流程是先下载ubuntu系统的对应版本的iso文件之后下载一个可以开虚拟机的东西比如vmware好像我装的时候主要参考了这个链接而安装完vmware就要安装虚拟机了可以参考这个和这个">大致的流程是，先下载Ubuntu系统的对应版本的iso文件，之后下载一个可以开虚拟机的东西，比如VMware（好像我装的时候主要参考了<a target="_blank" rel="noopener" href="https://www.cnblogs.com/EthanS/p/18211302">这个链接</a>）。而安装完VMware，就要安装虚拟机了，可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/u012611644/article/details/80728806">这个</a>和<a target="_blank" rel="noopener" href="https://blog.csdn.net/fanyun_01/article/details/136540798">这个</a>）</h1>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/04/05/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84+=/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/04/05/python%E7%9B%B8%E5%85%B3bugs%E6%88%96%E7%9F%A5%E8%AF%86/%E5%85%B3%E4%BA%8Epython%E4%B8%AD%E7%9A%84+=/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-04-05 15:28:50 / Modified: 15:49:17" itemprop="dateCreated datePublished" datetime="2025-04-05T15:28:50+08:00">2025-04-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="简单来说对一个变量如果实施比如targets-add_num此时它的修改时就地的虽然省了内存但如果后面还要用原来的targets就会出问题-而targets-targets-add_num则是targets-add_num会创建一个新的tensor对象这里实际的例子是在对pytorch张量进行运算之后再把这个新的tensor赋值给变量targets">简单来说，对一个变量，如果实施+=，比如targets
-+=
-add_num，此时它的修改时就地的，虽然省了内存，但如果后面还要用原来的targets，就会出问题<br>而targets
-= targets + add_num，则是：targets +
-add_num会创建一个新的tensor对象（这里实际的例子是在对pytorch张量进行运算），之后再把这个新的tensor赋值给变量targets</h1>
-<h1 id="附上原来的代码吧这样能更清晰的看出为什么原来会报错因为其实这个错感觉还不太容易触发">附上原来的代码吧，这样能更清晰的看出为什么原来会报错，因为其实这个错感觉还不太容易触发：</h1>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(train_iters):</span><br><span class="line"></span><br><span class="line">            train_inputs = data_loader_train.<span class="built_in">next</span>()</span><br><span class="line"></span><br><span class="line">            data_time.update(time.time() - end)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            s_inputs,imgs_origin, targets, cids, domains, = <span class="variable language_">self</span>._parse_data(train_inputs)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> training_phase&gt;<span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">                <span class="keyword">with</span> torch.no_grad():</span><br><span class="line"></span><br><span class="line">                    kernel = rehearser(imgs_origin)</span><br><span class="line"></span><br><span class="line">                inputs_r=decode_transfer_img(<span class="variable language_">self</span>.args,imgs_origin,kernel)              </span><br><span class="line"></span><br><span class="line">                datas=[</span><br><span class="line"></span><br><span class="line">                    [s_inputs,imgs_origin, targets, cids, domains],</span><br><span class="line"></span><br><span class="line">                    [inputs_r,imgs_origin, targets, cids, domains]</span><br><span class="line"></span><br><span class="line">                ]            </span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">                datas=[</span><br><span class="line"></span><br><span class="line">                    [s_inputs,imgs_origin, targets, cids, domains]</span><br><span class="line"></span><br><span class="line">                ]</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">            loss=<span class="number">0</span>    </span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> idx, (s_inputs,imgs_origin, targets, cids, domains) <span class="keyword">in</span> <span class="built_in">enumerate</span>(datas):</span><br><span class="line"></span><br><span class="line">                <span class="comment"># targets_origin=targets</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># targets =targets+ add_num</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 上面两行才是正确的做法</span></span><br><span class="line">                targets += add_num    <span class="comment"># 错误代码</span></span><br></pre></td></tr></table></figure>
-<h2 id="这是一段深度学习里进行训练的代码在每个iter开头我们都先取出数据然后如果training_phase1则对其中的imgs_origin进行一个类似于变换的操作得到新的一个数据inputs_r它的形状和s_inputs是一样的我们这里只关注training_phase1的情况毕竟错是在这个情况下报的-到了下面我们看到会循环datas那这里的大概意思是说如果training_phase等于1则我们只学习一份数据而如果training_phase1则我们会学习两份数据重点来了我的错误做法是要加上add_num的时候直接用targets-add_num然而在下一个循环里我依然要用到targets且根据上面datas在training_phase1情况下的定义可以看到两组数据里的targets是一样的这就表明我是要用一样的targets的而且它们都是用的targets那么引用的本质上是同一个内存块这点很重要这在后面就导致了错误如果我此时就地修改那么第一份数据里没问题我们给targets加上add_num而后因为第一份第二份数据的targets是指向同一块内存的所以此时第二份数据的targets就也已经加上了add_num但到了第二份数据的循环我们依然会对它的targets加上add_num那就相当于加了两次这就导致了标签越界了所以最终会报错">这是一段深度学习里进行训练的代码。在每个iter开头，我们都先取出数据，然后如果training_phase&gt;1，则对其中的imgs_origin进行一个类似于变换的操作，得到新的一个数据inputs_r（它的形状和s_inputs是一样的）（我们这里只关注training_phase&gt;1的情况，毕竟错是在这个情况下报的）<br>到了下面，我们看到会循环datas。那这里的大概意思是说，如果training_phase等于1，则我们只学习一份数据；而如果training_phase&gt;1，则我们会学习两份数据。重点来了，我的错误做法是，要加上add_num的时候，直接用targets
-+=
-add_num。然而，在下一个循环里，我依然要用到targets，且根据上面datas在training_phase&gt;1情况下的定义，可以看到，两组数据里的targets是一样的，这就表明我是要用一样的targets的（而且它们都是用的targets，那么引用的本质上是同一个内存块。这点很重要，这在后面就导致了错误）。如果我此时就地修改，那么第一份数据里没问题，我们给targets加上add_num，而后，因为第一份第二份数据的targets是指向同一块内存的，所以，此时第二份数据的targets就也已经加上了add_num；但到了第二份数据的循环，我们依然会对它的targets加上add_num，那就相当于加了两次，这就导致了标签越界了，所以最终会报错。</h2>
-<h2 id="再来看看正确做法为什么对其实它的那行targets_origintargets感觉没必要因为它后面也没用到targets_origin而且这一步也并不是规避错误的关键关键在于用targets-targets-add_num正如上所述它会创建一个新的tensor对象之后再把这个新的tensor赋值给变量targets而第二份数据里的targets则还是指向原来的那块没加上add_num的targets的内存所以到了第二份数据的循环的时候我们就是只对它加一次add_num所以总结一下正确代码之所以对就是因为它的加法不是in-place的">再来看看正确做法为什么对。其实它的那行targets_origin=targets感觉没必要，因为它后面也没用到targets_origin，而且这一步也并不是规避错误的关键。关键在于用targets
-= targets +
-add_num。正如上所述，它会创建一个新的tensor对象，之后再把这个新的tensor赋值给变量targets；而第二份数据里的targets，则还是指向原来的那块，没加上add_num的targets的内存。所以到了第二份数据的循环的时候，我们就是只对它加一次add_num。所以，总结一下，正确代码之所以对，就是因为它的加法不是in-place的</h2>
 
       
     </div>
@@ -893,10 +761,163 @@ deactivate当然可以退出这个默认环境，但也有点麻烦。永久的�
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/trick/vi-reid%20trick/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/17/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/trick/vi-reid%20trick/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-03-17 21:01:36" itemprop="dateCreated datePublished" datetime="2025-03-17T21:01:36+08:00">2025-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-18 11:44:39" itemprop="dateModified" datetime="2025-03-18T11:44:39+08:00">2025-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="涉及提取身体部位啊姿态啊之类的信息时通常的做法都是学习mask然后和feature-map进行哈达玛积得到的结果就认为是提取了重点部位的结果这个想法还算合理吧毕竟说要提取重点的部位之类的用较大的权重来表征倒也没错不过一般mask都是全局的能不能设计一些局部的呢比如先对图像进行水平划分假设是水平均匀划分为六份然后每一份里都学习一个mask分别提取特征之后再拼起来甚至还可以学一个全局的然后把全局mask加权的结果也加进来不知道会不会提取的好一点">涉及提取身体部位啊，姿态啊，之类的信息时，通常的做法都是学习mask，然后和feature
+map进行哈达玛积，得到的结果就认为是提取了重点部位的结果（这个想法还算合理吧，毕竟说要提取重点的部位之类的，用较大的权重来表征，倒也没错（不过一般mask都是全局的。能不能设计一些局部的呢？比如，先对图像进行水平划分，假设是水平均匀划分为六份，然后每一份里都学习一个mask，分别提取特征，之后再拼起来；甚至还可以学一个全局的，然后把全局mask加权的结果也加进来。不知道会不会提取的好一点</h1>
+<h1 id="在聚合一些东西的时候或许可以考虑只聚合top-k的而不是全部的一些权重过于小的部分可能其实没什么用甚至还可能有噪声">在聚合一些东西的时候，或许可以考虑只聚合top-k的，而不是全部的。一些权重过于小的部分，可能其实没什么用，甚至还可能有噪声</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/03/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/14/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Object_Re-Identification/VI-ReID/%E6%B3%9B%E8%AF%BB/%E6%B3%9B%E8%AF%BB2/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-03-14 23:27:03" itemprop="dateCreated datePublished" datetime="2025-03-14T23:27:03+08:00">2025-03-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-03-18 14:31:41" itemprop="dateModified" datetime="2025-03-18T14:31:41+08:00">2025-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="robust-multimodal-learning-via-representation-decoupling">Robust
+Multimodal Learning via Representation Decoupling</h1>
+<h1 id="eccv-24">ECCV 24</h1>
+<h1 id="motivation">motivation：</h1>
+<h1 id="insight">insight：</h1>
+<h1 id="方法">方法</h1>
+<h2 id="方法的第一节其实没讲新东西而是从一个具体的任务分类任务入手说明了一下为什么传统的学习方法会限制模型的表达能力">1.方法的第一节其实没讲新东西，而是从一个具体的任务——分类任务入手，说明了一下为什么传统的学习方法会限制模型的表达能力</h2>
+<h2 id="decoupled-multimodal-representation">2.Decoupled Multimodal
+Representation</h2>
+<h3 id="这一节主要讲如何缓解上面提到的问题同类的不同模态的数据被强制约束要靠近同一个中心导致模型表达能力降低">这一节主要讲如何缓解上面提到的问题：同类的不同模态的数据被强制约束要靠近同一个中心，导致模型表达能力降低</h3>
+<h3 id="首先是prepresentation-probabilization具体来说对得到的embedding我们不直接利用它而是再用它去建立一个分布这里假设是多元高斯分布所以我们会用这个embedding送到两个网络分别预测高斯分布的均值和标准差的对数这个也算是常见的技巧了吧预测标准差这种恒正的量可能预测取对数后的值是更加容易优化的也是更加稳定的建立好分布之后训练时的embedding就是从分布里采样得到的当然为了能优化这个分布的均值和标准差用到了重参数化方法而测试的时候的embedding就是均值向量和dkp的操作几乎完全一样但可能是概率建模embedding的方法并不是特别稀奇吧">首先是Prepresentation
+Probabilization。具体来说，对得到的embedding，我们不直接利用它，而是再用它去建立一个分布，这里假设是多元高斯分布。所以我们会用这个embedding，送到两个网络，分别预测高斯分布的均值和标准差的对数（这个也算是常见的技巧了吧。预测标准差这种恒正的量，可能预测取对数后的值是更加容易优化的，也是更加稳定的）。建立好分布之后，训练时的embedding就是从分布里采样得到的（当然，为了能优化这个分布的均值和标准差，用到了重参数化方法）。而测试的时候的embedding就是均值向量（和DKP的操作几乎完全一样。。但可能是概率建模embedding的方法并不是特别稀奇吧）</h3>
+<h3 id="通过建立分布现在每个数据的分布的均值并不一定要完全地相互靠近可以稍微远离一点也没关系因为是从一个分布里采样训练的embedding的因此此时的均值向量可以更加多样化一些论文认为这样的话模型能捕捉到更多模态特有的特征显然标准差越大不确定性越大均值向量之间可能离得更加远了但标准差过高是不好的所以需要加一些约束让它不要太随机了故引出下面的distributional-regularizaiton">通过建立分布，现在每个数据的分布的均值并不一定要完全地相互靠近，可以稍微远离一点也没关系，因为是从一个分布里采样训练的embedding的。因此，此时的均值向量可以更加多样化一些，论文认为这样的话，模型能捕捉到更多模态特有的特征（显然，标准差越大，不确定性越大，均值向量之间可能离得更加远了。但标准差过高是不好的，所以需要加一些约束，让它不要太随机了。故引出下面的Distributional
+Regularizaiton）</h3>
+<h3 id="所谓distributional-regularization就是对建立的分布我们会施加一个它和标准正态分布之间的kl损失这里我的一个理解是往正态分布上约束是可以让标准差不要太大但为什么还要约束均值呢让所有分布都往同一个分布上靠拢似乎也有点奇怪但论文里说是受其它用概率建模embedding的论文的启发才这样做的姑且可以认为是一个比较常见的手段但为什么这样并没有说的很清楚">所谓Distributional
+Regularization，就是对建立的分布，我们会施加一个它和标准正态分布之间的KL损失（这里我的一个理解是，往正态分布上约束，是可以让标准差不要太大。但为什么还要约束均值呢？让所有分布都往同一个分布上靠拢？似乎也有点奇怪。但论文里说是受其它用概率建模embedding的论文的启发，才这样做的。姑且可以认为是一个比较常见的手段，但为什么这样，并没有说的很清楚。。。）</h3>
+<h2 id="hard-combination-regularizer">3.Hard Combination
+Regularizer</h2>
+<h3 id="具体原理还没特别明白可能得再细看但它大概的思想以及作用是针对比较少出现的组合论文是处理多模态的输入的假设有k种模态一个输入里未必同时有这k个模态的数据k种模态是否出现一共会有2k种组合形式设计专门的梯度计算模块以免模型对这类组合处理的太差了有点对少样本进行重采样的感觉">具体原理还没特别明白，可能得再细看。。。但它大概的思想以及作用是，针对比较少出现的组合（论文是处理多模态的输入的，假设有k种模态，一个输入里未必同时有这k个模态的数据。k种模态是否出现，一共会有<span class="math inline">\(2^{k}\)</span>种组合形式），设计专门的梯度计算模块，以免模型对这类组合处理的太差了（有点对少样本进行重采样的感觉。。）</h3>
+<h1 id="cross-modality-transformer-with-modality-mining-for-visible-infrared-person-re-identification">CROSS-MODALITY
+TRANSFORMER WITH MODALITY MINING FOR VISIBLE-INFRARED PERSON
+RE-IDENTIFICATION</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/18/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/20/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/18/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/20/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -962,18 +983,18 @@ deactivate当然可以退出这个默认环境，但也有点麻烦。永久的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">256</span>
+          <span class="site-state-item-count">243</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-count">81</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">104</span>
+        <span class="site-state-item-count">102</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
