@@ -150,6 +150,482 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/" class="post-title-link" itemprop="url">Incorporating physics into data-driven computer vision</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 16:53:00 / Modified: 16:54:51" itemprop="dateCreated datePublished" datetime="2025-05-21T16:53:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/" itemprop="url" rel="index"><span itemprop="name">ai4s</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="abstract">abstract</h1>
+<h2 id="现在的cv技术因为它是数据驱动的所以其实它是从大量数据中推测出物理规律的这种方式不够显式进而导致可解释性等不足而传统的cv技术虽然是明确有物理规律支撑的但性能又不够好比不过深度学习的那些技术那么弱国能把物理模型与深度学习的技术融合或许就能结合二者的优点既有高性能又有可解释性泛化性可证伪性而这可以认为是把物理模型当成数据驱动过程中的一个约束条件也就是我们约束深度学习模型必须满足物理规律相当于一种融入先验知识的方法">现在的cv技术，因为它是数据驱动的，所以其实它是从大量数据中“推测”出物理规律的（这种方式不够显式，进而导致可解释性等不足）；而传统的cv技术，虽然是明确有物理规律支撑的，但性能又不够好，比不过深度学习的那些技术。那么，弱国能把物理模型与深度学习的技术融合，或许就能结合二者的优点，既有高性能，又有可解释性、泛化性、可证伪性。而这可以认为是把物理模型当成数据驱动过程中的一个约束条件，也就是我们约束深度学习模型必须满足物理规律（相当于一种融入先验知识的方法）</h2>
+<h2 id="这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术也即所谓physics-based-machine-learning">这篇文章就是在讲一些把物理模型和深度学习模型给融合起来的技术，也即所谓physics-based
+machine learning</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/ai4s/Incorporating%20physics%20into%20data-driven%20computer%20vision/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/" class="post-title-link" itemprop="url">偏差与方差</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-21 00:50:00 / Modified: 00:51:11" itemprop="dateCreated datePublished" datetime="2025-05-21T00:50:00+08:00">2025-05-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="先来个粗糙的理解偏差可以简单看成是表征了这个模型族的输出与真实值之间的偏差因此如果偏差很大比较有可能是模型形式过于简单而导致的欠拟合-方差则度量了同样大小的训练集的变动导致的学习性能的变化这里注意是训练集的变动那么如果训练集有微小变动但学习性能变化很大这就是方差大的情况它表明训练出的模型性能太依赖于训练集了这表明模型的形式可能过于复杂了导致一训练就出现了过拟合的情况-因此实际训练的时候需要权衡偏差和方差也就是要注意模型的复杂度不能太复杂导致过拟合了但也不能太简单导致根本学不好某种程度上可以认为偏差反映了模型的准确性方差反映了模型的稳定性">1.先来个粗糙的理解。偏差可以简单看成是，表征了这个模型族的输出与真实值之间的偏差。因此，如果偏差很大，比较有可能是模型形式过于简单而导致的欠拟合<br>方差则度量了同样大小的训练集的变动导致的学习性能的变化（这里注意，是“训练集的变动”）。那么，如果训练集有微小变动，但学习性能变化很大，这就是方差大的情况，它表明训练出的模型性能太依赖于训练集了，这表明模型的形式可能过于复杂了，导致一训练就出现了过拟合的情况<br>因此，实际训练的时候，需要权衡偏差和方差。也就是要注意模型的复杂度，不能太复杂导致过拟合了，但也不能太简单，导致根本学不好。某种程度上，可以认为：偏差反映了模型的准确性，方差反映了模型的稳定性</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/21/ml%E5%9F%BA%E7%A1%80/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">贝叶斯分类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-05-20 11:57:00" itemprop="dateCreated datePublished" datetime="2025-05-20T11:57:00+08:00">2025-05-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-05-21 00:50:21" itemprop="dateModified" datetime="2025-05-21T00:50:21+08:00">2025-05-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">ml基础</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">ml常见算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原理">1.原理</h1>
+<h2 id="这个分类方法是想通过最大化后验概率来实现分类简单说假如一共有k种标签对于一个待分类的样本我们看一下把它分到哪个类别的概率最大然后就把样本分到这个类别也就是取argmax_y-pyx作为标签">这个分类方法，是想通过最大化后验概率来实现分类。简单说，假如一共有k种标签，对于一个待分类的样本，我们看一下把它分到哪个类别的概率最大，然后就把样本分到这个类别。也就是取<span class="math inline">\(\arg\max_{y} p(y|x)\)</span>作为标签</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/20/ml%E5%9F%BA%E7%A1%80/ml%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/19/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%E2%85%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/19/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%E2%85%A1/" class="post-title-link" itemprop="url">两个数组的交集Ⅱ</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-19 23:44:00 / Modified: 23:50:00" itemprop="dateCreated datePublished" datetime="2025-05-19T23:44:00+08:00">2025-05-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/intersection-of-two-arrays-ii/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/19/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%E2%85%A1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/18/%E6%8D%A3%E9%BC%93blog/obsidian%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/18/%E6%8D%A3%E9%BC%93blog/obsidian%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">obsidian模板使用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-18 17:37:00 / Modified: 17:37:46" itemprop="dateCreated datePublished" datetime="2025-05-18T17:37:00+08:00">2025-05-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8D%A3%E9%BC%93blog/" itemprop="url" rel="index"><span itemprop="name">捣鼓blog</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="如题主要介绍一下模板的使用因为现在博客的文章需要一些专门的格式来记录题目和时间等如果每次都手打略有些麻烦故尝试使用模板">如题，主要介绍一下模板的使用。因为现在博客的文章需要一些专门的格式来记录题目和时间等，如果每次都手打，略有些麻烦。故尝试使用模板</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/18/%E6%8D%A3%E9%BC%93blog/obsidian%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">打乱数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-05-18 16:39:00 / Modified: 17:25:22" itemprop="dateCreated datePublished" datetime="2025-05-18T16:39:00+08:00">2025-05-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/shuffle-an-array/description/">在这</a></h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/05/18/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/16/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -474,528 +950,6 @@ retrieval：architecture，training，indexing，integration，最后总结一�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/" class="post-title-link" itemprop="url">多数元素</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-13 17:36:00 / Modified: 17:55:52" itemprop="dateCreated datePublished" datetime="2025-05-13T17:36:00+08:00">2025-05-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/majority-element/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%95%B0%E7%BB%84/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">验证回文串</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-13 17:08:00 / Modified: 17:35:59" itemprop="dateCreated datePublished" datetime="2025-05-13T17:08:00+08:00">2025-05-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/first-unique-character-in-a-string/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/13/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/" class="post-title-link" itemprop="url">单词搜索Ⅱ</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-12 23:00:00 / Modified: 23:24:11" itemprop="dateCreated datePublished" datetime="2025-05-12T23:00:00+08:00">2025-05-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/" itemprop="url" rel="index"><span itemprop="name">algo</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">算法面试题</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="原题链接在这">原题链接<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/word-search-ii/description/">在这</a></h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/12/algo/%E7%AE%97%E6%B3%95%E9%9D%A2%E8%AF%95%E9%A2%98/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2%E2%85%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/" class="post-title-link" itemprop="url">END-TO-END OPTIMIZED IMAGE COMPRESSION</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-09 21:41:00 / Modified: 21:42:38" itemprop="dateCreated datePublished" datetime="2025-05-09T21:41:00+08:00">2025-05-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image-Compression/" itemprop="url" rel="index"><span itemprop="name">Image Compression</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="iclr-2017">ICLR 2017</h1>
-<h1 id="intro">intro</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/END-TO-END%20OPTIMIZED%20IMAGE%20COMPRESSION/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/Image%20Compression%E5%85%A5%E9%97%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image%20Compression/Image%20Compression%E5%85%A5%E9%97%A8/" class="post-title-link" itemprop="url">Image Compression入门</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-09 21:41:00 / Modified: 21:42:14" itemprop="dateCreated datePublished" datetime="2025-05-09T21:41:00+08:00">2025-05-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/Image-Compression/" itemprop="url" rel="index"><span itemprop="name">Image Compression</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="尝试搞清楚这些概念">尝试搞清楚这些概念：</h1>
-<h2 id="convolutional-autoencoder-framework-for-learned-image-compression">convolutional
-autoencoder framework for learned image compression</h2>
-<h2 id="autoregressive-entropy-model">autoregressive entropy model</h2>
-<h2 id="context-model">context model</h2>
-<h2 id="rate-distortionrd">Rate Distortion（RD）</h2>
-<h2 id="serial-processing">serial processing</h2>
-<h2 id="entropy-models">entropy models</h2>
-<h2 id="rate-distortion-curve">rate-distortion curve</h2>
-<h2 id="proxy-loss-function">proxy loss function</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/05/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt%20learning/DART/" class="post-title-link" itemprop="url">DART</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-05-09 21:41:00 / Modified: 21:44:05" itemprop="dateCreated datePublished" datetime="2025-05-09T21:41:00+08:00">2025-05-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/cv/prompt-learning/" itemprop="url" rel="index"><span itemprop="name">prompt learning</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="问题设定">问题设定：</h1>
-<h2 id="要解决的是利用clip-based-model用于下游的图像分类的问题">要解决的是利用CLIP-based
-model用于下游的图像分类的问题</h2>
-<h1 id="创新点">创新点：</h1>
-<h2 id="提出学习两种模态的prompt即text和image而之前的工作大多是只学习text-modal-prompt">提出学习两种模态的prompt（即text和image），而之前的工作大多是只学习text-modal
-prompt</h2>
-<h2 id="学习的prompt之间是有联系的即用不同的test-sample学习prompt时由前一个test-sample习得的prompt会部分地继承到下一个prompt里继承的程度则由前一个prompt的效果决定效果越好继承的越多">学习的prompt之间是有联系的，即用不同的test
-sample学习prompt时，由前一个test
-sample习得的prompt会部分地继承到下一个prompt里。继承的程度则由前一个prompt的效果决定，效果越好、继承的越多</h2>
-<h1 id="method">Method</h1>
-<h2 id="dual-modal-online-prompting-in-dart">1.Dual-Modal Online
-Prompting in DART</h2>
-<h3 id="它主要就是对textual-modal的prompt进行改进之前的工作一般都是一个prompt套到多个类上比如this-is-a-photo-of-birddog......-而论文希望改进它给每个类别都设计了自己的prompt并且后续可以学习">它主要就是对textual
-modal的prompt进行改进。之前的工作，一般都是一个prompt套到多个类上，比如this
-is a photo of bird/dog/......
-而论文希望改进，它给每个类别都设计了自己的prompt，并且后续可以学习</h3>
-<h3 id="另外之前的工作大部分只是在调整textual-modal的prompt但该论文希望visual-modal也能有prompt于是也提出了一个prompt但这里就没有像上面那样给每个类别都设计一个prompt而是只设计了一个prompt">另外，之前的工作大部分只是在调整textual
-modal的prompt，但该论文希望visual
-modal也能有prompt，于是也提出了一个prompt。但这里就没有像上面那样给每个类别都设计一个prompt，而是只设计了一个prompt</h3>
-<h3 id="这里的两种prompt都是instance-level的就是每个样本的都不一样">这里的两种prompt都是instance-level的，就是每个样本的都不一样</h3>
-<h2 id="adaptive-knowledge-retention-in-dart">2.Adaptive Knowledge
-Retention in DART</h2>
-<h3 id="之所以它希望能做到knowledge-retention是因为测试的时候数据本就不多并且它是online-learning">之所以它希望能做到knowledge
-retention，是因为测试的时候数据本就不多，并且它是online learning</h3>
-<h3 id="knowledge-retention的方法就是引入一组prompt包括visual和textual的它们记录了历史信息有点类似于lstm里的隐状态具体来说它引入的这组visual和textual-prompt都是分类别的这里一定要和上面的prompt区分开二者不是同一个东西这里引入的我们可以叫它历史prompt上面的是instance-level的然后历史prompt的学习是依赖于instance-level的有点moco里的动量更新的感觉而instance-level-prompt的初始化又是依赖于历史prompt的">knowledge
-retention的方法就是引入一组prompt，包括visual和textual的。它们记录了历史信息，有点类似于LSTM里的隐状态。具体来说，它引入的这组visual和textual
-prompt，都是分类别的。这里一定要和上面的prompt区分开，二者不是同一个东西。这里引入的我们可以叫它历史prompt，上面的是instance-level的。然后历史prompt的学习是依赖于instance
-level的，有点Moco里的动量更新的感觉；而instance level
-prompt的初始化又是依赖于历史prompt的</h3>
-<h3 id="这里的核心思想或者说假设是对一个输入样本它属于哪个类的概率更高这个概率是用了visual和textual-prompt的我们认为那个类对应的instance-level-visualtextual-prompt质量越高也会越多地把它融合进历史prompt里">这里的核心思想，或者说假设，是：对一个输入样本，它属于哪个类的概率更高（这个概率是用了visual和textual
-prompt的），我们认为那个类对应的instance-level visual/textual
-prompt质量越高，也会越多地把它融合进历史prompt里</h3>
-<h2 id="the-optimization-of-dart">3.The Optimization of DART</h2>
-<h3 id="上面要用到的instance-level-visualtextual-prompt其实应该是用历史prompt初始化后需要学习的">上面要用到的instance-level
-visual/textual prompt，其实应该是用历史prompt初始化后，需要学习的</h3>
-<h3 id="它具体的学习过程如下对一幅输入图像先做b次augmentation得到b幅图像b即batch-size然后利用初始化的prompt计算出各个图像属于各个类别的概率分布再筛选出比较自信的结果取平均得到原始样本属于各个类别的概率最后我们优化原始样本的那个概率分布希望它的信息熵尽可能小也就是要尽可能确定逼近一个独热向量优化应该是梯度下降吧还没看代码">它具体的学习过程如下：对一幅输入图像，先做B次augmentation，得到B幅图像（B即batch
-size），然后利用初始化的prompt计算出各个图像属于各个类别的概率分布，再筛选出比较自信的结果，取平均得到原始样本属于各个类别的概率，最后我们优化原始样本的那个概率分布，希望它的信息熵尽可能小，也就是要尽可能确定，逼近一个独热向量（优化应该是梯度下降吧，还没看代码）</h3>
-<h1 id="疑问">疑问：</h1>
-<h2 id="论文里认为由prompt得到的分类结果越自信即越接近于一个独热向量效果越好但有没有可能分类错了这时就不应该过多继承吧">（论文里认为，由prompt得到的分类结果越自信——即越接近于一个独热向量，效果越好。但有没有可能分类错了？这时就不应该过多继承吧？）</h2>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1065,14 +1019,14 @@ size），然后利用初始化的prompt计算出各个图像属于各个类别�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">243</span>
+          <span class="site-state-item-count">249</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">81</span>
+        <span class="site-state-item-count">82</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

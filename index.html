@@ -150,6 +150,419 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%BE%AE%E8%BD%AFgraphrag%E7%9A%84fast%E6%A8%A1%E5%BC%8F%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%BE%AE%E8%BD%AFgraphrag%E7%9A%84fast%E6%A8%A1%E5%BC%8F%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/" class="post-title-link" itemprop="url">微软graphrag的fast模式建立索引</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-03-14 15:08:00 / Modified: 15:35:49" itemprop="dateCreated datePublished" datetime="2026-03-14T15:08:00+08:00">2026-03-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A5%87%E6%80%AA%E7%9A%84bugs/" itemprop="url" rel="index"><span itemprop="name">奇怪的bugs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="大概的问题就是在生成community-reports的时候会出现一些奇怪的报错类似这样的">大概的问题就是，在生成community
+reports的时候，会出现一些奇怪的报错，类似这样的：</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%BE%AE%E8%BD%AFgraphrag%E7%9A%84fast%E6%A8%A1%E5%BC%8F%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/13/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/Claude%20code%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/13/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/Claude%20code%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-03-13 15:54:00 / Modified: 15:55:27" itemprop="dateCreated datePublished" datetime="2026-03-13T15:54:00+08:00">2026-03-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>注意配置的时候api_url，如果使用的时候说找不到模型/模型不可用什么的，可能是这个url出问题了（前提是确认了其它地方没写错）。那么把后缀的/v1去掉试试</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/13/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/Claude%20code%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/12/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/memory/memory%E5%B8%B8%E8%A7%81bench/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/12/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/memory/memory%E5%B8%B8%E8%A7%81bench/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-03-12 12:51:00 / Modified: 12:51:44" itemprop="dateCreated datePublished" datetime="2026-03-12T12:51:00+08:00">2026-03-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Locomo，LongMemEval</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/12/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/memory/memory%E5%B8%B8%E8%A7%81bench/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/11/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E6%9C%8D%E5%8A%A1%E5%99%A8git%20push%E7%AA%81%E7%84%B6%E9%81%87%E5%88%B0%E6%8A%A5%E9%94%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/11/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E6%9C%8D%E5%8A%A1%E5%99%A8git%20push%E7%AA%81%E7%84%B6%E9%81%87%E5%88%B0%E6%8A%A5%E9%94%99/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-03-11 14:58:00 / Modified: 18:28:09" itemprop="dateCreated datePublished" datetime="2026-03-11T14:58:00+08:00">2026-03-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么也没做突然在服务器上无法push了之前还可以报错信息类似下面的">什么也没做，突然在服务器上无法push了（之前还可以）。报错信息类似下面的：</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(rag_routing) lhz@ddl-DGX-Station:~/code/routing_rag$ git push -u origin dev-train-router</span><br><span class="line">Missing or invalid credentials.</span><br><span class="line">Error: connect ECONNREFUSED /run/user/1xxx/vscode-git-xxxx.sock</span><br><span class="line">    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1611:16) &#123;</span><br><span class="line">  errno: -111,</span><br><span class="line">  code: <span class="string">&#x27;ECONNREFUSED&#x27;</span>,</span><br><span class="line">  syscall: <span class="string">&#x27;connect&#x27;</span>,</span><br><span class="line">  address: <span class="string">&#x27;/run/user/1031/vscode-git-9faxxxx.sock&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">Missing or invalid credentials.</span><br><span class="line">Error: connect ECONNREFUSED /run/user/1xxx/vscode-git-9fa0xxxx.sock</span><br><span class="line">    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1611:16) &#123;</span><br><span class="line">  errno: -111,</span><br><span class="line">  code: <span class="string">&#x27;ECONNREFUSED&#x27;</span>,</span><br><span class="line">  syscall: <span class="string">&#x27;connect&#x27;</span>,</span><br><span class="line">  address: <span class="string">&#x27;/run/user/10xx/vscode-git-9faxxxx.sock&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">remote: No anonymous write access.</span><br><span class="line">fatal: Authentication failed <span class="keyword">for</span> <span class="string">&#x27;https://github.com/user_name/proj_name.git/&#x27;</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/11/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E6%9C%8D%E5%8A%A1%E5%99%A8git%20push%E7%AA%81%E7%84%B6%E9%81%87%E5%88%B0%E6%8A%A5%E9%94%99/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/memory%E9%9A%8F%E7%AC%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/memory%E9%9A%8F%E7%AC%94/" class="post-title-link" itemprop="url">memory随笔</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-03-09 19:14:00" itemprop="dateCreated datePublished" datetime="2026-03-09T19:14:00+08:00">2026-03-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-03-12 19:26:09" itemprop="dateModified" datetime="2026-03-12T19:26:09+08:00">2026-03-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>memory的设计似乎是要分场景的，不知道现在有没有做统一的、通用的memory架构设计的</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/09/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/memory%E9%9A%8F%E7%AC%94/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ollama/ollama%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/03/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ollama/ollama%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-03-05 21:37:00 / Modified: 21:38:43" itemprop="dateCreated datePublished" datetime="2026-03-05T21:37:00+08:00">2026-03-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一个很重要的点ollama依赖于端口一个端口类似于一个实例同时我们下载模型的时候如果ollama已经serve了那么下载模型的路径是由serve的时候指定的路径决定的也就是由服务端指定了没指定那就是默认路径">一个很重要的点，ollama依赖于端口。一个端口类似于一个实例。同时，我们下载模型的时候，如果ollama已经serve了，那么下载模型的路径是由serve的时候指定的路径决定的（也就是由服务端指定了）（没指定那就是默认路径）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/03/05/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ollama/ollama%E7%AE%80%E4%BB%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/02/01/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/ollama%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -468,460 +881,6 @@ boundary与rag结合起来（虽然没有明说是routing啊）。而且大部�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%BE%AE%E8%BD%AFGraphRAG%20ollama%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%BE%AE%E8%BD%AFGraphRAG%20ollama%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">微软GraphRAG ollama本地部署</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2026-01-24 11:24:00" itemprop="dateCreated datePublished" datetime="2026-01-24T11:24:00+08:00">2026-01-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-02-01 12:48:24" itemprop="dateModified" datetime="2026-02-01T12:48:24+08:00">2026-02-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="windows本地部署ollama还挺简单的照着官方教程来就好至于后续的部署用于graphrag这个看起来很简单网上一搜也有很多教程但实际似乎并非如此有一类方法类似这篇博客大体思路是说除了改settings还要改一些源码然而一来这类博客内容极为相似很可能是你抄我我抄你二来它们的graphrag的版本感觉也有点老至少在我这里我就没找到它们说要修改的那个文件可能是版本不同导致相同功能的文件的名字不同了">Windows本地部署ollama还挺简单的，照着官方教程来就好。至于后续的部署用于graphrag，这个看起来很简单，网上一搜也有很多教程。但实际似乎并非如此。有一类方法类似<a target="_blank" rel="noopener" href="https://blog.csdn.net/musicml/article/details/140677990">这篇博客</a>，大体思路是说，除了改settings，还要改一些源码。然而一来这类博客内容极为相似（很可能是你抄我，我抄你），二来它们的graphrag的版本感觉也有点老。至少在我这里，我就没找到它们说要修改的那个文件（可能是版本不同，导致相同功能的文件的名字不同了）</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%BE%AE%E8%BD%AFGraphRAG%20ollama%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/22/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/LlamaIndex%E7%9B%B8%E5%85%B3%E6%8A%A5%E9%94%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/22/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/LlamaIndex%E7%9B%B8%E5%85%B3%E6%8A%A5%E9%94%99/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-22 12:13:10 / Modified: 12:20:14" itemprop="dateCreated datePublished" datetime="2026-01-22T12:13:10+08:00">2026-01-22</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>No module named 'llama_index.llms.ollama'</p>
-<p>LlamaIndex not available. Please install it using: pip install
-llama-index (ant-graphrag-dev) PS D:_RAG_rag&gt; uv pip install
-llama-index-embeddings-ollama</p>
-<p>不同厂商/provider的api
-url要求格式是不同的（比如，openai调用模型最后url会带一个/v1，但是ollama调用则不会）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8B%E5%AE%89%E8%A3%85flash-attn/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8B%E5%AE%89%E8%A3%85flash-attn/" class="post-title-link" itemprop="url">Windows下安装flash-attn</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-20 10:13:00 / Modified: 10:41:37" itemprop="dateCreated datePublished" datetime="2026-01-20T10:13:00+08:00">2026-01-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="同样的因为小项目需要flash-attn所以捣鼓一下怎么安装大体思路上windows因为编译特别麻烦所以基本得考虑找现成的whl文件直接安装tri-dao的官方的仓库里放的都是linux下的whl所以得找其它仓库的找了找看到这个kingbri1flash-attention这回就是从这里下载的whl的八百多star也是从官方仓库fork过来的目前用下来还是没什么大问题的-还另外找到一个hugging-face上的">同样的，因为小项目需要flash-attn，所以捣鼓一下怎么安装。大体思路上，Windows因为编译特别麻烦，所以基本得考虑找现成的whl文件直接安装。Tri
-Dao的官方的仓库里放的都是Linux下的whl，所以得找其它仓库的。找了找，看到这个：<a target="_blank" rel="noopener" href="https://github.com/kingbri1/flash-attention/releases">kingbri1/flash-attention</a>（这回就是从这里下载的whl的，八百多star）（也是从官方仓库fork过来的）。目前用下来还是没什么大问题的<br>还另外找到一个<a target="_blank" rel="noopener" href="https://huggingface.co/lldacing/flash-attention-windows-wheel/tree/main">hugging
-face上的</a></h1>
-<h2 id="几个小细节是因为windows下的flash-attn的whl文件感觉不是主流所以whl文件没那么多那么全为了保险一般torch版本不能太高2.72.8这种暂时别想了flash-attn对pytorch好像是严格要求不能有不同反正试过装不对应pytorch版本的whl文件一运行就报错cuda版本要看我们本地nvcc--v输出的实际的cuda驱动的版本以此为准而不是nvidia-smi输出的最高可容纳的驱动版本以及看起来安装flash-attn需要至少cuda12.x">几个小细节是，因为Windows下的flash-attn的whl文件感觉不是主流，所以whl文件没那么多、那么全。为了保险，一般torch版本不能太高（2.7，2.8这种暂时别想了）（flash-attn对pytorch好像是严格要求，不能有不同……反正试过装不对应pytorch版本的whl文件，一运行就报错……）。cuda版本要看我们本地<code>nvcc -v</code>输出的实际的cuda驱动的版本，以此为准（而不是<code>nvidia-smi</code>输出的最高可容纳的驱动版本）（以及，看起来安装flash-attn需要至少cuda12.x）</h2>
-<h2 id="还有啥问题可能也可以去翻翻官方仓库的issue区或许可以看到我们所碰到的问题">还有啥问题，可能也可以去翻翻<a target="_blank" rel="noopener" href="https://github.com/Dao-AILab/flash-attention/issues">官方仓库的issue区</a>，或许可以看到我们所碰到的问题</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8B%E5%AE%89%E8%A3%85flash-attn/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/16/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E5%85%B3%E4%BA%8E%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%B0%E5%BF%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/16/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E5%85%B3%E4%BA%8E%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%B0%E5%BF%86/" class="post-title-link" itemprop="url">关于持续学习与记忆</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-16 12:56:00 / Modified: 18:17:25" itemprop="dateCreated datePublished" datetime="2026-01-16T12:56:00+08:00">2026-01-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">感想与思考</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="回想一下最早提出类似于人能持续学习这是很重要的现在的模型无法持续学习训练完了就不会再更新不够好这种观点的会不会是lifelong-learning啊这个比较粗暴单纯就是希望能把不断增长的新知识塞到模型里而且理想情况下要求旧知识不会遗忘那几乎相当于要让一个固定大小的模型把所有知识都容纳进来这不可行而且这种方法显然还是要训练的隔一段时间就得训练一次其实不好毕竟还是有开销的要是大模型开销更是大显然也没可能平民化其实感觉lifelong-learning的一个致命问题在于它还是依靠梯度下降来更新权重的梯度下降就免不了一套的流程开销很大如果能有不用梯度下降的学习方法而且足够方便当然可以in-context-learning就不失为一种方法虽然感觉它的上限也就到这里了本质难道不也只是给llm提供一些相关示例而已吗再底层点和外挂式记忆有什么区别呢外挂式记忆把知识存储到外部一个memory需要的时候不也得检索出来给模型吗还是有一步喂给模型的操作这不就是in-context-learning除此之外还有最近的ttttest-time-training以及未来可能有人研究的新的学习方法">回想一下，最早提出类似于“人能持续学习，这是很重要的；现在的模型无法持续学习，训练完了就不会再更新，不够好”这种观点的，会不会是lifelong
-learning啊。这个比较粗暴，单纯就是希望能把不断增长的新知识塞到模型里，而且理想情况下要求旧知识不会遗忘。那几乎相当于要让一个固定大小的模型把所有知识都容纳进来。这不可行。而且这种方法显然还是要训练的。隔一段时间就得训练一次，其实不好，毕竟还是有开销的。要是大模型，开销更是大。显然也没可能平民化（其实感觉lifelong
-learning的一个致命问题在于，它还是依靠梯度下降来更新权重的。梯度下降，就免不了一套的流程，开销很大。如果能有不用梯度下降的学习方法，而且足够方便，当然可以。in-context
-learning就不失为一种方法（虽然感觉它的上限也就到这里了。本质难道不也只是给llm提供一些相关示例而已吗，再底层点，和外挂式记忆有什么区别呢？外挂式记忆，把知识存储到外部一个memory，需要的时候不也得检索出来给模型吗？还是有一步“喂给”模型的操作，这不就是in-context
-learning？）。除此之外，还有最近的TTT（Test-Time
-Training），以及未来可能有人研究的新的学习方法）</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/16/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E5%85%B3%E4%BA%8E%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%B0%E5%BF%86/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/git%E7%AE%80%E4%BB%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/git%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">git简介</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-14 22:31:00 / Modified: 22:43:55" itemprop="dateCreated datePublished" datetime="2026-01-14T22:31:00+08:00">2026-01-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="还是项目里需要用git管理一下。之前其实没怎么用过"><a href="#还是项目里需要用git管理一下。之前其实没怎么用过" class="headerlink" title="还是项目里需要用git管理一下。之前其实没怎么用过"></a>还是项目里需要用git管理一下。之前其实没怎么用过</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/git%E7%AE%80%E4%BB%8B/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/pre-commit%E7%AE%80%E4%BB%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/pre-commit%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">pre-commit简介</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-14 22:28:00 / Modified: 22:38:45" itemprop="dateCreated datePublished" datetime="2026-01-14T22:28:00+08:00">2026-01-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git-add，再commit"><a href="#同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git-add，再commit" class="headerlink" title="同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git add，再commit"></a>同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git add，再commit</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/pre-commit%E7%AE%80%E4%BB%8B/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -991,14 +950,14 @@ Training），以及未来可能有人研究的新的学习方法）</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">243</span>
+          <span class="site-state-item-count">249</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">81</span>
+        <span class="site-state-item-count">82</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

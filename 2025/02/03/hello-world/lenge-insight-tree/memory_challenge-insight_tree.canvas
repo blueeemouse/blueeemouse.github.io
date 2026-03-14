@@ -1,0 +1,10 @@
+{
+	"nodes":[
+		{"id":"0a747202c0cae1d1","x":-112,"y":-76,"width":232,"height":96,"type":"text","text":"memory challenge-insight tree"},
+		{"id":"309aed029a0209be","x":276,"y":-229,"width":250,"height":60,"type":"text","text":"[MemAgent](https://arxiv.org/abs/2507.02259)式处理"},
+		{"id":"c77c48a745dad6fd","x":560,"y":-460,"width":250,"height":180,"type":"text","text":"把输入切分chunk，让llm自己去挨个处理这些chunk，从中提取信息并更新memory（上限固定）"},
+		{"id":"04b266b083a00906","x":560,"y":-136,"width":250,"height":60,"type":"text","text":"可能需要用一些方法来训练llm（比如rl），让它学会何时提取等"},
+		{"id":"eaef9dd29bf159b8","x":935,"y":-280,"width":250,"height":126,"type":"text","text":"类似于一种流式处理（或者说，视频流处理的方法也是类似的目的吧）\n同时，这个处理方法不显式依赖一个外部的memory，而是好比让llm自己掌握记忆能力"}
+	],
+	"edges":[]
+}

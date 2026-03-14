@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="大概的问题就是，在生成community reports的时候，会出现一些奇怪的报错，类似这样的：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微软graphrag的fast模式建立索引">
+<meta property="og:url" content="https://blueeemouse.github.io/2026/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%BE%AE%E8%BD%AFgraphrag%E7%9A%84fast%E6%A8%A1%E5%BC%8F%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="大概的问题就是，在生成community reports的时候，会出现一些奇怪的报错，类似这样的：">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-14T07:08:00.000Z">
+<meta property="article:modified_time" content="2026-03-14T07:35:49.847Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2026/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%BE%AE%E8%BD%AFgraphrag%E7%9A%84fast%E6%A8%A1%E5%BC%8F%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>微软graphrag的fast模式建立索引 | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/03/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%BE%AE%E8%BD%AFgraphrag%E7%9A%84fast%E6%A8%A1%E5%BC%8F%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微软graphrag的fast模式建立索引
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-03-14 15:08:00 / Modified: 15:35:49" itemprop="dateCreated datePublished" datetime="2026-03-14T15:08:00+08:00">2026-03-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A5%87%E6%80%AA%E7%9A%84bugs/" itemprop="url" rel="index"><span itemprop="name">奇怪的bugs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="大概的问题就是在生成community-reports的时候会出现一些奇怪的报错类似这样的">大概的问题就是，在生成community
+reports的时候，会出现一些奇怪的报错，类似这样的：</h1>
+<span id="more"></span>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO:graphrag.logger.progress:level 3 summarize communities progress: 670/6848 ERROR:graphrag.index.operations.summarize_communities.community_reports_extractor:error generating community report Traceback (most recent call last): File <span class="string">&quot;D:\Develop\all_RAG\routing_rag\graphrag\graphrag\index\operations\summarize_communities\community_reports_extractor.py&quot;</span>, line 80, <span class="keyword">in</span> __call__ response = await self._model.achat( File <span class="string">&quot;D:\Develop\all_RAG\routing_rag\graphrag\graphrag\language_model\providers\litellm\chat_model.py&quot;</span>, line 295, <span class="keyword">in</span> achat parsed_dict: dict[str, Any] = json.loads( File <span class="string">&quot;C:\Users\lanhz\miniconda3\envs\ant-graphrag-dev\lib\json\__init__.py&quot;</span>, line 346, <span class="keyword">in</span> loads <span class="built_in">return</span> _default_decoder.decode(s) File <span class="string">&quot;C:\Users\lanhz\miniconda3\envs\ant-graphrag-dev\lib\json\decoder.py&quot;</span>, line 337, <span class="keyword">in</span> decode obj, end = self.raw_decode(s, idx=_w(s, 0).end()) File <span class="string">&quot;C:\Users\lanhz\miniconda3\envs\ant-graphrag-dev\lib\json\decoder.py&quot;</span>, line 353, <span class="keyword">in</span> raw_decode obj, end = self.scan_once(s, idx) json.decoder.JSONDecodeError: Unterminated string starting at: line 7 column 28 (char 558) ERROR:graphrag.index.operations.summarize_communities.strategies:Community Report Extraction Error Traceback (most recent call last): File <span class="string">&quot;D:\Develop\all_RAG\routing_rag\graphrag\graphrag\index\operations\summarize_communities\community_reports_extractor.py&quot;</span>, line 80, <span class="keyword">in</span> __call__ response = await self._model.achat( File <span class="string">&quot;D:\Develop\all_RAG\routing_rag\graphrag\graphrag\language_model\providers\litellm\chat_model.py&quot;</span>, line 295, <span class="keyword">in</span> achat parsed_dict: dict[str, Any] = json.loads( File <span class="string">&quot;C:\Users\lanhz\miniconda3\envs\ant-graphrag-dev\lib\json\__init__.py&quot;</span>, line 346, <span class="keyword">in</span> loads <span class="built_in">return</span> _default_decoder.decode(s) File <span class="string">&quot;C:\Users\lanhz\miniconda3\envs\ant-graphrag-dev\lib\json\decoder.py&quot;</span>, line 337, <span class="keyword">in</span> decode obj, end = self.raw_decode(s, idx=_w(s, 0).end()) File <span class="string">&quot;C:\Users\lanhz\miniconda3\envs\ant-graphrag-dev\lib\json\decoder.py&quot;</span>, line 353, <span class="keyword">in</span> raw_decode obj, end = self.scan_once(s, idx) json.decoder.JSONDecodeError: Unterminated string starting at: line 7 column 28 (char 558) WARNING:graphrag.index.operations.summarize_communities.strategies:No report found <span class="keyword">for</span> community: 3807 INFO:graphrag.logger.progress:level 3 summarize communities progress: 671/6848</span><br></pre></td></tr></table></figure>
+<h2 id="看起来貌似是因为上下文窗口不够然后把llm输出截断结果字符上出现一些问题因为是ollama部署的所以要改一下它的模型的上下文窗口好像ollama部署的模型不管你模型本身支持多长的上下文窗口它默认是2048的很小需要自己修改即使我们在graphrag的配置文件里修改也无济于事">看起来貌似是因为上下文窗口不够，然后把llm输出截断，结果字符上出现一些问题。因为是ollama部署的，所以要改一下它的模型的上下文窗口（好像ollama部署的模型，不管你模型本身支持多长的上下文窗口，它默认是2048的，很小。需要自己修改）。即使我们在graphrag的配置文件里修改也无济于事</h2>
+<h2 id="结合网上的博客以及问ai还有看了一下ollama官网总结一下可以考虑以下的组合拳重新创建某个你在用的模型的modelfile在里面指定num_ctx参数同时启动ollama的时候可以指定一下它的context_length和num_parallel了类似envollama_context_length8192-envollama_num_parallel-2ollama-servewindows上的命令">结合网上的博客，以及问ai，还有看了一下ollama官网，总结一下，可以考虑以下的组合拳：重新创建某个你在用的模型的Modelfile，在里面指定num_ctx参数；同时启动ollama的时候，可以指定一下它的context_length和num_parallel，了类似：<code>$env:OLLAMA_CONTEXT_LENGTH=8192; $env:OLLAMA_NUM_PARALLEL = "2";ollama serve</code>（Windows上的命令）</h2>
+<h3 id="尽管如此可以缓解大部分问题比如之前报错的地方不再报错了但还有新的问题就是它后面可能还会报类似的错这实在令人疑惑不知道是不是部署的模型过小导致指令遵循不够好现在用的是用一个3b的而且ollama部署的默认是量化的实操发现如果报错了把对应的cache文件删掉然后重新建立索引有概率跳过这个问题本身它报错的概率也非常低的">尽管如此可以缓解大部分问题（比如之前报错的地方不再报错了），但还有新的问题，就是它后面可能还会报类似的错……这实在令人疑惑（不知道是不是部署的模型过小导致指令遵循不够好……现在用的是用一个3b的，而且ollama部署的默认是量化的）。实操发现，如果报错了，把对应的cache文件删掉，然后重新建立索引，有概率跳过这个问题（本身它报错的概率也非常低的）</h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/03/13/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/Claude%20code%E9%85%8D%E7%BD%AE/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A6%82%E7%9A%84%E9%97%AE%E9%A2%98%E5%B0%B1%E6%98%AF%E5%9C%A8%E7%94%9F%E6%88%90community-reports%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E5%87%BA%E7%8E%B0%E4%B8%80%E4%BA%9B%E5%A5%87%E6%80%AA%E7%9A%84%E6%8A%A5%E9%94%99%E7%B1%BB%E4%BC%BC%E8%BF%99%E6%A0%B7%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">大概的问题就是，在生成community
+reports的时候，会出现一些奇怪的报错，类似这样的：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E8%B5%B7%E6%9D%A5%E8%B2%8C%E4%BC%BC%E6%98%AF%E5%9B%A0%E4%B8%BA%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3%E4%B8%8D%E5%A4%9F%E7%84%B6%E5%90%8E%E6%8A%8Allm%E8%BE%93%E5%87%BA%E6%88%AA%E6%96%AD%E7%BB%93%E6%9E%9C%E5%AD%97%E7%AC%A6%E4%B8%8A%E5%87%BA%E7%8E%B0%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E5%9B%A0%E4%B8%BA%E6%98%AFollama%E9%83%A8%E7%BD%B2%E7%9A%84%E6%89%80%E4%BB%A5%E8%A6%81%E6%94%B9%E4%B8%80%E4%B8%8B%E5%AE%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3%E5%A5%BD%E5%83%8Follama%E9%83%A8%E7%BD%B2%E7%9A%84%E6%A8%A1%E5%9E%8B%E4%B8%8D%E7%AE%A1%E4%BD%A0%E6%A8%A1%E5%9E%8B%E6%9C%AC%E8%BA%AB%E6%94%AF%E6%8C%81%E5%A4%9A%E9%95%BF%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3%E5%AE%83%E9%BB%98%E8%AE%A4%E6%98%AF2048%E7%9A%84%E5%BE%88%E5%B0%8F%E9%9C%80%E8%A6%81%E8%87%AA%E5%B7%B1%E4%BF%AE%E6%94%B9%E5%8D%B3%E4%BD%BF%E6%88%91%E4%BB%AC%E5%9C%A8graphrag%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%87%8C%E4%BF%AE%E6%94%B9%E4%B9%9F%E6%97%A0%E6%B5%8E%E4%BA%8E%E4%BA%8B"><span class="nav-number">1.1.</span> <span class="nav-text">看起来貌似是因为上下文窗口不够，然后把llm输出截断，结果字符上出现一些问题。因为是ollama部署的，所以要改一下它的模型的上下文窗口（好像ollama部署的模型，不管你模型本身支持多长的上下文窗口，它默认是2048的，很小。需要自己修改）。即使我们在graphrag的配置文件里修改也无济于事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%90%88%E7%BD%91%E4%B8%8A%E7%9A%84%E5%8D%9A%E5%AE%A2%E4%BB%A5%E5%8F%8A%E9%97%AEai%E8%BF%98%E6%9C%89%E7%9C%8B%E4%BA%86%E4%B8%80%E4%B8%8Bollama%E5%AE%98%E7%BD%91%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B%E5%8F%AF%E4%BB%A5%E8%80%83%E8%99%91%E4%BB%A5%E4%B8%8B%E7%9A%84%E7%BB%84%E5%90%88%E6%8B%B3%E9%87%8D%E6%96%B0%E5%88%9B%E5%BB%BA%E6%9F%90%E4%B8%AA%E4%BD%A0%E5%9C%A8%E7%94%A8%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%9A%84modelfile%E5%9C%A8%E9%87%8C%E9%9D%A2%E6%8C%87%E5%AE%9Anum_ctx%E5%8F%82%E6%95%B0%E5%90%8C%E6%97%B6%E5%90%AF%E5%8A%A8ollama%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AE%9A%E4%B8%80%E4%B8%8B%E5%AE%83%E7%9A%84context_length%E5%92%8Cnum_parallel%E4%BA%86%E7%B1%BB%E4%BC%BCenvollama_context_length8192-envollama_num_parallel-2ollama-servewindows%E4%B8%8A%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">结合网上的博客，以及问ai，还有看了一下ollama官网，总结一下，可以考虑以下的组合拳：重新创建某个你在用的模型的Modelfile，在里面指定num_ctx参数；同时启动ollama的时候，可以指定一下它的context_length和num_parallel，了类似：$env:OLLAMA_CONTEXT_LENGTH&#x3D;8192; $env:OLLAMA_NUM_PARALLEL &#x3D; &quot;2&quot;;ollama serve（Windows上的命令）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BD%E7%AE%A1%E5%A6%82%E6%AD%A4%E5%8F%AF%E4%BB%A5%E7%BC%93%E8%A7%A3%E5%A4%A7%E9%83%A8%E5%88%86%E9%97%AE%E9%A2%98%E6%AF%94%E5%A6%82%E4%B9%8B%E5%89%8D%E6%8A%A5%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9%E4%B8%8D%E5%86%8D%E6%8A%A5%E9%94%99%E4%BA%86%E4%BD%86%E8%BF%98%E6%9C%89%E6%96%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%B0%B1%E6%98%AF%E5%AE%83%E5%90%8E%E9%9D%A2%E5%8F%AF%E8%83%BD%E8%BF%98%E4%BC%9A%E6%8A%A5%E7%B1%BB%E4%BC%BC%E7%9A%84%E9%94%99%E8%BF%99%E5%AE%9E%E5%9C%A8%E4%BB%A4%E4%BA%BA%E7%96%91%E6%83%91%E4%B8%8D%E7%9F%A5%E9%81%93%E6%98%AF%E4%B8%8D%E6%98%AF%E9%83%A8%E7%BD%B2%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%BF%87%E5%B0%8F%E5%AF%BC%E8%87%B4%E6%8C%87%E4%BB%A4%E9%81%B5%E5%BE%AA%E4%B8%8D%E5%A4%9F%E5%A5%BD%E7%8E%B0%E5%9C%A8%E7%94%A8%E7%9A%84%E6%98%AF%E7%94%A8%E4%B8%80%E4%B8%AA3b%E7%9A%84%E8%80%8C%E4%B8%94ollama%E9%83%A8%E7%BD%B2%E7%9A%84%E9%BB%98%E8%AE%A4%E6%98%AF%E9%87%8F%E5%8C%96%E7%9A%84%E5%AE%9E%E6%93%8D%E5%8F%91%E7%8E%B0%E5%A6%82%E6%9E%9C%E6%8A%A5%E9%94%99%E4%BA%86%E6%8A%8A%E5%AF%B9%E5%BA%94%E7%9A%84cache%E6%96%87%E4%BB%B6%E5%88%A0%E6%8E%89%E7%84%B6%E5%90%8E%E9%87%8D%E6%96%B0%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%E6%9C%89%E6%A6%82%E7%8E%87%E8%B7%B3%E8%BF%87%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E6%9C%AC%E8%BA%AB%E5%AE%83%E6%8A%A5%E9%94%99%E7%9A%84%E6%A6%82%E7%8E%87%E4%B9%9F%E9%9D%9E%E5%B8%B8%E4%BD%8E%E7%9A%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">尽管如此可以缓解大部分问题（比如之前报错的地方不再报错了），但还有新的问题，就是它后面可能还会报类似的错……这实在令人疑惑（不知道是不是部署的模型过小导致指令遵循不够好……现在用的是用一个3b的，而且ollama部署的默认是量化的）。实操发现，如果报错了，把对应的cache文件删掉，然后重新建立索引，有概率跳过这个问题（本身它报错的概率也非常低的）</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">249</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">102</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
