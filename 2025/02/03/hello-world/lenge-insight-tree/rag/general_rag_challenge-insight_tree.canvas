@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"31cb8a1129818cf9","type":"text","text":"general rag challenge-insight tree","x":-220,"y":-40,"width":269,"height":70},
+		{"id":"63c687a0cb3d4771","type":"text","text":"cha：对检索到的文档过于敏感","x":127,"y":-189,"width":250,"height":60},
+		{"id":"17136bf525a77b39","type":"text","text":"表现在，一旦我们检索的top-k文档里，无关的比较多，那即使里面是有真正有用的，llm也很有可能认不出来、利用不上。因此，我们会想方设法提高检索质量，还有各种的后处理（比如rerank）来提高结果质量。又比如，我们对检索到的结果也会进行顺序上的调整。但仔细想，这有点没道理。如果一个模型真的足够强，那它应该有能够辨认哪些是有用的，哪些是没用的的能力。起码一个人肯定是有这个能力的，只不过人可能在效率上不如llm而已（读得没那么快）","x":440,"y":-369,"width":380,"height":420},
+		{"id":"18f9bb8c6bd35029","type":"text","text":"但这个问题，更根本一点讲，其实是跟llm的机制有关。对顺序敏感，那已经引起了注意，一方面有在实践中利用这个bias提高效果的，也有尝试改掉这个问题的，还有从理论角度研究为什么会产生这个问题的。当然也可以归咎到文本能力不够，但这只是一个方面而已。context window长了，依然有这个顺序上的bias\n好像从rag的角度上看，也只能尽量提高检索的效果，保证最后喂到llm的文档列表是符合它的bias的","x":860,"y":-353,"width":400,"height":389},
+		{"id":"d7a079b4c5882e65","type":"text","text":"cha：如何更好检索","x":127,"y":200,"width":250,"height":60},
+		{"id":"fc945753ea676ce7","type":"text","text":"insight：对query进行分解，然后利用这些sub-query进行检索，扩大检索面（Question Decomposition for Retrieval-Augmented Generation，acl 25 workshop）","x":440,"y":140,"width":380,"height":90},
+		{"id":"8ac1c30f0df6f109","type":"text","text":"扩大知识面之后，每个sub-query对应可能有k个检索文档。我们要从中进行选择，可以考虑建模成一个多臂老虎机（MAB），每个sub-query对应的文档集合相关的概率可以被建模成一个分布（这个分布可以在探索的过程中不断被优化完善）（paper：Query Decomposition for RAG: Balancing Exploration-Exploitation）","x":860,"y":133,"width":400,"height":105},
+		{"id":"67243e742d742b0d","type":"text","text":"cha：如何更好利用知识？","x":100,"y":636,"width":250,"height":60},
+		{"id":"9e9df879f74c4214","x":494,"y":324,"width":250,"height":60,"type":"text","text":"insight：把llm融入到检索过程里"},
+		{"id":"882864613942a3c7","x":820,"y":301,"width":250,"height":60,"type":"text","text":"其实就是，检索，如果光靠语义向量那一套，有点到头的感觉，会有很多的问题（比如naive rag里的“像而不是”，graphrag里的“表面相似”，又比如graph中“理应连接但因为表面语义不相似而没有连接”等等。llm的融入，其实就是希望让llm来进行更加严谨的推理和判断，不局限于用语义相似判断相关性，更加是从逻辑上判断"},
+		{"id":"997bd2744411abbc","x":1141,"y":260,"width":377,"height":142,"type":"text","text":"pageindex其实就是一个例子。这篇Beyond Explicit Edges: Robust Reasoning over Noisy and Sparse Knowledge **Graphs**也是一个例子"},
+		{"id":"4329c23f5266a414","type":"text","text":"insight：对于如何更好利用模型参数知识，一个思路是来自Self-Routing RAG的verbalize，也就是让模型主动把参数知识给“说”出来。通过展示出来这个动作，或许可以进一步挖掘出模型可能忽略掉、但是其实隐藏在参数里的知识（这其实有点玄学，不过它可能用了之后提点了）","x":440,"y":476,"width":332,"height":160},
+		{"id":"597cf337b4bc2cef","x":-829,"y":-128,"width":250,"height":60,"type":"text","text":""}
+	],
+	"edges":[]
+}

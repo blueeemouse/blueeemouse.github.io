@@ -1,10 +1,14 @@
 {
 	"nodes":[
-		{"id":"0a747202c0cae1d1","x":-112,"y":-76,"width":232,"height":96,"type":"text","text":"memory challenge-insight tree"},
-		{"id":"309aed029a0209be","x":276,"y":-229,"width":250,"height":60,"type":"text","text":"[MemAgent](https://arxiv.org/abs/2507.02259)式处理"},
-		{"id":"c77c48a745dad6fd","x":560,"y":-460,"width":250,"height":180,"type":"text","text":"把输入切分chunk，让llm自己去挨个处理这些chunk，从中提取信息并更新memory（上限固定）"},
-		{"id":"04b266b083a00906","x":560,"y":-136,"width":250,"height":60,"type":"text","text":"可能需要用一些方法来训练llm（比如rl），让它学会何时提取等"},
-		{"id":"eaef9dd29bf159b8","x":935,"y":-280,"width":250,"height":126,"type":"text","text":"类似于一种流式处理（或者说，视频流处理的方法也是类似的目的吧）\n同时，这个处理方法不显式依赖一个外部的memory，而是好比让llm自己掌握记忆能力"}
+		{"id":"0a747202c0cae1d1","type":"text","text":"memory challenge-insight tree","x":-112,"y":-76,"width":232,"height":96},
+		{"id":"309aed029a0209be","type":"text","text":"[MemAgent](https://arxiv.org/abs/2507.02259)式处理","x":400,"y":-409,"width":250,"height":60},
+		{"id":"c77c48a745dad6fd","type":"text","text":"把输入切分chunk，让llm自己去挨个处理这些chunk，从中提取信息并更新memory（上限固定）","x":684,"y":-640,"width":250,"height":180},
+		{"id":"04b266b083a00906","type":"text","text":"可能需要用一些方法来训练llm（比如rl），让它学会何时提取等","x":684,"y":-316,"width":250,"height":60},
+		{"id":"eaef9dd29bf159b8","type":"text","text":"类似于一种流式处理（或者说，视频流处理的方法也是类似的目的吧）\n同时，这个处理方法不显式依赖一个外部的memory，而是好比让llm自己掌握记忆能力","x":1059,"y":-460,"width":250,"height":126},
+		{"id":"16398d92a8ec1e1b","x":276,"y":141,"width":250,"height":60,"type":"text","text":"cha：memory如何演化？或者说如何越用越好？"},
+		{"id":"41c13699d7103dd4","x":679,"y":140,"width":250,"height":60,"type":"text","text":"insight：引入一个类似utility的属性"},
+		{"id":"3de4acf40587e867","x":992,"y":124,"width":288,"height":176,"type":"text","text":"utility是一个通称，可以是一个标量，可以是一个/若干个向量。这个思想并不罕见，MemRL、GAM-RAG都已有类似的操作"},
+		{"id":"9e2c30120075f1a8","x":1351,"y":58,"width":329,"height":282,"type":"text","text":"思考：单靠一个标量，够吗？肯定不够吧。那靠向量呢？我们也不能指望一个/若干个向量就把很多的属性都描述清楚吧。这个utility的思路，本质上是说，有一个描述这条memory（在某个场景下）的效果的好坏。那为什么不引入文本呢"}
 	],
 	"edges":[]
 }

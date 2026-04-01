@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"5ec8ca76fca21207","type":"text","text":"efficient llm challeng-insight tree","x":-86,"y":-65,"width":246,"height":85},
+		{"id":"bad25feb9832365a","type":"text","text":"cha：kv cache compression方法损失语义","x":482,"y":-445,"width":260,"height":112},
+		{"id":"40ce22b8091bfaa2","type":"text","text":"insight：一个问题在于，现在的kv cache compression是基于token的，这本身是非常离散的单元，所以compression之后可能确实会损失语义","x":842,"y":-640,"width":292,"height":195},
+		{"id":"b87b13172ae210a3","type":"text","text":"所以考虑，把文本、token给聚合一下，以更大的单元来compression","x":1202,"y":-596,"width":279,"height":108},
+		{"id":"a3ae987e217f5d84","type":"text","text":"kv cache","x":220,"y":-293,"width":250,"height":60},
+		{"id":"7ea68bc519243e8d","x":474,"y":124,"width":306,"height":136,"type":"text","text":"cha：多次调用相同的skill、procedure（这算不算一个问题？算的话是否需要解决？应该是一个efficiency的问题）（能叫做agent infra吗？）"}
+	],
+	"edges":[]
+}

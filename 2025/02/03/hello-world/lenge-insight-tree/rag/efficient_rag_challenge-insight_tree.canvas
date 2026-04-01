@@ -1,0 +1,40 @@
+{
+	"nodes":[
+		{"id":"78a23e862baef7a8","type":"text","text":"efficient RAG challenge-insight tree","x":-126,"y":-8,"width":266,"height":88},
+		{"id":"e752c98561521b26","type":"text","text":"时间方面","x":196,"y":-145,"width":250,"height":60},
+		{"id":"0caf6c74854d1547","type":"text","text":"cha：rag中哪些部分可以加速？应该如何加速？","x":511,"y":-254,"width":269,"height":74},
+		{"id":"5a47a1b4b37bf8ec","type":"text","text":"prefill阶段","x":823,"y":-372,"width":250,"height":60},
+		{"id":"55327cfec72251d9","type":"text","text":"原因：检索到的文档很多，对应产生的token也多。那么，llm的prefill阶段（也就是根据给定的输入，产生第一个token的过程）会比较长时间","x":1180,"y":-580,"width":250,"height":100},
+		{"id":"e32a73111d36b073","type":"text","text":"insight：压缩文档","x":1180,"y":-372,"width":250,"height":60},
+		{"id":"ec5d3dbb55e0f481","type":"text","text":"insight：kv cache技术","x":1180,"y":-205,"width":250,"height":60},
+		{"id":"d07b4d2fe5081a5c","type":"text","text":"复用历史结果","x":1180,"y":-38,"width":250,"height":60},
+		{"id":"0529de952b3f2508","type":"text","text":"例如，把之前的query和检索文档/响应 cache起来。如果来了新的query和它语义重复/相似，则可以考虑直接复用结果（参考[PentaRAG](https://arxiv.org/abs/2506.21593)","x":1577,"y":-107,"width":280,"height":198},
+		{"id":"dda22605c243a27a","x":1180,"y":281,"width":250,"height":60,"type":"text","text":"预计算doc kv并复用"},
+		{"id":"59b646de36bbc32e","x":1577,"y":194,"width":264,"height":147,"type":"text","text":"一条路子是比较常见的，我们把所有的doc chunk的kv提前算好，检索到哪些chunk，就复用哪些kv cache（eg，TurboRAG）"},
+		{"id":"a78fdfe292a9b33d","x":1603,"y":532,"width":250,"height":60,"type":"text","text":"另一类是比较少见的，即我们把所有的doc的kv都提前算好，每次回答的时候直接把所有doc的kv cache都复用，直接免去检索这一步"},
+		{"id":"3bb392a7e1a2577e","x":1920,"y":160,"width":250,"height":215,"type":"text","text":"problem：这类方法都要处理doc之间的顺序问题，以及由此带来的kv recompute的问题。处理不好，性能是要下降的"},
+		{"id":"2ce095f5364b2c72","x":1920,"y":506,"width":299,"height":172,"type":"text","text":"problem：场景上有所限制。这类方法虽然不需要关注doc之间的顺序问题了，也不会因为检索不当而漏掉内容，但它一定要求doc的内容量不超过model的context window"},
+		{"id":"100022e6170678d7","x":2435,"y":397,"width":365,"height":281,"type":"text","text":"有没有可能结合？比如说，我们通过一定方法，找到一些高频的doc组合，然后precompute这些组合的kv cache。检索的时候，如果检索到的文档有出现在这些组合里的，我们就直接取用这个组合的kv cache（但坏处是，如果想避免doc顺序问题，就只能取用一个组合，效率上的提升不够大；如果想取用多个组合，那又得担心一个doc出现在多个组合里导致的冗余问题，以及更重要的doc顺序问题）"},
+		{"id":"ef004e86b1eabf4b","x":2900,"y":397,"width":278,"height":158,"type":"text","text":"doc组合这一块，可以考虑通过分析一批query的检索结果，也可以考虑直接对doc进行聚类？"},
+		{"id":"a61f3c7a66918418","x":2360,"y":-8,"width":295,"height":148,"type":"text","text":"insight：跨文档的联系（attn scores）是比较稀疏的，那么把这部分忽略掉，带来的性能损失是可以接受的；如果还进一步微调模型，则有可能把性能补回来（来自TurboRAG）"},
+		{"id":"41c0d2aeecf6b390","x":1577,"y":-488,"width":250,"height":146,"type":"text","text":"xRAG、MHA-RAG等工作，已经在探讨把检索内容给压缩成向量的加速方法了（换句话说，直接把检索内容以文本形式输入给模型，未必是最优方法）"},
+		{"id":"3e34b77234434f7b","x":1920,"y":-488,"width":335,"height":173,"type":"text","text":"进一步，即使是压缩文档，但文档的顺序对性能的影响依然在。这里也需要一些考虑，可以是想办法利用这个bias，也可以是想办法消除这个bias（即让结果和顺序无关，比如MHA-RAG的做法，用一个注意力头来把文档信息进行压缩，且是输入所有检索文档。所以这样聚合的时候，输出与文档顺序是无关的）"},
+		{"id":"c6d81ea90bcab2c0","x":2369,"y":-453,"width":250,"height":60,"type":"text","text":"欸，这样的话，我们在这个压缩的场景下，不就可以正常使用KV cache了吗？（不过其实也只是省去把文档压缩的步骤，之后具体的送到llm进行推理，还是绕不开这个顺序的问题）"}
+	],
+	"edges":[
+		{"id":"1adf42e5727d522a","fromNode":"0caf6c74854d1547","fromSide":"right","toNode":"5a47a1b4b37bf8ec","toSide":"left"},
+		{"id":"e4d55088fdd62888","fromNode":"5a47a1b4b37bf8ec","fromSide":"right","toNode":"55327cfec72251d9","toSide":"left"},
+		{"id":"a0229ab5805e752f","fromNode":"5a47a1b4b37bf8ec","fromSide":"right","toNode":"e32a73111d36b073","toSide":"left"},
+		{"id":"0944f7415c1c390c","fromNode":"5a47a1b4b37bf8ec","fromSide":"right","toNode":"ec5d3dbb55e0f481","toSide":"left"},
+		{"id":"1c98aca356b8e226","fromNode":"100022e6170678d7","fromSide":"right","toNode":"ef004e86b1eabf4b","toSide":"left"},
+		{"id":"69b7ed5621e0bb92","fromNode":"d07b4d2fe5081a5c","fromSide":"right","toNode":"0529de952b3f2508","toSide":"left"},
+		{"id":"e58763f7a83fff33","fromNode":"dda22605c243a27a","fromSide":"right","toNode":"59b646de36bbc32e","toSide":"left"},
+		{"id":"a8d77bdf0499fe17","fromNode":"dda22605c243a27a","fromSide":"right","toNode":"a78fdfe292a9b33d","toSide":"left"},
+		{"id":"2a8de20a4680e8a2","fromNode":"59b646de36bbc32e","fromSide":"right","toNode":"3bb392a7e1a2577e","toSide":"left"},
+		{"id":"fe2200e494172ce6","fromNode":"a78fdfe292a9b33d","fromSide":"right","toNode":"2ce095f5364b2c72","toSide":"left"},
+		{"id":"037e9a51c187a379","fromNode":"3bb392a7e1a2577e","fromSide":"right","toNode":"100022e6170678d7","toSide":"left"},
+		{"id":"80aff483937e7770","fromNode":"2ce095f5364b2c72","fromSide":"right","toNode":"100022e6170678d7","toSide":"left"},
+		{"id":"d10504ac04eeed83","fromNode":"3bb392a7e1a2577e","fromSide":"right","toNode":"a61f3c7a66918418","toSide":"left"},
+		{"id":"516c7c89b0246ad4","fromNode":"e32a73111d36b073","fromSide":"right","toNode":"41c0d2aeecf6b390","toSide":"left"}
+	]
+}

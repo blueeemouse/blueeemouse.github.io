@@ -1,0 +1,16 @@
+{
+	"nodes":[
+		{"id":"07f2c3a282be2d89","type":"text","text":"GraphRAG challenge-insight tree","x":-118,"y":-33,"width":258,"height":93},
+		{"id":"18ce9caa3aed985d","type":"text","text":"cha：graph带噪声/冗余（这其实是不可避免的，我们一定无法构造完美的KG）","x":200,"y":-240,"width":240,"height":140},
+		{"id":"4f3ae2ec3031ab88","type":"text","text":"insight：那就不要仅依赖静态的KG。推理的时候有一些动态的操作来弥补","x":540,"y":-240,"width":260,"height":140},
+		{"id":"01e5d1a8ef953643","type":"text","text":"推理时创建节点间的虚拟边（有一些节点之间可能本来是应该有边的，但构造的时候漏了）（Beyond Explicit Edges: Robust Reasoning over Noisy and Sparse Knowledge Graphs）","x":900,"y":-254,"width":280,"height":167},
+		{"id":"70ea123b3dd23aed","type":"text","text":"其实可以进一步。有些节点之间可能在当前语境下是有联系的，在一般语境下是没有的。换句话说，我们的虚拟边应该结合上query来增设","x":1240,"y":-253,"width":360,"height":166},
+		{"id":"9912a29f4f83f3a1","type":"text","text":"更有甚者，在具体的语境下，不仅可以增加虚拟边，还可以考虑虚删边（类似的假设，一些东西可能一般是有联系的，但在特定语境下我们可以确定二者不需要产生联系）","x":1680,"y":-300,"width":250,"height":260},
+		{"id":"ebf4febc6d7dc8de","type":"text","text":"cha：三元组提取丢失信息","x":169,"y":170,"width":250,"height":60},
+		{"id":"602d46b3649fa683","type":"text","text":"主要体现在，提取三元组可能丢失一些语境信息","x":540,"y":66,"width":250,"height":104},
+		{"id":"998dbe7dc99b9e4a","type":"text","text":"insight：既然会丢失，那就考虑把它补回来（比如MDER-DR，把三元组所属的chunk以及前后的chunk都找到，拿回来，生成一个摘要，从而得到三元组的local信息了）","x":882,"y":17,"width":317,"height":203},
+		{"id":"6f4a22e93384a34b","x":239,"y":392,"width":250,"height":60,"type":"text","text":"cha：检索内容碎片化"},
+		{"id":"cb9a7bc74b4e761d","x":612,"y":392,"width":250,"height":60,"type":"text","text":"insight：把检索回来的内容再次整理（比如整理成graph。如这篇AAAI 26，TAdaRAG）"}
+	],
+	"edges":[]
+}

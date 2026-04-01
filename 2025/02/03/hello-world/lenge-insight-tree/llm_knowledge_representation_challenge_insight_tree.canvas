@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"7612c2b26a4c2a76","x":-110,"y":-64,"width":250,"height":60,"type":"text","text":"llm knowledge representation challeng-insight tree"},
+		{"id":"630abca578f85d4a","x":265,"y":-253,"width":250,"height":60,"type":"text","text":"cha：如何衡量模型对某个东西的不确定性？"},
+		{"id":"3ffd6cd4f9fbbacf","x":919,"y":-444,"width":281,"height":112,"type":"text","text":"这是一个非常intuitive的思路：如果llm对一个问题很自信，那么它应该多次回答的答案都十分接近。所以这个思路就是说让llm多次回答，然后衡量多次回答之间的一致性，一致性高表明确定性高，反之则表明确定性低"},
+		{"id":"1d9726d95aa98edd","x":600,"y":-360,"width":250,"height":56,"type":"text","text":"insight：自一致性"},
+		{"id":"803725e8d841332a","x":1286,"y":-392,"width":290,"height":139,"type":"text","text":"也可以从llm内部表征上衡量（就是提取多次回答的内部表征，然后衡量这些向量之间的一致性，这可能会用到一些比较数学的方法（eg. SeaKR，用到Gram行列式衡量多个向量之间围成的“体积”的大小）"},
+		{"id":"4a024b99432a056d","x":1280,"y":-544,"width":296,"height":96,"type":"text","text":"而衡量自一致性，可以从文本的直接回答进行衡量（比较常见）"}
+	],
+	"edges":[]
+}

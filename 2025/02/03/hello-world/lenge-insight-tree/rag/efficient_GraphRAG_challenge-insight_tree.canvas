@@ -5,11 +5,18 @@
 		{"id":"7d0759da8c3bc775","type":"text","text":"insight：构图的时候减少llm的调用，转而使用传统的nlp工具","x":505,"y":-415,"width":250,"height":95},
 		{"id":"b17e5a1147f327f1","type":"text","text":"一方面是llm开销大（计算上/金钱上/时间上），同时llm提取的三元组也未必总是准确，还有可能犯一些错误","x":808,"y":-548,"width":250,"height":133},
 		{"id":"f449ce75e0248caa","type":"text","text":"另一方面，传统nlp工具，简单、快速、便宜，特定场景下效果也还行","x":808,"y":-320,"width":250,"height":140},
-		{"id":"a7d8c75085d7f277","type":"text","text":"我们想方设法做这些改进，能长期有用吗？感觉llm再往后发展，能力继续变强，效果更好的话，那在追求效果的前提下可能还是得用llm构建graph；而如果llm能在进一步“民主化”，更小，更快，说不定能彻底否定掉传统nlp工具。但感觉还有点远。就算是现在最小的那类llm，其实开销也还是有的","x":1160,"y":-456,"width":382,"height":178},
+		{"id":"a7d8c75085d7f277","type":"text","text":"我们想方设法做这些改进，能长期有用吗？感觉llm再往后发展，能力继续变强，效果更好的话，那在追求效果的前提下可能还是得用llm构建graph；而如果llm能在进一步“民主化”，更小，更快，说不定能彻底否定掉传统nlp工具。但感觉还有点远。就算是现在最小的那类llm，其实开销也还是有的","x":1160,"y":-500,"width":382,"height":290},
 		{"id":"e44edebe9be7302f","type":"text","text":"insight：减小构建的graph的规模","x":504,"y":-123,"width":250,"height":60},
 		{"id":"50aa24db63d7f5e3","type":"text","text":"相应的，为了减小graph规模，同时确保效果，一般都会引进granular kg，比如global的，local的信息，提取关键chunk，关键实体","x":1160,"y":-153,"width":382,"height":133},
 		{"id":"bc247a0ea05ed292","type":"text","text":"小的graph可以用llm构建，大的一般就不会再用llm构建了。否则就又绕回去了。这里可能会用一些比较经典的方法来构建graph（co-occurance、包含关键词……）","x":808,"y":6,"width":250,"height":134},
-		{"id":"39f375011ce8f8c4","type":"text","text":"这是从更加根本的角度入手——即使避免不了使用llm构图，但我们通过减小构建的graph的规模，也能相应减少调用llm的次数","x":808,"y":-136,"width":250,"height":99}
+		{"id":"39f375011ce8f8c4","type":"text","text":"这是从更加根本的角度入手——即使避免不了使用llm构图，但我们通过减小构建的graph的规模，也能相应减少调用llm的次数","x":808,"y":-136,"width":250,"height":99},
+		{"id":"289714ac91ba5dd6","type":"text","text":"retrieval","x":207,"y":406,"width":250,"height":60},
+		{"id":"f99e52311a415758","type":"text","text":"insight：从减少graph上的游走入手","x":505,"y":280,"width":250,"height":60},
+		{"id":"20a1ee613102e1fb","type":"text","text":"insight：比较经典的应该是对子图进行剪枝，减少游走的范围","x":828,"y":180,"width":252,"height":100},
+		{"id":"3648eb042dcda54d","type":"text","text":"极端一点，可以考虑直接把游走过程给省略掉。不过相应的，就得用其它方法补充上多跳的信息了（否则graph就失去意义了）","x":1200,"y":120,"width":280,"height":220},
+		{"id":"b29881b530968478","type":"text","text":"eg. MDER-DR，这篇就是从索引上下手，最后有一步，为每个实体都找到和它关联的三元组，把这些三元组相关信息收集起来，用llm生成摘要，从而得到这个实体相关的多跳信息","x":1542,"y":120,"width":298,"height":236},
+		{"id":"43c8cead73863703","x":538,"y":587,"width":250,"height":60,"type":"text","text":"insight：批量处理query检索到的子图"},
+		{"id":"992b195ba00536e4","x":855,"y":528,"width":250,"height":60,"type":"text","text":"一批query，它们检索到的子图可能是有重复的。我们可以考虑把这一批query涉及的子图整合成一个大的子图，然后这个大的子图的kv cache就可以给这一批的query复用了（相当于算一次，用N次）（来自SubGCache）"}
 	],
 	"edges":[
 		{"id":"3cdcb8eabc5641ae","fromNode":"6d403d022e23f4ff","fromSide":"right","toNode":"146b307152655a2b","toSide":"left"},

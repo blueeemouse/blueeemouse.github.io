@@ -150,6 +150,261 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/llm%E7%9F%A5%E8%AF%86%E8%BE%B9%E7%95%8C%E4%B8%8Erag%20routing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/llm%E7%9F%A5%E8%AF%86%E8%BE%B9%E7%95%8C%E4%B8%8Erag%20routing/" class="post-title-link" itemprop="url">llm知识边界与rag routing</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-01-25 10:44:00" itemprop="dateCreated datePublished" datetime="2026-01-25T10:44:00+08:00">2026-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-01-29 21:20:31" itemprop="dateModified" datetime="2026-01-29T21:20:31+08:00">2026-01-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>llm boundary应该是一个研究比较多的领域了，这方面可以搜集到一些paper
+在rag领域里，常见的相关研究，一般聚焦于，检索知识和内部知识的冲突吧（印象里是有见到过）
+但我们关注的是，对于回答一个query所需知识的衡量，以及llm的知识亏空（欠缺）应该如何表征。希望由此进行routing</p>
+<h3 id="我们考虑关注一下llm知识边界如何界定有很多研究">我们考虑关注一下llm知识边界如何界定（有很多研究）</h3>
+<h4 id="kimi综述给了一个分类感觉有点道理首先是最大的通用知识边界这是全体人类在所有领域积累的全部信息但一般用不到-其次是参数知识边界这个可以参考形式化定义如果一个知识项-k-属于参数知识边界那么至少存在一个提示-q使得模型在给定该提示时能够以高于某个预设阈值-ε-的概率生成正确答案-a简而言之就是模型能在特定prompt下回答出来的-最后是外部知识边界对于一个给定的知识项-k模型在多个不同的经过采样的提示-q-下都能以高于阈值-ε-的概率生成正确答案-a也就是要求模型对这个东西掌握比较深刻熟练不容易受外界干扰参考自acl-25-survey">kimi综述给了一个分类，感觉有点道理：首先是最大的，通用知识边界（这是全体人类在所有领域积累的全部信息。但一般用不到）<br>其次是参数知识边界（这个可以参考形式化定义：如果一个知识项
+<code>k</code> 属于参数知识边界，那么<strong>至少存在一个提示
+<code>q</code>，使得模型在给定该提示时，能够以高于某个预设阈值
+<code>ε</code> 的概率生成正确答案
+<code>a</code></strong>。简而言之，就是模型能在特定prompt下回答出来的）<br>最后是外部知识边界（对于一个给定的知识项
+<code>k</code>，<strong>模型在多个不同的、经过采样的提示 <code>q</code>
+下，都能以高于阈值 <code>ε</code> 的概率生成正确答案
+<code>a</code></strong>）。也就是，要求模型对这个东西掌握比较“深刻、熟练”，不容易受外界干扰（参考自<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.12472">ACL 25 survey</a>）</h4>
+<h4 id="基于上述的知识边界三种界定可以进一步把知识给细分为四种种类该研究进一步将知识划分为四种类型提示无关已知知识-prompt-agnostic-known-knowledge-pak即无论提示如何变化llm都能稳定正确回答的知识提示敏感已知知识-prompt-sensitive-known-knowledge-psk这类知识存在于模型参数中但其正确表达高度依赖于提示的形式某些提示可能无法有效激活这部分知识模型特定未知知识-model-specific-unknown-knowledge-msu指特定llm参数中不具备但人类已知的普适知识以及模型不可知未知知识-model-agnostic-unknown-knowledge-mau指目前人类也尚未知晓的知识-落实到我们的场景对于pak我们就不需要rag了psk可能就需要naive-ragmsu看情况需要naive-rag或graphragmau的话有点玄乎暂时可能用不上这已经是真正探索人类知识边界了不过或许我们也没必要进行四分类之后直接路由而是把内部的表征拿去融合到路由过程这个思路还挺常见啊">基于上述的知识边界三种界定，可以进一步把知识给细分为四种种类：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.12472">该研究</a>进一步将知识划分为四种类型：<strong>提示无关已知知识
+(Prompt-Agnostic Known Knowledge,
+PAK)</strong>，即无论提示如何变化，LLM都能稳定正确回答的知识；<strong>提示敏感已知知识
+(Prompt-Sensitive Known Knowledge,
+PSK)</strong>，这类知识存在于模型参数中，但其正确表达高度依赖于提示的形式，某些提示可能无法有效激活这部分知识；<strong>模型特定未知知识
+(Model-Specific Unknown Knowledge,
+MSU)</strong>，指特定LLM参数中不具备，但人类已知的普适知识；以及<strong>模型不可知未知知识
+(Model-Agnostic Unknown Knowledge,
+MAU)</strong>，指目前人类也尚未知晓的知识。<br>落实到我们的场景，对于PAK，我们就不需要rag了；PSK可能就需要naive
+rag；MSU看情况需要naive
+rag或graphrag；MAU的话，有点玄乎，暂时可能用不上（这已经是真正探索人类知识边界了）。不过或许我们也没必要进行四分类之后直接路由，而是把内部的表征拿去融合到路由过程。这个思路还挺常见啊</h4>
+<h3 id="然后是知识边界如何衡量">然后是知识边界如何衡量：</h3>
+<h4 id="kimi给出的分类基于置信度探测与校准的方法基于提示空间对抗搜索的方法基于内部状态探测与对齐的方法以及基于采样推断与边界分类的方法这个说法可以有很多吧也可以叫做依靠内部信号依靠多种prompt下的输出">kimi给出的分类：基于置信度探测与校准的方法、基于提示空间对抗搜索的方法、基于内部状态探测与对齐的方法，以及基于采样推断与边界分类的方法（这个说法可以有很多吧，也可以叫做，依靠内部信号、依靠多种prompt下的输出、</h4>
+<h3 id="现有的相关研究">现有的相关研究：</h3>
+<h4 id="现在其实已经有一些研究是在把knowledge-boundary与rag结合起来虽然没有明说是routing啊而且大部分都是说训一个二分类模型判断一下对于当前query模型确不确定确定就不用rag不确定就用一下rag比如kbm这篇-感觉确实可以参考memrl不仅存储知识还把过往的经验给存储起来了这样我们扩展检索方式不仅仅是本地检索还支持api检索网络内容让模型agent在不断的尝试中发现对各种query应当采取哪些操作才是最好的">现在其实已经有一些研究是在把knowledge
+boundary与rag结合起来（虽然没有明说是routing啊）。而且大部分都是说，训一个二分类模型，判断一下对于当前query，模型确不确定：确定就不用rag，不确定就用一下rag。比如，<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2411.06207">KBM这篇</a><br>（感觉确实可以参考MemRL，不仅存储知识，还把过往的经验给存储起来了。这样，我们扩展检索方式，不仅仅是本地检索，还支持api检索网络内容，让模型/agent在不断的尝试中，发现对各种query，应当采取哪些操作才是最好的）</h4>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/25/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E8%B0%83%E7%A0%94/llm%E7%9F%A5%E8%AF%86%E8%BE%B9%E7%95%8C%E4%B8%8Erag%20routing/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85ollama/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85ollama/" class="post-title-link" itemprop="url">服务器安装ollama</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-01-24 17:05:00" itemprop="dateCreated datePublished" datetime="2026-01-24T17:05:00+08:00">2026-01-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-02-01 12:47:34" itemprop="dateModified" datetime="2026-02-01T12:47:34+08:00">2026-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="按理来说这应该是很容易的ollama官网其实已经给了很简洁的安装方法了三个系统都有不过如果是租借的服务器可能会有个问题就是直接执行官方的linux系统下的安装命令下载东西会失败或者看起来下载好了但是异常得快且下载的东西大小明显对不上">按理来说，这应该是很容易的。ollama官网其实已经给了很简洁的安装方法了，三个系统都有。不过如果是租借的服务器，可能会有个问题，就是直接执行官方的Linux系统下的安装命令，下载东西会失败（或者看起来下载好了，但是异常得快，且下载的东西大小明显对不上）</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%8D%E5%8A%A1%E5%99%A8/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85ollama/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/faiss-gpu%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/faiss-gpu%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">faiss-gpu安装</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-24 12:29:00 / Modified: 22:27:27" itemprop="dateCreated datePublished" datetime="2026-01-24T12:29:00+08:00">2026-01-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="faiss这个库经常要安装但也经常遇到报错遂记录一下">faiss这个库经常要安装，但也经常遇到报错。遂记录一下</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/faiss-gpu%E5%AE%89%E8%A3%85/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/24/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E5%BE%AE%E8%BD%AFGraphRAG%20ollama%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -675,235 +930,10 @@ Training），以及未来可能有人研究的新的学习方法）</h2>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/" class="post-title-link" itemprop="url">本地（Windows）安装uv</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-14 21:56:00 / Modified: 22:14:04" itemprop="dateCreated datePublished" datetime="2026-01-14T21:56:00+08:00">2026-01-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="因为一个项目可以选择用uv管理python包，决定接触一下试试"><a href="#因为一个项目可以选择用uv管理python包，决定接触一下试试" class="headerlink" title="因为一个项目可以选择用uv管理python包，决定接触一下试试"></a>因为一个项目可以选择用uv管理python包，决定接触一下试试</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/10/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%EF%BC%88Windows%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2026/01/10/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%EF%BC%88Windows%EF%BC%89/" class="post-title-link" itemprop="url">字符编码问题（Windows）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2026-01-10 18:09:00 / Modified: 18:15:29" itemprop="dateCreated datePublished" datetime="2026-01-10T18:09:00+08:00">2026-01-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="在windows跑一些文件的时候有时或许会遇到类似这样的报错unicodedecodeerror-gbk-codec-cant-decode-byte-0xa6-in-position-5841-illegal-multibyte-sequence前面可以有一大段信息显示运行到哪里的时候出错了问问ai原因大体上是有一些字符无法用我们系统上默认的编码读取具体到这里的情况我们是windows默认用gbk编码而实际的情况是我们读取源码的时候读取torch里的一部分源码读到了一些非gbk字符所以就出问题了">在Windows跑一些文件的时候，有时或许会遇到类似这样的报错：<code>UnicodeDecodeError: 'gbk' codec can't decode byte 0xa6 in position 5841: illegal multibyte sequence</code>。前面可以有一大段信息显示运行到哪里的时候出错了。问问ai，原因大体上是，有一些字符无法用我们系统上默认的编码读取。具体到这里的情况，我们是Windows，默认用gbk编码。而实际的情况是，我们读取源码的时候，读取torch里的一部分源码，读到了一些非gbk字符，所以就出问题了</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/10/%E5%A5%87%E6%80%AA%E7%9A%84bugs/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%EF%BC%88Windows%EF%BC%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/12/29/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8Aword%E5%BF%AB%E6%8D%B7%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/12/29/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8Aword%E5%BF%AB%E6%8D%B7%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/" class="post-title-link" itemprop="url">Windows上word快捷插入参考文献</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-12-29 23:02:00 / Modified: 23:18:13" itemprop="dateCreated datePublished" datetime="2025-12-29T23:02:00+08:00">2025-12-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="如题因为需要进行本科毕设在写开题报告的时候需要在word上写报告然后要写一些参考文献这就不像本地latex或者overleaf那样引用特别方便感觉上word插入参考文献一直很麻烦因为懒得用word自带的功能加上文献整理在zotero检索之下发现了可以用zotero的插件实现文献插入不过目前只是解决了一部分而已">如题，因为需要进行本科毕设，在写开题报告的时候需要在word上写报告，然后要写一些参考文献。这就不像本地latex或者overleaf那样，引用特别方便；感觉上word插入参考文献一直很麻烦。因为懒得用word自带的功能，加上文献整理在zotero，检索之下发现了可以用zotero的插件实现文献插入（不过目前只是解决了一部分而已）</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/29/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8Aword%E5%BF%AB%E6%8D%B7%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -969,7 +999,7 @@ Training），以及未来可能有人研究的新的学习方法）</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">249</span>
+          <span class="site-state-item-count">252</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
