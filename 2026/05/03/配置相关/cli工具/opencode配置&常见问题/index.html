@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="之前用claude code，发现总是会出现类似连接不好的问题（比如模型不回复，或者它只回答我“好的”，但始终不去执行）；然而在其它地方用同样的中转站却是正常的。所以大概是claude code自己有些问题。转到opencode之后，至少用了一段时间，没遇到这个问题。而且它其实也不错，有一些好的设计（例如它提问的终端的框始终在下面，不管我往上怎么翻。所以就可以我看到哪里，有疑问就提问，而不需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:url" content="https://blueeemouse.github.io/2026/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/opencode%E9%85%8D%E7%BD%AE&%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="bluemouse&#39;s blog">
+<meta property="og:description" content="之前用claude code，发现总是会出现类似连接不好的问题（比如模型不回复，或者它只回答我“好的”，但始终不去执行）；然而在其它地方用同样的中转站却是正常的。所以大概是claude code自己有些问题。转到opencode之后，至少用了一段时间，没遇到这个问题。而且它其实也不错，有一些好的设计（例如它提问的终端的框始终在下面，不管我往上怎么翻。所以就可以我看到哪里，有疑问就提问，而不需要">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-03T09:01:00.000Z">
+<meta property="article:modified_time" content="2026-05-05T08:38:31.501Z">
+<meta property="article:author" content="bluemouse">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueeemouse.github.io/2026/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/opencode%E9%85%8D%E7%BD%AE&%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | bluemouse's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">bluemouse's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/05/03/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/cli%E5%B7%A5%E5%85%B7/opencode%E9%85%8D%E7%BD%AE&%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-05-03 17:01:00" itemprop="dateCreated datePublished" datetime="2026-05-03T17:01:00+08:00">2026-05-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-05-05 16:38:31" itemprop="dateModified" datetime="2026-05-05T16:38:31+08:00">2026-05-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="之前用claude-code发现总是会出现类似连接不好的问题比如模型不回复或者它只回答我好的但始终不去执行然而在其它地方用同样的中转站却是正常的所以大概是claude-code自己有些问题转到opencode之后至少用了一段时间没遇到这个问题而且它其实也不错有一些好的设计例如它提问的终端的框始终在下面不管我往上怎么翻所以就可以我看到哪里有疑问就提问而不需要像claude-code那样还得翻到最底下提问完了再翻回去继续看那样很麻烦加上它是开源的有什么想设计的也可以自己改虽然claude-code也被迫开源了">之前用claude
+code，发现总是会出现类似连接不好的问题（比如模型不回复，或者它只回答我“好的”，但始终不去执行）；然而在其它地方用同样的中转站却是正常的。所以大概是claude
+code自己有些问题。转到opencode之后，至少用了一段时间，没遇到这个问题。而且它其实也不错，有一些好的设计（例如它提问的终端的框始终在下面，不管我往上怎么翻。所以就可以我看到哪里，有疑问就提问，而不需要像claude
+code那样，还得翻到最底下，提问，完了再翻回去继续看。那样很麻烦。加上它是开源的，有什么想设计的也可以自己改（虽然claude
+code也被迫开源了）</h1>
+<span id="more"></span>
+<h1 id="配置路径优先级">配置路径优先级：</h1>
+<h2 id="opencode可以有多个配置路径和文件然后相互之间有优先级优先级高的会覆盖优先级低的问了一下ai得到的说法是这样的供参考">opencode可以有多个配置路径和文件，然后相互之间有优先级，优先级高的会覆盖优先级低的。问了一下ai，得到的说法是这样的（供参考）：</h2>
+<ol type="1">
+<li><strong>远程配置</strong>（来自
+<code>.well-known/opencode</code>）：组织级默认设置。</li>
+<li><strong>全局用户配置</strong>（<code>~/.config/opencode/opencode.json</code>）：个人偏好设置</li>
+<li><strong>自定义配置</strong>（<code>OPENCODE_CONFIG</code>
+环境变量）：自定义覆盖。</li>
+<li><strong>项目级配置</strong>（项目根目录下的
+<code>opencode.json</code>）：项目特定设置，<strong>优先级最高</strong></li>
+<li><strong><code>.opencode</code>
+目录</strong>：包含代理、命令、插件和<strong>技能</strong>等</li>
+<li><strong>内联配置</strong>（<code>OPENCODE_CONFIG_CONTENT</code>
+环境变量）：运行时覆盖。</li>
+<li><strong>托管配置文件</strong>（如
+<code>/Library/Application Support/opencode/</code>）：系统级管理。</li>
+<li><strong>macOS
+托管偏好设置</strong>（<code>.mobileconfig</code>）：最高优先级，不可被用户覆盖。
+###
+这样看，我们一般做一些全局的设置可能就还是在<code>~/.config/opencode/opencode.json</code>这里配置吧
+# 添加arxiv mcp： ## 用到了这个<a target="_blank" rel="noopener" href="https://github.com/blazickjp/arxiv-mcp-server">GitHub仓库</a>。流程上，首先要安装uv（如果是wsl，可能没有安装，那么<code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>先安装，然后退出当前wsl终端再进入（以便环境变量生效），<code>uv --version</code>看看生效没，生效了应该看到输出版本
+## 下一步是安装这个功能 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装基础功能（处理HTML论文）</span></span><br><span class="line">uv tool install arxiv-mcp-server</span><br><span class="line"><span class="comment"># 或安装包含PDF处理功能的完整版</span></span><br><span class="line">uv tool install <span class="string">&#x27;arxiv-mcp-server[pdf]&#x27;</span></span><br></pre></td></tr></table></figure> ##
+验证安装可以：<code>arxiv-mcp-server --help</code> ##
+最后配置opencode.json文件，添加配置： <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://opencode.ai/config.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mcp&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;arxiv&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;local&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;arxiv-mcp-server&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure> ##
+此时重启opencode，应该就可以看到有这个mcp了 # 定制主题： ##
+其实流程上应该可以参考这个<a target="_blank" rel="noopener" href="https://github.com/anomalyco/opencode/pull/17992">PR</a>，主要要修改的是一个themes.json文件（虽然不知道它PR里为什么还要改一个csv文件。但我实操下来，只改一个json文件，就可以看到自己新增加的自定义主题了）
+##
+说回来，我本来的需求就是增加一个白底黑字的主题（它wsl和windows上自带的主题几乎都是偏向夜间模式的，个人不太喜欢）。所以才找到了这个PR，它就是提出一个light的主题
+# 复制、粘贴文本 ##
+这个不是所有地方都会发生的。比如服务器上，就没有这个问题，鼠标左键划过的地方自动都会复制；但在本地用wsl的时候就会有这个问题，鼠标无法左键划过内容复制，比较麻烦。找到的一个临时解决方法是，
+### 复制：按住Shift，鼠标左键选中文字，松开Shift，按 Ctrl + Shift + C
+进行复制 ### 粘贴：Ctrl + Shift + V ### 如果要彻底解决，考虑
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y xclip xsel ws-clipboard</span><br></pre></td></tr></table></figure> ###
+话虽如此，这个下载的时候遇到报错了，好像说没有ws-clipboard来着</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/11/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/rag%20paper%E8%B0%83%E7%A0%94/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%94%A8claude-code%E5%8F%91%E7%8E%B0%E6%80%BB%E6%98%AF%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%B1%BB%E4%BC%BC%E8%BF%9E%E6%8E%A5%E4%B8%8D%E5%A5%BD%E7%9A%84%E9%97%AE%E9%A2%98%E6%AF%94%E5%A6%82%E6%A8%A1%E5%9E%8B%E4%B8%8D%E5%9B%9E%E5%A4%8D%E6%88%96%E8%80%85%E5%AE%83%E5%8F%AA%E5%9B%9E%E7%AD%94%E6%88%91%E5%A5%BD%E7%9A%84%E4%BD%86%E5%A7%8B%E7%BB%88%E4%B8%8D%E5%8E%BB%E6%89%A7%E8%A1%8C%E7%84%B6%E8%80%8C%E5%9C%A8%E5%85%B6%E5%AE%83%E5%9C%B0%E6%96%B9%E7%94%A8%E5%90%8C%E6%A0%B7%E7%9A%84%E4%B8%AD%E8%BD%AC%E7%AB%99%E5%8D%B4%E6%98%AF%E6%AD%A3%E5%B8%B8%E7%9A%84%E6%89%80%E4%BB%A5%E5%A4%A7%E6%A6%82%E6%98%AFclaude-code%E8%87%AA%E5%B7%B1%E6%9C%89%E4%BA%9B%E9%97%AE%E9%A2%98%E8%BD%AC%E5%88%B0opencode%E4%B9%8B%E5%90%8E%E8%87%B3%E5%B0%91%E7%94%A8%E4%BA%86%E4%B8%80%E6%AE%B5%E6%97%B6%E9%97%B4%E6%B2%A1%E9%81%87%E5%88%B0%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E8%80%8C%E4%B8%94%E5%AE%83%E5%85%B6%E5%AE%9E%E4%B9%9F%E4%B8%8D%E9%94%99%E6%9C%89%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%BE%8B%E5%A6%82%E5%AE%83%E6%8F%90%E9%97%AE%E7%9A%84%E7%BB%88%E7%AB%AF%E7%9A%84%E6%A1%86%E5%A7%8B%E7%BB%88%E5%9C%A8%E4%B8%8B%E9%9D%A2%E4%B8%8D%E7%AE%A1%E6%88%91%E5%BE%80%E4%B8%8A%E6%80%8E%E4%B9%88%E7%BF%BB%E6%89%80%E4%BB%A5%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%88%91%E7%9C%8B%E5%88%B0%E5%93%AA%E9%87%8C%E6%9C%89%E7%96%91%E9%97%AE%E5%B0%B1%E6%8F%90%E9%97%AE%E8%80%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E5%83%8Fclaude-code%E9%82%A3%E6%A0%B7%E8%BF%98%E5%BE%97%E7%BF%BB%E5%88%B0%E6%9C%80%E5%BA%95%E4%B8%8B%E6%8F%90%E9%97%AE%E5%AE%8C%E4%BA%86%E5%86%8D%E7%BF%BB%E5%9B%9E%E5%8E%BB%E7%BB%A7%E7%BB%AD%E7%9C%8B%E9%82%A3%E6%A0%B7%E5%BE%88%E9%BA%BB%E7%83%A6%E5%8A%A0%E4%B8%8A%E5%AE%83%E6%98%AF%E5%BC%80%E6%BA%90%E7%9A%84%E6%9C%89%E4%BB%80%E4%B9%88%E6%83%B3%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B9%9F%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%B7%B1%E6%94%B9%E8%99%BD%E7%84%B6claude-code%E4%B9%9F%E8%A2%AB%E8%BF%AB%E5%BC%80%E6%BA%90%E4%BA%86"><span class="nav-number">1.</span> <span class="nav-text">之前用claude
+code，发现总是会出现类似连接不好的问题（比如模型不回复，或者它只回答我“好的”，但始终不去执行）；然而在其它地方用同样的中转站却是正常的。所以大概是claude
+code自己有些问题。转到opencode之后，至少用了一段时间，没遇到这个问题。而且它其实也不错，有一些好的设计（例如它提问的终端的框始终在下面，不管我往上怎么翻。所以就可以我看到哪里，有疑问就提问，而不需要像claude
+code那样，还得翻到最底下，提问，完了再翻回去继续看。那样很麻烦。加上它是开源的，有什么想设计的也可以自己改（虽然claude
+code也被迫开源了）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%B7%AF%E5%BE%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">2.</span> <span class="nav-text">配置路径优先级：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#opencode%E5%8F%AF%E4%BB%A5%E6%9C%89%E5%A4%9A%E4%B8%AA%E9%85%8D%E7%BD%AE%E8%B7%AF%E5%BE%84%E5%92%8C%E6%96%87%E4%BB%B6%E7%84%B6%E5%90%8E%E7%9B%B8%E4%BA%92%E4%B9%8B%E9%97%B4%E6%9C%89%E4%BC%98%E5%85%88%E7%BA%A7%E4%BC%98%E5%85%88%E7%BA%A7%E9%AB%98%E7%9A%84%E4%BC%9A%E8%A6%86%E7%9B%96%E4%BC%98%E5%85%88%E7%BA%A7%E4%BD%8E%E7%9A%84%E9%97%AE%E4%BA%86%E4%B8%80%E4%B8%8Bai%E5%BE%97%E5%88%B0%E7%9A%84%E8%AF%B4%E6%B3%95%E6%98%AF%E8%BF%99%E6%A0%B7%E7%9A%84%E4%BE%9B%E5%8F%82%E8%80%83"><span class="nav-number">2.1.</span> <span class="nav-text">opencode可以有多个配置路径和文件，然后相互之间有优先级，优先级高的会覆盖优先级低的。问了一下ai，得到的说法是这样的（供参考）：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">bluemouse</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">257</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">102</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">bluemouse</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"blueeemouse.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Locomo，LongMemEval">
+  <meta name="description" content="Locomo 这里测试的时候，它不会去检索索引，而是直接进行精确的相似度计算了（那rag类方法显然是可以很方便地迁移过来） ## 评估指标： ### 回答： precision&#x2F;recall&#x2F;F1：主要是这个，对于一些直接给一个答案的，就是正常计算；对于多跳问题，因为会给出子答案，所以会计算每个子答案的F1然后求均值 0&#x2F;1（对于二选一类问题） ### 检索： recall：看id来判断">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bluemouse&#39;s blog">
+<meta property="og:title" content="memory常见bench">
 <meta property="og:url" content="https://blueeemouse.github.io/2026/03/12/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/memory/memory%E5%B8%B8%E8%A7%81bench/index.html">
 <meta property="og:site_name" content="bluemouse&#39;s blog">
-<meta property="og:description" content="Locomo，LongMemEval">
+<meta property="og:description" content="Locomo 这里测试的时候，它不会去检索索引，而是直接进行精确的相似度计算了（那rag类方法显然是可以很方便地迁移过来） ## 评估指标： ### 回答： precision&#x2F;recall&#x2F;F1：主要是这个，对于一些直接给一个答案的，就是正常计算；对于多跳问题，因为会给出子答案，所以会计算每个子答案的F1然后求均值 0&#x2F;1（对于二选一类问题） ### 检索： recall：看id来判断">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-03-12T04:51:00.000Z">
-<meta property="article:modified_time" content="2026-03-12T04:51:44.950Z">
+<meta property="article:modified_time" content="2026-05-04T09:11:15.333Z">
 <meta property="article:author" content="bluemouse">
 <meta name="twitter:card" content="summary">
 
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title> | bluemouse's blog</title>
+  <title>memory常见bench | bluemouse's blog</title>
   
 
 
@@ -168,7 +168,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          memory常见bench
         </h1>
 
         <div class="post-meta">
@@ -177,9 +177,36 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2026-03-12 12:51:00 / Modified: 12:51:44" itemprop="dateCreated datePublished" datetime="2026-03-12T12:51:00+08:00">2026-03-12</time>
+              <time title="Created: 2026-03-12 12:51:00" itemprop="dateCreated datePublished" datetime="2026-03-12T12:51:00+08:00">2026-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2026-05-04 17:11:15" itemprop="dateModified" datetime="2026-05-04T17:11:15+08:00">2026-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/memory/" itemprop="url" rel="index"><span itemprop="name">memory</span></a>
+                </span>
             </span>
 
           
@@ -193,7 +220,164 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Locomo，LongMemEval <span id="more"></span></p>
+        <h1 id="locomo">Locomo</h1>
+<p>这里测试的时候，它不会去检索索引，而是直接进行精确的相似度计算了（那rag类方法显然是可以很方便地迁移过来）
+## 评估指标： ### 回答：
+precision/recall/F1：主要是这个，对于一些直接给一个答案的，就是正常计算；对于多跳问题，因为会给出子答案，所以会计算每个子答案的F1然后求均值
+0/1（对于二选一类问题） ### 检索：
+recall：看id来判断是否命中。分两种匹配粒度，一种是dialog，按照dia_id来匹配；另一种是summary，按照session来匹配。recall的计算和一般的没区别，就是
+检索中命中的 / 有效的总数 # LongMemEval（长程对话问答） ## 评测指标：
+### 检索： recall_any@k recall_all@k
+ndcg_any@k（这个和一般的ndcg没区别，感觉纯粹是为了和上面的指标对齐而已）
+### qa： task-avg
+acc：这个是，先对每个类型的任务里的query的llm-judge求均值，得到每个类型的任务的均值指标，然后再对这些任务的指标求均值（虽然看起来和下面的很像，但是写写公式可以发现是不一样的）
+overall
+acc：这个和task-avg略有不同，它是直接把所有query的llm-judge结果拿来求均值
+abstention
+acc：这类就是评估那些无法回答的问题，模型是否有识别出来，然后对这些问题计算llm
+judge的均值 <span id="more"></span> --- # 类别：长对话里动态信息捕捉 # RealMem（ACL
+26 findings）（这个起码代码比较齐全，感觉可测） ## 维度：长程，project
+states，schedules，personas（不仅是关注局部的信息了） ##
+这个它有一点提得很好，就是qa
+timing，像LoCoMo还有LongMemEval，它们是after all
+sessions的，但RealMem就是Interleaved within sessions ##
+指标上，它会评估检索内容和回答内容（也就是关注，有没有取到正确记忆，以及有没有真的把正确记忆用到回答里）
+### 检索（会衡量准不准，好不好）： recall_any@k（top-k
+检索结果里，只要命中了任意一个 gold session，就记为 1，否则
+0；最后会对所有query求平均。它其实就是一种比较宽松的衡量检索效果的能力）</p>
+<p>recall_all@k：衡量top-k结果里是否包含所有gold
+session，是则记为1，否则为0（是一种非常严格的指标）</p>
+<p>ndcg_any@k：用NDCG衡量正确session在排序种的位置，正确结果越靠前，分数越高（所以它衡量的是排序质量好不好）</p>
+<p>Mem_recall /
+average_mem_recall：这个也是衡量检索的记忆“好不好”，但不是像上面的指标那样侧重于lexical角度分析，而是从语义的角度，让llm判断，ground-truth
+memory里有多少条被retrieved
+memory覆盖了（取值范围0-1）（上面的recall是用session
+id来判断是否命中的，这里则是llm按照语义来判断）</p>
+<p>Mem_helpful_score /
+average_mem_helpful_score：这个就是想用lexical来衡量也不太能做到了，可以说必须得上llm了。它衡量的是检索的memory本身的质量（而非说参考ground-truth
+memory），0表示检索记忆相互冲突/误导，1表示有一点帮助，2表示memory很有帮助，能比较完整支持回答
+### 回答： score /
+average_qa_score：这是一个llm-judge的指标，它会给单个query打分，从0-3（离散的），0表示回答和用户记忆冲突；1表示不冲突，但很泛泛，没有真正利用记忆；2表示用到了部分用户记忆；3表示像参考答案一样，充分使用了相关记忆（嗯，所以说可以认为它是在衡量回答，但衡量的维度侧重于“是否利用好了memory”，而不是单纯看对不对）</p>
+<p>qa_score_distribution：这个就是评估上面那个指标的分数的分布，由此来判断系统的问题，是大多能充分利用记忆，还是说经常幻觉</p>
+<p>qa_hallucination_rate：这个就是score=0的比例，也就是说回答和记忆冲突的比例（回答和检索内容冲突，其实就是这里所谓的幻觉了）</p>
+<p>qa_perfect_rate：score为3的比例 # PersonaMem（COLM 25） ##
+这个应该是主打用户偏好的变化吗？就是一个user
+profile既有静态信息也有动态信息 ## 想评估的llm的能力包括： ### 对user
+profile的记忆（偏重静态信息的记忆、提取） ### 对user profile的追踪 ###
+生成个性化回复 ##
+通过看代码，可以发现，它的评测是相对偏动态的。实现上，在一长串的对话里，它会在中间若干位置插入query，然后提问模型的时候，只会提供截至到query的上下文。且问的问题是时间顺序的，所以先问前面的，然后问后面的。那么每次模型见到的上下文就是越来越多的</p>
+<h1 id="section">===</h1>
+<h1 id="偏向事实性">偏向事实性</h1>
+<h1 id="halumemmemtensor的这个感觉真得测挺常见的而且确实是有人用过的可以说比较重要了代码比较全面整体也比较好而且对于extraction的测评正好用rag类的粗略chunk作为对比的话可以体现memory类工作的一部分价值如果它们那些复杂的extraction确实有用的话而且它评估的update的能力很重要值得关注这是和一般的bench不一样的地方加上如果我们想综合评估ragmemoryagentic-search可以从一个知识管理的统一角度来看待而知识管理要评估的就得有这个更新方面的能力">HaluMem（MemTensor的）（这个感觉真得测，挺常见的，而且确实是有人用过的）（可以说比较重要了，代码比较全面，整体也比较好；而且对于extraction的测评，正好用rag类的粗略chunk作为对比的话，可以体现memory类工作的一部分价值（如果它们那些复杂的extraction确实有用的话））（而且它评估的update的能力，很重要，值得关注，这是和一般的bench不一样的地方，加上如果我们想综合评估rag、memory、agentic
+search，可以从一个知识管理的统一角度来看待。而知识管理要评估的就得有这个更新方面的能力）</h1>
+<h2 id="想评估的能力">想评估的能力；</h2>
+<h3 id="记忆提取其实就是检索">记忆提取（其实就是检索）</h3>
+<h3 id="记忆更新能否正确更新现有记忆保持一致性">记忆更新（能否正确更新现有记忆，保持一致性）</h3>
+<h3 id="记忆问答就是说最后效果好不好是一个综合能力的体现既要提取好也要更新好最后还要利用好检索内容">记忆问答（就是说最后效果好不好，是一个综合能力的体现，既要提取好，也要更新好，最后还要利用好检索内容）</h3>
+<h2 id="数据构成">数据构成：</h2>
+<h3 id="记忆分了三类persona-memory比如个人兴趣等event-memoryrelationship-memory">记忆分了三类：persona
+memory（比如个人兴趣等）、event memory、relationship memory</h3>
+<h3 id="设计的问题种类">设计的问题种类：</h3>
+<p>基础事实回溯（Basic Fact Recall）：直接询问对话中的客观事实。
+多跳推理（Multi-hop
+Inference）：需要整合多个对话片段进行逻辑或时间推理。 动态更新（Dynamic
+Update）：测试系统追踪信息随时间变化的能力。 记忆边界（Memory
+Boundary）：询问对话中未提及的细节，测试系统是否会凭空捏造。
+泛化与应用（Generalization &amp;
+Application）：基于已知偏好在场景中给出建议。 记忆冲突（Memory
+Conflict）：故意提供错误前提，测试系统能否识别并纠正矛盾。 ## 评估流程：
+### 三类任务：memory extraction，memory update，qa ###
+逐session添加到memory里的，而且它实验里也没有测试rag类方法。那比较麻烦了，可能只能自己做一些假设了（比如不建立索引了，直接存向量……然后设计一些简单的驱逐/添加策略，像Evo-Memory那样）
+### 指标： #### memory extraction：
+（首先要注意，这里是衡量extraction效果，也就是从对话里提取出要存储的信息的效果衡量，既要衡量准不准，也要衡量是否把重要的东西都提取出来了，那就对应了acc和recall了）
+memory_integrity：这里我们会给检索记忆进行打分，判断memory的完整性（就是指该检索出来的东西是不是都检索出来了，所以实际计算的指标还是recall）（0-2离散分数，llm判断。给llm的输入是我们检索到的memories以及golden
+memory），然后算得分为2的比率，作为recall。虽然是0-2，但是实际计算的时候会乘上0.5用以归一化
+memory_accuracy：这个就是衡量我们检索的memory是否足够准确，给模型的输入是完整对话+golden
+memory+单条我们检索到的memory。这里llm会打0-2的分，同时也有一个bool变量，is_included_in_golden_memories（这里主要是
+FMR（False Memory Resistence）：
+F1：其实就是对recall和acc的一个综合度量，和一般f1定义没区别，二者的调和平均
+#### memory update： （其实memory
+update和qa，最后的指标都是统计一些比率。这些都是用llm给每个query的回答进行打分，看是属于哪一类，然后统计比率）
+correct_update_memory_ratio（生成记忆完整覆盖目标更新内容，关键字段正确，且旧记忆被替换/过时化）
+hallucination_update_memory_ratio（有相关“更新”但事实错误或与目标更新冲突）
+omission_udpate_memory_ratio（没更新，或更新了但缺关键内容（部分遗漏））
+other_update_memory_ratio（其余异常）
+（由此我们也可以看到，虽然我们最终效果上可能还是看correct的比率，但它这里定义了一些错误的类型，因而可以辅助判断update环节到底有没有幻觉，幻觉严不严重）
+#### qa： correct_qa_ratio hallucination_qa_ratio omission_qa_ratio #
+BEAM（BEYOND A MILLION TOKENS: BENCHMARKING AND ENHANCING LONG-TERM
+MEMORY IN LLMS，ICLR 26）（看起来它评估的更多是llm自己的能力啊？） ##
+想评估的能力： 拒答（Abstention）：当证据缺失时，模型是否能拒绝回答。
+矛盾解决（Contradiction
+Resolution）：检测并调和对话中相隔较远的矛盾陈述。 事件排序（Event
+Ordering）：识别并重建对话中信息的演变顺序。 信息提取（Information
+Extraction）：从长历史中召回实体和事实细节。 指令遵循（Instruction
+Following）：在长上下文中持续遵守用户指定的约束。 信息更新（Information
+Update）：随着新事实的出现修正已存储的事实。 多跳推理（Multi-hop
+Reasoning）：整合多个非相邻对话片段的证据进行推理。 偏好遵循（Preference
+Following）：根据用户演变的偏好进行个性化响应。
+摘要（Summarization）：抽象并压缩对话内容。 时间推理（Temporal
+Reasoning）：对显式和隐式的时间关系进行推理。 ## 数据构成： ###
+100场长对话，token跨度涵盖100k、500k、1M以及极端的10M
+tokens；总共2000个问题（每场对话对应20个问题） ###
+涵盖19个领域，包括coding、math、health、finance等 #
+MemoryAgentBench（Evaluating Memory in LLM Agents via Incremental
+Multi-Turn Interactions，ICLR 26，314stars了，挺高质量的感觉） ##
+想评估的能力： ### 精确检索（能不能检索到关键信息） ###
+事实整合（检索到多种，甚至冲突的信息，如何整理） ### test-time
+learning，类似于in-context learning，或者说是对检索内容的利用效果 ###
+长文本理解与推理 ##
+这篇其实比较关键，它应该也有很多可以参考的点。主要是它好像在qa数据集上也测试了类似agentic
+search以及memory的方法。不过它本身并没有提出一个新的bench，更多是类似于用多个现有bench进行综合评估
+# ES-MemEval（WWW 26） ## 想评估的能力： 信息提取（Information
+Extraction）：识别会话内和跨会话的关键事实。 时间推理（Temporal
+Reasoning）：推断事件的时间顺序和因果关系，追踪用户状态的演变。
+冲突检测（Conflict
+Detection）：检测并解决记忆中的矛盾，以保持与用户当前状态一致。
+拒绝回答（Abstention）：在信息不足时拒绝回答，以确保可靠性。
+用户建模（User Modeling）：推断并更新用户的特质、偏好和状态。
+（没有太特别的维度） ## 数据构成： ###
+任务上主要是三种，qa（评估跨会话信息检索和回答）、summarization（分析跨会话信息和用户动态变化）、dialogue
+generation（模拟真实交互，反映模型在个性化情感支持中的综合表现）</p>
+<h1 id="section-1">===</h1>
+<h1 id="类别用户画像推断算隐式意图推断吗">类别：用户画像推断（算隐式意图推断吗？）</h1>
+<h1 id="evermembench">EverMemBench</h1>
+<h2 id="想评估的能力-1">想评估的能力：</h2>
+<h3 id="细粒度召回其实还是检索精度的问题但重点放在证据分散在多个发言者和群组的场景下">细粒度召回（其实还是检索精度的问题，但重点放在“证据分散在多个发言者和群组”的场景下）</h3>
+<h3 id="在单跳多跳时序问题上的回答这一块差不多其它bench也有">在单跳、多跳、时序问题上的回答（这一块差不多，其它bench也有）</h3>
+<h3 id="memory-awareness想测试系统能不能超越简单的检索理解存储信息并应用到新的场景可以认为是想测试memory的泛化性吧">memory
+awareness（想测试系统能不能超越简单的检索，理解存储信息并应用到新的场景。可以认为是想测试memory的泛化性吧）</h3>
+<h3 id="profile-understanding评估系统能否通过长期对话聚合出一个稳定的用户模型以保证行为一致性">profile
+understanding（评估系统能否通过长期对话聚合出一个稳定的用户模型，以保证行为一致性）</h3>
+<h2 id="数据构成-1">数据构成：</h2>
+<h3 id="模拟时长为365天qa对总数为2400涉及170个个体employee模拟了一个完整的企业组织架构">模拟时长为365天，qa对总数为2400，涉及170个个体（employee）（模拟了一个完整的企业组织架构）</h3>
+<h2 id="这个bench可以评估在多方归属隐式画像建模这一块的能力算比较独特的吧">##
+（这个bench可以评估在多方归属、隐式画像建模这一块的能力，算比较独特的吧）</h2>
+<h1 id="section-2">===</h1>
+<h1 id="类别长程任务">类别：长程任务</h1>
+<h1 id="memoryarena但是没有评测代码只给了数据">MemoryArena（但是没有评测代码，只给了数据）</h1>
+<h2 id="这个场景上更加综合啊考虑了很多新的长程任务相对于memory领域的新">这个场景上更加综合啊，考虑了很多新的长程任务（相对于memory领域的新）</h2>
+<h2 id="想评估的能力-2">想评估的能力：</h2>
+<p>经验蒸馏与存储（Distillation &amp; Storage）：
+智能体能否从早期的行动和环境反馈中提取关键信息，并将其转化为持久记忆。
+跨会话的因果推理（Cross-session Causal Reasoning）：
+智能体能否识别并利用前序会话中产生的潜在约束（如兼容性要求、共享偏好、中间推理结果）来指导后续决策。
+长程任务执行（Long-horizon Execution）：
+在长达数十步的操作中保持任务状态的一致性。 ## 数据构成： ###
+包含766个任务，平均每个任务包含 6.9 个子任务（会话），平均每个任务需要
+57 个动作步骤 ### 涵盖的场景方面，有bundled web shopping、group travel
+planning、progressive web search、sequential formal
+reasoning（和常见的qa形式不太一样，其任务相对更复杂、多阶段） ---</p>
+<h1 id="mt-bench">MT-Bench</h1>
+<h2 id="这个好像有点早了23年的而且似乎总共是80个两轮的question应该不够难">这个好像有点早了，23年的，而且似乎总共是80个两轮的question，应该不够难</h2>
+<h1 id="procedure-memory还有alfworld这种evolving的需要对比吗但这样的话agentic-search类方法可以在这上面做吗感觉还是得做的也应该按理说可以做至少memrl就对比了self-rag可以参考它的代码过程性记忆也可以算是一种知识吧那按说也应该归类到知识管理里应当比较而且这样才能分析出更多东西吧">procedure
+memory，还有alfworld这种evolving的，需要对比吗？但这样的话，agentic
+search类方法可以在这上面做吗？感觉还是得做的，也应该按理说可以做，至少MemRL就对比了self-rag，可以参考它的代码（过程性记忆，也可以算是一种知识吧，那按说也应该归类到知识管理里，应当比较。而且这样才能分析出更多东西吧）</h1>
+<h1 id="bigcodebenchlifelong-agent-benchalfworld">BigCodeBench，Lifelong
+Agent Bench，ALFWorld</h1>
+<h1 id="section-3">===</h1>
+<h1 id="思考">思考：</h1>
+<h2 id="如果有bench它是专门做隐式地把偏好等信息融入进去那么这个bench是不是就可以测量出来rag类方法和专门的memory类方法它们在提取信息上的差别因为一般rag的信息提取做法可能在这种隐式信息上会有损失主要是提取不出来">如果有bench它是专门做”隐式“地把偏好等信息融入进去，那么这个bench是不是就可以测量出来rag类方法和专门的memory类方法它们在提取信息上的差别？因为一般rag的信息提取做法可能在这种隐式信息上会有损失，主要是提取不出来</h2>
+<h2 id="第一人称第三人称信息这也是一个不同维度需要测试吗">第一人称、第三人称信息，这也是一个不同维度。需要测试吗？</h2>
 
     </div>
 
@@ -274,6 +458,15 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#locomo"><span class="nav-number">1.</span> <span class="nav-text">Locomo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-number">2.</span> <span class="nav-text">&#x3D;&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E4%BA%8B%E5%AE%9E%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">偏向事实性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#halumemmemtensor%E7%9A%84%E8%BF%99%E4%B8%AA%E6%84%9F%E8%A7%89%E7%9C%9F%E5%BE%97%E6%B5%8B%E6%8C%BA%E5%B8%B8%E8%A7%81%E7%9A%84%E8%80%8C%E4%B8%94%E7%A1%AE%E5%AE%9E%E6%98%AF%E6%9C%89%E4%BA%BA%E7%94%A8%E8%BF%87%E7%9A%84%E5%8F%AF%E4%BB%A5%E8%AF%B4%E6%AF%94%E8%BE%83%E9%87%8D%E8%A6%81%E4%BA%86%E4%BB%A3%E7%A0%81%E6%AF%94%E8%BE%83%E5%85%A8%E9%9D%A2%E6%95%B4%E4%BD%93%E4%B9%9F%E6%AF%94%E8%BE%83%E5%A5%BD%E8%80%8C%E4%B8%94%E5%AF%B9%E4%BA%8Eextraction%E7%9A%84%E6%B5%8B%E8%AF%84%E6%AD%A3%E5%A5%BD%E7%94%A8rag%E7%B1%BB%E7%9A%84%E7%B2%97%E7%95%A5chunk%E4%BD%9C%E4%B8%BA%E5%AF%B9%E6%AF%94%E7%9A%84%E8%AF%9D%E5%8F%AF%E4%BB%A5%E4%BD%93%E7%8E%B0memory%E7%B1%BB%E5%B7%A5%E4%BD%9C%E7%9A%84%E4%B8%80%E9%83%A8%E5%88%86%E4%BB%B7%E5%80%BC%E5%A6%82%E6%9E%9C%E5%AE%83%E4%BB%AC%E9%82%A3%E4%BA%9B%E5%A4%8D%E6%9D%82%E7%9A%84extraction%E7%A1%AE%E5%AE%9E%E6%9C%89%E7%94%A8%E7%9A%84%E8%AF%9D%E8%80%8C%E4%B8%94%E5%AE%83%E8%AF%84%E4%BC%B0%E7%9A%84update%E7%9A%84%E8%83%BD%E5%8A%9B%E5%BE%88%E9%87%8D%E8%A6%81%E5%80%BC%E5%BE%97%E5%85%B3%E6%B3%A8%E8%BF%99%E6%98%AF%E5%92%8C%E4%B8%80%E8%88%AC%E7%9A%84bench%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E5%9C%B0%E6%96%B9%E5%8A%A0%E4%B8%8A%E5%A6%82%E6%9E%9C%E6%88%91%E4%BB%AC%E6%83%B3%E7%BB%BC%E5%90%88%E8%AF%84%E4%BC%B0ragmemoryagentic-search%E5%8F%AF%E4%BB%A5%E4%BB%8E%E4%B8%80%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86%E7%9A%84%E7%BB%9F%E4%B8%80%E8%A7%92%E5%BA%A6%E6%9D%A5%E7%9C%8B%E5%BE%85%E8%80%8C%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86%E8%A6%81%E8%AF%84%E4%BC%B0%E7%9A%84%E5%B0%B1%E5%BE%97%E6%9C%89%E8%BF%99%E4%B8%AA%E6%9B%B4%E6%96%B0%E6%96%B9%E9%9D%A2%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">4.</span> <span class="nav-text">HaluMem（MemTensor的）（这个感觉真得测，挺常见的，而且确实是有人用过的）（可以说比较重要了，代码比较全面，整体也比较好；而且对于extraction的测评，正好用rag类的粗略chunk作为对比的话，可以体现memory类工作的一部分价值（如果它们那些复杂的extraction确实有用的话））（而且它评估的update的能力，很重要，值得关注，这是和一般的bench不一样的地方，加上如果我们想综合评估rag、memory、agentic
+search，可以从一个知识管理的统一角度来看待。而知识管理要评估的就得有这个更新方面的能力）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B3%E8%AF%84%E4%BC%B0%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">4.1.</span> <span class="nav-text">想评估的能力；</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E6%8F%90%E5%8F%96%E5%85%B6%E5%AE%9E%E5%B0%B1%E6%98%AF%E6%A3%80%E7%B4%A2"><span class="nav-number">4.1.1.</span> <span class="nav-text">记忆提取（其实就是检索）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E6%9B%B4%E6%96%B0%E8%83%BD%E5%90%A6%E6%AD%A3%E7%A1%AE%E6%9B%B4%E6%96%B0%E7%8E%B0%E6%9C%89%E8%AE%B0%E5%BF%86%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">4.1.2.</span> <span class="nav-text">记忆更新（能否正确更新现有记忆，保持一致性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E9%97%AE%E7%AD%94%E5%B0%B1%E6%98%AF%E8%AF%B4%E6%9C%80%E5%90%8E%E6%95%88%E6%9E%9C%E5%A5%BD%E4%B8%8D%E5%A5%BD%E6%98%AF%E4%B8%80%E4%B8%AA%E7%BB%BC%E5%90%88%E8%83%BD%E5%8A%9B%E7%9A%84%E4%BD%93%E7%8E%B0%E6%97%A2%E8%A6%81%E6%8F%90%E5%8F%96%E5%A5%BD%E4%B9%9F%E8%A6%81%E6%9B%B4%E6%96%B0%E5%A5%BD%E6%9C%80%E5%90%8E%E8%BF%98%E8%A6%81%E5%88%A9%E7%94%A8%E5%A5%BD%E6%A3%80%E7%B4%A2%E5%86%85%E5%AE%B9"><span class="nav-number">4.1.3.</span> <span class="nav-text">记忆问答（就是说最后效果好不好，是一个综合能力的体现，既要提取好，也要更新好，最后还要利用好检索内容）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9E%84%E6%88%90"><span class="nav-number">4.2.</span> <span class="nav-text">数据构成：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%88%86%E4%BA%86%E4%B8%89%E7%B1%BBpersona-memory%E6%AF%94%E5%A6%82%E4%B8%AA%E4%BA%BA%E5%85%B4%E8%B6%A3%E7%AD%89event-memoryrelationship-memory"><span class="nav-number">4.2.1.</span> <span class="nav-text">记忆分了三类：persona
+memory（比如个人兴趣等）、event memory、relationship memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%9A%84%E9%97%AE%E9%A2%98%E7%A7%8D%E7%B1%BB"><span class="nav-number">4.2.2.</span> <span class="nav-text">设计的问题种类：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#section-1"><span class="nav-number">5.</span> <span class="nav-text">&#x3D;&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%88%AB%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E6%8E%A8%E6%96%AD%E7%AE%97%E9%9A%90%E5%BC%8F%E6%84%8F%E5%9B%BE%E6%8E%A8%E6%96%AD%E5%90%97"><span class="nav-number">6.</span> <span class="nav-text">类别：用户画像推断（算隐式意图推断吗？）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#evermembench"><span class="nav-number">7.</span> <span class="nav-text">EverMemBench</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B3%E8%AF%84%E4%BC%B0%E7%9A%84%E8%83%BD%E5%8A%9B-1"><span class="nav-number">7.1.</span> <span class="nav-text">想评估的能力：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E7%B2%92%E5%BA%A6%E5%8F%AC%E5%9B%9E%E5%85%B6%E5%AE%9E%E8%BF%98%E6%98%AF%E6%A3%80%E7%B4%A2%E7%B2%BE%E5%BA%A6%E7%9A%84%E9%97%AE%E9%A2%98%E4%BD%86%E9%87%8D%E7%82%B9%E6%94%BE%E5%9C%A8%E8%AF%81%E6%8D%AE%E5%88%86%E6%95%A3%E5%9C%A8%E5%A4%9A%E4%B8%AA%E5%8F%91%E8%A8%80%E8%80%85%E5%92%8C%E7%BE%A4%E7%BB%84%E7%9A%84%E5%9C%BA%E6%99%AF%E4%B8%8B"><span class="nav-number">7.1.1.</span> <span class="nav-text">细粒度召回（其实还是检索精度的问题，但重点放在“证据分散在多个发言者和群组”的场景下）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%8D%95%E8%B7%B3%E5%A4%9A%E8%B7%B3%E6%97%B6%E5%BA%8F%E9%97%AE%E9%A2%98%E4%B8%8A%E7%9A%84%E5%9B%9E%E7%AD%94%E8%BF%99%E4%B8%80%E5%9D%97%E5%B7%AE%E4%B8%8D%E5%A4%9A%E5%85%B6%E5%AE%83bench%E4%B9%9F%E6%9C%89"><span class="nav-number">7.1.2.</span> <span class="nav-text">在单跳、多跳、时序问题上的回答（这一块差不多，其它bench也有）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory-awareness%E6%83%B3%E6%B5%8B%E8%AF%95%E7%B3%BB%E7%BB%9F%E8%83%BD%E4%B8%8D%E8%83%BD%E8%B6%85%E8%B6%8A%E7%AE%80%E5%8D%95%E7%9A%84%E6%A3%80%E7%B4%A2%E7%90%86%E8%A7%A3%E5%AD%98%E5%82%A8%E4%BF%A1%E6%81%AF%E5%B9%B6%E5%BA%94%E7%94%A8%E5%88%B0%E6%96%B0%E7%9A%84%E5%9C%BA%E6%99%AF%E5%8F%AF%E4%BB%A5%E8%AE%A4%E4%B8%BA%E6%98%AF%E6%83%B3%E6%B5%8B%E8%AF%95memory%E7%9A%84%E6%B3%9B%E5%8C%96%E6%80%A7%E5%90%A7"><span class="nav-number">7.1.3.</span> <span class="nav-text">memory
+awareness（想测试系统能不能超越简单的检索，理解存储信息并应用到新的场景。可以认为是想测试memory的泛化性吧）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profile-understanding%E8%AF%84%E4%BC%B0%E7%B3%BB%E7%BB%9F%E8%83%BD%E5%90%A6%E9%80%9A%E8%BF%87%E9%95%BF%E6%9C%9F%E5%AF%B9%E8%AF%9D%E8%81%9A%E5%90%88%E5%87%BA%E4%B8%80%E4%B8%AA%E7%A8%B3%E5%AE%9A%E7%9A%84%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9E%8B%E4%BB%A5%E4%BF%9D%E8%AF%81%E8%A1%8C%E4%B8%BA%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">7.1.4.</span> <span class="nav-text">profile
+understanding（评估系统能否通过长期对话聚合出一个稳定的用户模型，以保证行为一致性）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9E%84%E6%88%90-1"><span class="nav-number">7.2.</span> <span class="nav-text">数据构成：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F%E6%97%B6%E9%95%BF%E4%B8%BA365%E5%A4%A9qa%E5%AF%B9%E6%80%BB%E6%95%B0%E4%B8%BA2400%E6%B6%89%E5%8F%8A170%E4%B8%AA%E4%B8%AA%E4%BD%93employee%E6%A8%A1%E6%8B%9F%E4%BA%86%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E4%BC%81%E4%B8%9A%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84"><span class="nav-number">7.2.1.</span> <span class="nav-text">模拟时长为365天，qa对总数为2400，涉及170个个体（employee）（模拟了一个完整的企业组织架构）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AAbench%E5%8F%AF%E4%BB%A5%E8%AF%84%E4%BC%B0%E5%9C%A8%E5%A4%9A%E6%96%B9%E5%BD%92%E5%B1%9E%E9%9A%90%E5%BC%8F%E7%94%BB%E5%83%8F%E5%BB%BA%E6%A8%A1%E8%BF%99%E4%B8%80%E5%9D%97%E7%9A%84%E8%83%BD%E5%8A%9B%E7%AE%97%E6%AF%94%E8%BE%83%E7%8B%AC%E7%89%B9%E7%9A%84%E5%90%A7"><span class="nav-number">7.3.</span> <span class="nav-text">##
+（这个bench可以评估在多方归属、隐式画像建模这一块的能力，算比较独特的吧）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#section-2"><span class="nav-number">8.</span> <span class="nav-text">&#x3D;&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%88%AB%E9%95%BF%E7%A8%8B%E4%BB%BB%E5%8A%A1"><span class="nav-number">9.</span> <span class="nav-text">类别：长程任务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#memoryarena%E4%BD%86%E6%98%AF%E6%B2%A1%E6%9C%89%E8%AF%84%E6%B5%8B%E4%BB%A3%E7%A0%81%E5%8F%AA%E7%BB%99%E4%BA%86%E6%95%B0%E6%8D%AE"><span class="nav-number">10.</span> <span class="nav-text">MemoryArena（但是没有评测代码，只给了数据）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E5%9C%BA%E6%99%AF%E4%B8%8A%E6%9B%B4%E5%8A%A0%E7%BB%BC%E5%90%88%E5%95%8A%E8%80%83%E8%99%91%E4%BA%86%E5%BE%88%E5%A4%9A%E6%96%B0%E7%9A%84%E9%95%BF%E7%A8%8B%E4%BB%BB%E5%8A%A1%E7%9B%B8%E5%AF%B9%E4%BA%8Ememory%E9%A2%86%E5%9F%9F%E7%9A%84%E6%96%B0"><span class="nav-number">10.1.</span> <span class="nav-text">这个场景上更加综合啊，考虑了很多新的长程任务（相对于memory领域的新）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B3%E8%AF%84%E4%BC%B0%E7%9A%84%E8%83%BD%E5%8A%9B-2"><span class="nav-number">10.2.</span> <span class="nav-text">想评估的能力：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mt-bench"><span class="nav-number">11.</span> <span class="nav-text">MT-Bench</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E5%A5%BD%E5%83%8F%E6%9C%89%E7%82%B9%E6%97%A9%E4%BA%8623%E5%B9%B4%E7%9A%84%E8%80%8C%E4%B8%94%E4%BC%BC%E4%B9%8E%E6%80%BB%E5%85%B1%E6%98%AF80%E4%B8%AA%E4%B8%A4%E8%BD%AE%E7%9A%84question%E5%BA%94%E8%AF%A5%E4%B8%8D%E5%A4%9F%E9%9A%BE"><span class="nav-number">11.1.</span> <span class="nav-text">这个好像有点早了，23年的，而且似乎总共是80个两轮的question，应该不够难</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#procedure-memory%E8%BF%98%E6%9C%89alfworld%E8%BF%99%E7%A7%8Devolving%E7%9A%84%E9%9C%80%E8%A6%81%E5%AF%B9%E6%AF%94%E5%90%97%E4%BD%86%E8%BF%99%E6%A0%B7%E7%9A%84%E8%AF%9Dagentic-search%E7%B1%BB%E6%96%B9%E6%B3%95%E5%8F%AF%E4%BB%A5%E5%9C%A8%E8%BF%99%E4%B8%8A%E9%9D%A2%E5%81%9A%E5%90%97%E6%84%9F%E8%A7%89%E8%BF%98%E6%98%AF%E5%BE%97%E5%81%9A%E7%9A%84%E4%B9%9F%E5%BA%94%E8%AF%A5%E6%8C%89%E7%90%86%E8%AF%B4%E5%8F%AF%E4%BB%A5%E5%81%9A%E8%87%B3%E5%B0%91memrl%E5%B0%B1%E5%AF%B9%E6%AF%94%E4%BA%86self-rag%E5%8F%AF%E4%BB%A5%E5%8F%82%E8%80%83%E5%AE%83%E7%9A%84%E4%BB%A3%E7%A0%81%E8%BF%87%E7%A8%8B%E6%80%A7%E8%AE%B0%E5%BF%86%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%AE%97%E6%98%AF%E4%B8%80%E7%A7%8D%E7%9F%A5%E8%AF%86%E5%90%A7%E9%82%A3%E6%8C%89%E8%AF%B4%E4%B9%9F%E5%BA%94%E8%AF%A5%E5%BD%92%E7%B1%BB%E5%88%B0%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86%E9%87%8C%E5%BA%94%E5%BD%93%E6%AF%94%E8%BE%83%E8%80%8C%E4%B8%94%E8%BF%99%E6%A0%B7%E6%89%8D%E8%83%BD%E5%88%86%E6%9E%90%E5%87%BA%E6%9B%B4%E5%A4%9A%E4%B8%9C%E8%A5%BF%E5%90%A7"><span class="nav-number">12.</span> <span class="nav-text">procedure
+memory，还有alfworld这种evolving的，需要对比吗？但这样的话，agentic
+search类方法可以在这上面做吗？感觉还是得做的，也应该按理说可以做，至少MemRL就对比了self-rag，可以参考它的代码（过程性记忆，也可以算是一种知识吧，那按说也应该归类到知识管理里，应当比较。而且这样才能分析出更多东西吧）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bigcodebenchlifelong-agent-benchalfworld"><span class="nav-number">13.</span> <span class="nav-text">BigCodeBench，Lifelong
+Agent Bench，ALFWorld</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#section-3"><span class="nav-number">14.</span> <span class="nav-text">&#x3D;&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%80%83"><span class="nav-number">15.</span> <span class="nav-text">思考：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%9C%89bench%E5%AE%83%E6%98%AF%E4%B8%93%E9%97%A8%E5%81%9A%E9%9A%90%E5%BC%8F%E5%9C%B0%E6%8A%8A%E5%81%8F%E5%A5%BD%E7%AD%89%E4%BF%A1%E6%81%AF%E8%9E%8D%E5%85%A5%E8%BF%9B%E5%8E%BB%E9%82%A3%E4%B9%88%E8%BF%99%E4%B8%AAbench%E6%98%AF%E4%B8%8D%E6%98%AF%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%B5%8B%E9%87%8F%E5%87%BA%E6%9D%A5rag%E7%B1%BB%E6%96%B9%E6%B3%95%E5%92%8C%E4%B8%93%E9%97%A8%E7%9A%84memory%E7%B1%BB%E6%96%B9%E6%B3%95%E5%AE%83%E4%BB%AC%E5%9C%A8%E6%8F%90%E5%8F%96%E4%BF%A1%E6%81%AF%E4%B8%8A%E7%9A%84%E5%B7%AE%E5%88%AB%E5%9B%A0%E4%B8%BA%E4%B8%80%E8%88%ACrag%E7%9A%84%E4%BF%A1%E6%81%AF%E6%8F%90%E5%8F%96%E5%81%9A%E6%B3%95%E5%8F%AF%E8%83%BD%E5%9C%A8%E8%BF%99%E7%A7%8D%E9%9A%90%E5%BC%8F%E4%BF%A1%E6%81%AF%E4%B8%8A%E4%BC%9A%E6%9C%89%E6%8D%9F%E5%A4%B1%E4%B8%BB%E8%A6%81%E6%98%AF%E6%8F%90%E5%8F%96%E4%B8%8D%E5%87%BA%E6%9D%A5"><span class="nav-number">15.1.</span> <span class="nav-text">如果有bench它是专门做”隐式“地把偏好等信息融入进去，那么这个bench是不是就可以测量出来rag类方法和专门的memory类方法它们在提取信息上的差别？因为一般rag的信息提取做法可能在这种隐式信息上会有损失，主要是提取不出来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%BA%BA%E7%A7%B0%E7%AC%AC%E4%B8%89%E4%BA%BA%E7%A7%B0%E4%BF%A1%E6%81%AF%E8%BF%99%E4%B9%9F%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%8D%E5%90%8C%E7%BB%B4%E5%BA%A6%E9%9C%80%E8%A6%81%E6%B5%8B%E8%AF%95%E5%90%97"><span class="nav-number">15.2.</span> <span class="nav-text">第一人称、第三人称信息，这也是一个不同维度。需要测试吗？</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -287,14 +480,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-count">257</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

@@ -150,6 +150,390 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8B%E5%AE%89%E8%A3%85flash-attn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8B%E5%AE%89%E8%A3%85flash-attn/" class="post-title-link" itemprop="url">Windows下安装flash-attn</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-20 10:13:00 / Modified: 10:41:37" itemprop="dateCreated datePublished" datetime="2026-01-20T10:13:00+08:00">2026-01-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="同样的因为小项目需要flash-attn所以捣鼓一下怎么安装大体思路上windows因为编译特别麻烦所以基本得考虑找现成的whl文件直接安装tri-dao的官方的仓库里放的都是linux下的whl所以得找其它仓库的找了找看到这个kingbri1flash-attention这回就是从这里下载的whl的八百多star也是从官方仓库fork过来的目前用下来还是没什么大问题的-还另外找到一个hugging-face上的">同样的，因为小项目需要flash-attn，所以捣鼓一下怎么安装。大体思路上，Windows因为编译特别麻烦，所以基本得考虑找现成的whl文件直接安装。Tri
+Dao的官方的仓库里放的都是Linux下的whl，所以得找其它仓库的。找了找，看到这个：<a target="_blank" rel="noopener" href="https://github.com/kingbri1/flash-attention/releases">kingbri1/flash-attention</a>（这回就是从这里下载的whl的，八百多star）（也是从官方仓库fork过来的）。目前用下来还是没什么大问题的<br>还另外找到一个<a target="_blank" rel="noopener" href="https://huggingface.co/lldacing/flash-attention-windows-wheel/tree/main">hugging
+face上的</a></h1>
+<h2 id="几个小细节是因为windows下的flash-attn的whl文件感觉不是主流所以whl文件没那么多那么全为了保险一般torch版本不能太高2.72.8这种暂时别想了flash-attn对pytorch好像是严格要求不能有不同反正试过装不对应pytorch版本的whl文件一运行就报错cuda版本要看我们本地nvcc--v输出的实际的cuda驱动的版本以此为准而不是nvidia-smi输出的最高可容纳的驱动版本以及看起来安装flash-attn需要至少cuda12.x">几个小细节是，因为Windows下的flash-attn的whl文件感觉不是主流，所以whl文件没那么多、那么全。为了保险，一般torch版本不能太高（2.7，2.8这种暂时别想了）（flash-attn对pytorch好像是严格要求，不能有不同……反正试过装不对应pytorch版本的whl文件，一运行就报错……）。cuda版本要看我们本地<code>nvcc -v</code>输出的实际的cuda驱动的版本，以此为准（而不是<code>nvidia-smi</code>输出的最高可容纳的驱动版本）（以及，看起来安装flash-attn需要至少cuda12.x）</h2>
+<h2 id="还有啥问题可能也可以去翻翻官方仓库的issue区或许可以看到我们所碰到的问题">还有啥问题，可能也可以去翻翻<a target="_blank" rel="noopener" href="https://github.com/Dao-AILab/flash-attention/issues">官方仓库的issue区</a>，或许可以看到我们所碰到的问题</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/20/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/Windows%E4%B8%8B%E5%AE%89%E8%A3%85flash-attn/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/16/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E5%85%B3%E4%BA%8E%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%B0%E5%BF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/16/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E5%85%B3%E4%BA%8E%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%B0%E5%BF%86/" class="post-title-link" itemprop="url">关于持续学习与记忆</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-16 12:56:00 / Modified: 18:17:25" itemprop="dateCreated datePublished" datetime="2026-01-16T12:56:00+08:00">2026-01-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">感想与思考</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="回想一下最早提出类似于人能持续学习这是很重要的现在的模型无法持续学习训练完了就不会再更新不够好这种观点的会不会是lifelong-learning啊这个比较粗暴单纯就是希望能把不断增长的新知识塞到模型里而且理想情况下要求旧知识不会遗忘那几乎相当于要让一个固定大小的模型把所有知识都容纳进来这不可行而且这种方法显然还是要训练的隔一段时间就得训练一次其实不好毕竟还是有开销的要是大模型开销更是大显然也没可能平民化其实感觉lifelong-learning的一个致命问题在于它还是依靠梯度下降来更新权重的梯度下降就免不了一套的流程开销很大如果能有不用梯度下降的学习方法而且足够方便当然可以in-context-learning就不失为一种方法虽然感觉它的上限也就到这里了本质难道不也只是给llm提供一些相关示例而已吗再底层点和外挂式记忆有什么区别呢外挂式记忆把知识存储到外部一个memory需要的时候不也得检索出来给模型吗还是有一步喂给模型的操作这不就是in-context-learning除此之外还有最近的ttttest-time-training以及未来可能有人研究的新的学习方法">回想一下，最早提出类似于“人能持续学习，这是很重要的；现在的模型无法持续学习，训练完了就不会再更新，不够好”这种观点的，会不会是lifelong
+learning啊。这个比较粗暴，单纯就是希望能把不断增长的新知识塞到模型里，而且理想情况下要求旧知识不会遗忘。那几乎相当于要让一个固定大小的模型把所有知识都容纳进来。这不可行。而且这种方法显然还是要训练的。隔一段时间就得训练一次，其实不好，毕竟还是有开销的。要是大模型，开销更是大。显然也没可能平民化（其实感觉lifelong
+learning的一个致命问题在于，它还是依靠梯度下降来更新权重的。梯度下降，就免不了一套的流程，开销很大。如果能有不用梯度下降的学习方法，而且足够方便，当然可以。in-context
+learning就不失为一种方法（虽然感觉它的上限也就到这里了。本质难道不也只是给llm提供一些相关示例而已吗，再底层点，和外挂式记忆有什么区别呢？外挂式记忆，把知识存储到外部一个memory，需要的时候不也得检索出来给模型吗？还是有一步“喂给”模型的操作，这不就是in-context
+learning？）。除此之外，还有最近的TTT（Test-Time
+Training），以及未来可能有人研究的新的学习方法）</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/16/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E6%84%9F%E6%83%B3%E4%B8%8E%E6%80%9D%E8%80%83/%E5%85%B3%E4%BA%8E%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%B0%E5%BF%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/git%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/git%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">git简介</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-14 22:31:00 / Modified: 22:43:55" itemprop="dateCreated datePublished" datetime="2026-01-14T22:31:00+08:00">2026-01-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="还是项目里需要用git管理一下。之前其实没怎么用过"><a href="#还是项目里需要用git管理一下。之前其实没怎么用过" class="headerlink" title="还是项目里需要用git管理一下。之前其实没怎么用过"></a>还是项目里需要用git管理一下。之前其实没怎么用过</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/git%E7%AE%80%E4%BB%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/pre-commit%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/pre-commit%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">pre-commit简介</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-14 22:28:00 / Modified: 22:38:45" itemprop="dateCreated datePublished" datetime="2026-01-14T22:28:00+08:00">2026-01-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index"><span itemprop="name">配置相关</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git-add，再commit"><a href="#同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git-add，再commit" class="headerlink" title="同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git add，再commit"></a>同样的，还是一个项目里用到了pre-commit这个东西。个人理解，这个东西就是在commit和push之前，做一些检查，提高鲁棒性的。然后可能它检查出错误（一般是格式上的）之后，会帮你修正。此时如果我们继续直接commit还是会出问题（因为相当于它虽然帮我们改了，但是这个新的改动还没有被add，那它就又是对我们之前add的内容做检查。而上次就没通过，同样还是上次的内容，当然这次也不会通过。所以，它提示报错之后，如果我们确认它会帮忙修改，那么就重新git add，再commit</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/pre-commit%E7%AE%80%E4%BB%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/GitHub%20git%20clone%E5%91%BD%E4%BB%A4%E5%A4%B1%E8%B4%A5%EF%BC%88Windows%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="bluemouse">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="bluemouse's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2026/01/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/GitHub%20git%20clone%E5%91%BD%E4%BB%A4%E5%A4%B1%E8%B4%A5%EF%BC%88Windows%EF%BC%89/" class="post-title-link" itemprop="url">GitHub git clone命令失败（Windows）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-14 22:08:00 / Modified: 22:26:21" itemprop="dateCreated datePublished" datetime="2026-01-14T22:08:00+08:00">2026-01-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/bugs/" itemprop="url" rel="index"><span itemprop="name">bugs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="有时候执行git-clone，可能得到类似如下的报错："><a href="#有时候执行git-clone，可能得到类似如下的报错：" class="headerlink" title="有时候执行git clone，可能得到类似如下的报错："></a>有时候执行<code>git clone</code>，可能得到类似如下的报错：</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &#x27;https://github.com/user-name/repo-name.git/&#x27;: Recv failure: Connection was reset</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/14/%E5%A5%87%E6%80%AA%E7%9A%84bugs/GitHub%20git%20clone%E5%91%BD%E4%BB%A4%E5%A4%B1%E8%B4%A5%EF%BC%88Windows%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2026/01/14/%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3/%E6%9C%AC%E5%9C%B0%EF%BC%88Windows%EF%BC%89%E5%AE%89%E8%A3%85uv/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -539,868 +923,6 @@ Retrieved from <a target="_blank" rel="noopener" href="https://www.spaces.ac.cn
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/12/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/1.%20WGAN-GP%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/12/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/1.%20WGAN-GP%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/" class="post-title-link" itemprop="url">1. WGAN-GP简单理解</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-12-15 09:55:00" itemprop="dateCreated datePublished" datetime="2025-12-15T09:55:00+08:00">2025-12-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-12-19 10:02:54" itemprop="dateModified" datetime="2025-12-19T10:02:54+08:00">2025-12-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">博客阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/cv/" itemprop="url" rel="index"><span itemprop="name">cv</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/cv/generation-model/" itemprop="url" rel="index"><span itemprop="name">generation model</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="引用一下苏剑林.-jun.-08-2017.-互怼的艺术从零直达wgan-gp-blog-post.-retrieved-from-httpswww.spaces.ac.cnarchives4439">引用一下：苏剑林.
-(Jun. 08, 2017). 《互怼的艺术：从零直达WGAN-GP 》Blog post. Retrieved
-from <a target="_blank" rel="noopener" href="https://www.spaces.ac.cn/archives/4439">https://www.spaces.ac.cn/archives/4439</a></h1>
-<h2 id="通过读这篇博客简单了解一下wgan-gp重点是了解一下它将距离度量也用神经网络学到的这个思想">通过读这篇博客，简单了解一下WGAN-GP，重点是了解一下它将距离度量也用神经网络学到的这个思想</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/15/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B%E7%BC%96/1.%20WGAN-GP%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/23/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/rag_system%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/README/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/11/23/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/rag_system%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/README/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-11-23 21:15:03 / Modified: 21:50:22" itemprop="dateCreated datePublished" datetime="2025-11-23T21:15:03+08:00">2025-11-23</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="rag-system">🌟 RAG system</h1>
-<p><a name="top"></a> <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen" alt="PRs Welcome"> <img src="https://img.shields.io/badge/Last%20Updated-Nov%2023,%202025-blue" alt="Last Updated"></p>
-<p><em>A curated repository of Retrieval-Augmented Generation (RAG)
-research papers, currently focused on systems and architecture
-contributions from major DB/OS venues (SIGMOD, VLDB, OSDI, NSDI,
-etc.).</em></p>
-<h1 id="rag-system-1">RAG system</h1>
-<h2 id="section">🗓️ 2025</h2>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/11022767">Compute-Enabled CXL
-Memory Expansion for Efficient Retrieval Augmented
-Generation</a>(2025-06-13)(MICRO 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2503.14649">RAGO: Systematic
-Performance Optimization for Retrieval-Augmented Generation Serving</a>
-(2025-03-21)(ISCA 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.15734">Cache-Craft: Managing
-Chunk-Caches for Efficient Retrieval-Augmented
-Generation</a>(2025-02-25)(SIGMOD 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2411.14754">Subspace Collision: An
-Efficient and Accurate Framework for High-dimensional Approximate
-Nearest Neighbor Search</a>(2025-01-13)(SIGMOD 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://www.vldb.org/2025/Workshops/VLDB-Workshops-2025/LLM+Graph/LLMGraph-3.pdf">Scalable
-Graph-based Retrieval-Augmented Generation via Locality-Sensitive
-Hashing</a> (VLDB 2025 Workshop)</p></li>
-</ul>
-<h2 id="section-1">🗓️ 2024</h2>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.15246">Accelerating
-Retrieval-Augmented Generation</a>(2024-12-14)(ASPLOS 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.14778/3685800.3685905">Chat2Data: An
-Interactive Data Analysis System with RAG, Vector Databases and LLMs</a>
-(2024-08-01)(VLDB 2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://www.vldb.org/pvldb/vol17/p4309-huang.pdf">TSGAssist: An
-Interactive Assistant Harnessing LLMs and RAG for Time Series Generation
-Recommendations and Benchmarking</a> (2024-08)(VLDB 2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2407.04217">An Interactive
-Multi-modal Query Answering System with Retrieval-Augmented Large
-Language Models</a>(2024-07-05)(VLDB 2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.13000">RAGE Against the
-Machine: Retrieval-Augmented LLM Explanations</a> (2024-05-13)(ICDE
-2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10598100">Towards
-Explainability in Retrieval-Augmented LLMs</a> (2024-05)(ICDE
-2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.5555/3691825.3691827">Fast
-Vector Query Processing for Large Datasets Beyond GPU Memory with
-Reordered Pipelining</a> (2024-04-16)(NSDI 2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2403.14403">RetClean:
-Retrieval-Based Data Cleaning Using LLMs and Data Lakes</a>
-(2023-03-29)(VLDB 2024)</p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/rag_query%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/README/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/11/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/rag_query%E8%AE%BA%E6%96%87%E6%B8%85%E5%8D%95%E6%95%B4%E7%90%86/README/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-11-22 21:16:40" itemprop="dateCreated datePublished" datetime="2025-11-22T21:16:40+08:00">2025-11-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-12-14 23:16:05" itemprop="dateModified" datetime="2025-12-14T23:16:05+08:00">2025-12-14</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="query-routing-and-query-decomposition">🌟 query routing and
-query decomposition</h1>
-<p><a name="top"></a> <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen" alt="PRs Welcome"> <img src="https://img.shields.io/badge/Last%20Updated-Dec%2014,%202025-blue" alt="Last Updated"></p>
-<p><em>Hope to maintain a curated query routing and query decomposition
-paper repository, collecting recent high-quality research in rag or
-related topics. It aims to help researchers and practitioners stay
-updated with cutting-edge trends.</em></p>
-<h1 id="query-routing">query routing</h1>
-<h2 id="section">🗓️ 2025</h2>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.16037">Causal LLM Routing:
-End-to-End Regret Minimization from Observational Data</a>
-(2025-12-03)(NIPS 2025)<br><em>It proposes a unified, end-to-end LLM
-routing framework that minimizes expected regret directly—integrating
-performance estimation and routing decision into a single objective, and
-enables training solely from observational data without requiring costly
-full-feedback annotations</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://aclanthology.org/2025.emnlp-main.331/">Firewall
-Routing: Blocking Leads to Better Hybrid Inference for LLMs</a>
-(2025-11)(EMNLP 2025)<br><em>Multi-sample pass rates + soft-label + cope
-with long-tail</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://openreview.net/forum?id=uC3DI4YPRv">Let the LLM
-Stick to Its Strengths: Learning to Route Economical LLM</a>
-(2025-10-29)(NIPS 2025)<br><em>Refactor llm routing as recommendation
-task, considering more features and extract high-order
-interactions</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2506.09033">Router-R1: Teaching
-LLMs Multi-Round Routing and Aggregation via Reinforcement Learning</a>
-(2025-10-24)(NIPS 2025)<br><em>Router-R1 firstly introduce iterative,
-multi-round routing, using a small LLM (rl trained) as router to
-iteratively plan and route</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.19947">MESS+: Dynamically
-Learned Inference-Time LLM Routing in Model Zoos with Service Level
-Guarantees</a> (2025-10-23)(NIPS 2025)<br><em>MESS+ formulate LLM
-routing as a cost-minimization problem subject to a long-term
-service-level agreement (SLA) constraint on response
-satisfaction</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.23052">RAGRouter: Learning to
-Route Queries to Multiple Retrieval-Augmented Language Models</a>
-(2025-10-17)(NIPS 2025)<br><em>It generalizes standard LLM routing to
-RAG-aware LLM routing, conditioned on both the query and its retrieved
-documents, under a fixed retrieval setup</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2508.12491">Cost-Aware Contrastive
-Routing for LLMs</a> (2025-10-08)(NIPS 2025)<br><em>CSCR firstly
-proposes to represent each model via a static, probe-based embedding
-instead of a learnable embedding (so can add new llms without
-retraining), with contrastive learning adapted to preserve cost-accuracy
-trade-offs</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2506.22716">BEST-Route: Adaptive
-LLM Routing with Test-Time Optimal Compute</a>(2025-06-28)(ICML
-2025)<br><em>Multi-head match-probability routing + test-time optimal
-compute</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2410.13284">Learning to Route LLMs
-with Confidence Tokens</a>(2025-06-19)(ICML 2025)<br><em>Fine-tune llm
-to grasp when to generate two kinds of confidence token + using internal
-representation to construct confidence to guide routing</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2410.10347">A Unified Approach to
-Routing and Cascading for LLMs</a>(2025-05-22)(ICML 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.18665">RouteLLM: Learning to
-Route LLMs with Preference Data</a>(2025-02-23)(ICLR
-2025)<br><em>Chatbot-Arena human-preference bootstrapping</em> ## 🗓️
-2024</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2409.19886">RouterDC: Query-Based
-Router by Dual Contrastive Learning for Assembling Large Language
-Models</a>(2024-09-30)(NIPS 2024)<br><em>Dual-contrastive query-LLM
-embedding alignment + sample clustering for routing-assembled LLM
-inference</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.12429">Query Routing for
-Homogeneous Tools: An Instantiation in the RAG Scenario</a>
-(2024-09-30)(EMNLP 2024 findings)<br><em>Query-performance forecasting +
-ILP-based batch assignment for cost-performance optimal routing of
-homogeneous tools in RAG</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2403.14403">Adaptive-RAG: Learning
-to Adapt Retrieval-Augmented Large Language Models through Question
-Complexity</a> (2024-05-28)(NAACL 2024)<br><em>Proxy-labeled three-tier
-router for adaptive retrieval</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.12207">Optimistic Query
-Routing in Clustering-based Approximate Maximum Inner Product Search</a>
-(2024-05-20)(NIPS 2024)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2404.14618">Hybrid LLM:
-Cost-Efficient and Quality-Aware Query Routing</a>(2024-04-22)(ICLR
-2024)<br><em>BART-scored soft-label routing (classical)</em></p></li>
-</ul>
-<h1 id="query-decomposition">query decomposition</h1>
-<h2 id="section-1">🗓️ 2025</h2>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2507.00355">Question Decomposition
-for Retrieval-Augmented Generation</a>(2025-07-01)ACL 2025
-Workshop)<br><em>Decompose the query(using prompt) to expand retrieval
-results</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2505.19189">POQD:
-Performance-Oriented Query Decomposer for Multi-vector
-retrieval</a>(2025-06-01)(ICML 2025)<br><em>Optimize the prompt for
-decomposing query by a llm (zero-order optimization)</em></p></li>
-</ul>
-<h2 id="section-2">🗓️ 2024</h2>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2411.02400">Decomposition
-Dilemmas: Does Claim Decomposition Boost or Burden Fact-Checking
-Performance?</a>(2024-10-17)(NAACL 2025)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://openreview.net/forum?id=UwcZEoNP19">Triples as
-the Key: Structuring Makes Decomposition and Verification Easier in
-LLM-based TableQA</a>(2024-10-04)(ICLR 2025)<br><em>Extract triples from
-query to constrain the query decomposition and
-verification</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://aclanthology.org/2024.findings-acl.283/">Chain-of-Question:
-A Progressive Question Decomposition Approach for Complex Knowledge Base
-Question Answering</a>(2024-08)(ACL 2024 findings)<br><em>Progressive
-question decomposition with dependency-aware chain-of-question
-prompting</em></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2403.06840">RA-ISF: Learning to
-Answer and Understand from Retrieval Augmentation via Iterative
-Self-Feedback</a>(2024-06-06)(ACL 2024 findings)</p></li>
-<li><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2401.05268">AutoAct: Automatic
-Agent Learning from Scratch for QA via Self-Planning</a>(2024-05-26)(ACL
-2024)<br><em>Self-synthesized planning trajectories + division-of-labor
-sub-agents + annotation-free</em></p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/challenge-insight-tree/README/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/11/22/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/challenge-insight-tree/README/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2025-11-22 21:15:05" itemprop="dateCreated datePublished" datetime="2025-11-22T21:15:05+08:00">2025-11-22</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="welcome-to-awesome-ai4se">🌟 Welcome-to-Awesome-AI4SE</h1>
-<p><a name="top"></a></p>
-<p><a target="_blank" rel="noopener" href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome"></a> <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen" alt="PRs Welcome"> <img src="https://img.shields.io/badge/Last%20Updated-June%2030,%202025-blue" alt="Last Updated"></p>
-<p><em>I hope to maintain a curated AI4SE Paper Repository collecting
-recent high-quality research in software engineering. It aims to help
-researchers and practitioners stay updated with cutting-edge
-trends.</em></p>
-<h2 id="section">🗓️ 2025</h2>
-<ul>
-<li><p>[2025-09-30] <a target="_blank" rel="noopener" href="https://arXiv.org/abs/2509.25676">Explainable Fault Localization
-for Programming Assignments via LLM-Guided Annotation (FLAME)</a><br>
-<em>LLM-guided annotation + ensemble voting to give explainable,
-fine-grained fault localization for student programming
-tasks.</em></p></li>
-<li><p>[2025-06-30] <a target="_blank" rel="noopener" href="https://arXiv.org/abs/2506.24015">Hierarchical Knowledge Injection
-for Improving LLM-based Program Repair</a></p>
-<p><em>A layered knowledge injection framework that progressively
-injects bug-level, repository-level, project-level context into LLM
-prompts to improve repair performance.</em></p></li>
-<li><p>[2025-06-26] <a target="_blank" rel="noopener" href="https://conf.researchr.org/details/issta-2025/issta-2025-papers/27/ConTested-Consistency-Aided-Tested-Code-Generation-with-LLM">ConTested:
-Consistency-Aided Tested Code Generation with LLM</a><br>
-<em>Incorporate user feedback to effectively guide
-consistency.</em></p></li>
-<li><p>[2025-06-19] <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/3729341">Beyond PEFT: Layer-Wise
-Optimization for More Effective and Efficient Large Code Model
-Tuning</a><br>
-<em>A comprehensive study on exploring the effectiveness of the PEFT
-methods.</em></p></li>
-<li><p>[2025-05-26] <a target="_blank" rel="noopener" href="https://arXiv.org/abs/2505.19502">Code-DiTing: Automatic
-Evaluation of Code Generation without References or Test Cases</a><br>
-<em>“Data distillation + multi-model voting” framework to evaluate
-functional consistency when no reference or test case is available, with
-explanations.</em></p></li>
-<li><p>[2025-05-02] <a target="_blank" rel="noopener" href="https://conf.researchr.org/details/icse-2025/icse-2025-research-track/77/Iterative-Generation-of-Adversarial-Example-for-Deep-Code-Models">Iterative
-Generation of Adversarial Example for Deep Code Models</a><br>
-<em>A novel black-box adversarial example generation method that
-iteratively utilizes feedback from failed attacks to refine the
-generation process.</em></p></li>
-<li><p>[2025-04-30] <a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/11029953">Planning a Large
-Language Model for Static Detection of Runtime Errors in Code
-Snippets</a><br>
-<em>Instruct an LLM to autonomously formulate a plan to navigate through
-a control flow graph (CFG) for predictive execution of (in)complete code
-snippets.</em></p></li>
-<li><p>[2025-04-21] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2502.06193">Can LLMs
-Replace Human Evaluators? An Empirical Study of LLM-as-a-Judge in
-Software Engineering</a><br>
-<em>Explore LLM-as-a-judge methods for evaluating SE
-tasks.</em></p></li>
-<li><p>[2025-04-18] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2504.13472">CodeVisionary: An Agent-based
-Evaluation Framework for Complex Code Generation</a></p>
-<p><em>Proposes a multi-agent, two-stage evaluation that decomposes
-complex requirements + integrates context, then reviewers give
-fine-grained, interpretable scoring.</em></p></li>
-<li><p>[2025-03-22] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2411.07112">ROCODE:
-Integrating Backtracking Mechanism and Program Analysis in Large
-Language Models for Code Generation</a><br>
-<em>Integrate backtracking mechanism and program analysis
-tools.</em></p></li>
-<li><p>[2025-03-19][Think Like Human Developers: Harnessing Community
-Knowledge for Structured Code
-Reasoning](https://arXiv.org/abs/2503.14838)<br>
-<em>Mines, restructures, and enriches community discussion into
-structured reasoning chains (guided by SDLC), to train LLMs for better
-multi-step coding reasoning.</em></p></li>
-<li><p>[2025-03-18] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2406.06918">HumanEvo:
-An Evolution-aware Benchmark for More Realistic Evaluation of
-Repository-level Code Generation</a><br>
-<em>Construct an evolution-aware repository-level code generation
-dataset.</em></p></li>
-<li><p>[2025-02-13] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2502.09771">Knowledge-Enhanced Program
-Repair for Data Science Code</a><br>
-<em>A knowledge-enhanced program repair approach designed to repair the
-buggy code generated by LLMs in the data science domain.</em></p></li>
-<li><p>[2025-02-05] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2502.02827">COFFE: A
-Code Efficiency Benchmark for Code Generation</a><br>
-<em>A new benchmark COFFE for the time efficiency evaluation of
-LLMgenerated code.</em></p></li>
-<li><p>[2025-02-01] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2404.01642">Patch
-Synthesis for Property Repair of Deep Neural Networks</a><br>
-<em>Incorporate formal verification and a heuristic mechanism for
-allocating patch modules.</em></p></li>
-<li><p>[2025-01-04] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2507.05281">CoreCodeBench: A Configurable
-Multi-Scenario Repository-Level Benchmark</a><br>
-<em>Provide a comprehensive and extensive repository-level benchmark to
-investigate the applicability of LLMs in real-world engineering
-projects.</em></p></li>
-</ul>
-<h2 id="section-1">🗓️ 2024</h2>
-<ul>
-<li><p>[2024-11-12] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2409.12186">Qwen2.5-Coder Technical
-Report</a><br>
-<em>Introduce the Qwen2.5-Coder series.</em></p></li>
-<li><p>[2024-11-11] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2405.15793">SWE-agent: Agent-Computer
-Interfaces Enable Automated Software Engineering</a><br>
-<em>A system that facilitates LM agents to autonomously use computers to
-solve software engineering tasks.</em></p></li>
-<li><p>[2024-10-29] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2407.01489">AGENTLESS: Demystifying
-LLM-based Software Engineering Agents</a><br>
-<em>Do we really have to employ complex autonomous software
-agents?</em></p></li>
-<li><p>[2024-09-21] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2403.16437">Reasoning
-Runtime Behavior of a Program with LLM: How Far Are We?</a><br>
-<em>Evaluate the code reasoning capability of code LLMs.</em></p></li>
-<li><p>[2024-08-22] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2408.12159">Search-Based LLMs for Code
-Optimization</a><br>
-<em>Integrate LLMs with evolutionary search.</em></p></li>
-<li><p>[2024-07-28] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2407.19487">RLCoder:
-Reinforcement Learning for Repository-Level Code Completion</a><br>
-<em>A novel reinforcement learning framework for repository-level code
-completion.</em></p></li>
-<li><p>[2024-06-30] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.14572">GALLa:
-Graph Aligned Large Language Models for Improved Source Code
-Understanding</a><br>
-<em>Align graph-level semantics with code generation
-models.</em></p></li>
-<li><p>[2024-06-28] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.14001">Context-Augmented Code
-Generation Using Programming Knowledge Graphs</a><br>
-<em>Leverage knowledge graphs to improve context-aware
-generation.</em></p></li>
-<li><p>[2024-06-27] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.13456">From
-Token to Line: Enhancing Code Generation with a Long-Term
-Perspective</a><br>
-<em>Model code generation at the line-level for long-range
-coherence.</em></p></li>
-<li><p>[2024-06-25] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.09876">Brevity
-is the soul of wit: Pruning long files for code generation</a><br>
-<em>File pruning strategies help LLMs focus and generate better
-code.</em></p></li>
-<li><p>[2024-06-24] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.12345">What to
-Retrieve for Effective Retrieval-Augmented Code Generation? An Empirical
-Study and Beyond</a><br>
-<em>Compares various retrieval signals for code
-generation.</em></p></li>
-<li><p>[2024-06-22] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.11599">Uncertainty-Guided
-Chain-of-Thought for Code Generation with LLMs</a><br>
-<em>Use uncertainty to dynamically guide CoT prompting for
-code.</em></p></li>
-<li><p>[2024-06-21] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.11777">Sifting
-through the Chaff: On Utilizing Execution Feedback for Ranking the
-Generated Code Candidates</a><br>
-<em>Execution-based ranking improves selection of code
-completions.</em></p></li>
-<li><p>[2024-06-20] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.11256">AceReason-Nemotron 1.1:
-Advancing Math and Code Reasoning through SFT and RL Synergy</a><br>
-<em>Combines supervised fine-tuning and RL to boost code/math
-reasoning.</em></p></li>
-<li><p>[2024-06-18] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.08888">Scattered
-Forest Search: Smarter Code Space Exploration with LLMs</a><br>
-<em>Explores diverse code candidates using scattered
-sampling.</em></p></li>
-<li><p>[2024-06-15] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.07987">FAIT:
-Fault-Aware Fine-Tuning for Better Code Generation</a><br>
-<em>Incorporate fault signals in training to boost generation
-quality.</em></p></li>
-<li><p>[2024-06-10] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.06100">GiFT:
-Gibbs Fine-Tuning for Code Generation</a><br>
-<em>A sampling-based fine-tuning method for code
-generation.</em></p></li>
-<li><p>[2024-06-08] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.05500">SemAgent:
-A Semantics Aware Program Repair Agent</a><br>
-<em>Program repair guided by semantics and repository
-feedback.</em></p></li>
-<li><p>[2024-06-07] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.03400">XFT:
-Unlocking the Power of Code Instruction Tuning by Simply Merging
-Upcycled Mixture-of-Experts</a><br>
-<em>Merge multiple experts in instruction tuning for code
-generation.</em></p></li>
-<li><p>[2024-06-06] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.04912">Planning
-In Natural Language Improves LLM Search For Code Generation</a><br>
-<em>Use natural language planning to guide better code
-retrieval.</em></p></li>
-<li><p>[2024-06-05] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.03003">CCT: Code
-Comparison Tuning for Code Large Language Models</a><br>
-<em>Code comparison-based contrastive tuning for code
-understanding.</em></p></li>
-<li><p>[2024-06-03] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.02472">RepoMaster: Autonomous
-Exploration and Understanding of GitHub Repositories for Complex Task
-Solving</a><br>
-<em>Agent framework that explores and reasons over full
-repositories.</em></p></li>
-<li><p>[2024-06-01] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.00084">Quality
-Assessment of Prompts Used in Code Generation</a><br>
-<em>Prompt quality evaluation for better code generation
-outputs.</em></p></li>
-<li><p>[2024-05-31] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.19972">OpenCodeInstruct: A Large-scale
-Instruction Tuning Dataset for Code LLMs</a><br>
-<em>Release a massive instruction tuning dataset for code
-generation.</em></p></li>
-<li><p>[2024-05-30] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.19387">MFTCoder:
-Boosting Code LLMs with Multitask Fine-Tuning</a><br>
-<em>Apply multitask fine-tuning to improve code generation
-performance.</em></p></li>
-<li><p>[2024-05-28] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.17192">No Man is
-an Island: Towards Fully Automatic Programming by Code Search, Code
-Generation and Program Repair</a><br>
-<em>Integrates search, generation, and repair for fully automatic
-coding.</em></p></li>
-<li><p>[2024-05-25] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.14555">EpiCoder:
-Encompassing Diversity and Complexity in Code Generation</a><br>
-<em>Embrace diverse and complex cases to improve code
-synthesis.</em></p></li>
-<li><p>[2024-05-23] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.13897">Code
-Less, Align More: Efficient LLM Fine-tuning for Code Generation with
-Data Pruning</a><br>
-<em>Use high-quality data pruning to achieve efficient
-fine-tuning.</em></p></li>
-<li><p>[2024-05-22] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.13101">CodeAct:
-Executable Code Actions Elicit Better LLM Agents</a><br>
-<em>Executable feedback helps code agents better understand
-actions.</em></p></li>
-<li><p>[2024-05-21] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.12311">Code
-Needs Comments: Enhancing Code LLMs with Comment Augmentation</a><br>
-<em>Improve code generation by adding comment-based data
-augmentation.</em></p></li>
-<li><p>[2024-05-20] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.11811">SemCoder:
-Training Code Language Models with Comprehensive Semantics
-Reasoning</a><br>
-<em>Augment code LLMs with semantic reasoning capability.</em></p></li>
-<li><p>[2024-05-19] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.11111">Self-Explained Keywords Empower
-Large Language Models for Code Generation</a><br>
-<em>Add self-explained keywords to prompts to improve LLM
-coding.</em></p></li>
-<li><p>[2024-05-17] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.09597">Intention
-is All You Need: Refining Your Code from Your Intention</a><br>
-<em>Code refinement by intention-driven instruction and
-planning.</em></p></li>
-<li><p>[2024-04-23] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2404.10045">UniCoder:
-Scaling Code Large Language Model via Universal Code</a><br>
-<em>Unified format for multilingual and multi-paradigm code
-modeling.</em></p></li>
-<li><p>[2024-04-10] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2308.10620">Large
-Language Models for Software Engineering: A Systematic Literature
-Review</a><br>
-<em>A systematic literature review (SLR) on LLM4SE.</em></p></li>
-<li><p>[2024-04-03] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2404.01888">From
-Symbolic Tasks to Code Generation: Diversification Yields Better Task
-Performers</a><br>
-<em>Task diversity leads to stronger generalization in code
-LLMs.</em></p></li>
-<li><p>[2024-03-12] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2403.07785">PanGu-Coder2: Boosting Large
-Language Models for Code with Ranking Feedback</a><br>
-<em>Leverage ranking-based feedback to enhance code LLM
-training.</em></p></li>
-<li><p>[2024-02-23] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2507.05281">CoderEval: A Benchmark of
-Pragmatic Code Generation with Generative Pre-trained Models</a><br>
-<em>A new benchmark to evaluate a model’s effectiveness in pragmatic
-code generation scenarios.</em></p></li>
-<li><p>[2024-02-14] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2402.07265">CodeFort:
-Robust Training for Code Generation Models</a><br>
-<em>Improve code model robustness by curriculum and noise-aware
-learning.</em></p></li>
-<li><p>[2024-01-30] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2401.06461">Between
-Lines of Code: Unraveling the Distinct Patterns of Machine and Human
-Programmers</a><br>
-<em>Study the specific patterns that characterize machine- and
-human-authored code.</em></p></li>
-</ul>
-<h2 id="section-2">🗓️ 2023</h2>
-<ul>
-<li><p>[2023-12-07] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2312.04470">SAT:
-Structure-aware Fine-tuning for Code Pre-trained Models</a><br>
-<em>Incorporates structure information in fine-tuning code
-models.</em></p></li>
-<li><p>[2023-10-30] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2305.01210">Is Your
-Code Generated by ChatGPT Really Correct? Rigorous Evaluation of Large
-Language Models for Code Generation</a><br>
-<em>EvalPlus——a code synthesis evaluation framework to rigorously
-benchmark the functional correctness of LLM-synthesized code. 🌟This is
-<strong>the first academic paper</strong> I've ever read in my life, and
-it marks the beginning of my journey into research and
-academia.</em></p></li>
-<li><p>[2023-10-23] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.12897">OctoPack:
-Instruction Tuning Code Large Language Models</a><br>
-<em>Instruction tuning dataset and methodology for training code
-LLMs.</em></p></li>
-<li><p>[2023-10-20] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2303.12570">RepoCoder: Repository-Level Code
-Completion Through Iterative Retrieval and Generation</a><br>
-<em>A straightforward and effective framework for the repositorylevel
-code completion task.</em></p></li>
-<li><p>[2023-10-11] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2310.06830v2">The
-Impact of Code Data on Language Models</a><br>
-<em>A systematic investigation of how varying code data proportions in
-pretraining affect language models’ performance across structural,
-arithmetic, and natural language tasks.</em></p></li>
-<li><p>[2023-10-11] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.06870">Magicoder: Empowering Code
-Generation with OSS-Instruct</a><br>
-<em>Open-source instruction-tuned dataset for better code
-generation.</em></p></li>
-<li><p>[2023-09-27] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2309.14589">At Which
-Training Stage Does Code Data Help LLMs Reasoning</a><br>
-<em>Empirical study on when code data benefits reasoning during
-pretraining.</em></p></li>
-<li><p>[2023-08-24] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2308.13365">Code
-Summarization Beyond Function Level</a><br>
-<em>Explore summarization of class- and repo-level code.</em></p></li>
-<li><p>[2023-06-19] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2306.10995">CoSS:
-Leveraging Statement Semantics for Code Summarization</a><br>
-<em>Uses statement-level semantics graph for better code
-summarization.</em></p></li>
-<li><p>[2023-06-14] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2306.08568">WizardCoder: Empowering Code
-Large Language Models with Evol-Instruct</a><br>
-<em>Enhance code LLMs with instruction tuning using evol-instruct
-strategy.</em></p></li>
-</ul>
-<h2 id="useful-github-repos-models">🚀 Useful GitHub Repos &amp;
-Models</h2>
-<p>Here are some great open-source resources and models related to
-<strong>AI4SE</strong> that are worth checking out:</p>
-<ul>
-<li><p><strong><a target="_blank" rel="noopener" href="https://github.com/princeton-nlp/SWE-bench">SWE-bench</a></strong><br>
-A benchmark for evaluating LLMs on real-world GitHub issue
-resolution.</p></li>
-<li><p><strong><a target="_blank" rel="noopener" href="https://github.com/codefuse-ai/Awesome-Code-LLM?tab=readme-ov-file#25-reinforcement-learning-on-code">Awesome-Code-LLM</a></strong><br>
-A curated list of language modeling researches for code (and other
-software engineering activities), plus related datasets.<br>
-🌟 I’ll go through all the papers in this list within a month and
-regularly update the repo with the most valuable ones.</p></li>
-</ul>
-<h2 id="contact">📬 Contact</h2>
-<p>💡 <strong>Working on something exciting in AI4SE?</strong> I'd love
-to hear from you — feel free to get in touch:
-panruwei@stu.cqu.edu.cn</p>
-<p>🌱 I'm currently exploring internship opportunities where I can
-contribute to real-world applications of AI for Software Engineering.
-Let's connect!</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueeemouse.github.io/2025/11/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="bluemouse">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="bluemouse's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/11/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/" class="post-title-link" itemprop="url">TurboRAG：Accelerating Retrieval-Augmented Generation with Precomputed KV Caches for Chunked Text</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2025-11-10 17:19:00 / Modified: 23:27:26" itemprop="dateCreated datePublished" datetime="2025-11-10T17:19:00+08:00">2025-11-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文阅读</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/" itemprop="url" rel="index"><span itemprop="name">llm</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/" itemprop="url" rel="index"><span itemprop="name">efficientRAG</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="venueemnlp-25">Venue：EMNLP 25</h1>
-<h1 id="date">date：</h1>
-<h1 id="动机">动机：</h1>
-<h2 id="这篇文章是从cache的角度来提高rag的efficiency的但这么说可能也不太对应该说是论文观察到一个现象阻碍了rag的efficiency而一个可以考虑的解决方法正是类似kv-cache的技术">这篇文章是从cache的角度来提高rag的efficiency的。但这么说可能也不太对，应该说是论文观察到一个现象阻碍了rag的efficiency，而一个可以考虑的解决方法正是类似kv
-cache的技术</h2>
-<h2 id="rag需要检索很多外部的信息然后结合prompt进行回答问题就在于检索到的文档会产生比较多的token这就导致注意力机制进行计算的时候会花比较多的时间从而产生第一个token的时间会比较久也就是time-to-first-tokenttft会比较长这降低了rag的efficiency时间上而且每次检索到的文档都需要计算对应的kv这是一种重复性的工作让我们想到能否可以通过复用减少时间开销论文想解决这一问题从而提高efficiency">rag需要检索很多外部的信息，然后结合prompt进行回答。问题就在于检索到的文档会产生比较多的token，这就导致注意力机制进行计算的时候会花比较多的时间，从而产生第一个token的时间会比较久。也就是time-to-first-token（TTFT）会比较长。这降低了rag的efficiency（时间上）（而且每次检索到的文档都需要计算对应的kv，这是一种重复性的工作，让我们想到能否可以通过复用减少时间开销）。论文想解决这一问题，从而提高efficiency</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/11/10/%E8%AE%BA%E6%96%87%E5%92%8C%E5%8D%9A%E5%AE%A2%E9%98%85%E8%AF%BB/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/nlp/llm/RAG/efficientRAG/TurboRAG%EF%BC%9AAccelerating%20Retrieval-Augmented%20Generation%20with%20%20Precomputed%20KV%20Caches%20for%20Chunked%20Text/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1470,14 +992,14 @@ cache的技术</h2>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-count">257</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
